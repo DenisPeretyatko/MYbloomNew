@@ -1,21 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using Sage.WebApi.Models;
+using System.Threading;
+using Sage.Messaging;
+using Sage.WebApi.Infratructure.Constants;
+using System.Configuration;
 
 namespace Sage.WebApi.Providers
 {
+    public static class ExtendedClaimsProvider
+    {
+        public static IEnumerable<Claim> GetClaims(string name, string pass)
+        {
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Name, name));
+            claims.Add(new Claim(ClaimTypes.Surname, pass));
+            return claims;
+        }
+
+        public static Claim CreateClaim(string type, string value)
+        {
+            return new Claim(type, value, ClaimValueTypes.String);
+        }
+
+    }
+
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
         private readonly string _publicClientId;
+
+        public ApplicationOAuthProvider() { }
 
         public ApplicationOAuthProvider(string publicClientId)
         {
@@ -27,27 +45,40 @@ namespace Sage.WebApi.Providers
             _publicClientId = publicClientId;
         }
 
+        public bool CheckUser(string name, string password, out string resXml)
+        {
+            MessageTypeDescriptor mtd;
+            IMessageBoard mb;
+            mtd = new MessageTypeDescriptor();
+            var xmlMessage = string.Format(Messages.MessageTypeDescriptor, name, password);
+            mtd.Xml = xmlMessage;
+            mb = MessageBoardFactory.CreateMessageBoardFromDefaultCatalogFile();
+            var catalogPath = ConfigurationManager.AppSettings["catalogPath"];
+            mb.RoutingCatalogPersist.LoadFrom(catalogPath);
+            var xmlString = Messages.Locations;
+            var result = mb.SendMessage(mtd.Xml, xmlString);
+            resXml = result;
+            if (result.Contains("Status='failed'"))
+                return false;
+            return true;
+
+        }
+
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
-
-            ApplicationUser user = await userManager.FindAsync(context.UserName, context.Password);
-
-            if (user == null)
+            var identity = new ClaimsIdentity(ExtendedClaimsProvider.GetClaims(context.UserName, context.Password), DefaultAuthenticationTypes.ExternalCookie);
+            var ctx = context.OwinContext;
+            string resXml;
+            if (!CheckUser(context.UserName, context.Password, out resXml))
             {
-                context.SetError("invalid_grant", "The user name or password is incorrect.");
+                context.SetError(resXml);
                 return;
             }
-
-            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager,
-               OAuthDefaults.AuthenticationType);
-            ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,
-                CookieAuthenticationDefaults.AuthenticationType);
-
-            AuthenticationProperties properties = CreateProperties(user.UserName);
-            AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
+            var authenticationManager = ctx.Authentication;
+            var claimsPrincipal = new ClaimsPrincipal(identity);
+            Thread.CurrentPrincipal = claimsPrincipal;
+            var ticket = new AuthenticationTicket(identity, null);
             context.Validated(ticket);
-            context.Request.Context.Authentication.SignIn(cookiesIdentity);
         }
 
         public override Task TokenEndpoint(OAuthTokenEndpointContext context)

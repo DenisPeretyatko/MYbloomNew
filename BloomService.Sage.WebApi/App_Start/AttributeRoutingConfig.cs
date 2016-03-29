@@ -4,7 +4,7 @@ using System.Web.Mvc;
 
 //[assembly: WebActivator.PreApplicationStartMethod(typeof(Sage.WebApi.AttributeRoutingConfig), "Start")]
 
-namespace Sage.WebApi 
+namespace Sage.WebApi
 {
     public static class AttributeRoutingConfig
 	{

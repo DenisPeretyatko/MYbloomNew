@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using Sage.WebApi.Models.SerializeModels;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -15,6 +16,8 @@ namespace Sage.WebApi
             //RouteConfig.RegisterRoutes(RouteTable.Routes);
             AttributeRoutingConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            ModelBinders.Binders.Add(typeof(Properties), new ProportiesModelBinder());
+            IoCConfig.Register();
         }
     }
 }
