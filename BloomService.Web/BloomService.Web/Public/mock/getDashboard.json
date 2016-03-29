@@ -1,0 +1,29 @@
+{
+	"workorders" : [
+		{ 
+			"number": 87123,
+			"date": "12:12:2012",
+			"customer": "John Smith",
+			"location": "12238 Emerson Dr Brighton MI 48116",
+			"status": "open"
+		},
+		{ 
+			"number": 1231,
+			"date": "12:12:2012",
+			"customer": "Bloom Roofing",
+			"location": "12238 Emerson Dr Brighton MI 48116",
+			"status": "open"
+		},
+		{ 
+			"number": 35345,
+			"date": "12:12:2012",
+			"customer": "Bloom Roofing",
+			"location": "12238 Emerson Dr Brighton MI 48116",
+			"status": "open"
+		}
+	],
+	"chart" : 
+	[{
+        "data" : [["Open", 15], ["Assigned", 5], ["Roof leak", 12], ["Closed today", 10]]
+	}]
+}

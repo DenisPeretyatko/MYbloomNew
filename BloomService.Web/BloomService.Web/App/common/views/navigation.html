@@ -1,0 +1,36 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul side-navigation class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element" dropdown>
+                    <a class="dropdown-toggle" dropdown-toggle href>
+                        <span class="clear">
+                            <span class="block m-t-xs">
+                                <strong class="font-bold">{{userName}}</strong>
+                            </span>
+                        </span>
+                    </a>
+                </div>
+                <div class="logo-element">
+                    BS+
+                </div>
+            </li>
+            <li ng-class="{active: $state.includes('manager.dashboard')}">
+                <a ui-sref="manager.dashboard"><i class="fa fa-tachometer"></i> <span class="nav-label">Dashboard</span></a>
+            </li>
+            <li ng-class="{active: $state.includes('manager.workorder')}">
+                <a ui-sref="manager.workorder.list"><i class="fa fa-tasks"></i> <span class="nav-label">Workorders</span></a>
+            </li>
+            <li ng-class="{active: $state.includes('manager.map')}">
+                <a ui-sref="manager.map"><i class="fa fa-location-arrow"></i> <span class="nav-label">Map</span></a>
+            </li>
+            <li ng-class="{active: $state.includes('manager.schedule')}">
+                <a ui-sref="manager.schedule"><i class="fa fa-calendar-o"></i> <span class="nav-label">Schedule</span></a>
+            </li>
+            <li ng-class="{active: $state.includes('manager.technician')}">
+                <a ui-sref="manager.technician.list"><i class="fa fa-users"></i> <span class="nav-label">Technicians</span></a>
+            </li>
+        </ul>
+
+    </div>
+</nav>

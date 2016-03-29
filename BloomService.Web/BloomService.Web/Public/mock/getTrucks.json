@@ -1,0 +1,22 @@
+ [{
+	"order" : "1",
+	"location" :  { "lat": 42.59067, "lng": -83.69233 },
+	"title": "Target #3250",
+	"description" : "12345 Fake Street<br/>Faketown, MI 48334<br/><br/>Roof Leak - 4:00pm",
+	"icon" : "/public/images/technician1.png",
+	"color": "#FF0000"
+},{
+	"order" : "2",
+	"location" :  { "lat": 42.54213, "lng": -83.71842 },
+	"title": "Target #3250",
+	"description" : "12345 Fake Street<br/>Faketown, MI 48334<br/><br/>Roof Leak - 4:00pm",
+	"icon" : "/public/images/technician2.png",
+	"color": "#FF0000"
+},{
+	"order" : "3",
+	"location" :  { "lat": 42.64878, "lng": -83.66692 },
+	"title": "Target #3250",
+	"description" : "12345 Fake Street<br/>Faketown, MI 48334<br/><br/>Roof Leak - 4:00pm",
+	"icon" : "/public/images/technician2.png",
+	"color": "#FF0000"
+}]

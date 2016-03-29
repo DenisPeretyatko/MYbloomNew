@@ -1,0 +1,36 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Edit Technician</h2>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <form role="form" name="edit_technician_form" novalidate ng-submit="saveTechnician()">
+                        <div class="form-group">
+                            <label>Available</label>
+                            <br/>
+                            <br/>
+                            <input type="checkbox" class="js-switch" ui-switch="{color:'#ED5565', secondaryColor:'#1AB394'}" ng-model="notAvailable"/>
+                        </div>
+                        <div class="form-group ui-calendar">
+                            <label>Weekly Schedule</label>
+                            <div ui-calendar="uiConfig.calendar" calendar="schedule" class="calendar" ng-model="eventSources"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+             <div class="form-group">
+                <button class="btn btn-sm btn-primary" type="submit"><strong>Save</strong></button>
+                <button class="btn btn-sm btn-danger" type="cancel" back><strong>Cancel</strong></button>
+             </div>
+       </div>
+    </div>
+</div>

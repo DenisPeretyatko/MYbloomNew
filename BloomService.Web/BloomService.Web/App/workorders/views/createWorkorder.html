@@ -1,0 +1,146 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Create Workorder</h2>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+    <tabset>
+        <tab heading="Workorder">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <form role="form" name="workorder_form" novalidate ng-submit="createWorkOrder()">
+                                <div class="form-group">
+                                    <label>Customer</label>
+                                    <ui-select ng-model="option.selected" theme="bootstrap">
+                                        <ui-select-match placeholder="Customer">{{$select.selected.text}}</ui-select-match>
+                                        <ui-select-choices repeat="item in lookups.customers | filter: $select.search">
+                                            <div ng-bind-html="item.text | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    <ui-select ng-model="option.selected" theme="bootstrap">
+                                        <ui-select-match placeholder="Location">{{$select.selected.text}}</ui-select-match>
+                                        <ui-select-choices repeat="item in lookups.locations | filter: $select.search">
+                                            <div ng-bind-html="item.text | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Call Type</label>
+                                    <ui-select ng-model="option.selected" theme="bootstrap">
+                                        <ui-select-match placeholder="Call Type">{{$select.selected.text}}</ui-select-match>
+                                        <ui-select-choices repeat="item in lookups.callTypes | filter: $select.search">
+                                            <div ng-bind-html="item.text | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Call Date</label>
+                                    <div class="input-group date">
+                                        <input type="datetime" class="form-control" date-time ng-model="callDate" view="date" auto-close="true" min-view="date" format="YYYY-MM-DD">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Problem</label>
+                                    <ui-select ng-model="option.selected" theme="bootstrap">
+                                        <ui-select-match placeholder="Problem">{{$select.selected.text}}</ui-select-match>
+                                        <ui-select-choices repeat="item in lookups.problems | filter: $select.search">
+                                            <div ng-bind-html="item.text | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Rate Sheet</label>
+                                    <ui-select ng-model="option.selected" theme="bootstrap">
+                                        <ui-select-match placeholder="Rate Sheet">{{$select.selected.text}}</ui-select-match>
+                                        <ui-select-choices repeat="item in lookups.rateSheets | filter: $select.search">
+                                            <div ng-bind-html="item.text | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Emploee</label>
+                                    <ui-select ng-model="option.selected" theme="bootstrap">
+                                        <ui-select-match placeholder="Employee">{{$select.selected.text}}</ui-select-match>
+                                        <ui-select-choices repeat="item in lookups.employees | filter: $select.search">
+                                            <div ng-bind-html="item.text | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Equiment to Service</label>
+                                    <ui-select ng-model="option.selected" theme="bootstrap">
+                                        <ui-select-match placeholder="Equipment to Service">{{$select.selected.text}}</ui-select-match>
+                                        <ui-select-choices repeat="item in lookups.equiment | filter: $select.search">
+                                            <div ng-bind-html="item.text | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Estimate Repair Hours</label>
+                                    <ui-select ng-model="option.selected" theme="bootstrap">
+                                        <ui-select-match placeholder="Estimated Repair Hours">{{$select.selected.text}}</ui-select-match>
+                                        <ui-select-choices repeat="item in lookups.hours | filter: $select.search">
+                                            <div ng-bind-html="item.text | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Not to Exceed</label>
+                                    <input type="email" placeholder="Not to Exceed" class="form-control" name="notToExceed" ng-model="email" required>
+                                    <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
+                                        <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Location comments</label>
+                                    <input type="text" placeholder="Location comments" class="form-control" name="locationComments" ng-model="email" required>
+                                    <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
+                                        <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Customer PO</label>
+                                    <input type="text" placeholder="Customer PO" class="form-control" name="CustomerPO" ng-model="email" required>
+                                    <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
+                                        <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Persmission Code</label>
+                                    <input type="text" placeholder="Permission Code" class="form-control" name="permissionCode" ng-model="email" required>
+                                    <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
+                                        <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Payment method</label>
+                                    <ui-select ng-model="option.selected" theme="bootstrap">
+                                        <ui-select-match placeholder="Payment method">{{$select.selected.text}}</ui-select-match>
+                                        <ui-select-choices repeat="item in lookup.paymentMethods | filter: $select.search">
+                                            <div ng-bind-html="item.text | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+              <div class="form-group">
+                  <button class="btn btn-sm btn-primary" type="submit"><strong>Create</strong></button>
+                  <button class="btn btn-sm btn-danger" type="cancel" back><strong>Cancel</strong></button>
+              </div>
+       </div>
+    </div>
+</div>

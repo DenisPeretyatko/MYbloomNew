@@ -1,44 +1,87 @@
 ﻿<!DOCTYPE html>
-<html>
+<html ng-app="bloom">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Page title set in pageTitle directive -->
+    <title page-title></title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
+    <!-- Font awesome -->
+    <link href="~/public/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Bootstrap and Fonts -->
+    <link href="~/public/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/public/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <!-- Main Inspinia CSS files -->
+    <link href="~/public/css/animate.css" rel="stylesheet">
+    <link href="~/public/css/custom.css" rel="stylesheet">
+    <link id="loadBefore" href="~/public/css/style.css" rel="stylesheet">
+
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+<body ng-controller="mainController as main">
+
+    @RenderBody()
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <!-- Main view  -->
+    <div ui-view></div>
+
+    <!-- jQuery and Bootstrap -->
+    <script src="~/public/js/jquery/jquery-2.1.1.min.js"></script>
+    <script src="~/public/js/plugins/jquery-ui/jquery-ui.js"></script>
+    <script src="~/public/js/bootstrap/bootstrap.min.js"></script>
+
+    <!-- MetsiMenu -->
+    <script src="~/public/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    <!-- SlimScroll -->
+    <script src="~/public/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Peace JS -->
+    <script src="~/public/js/plugins/pace/pace.min.js"></script>
+
+    <!-- Google Maps -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5C6xLb_p080IROfTmJA7cneaajIyznnM"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="~/public/js/inspinia.js"></script>
+
+    <!-- Main Angular scripts-->
+    <script src="~/public/js/angular/angular.min.js"></script>
+    <script src="~/public/js/plugins/oclazyload/dist/ocLazyLoad.min.js"></script>
+    <script src="~/public/js/ui-router/angular-ui-router.min.js"></script>
+    <script src="~/public/js/bootstrap/ui-bootstrap-tpls-0.12.0.min.js"></script>
+    <script src="~/public/js/plugins/toastr/toastr.min.js"></script>
+
+    <!-- Anglar App Script -->
+    <script src="~/app/common/commonConstants.js"></script>
+    <script src="~/app/common/commonDirectives.js"></script>
+    <script src="~/app/common/commonDataService.js"></script>
+    <script src="~/app/common/commonStateManager.js"></script>
+    <script src="~/app/common/commonNotificationService.js"></script>
+    <script src="~/app/common/mainController.js"></script>
+    <script src="~/app/common/commonModule.js"></script>
+    <script src="~/app/dashboard/dashboardController.js"></script>
+    <script src="~/app/dashboard/dashboardModule.js"></script>
+    <script src="~/app/map/mapController.js"></script>
+    <script src="~/app/map/mapModule.js"></script>
+    <script src="~/app/schedule/scheduleController.js"></script>
+    <script src="~/app/schedule/scheduleModule.js"></script>
+    <script src="~/app/technician/technicianController.js"></script>
+    <script src="~/app/technician/editTechnicianController.js"></script>
+    <script src="~/app/technician/technicianModule.js"></script>
+    <script src="~/app/workorders/workorderController.js"></script>
+    <script src="~/app/workorders/createWorkorderController.js"></script>
+    <script src="~/app/workorders/editWorkorderController.js"></script>
+    <script src="~/app/workorders/workorderModule.js"></script>
+    <script src="~/app/app.js"></script>
 </body>
 </html>
