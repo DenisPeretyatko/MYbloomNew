@@ -34,18 +34,12 @@
             controller: "editTechnicianController",
             data: { pageTitle: 'Example view' },
             resolve: {
-                loadPlugin: function ($ocLazyLoad) {                    
+                loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
                         {
                             serie: true,
-                            files: ['public/js/plugins/moment/moment.min.js']
-                        },
-                        {
                             insertBefore: '#loadBefore',
-                            files: ['public/css/plugins/fullcalendar/fullcalendar.css','public/js/plugins/fullcalendar/fullcalendar.min.js']
-                        },
-                        {
-                            files: ['public/css/plugins/fullcalendar-scheduler/scheduler.min.css','public/js/plugins/fullcalendar-scheduler/scheduler.min.js']
+                            files: ['public/js/plugins/moment/moment.min.js', 'public/css/plugins/fullcalendar/fullcalendar.css','public/js/plugins/fullcalendar/fullcalendar.min.js', 'public/css/plugins/fullcalendar-scheduler/scheduler.min.css','public/js/plugins/fullcalendar-scheduler/scheduler.min.js']
                         },
                         {
                             name: 'ui.calendar',

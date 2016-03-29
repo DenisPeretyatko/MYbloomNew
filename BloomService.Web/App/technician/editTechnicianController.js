@@ -13,10 +13,13 @@ var editTechnicianController = function($scope, $stateParams) {
 
     // Events
     $scope.events = [
-        {title: 'All Day Event',start: new Date(y, m, d)},
-        {title: 'All Day Event',start: new Date(y, m, d + 1)},
-        {title: 'All Day Event',start: new Date(y, m, d + 2)},
-        {title: 'All Day Event',start: new Date(y, m, d + 3)}
+        { resourceId: 'Sun', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
+        { resourceId: 'Mon', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
+        { resourceId: 'Tue', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
+        { resourceId: 'Wed', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
+        { resourceId: 'Thu', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
+        { resourceId: 'Fri', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
+        { resourceId: 'Sat', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) }
     ];
 
     $scope.alertOnEventClick = function( event, allDay, jsEvent, view ){
@@ -34,10 +37,15 @@ var editTechnicianController = function($scope, $stateParams) {
     /* config object */
     $scope.uiConfig = {
         calendar:{
+        	schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+        	now: date,
         	defaultView: 'timelineDay',
-            height: 550,
+            height: 280,
+            resourceAreaWidth: 250,
             editable: true,
             businessHours : true,
+            eventOverlap: false,
+            disableDragging : true,
             header: {
                 left: '',
                 center: '',
@@ -46,7 +54,17 @@ var editTechnicianController = function($scope, $stateParams) {
             eventLimit: true,
             eventClick: $scope.alertOnEventClick,
             eventDrop: $scope.alertOnDrop,
-            eventResize: $scope.alertOnResize
+            eventResize: $scope.alertOnResize,
+            resourceLabelText: 'Availability',
+			resources: [
+				{ id: 'Sun', title: 'Sunday' },
+				{ id: 'Mon', title: 'Monday' },
+				{ id: 'Tue', title: 'Tuesday' },
+				{ id: 'Wed', title: 'Wednesday' },
+				{ id: 'Thu', title: 'Thursday' },
+				{ id: 'Fri', title: 'Friday' },
+				{ id: 'Sat', title: 'Saturday' }
+			]
         }
     };
 

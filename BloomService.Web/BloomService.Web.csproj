@@ -498,7 +498,9 @@
     <Content Include="Public\js\plugins\oclazyload\LICENSE.md" />
     <Content Include="Public\js\plugins\oclazyload\README.md" />
     <Content Include="Public\mock\getAssigments.json" />
-    <Content Include="Public\mock\getDashboard.json" />
+    <Content Include="Public\mock\getDashboard.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Public\mock\getLocations.json" />
     <Content Include="Public\mock\getSchedule.json" />
     <Content Include="Public\mock\getTechnician.json" />

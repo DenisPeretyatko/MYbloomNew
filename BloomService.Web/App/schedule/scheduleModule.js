@@ -10,16 +10,21 @@
             controller: "scheduleController",
             data: { pageTitle: 'Example view' },
             resolve: {
-                loadPlugin: function ($ocLazyLoad) {
+                loadPlugin: function ($ocLazyLoad) {    
                     return $ocLazyLoad.load([
                         {
+                            serie: true,
                             insertBefore: '#loadBefore',
-                            files: ['public/css/plugins/fullcalendar/fullcalendar.css','public/js/plugins/fullcalendar/fullcalendar.min.js']
+                            files: ['public/js/plugins/moment/moment.min.js', 'public/css/plugins/fullcalendar/fullcalendar.css','public/js/plugins/fullcalendar/fullcalendar.min.js', 'public/css/plugins/fullcalendar-scheduler/scheduler.min.css','public/js/plugins/fullcalendar-scheduler/scheduler.min.js']
                         },
                         {
                             name: 'ui.calendar',
                             files: ['public/js/plugins/fullcalendar/calendar.js']
-                        }
+                        },
+                        {
+                            name: 'ui.switchery',
+                            files: ['public/css/plugins/switchery/switchery.css','public/js/plugins/switchery/switchery.js','public/js/plugins/switchery/ng-switchery.js']
+                        },
                     ]);
                 }
             }
