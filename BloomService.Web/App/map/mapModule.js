@@ -26,7 +26,7 @@ var mapModuleConfig = function($stateProvider) {
             }
         });
 }
-mapModuleConfig.$inject = ["$stateProvider"]; 
+mapModuleConfig.$inject = ["$stateProvider"];
 
 angular
     .module('bloom.map', [])

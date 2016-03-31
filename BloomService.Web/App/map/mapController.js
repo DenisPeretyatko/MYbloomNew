@@ -3,23 +3,18 @@
  */
 "use strict";
 
-var mapController = function($scope, $http, $compile, $templateCache, commonDataService) {
+var mapController = function ($scope, $http, $compile, $interpolate, commonDataService) {
 
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
     $scope.workorders = [];
-
-    $http.get('/app/map/views/tooltip.html').success(function (response) {
-        $templateCache.put('tooltip.html', response);
-    });
-
-    var tooltipTemplate = $templateCache.get('tooltip.html');
-    var tooltip = $compile(tooltipTemplate);
+    
+    var tooltip = $interpolate("<div><h1 class='firstHeading'>{{title}}</h1><div>{{description}}</div></div>");
 
     $scope.$watch("workorders", function(workorders){
-        angular.forEach(workorders, function (workorder){  
-
-          var content = tooltip(workorder).html();
+        angular.forEach(workorders, function (workorder) {
+           
+          var content = tooltip(workorder);
 
           var marker = new google.maps.Marker({
             position: workorder.location,
@@ -40,7 +35,7 @@ var mapController = function($scope, $http, $compile, $templateCache, commonData
     $scope.$watch("trucks", function(trucks){
         angular.forEach(trucks, function (truck){  
 
-          var content = tooltip(truck).html();
+          var content = tooltip(truck);
 
           var marker = new google.maps.Marker({
             position: truck.location,
@@ -66,4 +61,4 @@ var mapController = function($scope, $http, $compile, $templateCache, commonData
         $scope.trucks = response.data;
     });
 };
-mapController.$inject = ["$scope", "$http", "$compile", "$templateCache", "commonDataService"];
+mapController.$inject = ["$scope", "$http", "$compile", "$interpolate", "commonDataService"];
