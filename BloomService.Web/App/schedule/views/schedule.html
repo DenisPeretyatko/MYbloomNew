@@ -8,14 +8,14 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content ui-calendar">
-                    <div ui-calendar="uiConfig.calendar" calendar="schedule" class="calendar" ng-model="eventSources"></div>
+                    <div id="calendar" ui-calendar="uiConfig.calendar" calendar="schedule" class="calendar" ng-model="eventSources"></div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">    
         <div class="col-lg-12">
-            <div class="ibox float-e-margins">
+            <div class="ibox float-e-margins dragdpor_section">
                 <div class="ibox-title">
                     <h5>Unassigned Workorders</h5>
                 </div>
@@ -32,13 +32,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="workorder in unassignedWorkorders" class="drag">
-                            <td>{{workorder.number}}</td>
-                            <td>{{workorder.date}}</td>
-                            <td>{{workorder.customer}}</td>
-                            <td>{{workorder.location}}</td>
-                            <td>{{workorder.hours}}</td>
-                        </tr>
+                            <tr ng-repeat="workorder in unassignedWorkorders" class="drag fc-event" style=" z-index: 999">
+                                <td>{{workorder.number}}</td>
+                                <td>{{workorder.date}}</td>
+                                <td>{{workorder.customer}}</td>
+                                <td>{{workorder.location}}</td>
+                                <td>{{workorder.hours}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

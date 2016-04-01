@@ -37,11 +37,15 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             height: 400,
             resourceAreaWidth: '15%',
             editable: true,
-            eventOverlap: false,
+            droppable: true, // this allows things to be dropped onto the calendar
+            dragRevertDuration: 0,
             header: {
                 left: 'prev,next',
                 center: 'title',
                 right: 'timelineMonth,timelineWeek,timelineDay'
+            },
+            drop: function() {
+                $(this).remove();
             },
             eventClick: $scope.alertOnEventClick,
             eventDrop: $scope.alertOnDrop,
@@ -53,10 +57,44 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                 labelTds.html($interpolate(cell)(resource));
                 //bodyTds.html(cell);
             },
+            eventDragStop: function( event, jsEvent, ui, view ) {
+                
+                if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
+                    $('#calendar').fullCalendar('removeEvents', event._id);
+                    var columns = event.title.split("\n");
+                    var innerHtml = "";
+                    columns.forEach(function(item, i) {
+                        innerHtml += "<td>" + columns[i] + "</td>";
+                    });
+                    var el = $("<tr class='drag fc-event'>").appendTo('.footable tbody').html(innerHtml);
+                    el.draggable({
+                        zIndex: 1000,
+                        revert: true, 
+                        revertDuration: 0 
+                    });
+                    el.data('event', { title: event.title, id :event.id, stick: true });
+                }
+            },
             resourceLabelText: 'Technicians',
             resources: $scope.resources,
         }
     };
+
+    var isEventOverDiv = function (x, y) {
+        var external_events = $('.dragdpor_section');
+        var offset = external_events.offset();
+        offset.right = external_events.width() + offset.left;
+        offset.bottom = external_events.height() + offset.top;
+
+        if (x >= offset.left
+            && y >= offset.top
+            && x <= offset.right
+            && y <= offset.bottom) { return true; }
+        return false;
+
+    }
+
+    
 
     $scope.eventSources = [$scope.events];
     $scope.resouceSources = [$scope.resources];
@@ -79,26 +117,18 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
         $scope.unassignedWorkorders = schedule.unassignedWorkorders;
         $scope.assigments = schedule.assigments;
 
-        $timeout(function() {
-            $(".footable").data('footable').redraw();
-            $(".footable").data('footable').bind({
-                'footable_redrawn' : function(e) {
-                    $(".drag").each(function() {
-                        console.log(this);
+        $timeout(function () {
+            $('.drag').each(function () {
+                $(this).data('event', {
+                    title: $.trim($(this).text()),
+                    stick: true
+                });
 
-                        $(this).data("event", {
-                            title: $.trim($(this).text()),
-                            stick: true 
-                        });
-
-                        $(this).draggable({
-                            zIndex: 999,
-                            revert: 'invalid',
-                            handle: 'span',
-                            revertDuration: 0
-                        });
-                    });
-                }
+                $(this).draggable({
+                    zIndex: 999,
+                    revert: true,
+                    revertDuration: 0
+                });
             });
 
             function resizeGhost(event, ui) {
