@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,6 +41,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Sage.LS1.Core">
+      <HintPath>..\lib\Sage.LS1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sage.LS1.Messaging">
+      <HintPath>..\lib\Sage.LS1.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="Sage.LS1.Messaging.Interfaces">
+      <HintPath>..\lib\Sage.LS1.Messaging.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Sage.LS1.Messaging.Provider">
+      <HintPath>..\lib\Sage.LS1.Messaging.Provider.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -565,6 +578,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BloomService.Domain\BloomService.Domain.csproj">
+      <Project>{c864fa21-c500-4d98-9009-9a6f88709f8c}</Project>
+      <Name>BloomService.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

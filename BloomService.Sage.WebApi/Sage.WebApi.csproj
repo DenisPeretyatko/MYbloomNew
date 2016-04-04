@@ -308,18 +308,6 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ResponseException.cs" />
-    <Compile Include="Models\SerializeModels\Assignment.cs" />
-    <Compile Include="Models\SerializeModels\CallType.cs" />
-    <Compile Include="Models\SerializeModels\Departments.cs" />
-    <Compile Include="Models\SerializeModels\Employee.cs" />
-    <Compile Include="Models\SerializeModels\Equipment.cs" />
-    <Compile Include="Models\SerializeModels\Locations.cs" />
-    <Compile Include="Models\SerializeModels\MessageResponses.cs" />
-    <Compile Include="Models\SerializeModels\Parts.cs" />
-    <Compile Include="Models\SerializeModels\Problem.cs" />
-    <Compile Include="Models\SerializeModels\PropertiesWorkOrder.cs" />
-    <Compile Include="Models\SerializeModels\Repair.cs" />
-    <Compile Include="Models\SerializeModels\WorkOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProportiesModelBinder .cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
@@ -416,6 +404,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BloomService.Domain\BloomService.Domain.csproj">
+      <Project>{c864fa21-c500-4d98-9009-9a6f88709f8c}</Project>
+      <Name>BloomService.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

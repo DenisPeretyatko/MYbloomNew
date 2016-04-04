@@ -1,8 +1,9 @@
-﻿using Sage.WebApi.Models.SerializeModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Sage.WebApi.Infratructure.Service
 {
+    using BloomService.Domain.Entities;
+
     public interface IServiceManagement
     {
         string CatalogPath { get; set; }

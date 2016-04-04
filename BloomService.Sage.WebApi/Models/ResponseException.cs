@@ -1,8 +1,9 @@
-﻿using Sage.WebApi.Models.SerializeModels;
-using System;
+﻿using System;
 
 namespace Sage.WebApi.Models
 {
+    using BloomService.Domain.Entities;
+
     public class ResponseException : Exception
     {
         public MessageResponsesMessageResponseError Error { get; }

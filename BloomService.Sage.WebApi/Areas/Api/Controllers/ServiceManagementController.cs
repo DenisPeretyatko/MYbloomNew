@@ -1,11 +1,12 @@
 ﻿using AttributeRouting.Web.Mvc;
 using Sage.WebApi.Infratructure.Service;
 using Sage.WebApi.Models;
-using Sage.WebApi.Models.SerializeModels;
 using System.Web.Mvc;
 
 namespace Sage.WebApi.Areas.Api.Controllers
 {
+    using BloomService.Domain.Entities;
+
     [Authorize]
     public class ServiceManagementController : BaseApiController
     {

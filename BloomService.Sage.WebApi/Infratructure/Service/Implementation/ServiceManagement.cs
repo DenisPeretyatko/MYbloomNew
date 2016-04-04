@@ -1,8 +1,6 @@
 ﻿using Sage.Messaging;
 using Sage.WebApi.Infratructure.Constants;
 using Sage.WebApi.Models;
-using Sage.WebApi.Models.SerializeModels;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +8,8 @@ using System.Xml.Serialization;
 
 namespace Sage.WebApi.Infratructure.Service.Implementation
 {
+    using BloomService.Domain.Entities;
+
     public class ServiceManagement: IServiceManagement
     {
         public MessageTypeDescriptor mtd;

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Sage.WebApi.Models.SerializeModels
+﻿namespace BloomService.Domain.Entities
 {
+    using System.Collections.Generic;
+
     public partial class Properties : Dictionary<string, string>
     {
         

@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloomService.Web", "BloomService.Web\BloomService.Web.csproj", "{DA6EE7D1-A7AC-4398-8B2C-3E5FA843EC77}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sage.WebApi", "BloomService.Sage.WebApi\Sage.WebApi.csproj", "{507FF982-C1D8-451D-9DE4-AA71D83BE70C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloomService.Domain", "BloomService.Domain\BloomService.Domain.csproj", "{C864FA21-C500-4D98-9009-9A6F88709F8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{507FF982-C1D8-451D-9DE4-AA71D83BE70C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{507FF982-C1D8-451D-9DE4-AA71D83BE70C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{507FF982-C1D8-451D-9DE4-AA71D83BE70C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C864FA21-C500-4D98-9009-9A6F88709F8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C864FA21-C500-4D98-9009-9A6F88709F8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C864FA21-C500-4D98-9009-9A6F88709F8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C864FA21-C500-4D98-9009-9A6F88709F8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

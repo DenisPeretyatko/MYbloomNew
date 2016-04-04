@@ -1,14 +1,10 @@
-﻿using Sage.WebApi.Models.SerializeModels;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.ModelBinding;
+﻿using System.IO;
 using System.Web.Mvc;
 
 namespace Sage.WebApi
 {
+    using BloomService.Domain.Entities;
+
     public class ProportiesModelBinder : System.Web.Mvc.DefaultModelBinder
     {
         public override object BindModel(ControllerContext controllerContext, System.Web.Mvc.ModelBindingContext bindingContext)

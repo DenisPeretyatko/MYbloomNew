@@ -1,4 +1,4 @@
-﻿namespace Sage.WebApi.Models.SerializeModels
+﻿namespace BloomService.Domain.Entities
 {
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
