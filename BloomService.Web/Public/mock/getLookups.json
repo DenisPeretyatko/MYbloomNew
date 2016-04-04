@@ -1,0 +1,85 @@
+{
+    "locations": 
+    [
+        {
+            "id": 1,
+            "name": "Location 1"
+        },
+        {
+            "id": 2,
+            "name": "Location 2"
+        },
+        {
+            "id": 3,
+            "name": "Location 3"
+        }
+    ],
+     "customers": 
+    [
+        {
+           "id": 1,
+           "name": "Customer 1"
+        },
+        {
+           "id": 2,
+           "name": "Customer 2"
+        }
+    ],
+    "calltypes":  
+    [
+        {
+           "id": 1,
+           "name": "Type 1"
+        },
+        {
+           "id": 2,
+           "name": "Type 2"
+        }
+    ],
+    "problems": 
+    [
+        {
+           "id": 1,
+           "name": "Problem 1"
+        }
+    ],
+    "ratesheets": 
+    [
+        {
+           "id": 1,
+           "name": "Rate 1"
+        }
+    ],
+    "employes": 
+    [
+        {
+           "id": 1,
+           "name": "John Smith"
+        }
+    ],
+    "equipment": 
+    [
+        {
+           "id": 1,
+           "name": "Drill"
+        }
+    ],
+    "hours": 
+    [
+        {
+            "id": 1,
+            "name": "Default"
+        }
+    ],
+    "paymentMethods": 
+    [
+        {
+            "id": 1,
+            "name": "Cash"
+        },
+        {
+            "id": 2,
+            "name": "Wire Transfer"
+        }
+    ]
+}

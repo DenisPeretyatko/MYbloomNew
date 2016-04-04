@@ -2,7 +2,7 @@ var commonDataService = function($http) {
 
 	this.getWorkorders = function() {
 		//return $http.post("/workorders");
-		return $http.get("/public/mock/getWorkorders.json");
+		return $http.get("/Workorder/GetWorkorders");
 	}
 
 	this.saveWorkorder = function(workorder){
@@ -20,6 +20,9 @@ var commonDataService = function($http) {
 	this.getDashboard = function() {
 		return $http.get("/public/mock/getDashboard.json");
 	}
+	this.getLookups = function () {
+	    return $http.get("/Dashboard/GetLookups");
+	}
 
 	this.getLocations = function() {
 		return $http.get("/public/mock/getLocations.json");
@@ -35,7 +38,7 @@ var commonDataService = function($http) {
 
 	this.getTechnicians = function () {
 		//return $http.get("/technicians");
-		return $http.get("/public/mock/getTechnicians.json");
+	    return $http.get("/Technician/GetTachnicians");
 	}
 
 	this.saveTechnicianSchedule = function(technicianId, schedule) {
