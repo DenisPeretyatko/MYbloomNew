@@ -3,6 +3,8 @@ using System.Web.Mvc;
 
 namespace Sage.WebApi.Areas.HelpPage
 {
+    using Sage.WebApi.Areas.HelpPage.App_Start;
+
     public class HelpPageAreaRegistration : AreaRegistration
     {
         public override string AreaName

@@ -66,6 +66,7 @@
     <Compile Include="Entities\PropertiesWorkOrder.cs" />
     <Compile Include="Entities\Repair.cs" />
     <Compile Include="Entities\WorkOrder.cs" />
+    <Compile Include="Exceptions\ResponseException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

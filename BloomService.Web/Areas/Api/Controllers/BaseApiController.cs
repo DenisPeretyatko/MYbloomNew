@@ -1,14 +1,9 @@
-﻿using System.Web.Mvc;
-
-namespace Sage.WebApi.Areas.Api.Controllers
+﻿namespace BloomService.Web.Areas.Api.Controllers
 {
+    using System.Web.Mvc;
+
     public class BaseApiController : Controller
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         public new JsonResult Json(object obj)
         {
             var jsonResult = Json(obj, JsonRequestBehavior.AllowGet);

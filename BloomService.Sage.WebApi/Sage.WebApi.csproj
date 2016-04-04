@@ -103,19 +103,22 @@
     </Reference>
     <Reference Include="Sage.Data.CRE.Interfaces, Version=14.1.0.0, Culture=neutral, PublicKeyToken=3e78b2cabf12f868, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_32\Sage.Data.CRE.Interfaces\v4.0_14.1.0.0__3e78b2cabf12f868\Sage.Data.CRE.Interfaces.dll</HintPath>
+      <HintPath>..\lib\Sage.Data.CRE.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Sage.LS1.Core">
+      <HintPath>..\lib\Sage.LS1.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sage.LS1.Messaging, Version=14.1.0.0, Culture=neutral, PublicKeyToken=3e78b2cabf12f868, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_32\Sage.LS1.Messaging\v4.0_14.1.0.0__3e78b2cabf12f868\Sage.LS1.Messaging.dll</HintPath>
+      <HintPath>..\lib\Sage.LS1.Messaging.dll</HintPath>
     </Reference>
     <Reference Include="Sage.LS1.Messaging.Interfaces, Version=14.1.0.0, Culture=neutral, PublicKeyToken=3e78b2cabf12f868, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_32\Sage.LS1.Messaging.Interfaces\v4.0_14.1.0.0__3e78b2cabf12f868\Sage.LS1.Messaging.Interfaces.dll</HintPath>
+      <HintPath>..\lib\Sage.LS1.Messaging.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="Sage.LS1.Messaging.Provider, Version=14.1.0.0, Culture=neutral, PublicKeyToken=3e78b2cabf12f868, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_32\Sage.LS1.Messaging.Provider\v4.0_14.1.0.0__3e78b2cabf12f868\Sage.LS1.Messaging.Provider.dll</HintPath>
+      <HintPath>..\lib\Sage.LS1.Messaging.Provider.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -307,7 +310,6 @@
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ResponseException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProportiesModelBinder .cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />

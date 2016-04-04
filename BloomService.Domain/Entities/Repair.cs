@@ -18,11 +18,11 @@
         {
             get
             {
-                return this.repairField;
+                return repairField;
             }
             set
             {
-                this.repairField = value;
+                repairField = value;
             }
         }
 
@@ -32,11 +32,11 @@
         {
             get
             {
-                return this.descriptionField;
+                return descriptionField;
             }
             set
             {
-                this.descriptionField = value;
+                descriptionField = value;
             }
         }
 
@@ -46,11 +46,11 @@
         {
             get
             {
-                return this.inactiveField;
+                return inactiveField;
             }
             set
             {
-                this.inactiveField = value;
+                inactiveField = value;
             }
         }
 
@@ -60,11 +60,11 @@
         {
             get
             {
-                return this.jCCostCodeField;
+                return jCCostCodeField;
             }
             set
             {
-                this.jCCostCodeField = value;
+                jCCostCodeField = value;
             }
         }
     }

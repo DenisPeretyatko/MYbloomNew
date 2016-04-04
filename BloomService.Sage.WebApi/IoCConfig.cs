@@ -6,6 +6,8 @@ using TinyIoC;
 
 namespace Sage.WebApi
 {
+    using Sage.WebApi.Infratructure;
+
     public static class IoCConfig
     {
         public static void Register()

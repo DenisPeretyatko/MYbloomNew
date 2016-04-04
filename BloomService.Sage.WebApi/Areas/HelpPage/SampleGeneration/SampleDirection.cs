@@ -1,4 +1,4 @@
-namespace Sage.WebApi.Areas.HelpPage
+namespace Sage.WebApi.Areas.HelpPage.SampleGeneration
 {
     /// <summary>
     /// Indicates whether the sample is used for request or response

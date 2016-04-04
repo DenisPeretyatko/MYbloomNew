@@ -1,7 +1,7 @@
-using System;
-
-namespace Sage.WebApi.Areas.HelpPage
+namespace Sage.WebApi.Areas.HelpPage.SampleGeneration
 {
+    using System;
+
     /// <summary>
     /// This represents an image sample on the help page. There's a display template named ImageSample associated with this class.
     /// </summary>

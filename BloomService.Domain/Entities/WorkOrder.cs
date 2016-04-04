@@ -171,11 +171,11 @@
         {
             get
             {
-                return this.workOrderField;
+                return workOrderField;
             }
             set
             {
-                this.workOrderField = value;
+                workOrderField = value;
             }
         }
 
@@ -185,11 +185,11 @@
         {
             get
             {
-                return this.callTypeField;
+                return callTypeField;
             }
             set
             {
-                this.callTypeField = value;
+                callTypeField = value;
             }
         }
 
@@ -199,11 +199,11 @@
         {
             get
             {
-                return this.problemField;
+                return problemField;
             }
             set
             {
-                this.problemField = value;
+                problemField = value;
             }
         }
 
@@ -213,11 +213,11 @@
         {
             get
             {
-                return this.estimatedRepairHoursField;
+                return estimatedRepairHoursField;
             }
             set
             {
-                this.estimatedRepairHoursField = value;
+                estimatedRepairHoursField = value;
             }
         }
 
@@ -227,11 +227,11 @@
         {
             get
             {
-                return this.priorityField;
+                return priorityField;
             }
             set
             {
-                this.priorityField = value;
+                priorityField = value;
             }
         }
 
@@ -241,11 +241,11 @@
         {
             get
             {
-                return this.agreementField;
+                return agreementField;
             }
             set
             {
-                this.agreementField = value;
+                agreementField = value;
             }
         }
 
@@ -255,11 +255,11 @@
         {
             get
             {
-                return this.agreemntPeriodField;
+                return agreemntPeriodField;
             }
             set
             {
-                this.agreemntPeriodField = value;
+                agreemntPeriodField = value;
             }
         }
 
@@ -269,11 +269,11 @@
         {
             get
             {
-                return this.agreemntPeriodFieldSpecified;
+                return agreemntPeriodFieldSpecified;
             }
             set
             {
-                this.agreemntPeriodFieldSpecified = value;
+                agreemntPeriodFieldSpecified = value;
             }
         }
 
@@ -283,11 +283,11 @@
         {
             get
             {
-                return this.centerField;
+                return centerField;
             }
             set
             {
-                this.centerField = value;
+                centerField = value;
             }
         }
 
@@ -297,11 +297,11 @@
         {
             get
             {
-                return this.areaField;
+                return areaField;
             }
             set
             {
-                this.areaField = value;
+                areaField = value;
             }
         }
 
@@ -311,11 +311,11 @@
         {
             get
             {
-                return this.nameField;
+                return nameField;
             }
             set
             {
-                this.nameField = value;
+                nameField = value;
             }
         }
 
@@ -325,11 +325,11 @@
         {
             get
             {
-                return this.contactField;
+                return contactField;
             }
             set
             {
-                this.contactField = value;
+                contactField = value;
             }
         }
 
@@ -339,11 +339,11 @@
         {
             get
             {
-                return this.dateEnteredField;
+                return dateEnteredField;
             }
             set
             {
-                this.dateEnteredField = value;
+                dateEnteredField = value;
             }
         }
 
@@ -353,11 +353,11 @@
         {
             get
             {
-                return this.dateEnteredFieldSpecified;
+                return dateEnteredFieldSpecified;
             }
             set
             {
-                this.dateEnteredFieldSpecified = value;
+                dateEnteredFieldSpecified = value;
             }
         }
 
@@ -367,11 +367,11 @@
         {
             get
             {
-                return this.timeEnteredField;
+                return timeEnteredField;
             }
             set
             {
-                this.timeEnteredField = value;
+                timeEnteredField = value;
             }
         }
 
@@ -381,11 +381,11 @@
         {
             get
             {
-                return this.timeEnteredFieldSpecified;
+                return timeEnteredFieldSpecified;
             }
             set
             {
-                this.timeEnteredFieldSpecified = value;
+                timeEnteredFieldSpecified = value;
             }
         }
 
@@ -395,11 +395,11 @@
         {
             get
             {
-                return this.enteredByField;
+                return enteredByField;
             }
             set
             {
-                this.enteredByField = value;
+                enteredByField = value;
             }
         }
 
@@ -409,11 +409,11 @@
         {
             get
             {
-                return this.employeeField;
+                return employeeField;
             }
             set
             {
-                this.employeeField = value;
+                employeeField = value;
             }
         }
 
@@ -423,11 +423,11 @@
         {
             get
             {
-                return this.dateRunField;
+                return dateRunField;
             }
             set
             {
-                this.dateRunField = value;
+                dateRunField = value;
             }
         }
 
@@ -437,11 +437,11 @@
         {
             get
             {
-                return this.dateCompleteField;
+                return dateCompleteField;
             }
             set
             {
-                this.dateCompleteField = value;
+                dateCompleteField = value;
             }
         }
 
@@ -451,11 +451,11 @@
         {
             get
             {
-                return this.timeCompleteField;
+                return timeCompleteField;
             }
             set
             {
-                this.timeCompleteField = value;
+                timeCompleteField = value;
             }
         }
 
@@ -465,11 +465,11 @@
         {
             get
             {
-                return this.timeCompleteFieldSpecified;
+                return timeCompleteFieldSpecified;
             }
             set
             {
-                this.timeCompleteFieldSpecified = value;
+                timeCompleteFieldSpecified = value;
             }
         }
 
@@ -479,11 +479,11 @@
         {
             get
             {
-                return this.completedByField;
+                return completedByField;
             }
             set
             {
-                this.completedByField = value;
+                completedByField = value;
             }
         }
 
@@ -493,11 +493,11 @@
         {
             get
             {
-                return this.completedByFieldSpecified;
+                return completedByFieldSpecified;
             }
             set
             {
-                this.completedByFieldSpecified = value;
+                completedByFieldSpecified = value;
             }
         }
 
@@ -507,11 +507,11 @@
         {
             get
             {
-                return this.statusField;
+                return statusField;
             }
             set
             {
-                this.statusField = value;
+                statusField = value;
             }
         }
 
@@ -521,11 +521,11 @@
         {
             get
             {
-                return this.customerPOField;
+                return customerPOField;
             }
             set
             {
-                this.customerPOField = value;
+                customerPOField = value;
             }
         }
 
@@ -535,11 +535,11 @@
         {
             get
             {
-                return this.quoteExpirationDateField;
+                return quoteExpirationDateField;
             }
             set
             {
-                this.quoteExpirationDateField = value;
+                quoteExpirationDateField = value;
             }
         }
 
@@ -549,11 +549,11 @@
         {
             get
             {
-                return this.taxatCenterField;
+                return taxatCenterField;
             }
             set
             {
-                this.taxatCenterField = value;
+                taxatCenterField = value;
             }
         }
 
@@ -563,11 +563,11 @@
         {
             get
             {
-                return this.amountField;
+                return amountField;
             }
             set
             {
-                this.amountField = value;
+                amountField = value;
             }
         }
 
@@ -577,11 +577,11 @@
         {
             get
             {
-                return this.amountFieldSpecified;
+                return amountFieldSpecified;
             }
             set
             {
-                this.amountFieldSpecified = value;
+                amountFieldSpecified = value;
             }
         }
 
@@ -591,11 +591,11 @@
         {
             get
             {
-                return this.salesTaxAmountField;
+                return salesTaxAmountField;
             }
             set
             {
-                this.salesTaxAmountField = value;
+                salesTaxAmountField = value;
             }
         }
 
@@ -605,11 +605,11 @@
         {
             get
             {
-                return this.salesTaxAmountFieldSpecified;
+                return salesTaxAmountFieldSpecified;
             }
             set
             {
-                this.salesTaxAmountFieldSpecified = value;
+                salesTaxAmountFieldSpecified = value;
             }
         }
 
@@ -619,11 +619,11 @@
         {
             get
             {
-                return this.amountBilledField;
+                return amountBilledField;
             }
             set
             {
-                this.amountBilledField = value;
+                amountBilledField = value;
             }
         }
 
@@ -633,11 +633,11 @@
         {
             get
             {
-                return this.amountBilledFieldSpecified;
+                return amountBilledFieldSpecified;
             }
             set
             {
-                this.amountBilledFieldSpecified = value;
+                amountBilledFieldSpecified = value;
             }
         }
 
@@ -647,11 +647,11 @@
         {
             get
             {
-                return this.totalCostField;
+                return totalCostField;
             }
             set
             {
-                this.totalCostField = value;
+                totalCostField = value;
             }
         }
 
@@ -661,11 +661,11 @@
         {
             get
             {
-                return this.totalCostFieldSpecified;
+                return totalCostFieldSpecified;
             }
             set
             {
-                this.totalCostFieldSpecified = value;
+                totalCostFieldSpecified = value;
             }
         }
 
@@ -675,11 +675,11 @@
         {
             get
             {
-                return this.leadSourceField;
+                return leadSourceField;
             }
             set
             {
-                this.leadSourceField = value;
+                leadSourceField = value;
             }
         }
 
@@ -689,11 +689,11 @@
         {
             get
             {
-                return this.commentsField;
+                return commentsField;
             }
             set
             {
-                this.commentsField = value;
+                commentsField = value;
             }
         }
 
@@ -703,11 +703,11 @@
         {
             get
             {
-                return this.equipmentField;
+                return equipmentField;
             }
             set
             {
-                this.equipmentField = value;
+                equipmentField = value;
             }
         }
 
@@ -717,11 +717,11 @@
         {
             get
             {
-                return this.equipmentFieldSpecified;
+                return equipmentFieldSpecified;
             }
             set
             {
-                this.equipmentFieldSpecified = value;
+                equipmentFieldSpecified = value;
             }
         }
 
@@ -731,11 +731,11 @@
         {
             get
             {
-                return this.workOrderTypeField;
+                return workOrderTypeField;
             }
             set
             {
-                this.workOrderTypeField = value;
+                workOrderTypeField = value;
             }
         }
 
@@ -745,11 +745,11 @@
         {
             get
             {
-                return this.payMethodField;
+                return payMethodField;
             }
             set
             {
-                this.payMethodField = value;
+                payMethodField = value;
             }
         }
 
@@ -759,11 +759,11 @@
         {
             get
             {
-                return this.preventiveMaintenanceField;
+                return preventiveMaintenanceField;
             }
             set
             {
-                this.preventiveMaintenanceField = value;
+                preventiveMaintenanceField = value;
             }
         }
 
@@ -773,11 +773,11 @@
         {
             get
             {
-                return this.rateSheetField;
+                return rateSheetField;
             }
             set
             {
-                this.rateSheetField = value;
+                rateSheetField = value;
             }
         }
 
@@ -787,11 +787,11 @@
         {
             get
             {
-                return this.salesEmployeeField;
+                return salesEmployeeField;
             }
             set
             {
-                this.salesEmployeeField = value;
+                salesEmployeeField = value;
             }
         }
 
@@ -801,11 +801,11 @@
         {
             get
             {
-                return this.jobSaleProductField;
+                return jobSaleProductField;
             }
             set
             {
-                this.jobSaleProductField = value;
+                jobSaleProductField = value;
             }
         }
 
@@ -815,11 +815,11 @@
         {
             get
             {
-                return this.estimatedPartsCostField;
+                return estimatedPartsCostField;
             }
             set
             {
-                this.estimatedPartsCostField = value;
+                estimatedPartsCostField = value;
             }
         }
 
@@ -829,11 +829,11 @@
         {
             get
             {
-                return this.estimatedPartsCostFieldSpecified;
+                return estimatedPartsCostFieldSpecified;
             }
             set
             {
-                this.estimatedPartsCostFieldSpecified = value;
+                estimatedPartsCostFieldSpecified = value;
             }
         }
 
@@ -843,11 +843,11 @@
         {
             get
             {
-                return this.estimatedLaborCostField;
+                return estimatedLaborCostField;
             }
             set
             {
-                this.estimatedLaborCostField = value;
+                estimatedLaborCostField = value;
             }
         }
 
@@ -857,11 +857,11 @@
         {
             get
             {
-                return this.estimatedLaborCostFieldSpecified;
+                return estimatedLaborCostFieldSpecified;
             }
             set
             {
-                this.estimatedLaborCostFieldSpecified = value;
+                estimatedLaborCostFieldSpecified = value;
             }
         }
 
@@ -871,11 +871,11 @@
         {
             get
             {
-                return this.estimatedMiscCostField;
+                return estimatedMiscCostField;
             }
             set
             {
-                this.estimatedMiscCostField = value;
+                estimatedMiscCostField = value;
             }
         }
 
@@ -885,11 +885,11 @@
         {
             get
             {
-                return this.estimatedMiscCostFieldSpecified;
+                return estimatedMiscCostFieldSpecified;
             }
             set
             {
-                this.estimatedMiscCostFieldSpecified = value;
+                estimatedMiscCostFieldSpecified = value;
             }
         }
 
@@ -899,11 +899,11 @@
         {
             get
             {
-                return this.actualPartsCostField;
+                return actualPartsCostField;
             }
             set
             {
-                this.actualPartsCostField = value;
+                actualPartsCostField = value;
             }
         }
 
@@ -913,11 +913,11 @@
         {
             get
             {
-                return this.actualPartsCostFieldSpecified;
+                return actualPartsCostFieldSpecified;
             }
             set
             {
-                this.actualPartsCostFieldSpecified = value;
+                actualPartsCostFieldSpecified = value;
             }
         }
 
@@ -927,11 +927,11 @@
         {
             get
             {
-                return this.actualLaborCostField;
+                return actualLaborCostField;
             }
             set
             {
-                this.actualLaborCostField = value;
+                actualLaborCostField = value;
             }
         }
 
@@ -941,11 +941,11 @@
         {
             get
             {
-                return this.actualLaborCostFieldSpecified;
+                return actualLaborCostFieldSpecified;
             }
             set
             {
-                this.actualLaborCostFieldSpecified = value;
+                actualLaborCostFieldSpecified = value;
             }
         }
 
@@ -955,11 +955,11 @@
         {
             get
             {
-                return this.actualMiscCostField;
+                return actualMiscCostField;
             }
             set
             {
-                this.actualMiscCostField = value;
+                actualMiscCostField = value;
             }
         }
 
@@ -969,11 +969,11 @@
         {
             get
             {
-                return this.actualMiscCostFieldSpecified;
+                return actualMiscCostFieldSpecified;
             }
             set
             {
-                this.actualMiscCostFieldSpecified = value;
+                actualMiscCostFieldSpecified = value;
             }
         }
 
@@ -983,11 +983,11 @@
         {
             get
             {
-                return this.actualLaborHoursField;
+                return actualLaborHoursField;
             }
             set
             {
-                this.actualLaborHoursField = value;
+                actualLaborHoursField = value;
             }
         }
 
@@ -997,11 +997,11 @@
         {
             get
             {
-                return this.actualLaborHoursFieldSpecified;
+                return actualLaborHoursFieldSpecified;
             }
             set
             {
-                this.actualLaborHoursFieldSpecified = value;
+                actualLaborHoursFieldSpecified = value;
             }
         }
 
@@ -1011,11 +1011,11 @@
         {
             get
             {
-                return this.alternateWorkOrderNbrField;
+                return alternateWorkOrderNbrField;
             }
             set
             {
-                this.alternateWorkOrderNbrField = value;
+                alternateWorkOrderNbrField = value;
             }
         }
 
@@ -1025,11 +1025,11 @@
         {
             get
             {
-                return this.leadField;
+                return leadField;
             }
             set
             {
-                this.leadField = value;
+                leadField = value;
             }
         }
 
@@ -1039,11 +1039,11 @@
         {
             get
             {
-                return this.leadFieldSpecified;
+                return leadFieldSpecified;
             }
             set
             {
-                this.leadFieldSpecified = value;
+                leadFieldSpecified = value;
             }
         }
 
@@ -1053,11 +1053,11 @@
         {
             get
             {
-                return this.miscField;
+                return miscField;
             }
             set
             {
-                this.miscField = value;
+                miscField = value;
             }
         }
 
@@ -1067,11 +1067,11 @@
         {
             get
             {
-                return this.callDateField;
+                return callDateField;
             }
             set
             {
-                this.callDateField = value;
+                callDateField = value;
             }
         }
 
@@ -1081,11 +1081,11 @@
         {
             get
             {
-                return this.callDateFieldSpecified;
+                return callDateFieldSpecified;
             }
             set
             {
-                this.callDateFieldSpecified = value;
+                callDateFieldSpecified = value;
             }
         }
 
@@ -1095,11 +1095,11 @@
         {
             get
             {
-                return this.callTimeField;
+                return callTimeField;
             }
             set
             {
-                this.callTimeField = value;
+                callTimeField = value;
             }
         }
 
@@ -1109,11 +1109,11 @@
         {
             get
             {
-                return this.callTimeFieldSpecified;
+                return callTimeFieldSpecified;
             }
             set
             {
-                this.callTimeFieldSpecified = value;
+                callTimeFieldSpecified = value;
             }
         }
 
@@ -1123,11 +1123,11 @@
         {
             get
             {
-                return this.jCJobField;
+                return jCJobField;
             }
             set
             {
-                this.jCJobField = value;
+                jCJobField = value;
             }
         }
 
@@ -1137,11 +1137,11 @@
         {
             get
             {
-                return this.jCExtraField;
+                return jCExtraField;
             }
             set
             {
-                this.jCExtraField = value;
+                jCExtraField = value;
             }
         }
 
@@ -1151,11 +1151,11 @@
         {
             get
             {
-                return this.locationField;
+                return locationField;
             }
             set
             {
-                this.locationField = value;
+                locationField = value;
             }
         }
 
@@ -1165,11 +1165,11 @@
         {
             get
             {
-                return this.aRCustomerField;
+                return aRCustomerField;
             }
             set
             {
-                this.aRCustomerField = value;
+                aRCustomerField = value;
             }
         }
 
@@ -1179,11 +1179,11 @@
         {
             get
             {
-                return this.departmentField;
+                return departmentField;
             }
             set
             {
-                this.departmentField = value;
+                departmentField = value;
             }
         }
 
@@ -1193,11 +1193,11 @@
         {
             get
             {
-                return this.nonBillableField;
+                return nonBillableField;
             }
             set
             {
-                this.nonBillableField = value;
+                nonBillableField = value;
             }
         }
 
@@ -1207,11 +1207,11 @@
         {
             get
             {
-                return this.chargeBilltoField;
+                return chargeBilltoField;
             }
             set
             {
-                this.chargeBilltoField = value;
+                chargeBilltoField = value;
             }
         }
 
@@ -1221,11 +1221,11 @@
         {
             get
             {
-                return this.permissionCodeField;
+                return permissionCodeField;
             }
             set
             {
-                this.permissionCodeField = value;
+                permissionCodeField = value;
             }
         }
 
@@ -1235,11 +1235,11 @@
         {
             get
             {
-                return this.salesTaxBilledField;
+                return salesTaxBilledField;
             }
             set
             {
-                this.salesTaxBilledField = value;
+                salesTaxBilledField = value;
             }
         }
 
@@ -1249,11 +1249,11 @@
         {
             get
             {
-                return this.invoiceDateField;
+                return invoiceDateField;
             }
             set
             {
-                this.invoiceDateField = value;
+                invoiceDateField = value;
             }
         }
 
@@ -1263,11 +1263,11 @@
         {
             get
             {
-                return this.dateClosedField;
+                return dateClosedField;
             }
             set
             {
-                this.dateClosedField = value;
+                dateClosedField = value;
             }
         }
 
@@ -1277,11 +1277,11 @@
         {
             get
             {
-                return this.nottoExceedField;
+                return nottoExceedField;
             }
             set
             {
-                this.nottoExceedField = value;
+                nottoExceedField = value;
             }
         }
 
@@ -1291,11 +1291,11 @@
         {
             get
             {
-                return this.agreemntPeriCustomerField;
+                return agreemntPeriCustomerField;
             }
             set
             {
-                this.agreemntPeriCustomerField = value;
+                agreemntPeriCustomerField = value;
             }
         }
     }

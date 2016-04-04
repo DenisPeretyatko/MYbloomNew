@@ -68,11 +68,11 @@
         {
             get
             {
-                return this.employeeField;
+                return employeeField;
             }
             set
             {
-                this.employeeField = value;
+                employeeField = value;
             }
         }
 
@@ -82,11 +82,11 @@
         {
             get
             {
-                return this.centerField;
+                return centerField;
             }
             set
             {
-                this.centerField = value;
+                centerField = value;
             }
         }
 
@@ -96,11 +96,11 @@
         {
             get
             {
-                return this.nameField;
+                return nameField;
             }
             set
             {
-                this.nameField = value;
+                nameField = value;
             }
         }
 
@@ -110,11 +110,11 @@
         {
             get
             {
-                return this.addressField;
+                return addressField;
             }
             set
             {
-                this.addressField = value;
+                addressField = value;
             }
         }
 
@@ -124,11 +124,11 @@
         {
             get
             {
-                return this.address2Field;
+                return address2Field;
             }
             set
             {
-                this.address2Field = value;
+                address2Field = value;
             }
         }
 
@@ -138,11 +138,11 @@
         {
             get
             {
-                return this.cityField;
+                return cityField;
             }
             set
             {
-                this.cityField = value;
+                cityField = value;
             }
         }
 
@@ -152,11 +152,11 @@
         {
             get
             {
-                return this.stateField;
+                return stateField;
             }
             set
             {
-                this.stateField = value;
+                stateField = value;
             }
         }
 
@@ -166,11 +166,11 @@
         {
             get
             {
-                return this.zIPField;
+                return zIPField;
             }
             set
             {
-                this.zIPField = value;
+                zIPField = value;
             }
         }
 
@@ -180,11 +180,11 @@
         {
             get
             {
-                return this.countryField;
+                return countryField;
             }
             set
             {
-                this.countryField = value;
+                countryField = value;
             }
         }
 
@@ -194,11 +194,11 @@
         {
             get
             {
-                return this.phoneField;
+                return phoneField;
             }
             set
             {
-                this.phoneField = value;
+                phoneField = value;
             }
         }
 
@@ -208,11 +208,11 @@
         {
             get
             {
-                return this.faxField;
+                return faxField;
             }
             set
             {
-                this.faxField = value;
+                faxField = value;
             }
         }
 
@@ -222,11 +222,11 @@
         {
             get
             {
-                return this.pagerField;
+                return pagerField;
             }
             set
             {
-                this.pagerField = value;
+                pagerField = value;
             }
         }
 
@@ -236,11 +236,11 @@
         {
             get
             {
-                return this.emailField;
+                return emailField;
             }
             set
             {
-                this.emailField = value;
+                emailField = value;
             }
         }
 
@@ -250,11 +250,11 @@
         {
             get
             {
-                return this.departmentField;
+                return departmentField;
             }
             set
             {
-                this.departmentField = value;
+                departmentField = value;
             }
         }
 
@@ -264,11 +264,11 @@
         {
             get
             {
-                return this.stockLocationField;
+                return stockLocationField;
             }
             set
             {
-                this.stockLocationField = value;
+                stockLocationField = value;
             }
         }
 
@@ -278,11 +278,11 @@
         {
             get
             {
-                return this.birthdateField;
+                return birthdateField;
             }
             set
             {
-                this.birthdateField = value;
+                birthdateField = value;
             }
         }
 
@@ -292,11 +292,11 @@
         {
             get
             {
-                return this.jobTitleField;
+                return jobTitleField;
             }
             set
             {
-                this.jobTitleField = value;
+                jobTitleField = value;
             }
         }
 
@@ -306,11 +306,11 @@
         {
             get
             {
-                return this.statusField;
+                return statusField;
             }
             set
             {
-                this.statusField = value;
+                statusField = value;
             }
         }
 
@@ -320,11 +320,11 @@
         {
             get
             {
-                return this.inactiveField;
+                return inactiveField;
             }
             set
             {
-                this.inactiveField = value;
+                inactiveField = value;
             }
         }
 
@@ -334,11 +334,11 @@
         {
             get
             {
-                return this.pagerDeviceField;
+                return pagerDeviceField;
             }
             set
             {
-                this.pagerDeviceField = value;
+                pagerDeviceField = value;
             }
         }
 
@@ -348,11 +348,11 @@
         {
             get
             {
-                return this.aliasField;
+                return aliasField;
             }
             set
             {
-                this.aliasField = value;
+                aliasField = value;
             }
         }
 
@@ -362,11 +362,11 @@
         {
             get
             {
-                return this.jCJobField;
+                return jCJobField;
             }
             set
             {
-                this.jCJobField = value;
+                jCJobField = value;
             }
         }
 
@@ -376,11 +376,11 @@
         {
             get
             {
-                return this.jCCostCodeField;
+                return jCCostCodeField;
             }
             set
             {
-                this.jCCostCodeField = value;
+                jCCostCodeField = value;
             }
         }
 
@@ -390,11 +390,11 @@
         {
             get
             {
-                return this.pREmployeeField;
+                return pREmployeeField;
             }
             set
             {
-                this.pREmployeeField = value;
+                pREmployeeField = value;
             }
         }
 
@@ -404,11 +404,11 @@
         {
             get
             {
-                return this.defaultStartTimeField;
+                return defaultStartTimeField;
             }
             set
             {
-                this.defaultStartTimeField = value;
+                defaultStartTimeField = value;
             }
         }
 
@@ -418,11 +418,11 @@
         {
             get
             {
-                return this.normalEndTimeField;
+                return normalEndTimeField;
             }
             set
             {
-                this.normalEndTimeField = value;
+                normalEndTimeField = value;
             }
         }
 
@@ -432,11 +432,11 @@
         {
             get
             {
-                return this.workSaturdayField;
+                return workSaturdayField;
             }
             set
             {
-                this.workSaturdayField = value;
+                workSaturdayField = value;
             }
         }
 
@@ -446,11 +446,11 @@
         {
             get
             {
-                return this.workSundayField;
+                return workSundayField;
             }
             set
             {
-                this.workSundayField = value;
+                workSundayField = value;
             }
         }
 
@@ -460,11 +460,11 @@
         {
             get
             {
-                return this.defaultRepairField;
+                return defaultRepairField;
             }
             set
             {
-                this.defaultRepairField = value;
+                defaultRepairField = value;
             }
         }
     }

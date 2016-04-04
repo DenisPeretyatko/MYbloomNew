@@ -1,7 +1,7 @@
-﻿using System.Configuration;
-
-namespace Sage.WebApi.Infratructure.Service.Implementation
+﻿namespace Sage.WebApi.Infratructure
 {
+    using System.Configuration;
+
     public class SageWebConfig
     {
         public string CatalogPath { get; }

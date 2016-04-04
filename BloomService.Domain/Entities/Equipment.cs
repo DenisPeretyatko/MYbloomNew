@@ -44,11 +44,11 @@
         {
             get
             {
-                return this.equipmentField;
+                return equipmentField;
             }
             set
             {
-                this.equipmentField = value;
+                equipmentField = value;
             }
         }
 
@@ -58,11 +58,11 @@
         {
             get
             {
-                return this.parentnumberField;
+                return parentnumberField;
             }
             set
             {
-                this.parentnumberField = value;
+                parentnumberField = value;
             }
         }
 
@@ -72,11 +72,11 @@
         {
             get
             {
-                return this.partField;
+                return partField;
             }
             set
             {
-                this.partField = value;
+                partField = value;
             }
         }
 
@@ -86,11 +86,11 @@
         {
             get
             {
-                return this.serialNumberField;
+                return serialNumberField;
             }
             set
             {
-                this.serialNumberField = value;
+                serialNumberField = value;
             }
         }
 
@@ -100,11 +100,11 @@
         {
             get
             {
-                return this.equipmentTypeField;
+                return equipmentTypeField;
             }
             set
             {
-                this.equipmentTypeField = value;
+                equipmentTypeField = value;
             }
         }
 
@@ -114,11 +114,11 @@
         {
             get
             {
-                return this.modelField;
+                return modelField;
             }
             set
             {
-                this.modelField = value;
+                modelField = value;
             }
         }
 
@@ -128,11 +128,11 @@
         {
             get
             {
-                return this.manufacturerField;
+                return manufacturerField;
             }
             set
             {
-                this.manufacturerField = value;
+                manufacturerField = value;
             }
         }
 
@@ -142,11 +142,11 @@
         {
             get
             {
-                return this.yearofManufacturingField;
+                return yearofManufacturingField;
             }
             set
             {
-                this.yearofManufacturingField = value;
+                yearofManufacturingField = value;
             }
         }
 
@@ -156,11 +156,11 @@
         {
             get
             {
-                return this.installDateField;
+                return installDateField;
             }
             set
             {
-                this.installDateField = value;
+                installDateField = value;
             }
         }
 
@@ -170,11 +170,11 @@
         {
             get
             {
-                return this.installLocationField;
+                return installLocationField;
             }
             set
             {
-                this.installLocationField = value;
+                installLocationField = value;
             }
         }
 
@@ -184,11 +184,11 @@
         {
             get
             {
-                return this.dateReplacedField;
+                return dateReplacedField;
             }
             set
             {
-                this.dateReplacedField = value;
+                dateReplacedField = value;
             }
         }
 
@@ -198,11 +198,11 @@
         {
             get
             {
-                return this.dateRemovedField;
+                return dateRemovedField;
             }
             set
             {
-                this.dateRemovedField = value;
+                dateRemovedField = value;
             }
         }
 
@@ -212,11 +212,11 @@
         {
             get
             {
-                return this.warrantyStartsField;
+                return warrantyStartsField;
             }
             set
             {
-                this.warrantyStartsField = value;
+                warrantyStartsField = value;
             }
         }
 
@@ -226,11 +226,11 @@
         {
             get
             {
-                return this.warrantyExpiresField;
+                return warrantyExpiresField;
             }
             set
             {
-                this.warrantyExpiresField = value;
+                warrantyExpiresField = value;
             }
         }
 
@@ -240,11 +240,11 @@
         {
             get
             {
-                return this.employeeField;
+                return employeeField;
             }
             set
             {
-                this.employeeField = value;
+                employeeField = value;
             }
         }
 
@@ -254,11 +254,11 @@
         {
             get
             {
-                return this.inactiveField;
+                return inactiveField;
             }
             set
             {
-                this.inactiveField = value;
+                inactiveField = value;
             }
         }
 
@@ -268,11 +268,11 @@
         {
             get
             {
-                return this.locationField;
+                return locationField;
             }
             set
             {
-                this.locationField = value;
+                locationField = value;
             }
         }
     }

@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 namespace Sage.WebApi.Infratructure.Service.Implementation
 {
     using BloomService.Domain.Entities;
+    using BloomService.Domain.Exceptions;
 
     public class ServiceManagement: IServiceManagement
     {

@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using System.Security.Claims;
-using System.Threading;
-
-namespace Sage.WebApi.Infratructure.Service.Implementation
+﻿namespace Sage.WebApi.Infratructure
 {
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading;
+
     public class ClaimsAgent
     {
         public string Name;
@@ -11,7 +11,7 @@ namespace Sage.WebApi.Infratructure.Service.Implementation
         public ClaimsAgent()
         {
             var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
-            
+
             Name = identity.Claims.Where(c => c.Type == ClaimTypes.Name)
                                .Select(c => c.Value).SingleOrDefault();
             Password = identity.Claims.Where(c => c.Type == ClaimTypes.Surname)

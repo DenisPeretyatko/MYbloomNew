@@ -1,52 +1,50 @@
-﻿using AttributeRouting.Web.Mvc;
-using Sage.WebApi.Infratructure.Service;
-using Sage.WebApi.Models;
-using System.Web.Mvc;
-
-namespace Sage.WebApi.Areas.Api.Controllers
+﻿namespace BloomService.Web.Areas.Api.Controllers
 {
+    using System.Web.Mvc;
+
     using BloomService.Domain.Entities;
     using BloomService.Domain.Exceptions;
+    using BloomService.Web.Managers;
 
     [Authorize]
     public class ServiceManagementController : BaseApiController
     {
-        private readonly IServiceManagement _serviceManager;
+        private readonly ISageApiManager sageApiManager;
 
-        public ServiceManagementController(IServiceManagement serviceManager)
+        public ServiceManagementController(ISageApiManager sageApiManager)
         {
-            _serviceManager = serviceManager;
+            this.sageApiManager = sageApiManager;
         }
         
         public ActionResult Locations()
         {
-            return Json(_serviceManager.Locations());
+            return Json(sageApiManager.Locations());
         }
 
         public ActionResult Parts()
         {
-            return Json(_serviceManager.Parts());
+            return Json(sageApiManager.Parts());
         }
 
         public ActionResult Problems()
         {
-            return Json(_serviceManager.Problems());
+            return Json(sageApiManager.Problems());
         }
 
         public ActionResult Repairs()
         {
-            return Json(_serviceManager.Repairs());
+            return Json(sageApiManager.Repairs());
         }
 
+        [AllowAnonymous]
         public ActionResult Employees()
         {
-            return Json(_serviceManager.Employees());
+            return Json(sageApiManager.Employees());
         }
         
-        [GET("api/v1/sm/workorders/{id}")]
         public ActionResult Workorders(string id)
         {
-            return id == null ? Json(_serviceManager.WorkOrders()) : Json(_serviceManager.WorkOrders(id));
+            return id == null ? Json(sageApiManager.WorkOrders()) : Json(sageApiManager.WorkOrders(id));
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
@@ -54,7 +52,7 @@ namespace Sage.WebApi.Areas.Api.Controllers
         {
             try
             {
-                return Json(_serviceManager.WorkOrders(properties));
+                return Json(sageApiManager.WorkOrders(properties));
             }
             catch(ResponseException ex)
             {
@@ -64,23 +62,22 @@ namespace Sage.WebApi.Areas.Api.Controllers
 
         public ActionResult Calltypes()
         {
-            return Json(_serviceManager.Calltypes());
+            return Json(sageApiManager.Calltypes());
         }
 
         public ActionResult Departments()
         {
-            return Json(_serviceManager.Departments());
+            return Json(sageApiManager.Departments());
         }
 
         public ActionResult Equipment()
         {
-            return Json(_serviceManager.Equipments());
+            return Json(sageApiManager.Equipments());
         }
 
-        [GET("api/v1/sm/assignments/{id}")]
         public ActionResult Assignments(string id)
         {
-            return id == null ? Json(_serviceManager.Assignments()) : Json(_serviceManager.Assignments(id));
+            return id == null ? Json(sageApiManager.Assignments()) : Json(sageApiManager.Assignments(id));
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
@@ -88,7 +85,7 @@ namespace Sage.WebApi.Areas.Api.Controllers
         {
             try
             {
-                return Json(_serviceManager.AddAssignments(properties));
+                return Json(sageApiManager.AddAssignments(properties));
             }
             catch (ResponseException ex)
             {
@@ -101,27 +98,27 @@ namespace Sage.WebApi.Areas.Api.Controllers
         {
             try
             {
-                return Json(_serviceManager.EditAssignments(properties));
+                return Json(sageApiManager.EditAssignments(properties));
             }
             catch (ResponseException ex)
             {
                 return Json(ex.Error);
             }
         }
-        
+
         public ActionResult RateSheets()
         {
-            return Json(_serviceManager.RateSheet());
-        }
-        
-        public ActionResult PermissionCodes()
-        {
-            return Json(_serviceManager.PermissionCode());
+            return Json(sageApiManager.RateSheet());
         }
 
-        //public ActionResult Agreements()
-        //{
-        //    return Json(_serviceManager.Agreements());
-        //}
+        public ActionResult PermissionCodes()
+        {
+            return Json(sageApiManager.PermissionCode());
+        }
+
+        public ActionResult Agreements()
+        {
+            return Json(sageApiManager.Agreements());
+        }
     }
 }

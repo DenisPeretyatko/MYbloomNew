@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Sage.WebApi.Infratructure.Service
+﻿namespace Sage.WebApi.Infratructure.Service
 {
+    using System.Collections.Generic;
+
     using BloomService.Domain.Entities;
 
     public interface IServiceManagement

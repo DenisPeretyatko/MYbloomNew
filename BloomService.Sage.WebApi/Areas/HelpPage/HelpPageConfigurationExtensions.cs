@@ -16,6 +16,8 @@ using Sage.WebApi.Areas.HelpPage.Models;
 
 namespace Sage.WebApi.Areas.HelpPage
 {
+    using Sage.WebApi.Areas.HelpPage.SampleGeneration;
+
     public static class HelpPageConfigurationExtensions
     {
         private const string ApiModelPrefix = "MS_HelpPageApiModel_";

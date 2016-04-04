@@ -28,11 +28,11 @@
         {
             get
             {
-                return this.problemField;
+                return problemField;
             }
             set
             {
-                this.problemField = value;
+                problemField = value;
             }
         }
 
@@ -42,11 +42,11 @@
         {
             get
             {
-                return this.descriptionField;
+                return descriptionField;
             }
             set
             {
-                this.descriptionField = value;
+                descriptionField = value;
             }
         }
 
@@ -56,11 +56,11 @@
         {
             get
             {
-                return this.departmentField;
+                return departmentField;
             }
             set
             {
-                this.departmentField = value;
+                departmentField = value;
             }
         }
 
@@ -70,11 +70,11 @@
         {
             get
             {
-                return this.estimatedRepairHoursField;
+                return estimatedRepairHoursField;
             }
             set
             {
-                this.estimatedRepairHoursField = value;
+                estimatedRepairHoursField = value;
             }
         }
 
@@ -84,11 +84,11 @@
         {
             get
             {
-                return this.priorityField;
+                return priorityField;
             }
             set
             {
-                this.priorityField = value;
+                priorityField = value;
             }
         }
 
@@ -98,11 +98,11 @@
         {
             get
             {
-                return this.inactiveField;
+                return inactiveField;
             }
             set
             {
-                this.inactiveField = value;
+                inactiveField = value;
             }
         }
 
@@ -112,11 +112,11 @@
         {
             get
             {
-                return this.skillField;
+                return skillField;
             }
             set
             {
-                this.skillField = value;
+                skillField = value;
             }
         }
 
@@ -126,11 +126,11 @@
         {
             get
             {
-                return this.laborRepairField;
+                return laborRepairField;
             }
             set
             {
-                this.laborRepairField = value;
+                laborRepairField = value;
             }
         }
 
@@ -140,11 +140,11 @@
         {
             get
             {
-                return this.jCCostCodeField;
+                return jCCostCodeField;
             }
             set
             {
-                this.jCCostCodeField = value;
+                jCCostCodeField = value;
             }
         }
     }

@@ -15,11 +15,11 @@
         {
             get
             {
-                return this.messageResponseField;
+                return messageResponseField;
             }
             set
             {
-                this.messageResponseField = value;
+                messageResponseField = value;
             }
         }
 
@@ -29,11 +29,11 @@
         {
             get
             {
-                return this.textField;
+                return textField;
             }
             set
             {
-                this.textField = value;
+                textField = value;
             }
         }
     }
@@ -57,11 +57,11 @@
         {
             get
             {
-                return this.errorField;
+                return errorField;
             }
             set
             {
-                this.errorField = value;
+                errorField = value;
             }
         }
 
@@ -70,11 +70,11 @@
         {
             get
             {
-                return this.returnParamsField;
+                return returnParamsField;
             }
             set
             {
-                this.returnParamsField = value;
+                returnParamsField = value;
             }
         }
 
@@ -84,11 +84,11 @@
         {
             get
             {
-                return this.textField;
+                return textField;
             }
             set
             {
-                this.textField = value;
+                textField = value;
             }
         }
 
@@ -98,11 +98,11 @@
         {
             get
             {
-                return this.targetIdField;
+                return targetIdField;
             }
             set
             {
-                this.targetIdField = value;
+                targetIdField = value;
             }
         }
 
@@ -112,11 +112,11 @@
         {
             get
             {
-                return this.statusField;
+                return statusField;
             }
             set
             {
-                this.statusField = value;
+                statusField = value;
             }
         }
     }
@@ -135,11 +135,11 @@
         {
             get
             {
-                return this.codeField;
+                return codeField;
             }
             set
             {
-                this.codeField = value;
+                codeField = value;
             }
         }
 
@@ -149,11 +149,11 @@
         {
             get
             {
-                return this.messageField;
+                return messageField;
             }
             set
             {
-                this.messageField = value;
+                messageField = value;
             }
         }
     }
@@ -174,11 +174,11 @@
         {
             get
             {
-                return this.returnParamField;
+                return returnParamField;
             }
             set
             {
-                this.returnParamField = value;
+                returnParamField = value;
             }
         }
 
@@ -188,11 +188,11 @@
         {
             get
             {
-                return this.textField;
+                return textField;
             }
             set
             {
-                this.textField = value;
+                textField = value;
             }
         }
 
@@ -236,11 +236,11 @@
         {
             get
             {
-                return this.locationsField;
+                return locationsField;
             }
             set
             {
-                this.locationsField = value;
+                locationsField = value;
             }
         }
 
@@ -249,11 +249,11 @@
         {
             get
             {
-                return this.partsField;
+                return partsField;
             }
             set
             {
-                this.partsField = value;
+                partsField = value;
             }
         }
 
@@ -262,11 +262,11 @@
         {
             get
             {
-                return this.problemsField;
+                return problemsField;
             }
             set
             {
-                this.problemsField = value;
+                problemsField = value;
             }
         }
 
@@ -275,11 +275,11 @@
         {
             get
             {
-                return this.employeesField;
+                return employeesField;
             }
             set
             {
-                this.employeesField = value;
+                employeesField = value;
             }
         }
 
@@ -288,11 +288,11 @@
         {
             get
             {
-                return this.workOrdersField;
+                return workOrdersField;
             }
             set
             {
-                this.workOrdersField = value;
+                workOrdersField = value;
             }
         }
 
@@ -301,11 +301,11 @@
         {
             get
             {
-                return this.repairsField;
+                return repairsField;
             }
             set
             {
-                this.repairsField = value;
+                repairsField = value;
             }
         }
 
@@ -314,11 +314,11 @@
         {
             get
             {
-                return this.callType;
+                return callType;
             }
             set
             {
-                this.callType = value;
+                callType = value;
             }
         }
 
@@ -327,11 +327,11 @@
         {
             get
             {
-                return this.departments;
+                return departments;
             }
             set
             {
-                this.departments = value;
+                departments = value;
             }
         }
 
@@ -340,11 +340,11 @@
         {
             get
             {
-                return this.equipments;
+                return equipments;
             }
             set
             {
-                this.equipments = value;
+                equipments = value;
             }
         }
 
@@ -353,11 +353,11 @@
         {
             get
             {
-                return this.assignmentsField;
+                return assignmentsField;
             }
             set
             {
-                this.assignmentsField = value;
+                assignmentsField = value;
             }
         }
 
@@ -367,11 +367,11 @@
         {
             get
             {
-                return this.textField;
+                return textField;
             }
             set
             {
-                this.textField = value;
+                textField = value;
             }
         }
 
@@ -381,11 +381,11 @@
         {
             get
             {
-                return this.nameField;
+                return nameField;
             }
             set
             {
-                this.nameField = value;
+                nameField = value;
             }
         }
 
@@ -395,11 +395,11 @@
         {
             get
             {
-                return this.typeField;
+                return typeField;
             }
             set
             {
-                this.typeField = value;
+                typeField = value;
             }
         }
 

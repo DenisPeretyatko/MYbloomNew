@@ -19,11 +19,11 @@
         {
             get
             {
-                return this.departmentField;
+                return departmentField;
             }
             set
             {
-                this.departmentField = value;
+                departmentField = value;
             }
         }
 
@@ -33,11 +33,11 @@
         {
             get
             {
-                return this.descriptionField;
+                return descriptionField;
             }
             set
             {
-                this.descriptionField = value;
+                descriptionField = value;
             }
         }
 
@@ -47,11 +47,11 @@
         {
             get
             {
-                return this.inactiveField;
+                return inactiveField;
             }
             set
             {
-                this.inactiveField = value;
+                inactiveField = value;
             }
         }
 
@@ -61,11 +61,11 @@
         {
             get
             {
-                return this.gLPrefixField;
+                return gLPrefixField;
             }
             set
             {
-                this.gLPrefixField = value;
+                gLPrefixField = value;
             }
         }
 
@@ -75,11 +75,11 @@
         {
             get
             {
-                return this.gLSuffixField;
+                return gLSuffixField;
             }
             set
             {
-                this.gLSuffixField = value;
+                gLSuffixField = value;
             }
         }
     }
