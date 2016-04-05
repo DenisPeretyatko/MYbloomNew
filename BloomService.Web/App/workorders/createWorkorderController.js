@@ -18,7 +18,11 @@ var createWorkorderController = function($scope, $stateParams, state, commonData
 	$scope.customerpo = '';
 	$scope.permissiocode = '';
 	$scope.paymentmethods = '';
-	$scope.lookups = state.lookups;
+    $scope.lookups = state.lookups;
+
+    $scope.$watch('lookups', function() {
+        $scope.lookups = state.lookups;
+    });
 
     $scope.createWorkOrder = function() {
     	console.log("createWorkOrder");

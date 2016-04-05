@@ -11,6 +11,6 @@
             Error = error;
         }
 
-        public MessageResponsesMessageResponseError Error { get; }
+        public MessageResponsesMessageResponseError Error { get; set; }
     }
 }
