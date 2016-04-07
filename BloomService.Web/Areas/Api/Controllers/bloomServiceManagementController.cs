@@ -7,15 +7,15 @@
     using BloomService.Web.Managers;
 
     [Authorize]
-    public class ServiceManagementController : BaseApiController
+    public class BloomServiceManagementController : BaseApiController
     {
         private readonly ISageApiManager sageApiManager;
 
-        public ServiceManagementController(ISageApiManager sageApiManager)
+        public BloomServiceManagementController(ISageApiManager sageApiManager)
         {
             this.sageApiManager = sageApiManager;
         }
-        
+
         public ActionResult Locations()
         {
             return Json(sageApiManager.Locations());
@@ -30,7 +30,7 @@
         {
             return Json(sageApiManager.Problems());
         }
-
+        [AllowAnonymous]
         public ActionResult Repairs()
         {
             return Json(sageApiManager.Repairs());
@@ -41,10 +41,11 @@
         {
             return Json(sageApiManager.Employees());
         }
-        
+
+        [AllowAnonymous]
         public ActionResult Workorders(string id)
         {
-            return id == null ? Json(sageApiManager.WorkOrders()) : Json(sageApiManager.WorkOrders(id));
+            return id == null ? Json(sageApiManager.Workorders()) : Json(sageApiManager.Workorders(id));
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
@@ -52,9 +53,9 @@
         {
             try
             {
-                return Json(sageApiManager.WorkOrders(properties));
+                return Json(sageApiManager.Workorders(properties));
             }
-            catch(ResponseException ex)
+            catch (ResponseException ex)
             {
                 return Json(ex.Error);
             }
@@ -72,7 +73,7 @@
 
         public ActionResult Equipment()
         {
-            return Json(sageApiManager.Equipments());
+            return Json(sageApiManager.Equipment());
         }
 
         public ActionResult Assignments(string id)
@@ -114,11 +115,6 @@
         public ActionResult PermissionCodes()
         {
             return Json(sageApiManager.PermissionCode());
-        }
-
-        public ActionResult Agreements()
-        {
-            return Json(sageApiManager.Agreements());
         }
     }
 }

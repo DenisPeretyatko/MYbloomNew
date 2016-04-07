@@ -6,19 +6,13 @@
 
     public interface ISageApiManager
     {
-        string CatalogPath { get; set; }
-
         IEnumerable<SageAssignment> AddAssignments(Properties properties);
 
-        object Agreements();
+        SageAssignment Assignments(string id);
 
         IEnumerable<SageAssignment> Assignments();
 
-        IEnumerable<SageAssignment> Assignments(string number);
-
         IEnumerable<SageCallType> Calltypes();
-
-        void Create(string name, string password);
 
         IEnumerable<SageDepartment> Departments();
 
@@ -26,7 +20,7 @@
 
         IEnumerable<SageEmployee> Employees();
 
-        IEnumerable<SageEquipment> Equipments();
+        IEnumerable<SageEquipment> Equipment();
 
         IEnumerable<SageLocation> Locations();
 
@@ -40,12 +34,10 @@
 
         IEnumerable<SageRepair> Repairs();
 
-        object SendMessage(string message);
+        SageWorkOrder Workorders(string id);
 
-        IEnumerable<SageWorkOrder> WorkOrders();
+        IEnumerable<SageWorkOrder> Workorders();
 
-        IEnumerable<SageWorkOrder> WorkOrders(string number);
-
-        IEnumerable<SageWorkOrder> WorkOrders(Properties properties);
+        IEnumerable<SageWorkOrder> Workorders(Properties properties);
     }
 }

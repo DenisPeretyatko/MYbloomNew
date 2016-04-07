@@ -14,14 +14,10 @@
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
-            // context.MapRoute(
-            // "Api_default", 
-            // "Api/{controller}/{action}/{id}", 
-            // new { action = "Index", id = UrlParameter.Optional });
             context.MapRoute(
                 "Api_Sm", 
                 "api/v1/sm/{action}/{id}", 
-                new { controller = "ServiceManagement", action = "{action}", id = UrlParameter.Optional });
+                new { controller = "BloomServiceManagement", action = "{action}", id = UrlParameter.Optional });
 
             context.MapRoute(
                 "Api_Ar", 

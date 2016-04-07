@@ -16,7 +16,8 @@ namespace BloomService.Web
     using Ninject.Web.Common;
 
     using RestSharp;
-
+    using System.Web.SessionState;
+    using Utils;
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -69,6 +70,7 @@ namespace BloomService.Web
         {
             kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument("http://localhost:50924/");
             kernel.Bind<ISageApiManager>().To<SageApiManager>();
-        }        
+            kernel.Bind<ISession>().To<BloomServiceSession>().InSingletonScope();
+        }         
     }
 }

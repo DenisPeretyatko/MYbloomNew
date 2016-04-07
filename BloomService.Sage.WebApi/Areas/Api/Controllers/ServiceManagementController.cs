@@ -1,6 +1,5 @@
 ﻿using AttributeRouting.Web.Mvc;
 using Sage.WebApi.Infratructure.Service;
-using Sage.WebApi.Models;
 using System.Web.Mvc;
 
 namespace Sage.WebApi.Areas.Api.Controllers
@@ -47,6 +46,11 @@ namespace Sage.WebApi.Areas.Api.Controllers
         public ActionResult Workorders(string id)
         {
             return id == null ? Json(_serviceManager.WorkOrders()) : Json(_serviceManager.WorkOrders(id));
+        }
+
+        public ActionResult Workorders()
+        {
+            return Json(_serviceManager.WorkOrders());
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
@@ -119,9 +123,9 @@ namespace Sage.WebApi.Areas.Api.Controllers
             return Json(_serviceManager.PermissionCode());
         }
 
-        //public ActionResult Agreements()
-        //{
-        //    return Json(_serviceManager.Agreements());
-        //}
+        public ActionResult Agreements()
+        {
+            return Json(_serviceManager.Agreements());
+        }
     }
 }

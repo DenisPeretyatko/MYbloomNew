@@ -227,7 +227,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\BaseApiController.cs" />
-    <Compile Include="Areas\Api\Controllers\ServiceManagementController.cs" />
+    <Compile Include="Areas\Api\Controllers\BloomServiceManagementController.cs" />
     <Compile Include="Controllers\TechnicianController.cs" />
     <Compile Include="Controllers\WorkorderController .cs" />
     <Compile Include="Controllers\LocationController.cs" />
@@ -243,6 +243,8 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utils\BloomServiceSession.cs" />
+    <Compile Include="Utils\ISession.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App\app.js" />

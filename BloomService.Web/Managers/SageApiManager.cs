@@ -1,44 +1,30 @@
 ﻿namespace BloomService.Web.Managers
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     using BloomService.Domain.Entities;
 
     using RestSharp;
+    using Utils;
 
     public class SageApiManager : ISageApiManager
     {
         private readonly IRestClient restClient;
+        private readonly ISession session;
 
-        private string token;
-
-        public SageApiManager(IRestClient restClient)
+        public SageApiManager(IRestClient restClient, ISession session)
         {
             this.restClient = restClient;
-        }
-
-        public string CatalogPath
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
+            this.session = session;
         }
 
         private string Token
         {
             get
             {
-                if (token != null)
+                if (session.Session["oauth_token"] != null)
                 {
-                    return token;
+                    return session.Session["oauth_token"].ToString();
                 }
 
                 return GetAuthToken();
@@ -46,48 +32,46 @@
 
             set
             {
-                token = value;
+                session.Session["oauth_token"] = value;
             }
         }
 
         public IEnumerable<SageAssignment> AddAssignments(Properties properties)
         {
-            throw new NotImplementedException();
-        }
-
-        public object Agreements()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<SageAssignment> Assignments()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<SageAssignment> Assignments(string number)
-        {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/v1/sm/addassignment", Method.POST);
+            request.AddObject(properties);
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<List<SageAssignment>>(request);
+            var result = response.Data;
+            return result;
         }
 
         public IEnumerable<SageCallType> Calltypes()
         {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/v1/sm/calltypes", Method.GET);
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<List<SageCallType>>(request);
+            var result = response.Data;
+            return result;
         }
-
-        public void Create(string name, string password)
-        {
-            throw new NotImplementedException();
-        }
-
+    
         public IEnumerable<SageDepartment> Departments()
         {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/v1/sm/departments", Method.GET);
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<List<SageDepartment>>(request);
+            var result = response.Data;
+            return result;
         }
 
         public IEnumerable<SageAssignment> EditAssignments(Properties properties)
         {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/v1/sm/editassignments", Method.POST);
+            request.AddObject(properties);
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<List<SageAssignment>>(request);
+            var result = response.Data;
+            return result;
         }
 
         public IEnumerable<SageEmployee> Employees()
@@ -95,99 +79,133 @@
             var request = new RestRequest("api/v1/sm/employees", Method.GET);
             request.AddHeader("Authorization", "bearer " + Token);
             var response = restClient.Execute<List<SageEmployee>>(request);
-            var result = response.Data.ToList();
+            var result = response.Data;
             return result;
         }
 
         public IEnumerable<SageEquipment> Equipment()
         {
-            var request = new RestRequest("api/v1/sm/equipments", Method.GET);
+            var request = new RestRequest("api/v1/sm/equipment", Method.GET);
+            request.AddHeader("Authorization", "bearer " + Token);
             var response = restClient.Execute<List<SageEquipment>>(request);
-            var result = response.Data.AsQueryable();
+            var result = response.Data;
             return result;
-        }
-
-        public IEnumerable<SageEquipment> Equipments()
-        {
-            throw new NotImplementedException();
         }
 
         public IEnumerable<SageLocation> Locations()
         {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/v1/sm/locations", Method.GET);
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<List<SageLocation>>(request);
+            var result = response.Data;
+            return result;
         }
 
         public IEnumerable<SagePart> Parts()
         {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/v1/sm/parts", Method.GET);
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<List<SagePart>>(request);
+            var result = response.Data;
+            return result;
         }
 
         public IEnumerable<string> PermissionCode()
         {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/v1/sm/permissioncodes", Method.GET);
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<List<string>>(request);
+            var result = response.Data;
+            return result;
         }
 
         public IEnumerable<SageProblem> Problems()
         {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/v1/sm/problems", Method.GET);
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<List<SageProblem>>(request);
+            var result = response.Data;
+            return result;
         }
 
         public IEnumerable<string> RateSheet()
         {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/v1/sm/ratesheet", Method.GET);
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<List<string>>(request);
+            var result = response.Data;
+            return result;
         }
 
         public IEnumerable<SageRepair> Repairs()
         {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/v1/sm/repairs", Method.GET);
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<List<SageRepair>>(request);
+            var result = response.Data;
+            return result;
         }
 
-        public object SendMessage(string message)
+        public SageWorkOrder Workorders(string id)
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<SageWorkOrder> Workorders(string id)
-        {
-            var request = new RestRequest("workorders", Method.GET);
+            var request = new RestRequest("api/v1/sm/workorders", Method.GET);
             request.AddUrlSegment("id", id);
-            var response = restClient.Execute<List<SageWorkOrder>>(request);
-            var result = response.Data.AsQueryable();
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<SageWorkOrder>(request);
+            var result = response.Data;
             return result;
         }
 
         public IEnumerable<SageWorkOrder> Workorders(Properties properties)
         {
-            var request = new RestRequest("workorders", Method.GET);
+            var request = new RestRequest("api/v1/sm/workorders", Method.POST);
             request.AddObject(properties);
+            request.AddHeader("Authorization", "bearer " + Token);
             var response = restClient.Execute<List<SageWorkOrder>>(request);
-            var result = response.Data.AsQueryable();
+            var result = response.Data;
             return result;
         }
 
-        public IEnumerable<SageWorkOrder> WorkOrders()
+        public SageAssignment Assignments(string id)
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<SageWorkOrder> WorkOrders(string number)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<SageWorkOrder> WorkOrders(Properties properties)
-        {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/v1/sm/assignments", Method.GET);
+            request.AddUrlSegment("id", id);
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<SageAssignment>(request);
+            var result = response.Data;
+            return result;
         }
 
         private string GetAuthToken()
         {
+            var username = System.Configuration.ConfigurationManager.AppSettings["SageUsername"];
+            var password = System.Configuration.ConfigurationManager.AppSettings["SagePassword"];
+
             var request = new RestRequest("oauth/token", Method.POST);
-            request.AddParameter("username", "kris");
-            request.AddParameter("password", "sageDEV!!");
+            request.AddParameter("username", username);
+            request.AddParameter("password", password);
             request.AddParameter("grant_type", "password");
             var response = restClient.Execute(request);
-            var result = response.Headers.ToList().Find(x => x.Name == "access_token").Value.ToString();
+            var json = Newtonsoft.Json.Linq.JObject.Parse(response.Content);
+            var result = json.First.First.ToString();
+            return result;
+        }
+
+        public IEnumerable<SageAssignment> Assignments()
+        {
+            var request = new RestRequest("api/v1/sm/assignments", Method.GET);
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<List<SageAssignment>>(request);
+            var result = response.Data;
+            return result;
+        }
+
+        public IEnumerable<SageWorkOrder> Workorders()
+        {
+            var request = new RestRequest("api/v1/sm/workorders", Method.GET);
+            request.AddHeader("Authorization", "bearer " + Token);
+            var response = restClient.Execute<List<SageWorkOrder>>(request);
+            var result = response.Data;
             return result;
         }
     }
