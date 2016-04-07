@@ -1,23 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using BloomService.Web.Infrastructure;
+using AttributeRouting.Web.Mvc;
 
 namespace BloomService.Web.Controllers
 {
-    public class DashboardController : Controller
+    public class DashboardController : BaseController
     {
         public ActionResult Index()
         {
             return View();
         }
 
-        public JsonResult GetLookups()
+        [GET("Dashboard/GetLookups")]
+        public ActionResult GetLookups()
         {
             var json = JsonHelper.GetObjects("getLookups.json");
             return Json(json, JsonRequestBehavior.AllowGet);
+        }
+
+        [GET("Dashboard/GetDashboard")]
+        public ActionResult GetDashboard()
+        {
+            return Json("", JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -38,7 +38,7 @@ var commonDataService = function($http) {
 
 	this.getTechnicians = function () {
 		//return $http.get("/technicians");
-	    return $http.get("/Technician/GetTachnicians");
+	    return $http.get("/Technician/GetTechnicians");
 	}
 
 	this.saveTechnicianSchedule = function(technicianId, schedule) {
