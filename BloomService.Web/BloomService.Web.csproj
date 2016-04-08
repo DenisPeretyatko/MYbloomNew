@@ -64,6 +64,14 @@
       <HintPath>..\packages\CacheCow.Server.EntityTagStore.MongoDb.0.4.11\lib\net40\CacheCow.Server.EntityTagStore.MongoDb.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.0\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MongoDB.Bson, Version=1.6.1.4678, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <HintPath>..\packages\mongocsharpdriver.1.6.1\lib\net35\MongoDB.Bson.dll</HintPath>
@@ -252,9 +260,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\Hubs\LocationHub.cs" />
     <Compile Include="Managers\ISageApiManager.cs" />
     <Compile Include="Managers\SageApiManager.cs" />
     <Compile Include="Infrastructure\JsonHelper.cs" />
+    <Compile Include="Models\LocationModel.cs" />
     <Compile Include="Models\TechnicianViewModel.cs" />
     <Compile Include="Models\WorkorderViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -603,10 +613,13 @@
     <Content Include="Areas\Api\Views\web.config" />
     <Content Include="Public\mock\getLookups.json" />
     <None Include="Properties\PublishProfiles\bloom.pubxml" />
+    <Content Include="Public\mock\getNewLocations.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />

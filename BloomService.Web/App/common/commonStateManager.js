@@ -7,8 +7,9 @@ var commonStateManager = function (commonDataService) {
         this.assigments = [];
         this.technicians = [];
         this.lookups = {};
-    
-        var _this = {
+        this.locations = {};
+
+    var _this = {
             profile: this.profile,
             statistic: this.statistic,
             notifications: this.notifications,
@@ -17,6 +18,7 @@ var commonStateManager = function (commonDataService) {
             assigments: this.assigments,
             technicians: this.technicians,
             lookups: this.lookups,
+            locations: this.locations
         }
 
     commonDataService.getLookups().then(function (response) {
@@ -27,6 +29,23 @@ var commonStateManager = function (commonDataService) {
     function setLookups() {
         return commonDataService.getLookups().then(function(response) {
             return _this.lookups = response.data;
+        });
+    }
+
+    commonDataService.getLocations().then(function (response) {
+        return _this.locations = response.data;
+        });
+    
+    setInterval(changeLocations, 1000);
+    function changeLocations() {
+        var location = $.connection.locationHub;
+
+        location.client.updateLocations = function (locations) {
+            _this.locations = locations;
+        };
+
+        $.connection.hub.start().done(function () {
+            location.server.getLocations();
         });
     }
 
