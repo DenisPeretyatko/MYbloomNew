@@ -21,7 +21,8 @@ namespace BloomService.Web.Controllers
         [GET("Dashboard/GetDashboard")]
         public ActionResult GetDashboard()
         {
-            return Json("", JsonRequestBehavior.AllowGet);
+            var json = JsonHelper.GetObjects("getDashboard.json");
+            return Json(json, JsonRequestBehavior.AllowGet);
         }
     }
 }

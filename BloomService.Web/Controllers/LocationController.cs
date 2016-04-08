@@ -13,5 +13,12 @@ namespace BloomService.Web.Controllers
             var json = JsonHelper.GetObjects("getLocations.json"); 
             return Json(json, JsonRequestBehavior.AllowGet);
         }
+
+        [GET("Location/GetTrucks")]
+        public ActionResult GetTrucks()
+        {
+            var json = JsonHelper.GetObjects("getTrucks.json");
+            return Json(json, JsonRequestBehavior.AllowGet);
+        }
     }
 }

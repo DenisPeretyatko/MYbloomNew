@@ -13,7 +13,8 @@ namespace BloomService.Web.Controllers
         [GET("Schedule/GetSchedules")]
         public ActionResult GetSchedules()
         {
-            return Json("", JsonRequestBehavior.AllowGet);
+            var json = JsonHelper.GetObjects("getSchedule.json");
+            return Json(json, JsonRequestBehavior.AllowGet);
         }
     }
 }

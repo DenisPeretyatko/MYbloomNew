@@ -18,22 +18,22 @@ var commonDataService = function($http) {
 	}
 
 	this.getDashboard = function() {
-		return $http.get("/public/mock/getDashboard.json");
+	    return $http.get("/Dashboard/GetDashboard");
 	}
 	this.getLookups = function () {
 	    return $http.get("/Dashboard/GetLookups");
 	}
 
 	this.getLocations = function() {
-		return $http.get("/public/mock/getLocations.json");
+	    return $http.get("/Location/GetLocations");
 	}
 
 	this.getTrucks = function() {
-		return $http.get("/public/mock/getTrucks.json");
+	    return $http.get("/Location/GetTrucks");
 	}
 
 	this.getSchedule = function() {
-		return $http.get("/public/mock/getSchedule.json");
+	    return $http.get("/Schedule/GetSchedules");
 	}
 
 	this.getTechnicians = function () {

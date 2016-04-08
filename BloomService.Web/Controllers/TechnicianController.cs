@@ -7,7 +7,7 @@ namespace BloomService.Web.Controllers
     public class TechnicianController : BaseController
     {
         [GET("Technician/GetTechnicians")]
-        public JsonResult GetTechnicians()
+        public ActionResult GetTechnicians()
         {
             var json = JsonHelper.GetObjects("getTechnicians.json");
             return Json(json, JsonRequestBehavior.AllowGet);
