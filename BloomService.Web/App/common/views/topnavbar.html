@@ -6,41 +6,32 @@
         <ul class="nav navbar-top-links navbar-right">
     		<li class="dropdown" dropdown>
                 <a class="dropdown-toggle count-info" href dropdown-toggle>
-                    <i class="fa fa-bell"></i> <span class="label label-primary">8</span>
+                    <i class="fa fa-bell"></i> <span class="label label-primary">{{notifications.length}}</span>
                 </a>
-                <ul class="dropdown-menu dropdown-alerts">
-                    <li>
+                <ul class="dropdown-menu dropdown-alerts" ng-click="$event.stopPropagation()">
+                    <li class="notif_el" ng-repeat="item in notifications" ng-if="allnotifications == true || (allnotifications == false && $index < 3)" ng-model="notifications" ng-init="notifications[$index].isViewed = true">
                         <a ui-sref="inbox">
-                            <div>
-                                <i class="fa fa-envelope fa-fw"></i> You have 16 messages
-                                <span class="pull-right text-muted small">4 minutes ago</span>
+                            <div title="{{item.message}}">
+                                <i class="fa fa-envelope fa-fw"></i>
+                                <span class="notif_message">{{item.message}}</span>
+                                <span class="pull-right text-muted small">{{item.time}}</span>
                             </div>
                         </a>
                     </li>
                     <li class="divider"></li>
-                    <li>
-                        <a ui-sref="profile">
-                            <div>
-                                <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                <span class="pull-right text-muted small">12 minutes ago</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a ui-sref="grid_options">
-                            <div>
-                                <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                <span class="pull-right text-muted small">4 minutes ago</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
+                    <li ng-if="allnotifications == false">
                         <div class="text-center link-block">
                             <a ui-sref="miscellaneous.notify">
-                                <strong>See All Alerts</strong>
+                                <strong ng-click="showAlerts()">See All Alerts</strong>
                                 <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </li>
+                    <li ng-if="allnotifications == true">
+                        <div class="text-center link-block">
+                            <a ui-sref="miscellaneous.notify">
+                                <i class="fa fa-angle-left"></i>
+                                <strong ng-click="hideAlerts()">See Less Alerts</strong>
                             </a>
                         </div>
                     </li>

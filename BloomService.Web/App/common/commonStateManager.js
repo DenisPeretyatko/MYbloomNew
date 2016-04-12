@@ -1,4 +1,4 @@
-var commonStateManager = function (commonDataService) {
+﻿var commonStateManager = function (commonDataService) {
         this.profile = {};
         this.statistic = [];
         this.notifications = [];
@@ -34,8 +34,25 @@ var commonStateManager = function (commonDataService) {
 
     commonDataService.getLocations().then(function (response) {
         return _this.locations = response.data;
+    });
+
+    commonDataService.getNotifications().then(function (response) {
+        return _this.notifications = response.data;
+    });
+    //------------- Test SignalR for notifications -------------------
+    setInterval(changeNotifications, 3000);
+    function changeNotifications() {
+        var notification = $.connection.notificationsHub;
+
+        notification.client.updateNotifications = function (notif) {
+            _this.notifications = notif;
+        };
+
+        $.connection.hub.start().done(function () {
+            notification.server.getNotifications(_this.notifications);
         });
-    
+    }
+    //------------- Test SignalR for locations -------------------
     setInterval(changeLocations, 1000);
     function changeLocations() {
         var location = $.connection.locationHub;
@@ -48,6 +65,8 @@ var commonStateManager = function (commonDataService) {
             location.server.getLocations();
         });
     }
+
+
 
     return _this;
 }

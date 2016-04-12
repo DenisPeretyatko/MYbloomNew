@@ -22,3 +22,13 @@
     background: none;
     font-weight: normal;
 }
+.notif_message {
+    white-space: nowrap!important;
+    overflow: hidden;
+    -moz-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    width: 150px;
+}
+.notif_el a {
+    line-height: normal;
+}

@@ -260,10 +260,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\Hubs\NotifocationsHub.cs" />
     <Compile Include="Infrastructure\Hubs\LocationHub.cs" />
     <Compile Include="Managers\ISageApiManager.cs" />
     <Compile Include="Managers\SageApiManager.cs" />
     <Compile Include="Infrastructure\JsonHelper.cs" />
+    <Compile Include="Models\NotificationModel.cs" />
     <Compile Include="Models\LocationModel.cs" />
     <Compile Include="Models\TechnicianViewModel.cs" />
     <Compile Include="Models\WorkorderViewModel.cs" />
@@ -614,6 +616,7 @@
     <Content Include="Public\mock\getLookups.json" />
     <None Include="Properties\PublishProfiles\bloom.pubxml" />
     <Content Include="Public\mock\getNewLocations.json" />
+    <Content Include="Public\mock\getNotifications.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

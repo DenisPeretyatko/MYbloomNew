@@ -20,7 +20,7 @@ var createWorkorderController = function($scope, $stateParams, state, commonData
 	$scope.paymentmethods = '';
     $scope.lookups = state.lookups;
 
-    $scope.$watch('lookups', function() {
+    $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
     });
 

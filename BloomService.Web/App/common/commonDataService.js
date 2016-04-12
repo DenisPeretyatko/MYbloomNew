@@ -44,5 +44,9 @@ var commonDataService = function($http) {
 	this.saveTechnicianSchedule = function(technicianId, schedule) {
 		$http.post("/technician/id");
 	}
+
+	this.getNotifications = function () {
+	    return $http.get("/Dashboard/SendNotification");
+	}
 }
 commonDataService.$inject = ['$http'];

@@ -24,5 +24,12 @@ namespace BloomService.Web.Controllers
             var json = JsonHelper.GetObjects("getDashboard.json");
             return Json(json, JsonRequestBehavior.AllowGet);
         }
+
+        [GET("Dashboard/SendNotification")]
+        public ActionResult SendNotification()
+        {
+            var json = JsonHelper.GetObjects("getNotifications.json");
+            return Json(json, JsonRequestBehavior.AllowGet);
+        }
     }
 }
