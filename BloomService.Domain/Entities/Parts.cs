@@ -2,7 +2,7 @@
 {
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class SagePart
+    public partial class SagePart : SageEntity
     {
         private string partField;
 

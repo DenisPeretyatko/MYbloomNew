@@ -1,7 +1,7 @@
 ﻿namespace BloomService.Domain.Entities
 {
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class SageEmployee
+    public partial class SageEmployee : SageEntity
     {
 
         private string employeeField;

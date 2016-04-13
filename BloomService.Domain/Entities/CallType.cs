@@ -3,7 +3,7 @@
     using System.Xml.Serialization;
 
     [XmlType(AnonymousType = true)]
-    public class SageCallType
+    public class SageCallType : SageEntity
     {
         /// <remarks/>
         [XmlAttribute]

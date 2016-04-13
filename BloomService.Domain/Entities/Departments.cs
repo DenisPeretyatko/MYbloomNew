@@ -1,7 +1,7 @@
 ﻿namespace BloomService.Domain.Entities
 {
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class SageDepartment
+    public partial class SageDepartment : SageEntity
     {
         private byte departmentField;
 

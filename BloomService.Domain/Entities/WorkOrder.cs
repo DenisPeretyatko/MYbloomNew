@@ -1,7 +1,11 @@
-﻿namespace BloomService.Domain.Entities
+﻿using BloomService.Domain.Attributes;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace BloomService.Domain.Entities
 {
+    [CollectionNameAttribute("WorkOrderCollection")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class SageWorkOrder
+    public partial class SageWorkOrder : SageEntity
     {
         private ushort workOrderField;
 
@@ -167,6 +171,8 @@
 
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [BsonId]
+        //[BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public ushort WorkOrder
         {
             get

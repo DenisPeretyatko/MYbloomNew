@@ -14,6 +14,13 @@
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
+
+            context.MapRoute(
+              "WorkOrders",
+              "api/v1/workorders/{action}/{id}",
+              new { controller = "WorkOrders", action = "{action}", id = UrlParameter.Optional });
+
+
             context.MapRoute(
                 "Api_Sm", 
                 "api/v1/sm/{action}/{id}", 
@@ -27,6 +34,8 @@
                 "Api_Jc", 
                 "api/v1/jc/{action}/{id}", 
                 new { controller = "JobCost", action = "{action}", id = UrlParameter.Optional });
+
+
         }
     }
 }
