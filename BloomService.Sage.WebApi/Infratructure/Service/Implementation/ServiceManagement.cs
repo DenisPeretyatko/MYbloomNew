@@ -1,6 +1,5 @@
 ﻿using Sage.Messaging;
 using Sage.WebApi.Infratructure.Constants;
-using Sage.WebApi.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

@@ -1,23 +1,21 @@
-using BloomService.Web;
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(BloomService.Web.App_Start.NinjectWebCommon), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(BloomService.Web.App_Start.NinjectWebCommon), "Stop")]
 
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
-
-namespace BloomService.Web
+namespace BloomService.Web.App_Start
 {
     using System;
     using System.Web;
-
-    using BloomService.Web.Managers;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;
     using Ninject.Web.Common;
-
-    using RestSharp;
-    using System.Web.SessionState;
+    using Services;
+    using Managers;
     using Utils;
+    using RestSharp;
+    using Domain.Entities;
+    using Domain.UnitOfWork;
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -68,9 +66,14 @@ namespace BloomService.Web
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument("http://localhost:50924/");
-            kernel.Bind<ISageApiManager>().To<SageApiManager>();
+            kernel.Bind<IWorkOrderSageApiService>().To<WorkOrderSageApiService>();
+            kernel.Bind<ISageApiService<SageWorkOrder>>().To<SageApiService<SageWorkOrder>>();
+            //kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument("http://localhost:50924/");
+            kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(" http://12.217.205.14/");
+
+
             kernel.Bind<ISession>().To<BloomServiceSession>().InSingletonScope();
-        }         
+            kernel.Bind<IUnitOfWork>().To<MongoDbUnitOfWork>();
+        }        
     }
 }

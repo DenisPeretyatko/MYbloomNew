@@ -3,7 +3,7 @@
 
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class SageLocation
+    public partial class SageLocation : SageEntity
     {
 
         private string siteTypeField;
