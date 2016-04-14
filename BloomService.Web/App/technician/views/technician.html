@@ -20,15 +20,15 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="technician in technicians">
-                            <td>{{technician.number}}</td>
-                            <td>{{technician.fullName}}</td>
+                            <td>{{technician.Employee}}</td>
+                            <td>{{technician.Name}}</td>
                             <td>
-                                <span class="label" ng-class="technician.available ? 'label-primary' : 'label-danger'">
-                                    {{technician.available ? "Available" : "Not Available" }}
+                                <span class="label" ng-class="technician.Inactive == 'No' ? 'label-primary' : 'label-danger'">
+                                    {{technician.Inactive == 'No' ? "Available" : "Not Available" }}
                                 </span>
                             </td>
                             <td class="center">
-                                <a ui-sref="manager.technician.edit({ id: {{technician.number}} })" class="btn btn-primary btn-xs">Edit...</a>
+                                <a ui-sref="manager.technician.edit({ id: {{technician.Name}} })" c class="btn btn-primary btn-xs">Edit...</a>
                             </td>
                         </tr>
                         <tfoot class="hide-if-no-paging">

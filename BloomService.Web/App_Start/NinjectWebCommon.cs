@@ -85,8 +85,8 @@ namespace BloomService.Web.App_Start
 
 
             kernel.Bind<ISageApiService<SageWorkOrder>>().To<SageApiService<SageWorkOrder>>();
-            kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument("http://localhost:50924/");
-            //kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(" http://12.217.205.14/");
+            //kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument("http://localhost:50924/");
+            kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(" http://12.217.205.14/");
 
 
             kernel.Bind<ISession>().To<BloomServiceSession>().InSingletonScope();
