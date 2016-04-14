@@ -1,6 +1,10 @@
-﻿namespace BloomService.Domain.Entities
+﻿using BloomService.Domain.Attributes;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace BloomService.Domain.Entities
 {
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [CollectionNameAttribute("EquipmentCollection")]
     public partial class SageEquipment : SageEntity
     {
 
@@ -40,6 +44,7 @@
 
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [BsonId]
         public string Equipment
         {
             get

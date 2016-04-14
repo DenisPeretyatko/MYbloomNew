@@ -172,7 +172,6 @@ namespace BloomService.Domain.Entities
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [BsonId]
-        //[BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public ushort WorkOrder
         {
             get

@@ -15,9 +15,10 @@ namespace BloomService.Web.Managers
         public WorkOrderSageApiService(IRestClient restClient, IUnitOfWork unitOfWork/*, ISession session*/) : base(restClient, unitOfWork/*, session*/)
         {
             this.restClient = restClient;
+            this.unitOfWork = unitOfWork;
             //this.session = session;
            
-            EndPoint = "api/v1/sm/workorders";
+            EndPoint = System.Configuration.ConfigurationManager.AppSettings["WorkOrderEndPoint"]; ;
         }
     }
 }

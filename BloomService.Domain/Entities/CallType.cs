@@ -1,8 +1,11 @@
 ﻿namespace BloomService.Domain.Entities
 {
+    using Attributes;
+    using MongoDB.Bson.Serialization.Attributes;
     using System.Xml.Serialization;
 
     [XmlType(AnonymousType = true)]
+    [CollectionNameAttribute("CallTypeCollection")]
     public class SageCallType : SageEntity
     {
         /// <remarks/>
@@ -15,6 +18,7 @@
 
         /// <remarks/>
         [XmlAttribute]
+        [BsonId]
         public string CallType { get; set; }
 
         /// <remarks/>

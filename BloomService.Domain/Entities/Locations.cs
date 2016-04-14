@@ -1,8 +1,12 @@
-﻿namespace BloomService.Domain.Entities
+﻿using BloomService.Domain.Attributes;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace BloomService.Domain.Entities
 {
 
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [CollectionNameAttribute("LocationCollection")]
     public partial class SageLocation : SageEntity
     {
 
@@ -116,6 +120,7 @@
 
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [BsonId]
         public string Location
         {
             get

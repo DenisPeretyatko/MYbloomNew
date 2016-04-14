@@ -16,8 +16,8 @@
         {
 
             context.MapRoute(
-              "WorkOrders",
-              "api/v1/workorders/{action}/{id}",
+              "Api",
+              "api/v1/{controller}/{action}/{id}",
               new { controller = "WorkOrders", action = "{action}", id = UrlParameter.Optional });
 
 

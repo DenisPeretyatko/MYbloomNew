@@ -77,7 +77,18 @@ namespace BloomService.Web.Managers
 
         public virtual IEnumerable<TEntity> Edit(Properties properties)
         {
-            var request = new RestRequest(EndPoint, Method.POST);
+            var request = new RestRequest(EndPoint, Method.PUT);
+            request.AddObject(properties);
+            request.AddHeader("Authorization", string.Format("Bearer {0}", GetAuthToken()));
+            var response = restClient.Execute<List<TEntity>>(request);
+            var result = response.Data;
+            return result;
+        }
+
+
+        public virtual IEnumerable<TEntity> Delete(Properties properties)
+        {
+            var request = new RestRequest(EndPoint, Method.DELETE);
             request.AddObject(properties);
             request.AddHeader("Authorization", string.Format("Bearer {0}", GetAuthToken()));
             var response = restClient.Execute<List<TEntity>>(request);

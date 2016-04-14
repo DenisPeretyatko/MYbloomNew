@@ -1,8 +1,11 @@
 ﻿namespace BloomService.Domain.Entities
 {
+    using Attributes;
+    using MongoDB.Bson.Serialization.Attributes;
     using System.Xml.Serialization;
 
     [XmlType(AnonymousType = true)]
+    [CollectionNameAttribute("AssignmentCollection")]
     public class SageAssignment : SageEntity
     {
         /// <remarks/>
@@ -23,6 +26,7 @@
 
         /// <remarks/>
         [XmlAttribute]
+        [BsonId]
         public string Assignment { get; set; }
 
         /// <remarks/>

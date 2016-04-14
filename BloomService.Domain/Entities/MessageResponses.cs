@@ -1,8 +1,10 @@
-﻿namespace BloomService.Domain.Entities
+﻿using System.Xml.Serialization;
+
+namespace BloomService.Domain.Entities
 {
     /// <remarks/>
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+    [XmlTypeAttribute(AnonymousType = true)]
+    [XmlRootAttribute(Namespace = "", IsNullable = false)]
     public partial class MessageResponses : SageEntity
     {
 
@@ -39,7 +41,7 @@
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [XmlTypeAttribute(AnonymousType = true)]
     public partial class MessageResponsesMessageResponse
     {
 
@@ -121,7 +123,7 @@
         }
     }
 
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [XmlTypeAttribute(AnonymousType = true)]
     public partial class MessageResponsesMessageResponseError
     {
 
@@ -161,7 +163,7 @@
 
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [XmlTypeAttribute(AnonymousType = true)]
     public partial class MessageResponsesMessageResponseReturnParams
     {
 
@@ -201,7 +203,7 @@
         
     }
 
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [XmlTypeAttribute(AnonymousType = true)]
     public partial class MessageResponsesMessageResponseReturnParamsReturnParam
     {
         private SageLocation[] locationsField;

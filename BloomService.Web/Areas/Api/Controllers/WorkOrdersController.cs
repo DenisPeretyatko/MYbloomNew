@@ -29,8 +29,14 @@ namespace BloomService.Web.Areas.Api
             return workOrderSageApiService.Add(properties);
         }
 
-        public void Put(int id, [FromBody]string value)
+        public IEnumerable<SageWorkOrder> Put(Properties properties)
         {
+            return workOrderSageApiService.Edit(properties);
+        }
+
+        public IEnumerable<SageWorkOrder> Delete(Properties properties)
+        {
+            return workOrderSageApiService.Delete(properties);
         }
     }
 }

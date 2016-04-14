@@ -15,5 +15,7 @@ namespace BloomService.Web.Services
 
 
         IEnumerable<TEntity> Edit(Properties properties);
+
+        IEnumerable<TEntity> Delete(Properties properties);
     }
 }

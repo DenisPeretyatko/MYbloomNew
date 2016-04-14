@@ -16,6 +16,8 @@ namespace BloomService.Web.App_Start
     using RestSharp;
     using Domain.Entities;
     using Domain.UnitOfWork;
+    using Services.Concrete;
+    using Services.Abstract;
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -67,9 +69,22 @@ namespace BloomService.Web.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IWorkOrderSageApiService>().To<WorkOrderSageApiService>();
+            kernel.Bind<ILocationSageApiService>().To<LocationSageApiService>();
+            kernel.Bind<ICallTypeSageApiService>().To<CallTypeSageApiService>();
+            kernel.Bind<IEmployeeSageApiService>().To<EmployeeSageApiService>();
+            kernel.Bind<IAssignmentSageApiService>().To<AssignmentSageApiService>();
+            kernel.Bind<IDepartmentSageApiService>().To<DepartmentSageApiService>();
+            kernel.Bind<IEquipmentSageApiService>().To<EquipmentSageApiService>();
+            kernel.Bind<IDepartmentSageApiService>().To<DepartmentSageApiService>();
+            kernel.Bind<IPartSageApiService>().To<PartSageApiService>();
+            kernel.Bind<IProblemSageApiService>().To<ProblemSageApiService>();
+            kernel.Bind<IRepairSageApiService>().To<RepairSageApiService>();
+
+
+
             kernel.Bind<ISageApiService<SageWorkOrder>>().To<SageApiService<SageWorkOrder>>();
-            //kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument("http://localhost:50924/");
-            kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(" http://12.217.205.14/");
+            kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument("http://localhost:50924/");
+            //kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(" http://12.217.205.14/");
 
 
             kernel.Bind<ISession>().To<BloomServiceSession>().InSingletonScope();
