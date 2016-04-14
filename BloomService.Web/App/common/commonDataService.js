@@ -2,7 +2,7 @@ var commonDataService = function($http) {
 
 	this.getWorkorders = function() {
 		//return $http.post("/workorders");
-		return $http.get("/Workorder/GetWorkorders");
+		return $http.get("/Workorder");
 	}
 
 	this.saveWorkorder = function(workorder){
@@ -18,27 +18,27 @@ var commonDataService = function($http) {
 	}
 
 	this.getDashboard = function() {
-	    return $http.get("/Dashboard/GetDashboard");
+	    return $http.get("/Dashboard");
 	}
 	this.getLookups = function () {
-	    return $http.get("/Dashboard/GetLookups");
+	    return $http.get("/Dashboard/Lookups");
 	}
 
 	this.getLocations = function() {
-	    return $http.get("/Location/GetLocations");
+	    return $http.get("/Location");
 	}
 
 	this.getTrucks = function() {
-	    return $http.get("/Location/GetTrucks");
+	    return $http.get("/Location/Trucks");
 	}
 
 	this.getSchedule = function() {
-	    return $http.get("/Schedule/GetSchedules");
+	    return $http.get("/Schedule");
 	}
 
 	this.getTechnicians = function () {
 		//return $http.get("/technicians");
-	    return $http.get("/Technician/GetTechnicians");
+	    return $http.get("/Technician");
 	}
 
 	this.saveTechnicianSchedule = function(technicianId, schedule) {
