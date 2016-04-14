@@ -1,10 +1,10 @@
 ﻿using BloomService.Domain.Entities;
 using BloomService.Domain.UnitOfWork;
-using BloomService.Web.Services;
+using BloomService.Web.Managers;
 using BloomService.Web.Utils;
 using RestSharp;
 
-namespace BloomService.Web.Managers
+namespace BloomService.Web.Services.Concrete
 {
     public class WorkOrderSageApiService : SageApiService<SageWorkOrder>, IWorkOrderSageApiService
     {

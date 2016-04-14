@@ -53,7 +53,7 @@ namespace BloomService.Domain.Repositories.Concrete
 
         public IEnumerable<TEntity> GetAll()
         {
-            return collection.FindAllAs<TEntity>().ToList();
+            return collection.AsQueryable();
         }
 
         public TEntity GetById(ObjectId id)

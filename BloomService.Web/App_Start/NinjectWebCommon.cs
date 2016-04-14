@@ -1,3 +1,5 @@
+using BloomService.Web.Services.Concrete;
+
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(BloomService.Web.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(BloomService.Web.App_Start.NinjectWebCommon), "Stop")]
 

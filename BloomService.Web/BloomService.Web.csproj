@@ -278,7 +278,7 @@
     </Compile>
     <Compile Include="Services\Abstract\ISageApiService.cs" />
     <Compile Include="Services\Abstract\IWorkOrderSageApiService.cs" />
-    <Compile Include="Infrastructure\Hubs\NotifocationsHub.cs" />
+    <Compile Include="Infrastructure\Hubs\NotificationsHub.cs" />
     <Compile Include="Infrastructure\Hubs\LocationHub.cs" />
     <Compile Include="Infrastructure\JsonHelper.cs" />
     <Compile Include="Services\Concrete\SageApiService.cs" />

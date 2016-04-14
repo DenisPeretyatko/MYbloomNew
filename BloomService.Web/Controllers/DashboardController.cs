@@ -11,14 +11,14 @@ namespace BloomService.Web.Controllers
             return View();
         }
 
-        [GET("Dashboard/GetLookups")]
+        [GET("Dashboard/Lookups")]
         public ActionResult GetLookups()
         {
             var json = JsonHelper.GetObjects("getLookups.json");
             return Json(json, JsonRequestBehavior.AllowGet);
         }
 
-        [GET("Dashboard/GetDashboard")]
+        [GET("Dashboard")]
         public ActionResult GetDashboard()
         {
             var json = JsonHelper.GetObjects("getDashboard.json");

@@ -27,17 +27,17 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="workorder in workorders">
-                            <td>{{workorder.number}}</td>
-                            <td>{{workorder.date}}</td>
-                            <td>{{workorder.customer}}</td>
-                            <td>{{workorder.location}}</td>
+                            <td>{{workorder.WorkOrder}}</td>
+                            <td>{{workorder.DateRun}}</td>
+                            <td>{{workorder.Contact}}</td>
+                            <td>{{workorder.Location}}</td>
                             <td>
                                 <span class="label" ng-class="workorder.status == 'closed' ? 'label-danger' : 'label-primary' ">
-                                    {{workorder.status == 'closed' ? "Closed" : "Open" }}
+                                    {{workorder.Status == 'closed' ? "Closed" : "Open" }}
                                 </span>
                             </td>
                             <td class="center">
-                                <a ui-sref="manager.workorder.edit({ id: {{workorder.number}} })" class="btn btn-primary btn-xs">Edit...</a>
+                                <a ui-sref="manager.workorder.edit({ id: {{workorder.WorkOrder}}})" class="btn btn-primary btn-xs">Edit...</a>
                             </td>
                         </tr>
                         </tbody>
