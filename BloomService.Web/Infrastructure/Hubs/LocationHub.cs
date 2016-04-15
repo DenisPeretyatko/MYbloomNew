@@ -11,7 +11,7 @@ namespace BloomService.Web.Infrastructure.Hubs
         {
             var json = JsonHelper.GetObjects("getNewLocations.json");
             var serializer = new JavaScriptSerializer();
-            var list = serializer.ConvertToType<IEnumerable<LocationModel>>(json);
+            var list = serializer.ConvertToType<IEnumerable<LocationJsonModel>>(json);
             Clients.All.updateLocations(list);
         }
     }

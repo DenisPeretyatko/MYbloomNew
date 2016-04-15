@@ -1,12 +1,11 @@
 var commonDataService = function($http) {
 
 	this.getWorkorders = function() {
-		//return $http.post("/workorders");
 		return $http.get("/Workorder");
 	}
 
-	this.saveWorkorder = function(workorder){
-		$http.post("/workorder");
+	this.createWorkorder = function(workorder){
+		$http.post("/workorder/Create", workorder);
 	}
 
 	this.getAssigments = function() {
@@ -37,7 +36,6 @@ var commonDataService = function($http) {
 	}
 
 	this.getTechnicians = function () {
-		//return $http.get("/technicians");
 	    return $http.get("/Technician");
 	}
 

@@ -283,6 +283,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\Constants\EstimateRepairHours.cs" />
+    <Compile Include="Infrastructure\Constants\PaymentMethod.cs" />
+    <Compile Include="Infrastructure\Constants\RateSheets.cs" />
+    <Compile Include="Models\CallTypeModel.cs" />
+    <Compile Include="Models\LocationModel.cs" />
+    <Compile Include="Models\LookupsModel.cs" />
+    <Compile Include="Models\EquipmentModel.cs" />
+    <Compile Include="Models\EmployeeModel.cs" />
+    <Compile Include="Models\ProblemModel.cs" />
+    <Compile Include="Models\CustomerModel.cs" />
+    <Compile Include="Models\WorkOrderModel.cs" />
     <Compile Include="Services\Abstract\IAssignmentSageApiService.cs" />
     <Compile Include="Services\Abstract\ICallTypeSageApiService.cs" />
     <Compile Include="Services\Abstract\IDepartmentSageApiService.cs" />
@@ -309,7 +320,7 @@
     <Compile Include="Services\Concrete\SageApiService.cs" />
     <Compile Include="Services\Concrete\WorkOrderSageApiService.cs" />
     <Compile Include="Models\NotificationModel.cs" />
-    <Compile Include="Models\LocationModel.cs" />
+    <Compile Include="Models\LocationJsonModel.cs" />
     <Compile Include="Models\TechnicianViewModel.cs" />
     <Compile Include="Models\WorkorderViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
