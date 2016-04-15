@@ -12,7 +12,7 @@ namespace BloomService.Web
         AutoMapper.Mapper.CreateMap<SageEmployee, EmployeeModel>();
         AutoMapper.Mapper.CreateMap<SageProblem, ProblemModel>();
         AutoMapper.Mapper.CreateMap<SageEquipment, EquipmentModel>();
-        //AutoMapper.Mapper.CreateMap<CustomerModel, SageCustomer>();
+        AutoMapper.Mapper.CreateMap<SageCustomer, CustomerModel>();
     }
 }
 }

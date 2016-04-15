@@ -26,20 +26,20 @@ var createWorkorderController = function($scope, $stateParams, state, commonData
 
     $scope.createWorkOrder = function () {
         var workorder = {
-            customer: $scope.lookups.customers.selected,
-            location: $scope.lookups.locations.selected,
-            calltype: $scope.lookups.calltypes.selected,
+            customer: $scope.lookups.Customers.selected,
+            location: $scope.lookups.Locations.selected,
+            calltype: $scope.lookups.Calltypes.selected,
             calldate: $scope.calldate,
-            problem: $scope.lookups.problems.selected,
-            ratesheet: $scope.lookups.ratesheets.selected,
-            emploee: $scope.lookups.employes.selected,
-            equipment: $scope.lookups.equipment.selected,
-            estimatehours: $scope.lookups.hours.selected,
+            problem: $scope.lookups.Problems.selected,
+            ratesheet: $scope.lookups.Ratesheets.selected,
+            emploee: $scope.lookups.Employes.selected,
+            equipment: $scope.lookups.Equipment.selected,
+            estimatehours: $scope.lookups.Hours.selected,
             nottoexceed: $scope.nottoexceed,
             locationcomments: $scope.locationcomments,
             customerpo: $scope.customerpo,
             permissiocode: $scope.permissiocode,
-            paymentmethods: $scope.lookups.paymentMethods.selected
+            paymentmethods: $scope.lookups.PaymentMethods.selected
         };
         commonDataService.createWorkorder(workorder).then(function () {
             console.log("createWorkOrder");

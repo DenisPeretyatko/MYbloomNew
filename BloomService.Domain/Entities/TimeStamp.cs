@@ -1,30 +1,32 @@
-﻿namespace BloomService.Domain.Entities
+﻿using System.Xml.Serialization;
+
+namespace BloomService.Domain.Entities
 {
     using Newtonsoft.Json;
 
     public class TimeStamp
     {
-        [JsonProperty("Ticks")]
+        [XmlAttribute]
         public long Ticks { get; set; }
-        [JsonProperty("Days")]
+        [XmlAttribute]
         public int Days { get; set; }
-        [JsonProperty("Hours")]
+        [XmlAttribute]
         public int Hours { get; set; }
-        [JsonProperty("Milliseconds")]
+        [XmlAttribute]
         public int Milliseconds { get; set; }
-        [JsonProperty("Minutes")]
+        [XmlAttribute]
         public int Minutes { get; set; }
-        [JsonProperty("Seconds")]
+        [XmlAttribute]
         public int Seconds { get; set; }
-        [JsonProperty("TotalDays")]
+        [XmlAttribute]
         public double TotalDays { get; set; }
-        [JsonProperty("TotalHours")]
+        [XmlAttribute]
         public double TotalHours { get; set; }
-        [JsonProperty("TotalMilliseconds")]
+        [XmlAttribute]
         public int TotalMilliseconds { get; set; }
-        [JsonProperty("TotalMinutes")]
+        [XmlAttribute]
         public double TotalMinutes { get; set; }
-        [JsonProperty("TotalSeconds")]
+        [XmlAttribute]
         public int TotalSeconds { get; set; }
     }
 

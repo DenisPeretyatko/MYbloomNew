@@ -64,7 +64,7 @@
 
         public virtual IEnumerable<TEntity> Get()
         {
-            var items = unitOfWork.GetEntities<TEntity>().GetAll().ToArray();
+            var items = unitOfWork.GetEntities<TEntity>().GetAll().Take(20).ToArray();
 
             if (items.Any())
             {

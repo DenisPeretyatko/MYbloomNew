@@ -15,9 +15,9 @@
                             <div class="form-group">
                                 <label>Customer</label>
                                 <ui-select ng-model="lookups.Customers.selected" theme="bootstrap">
-                                    <ui-select-match placeholder="Customer">{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-match placeholder="Customer">{{$select.selected.Name}}</ui-select-match>
                                     <ui-select-choices repeat="item in lookups.Customers | filter: $select.search">
-                                        <div ng-bind-html="item.name | highlight: $select.search">{{item.name}}</div>
+                                        <div ng-bind-html="item.Name | highlight: $select.search">{{item.Name}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
