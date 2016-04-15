@@ -267,6 +267,7 @@
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\AssignmentsController.cs" />
     <Compile Include="Areas\Api\Controllers\CallTypesController.cs" />
+    <Compile Include="Areas\Api\Controllers\CustomersController.cs" />
     <Compile Include="Areas\Api\Controllers\DepartmentsController.cs" />
     <Compile Include="Areas\Api\Controllers\EmployeesController.cs" />
     <Compile Include="Areas\Api\Controllers\EquipmentController.cs" />
@@ -285,6 +286,7 @@
     </Compile>
     <Compile Include="Services\Abstract\IAssignmentSageApiService.cs" />
     <Compile Include="Services\Abstract\ICallTypeSageApiService.cs" />
+    <Compile Include="Services\Abstract\ICustomerSageApiService.cs" />
     <Compile Include="Services\Abstract\IDepartmentSageApiService.cs" />
     <Compile Include="Services\Abstract\IEmployeeSageApiService.cs" />
     <Compile Include="Services\Abstract\IEquipmentSageApiService.cs" />
@@ -299,6 +301,7 @@
     <Compile Include="Infrastructure\JsonHelper.cs" />
     <Compile Include="Services\Concrete\AssignmentSageApiService.cs" />
     <Compile Include="Services\Concrete\CallTypeSageApiService.cs" />
+    <Compile Include="Services\Concrete\CustomerSageApiService.cs" />
     <Compile Include="Services\Concrete\DepartmentSageApiService.cs" />
     <Compile Include="Services\Concrete\EmployeeSageApiService.cs" />
     <Compile Include="Services\Concrete\EquipmentSageApiService.cs" />

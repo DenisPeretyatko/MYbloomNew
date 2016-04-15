@@ -1,11 +1,7 @@
-﻿using MongoDB.Bson;
-
-namespace BloomService.Domain.Entities
+﻿namespace BloomService.Domain.Entities
 {
-    public abstract class SageEntity  : IEntity
+    public abstract class SageEntity : IEntity
     {
         string IEntity.Id { get; set; }
     }
 }
-       
-   

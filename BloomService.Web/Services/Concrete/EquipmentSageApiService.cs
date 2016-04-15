@@ -1,22 +1,30 @@
-﻿using BloomService.Domain.Entities;
-using BloomService.Domain.UnitOfWork;
-using BloomService.Web.Managers;
-using BloomService.Web.Services.Abstract;
-using BloomService.Web.Utils;
-using RestSharp;
-
-public class EquipmentSageApiService : SageApiService<SageEquipment>, IEquipmentSageApiService
+﻿namespace BloomService.Web.Services.Concrete
 {
-    private IRestClient restClient;
-    private ISession session;
-    private IUnitOfWork unitOfWork;
+    using System.Configuration;
 
-    public EquipmentSageApiService(IRestClient restClient, IUnitOfWork unitOfWork/*, ISession session*/) : base(restClient, unitOfWork/*, session*/)
+    using BloomService.Domain.Entities;
+    using BloomService.Domain.UnitOfWork;
+    using BloomService.Web.Services.Abstract;
+    using BloomService.Web.Utils;
+
+    using RestSharp;
+
+    public class EquipmentSageApiService : SageApiService<SageEquipment>, IEquipmentSageApiService
     {
-        this.restClient = restClient;
-        this.unitOfWork = unitOfWork;
-        //this.session = session;
+        private IRestClient restClient;
 
-        EndPoint = System.Configuration.ConfigurationManager.AppSettings["EquipmentEndPoint"]; ;
+        private ISession session;
+
+        private IUnitOfWork unitOfWork;
+
+        public EquipmentSageApiService(IRestClient restClient, IUnitOfWork unitOfWork /*, ISession session*/)
+            : base(restClient, unitOfWork /*, session*/)
+        {
+            this.restClient = restClient;
+            this.unitOfWork = unitOfWork;
+
+            // this.session = session;
+            EndPoint = ConfigurationManager.AppSettings["EquipmentEndPoint"];
+        }
     }
 }

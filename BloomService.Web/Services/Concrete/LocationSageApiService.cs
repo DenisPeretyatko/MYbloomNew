@@ -1,6 +1,5 @@
 ﻿using BloomService.Domain.Entities;
 using BloomService.Domain.UnitOfWork;
-using BloomService.Web.Managers;
 using BloomService.Web.Services.Abstract;
 using BloomService.Web.Utils;
 using RestSharp;

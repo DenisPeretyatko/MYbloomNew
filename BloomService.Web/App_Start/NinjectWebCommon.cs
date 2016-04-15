@@ -1,47 +1,51 @@
-using BloomService.Web.Services.Concrete;
+using BloomService.Web;
 
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(BloomService.Web.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(BloomService.Web.App_Start.NinjectWebCommon), "Stop")]
+using WebActivatorEx;
 
-namespace BloomService.Web.App_Start
+[assembly: PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
+[assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
+
+namespace BloomService.Web
 {
     using System;
+    using System.Configuration;
     using System.Web;
+
+    using BloomService.Domain.Entities;
+    using BloomService.Domain.UnitOfWork;
+    using BloomService.Web.Services.Abstract;
+    using BloomService.Web.Services.Concrete;
+    using BloomService.Web.Utils;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;
     using Ninject.Web.Common;
-    using Services;
-    using Managers;
-    using Utils;
+
     using RestSharp;
-    using Domain.Entities;
-    using Domain.UnitOfWork;
-    using Services.Concrete;
-    using Services.Abstract;
-    public static class NinjectWebCommon 
+
+    public static class NinjectWebCommon
     {
-        private static readonly Bootstrapper bootstrapper = new Bootstrapper();
+        private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
 
         /// <summary>
         /// Starts the application
         /// </summary>
-        public static void Start() 
+        public static void Start()
         {
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
             DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
-            bootstrapper.Initialize(CreateKernel);
+            Bootstrapper.Initialize(CreateKernel);
         }
-        
+
         /// <summary>
         /// Stops the application.
         /// </summary>
         public static void Stop()
         {
-            bootstrapper.ShutDown();
+            Bootstrapper.ShutDown();
         }
-        
+
         /// <summary>
         /// Creates the kernel that will manage your application.
         /// </summary>
@@ -81,16 +85,15 @@ namespace BloomService.Web.App_Start
             kernel.Bind<IPartSageApiService>().To<PartSageApiService>();
             kernel.Bind<IProblemSageApiService>().To<ProblemSageApiService>();
             kernel.Bind<IRepairSageApiService>().To<RepairSageApiService>();
-
-
+            kernel.Bind<ICustomerSageApiService>().To<CustomerSageApiService>();
 
             kernel.Bind<ISageApiService<SageWorkOrder>>().To<SageApiService<SageWorkOrder>>();
-            kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument("http://localhost:50924/");
-            //kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(" http://12.217.205.14/");
 
+            var sageApiHost = ConfigurationManager.AppSettings["SageApiHost"];
 
+            kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(sageApiHost);
             kernel.Bind<ISession>().To<BloomServiceSession>().InSingletonScope();
             kernel.Bind<IUnitOfWork>().To<MongoDbUnitOfWork>();
-        }        
+        }
     }
 }

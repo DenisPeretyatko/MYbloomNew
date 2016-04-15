@@ -1,702 +1,143 @@
-﻿using BloomService.Domain.Attributes;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace BloomService.Domain.Entities
+﻿namespace BloomService.Domain.Entities
 {
-    /// <remarks/>
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [CollectionNameAttribute("PartCollection")]
-    public partial class SagePart : SageEntity
+    using System.Xml.Serialization;
+
+    using BloomService.Domain.Attributes;
+
+    using MongoDB.Bson.Serialization.Attributes;
+
+    [XmlType(AnonymousType = true)]
+    [CollectionName("PartCollection")]
+    public class SagePart : SageEntity
     {
-        private string partField;
+        [XmlAttribute]
+        public string AgreementPrice { get; set; }
 
-        private string partNumberField;
+        [XmlAttribute]
+        public string AKA { get; set; }
 
-        private string aKAField;
+        [XmlAttribute]
+        public string AllowFractions { get; set; }
 
-        private string descriptionField;
+        [XmlAttribute("Auto-GenerateEquipment")]
+        public string AutoGenerateEquipment { get; set; }
 
-        private string manufacturerNumberField;
+        [XmlAttribute]
+        public string AverageCost { get; set; }
 
-        private string manufacturerField;
+        [XmlAttribute]
+        public string BadInventoryValue { get; set; }
 
-        private string modelField;
+        [XmlAttribute]
+        public string BinLocation { get; set; }
 
-        private string equipmentTypeField;
+        [XmlAttribute]
+        public string Description { get; set; }
 
-        private string serializedField;
+        [XmlAttribute]
+        public string EquipmentType { get; set; }
 
-        private string lottedField;
+        [XmlAttribute]
+        public string ExchangeCost { get; set; }
 
-        private string allowFractionsField;
+        [XmlAttribute]
+        public string ExchangePrice { get; set; }
 
-        private string autoGenerateEquipmentField;
+        [XmlAttribute]
+        public string Inactive { get; set; }
 
-        private string binLocationField;
+        [XmlAttribute]
+        public string InStock { get; set; }
 
-        private string productField;
+        [XmlAttribute]
+        public string LastActivityDate { get; set; }
 
-        private string standardCostField;
+        [XmlAttribute]
+        public string LastOrderDate { get; set; }
 
-        private string averageCostField;
+        [XmlAttribute]
+        public string LastPrice { get; set; }
 
-        private string exchangeCostField;
+        [XmlAttribute]
+        public string LastReceivedDate { get; set; }
 
-        private string usedCostField;
+        [XmlAttribute]
+        public string Level1Price { get; set; }
 
-        private string level1PriceField;
+        [XmlAttribute]
+        public string Level2Price { get; set; }
 
-        private string level2PriceField;
+        [XmlAttribute]
+        public string Level3Price { get; set; }
 
-        private string level3PriceField;
+        [XmlAttribute]
+        public string Lotted { get; set; }
 
-        private string exchangePriceField;
+        [XmlAttribute]
+        public string Manufacturer { get; set; }
 
-        private string usedPriceField;
+        [XmlAttribute]
+        public string ManufacturerNumber { get; set; }
 
-        private string agreementPriceField;
+        [XmlAttribute]
+        public string MinimumStockQuantity { get; set; }
 
-        private string reimbursementAmountField;
+        [XmlAttribute]
+        public string Model { get; set; }
 
-        private string badInventoryValueField;
+        [XmlAttribute]
+        public string OrderLeadTime { get; set; }
 
-        private string quantityonHandField;
-
-        private string quantityonOrderField;
-
-        private string quantityAllocatedField;
-
-        private string warningLevelField;
-
-        private string minimumStockQuantityField;
-
-        private string reorderQuantityField;
-
-        private string totalQuantityField;
-
-        private string vendorField;
-
-        private string lastPriceField;
-
-        private string warrantyMonthsField;
-
-        private string lastOrderDateField;
-
-        private string lastReceivedDateField;
-
-        private string lastActivityDateField;
-
-        private string orderLeadTimeField;
-
-        private string inactiveField;
-
-        private string unitField;
-
-        private string inStockField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute]
         [BsonId]
-        public string Part
-        {
-            get
-            {
-                return partField;
-            }
-            set
-            {
-                partField = value;
-            }
-        }
+        public string Part { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PartNumber
-        {
-            get
-            {
-                return partNumberField;
-            }
-            set
-            {
-                partNumberField = value;
-            }
-        }
+        [XmlAttribute]
+        public string PartNumber { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string AKA
-        {
-            get
-            {
-                return aKAField;
-            }
-            set
-            {
-                aKAField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Product { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Description
-        {
-            get
-            {
-                return descriptionField;
-            }
-            set
-            {
-                descriptionField = value;
-            }
-        }
+        [XmlAttribute]
+        public string QuantityAllocated { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ManufacturerNumber
-        {
-            get
-            {
-                return manufacturerNumberField;
-            }
-            set
-            {
-                manufacturerNumberField = value;
-            }
-        }
+        [XmlAttribute]
+        public string QuantityonHand { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Manufacturer
-        {
-            get
-            {
-                return manufacturerField;
-            }
-            set
-            {
-                manufacturerField = value;
-            }
-        }
+        [XmlAttribute]
+        public string QuantityonOrder { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Model
-        {
-            get
-            {
-                return modelField;
-            }
-            set
-            {
-                modelField = value;
-            }
-        }
+        [XmlAttribute]
+        public string ReimbursementAmount { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string EquipmentType
-        {
-            get
-            {
-                return equipmentTypeField;
-            }
-            set
-            {
-                equipmentTypeField = value;
-            }
-        }
+        [XmlAttribute]
+        public string ReorderQuantity { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Serialized
-        {
-            get
-            {
-                return serializedField;
-            }
-            set
-            {
-                serializedField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Serialized { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Lotted
-        {
-            get
-            {
-                return lottedField;
-            }
-            set
-            {
-                lottedField = value;
-            }
-        }
+        [XmlAttribute]
+        public string StandardCost { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string AllowFractions
-        {
-            get
-            {
-                return allowFractionsField;
-            }
-            set
-            {
-                allowFractionsField = value;
-            }
-        }
+        [XmlAttribute]
+        public string TotalQuantity { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute("Auto-GenerateEquipment")]
-        public string AutoGenerateEquipment
-        {
-            get
-            {
-                return autoGenerateEquipmentField;
-            }
-            set
-            {
-                autoGenerateEquipmentField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Unit { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string BinLocation
-        {
-            get
-            {
-                return binLocationField;
-            }
-            set
-            {
-                binLocationField = value;
-            }
-        }
+        [XmlAttribute]
+        public string UsedCost { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Product
-        {
-            get
-            {
-                return productField;
-            }
-            set
-            {
-                productField = value;
-            }
-        }
+        [XmlAttribute]
+        public string UsedPrice { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string StandardCost
-        {
-            get
-            {
-                return standardCostField;
-            }
-            set
-            {
-                standardCostField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Vendor { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string AverageCost
-        {
-            get
-            {
-                return averageCostField;
-            }
-            set
-            {
-                averageCostField = value;
-            }
-        }
+        [XmlAttribute]
+        public string WarningLevel { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ExchangeCost
-        {
-            get
-            {
-                return exchangeCostField;
-            }
-            set
-            {
-                exchangeCostField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string UsedCost
-        {
-            get
-            {
-                return usedCostField;
-            }
-            set
-            {
-                usedCostField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Level1Price
-        {
-            get
-            {
-                return level1PriceField;
-            }
-            set
-            {
-                level1PriceField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Level2Price
-        {
-            get
-            {
-                return level2PriceField;
-            }
-            set
-            {
-                level2PriceField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Level3Price
-        {
-            get
-            {
-                return level3PriceField;
-            }
-            set
-            {
-                level3PriceField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ExchangePrice
-        {
-            get
-            {
-                return exchangePriceField;
-            }
-            set
-            {
-                exchangePriceField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string UsedPrice
-        {
-            get
-            {
-                return usedPriceField;
-            }
-            set
-            {
-                usedPriceField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string AgreementPrice
-        {
-            get
-            {
-                return agreementPriceField;
-            }
-            set
-            {
-                agreementPriceField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ReimbursementAmount
-        {
-            get
-            {
-                return reimbursementAmountField;
-            }
-            set
-            {
-                reimbursementAmountField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string BadInventoryValue
-        {
-            get
-            {
-                return badInventoryValueField;
-            }
-            set
-            {
-                badInventoryValueField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string QuantityonHand
-        {
-            get
-            {
-                return quantityonHandField;
-            }
-            set
-            {
-                quantityonHandField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string QuantityonOrder
-        {
-            get
-            {
-                return quantityonOrderField;
-            }
-            set
-            {
-                quantityonOrderField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string QuantityAllocated
-        {
-            get
-            {
-                return quantityAllocatedField;
-            }
-            set
-            {
-                quantityAllocatedField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string WarningLevel
-        {
-            get
-            {
-                return warningLevelField;
-            }
-            set
-            {
-                warningLevelField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string MinimumStockQuantity
-        {
-            get
-            {
-                return minimumStockQuantityField;
-            }
-            set
-            {
-                minimumStockQuantityField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ReorderQuantity
-        {
-            get
-            {
-                return reorderQuantityField;
-            }
-            set
-            {
-                reorderQuantityField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string TotalQuantity
-        {
-            get
-            {
-                return totalQuantityField;
-            }
-            set
-            {
-                totalQuantityField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Vendor
-        {
-            get
-            {
-                return vendorField;
-            }
-            set
-            {
-                vendorField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string LastPrice
-        {
-            get
-            {
-                return lastPriceField;
-            }
-            set
-            {
-                lastPriceField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string WarrantyMonths
-        {
-            get
-            {
-                return warrantyMonthsField;
-            }
-            set
-            {
-                warrantyMonthsField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string LastOrderDate
-        {
-            get
-            {
-                return lastOrderDateField;
-            }
-            set
-            {
-                lastOrderDateField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string LastReceivedDate
-        {
-            get
-            {
-                return lastReceivedDateField;
-            }
-            set
-            {
-                lastReceivedDateField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string LastActivityDate
-        {
-            get
-            {
-                return lastActivityDateField;
-            }
-            set
-            {
-                lastActivityDateField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string OrderLeadTime
-        {
-            get
-            {
-                return orderLeadTimeField;
-            }
-            set
-            {
-                orderLeadTimeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Inactive
-        {
-            get
-            {
-                return inactiveField;
-            }
-            set
-            {
-                inactiveField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Unit
-        {
-            get
-            {
-                return unitField;
-            }
-            set
-            {
-                unitField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string InStock
-        {
-            get
-            {
-                return inStockField;
-            }
-            set
-            {
-                inStockField = value;
-            }
-        }
+        [XmlAttribute]
+        public string WarrantyMonths { get; set; }
     }
-
-
 }

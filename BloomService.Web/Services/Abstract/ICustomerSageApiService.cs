@@ -2,7 +2,7 @@
 {
     using BloomService.Domain.Entities;
 
-    public interface ICallTypeSageApiService : ISageApiService<SageCallType>
+    public interface ICustomerSageApiService : ISageApiService<SageCustomer>
     {
     }
 }

@@ -1,20 +1,22 @@
-﻿using Sage.WebApi.Infratructure.Service;
-using System.Web.Mvc;
-
-namespace Sage.WebApi.Areas.Api.Controllers
+﻿namespace Sage.WebApi.Areas.Api.Controllers
 {
+    using System.Web.Mvc;
+
+    using Sage.WebApi.Infratructure.Service;
+
     [Authorize]
     public class AccountsReceivableController : BaseApiController
     {
-        private readonly IServiceODBC _serviceODBCr;
+        private readonly IServiceOdbc serviceOdbc;
 
-        public AccountsReceivableController(IServiceODBC serviceODBCr)
+        public AccountsReceivableController(IServiceOdbc serviceOdbc)
         {
-            _serviceODBCr = serviceODBCr;
+            this.serviceOdbc = serviceOdbc;
         }
+
         public ActionResult Customers()
         {
-            return Json(_serviceODBCr.Customers());
+            return Json(serviceOdbc.Customers());
         }
     }
 }

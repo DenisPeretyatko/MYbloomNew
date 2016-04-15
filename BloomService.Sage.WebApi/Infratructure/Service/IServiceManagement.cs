@@ -7,25 +7,45 @@
     public interface IServiceManagement
     {
         string CatalogPath { get; set; }
-        void Create(string name, string password);
-        object SendMessage(string message);
-        SageLocation[] Locations();
-        SagePart[] Parts();
-        SageProblem[] Problems();
-        SageEmployee[] Employees();
-        SageWorkOrder[] WorkOrders();
-        SageWorkOrder[] WorkOrders(string number);
-        SageWorkOrder[] WorkOrders(Properties properties);
-        SageRepair[] Repairs();
-        SageCallType[] Calltypes();
-        SageDepartment[] Departments();
-        SageEquipment[] Equipments();
-        SageAssignment[] Assignments();
-        SageAssignment[] Assignments(string number);
+
         SageAssignment[] AddAssignments(Properties properties);
-        SageAssignment[] EditAssignments(Properties properties);
-        IEnumerable<string> RateSheet();
-        IEnumerable<string> PermissionCode();
+
         object Agreements();
+
+        SageAssignment[] Assignments();
+
+        SageAssignment[] Assignments(string number);
+
+        SageCallType[] Calltypes();
+
+        void Create(string name, string password);
+
+        SageDepartment[] Departments();
+
+        SageAssignment[] EditAssignments(Properties properties);
+
+        SageEmployee[] Employees();
+
+        SageEquipment[] Equipments();
+
+        SageLocation[] Locations();
+
+        SagePart[] Parts();
+
+        IEnumerable<string> PermissionCode();
+
+        SageProblem[] Problems();
+
+        IEnumerable<string> RateSheet();
+
+        SageRepair[] Repairs();
+
+        object SendMessage(string message);
+
+        SageWorkOrder[] WorkOrders();
+
+        SageWorkOrder[] WorkOrders(string number);
+
+        SageWorkOrder[] WorkOrders(Properties properties);
     }
 }

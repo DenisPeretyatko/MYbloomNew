@@ -1,768 +1,155 @@
-﻿using BloomService.Domain.Attributes;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace BloomService.Domain.Entities
+﻿namespace BloomService.Domain.Entities
 {
+    using System.Xml.Serialization;
 
-    /// <remarks/>
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [CollectionNameAttribute("LocationCollection")]
-    public partial class SageLocation : SageEntity
+    using BloomService.Domain.Attributes;
+
+    using MongoDB.Bson.Serialization.Attributes;
+
+    [XmlType(AnonymousType = true)]
+    [CollectionName("LocationCollection")]
+    public class SageLocation : SageEntity
     {
+        [XmlAttribute]
+        public string ABN { get; set; }
 
-        private string siteTypeField;
+        [XmlAttribute]
+        public string AccountOpenDate { get; set; }
 
-        private string locationField;
+        [XmlAttribute]
+        public string Address { get; set; }
 
-        private string aliasField;
+        [XmlAttribute]
+        public string Address2 { get; set; }
 
-        private string aRCustomerField;
+        [XmlAttribute]
+        public string Alias { get; set; }
 
-        private string mainFaxField;
+        [XmlAttribute]
+        public string ARCustomer { get; set; }
 
-        private string mainPhoneField;
+        [XmlAttribute]
+        public string Area { get; set; }
 
-        private string contact1NameField;
+        [XmlAttribute("Bill-outAuthorization")]
+        public string BilloutAuthorization { get; set; }
 
-        private string contact1TitleField;
+        [XmlAttribute]
+        public string Center { get; set; }
 
-        private string contact1PhoneField;
+        [XmlAttribute]
+        public string City { get; set; }
 
-        private string contact1MobileField;
+        [XmlAttribute]
+        public string Contact1Email { get; set; }
 
-        private string contact1FaxField;
+        [XmlAttribute]
+        public string Contact1Fax { get; set; }
 
-        private string contact1EmailField;
+        [XmlAttribute]
+        public string Contact1Mobile { get; set; }
 
-        private string contact2NameField;
+        [XmlAttribute]
+        public string Contact1Name { get; set; }
 
-        private string contact2TitleField;
+        [XmlAttribute]
+        public string Contact1Phone { get; set; }
 
-        private string contact2PhoneField;
+        [XmlAttribute]
+        public string Contact1Title { get; set; }
 
-        private string contact2MobileField;
+        [XmlAttribute]
+        public string Contact2Email { get; set; }
 
-        private string contact2FaxField;
+        [XmlAttribute]
+        public string Contact2Fax { get; set; }
 
-        private string contact2EmailField;
+        [XmlAttribute]
+        public string Contact2Mobile { get; set; }
 
-        private string gLPrefixField;
+        [XmlAttribute]
+        public string Contact2Name { get; set; }
 
-        private string jCJobField;
+        [XmlAttribute]
+        public string Contact2Phone { get; set; }
 
-        private string jCExtraField;
+        [XmlAttribute]
+        public string Contact2Title { get; set; }
 
-        private string locationKeyField;
+        [XmlAttribute]
+        public string Country { get; set; }
 
-        private string centerField;
+        [XmlAttribute]
+        public string CustomerType { get; set; }
 
-        private string areaField;
+        [XmlAttribute]
+        public string Employee { get; set; }
 
-        private string customerTypeField;
+        [XmlAttribute]
+        public string ExemptStatus { get; set; }
 
-        private string nameField;
+        [XmlAttribute]
+        public string GLPrefix { get; set; }
 
-        private string addressField;
+        [XmlAttribute]
+        public string Inactive { get; set; }
 
-        private string address2Field;
+        [XmlAttribute]
+        public string JCExtra { get; set; }
 
-        private string cityField;
+        [XmlAttribute]
+        public string JCJob { get; set; }
 
-        private string stateField;
-
-        private string  zIPField;
-
-        private string countryField;
-
-        private string salesEmployeeField;
-
-        private string employeeField;
-
-        private string accountOpenDateField;
-
-        private string mapLocationField;
-
-        private string billoutAuthorizationField;
-
-        private string taxGroupField;
-
-        private string payTermsField;
-
-        private string inactiveField;
-
-        private string rateSheetField;
-
-        private string exemptStatusField;
-
-        private string aBNField;
-
-        private string miscellaneousField;
-
-        private string memoField;
-
-        private string permissionCodeField;
-
-        private string pREmployeeField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string SiteType
-        {
-            get
-            {
-                return siteTypeField;
-            }
-            set
-            {
-                siteTypeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute]
         [BsonId]
-        public string Location
-        {
-            get
-            {
-                return locationField;
-            }
-            set
-            {
-                locationField = value;
-            }
-        }
+        public string Location { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Alias
-        {
-            get
-            {
-                return aliasField;
-            }
-            set
-            {
-                aliasField = value;
-            }
-        }
+        [XmlAttribute]
+        public string LocationKey { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ARCustomer
-        {
-            get
-            {
-                return aRCustomerField;
-            }
-            set
-            {
-                aRCustomerField = value;
-            }
-        }
+        [XmlAttribute]
+        public string MainFax { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string MainFax
-        {
-            get
-            {
-                return mainFaxField;
-            }
-            set
-            {
-                mainFaxField = value;
-            }
-        }
+        [XmlAttribute]
+        public string MainPhone { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string MainPhone
-        {
-            get
-            {
-                return mainPhoneField;
-            }
-            set
-            {
-                mainPhoneField = value;
-            }
-        }
+        [XmlAttribute]
+        public string MapLocation { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Contact1Name
-        {
-            get
-            {
-                return contact1NameField;
-            }
-            set
-            {
-                contact1NameField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Memo { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Contact1Title
-        {
-            get
-            {
-                return contact1TitleField;
-            }
-            set
-            {
-                contact1TitleField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Miscellaneous { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Contact1Phone
-        {
-            get
-            {
-                return contact1PhoneField;
-            }
-            set
-            {
-                contact1PhoneField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Name { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Contact1Mobile
-        {
-            get
-            {
-                return contact1MobileField;
-            }
-            set
-            {
-                contact1MobileField = value;
-            }
-        }
+        [XmlAttribute]
+        public string PayTerms { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Contact1Fax
-        {
-            get
-            {
-                return contact1FaxField;
-            }
-            set
-            {
-                contact1FaxField = value;
-            }
-        }
+        [XmlAttribute]
+        public string PermissionCode { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Contact1Email
-        {
-            get
-            {
-                return contact1EmailField;
-            }
-            set
-            {
-                contact1EmailField = value;
-            }
-        }
+        [XmlAttribute]
+        public string PREmployee { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Contact2Name
-        {
-            get
-            {
-                return contact2NameField;
-            }
-            set
-            {
-                contact2NameField = value;
-            }
-        }
+        [XmlAttribute]
+        public string RateSheet { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Contact2Title
-        {
-            get
-            {
-                return contact2TitleField;
-            }
-            set
-            {
-                contact2TitleField = value;
-            }
-        }
+        [XmlAttribute]
+        public string SalesEmployee { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Contact2Phone
-        {
-            get
-            {
-                return contact2PhoneField;
-            }
-            set
-            {
-                contact2PhoneField = value;
-            }
-        }
+        [XmlAttribute]
+        public string SiteType { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Contact2Mobile
-        {
-            get
-            {
-                return contact2MobileField;
-            }
-            set
-            {
-                contact2MobileField = value;
-            }
-        }
+        [XmlAttribute]
+        public string State { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Contact2Fax
-        {
-            get
-            {
-                return contact2FaxField;
-            }
-            set
-            {
-                contact2FaxField = value;
-            }
-        }
+        [XmlAttribute]
+        public string TaxGroup { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Contact2Email
-        {
-            get
-            {
-                return contact2EmailField;
-            }
-            set
-            {
-                contact2EmailField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string GLPrefix
-        {
-            get
-            {
-                return gLPrefixField;
-            }
-            set
-            {
-                gLPrefixField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string JCJob
-        {
-            get
-            {
-                return jCJobField;
-            }
-            set
-            {
-                jCJobField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string JCExtra
-        {
-            get
-            {
-                return jCExtraField;
-            }
-            set
-            {
-                jCExtraField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string LocationKey
-        {
-            get
-            {
-                return locationKeyField;
-            }
-            set
-            {
-                locationKeyField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Center
-        {
-            get
-            {
-                return centerField;
-            }
-            set
-            {
-                centerField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Area
-        {
-            get
-            {
-                return areaField;
-            }
-            set
-            {
-                areaField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string CustomerType
-        {
-            get
-            {
-                return customerTypeField;
-            }
-            set
-            {
-                customerTypeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Name
-        {
-            get
-            {
-                return nameField;
-            }
-            set
-            {
-                nameField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Address
-        {
-            get
-            {
-                return addressField;
-            }
-            set
-            {
-                addressField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Address2
-        {
-            get
-            {
-                return address2Field;
-            }
-            set
-            {
-                address2Field = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string City
-        {
-            get
-            {
-                return cityField;
-            }
-            set
-            {
-                cityField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string State
-        {
-            get
-            {
-                return stateField;
-            }
-            set
-            {
-                stateField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ZIP
-        {
-            get
-            {
-                return zIPField;
-            }
-            set
-            {
-                zIPField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Country
-        {
-            get
-            {
-                return countryField;
-            }
-            set
-            {
-                countryField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string SalesEmployee
-        {
-            get
-            {
-                return salesEmployeeField;
-            }
-            set
-            {
-                salesEmployeeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Employee
-        {
-            get
-            {
-                return employeeField;
-            }
-            set
-            {
-                employeeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string AccountOpenDate
-        {
-            get
-            {
-                return accountOpenDateField;
-            }
-            set
-            {
-                accountOpenDateField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string MapLocation
-        {
-            get
-            {
-                return mapLocationField;
-            }
-            set
-            {
-                mapLocationField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute("Bill-outAuthorization")]
-        public string BilloutAuthorization
-        {
-            get
-            {
-                return billoutAuthorizationField;
-            }
-            set
-            {
-                billoutAuthorizationField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string TaxGroup
-        {
-            get
-            {
-                return taxGroupField;
-            }
-            set
-            {
-                taxGroupField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PayTerms
-        {
-            get
-            {
-                return payTermsField;
-            }
-            set
-            {
-                payTermsField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Inactive
-        {
-            get
-            {
-                return inactiveField;
-            }
-            set
-            {
-                inactiveField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string RateSheet
-        {
-            get
-            {
-                return rateSheetField;
-            }
-            set
-            {
-                rateSheetField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ExemptStatus
-        {
-            get
-            {
-                return exemptStatusField;
-            }
-            set
-            {
-                exemptStatusField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ABN
-        {
-            get
-            {
-                return aBNField;
-            }
-            set
-            {
-                aBNField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Miscellaneous
-        {
-            get
-            {
-                return miscellaneousField;
-            }
-            set
-            {
-                miscellaneousField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Memo
-        {
-            get
-            {
-                return memoField;
-            }
-            set
-            {
-                memoField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PermissionCode
-        {
-            get
-            {
-                return permissionCodeField;
-            }
-            set
-            {
-                permissionCodeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PREmployee
-        {
-            get
-            {
-                return pREmployeeField;
-            }
-            set
-            {
-                pREmployeeField = value;
-            }
-        }
+        [XmlAttribute]
+        public string ZIP { get; set; }
     }
-
-
 }

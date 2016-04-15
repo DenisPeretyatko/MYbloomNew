@@ -1,8 +1,9 @@
-﻿using BloomService.Domain.Entities;
-using System.Collections.Generic;
-
-namespace BloomService.Web.Services
+﻿namespace BloomService.Web.Services.Abstract
 {
+    using System.Collections.Generic;
+
+    using BloomService.Domain.Entities;
+
     public interface ISageApiService<TEntity> where TEntity : class, IEntity
     {
         IEnumerable<TEntity> Get();

@@ -1,1309 +1,258 @@
-﻿using BloomService.Domain.Attributes;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace BloomService.Domain.Entities
+﻿namespace BloomService.Domain.Entities
 {
-    [CollectionNameAttribute("WorkOrderCollection")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class SageWorkOrder : SageEntity
+    using System;
+    using System.Xml.Serialization;
+
+    using BloomService.Domain.Attributes;
+
+    using MongoDB.Bson.Serialization.Attributes;
+
+    [CollectionName("WorkOrderCollection")]
+    [XmlType(AnonymousType = true)]
+    public class SageWorkOrder : SageEntity
     {
-        private ushort workOrderField;
+        [XmlAttribute]
+        public decimal ActualLaborCost { get; set; }
 
-        private string callTypeField;
+        [XmlIgnore]
+        public bool ActualLaborCostSpecified { get; set; }
 
-        private string problemField;
+        [XmlAttribute]
+        public decimal ActualLaborHours { get; set; }
 
-        private decimal estimatedRepairHoursField;
+        [XmlIgnore]
+        public bool ActualLaborHoursSpecified { get; set; }
 
-        private string priorityField;
+        [XmlAttribute]
+        public decimal ActualMiscCost { get; set; }
 
-        private byte agreementField;
+        [XmlIgnore]
+        public bool ActualMiscCostSpecified { get; set; }
 
-        private byte agreemntPeriodField;
+        [XmlAttribute]
+        public decimal ActualPartsCost { get; set; }
 
-        private bool agreemntPeriodFieldSpecified;
+        [XmlIgnore]
+        public bool ActualPartsCostSpecified { get; set; }
 
-        private string centerField;
+        [XmlAttribute]
+        public byte Agreement { get; set; }
 
-        private string areaField;
+        [XmlAttribute("AgreemntPeri...Customer")]
+        public string AgreemntPeriCustomer { get; set; }
 
-        private string nameField;
+        [XmlAttribute]
+        public byte AgreemntPeriod { get; set; }
 
-        private string contactField;
+        [XmlIgnore]
+        public bool AgreemntPeriodSpecified { get; set; }
 
-        private System.DateTime dateEnteredField;
+        [XmlAttribute]
+        public string AlternateWorkOrderNbr { get; set; }
 
-        private bool dateEnteredFieldSpecified;
+        [XmlAttribute]
+        public decimal Amount { get; set; }
 
-        private System.DateTime timeEnteredField;
+        [XmlAttribute]
+        public decimal AmountBilled { get; set; }
 
-        private bool timeEnteredFieldSpecified;
+        [XmlIgnore]
+        public bool AmountBilledSpecified { get; set; }
 
-        private string enteredByField;
+        [XmlIgnore]
+        public bool AmountSpecified { get; set; }
 
-        private string employeeField;
+        [XmlAttribute]
+        public string ARCustomer { get; set; }
 
-        private string dateRunField;
+        [XmlAttribute]
+        public string Area { get; set; }
 
-        private string dateCompleteField;
+        [XmlAttribute(DataType = "date")]
+        public DateTime CallDate { get; set; }
 
-        private System.DateTime timeCompleteField;
+        [XmlIgnore]
+        public bool CallDateSpecified { get; set; }
 
-        private bool timeCompleteFieldSpecified;
+        [XmlAttribute(DataType = "time")]
+        public DateTime CallTime { get; set; }
 
-        private byte completedByField;
+        [XmlIgnore]
+        public bool CallTimeSpecified { get; set; }
 
-        private bool completedByFieldSpecified;
+        [XmlAttribute]
+        public string CallType { get; set; }
 
-        private string statusField;
+        [XmlAttribute]
+        public string Center { get; set; }
 
-        private string customerPOField;
+        [XmlAttribute("ChargeBill-to")]
+        public string ChargeBillto { get; set; }
 
-        private string quoteExpirationDateField;
+        [XmlAttribute]
+        public string Comments { get; set; }
 
-        private string taxatCenterField;
+        [XmlAttribute]
+        public byte CompletedBy { get; set; }
 
-        private decimal amountField;
+        [XmlIgnore]
+        public bool CompletedBySpecified { get; set; }
 
-        private bool amountFieldSpecified;
+        [XmlAttribute]
+        public string Contact { get; set; }
 
-        private decimal salesTaxAmountField;
+        [XmlAttribute]
+        public string CustomerPO { get; set; }
 
-        private bool salesTaxAmountFieldSpecified;
+        [XmlAttribute]
+        public string DateClosed { get; set; }
 
-        private decimal amountBilledField;
+        [XmlAttribute]
+        public string DateComplete { get; set; }
 
-        private bool amountBilledFieldSpecified;
+        [XmlAttribute(DataType = "date")]
+        public DateTime DateEntered { get; set; }
 
-        private decimal totalCostField;
+        [XmlIgnore]
+        public bool DateEnteredSpecified { get; set; }
 
-        private bool totalCostFieldSpecified;
+        [XmlAttribute]
+        public string DateRun { get; set; }
 
-        private string leadSourceField;
+        [XmlAttribute]
+        public string Department { get; set; }
 
-        private string commentsField;
+        [XmlAttribute]
+        public string Employee { get; set; }
 
-        private ushort equipmentField;
+        [XmlAttribute]
+        public string EnteredBy { get; set; }
 
-        private bool equipmentFieldSpecified;
+        [XmlAttribute]
+        public ushort Equipment { get; set; }
 
-        private string workOrderTypeField;
+        [XmlIgnore]
+        public bool EquipmentSpecified { get; set; }
 
-        private string payMethodField;
+        [XmlAttribute]
+        public decimal EstimatedLaborCost { get; set; }
 
-        private string preventiveMaintenanceField;
+        [XmlIgnore]
+        public bool EstimatedLaborCostSpecified { get; set; }
 
-        private string rateSheetField;
+        [XmlAttribute]
+        public decimal EstimatedMiscCost { get; set; }
 
-        private string salesEmployeeField;
+        [XmlIgnore]
+        public bool EstimatedMiscCostSpecified { get; set; }
 
-        private string jobSaleProductField;
+        [XmlAttribute]
+        public decimal EstimatedPartsCost { get; set; }
 
-        private decimal estimatedPartsCostField;
+        [XmlIgnore]
+        public bool EstimatedPartsCostSpecified { get; set; }
 
-        private bool estimatedPartsCostFieldSpecified;
+        [XmlAttribute]
+        public decimal EstimatedRepairHours { get; set; }
 
-        private decimal estimatedLaborCostField;
+        [XmlAttribute]
+        public string InvoiceDate { get; set; }
 
-        private bool estimatedLaborCostFieldSpecified;
+        [XmlAttribute]
+        public string JCExtra { get; set; }
 
-        private decimal estimatedMiscCostField;
+        [XmlAttribute]
+        public string JCJob { get; set; }
 
-        private bool estimatedMiscCostFieldSpecified;
+        [XmlAttribute]
+        public string JobSaleProduct { get; set; }
 
-        private decimal actualPartsCostField;
+        [XmlAttribute]
+        public byte Lead { get; set; }
 
-        private bool actualPartsCostFieldSpecified;
+        [XmlAttribute]
+        public string LeadSource { get; set; }
 
-        private decimal actualLaborCostField;
+        [XmlIgnore]
+        public bool LeadSpecified { get; set; }
 
-        private bool actualLaborCostFieldSpecified;
+        [XmlAttribute]
+        public string Location { get; set; }
 
-        private decimal actualMiscCostField;
+        [XmlAttribute]
+        public string Misc { get; set; }
 
-        private bool actualMiscCostFieldSpecified;
+        [XmlAttribute]
+        public string Name { get; set; }
 
-        private decimal actualLaborHoursField;
+        [XmlAttribute("Non-Billable")]
+        public string NonBillable { get; set; }
 
-        private bool actualLaborHoursFieldSpecified;
+        [XmlAttribute]
+        public string NottoExceed { get; set; }
 
-        private string alternateWorkOrderNbrField;
+        [XmlAttribute]
+        public string PayMethod { get; set; }
 
-        private byte leadField;
+        [XmlAttribute]
+        public string PermissionCode { get; set; }
 
-        private bool leadFieldSpecified;
+        [XmlAttribute]
+        public string PreventiveMaintenance { get; set; }
 
-        private string miscField;
+        [XmlAttribute]
+        public string Priority { get; set; }
 
-        private System.DateTime callDateField;
+        [XmlAttribute]
+        public string Problem { get; set; }
 
-        private bool callDateFieldSpecified;
+        [XmlAttribute]
+        public string QuoteExpirationDate { get; set; }
 
-        private System.DateTime callTimeField;
+        [XmlAttribute]
+        public string RateSheet { get; set; }
 
-        private bool callTimeFieldSpecified;
+        [XmlAttribute]
+        public string SalesEmployee { get; set; }
 
-        private string jCJobField;
+        [XmlAttribute]
+        public decimal SalesTaxAmount { get; set; }
 
-        private string jCExtraField;
+        [XmlIgnore]
+        public bool SalesTaxAmountSpecified { get; set; }
 
-        private string locationField;
+        [XmlAttribute]
+        public decimal SalesTaxBilled { get; set; }
 
-        private string aRCustomerField;
+        [XmlAttribute]
+        public string Status { get; set; }
 
-        private string departmentField;
+        [XmlAttribute]
+        public string TaxatCenter { get; set; }
 
-        private string nonBillableField;
+        [XmlAttribute(DataType = "time")]
+        public DateTime TimeComplete { get; set; }
 
-        private string chargeBilltoField;
+        [XmlIgnore]
+        public bool TimeCompleteSpecified { get; set; }
 
-        private string permissionCodeField;
+        [XmlAttribute(DataType = "time")]
+        public DateTime TimeEntered { get; set; }
 
-        private decimal salesTaxBilledField;
+        [XmlIgnore]
+        public bool TimeEnteredSpecified { get; set; }
 
-        private string invoiceDateField;
+        [XmlAttribute]
+        public decimal TotalCost { get; set; }
 
-        private string dateClosedField;
+        [XmlIgnore]
+        public bool TotalCostSpecified { get; set; }
 
-        private string nottoExceedField;
-
-        private string agreemntPeriCustomerField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute]
         [BsonId]
-        public ushort WorkOrder
-        {
-            get
-            {
-                return workOrderField;
-            }
-            set
-            {
-                workOrderField = value;
-            }
-        }
+        public ushort WorkOrder { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string CallType
-        {
-            get
-            {
-                return callTypeField;
-            }
-            set
-            {
-                callTypeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Problem
-        {
-            get
-            {
-                return problemField;
-            }
-            set
-            {
-                problemField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal EstimatedRepairHours
-        {
-            get
-            {
-                return estimatedRepairHoursField;
-            }
-            set
-            {
-                estimatedRepairHoursField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Priority
-        {
-            get
-            {
-                return priorityField;
-            }
-            set
-            {
-                priorityField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public byte Agreement
-        {
-            get
-            {
-                return agreementField;
-            }
-            set
-            {
-                agreementField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public byte AgreemntPeriod
-        {
-            get
-            {
-                return agreemntPeriodField;
-            }
-            set
-            {
-                agreemntPeriodField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AgreemntPeriodSpecified
-        {
-            get
-            {
-                return agreemntPeriodFieldSpecified;
-            }
-            set
-            {
-                agreemntPeriodFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Center
-        {
-            get
-            {
-                return centerField;
-            }
-            set
-            {
-                centerField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Area
-        {
-            get
-            {
-                return areaField;
-            }
-            set
-            {
-                areaField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Name
-        {
-            get
-            {
-                return nameField;
-            }
-            set
-            {
-                nameField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Contact
-        {
-            get
-            {
-                return contactField;
-            }
-            set
-            {
-                contactField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType = "date")]
-        public System.DateTime DateEntered
-        {
-            get
-            {
-                return dateEnteredField;
-            }
-            set
-            {
-                dateEnteredField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DateEnteredSpecified
-        {
-            get
-            {
-                return dateEnteredFieldSpecified;
-            }
-            set
-            {
-                dateEnteredFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType = "time")]
-        public System.DateTime TimeEntered
-        {
-            get
-            {
-                return timeEnteredField;
-            }
-            set
-            {
-                timeEnteredField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TimeEnteredSpecified
-        {
-            get
-            {
-                return timeEnteredFieldSpecified;
-            }
-            set
-            {
-                timeEnteredFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string EnteredBy
-        {
-            get
-            {
-                return enteredByField;
-            }
-            set
-            {
-                enteredByField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Employee
-        {
-            get
-            {
-                return employeeField;
-            }
-            set
-            {
-                employeeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string DateRun
-        {
-            get
-            {
-                return dateRunField;
-            }
-            set
-            {
-                dateRunField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string DateComplete
-        {
-            get
-            {
-                return dateCompleteField;
-            }
-            set
-            {
-                dateCompleteField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType = "time")]
-        public System.DateTime TimeComplete
-        {
-            get
-            {
-                return timeCompleteField;
-            }
-            set
-            {
-                timeCompleteField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TimeCompleteSpecified
-        {
-            get
-            {
-                return timeCompleteFieldSpecified;
-            }
-            set
-            {
-                timeCompleteFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public byte CompletedBy
-        {
-            get
-            {
-                return completedByField;
-            }
-            set
-            {
-                completedByField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CompletedBySpecified
-        {
-            get
-            {
-                return completedByFieldSpecified;
-            }
-            set
-            {
-                completedByFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Status
-        {
-            get
-            {
-                return statusField;
-            }
-            set
-            {
-                statusField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string CustomerPO
-        {
-            get
-            {
-                return customerPOField;
-            }
-            set
-            {
-                customerPOField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string QuoteExpirationDate
-        {
-            get
-            {
-                return quoteExpirationDateField;
-            }
-            set
-            {
-                quoteExpirationDateField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string TaxatCenter
-        {
-            get
-            {
-                return taxatCenterField;
-            }
-            set
-            {
-                taxatCenterField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal Amount
-        {
-            get
-            {
-                return amountField;
-            }
-            set
-            {
-                amountField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AmountSpecified
-        {
-            get
-            {
-                return amountFieldSpecified;
-            }
-            set
-            {
-                amountFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal SalesTaxAmount
-        {
-            get
-            {
-                return salesTaxAmountField;
-            }
-            set
-            {
-                salesTaxAmountField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool SalesTaxAmountSpecified
-        {
-            get
-            {
-                return salesTaxAmountFieldSpecified;
-            }
-            set
-            {
-                salesTaxAmountFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal AmountBilled
-        {
-            get
-            {
-                return amountBilledField;
-            }
-            set
-            {
-                amountBilledField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AmountBilledSpecified
-        {
-            get
-            {
-                return amountBilledFieldSpecified;
-            }
-            set
-            {
-                amountBilledFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal TotalCost
-        {
-            get
-            {
-                return totalCostField;
-            }
-            set
-            {
-                totalCostField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TotalCostSpecified
-        {
-            get
-            {
-                return totalCostFieldSpecified;
-            }
-            set
-            {
-                totalCostFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string LeadSource
-        {
-            get
-            {
-                return leadSourceField;
-            }
-            set
-            {
-                leadSourceField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Comments
-        {
-            get
-            {
-                return commentsField;
-            }
-            set
-            {
-                commentsField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public ushort Equipment
-        {
-            get
-            {
-                return equipmentField;
-            }
-            set
-            {
-                equipmentField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EquipmentSpecified
-        {
-            get
-            {
-                return equipmentFieldSpecified;
-            }
-            set
-            {
-                equipmentFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string WorkOrderType
-        {
-            get
-            {
-                return workOrderTypeField;
-            }
-            set
-            {
-                workOrderTypeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PayMethod
-        {
-            get
-            {
-                return payMethodField;
-            }
-            set
-            {
-                payMethodField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PreventiveMaintenance
-        {
-            get
-            {
-                return preventiveMaintenanceField;
-            }
-            set
-            {
-                preventiveMaintenanceField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string RateSheet
-        {
-            get
-            {
-                return rateSheetField;
-            }
-            set
-            {
-                rateSheetField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string SalesEmployee
-        {
-            get
-            {
-                return salesEmployeeField;
-            }
-            set
-            {
-                salesEmployeeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string JobSaleProduct
-        {
-            get
-            {
-                return jobSaleProductField;
-            }
-            set
-            {
-                jobSaleProductField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal EstimatedPartsCost
-        {
-            get
-            {
-                return estimatedPartsCostField;
-            }
-            set
-            {
-                estimatedPartsCostField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EstimatedPartsCostSpecified
-        {
-            get
-            {
-                return estimatedPartsCostFieldSpecified;
-            }
-            set
-            {
-                estimatedPartsCostFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal EstimatedLaborCost
-        {
-            get
-            {
-                return estimatedLaborCostField;
-            }
-            set
-            {
-                estimatedLaborCostField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EstimatedLaborCostSpecified
-        {
-            get
-            {
-                return estimatedLaborCostFieldSpecified;
-            }
-            set
-            {
-                estimatedLaborCostFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal EstimatedMiscCost
-        {
-            get
-            {
-                return estimatedMiscCostField;
-            }
-            set
-            {
-                estimatedMiscCostField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EstimatedMiscCostSpecified
-        {
-            get
-            {
-                return estimatedMiscCostFieldSpecified;
-            }
-            set
-            {
-                estimatedMiscCostFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal ActualPartsCost
-        {
-            get
-            {
-                return actualPartsCostField;
-            }
-            set
-            {
-                actualPartsCostField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ActualPartsCostSpecified
-        {
-            get
-            {
-                return actualPartsCostFieldSpecified;
-            }
-            set
-            {
-                actualPartsCostFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal ActualLaborCost
-        {
-            get
-            {
-                return actualLaborCostField;
-            }
-            set
-            {
-                actualLaborCostField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ActualLaborCostSpecified
-        {
-            get
-            {
-                return actualLaborCostFieldSpecified;
-            }
-            set
-            {
-                actualLaborCostFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal ActualMiscCost
-        {
-            get
-            {
-                return actualMiscCostField;
-            }
-            set
-            {
-                actualMiscCostField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ActualMiscCostSpecified
-        {
-            get
-            {
-                return actualMiscCostFieldSpecified;
-            }
-            set
-            {
-                actualMiscCostFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal ActualLaborHours
-        {
-            get
-            {
-                return actualLaborHoursField;
-            }
-            set
-            {
-                actualLaborHoursField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ActualLaborHoursSpecified
-        {
-            get
-            {
-                return actualLaborHoursFieldSpecified;
-            }
-            set
-            {
-                actualLaborHoursFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string AlternateWorkOrderNbr
-        {
-            get
-            {
-                return alternateWorkOrderNbrField;
-            }
-            set
-            {
-                alternateWorkOrderNbrField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public byte Lead
-        {
-            get
-            {
-                return leadField;
-            }
-            set
-            {
-                leadField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LeadSpecified
-        {
-            get
-            {
-                return leadFieldSpecified;
-            }
-            set
-            {
-                leadFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Misc
-        {
-            get
-            {
-                return miscField;
-            }
-            set
-            {
-                miscField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType = "date")]
-        public System.DateTime CallDate
-        {
-            get
-            {
-                return callDateField;
-            }
-            set
-            {
-                callDateField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CallDateSpecified
-        {
-            get
-            {
-                return callDateFieldSpecified;
-            }
-            set
-            {
-                callDateFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType = "time")]
-        public System.DateTime CallTime
-        {
-            get
-            {
-                return callTimeField;
-            }
-            set
-            {
-                callTimeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CallTimeSpecified
-        {
-            get
-            {
-                return callTimeFieldSpecified;
-            }
-            set
-            {
-                callTimeFieldSpecified = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string JCJob
-        {
-            get
-            {
-                return jCJobField;
-            }
-            set
-            {
-                jCJobField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string JCExtra
-        {
-            get
-            {
-                return jCExtraField;
-            }
-            set
-            {
-                jCExtraField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Location
-        {
-            get
-            {
-                return locationField;
-            }
-            set
-            {
-                locationField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ARCustomer
-        {
-            get
-            {
-                return aRCustomerField;
-            }
-            set
-            {
-                aRCustomerField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Department
-        {
-            get
-            {
-                return departmentField;
-            }
-            set
-            {
-                departmentField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute("Non-Billable")]
-        public string NonBillable
-        {
-            get
-            {
-                return nonBillableField;
-            }
-            set
-            {
-                nonBillableField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute("ChargeBill-to")]
-        public string ChargeBillto
-        {
-            get
-            {
-                return chargeBilltoField;
-            }
-            set
-            {
-                chargeBilltoField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PermissionCode
-        {
-            get
-            {
-                return permissionCodeField;
-            }
-            set
-            {
-                permissionCodeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal SalesTaxBilled
-        {
-            get
-            {
-                return salesTaxBilledField;
-            }
-            set
-            {
-                salesTaxBilledField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string InvoiceDate
-        {
-            get
-            {
-                return invoiceDateField;
-            }
-            set
-            {
-                invoiceDateField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string DateClosed
-        {
-            get
-            {
-                return dateClosedField;
-            }
-            set
-            {
-                dateClosedField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string NottoExceed
-        {
-            get
-            {
-                return nottoExceedField;
-            }
-            set
-            {
-                nottoExceedField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute("AgreemntPeri...Customer")]
-        public string AgreemntPeriCustomer
-        {
-            get
-            {
-                return agreemntPeriCustomerField;
-            }
-            set
-            {
-                agreemntPeriCustomerField = value;
-            }
-        }
+        [XmlAttribute]
+        public string WorkOrderType { get; set; }
     }
-
-
 }

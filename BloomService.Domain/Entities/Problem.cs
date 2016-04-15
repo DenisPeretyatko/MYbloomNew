@@ -1,156 +1,41 @@
-﻿using BloomService.Domain.Attributes;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace BloomService.Domain.Entities
+﻿namespace BloomService.Domain.Entities
 {
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [CollectionNameAttribute("ProblemCollection")]
-    public partial class SageProblem : SageEntity
+    using System.Xml.Serialization;
+
+    using BloomService.Domain.Attributes;
+
+    using MongoDB.Bson.Serialization.Attributes;
+
+    [XmlType(AnonymousType = true)]
+    [CollectionName("ProblemCollection")]
+    public class SageProblem : SageEntity
     {
+        [XmlAttribute]
+        public string Department { get; set; }
 
-        private byte problemField;
+        [XmlAttribute]
+        public string Description { get; set; }
 
-        private string descriptionField;
+        [XmlAttribute]
+        public decimal EstimatedRepairHours { get; set; }
 
-        private string departmentField;
+        [XmlAttribute]
+        public string Inactive { get; set; }
 
-        private decimal estimatedRepairHoursField;
+        [XmlAttribute]
+        public string JCCostCode { get; set; }
 
-        private string priorityField;
+        [XmlAttribute]
+        public string LaborRepair { get; set; }
 
-        private string inactiveField;
+        [XmlAttribute]
+        public string Priority { get; set; }
 
-        private string skillField;
-
-        private string laborRepairField;
-
-        private string jCCostCodeField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute]
         [BsonId]
-        public byte Problem
-        {
-            get
-            {
-                return problemField;
-            }
-            set
-            {
-                problemField = value;
-            }
-        }
+        public byte Problem { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Description
-        {
-            get
-            {
-                return descriptionField;
-            }
-            set
-            {
-                descriptionField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Department
-        {
-            get
-            {
-                return departmentField;
-            }
-            set
-            {
-                departmentField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal EstimatedRepairHours
-        {
-            get
-            {
-                return estimatedRepairHoursField;
-            }
-            set
-            {
-                estimatedRepairHoursField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Priority
-        {
-            get
-            {
-                return priorityField;
-            }
-            set
-            {
-                priorityField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Inactive
-        {
-            get
-            {
-                return inactiveField;
-            }
-            set
-            {
-                inactiveField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Skill
-        {
-            get
-            {
-                return skillField;
-            }
-            set
-            {
-                skillField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string LaborRepair
-        {
-            get
-            {
-                return laborRepairField;
-            }
-            set
-            {
-                laborRepairField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string JCCostCode
-        {
-            get
-            {
-                return jCCostCodeField;
-            }
-            set
-            {
-                jCCostCodeField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Skill { get; set; }
     }
 }

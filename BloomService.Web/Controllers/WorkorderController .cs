@@ -4,6 +4,8 @@ using BloomService.Web.Services;
 
 namespace BloomService.Web.Controllers
 {
+    using BloomService.Web.Services.Abstract;
+
     public class WorkorderController : BaseController
     {
         private readonly IWorkOrderSageApiService _workOrderSageApiService;
