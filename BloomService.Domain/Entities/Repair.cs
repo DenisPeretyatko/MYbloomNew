@@ -1,78 +1,26 @@
-﻿using BloomService.Domain.Attributes;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace BloomService.Domain.Entities
+﻿namespace BloomService.Domain.Entities
 {
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [CollectionNameAttribute("RepairCollection")]
-    public partial class SageRepair : SageEntity
+    using System.Xml.Serialization;
+
+    using BloomService.Domain.Attributes;
+
+    using MongoDB.Bson.Serialization.Attributes;
+
+    [XmlType(AnonymousType = true)]
+    [CollectionName("RepairCollection")]
+    public class SageRepair : SageEntity
     {
+        [XmlAttribute]
+        public string Description { get; set; }
 
-        private byte repairField;
+        [XmlAttribute]
+        public string Inactive { get; set; }
 
-        private string descriptionField;
+        [XmlAttribute]
+        public string JCCostCode { get; set; }
 
-        private string inactiveField;
-
-        private string jCCostCodeField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute]
         [BsonId]
-        public byte Repair
-        {
-            get
-            {
-                return repairField;
-            }
-            set
-            {
-                repairField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Description
-        {
-            get
-            {
-                return descriptionField;
-            }
-            set
-            {
-                descriptionField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Inactive
-        {
-            get
-            {
-                return inactiveField;
-            }
-            set
-            {
-                inactiveField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string JCCostCode
-        {
-            get
-            {
-                return jCCostCodeField;
-            }
-            set
-            {
-                jCCostCodeField = value;
-            }
-        }
+        public byte Repair { get; set; }
     }
-
-
 }

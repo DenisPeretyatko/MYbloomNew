@@ -1,284 +1,65 @@
-﻿using BloomService.Domain.Attributes;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace BloomService.Domain.Entities
+﻿namespace BloomService.Domain.Entities
 {
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [CollectionNameAttribute("EquipmentCollection")]
-    public partial class SageEquipment : SageEntity
+    using System.Xml.Serialization;
+
+    using BloomService.Domain.Attributes;
+
+    using MongoDB.Bson.Serialization.Attributes;
+
+    [XmlType(AnonymousType = true)]
+    [CollectionName("EquipmentCollection")]
+    public class SageEquipment : SageEntity
     {
+        [XmlAttribute]
+        public string DateRemoved { get; set; }
 
-        private string equipmentField;
+        [XmlAttribute]
+        public string DateReplaced { get; set; }
 
-        private string parentnumberField;
+        [XmlAttribute]
+        public string Employee { get; set; }
 
-        private string partField;
-
-        private string serialNumberField;
-
-        private string equipmentTypeField;
-
-        private string modelField;
-
-        private string manufacturerField;
-
-        private string yearofManufacturingField;
-
-        private string installDateField;
-
-        private string installLocationField;
-
-        private string dateReplacedField;
-
-        private string dateRemovedField;
-
-        private string warrantyStartsField;
-
-        private string warrantyExpiresField;
-
-        private string employeeField;
-
-        private string inactiveField;
-
-        private string locationField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute]
         [BsonId]
-        public string Equipment
-        {
-            get
-            {
-                return equipmentField;
-            }
-            set
-            {
-                equipmentField = value;
-            }
-        }
+        public string Equipment { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Parentnumber
-        {
-            get
-            {
-                return parentnumberField;
-            }
-            set
-            {
-                parentnumberField = value;
-            }
-        }
+        [XmlAttribute]
+        public string EquipmentType { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Part
-        {
-            get
-            {
-                return partField;
-            }
-            set
-            {
-                partField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Inactive { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string SerialNumber
-        {
-            get
-            {
-                return serialNumberField;
-            }
-            set
-            {
-                serialNumberField = value;
-            }
-        }
+        [XmlAttribute]
+        public string InstallDate { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string EquipmentType
-        {
-            get
-            {
-                return equipmentTypeField;
-            }
-            set
-            {
-                equipmentTypeField = value;
-            }
-        }
+        [XmlAttribute]
+        public string InstallLocation { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Model
-        {
-            get
-            {
-                return modelField;
-            }
-            set
-            {
-                modelField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Location { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Manufacturer
-        {
-            get
-            {
-                return manufacturerField;
-            }
-            set
-            {
-                manufacturerField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Manufacturer { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string YearofManufacturing
-        {
-            get
-            {
-                return yearofManufacturingField;
-            }
-            set
-            {
-                yearofManufacturingField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Model { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string InstallDate
-        {
-            get
-            {
-                return installDateField;
-            }
-            set
-            {
-                installDateField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Parentnumber { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string InstallLocation
-        {
-            get
-            {
-                return installLocationField;
-            }
-            set
-            {
-                installLocationField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Part { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string DateReplaced
-        {
-            get
-            {
-                return dateReplacedField;
-            }
-            set
-            {
-                dateReplacedField = value;
-            }
-        }
+        [XmlAttribute]
+        public string SerialNumber { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string DateRemoved
-        {
-            get
-            {
-                return dateRemovedField;
-            }
-            set
-            {
-                dateRemovedField = value;
-            }
-        }
+        [XmlAttribute]
+        public string WarrantyExpires { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string WarrantyStarts
-        {
-            get
-            {
-                return warrantyStartsField;
-            }
-            set
-            {
-                warrantyStartsField = value;
-            }
-        }
+        [XmlAttribute]
+        public string WarrantyStarts { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string WarrantyExpires
-        {
-            get
-            {
-                return warrantyExpiresField;
-            }
-            set
-            {
-                warrantyExpiresField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Employee
-        {
-            get
-            {
-                return employeeField;
-            }
-            set
-            {
-                employeeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Inactive
-        {
-            get
-            {
-                return inactiveField;
-            }
-            set
-            {
-                inactiveField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Location
-        {
-            get
-            {
-                return locationField;
-            }
-            set
-            {
-                locationField = value;
-            }
-        }
+        [XmlAttribute]
+        public string YearofManufacturing { get; set; }
     }
 }

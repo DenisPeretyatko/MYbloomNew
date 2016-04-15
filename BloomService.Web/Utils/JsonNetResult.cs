@@ -1,42 +1,46 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
 
-public class JsonNetResult : JsonResult
+using Newtonsoft.Json;
+
+namespace BloomService.Web.Utils
 {
-    public JsonNetResult()
+    public class JsonNetResult : JsonResult
     {
-        Settings = new JsonSerializerSettings
+        public JsonNetResult()
         {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-        };
-    }
+            Settings = new JsonSerializerSettings
+                           {
+                               ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                           };
+        }
 
-    public JsonSerializerSettings Settings { get; private set; }
+        public JsonSerializerSettings Settings { get; private set; }
 
-    public override void ExecuteResult(ControllerContext context)
-    {
-        if (context == null)
-            throw new ArgumentNullException("context");
-        if (this.JsonRequestBehavior == JsonRequestBehavior.DenyGet && string.Equals(context.HttpContext.Request.HttpMethod, "GET", StringComparison.OrdinalIgnoreCase))
-            throw new InvalidOperationException("JSON GET is not allowed");
-
-        HttpResponseBase response = context.HttpContext.Response;
-        response.ContentType = string.IsNullOrEmpty(this.ContentType) ? "application/json" : this.ContentType;
-
-        if (this.ContentEncoding != null)
-            response.ContentEncoding = this.ContentEncoding;
-        if (this.Data == null)
-            return;
-
-        var scriptSerializer = JsonSerializer.Create(this.Settings);
-
-        using (var sw = new StringWriter())
+        public override void ExecuteResult(ControllerContext context)
         {
-            scriptSerializer.Serialize(sw, this.Data);
-            response.Write(sw.ToString());
+            if (context == null)
+                throw new ArgumentNullException("context");
+            if (JsonRequestBehavior == JsonRequestBehavior.DenyGet && string.Equals(context.HttpContext.Request.HttpMethod, "GET", StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException("JSON GET is not allowed");
+
+            HttpResponseBase response = context.HttpContext.Response;
+            response.ContentType = string.IsNullOrEmpty(ContentType) ? "application/json" : ContentType;
+
+            if (ContentEncoding != null)
+                response.ContentEncoding = ContentEncoding;
+            if (Data == null)
+                return;
+
+            var scriptSerializer = JsonSerializer.Create(Settings);
+
+            using (var sw = new StringWriter())
+            {
+                scriptSerializer.Serialize(sw, Data);
+                response.Write(sw.ToString());
+            }
         }
     }
 }

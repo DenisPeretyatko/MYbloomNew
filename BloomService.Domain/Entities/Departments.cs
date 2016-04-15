@@ -1,93 +1,29 @@
-﻿using BloomService.Domain.Attributes;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace BloomService.Domain.Entities
+﻿namespace BloomService.Domain.Entities
 {
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [CollectionNameAttribute("DepartmentCollection")]
-    public partial class SageDepartment : SageEntity
+    using System.Xml.Serialization;
+
+    using BloomService.Domain.Attributes;
+
+    using MongoDB.Bson.Serialization.Attributes;
+
+    [XmlType(AnonymousType = true)]
+    [CollectionName("DepartmentCollection")]
+    public class SageDepartment : SageEntity
     {
-        private byte departmentField;
-
-        private string descriptionField;
-
-        private string inactiveField;
-
-        private string gLPrefixField;
-
-        private string gLSuffixField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [XmlAttribute]
         [BsonId]
-        public byte Department
-        {
-            get
-            {
-                return departmentField;
-            }
-            set
-            {
-                departmentField = value;
-            }
-        }
+        public byte Department { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Description
-        {
-            get
-            {
-                return descriptionField;
-            }
-            set
-            {
-                descriptionField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Description { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Inactive
-        {
-            get
-            {
-                return inactiveField;
-            }
-            set
-            {
-                inactiveField = value;
-            }
-        }
+        [XmlAttribute]
+        public string GLPrefix { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string GLPrefix
-        {
-            get
-            {
-                return gLPrefixField;
-            }
-            set
-            {
-                gLPrefixField = value;
-            }
-        }
+        [XmlAttribute]
+        public string GLSuffix { get; set; }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string GLSuffix
-        {
-            get
-            {
-                return gLSuffixField;
-            }
-            set
-            {
-                gLSuffixField = value;
-            }
-        }
+        [XmlAttribute]
+        public string Inactive { get; set; }
     }
-
-
 }

@@ -42,10 +42,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="AttributeRouting, Version=3.5.6.0, Culture=neutral, PublicKeyToken=c10f85d521a011a9, processorArchitecture=MSIL">
       <HintPath>..\packages\AttributeRouting.Core.3.5.6\lib\net40\AttributeRouting.dll</HintPath>
       <Private>True</Private>
@@ -272,6 +268,7 @@
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\AssignmentsController.cs" />
     <Compile Include="Areas\Api\Controllers\CallTypesController.cs" />
+    <Compile Include="Areas\Api\Controllers\CustomersController.cs" />
     <Compile Include="Areas\Api\Controllers\DepartmentsController.cs" />
     <Compile Include="Areas\Api\Controllers\EmployeesController.cs" />
     <Compile Include="Areas\Api\Controllers\EquipmentController.cs" />
@@ -301,6 +298,7 @@
     <Compile Include="Models\WorkOrderModel.cs" />
     <Compile Include="Services\Abstract\IAssignmentSageApiService.cs" />
     <Compile Include="Services\Abstract\ICallTypeSageApiService.cs" />
+    <Compile Include="Services\Abstract\ICustomerSageApiService.cs" />
     <Compile Include="Services\Abstract\IDepartmentSageApiService.cs" />
     <Compile Include="Services\Abstract\IEmployeeSageApiService.cs" />
     <Compile Include="Services\Abstract\IEquipmentSageApiService.cs" />
@@ -315,6 +313,7 @@
     <Compile Include="Infrastructure\JsonHelper.cs" />
     <Compile Include="Services\Concrete\AssignmentSageApiService.cs" />
     <Compile Include="Services\Concrete\CallTypeSageApiService.cs" />
+    <Compile Include="Services\Concrete\CustomerSageApiService.cs" />
     <Compile Include="Services\Concrete\DepartmentSageApiService.cs" />
     <Compile Include="Services\Concrete\EmployeeSageApiService.cs" />
     <Compile Include="Services\Concrete\EquipmentSageApiService.cs" />

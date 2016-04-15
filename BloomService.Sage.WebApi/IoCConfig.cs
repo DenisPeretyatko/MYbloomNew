@@ -15,7 +15,7 @@ namespace Sage.WebApi
             var container = TinyIoCContainer.Current;
             
             container.Register<IServiceManagement, ServiceManagement>().AsPerRequestSingleton();
-            container.Register<IServiceODBC, ServiceODBC>().AsPerRequestSingleton();
+            container.Register<IServiceOdbc, ServiceOdbc>().AsPerRequestSingleton();
             container.Register<SageWebConfig>().AsPerRequestSingleton();
             container.Register<ClaimsAgent>().AsPerRequestSingleton();
             DependencyResolver.SetResolver(new TinyIocMvcDependencyResolver(container));

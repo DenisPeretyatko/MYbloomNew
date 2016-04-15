@@ -1,21 +1,28 @@
-﻿using BloomService.Domain.Entities;
-using BloomService.Domain.UnitOfWork;
-using BloomService.Web.Services;
-using BloomService.Web.Utils;
-using MongoDB.Bson;
-using RestSharp;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace BloomService.Web.Managers
+﻿namespace BloomService.Web.Services.Concrete
 {
-    public class SageApiService<TEntity> : ISageApiService<TEntity> where TEntity : class, IEntity
-    {
-        private IRestClient restClient;
-        private ISession session;
-        private IUnitOfWork unitOfWork;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Linq;
 
-        public string EndPoint { get; set; }
+    using BloomService.Domain.Entities;
+    using BloomService.Domain.UnitOfWork;
+    using BloomService.Web.Services.Abstract;
+    using BloomService.Web.Utils;
+
+    using MongoDB.Bson;
+
+    using Newtonsoft.Json.Linq;
+
+    using RestSharp;
+
+    public class SageApiService<TEntity> : ISageApiService<TEntity>
+        where TEntity : class, IEntity
+    {
+        private readonly IRestClient restClient;
+
+        private readonly ISession session;
+
+        private readonly IUnitOfWork unitOfWork;
 
         public SageApiService(IRestClient restClient, IUnitOfWork unitOfWork)
         {
@@ -23,9 +30,41 @@ namespace BloomService.Web.Managers
             this.unitOfWork = unitOfWork;
         }
 
+        public string EndPoint { get; set; }
+
+        public virtual IEnumerable<TEntity> Add(Properties properties)
+        {
+            var request = new RestRequest(EndPoint, Method.POST);
+            request.AddObject(properties);
+            request.AddHeader("Authorization", string.Format("Bearer {0}", GetAuthToken()));
+            var response = restClient.Execute<List<TEntity>>(request);
+            var result = response.Data;
+            return result;
+        }
+
+        public virtual IEnumerable<TEntity> Delete(Properties properties)
+        {
+            var request = new RestRequest(EndPoint, Method.DELETE);
+            request.AddObject(properties);
+            request.AddHeader("Authorization", string.Format("Bearer {0}", GetAuthToken()));
+            var response = restClient.Execute<List<TEntity>>(request);
+            var result = response.Data;
+            return result;
+        }
+
+        public virtual IEnumerable<TEntity> Edit(Properties properties)
+        {
+            var request = new RestRequest(EndPoint, Method.PUT);
+            request.AddObject(properties);
+            request.AddHeader("Authorization", string.Format("Bearer {0}", GetAuthToken()));
+            var response = restClient.Execute<List<TEntity>>(request);
+            var result = response.Data;
+            return result;
+        }
+
         public virtual IEnumerable<TEntity> Get()
         {
-            var items = unitOfWork.GetEntities<TEntity>().GetAll().Take(20).ToArray();
+            var items = unitOfWork.GetEntities<TEntity>().GetAll().ToArray();
 
             if (items.Any())
             {
@@ -65,60 +104,29 @@ namespace BloomService.Web.Managers
             return result;
         }
 
-        public virtual IEnumerable<TEntity> Add(Properties properties)
-        {
-            var request = new RestRequest(EndPoint, Method.POST);
-            request.AddObject(properties);
-            request.AddHeader("Authorization", string.Format("Bearer {0}", GetAuthToken()));
-            var response = restClient.Execute<List<TEntity>>(request);
-            var result = response.Data;
-            return result;
-        }
-
-        public virtual IEnumerable<TEntity> Edit(Properties properties)
-        {
-            var request = new RestRequest(EndPoint, Method.PUT);
-            request.AddObject(properties);
-            request.AddHeader("Authorization", string.Format("Bearer {0}", GetAuthToken()));
-            var response = restClient.Execute<List<TEntity>>(request);
-            var result = response.Data;
-            return result;
-        }
-
-
-        public virtual IEnumerable<TEntity> Delete(Properties properties)
-        {
-            var request = new RestRequest(EndPoint, Method.DELETE);
-            request.AddObject(properties);
-            request.AddHeader("Authorization", string.Format("Bearer {0}", GetAuthToken()));
-            var response = restClient.Execute<List<TEntity>>(request);
-            var result = response.Data;
-            return result;
-        }
-
         protected string GetAuthToken()
         {
-            //if(session.Session["oauth_token"] != null)
-            //{
-            //    return session.Session["oauth_token"].ToString();
-            //}
-            //else
-            //{
-            var username = System.Configuration.ConfigurationManager.AppSettings["SageUsername"];
-            var password = System.Configuration.ConfigurationManager.AppSettings["SagePassword"];
+            // if(session.Session["oauth_token"] != null)
+            // {
+            // return session.Session["oauth_token"].ToString();
+            // }
+            // else
+            // {
+            var username = ConfigurationManager.AppSettings["SageUsername"];
+            var password = ConfigurationManager.AppSettings["SagePassword"];
 
             var request = new RestRequest("oauth/token", Method.POST);
             request.AddParameter("username", username);
             request.AddParameter("password", password);
             request.AddParameter("grant_type", "password");
             var response = restClient.Execute(request);
-            var json = Newtonsoft.Json.Linq.JObject.Parse(response.Content);
+            var json = JObject.Parse(response.Content);
             var result = json.First.First.ToString();
 
-            //session.Session["oauth_token"] = result;
-
+            // session.Session["oauth_token"] = result;
             return result;
-            //}
+
+            // }
         }
     }
 }

@@ -6,9 +6,9 @@ namespace Sage.WebApi.Areas.Api.Controllers
     [Authorize]
     public class JobCostController : BaseApiController
     {
-        private readonly IServiceODBC _serviceODBCr;
+        private readonly IServiceOdbc _serviceODBCr;
 
-        public JobCostController(IServiceODBC serviceODBCr)
+        public JobCostController(IServiceOdbc serviceODBCr)
         {
             _serviceODBCr = serviceODBCr;
         }

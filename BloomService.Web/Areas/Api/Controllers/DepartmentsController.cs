@@ -1,10 +1,11 @@
-﻿using BloomService.Domain.Entities;
-using BloomService.Web.Services.Abstract;
-using System.Collections.Generic;
-using System.Web.Http;
-
-namespace BloomService.Web.Areas.Api
+﻿namespace BloomService.Web.Areas.Api.Controllers
 {
+    using System.Collections.Generic;
+    using System.Web.Http;
+
+    using BloomService.Domain.Entities;
+    using BloomService.Web.Services.Abstract;
+
     public class DepartmentsController : ApiController
     {
         private readonly IDepartmentSageApiService departmentSageApiService;

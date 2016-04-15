@@ -1,16 +1,15 @@
-﻿using BloomService.Domain.Entities;
-using BloomService.Domain.Repositories.Abstract;
-using BloomService.Domain.Repositories.Concrete;
-
-namespace BloomService.Domain.Repositories
+﻿namespace BloomService.Domain.Repositories.Concrete
 {
+    using BloomService.Domain.Entities;
+    using BloomService.Domain.Repositories.Abstract;
+
     public class WorkOrderRepository : MongoRepository<SageWorkOrder>, IWorkOrderRepository
     {
-        private static string collectionName = "WorkOrderCollection";
+        private const string CollectionName = "WorkOrderCollection";
 
-        public WorkOrderRepository() : base(collectionName)
+        public WorkOrderRepository()
+            : base(CollectionName)
         {
-            
         }
     }
 }

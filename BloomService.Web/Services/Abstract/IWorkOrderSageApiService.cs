@@ -1,8 +1,7 @@
-﻿using BloomService.Domain.Entities;
-
-
-namespace BloomService.Web.Services
+﻿namespace BloomService.Web.Services.Abstract
 {
+    using BloomService.Domain.Entities;
+
     public interface IWorkOrderSageApiService : ISageApiService<SageWorkOrder>
     {
     }

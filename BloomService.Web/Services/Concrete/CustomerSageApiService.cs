@@ -9,22 +9,22 @@
 
     using RestSharp;
 
-    public class AssignmentSageApiService : SageApiService<SageAssignment>, IAssignmentSageApiService
+    public class CustomerSageApiService : SageApiService<SageCustomer>, ICustomerSageApiService
     {
-        private IRestClient restClient;
+        private readonly IRestClient restClient;
 
-        private ISession session;
+        private readonly ISession session;
 
-        private IUnitOfWork unitOfWork;
+        private readonly IUnitOfWork unitOfWork;
 
-        public AssignmentSageApiService(IRestClient restClient, IUnitOfWork unitOfWork /*, ISession session*/)
+        public CustomerSageApiService(IRestClient restClient, IUnitOfWork unitOfWork /*, ISession session*/)
             : base(restClient, unitOfWork /*, session*/)
         {
             this.restClient = restClient;
             this.unitOfWork = unitOfWork;
 
             // this.session = session;
-            EndPoint = ConfigurationManager.AppSettings["AssignmentEndPoint"];
+            EndPoint = ConfigurationManager.AppSettings["CustomerEndPoint"];
         }
     }
 }
