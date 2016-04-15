@@ -1,4 +1,6 @@
-﻿namespace BloomService.Web.Infrastructure.Constants
+﻿using System.Collections.Generic;
+
+namespace BloomService.Web.Infrastructure.Constants
 {
     public static class RateSheets
     {
@@ -12,5 +14,20 @@
         public static readonly string Midlink = "Midlink";
         public static readonly string SnowRemoval = "Snow Removal";
         public static readonly string PromotionalTwooMenHalfDay = "Promotional - 2 men 1/2 day";
+
+        public static List<string> RateSheetsList = new List<string>
+            {
+                StandardCallRate,
+                StandardCallRate,
+                TripCharge,
+                WarrantyCallNoCharge,
+                RoofingConsult,
+                MACI,
+                NonWarrantyNoCharge,
+                DetroitRenewablePower,
+                Midlink,
+                SnowRemoval,
+                PromotionalTwooMenHalfDay
+            };
     }
 }

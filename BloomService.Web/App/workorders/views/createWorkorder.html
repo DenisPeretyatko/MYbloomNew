@@ -14,28 +14,28 @@
                         <form role="form" name="workorder_form" novalidate ng-submit="createWorkOrder()">
                             <div class="form-group">
                                 <label>Customer</label>
-                                <ui-select ng-model="lookups.customers.selected" theme="bootstrap">
+                                <ui-select ng-model="lookups.Customers.selected" theme="bootstrap">
                                     <ui-select-match placeholder="Customer">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="item in lookups.customers | filter: $select.search">
+                                    <ui-select-choices repeat="item in lookups.Customers | filter: $select.search">
                                         <div ng-bind-html="item.name | highlight: $select.search">{{item.name}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
                             <div class="form-group">
                                 <label>Location</label>
-                                <ui-select ng-model="lookups.locations.selected" theme="bootstrap">
-                                    <ui-select-match placeholder="Location">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="item in lookups.locations | filter: $select.search">
-                                        <div ng-bind-html="item.name | highlight: $select.search">{{item.name}}</div>
+                                <ui-select ng-model="lookups.Locations.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Location">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="item in lookups.Locations | filter: $select.search">
+                                        <div ng-bind-html="item.Name | highlight: $select.search">{{item.Name}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
                             <div class="form-group">
                                 <label>Call Type</label>
-                                <ui-select ng-model="lookups.calltypes.selected" theme="bootstrap">
-                                    <ui-select-match placeholder="Call Type">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="item in lookups.calltypes | filter: $select.search">
-                                        <div ng-bind-html="item.name | highlight: $select.search">{{item.name}}</div>
+                                <ui-select ng-model="lookups.Calltypes.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Call Type">{{$select.selected.Description}}</ui-select-match>
+                                    <ui-select-choices repeat="item in lookups.Calltypes | filter: $select.search">
+                                        <div ng-bind-html="item.Description | highlight: $select.search">{{item.Description}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
@@ -48,46 +48,46 @@
                             </div>
                             <div class="form-group">
                                 <label>Problem</label>
-                                <ui-select ng-model="lookups.problems.selected" theme="bootstrap">
-                                    <ui-select-match placeholder="Problem">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="item in lookups.problems | filter: $select.search">
-                                        <div ng-bind-html="item.name | highlight: $select.search">{{item.name}}</div>
+                                <ui-select ng-model="lookups.Problems.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Problem">{{$select.selected.Description}}</ui-select-match>
+                                    <ui-select-choices repeat="item in lookups.Problems | filter: $select.search">
+                                        <div ng-bind-html="item.Description | highlight: $select.search">{{item.Description}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
                             <div class="form-group">
                                 <label>Rate Sheet</label>
-                                <ui-select ng-model="lookups.ratesheets.selected" theme="bootstrap">
-                                    <ui-select-match placeholder="Rate Sheet">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="item in lookups.ratesheets | filter: $select.search">
-                                        <div ng-bind-html="item.name | highlight: $select.search">{{item.name}}</div>
+                                <ui-select ng-model="lookups.Ratesheets.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Rate Sheet">{{$select.selected}}</ui-select-match>
+                                    <ui-select-choices repeat="item in lookups.Ratesheets | filter: $select.search">
+                                        <div ng-bind-html="item | highlight: $select.search">{{item}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
                             <div class="form-group">
                                 <label>Emploee</label>
-                                <ui-select ng-model="lookups.employes.selected" theme="bootstrap">
-                                    <ui-select-match placeholder="Employee">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="item in lookups.employes | filter: $select.search">
-                                        <div ng-bind-html="item.name | highlight: $select.search">{{item.name}}</div>
+                                <ui-select ng-model="lookups.Employes.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Employee">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="item in lookups.Employes | filter: $select.search">
+                                        <div ng-bind-html="item.Name | highlight: $select.search">{{item.Name}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
                             <div class="form-group">
                                 <label>Equiment to Service</label>
-                                <ui-select ng-model="lookups.equipment.selected" theme="bootstrap">
-                                    <ui-select-match placeholder="Equipment to Service">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="item in lookups.equipment | filter: $select.search">
-                                        <div ng-bind-html="item.name | highlight: $select.search">{{item.name}}</div>
+                                <ui-select ng-model="lookups.Equipment.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Equipment to Service">{{$select.selected.EquipmentType}}</ui-select-match>
+                                    <ui-select-choices repeat="item in lookups.Equipment | filter: $select.search">
+                                        <div ng-bind-html="item.EquipmentType | highlight: $select.search">{{item.EquipmentType}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
                             <div class="form-group">
                                 <label>Estimate Repair Hours</label>
-                                <ui-select ng-model="lookups.hours.selected" theme="bootstrap">
-                                    <ui-select-match placeholder="Estimated Repair Hours">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="item in lookups.hours | filter: $select.search">
-                                        <div ng-bind-html="item.name | highlight: $select.search">{{item.name}}</div>
+                                <ui-select ng-model="lookups.Hours.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Estimated Repair Hours">{{$select.selected}}</ui-select-match>
+                                    <ui-select-choices repeat="item in lookups.Hours | filter: $select.search">
+                                        <div ng-bind-html="item | highlight: $select.search">{{item}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
@@ -121,10 +121,10 @@
                             </div>
                             <div class="form-group">
                                 <label>Payment method</label>
-                                <ui-select ng-model="lookups.paymentMethods.selected" theme="bootstrap">
-                                    <ui-select-match placeholder="Payment method">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="item in lookups.paymentMethods | filter: $select.search">
-                                        <div ng-bind-html="item.name | highlight: $select.search">{{item.name}}</div>
+                                <ui-select ng-model="lookups.PaymentMethods.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Payment method">{{$select.selected}}</ui-select-match>
+                                    <ui-select-choices repeat="item in lookups.PaymentMethods | filter: $select.search">
+                                        <div ng-bind-html="item | highlight: $select.search">{{item}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>

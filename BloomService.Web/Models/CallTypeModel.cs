@@ -1,5 +1,4 @@
-﻿using BloomService.Domain.Enums;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace BloomService.Web.Models
 {

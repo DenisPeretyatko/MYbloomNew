@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
+using BloomService.Domain.Entities;
 using BloomService.Web.Infrastructure;
 using AttributeRouting.Web.Mvc;
+using BloomService.Web.Infrastructure.Constants;
 using BloomService.Web.Models;
 using BloomService.Web.Services.Abstract;
 
@@ -33,7 +36,20 @@ namespace BloomService.Web.Controllers
         public ActionResult GetLookups()
         {
             var lookups = new LookupsModel();
-            lookups.Locations = _locationSageApiService.Get();
+            var locations = _locationSageApiService.Get();
+            var calltypes = _callTypeSageApiService.Get();
+            var problems = _problemSageApiService.Get();
+            var employes = _employeeSageApiService.Get();
+            var equipment = _equipmentSageApiService.Get();
+
+            lookups.Locations = AutoMapper.Mapper.Map<List<SageLocation>, List<LocationModel>>(locations.ToList());
+            lookups.Calltypes = AutoMapper.Mapper.Map<List<SageCallType>, List<CallTypeModel>>(calltypes.ToList());
+            lookups.Problems = AutoMapper.Mapper.Map<List<SageProblem>, List<ProblemModel>>(problems.ToList());
+            lookups.Employes = AutoMapper.Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employes.ToList());
+            lookups.Equipment = AutoMapper.Mapper.Map<List<SageEquipment>, List<EquipmentModel>>(equipment.ToList());
+            lookups.Ratesheets = RateSheets.RateSheetsList;
+            lookups.Hours = EstimateRepairHours.EstimateRepairHoursList;
+            lookups.PaymentMethods = PaymentMethod.PaymentMethodList;
 
             return Json(lookups, JsonRequestBehavior.AllowGet);
         }
