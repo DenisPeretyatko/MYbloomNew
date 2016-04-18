@@ -51,7 +51,7 @@ namespace BloomService.Web.Controllers
             lookups.Employes = AutoMapper.Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employes.ToList());
             lookups.Equipment = AutoMapper.Mapper.Map<List<SageEquipment>, List<EquipmentModel>>(equipment.ToList());
             lookups.Customers = AutoMapper.Mapper.Map<List<SageCustomer>, List<CustomerModel>>(customer.ToList());
-            lookups.Ratesheets = RateSheets.RateSheetsList;
+            lookups.RateSheets = RateSheets.RateSheetsList;
             lookups.Hours = EstimateRepairHours.EstimateRepairHoursList;
             lookups.PaymentMethods = PaymentMethod.PaymentMethodList;
 

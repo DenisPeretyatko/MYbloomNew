@@ -18,7 +18,6 @@ namespace BloomService.Web.Infrastructure.Constants
         public static List<string> RateSheetsList = new List<string>
             {
                 StandardCallRate,
-                StandardCallRate,
                 TripCharge,
                 WarrantyCallNoCharge,
                 RoofingConsult,
