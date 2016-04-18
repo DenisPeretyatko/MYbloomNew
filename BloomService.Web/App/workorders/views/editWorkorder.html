@@ -59,8 +59,8 @@
                                     <label>Rate Sheet</label>
                                     <ui-select ng-model="lookups.Ratesheets.selected" theme="bootstrap">
                                         <ui-select-match placeholder="Rate Sheet">{{$select.selected}}</ui-select-match>
-                                        <ui-select-choices repeat="item in lookups.Ratesheets | filter: $select.search">
-                                            <div ng-bind-html="item | highlight: $select.search">{{lookups}}</div>
+                                        <ui-select-choices repeat="item in lookups.RateSheets | filter: $select.search">
+                                            <div ng-bind-html="item | highlight: $select.search">{{item}}</div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
