@@ -10,7 +10,12 @@
                 "API Default", 
                 "api/{controller}/{id}", 
                 new { id = RouteParameter.Optional});
-            
+
+            configuration.Routes.MapHttpRoute(
+                "API Mobile Default",
+                "apimobile/{controller}/{id}",
+                new { id = RouteParameter.Optional });
+
             HttpConfiguration config = GlobalConfiguration.Configuration;
             config.Formatters.JsonFormatter.SerializerSettings.Formatting =
                 Newtonsoft.Json.Formatting.Indented;
