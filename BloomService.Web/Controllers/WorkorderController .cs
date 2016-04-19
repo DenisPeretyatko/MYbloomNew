@@ -23,6 +23,13 @@ namespace BloomService.Web.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
+        [GET("Workorder/{id}")]
+        public ActionResult GetWorkorder(string id)
+        {
+            var workOrder = _workOrderSageApiService.Get(id);
+            return Json(workOrder, JsonRequestBehavior.AllowGet);
+        }
+
         [POST("Workorder/Create")]
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {

@@ -6,7 +6,7 @@ namespace BloomService.Web.Areas.Apimobile.Controllers
 {
     public class LocationController : ApiController
     {
-        public bool Post(int technicianId, decimal lat, decimal lng, string time, string token)
+        public bool Post(int technicianId, decimal lat, decimal lng, string time)
         {
             return true;
         }

@@ -4,6 +4,10 @@ var commonDataService = function($http) {
 		return $http.get("/Workorder");
 	}
 
+	this.getWorkorder = function (id) {
+	    return $http.get("/Workorder/"+id);
+	}
+
 	this.createWorkorder = function(workorder){
 		$http.post("/workorder/Create", workorder);
 	}

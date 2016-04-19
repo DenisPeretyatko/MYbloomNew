@@ -23,7 +23,7 @@ namespace BloomService.Domain.Repositories.Abstract
         IEnumerable<TEntity> GetAll();
 
 
-        TEntity GetById(ObjectId id);
+        TEntity GetById(Int32 id);
         
     }
 }

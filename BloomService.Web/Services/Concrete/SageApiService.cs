@@ -1,4 +1,6 @@
-﻿namespace BloomService.Web.Services.Concrete
+﻿using System;
+
+namespace BloomService.Web.Services.Concrete
 {
     using System.Collections.Generic;
     using System.Configuration;
@@ -86,7 +88,7 @@
 
         public virtual TEntity Get(string id)
         {
-            var item = unitOfWork.GetEntities<TEntity>().GetById(ObjectId.Parse(id));
+            var item = unitOfWork.GetEntities<TEntity>().GetById(Int32.Parse(id));
 
             if (item != null)
             {

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Web;
 using System.Web.Http;
 using System.Web.Script.Serialization;
 using AttributeRouting.Web.Mvc;
 using BloomService.Domain.Entities;
-using BloomService.Web.Infrastructure;
 
 namespace BloomService.Web.Areas.Apimobile.Controllers
 {
     public class WorkOrderController : ApiController
     {
-        public IEnumerable<SageWorkOrder> Get(string token)
+        public IEnumerable<SageWorkOrder> Get()
         {
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"public\mock\getWorkorders.json");
             var sr = new StreamReader(path);
@@ -19,7 +19,7 @@ namespace BloomService.Web.Areas.Apimobile.Controllers
             var list = new JavaScriptSerializer().Deserialize<IEnumerable<SageWorkOrder>>(json);
             return list;
         }
-        public SageWorkOrder Get(string id, string token)
+        public SageWorkOrder Get(string id)
         {
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"public\mock\getWorkorder.json");
             var sr = new StreamReader(path);
@@ -27,7 +27,8 @@ namespace BloomService.Web.Areas.Apimobile.Controllers
             var workorder = new JavaScriptSerializer().Deserialize<SageWorkOrder>(json);
             return workorder;
         }
-        public bool Post(string id, string token)
+
+        public bool Post(string id)
         {
             return true;
         }

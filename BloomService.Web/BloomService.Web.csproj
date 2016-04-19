@@ -267,6 +267,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Apimobile\Controllers\LocationController.cs" />
     <Compile Include="Areas\Apimobile\Controllers\AuthorizationController.cs" />
+    <Compile Include="Areas\Apimobile\Controllers\ImageController.cs" />
     <Compile Include="Areas\Apimobile\Controllers\WorkOrderController.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\AssignmentsController.cs" />
