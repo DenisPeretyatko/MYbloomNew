@@ -1,4 +1,6 @@
-﻿namespace BloomService.Domain.Entities
+﻿using System.Xml.Serialization;
+
+namespace BloomService.Domain.Entities
 {
     using System;
 
@@ -8,320 +10,318 @@
 
     using Newtonsoft.Json;
 
+    [XmlType(AnonymousType = true)]
     [CollectionName("CustomerCollection")]
     public class SageCustomer : SageEntity
     {
-        [JsonProperty("AB_Company_ID")]
-        public string AbCompanyId { get; set; }
+        [XmlAttribute]
+        public string AB_Company_ID { get; set; }
 
-        [JsonProperty("ABN")]
-        public string Abn { get; set; }
+        [XmlAttribute]
+        public string ABN { get; set; }
 
-        [JsonProperty("Addon_Table")]
-        public string AddonTable { get; set; }
+        [XmlAttribute]
+        public string Addon_Table { get; set; }
 
-        [JsonProperty("Address_1")]
-        public string Address1 { get; set; }
+        [XmlAttribute]
+        public string Address_1 { get; set; }
 
-        [JsonProperty("Address_2")]
-        public string Address2 { get; set; }
+        [XmlAttribute]
+        public string Address_2 { get; set; }
 
-        [JsonProperty("Address_3")]
-        public string Address3 { get; set; }
+        [XmlAttribute]
+        public string Address_3 { get; set; }
 
-        [JsonProperty("Address_4")]
-        public string Address4 { get; set; }
+        [XmlAttribute]
+        public string Address_4 { get; set; }
 
-        [JsonProperty("Auto_Text")]
-        public string AutoText { get; set; }
+        [XmlAttribute]
+        public string Auto_Text { get; set; }
 
-        [JsonProperty("Billing")]
+        [XmlAttribute]
         public string Billing { get; set; }
 
-        [JsonProperty("Billing_Address_1")]
-        public string BillingAddress1 { get; set; }
+        [XmlAttribute]
+        public string Billing_Address_1 { get; set; }
 
-        [JsonProperty("Billing_Address_2")]
-        public string BillingAddress2 { get; set; }
+        [XmlAttribute]
+        public string Billing_Address_3 { get; set; }
 
-        [JsonProperty("Billing_Address_3")]
-        public string BillingAddress3 { get; set; }
+        [XmlAttribute]
+        public string Billing_Address_4 { get; set; }
 
-        [JsonProperty("Billing_Address_4")]
-        public string BillingAddress4 { get; set; }
+        [XmlAttribute]
+        public string Billing_City { get; set; }
 
-        [JsonProperty("Billing_City")]
-        public string BillingCity { get; set; }
+        [XmlAttribute]
+        public string Billing_Contact { get; set; }
 
-        [JsonProperty("Billing_Contact")]
-        public string BillingContact { get; set; }
+        [XmlAttribute]
+        public string Billing_Email_Address { get; set; }
 
-        [JsonProperty("Billing_Email_Address")]
-        public string BillingEmailAddress { get; set; }
+        [XmlAttribute]
+        public string Billing_Freq { get; set; }
 
-        [JsonProperty("Billing_Freq")]
-        public string BillingFreq { get; set; }
+        [XmlAttribute]
+        public string Billing_State { get; set; }
 
-        [JsonProperty("Billing_State")]
-        public string BillingState { get; set; }
+        [XmlAttribute]
+        public string Billing_ZIP_Code { get; set; }
 
-        [JsonProperty("Billing_ZIP_Code")]
-        public string BillingZipCode { get; set; }
+       [XmlAttribute]
+        public bool Checklist_10 { get; set; }
 
-        [JsonProperty("Checklist_10")]
-        public bool Checklist10 { get; set; }
+        [XmlAttribute]
+        public object Checklist_10_Date { get; set; }
 
-        [JsonProperty("Checklist_10_Date")]
-        public object Checklist10Date { get; set; }
+        [XmlAttribute]
+        public object Checklist_1_Date { get; set; }
 
-        [JsonProperty("Checklist_1_Date")]
-        public object Checklist1Date { get; set; }
+        [XmlAttribute]
+        public bool Checklist_2 { get; set; }
 
-        [JsonProperty("Checklist_2")]
-        public bool Checklist2 { get; set; }
+        [XmlAttribute]
+        public object Checklist_2_Date { get; set; }
 
-        [JsonProperty("Checklist_2_Date")]
-        public object Checklist2Date { get; set; }
+        [XmlAttribute]
+        public bool Checklist_3 { get; set; }
 
-        [JsonProperty("Checklist_3")]
-        public bool Checklist3 { get; set; }
+        [XmlAttribute]
+        public object Checklist_3_Date { get; set; }
 
-        [JsonProperty("Checklist_3_Date")]
-        public object Checklist3Date { get; set; }
+        [XmlAttribute]
+        public bool Checklist_4 { get; set; }
 
-        [JsonProperty("Checklist_4")]
-        public bool Checklist4 { get; set; }
+        [XmlAttribute]
+        public object Checklist_4_Date { get; set; }
 
-        [JsonProperty("Checklist_4_Date")]
-        public object Checklist4Date { get; set; }
+        [XmlAttribute]
+        public bool Checklist_5 { get; set; }
 
-        [JsonProperty("Checklist_5")]
-        public bool Checklist5 { get; set; }
+        [XmlAttribute]
+        public object Checklist_5_Date { get; set; }
 
-        [JsonProperty("Checklist_5_Date")]
-        public object Checklist5Date { get; set; }
+        [XmlAttribute]
+        public bool Checklist_6 { get; set; }
 
-        [JsonProperty("Checklist_6")]
-        public bool Checklist6 { get; set; }
+        [XmlAttribute]
+        public object Checklist_6_Date { get; set; }
 
-        [JsonProperty("Checklist_6_Date")]
-        public object Checklist6Date { get; set; }
+       [XmlAttribute]
+        public bool Checklist_7 { get; set; }
 
-        [JsonProperty("Checklist_7")]
-        public bool Checklist7 { get; set; }
+        [XmlAttribute]
+        public object Checklist_7_Date { get; set; }
 
-        [JsonProperty("Checklist_7_Date")]
-        public object Checklist7Date { get; set; }
+        [XmlAttribute]
+        public bool Checklist_8 { get; set; }
 
-        [JsonProperty("Checklist_8")]
-        public bool Checklist8 { get; set; }
+        [XmlAttribute]
+        public object Checklist_8_Date { get; set; }
 
-        [JsonProperty("Checklist_8_Date")]
-        public object Checklist8Date { get; set; }
+        [XmlAttribute]
+        public bool Checklist_9 { get; set; }
 
-        [JsonProperty("Checklist_9")]
-        public bool Checklist9 { get; set; }
+        [XmlAttribute]
+        public object Checklist_9_Date { get; set; }
 
-        [JsonProperty("Checklist_9_Date")]
-        public object Checklist9Date { get; set; }
-
-        [JsonProperty("City")]
+        [XmlAttribute]
         public string City { get; set; }
 
-        [JsonProperty("Contact_10")]
-        public string Contact10 { get; set; }
+        [XmlAttribute]
+        public string Contact_10 { get; set; }
 
-        [JsonProperty("Contact_2")]
-        public string Contact2 { get; set; }
+        [XmlAttribute]
+        public string Contact_2 { get; set; }
 
-        [JsonProperty("Contact_3")]
-        public string Contact3 { get; set; }
+        [XmlAttribute]
+        public string Contact_3 { get; set; }
 
-        [JsonProperty("Contact_4")]
-        public string Contact4 { get; set; }
+        [XmlAttribute]
+        public string Contact_4 { get; set; }
 
-        [JsonProperty("Contact_5")]
-        public string Contact5 { get; set; }
+        [XmlAttribute]
+        public string Contact_5 { get; set; }
 
-        [JsonProperty("Contact_6")]
-        public string Contact6 { get; set; }
+        [XmlAttribute]
+        public string Contact_6 { get; set; }
 
-        [JsonProperty("Contact_7")]
-        public string Contact7 { get; set; }
+        [XmlAttribute]
+        public string Contact_7 { get; set; }
 
-        [JsonProperty("Contact_8")]
-        public string Contact8 { get; set; }
+        [XmlAttribute]
+        public string Contact_8 { get; set; }
 
-        [JsonProperty("Contact_9")]
-        public string Contact9 { get; set; }
+        [XmlAttribute]
+        public string Contact_9 { get; set; }
 
-        [JsonProperty("Credit_Limit")]
-        public int CreditLimit { get; set; }
+        [XmlAttribute]
+        public int Credit_Limit { get; set; }
 
-        [JsonProperty("Credit_Rating")]
-        public string CreditRating { get; set; }
+        [XmlAttribute]
+        public string Credit_Rating { get; set; }
 
-        [JsonProperty("Customer")]
+        [XmlAttribute]
         [BsonId]
         public string Customer { get; set; }
 
-        [JsonProperty("Customer_File_Links")]
-        public object CustomerFileLinks { get; set; }
+        [XmlAttribute]
+        public object Customer_File_Links { get; set; }
 
-        [JsonProperty("Customer_Notes")]
-        public object CustomerNotes { get; set; }
+        [XmlAttribute]
+        public object Customer_Notes { get; set; }
 
-        [JsonProperty("Customer_Type")]
-        public string CustomerType { get; set; }
+        [XmlAttribute]
+        public string Customer_Type { get; set; }
 
-        [JsonProperty("Date_Established")]
-        public DateTime DateEstablished { get; set; }
+        [XmlAttribute]
+        public DateTime Date_Established { get; set; }
 
-        [JsonProperty("Date_Stamp")]
-        public DateTime DateStamp { get; set; }
+        [XmlAttribute]
+        public DateTime Date_Stamp { get; set; }
 
-        [JsonProperty("Days_Before_Due")]
-        public int DaysBeforeDue { get; set; }
+        [XmlAttribute]
+        public int Days_Before_Due { get; set; }
 
-        [JsonProperty("Discount")]
+        [XmlAttribute]
         public int Discount { get; set; }
 
-        [JsonProperty("Email_Address")]
-        public string EmailAddress { get; set; }
+        [XmlAttribute]
+        public string Email_Address { get; set; }
 
-        [JsonProperty("Equipment_Exempt_Status")]
-        public string EquipmentExemptStatus { get; set; }
+        [XmlAttribute]
+        public string Equipment_Exempt_Status { get; set; }
 
-        [JsonProperty("Equipment_Rate_Table")]
-        public string EquipmentRateTable { get; set; }
+        [XmlAttribute]
+        public string Equipment_Rate_Table { get; set; }
 
-        [JsonProperty("Exempt_from_Finance_Charge")]
-        public bool ExemptFromFinanceCharge { get; set; }
+        [XmlAttribute]
+        public bool Exempt_from_Finance_Charge { get; set; }
 
-        [JsonProperty("Fax")]
+        [XmlAttribute]
         public string Fax { get; set; }
 
-        [JsonProperty("Finance_Charge_Flat_Rate")]
-        public int FinanceChargeFlatRate { get; set; }
+        [XmlAttribute]
+        public int Finance_Charge_Flat_Rate { get; set; }
 
-        [JsonProperty("Finance_Charge_Percentage_Rate")]
-        public int FinanceChargePercentageRate { get; set; }
+        [XmlAttribute]
+        public int Finance_Charge_Percentage_Rate { get; set; }
 
-        [JsonProperty("Finance_Charge_Rate_Type")]
-        public string FinanceChargeRateType { get; set; }
+        [XmlAttribute]
+        public string Finance_Charge_Rate_Type { get; set; }
 
-        [JsonProperty("GL_Prefix")]
-        public string GlPrefix { get; set; }
+        [XmlAttribute]
+        public string GL_Prefix { get; set; }
 
-        [JsonProperty("Invoice_Format")]
-        public string InvoiceFormat { get; set; }
+        [XmlAttribute]
+        public string Invoice_Format { get; set; }
 
-        [JsonProperty("Invoice_Header")]
-        public object InvoiceHeader { get; set; }
+        [XmlAttribute]
+        public object Invoice_Header { get; set; }
 
-        [JsonProperty("Key_1")]
-        public string Key1 { get; set; }
+        [XmlAttribute]
+        public string Key_1 { get; set; }
 
-        [JsonProperty("Key_2")]
-        public string Key2 { get; set; }
+        [XmlAttribute]
+        public string Key_2 { get; set; }
 
-        [JsonProperty("Labor_Exempt_Status")]
-        public string LaborExemptStatus { get; set; }
+        [XmlAttribute]
+        public string Labor_Exempt_Status { get; set; }
 
-        [JsonProperty("Labor_Rate_Table")]
-        public string LaborRateTable { get; set; }
+        [XmlAttribute]
+        public string Labor_Rate_Table { get; set; }
 
-        [JsonProperty("Last_Auto_Number")]
+        [XmlAttribute]
         public int LastAutoNumber { get; set; }
 
-        [JsonProperty("Markup_Table")]
-        public string MarkupTable { get; set; }
+        [XmlAttribute]
+        public string Markup_Table { get; set; }
 
-        [JsonProperty("Material_Exempt_Status")]
-        public string MaterialExemptStatus { get; set; }
+        [XmlAttribute]
+        public string Material_Exempt_Status { get; set; }
 
-        [JsonProperty("Material_Rate_Table")]
-        public string MaterialRateTable { get; set; }
+        [XmlAttribute]
+        public string Material_Rate_Table { get; set; }
 
-        [JsonProperty("Name")]
+        [XmlAttribute]
         public string Name { get; set; }
 
-        [JsonProperty("Operator_Stamp")]
-        public string OperatorStamp { get; set; }
+        [XmlAttribute]
+        public string Operator_Stamp { get; set; }
 
-        [JsonProperty("Other_Exempt_Status")]
-        public string OtherExemptStatus { get; set; }
+        [XmlAttribute]
+        public string Other_Exempt_Status { get; set; }
 
-        [JsonProperty("Other_Rate_Table")]
-        public string OtherRateTable { get; set; }
+        [XmlAttribute]
+        public string Other_Rate_Table { get; set; }
 
-        [JsonProperty("Overhead_Exempt_Status")]
-        public string OverheadExemptStatus { get; set; }
+        [XmlAttribute]
+        public string Overhead_Exempt_Status { get; set; }
 
-        [JsonProperty("Overhead_Rate_Table")]
-        public string OverheadRateTable { get; set; }
+        [XmlAttribute]
+        public string Overhead_Rate_Table { get; set; }
 
-        [JsonProperty("PO_Required")]
-        public bool PoRequired { get; set; }
+        [XmlAttribute]
+        public bool PO_Required { get; set; }
 
-        [JsonProperty("Resale_Cert")]
-        public string ResaleCert { get; set; }
+        [XmlAttribute]
+        public string Resale_Cert { get; set; }
 
-        [JsonProperty("Retainage")]
-        public int Retainage { get; set; }
+        [XmlAttribute]
+        public int RetainRetainageage { get; set; }
 
-        [JsonProperty("Send_Statement")]
-        public bool SendStatement { get; set; }
+        [XmlAttribute]
+        public bool Send_Statement { get; set; }
 
-        [JsonProperty("SM_Invoice_Format")]
-        public string SmInvoiceFormat { get; set; }
+        [XmlAttribute]
+        public string SM_Invoice_Format { get; set; }
 
-        [JsonProperty("State")]
+        [XmlAttribute]
         public string State { get; set; }
 
-        [JsonProperty("Status")]
+        [XmlAttribute]
         public string Status { get; set; }
 
-        [JsonProperty("Subcontract_Exempt_Status")]
-        public string SubcontractExemptStatus { get; set; }
+        [XmlAttribute]
+        public string Subcontract_Exempt_Status { get; set; }
 
-        [JsonProperty("Subcontract_Rate_Table")]
-        public string SubcontractRateTable { get; set; }
+        [XmlAttribute]
+        public string Subcontract_Rate_Table { get; set; }
 
-        [JsonProperty("Tax_Group")]
-        public string TaxGroup { get; set; }
+        [XmlAttribute]
+        public string Tax_Group { get; set; }
 
-        [JsonProperty("Telephone")]
+        [XmlAttribute]
         public string Telephone { get; set; }
 
-        [JsonProperty("Text_2")]
-        public object Text2 { get; set; }
+        [XmlAttribute]
+        public object Text_2 { get; set; }
 
-        [JsonProperty("Text_3")]
-        public object Text3 { get; set; }
+        [XmlAttribute]
+        public object Text_3 { get; set; }
 
-        [JsonProperty("Text_4")]
-        public object Text4 { get; set; }
+        [XmlAttribute]
+        public object Text_4 { get; set; }
 
-        [JsonProperty("Text_5")]
-        public object Text5 { get; set; }
+        [XmlAttribute]
+        public object Text_5 { get; set; }
 
-        [JsonProperty("Text_6")]
-        public object Text6 { get; set; }
+        [XmlAttribute]
+        public object Text_6 { get; set; }
 
-        [JsonProperty("Time_Stamp")]
-        public TimeStamp TimeStamp { get; set; }
+        [XmlAttribute]
+        public TimeStamp Time_Stamp { get; set; }
 
-        [JsonProperty("Total_Billed_Exempt_Status")]
-        public string TotalBilledExemptStatus { get; set; }
+        [XmlAttribute]
+        public string Total_Billed_Exempt_Status { get; set; }
 
-        [JsonProperty("Trade")]
+        [XmlAttribute]
         public string Trade { get; set; }
 
-        [JsonProperty("Warranty")]
+        [XmlAttribute]
         public bool Warranty { get; set; }
 
-        [JsonProperty("ZIP_Code")]
-        public string ZipCode { get; set; }
+        [XmlAttribute]
+        public string ZIP_Code { get; set; }
     }
 }

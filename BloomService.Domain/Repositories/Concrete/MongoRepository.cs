@@ -42,7 +42,7 @@
             return collection.AsQueryable();
         }
 
-        public TEntity GetById(ObjectId id)
+        public TEntity GetById(Int32 id)
         {
             return collection.FindOneByIdAs<TEntity>(id);
         }

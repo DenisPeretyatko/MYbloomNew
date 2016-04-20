@@ -1,4 +1,6 @@
-﻿namespace BloomService.Web.Services.Concrete
+﻿using System;
+
+namespace BloomService.Web.Services.Concrete
 {
     using System.Collections.Generic;
     using System.Configuration;
@@ -76,7 +78,7 @@
 
         public virtual IEnumerable<TEntity> Get()
         {
-            var items = unitOfWork.GetEntities<TEntity>().GetAll().ToArray();
+            var items = unitOfWork.GetEntities<TEntity>().GetAll().Take(20).ToArray();
 
             if (items.Any())
             {
@@ -98,7 +100,7 @@
 
         public virtual TEntity Get(string id)
         {
-            var item = unitOfWork.GetEntities<TEntity>().GetById(ObjectId.Parse(id));
+            var item = unitOfWork.GetEntities<TEntity>().GetById(Int32.Parse(id));
 
             if (item != null)
             {
