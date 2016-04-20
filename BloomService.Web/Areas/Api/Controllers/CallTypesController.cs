@@ -25,17 +25,17 @@
             return callTypeSageApiService.Get(id);
         }
 
-        public IEnumerable<SageCallType> Post(Properties properties)
+        public IEnumerable<SageCallType> Post(PropertyDictionary properties)
         {
             return callTypeSageApiService.Add(properties);
         }
 
-        public IEnumerable<SageCallType> Put(Properties properties)
+        public IEnumerable<SageCallType> Put(PropertyDictionary properties)
         {
             return callTypeSageApiService.Edit(properties);
         }
 
-        public IEnumerable<SageCallType> Delete(Properties properties)
+        public IEnumerable<SageCallType> Delete(PropertyDictionary properties)
         {
             return callTypeSageApiService.Edit(properties);
         }

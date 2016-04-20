@@ -79,7 +79,7 @@
     <Compile Include="Entities\MessageResponse\MessageResponses.cs" />
     <Compile Include="Entities\Parts.cs" />
     <Compile Include="Entities\Problem.cs" />
-    <Compile Include="Entities\Properties.cs" />
+    <Compile Include="Entities\PropertyDictionary.cs" />
     <Compile Include="Entities\Repair.cs" />
     <Compile Include="Entities\SageEntity.cs" />
     <Compile Include="Entities\TimeStamp.cs" />

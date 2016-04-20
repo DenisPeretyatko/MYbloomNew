@@ -25,17 +25,17 @@ namespace BloomService.Web.Areas.Api.Controllers
             return customerSageApiService.Get(id);
         }
 
-        public IEnumerable<SageCustomer> Post(Properties properties)
+        public IEnumerable<SageCustomer> Post(PropertyDictionary properties)
         {
             return customerSageApiService.Add(properties);
         }
 
-        public IEnumerable<SageCustomer> Put(Properties properties)
+        public IEnumerable<SageCustomer> Put(PropertyDictionary properties)
         {
             return customerSageApiService.Edit(properties);
         }
 
-        public IEnumerable<SageCustomer> Delete(Properties properties)
+        public IEnumerable<SageCustomer> Delete(PropertyDictionary properties)
         {
             return customerSageApiService.Edit(properties);
         }

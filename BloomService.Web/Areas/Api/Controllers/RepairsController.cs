@@ -25,17 +25,17 @@
             return repairSageApiService.Get(id);
         }
 
-        public IEnumerable<SageRepair> Post(Properties properties)
+        public IEnumerable<SageRepair> Post(PropertyDictionary properties)
         {
             return repairSageApiService.Add(properties);
         }
 
-        public IEnumerable<SageRepair> Put(Properties properties)
+        public IEnumerable<SageRepair> Put(PropertyDictionary properties)
         {
             return repairSageApiService.Edit(properties);
         }
 
-        public IEnumerable<SageRepair> Delete(Properties properties)
+        public IEnumerable<SageRepair> Delete(PropertyDictionary properties)
         {
             return repairSageApiService.Edit(properties);
         }

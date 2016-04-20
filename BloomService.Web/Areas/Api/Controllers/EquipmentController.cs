@@ -25,17 +25,17 @@
             return equipmentSageApiService.Get(id);
         }
 
-        public IEnumerable<SageEquipment> Post(Properties properties)
+        public IEnumerable<SageEquipment> Post(PropertyDictionary properties)
         {
             return equipmentSageApiService.Add(properties);
         }
 
-        public IEnumerable<SageEquipment> Put(Properties properties)
+        public IEnumerable<SageEquipment> Put(PropertyDictionary properties)
         {
             return equipmentSageApiService.Edit(properties);
         }
 
-        public IEnumerable<SageEquipment> Delete(Properties properties)
+        public IEnumerable<SageEquipment> Delete(PropertyDictionary properties)
         {
             return equipmentSageApiService.Edit(properties);
         }
