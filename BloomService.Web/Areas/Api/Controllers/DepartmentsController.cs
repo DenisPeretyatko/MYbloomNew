@@ -25,17 +25,17 @@
             return departmentSageApiService.Get(id);
         }
 
-        public IEnumerable<SageDepartment> Post(Properties properties)
+        public IEnumerable<SageDepartment> Post(PropertyDictionary properties)
         {
             return departmentSageApiService.Add(properties);
         }
 
-        public IEnumerable<SageDepartment> Put(Properties properties)
+        public IEnumerable<SageDepartment> Put(PropertyDictionary properties)
         {
             return departmentSageApiService.Edit(properties);
         }
 
-        public IEnumerable<SageDepartment> Delete(Properties properties)
+        public IEnumerable<SageDepartment> Delete(PropertyDictionary properties)
         {
             return departmentSageApiService.Edit(properties);
         }

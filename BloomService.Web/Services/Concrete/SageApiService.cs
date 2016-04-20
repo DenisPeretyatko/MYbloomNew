@@ -32,31 +32,43 @@
 
         public string EndPoint { get; set; }
 
-        public virtual IEnumerable<TEntity> Add(Properties properties)
+        public virtual IEnumerable<TEntity> Add(PropertyDictionary properties)
         {
             var request = new RestRequest(EndPoint, Method.POST);
-            request.AddObject(properties);
-            request.AddHeader("Authorization", string.Format("Bearer {0}", GetAuthToken()));
+            request.AddParameter("properties", request.JsonSerializer.Serialize(properties));
+            //request.AddObject(properties);
+            request.AddHeader("Authorization", GetAuthToken());
+
+            var response2 = restClient.Execute(request);
             var response = restClient.Execute<List<TEntity>>(request);
-            var result = response.Data;
-            return result;
+
+            var result2 = response2.Content as TEntity;
+
+            var results = response.Data;
+
+            foreach (var result in results)
+            {
+                unitOfWork.GetEntities<TEntity>().Insert(result);
+            }
+
+            return results;
         }
 
-        public virtual IEnumerable<TEntity> Delete(Properties properties)
+        public virtual IEnumerable<TEntity> Delete(PropertyDictionary properties)
         {
             var request = new RestRequest(EndPoint, Method.DELETE);
             request.AddObject(properties);
-            request.AddHeader("Authorization", string.Format("Bearer {0}", GetAuthToken()));
+            request.AddHeader("Authorization", GetAuthToken());
             var response = restClient.Execute<List<TEntity>>(request);
             var result = response.Data;
             return result;
         }
 
-        public virtual IEnumerable<TEntity> Edit(Properties properties)
+        public virtual IEnumerable<TEntity> Edit(PropertyDictionary properties)
         {
             var request = new RestRequest(EndPoint, Method.PUT);
             request.AddObject(properties);
-            request.AddHeader("Authorization", string.Format("Bearer {0}", GetAuthToken()));
+            request.AddHeader("Authorization", GetAuthToken());
             var response = restClient.Execute<List<TEntity>>(request);
             var result = response.Data;
             return result;
@@ -72,7 +84,7 @@
             }
 
             var request = new RestRequest(EndPoint, Method.GET);
-            request.AddHeader("Authorization", string.Format("Bearer {0}", GetAuthToken()));
+            request.AddHeader("Authorization", GetAuthToken());
             var response = restClient.Execute<List<TEntity>>(request);
             var results = response.Data;
 
@@ -95,7 +107,7 @@
 
             var request = new RestRequest(EndPoint, Method.GET);
             request.AddUrlSegment("id", id);
-            request.AddHeader("Authorization", string.Format("Bearer {0}", GetAuthToken()));
+            request.AddHeader("Authorization", GetAuthToken());
             var response = restClient.Execute(request);
             var result = response.Content as TEntity;
 
@@ -121,7 +133,7 @@
             request.AddParameter("grant_type", "password");
             var response = restClient.Execute(request);
             var json = JObject.Parse(response.Content);
-            var result = json.First.First.ToString();
+            var result = string.Format("Bearer {0}", json.First.First);
 
             // session.Session["oauth_token"] = result;
             return result;

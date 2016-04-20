@@ -25,17 +25,17 @@
             return locationSageApiService.Get(id);
         }
 
-        public IEnumerable<SageLocation> Post(Properties properties)
+        public IEnumerable<SageLocation> Post(PropertyDictionary properties)
         {
             return locationSageApiService.Add(properties);
         }
 
-        public IEnumerable<SageLocation> Put(Properties properties)
+        public IEnumerable<SageLocation> Put(PropertyDictionary properties)
         {
             return locationSageApiService.Edit(properties);
         }
 
-        public IEnumerable<SageLocation> Delete(Properties properties)
+        public IEnumerable<SageLocation> Delete(PropertyDictionary properties)
         {
             return locationSageApiService.Delete(properties);
         }

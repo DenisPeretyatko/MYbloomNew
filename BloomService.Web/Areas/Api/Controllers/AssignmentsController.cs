@@ -25,17 +25,17 @@
             return assignmentSageApiService.Get(id);
         }
 
-        public IEnumerable<SageAssignment> Post(Properties properties)
+        public IEnumerable<SageAssignment> Post(PropertyDictionary properties)
         {
             return assignmentSageApiService.Add(properties);
         }
 
-        public IEnumerable<SageAssignment> Put(Properties properties)
+        public IEnumerable<SageAssignment> Put(PropertyDictionary properties)
         {
             return assignmentSageApiService.Edit(properties);
         }
 
-        public IEnumerable<SageAssignment> Delete(Properties properties)
+        public IEnumerable<SageAssignment> Delete(PropertyDictionary properties)
         {
             return assignmentSageApiService.Edit(properties);
         }

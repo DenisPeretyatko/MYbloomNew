@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class Properties : Dictionary<string, string>
+    public class PropertyDictionary : Dictionary<string, string>
     {
     }
 }
