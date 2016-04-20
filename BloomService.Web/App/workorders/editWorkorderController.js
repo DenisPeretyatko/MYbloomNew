@@ -19,17 +19,19 @@ var editWorkorderController = function ($scope, $stateParams, commonDataService,
     $scope.permissiocode = '';
     $scope.paymentmethods = '';
     $scope.lookups = state.lookups;
+    $scope.editableWorkOrder = {}
 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
-        $scope.lookups.Customers.selected = $scope.editableWorkOrder.ARCustomer;
-        $scope.lookups.Locations.selected = $scope.editableWorkOrder.Location;
-        $scope.calltype = $scope.editableWorkOrder.CallType;
+
+        $scope.lookups.Customers.selected = { Name: $scope.editableWorkOrder.ARCustomer };
+        $scope.lookups.Locations.selected = { Name: $scope.editableWorkOrder.Location };
+        $scope.lookups.Calltypes.selected = { Description: $scope.editableWorkOrder.CallType };
         $scope.calldate = $scope.editableWorkOrder.CallDate;
-        $scope.lookups.Problems.selected = $scope.editableWorkOrder.Problem;
+        $scope.lookups.Problems.selected = { Description: $scope.editableWorkOrder.Problem };
         $scope.lookups.RateSheets.selected = $scope.editableWorkOrder.RateSheet;
-        $scope.lookups.Employes.selected = $scope.editableWorkOrder.Employee;
-        $scope.lookups.Equipment.selected = $scope.editableWorkOrder.Equipment;
+        $scope.lookups.Employes.selected = { Name: $scope.editableWorkOrder.Employee };
+        $scope.lookups.Equipment.selected = { EquipmentType: $scope.editableWorkOrder.Equipment };
         //$scope.lookups.Hours.selected = $scope.editableWorkOrder.Contact;
         $scope.nottoexceed = $scope.editableWorkOrder.NottoExceed;
         $scope.locationcomments = $scope.editableWorkOrder.Area;
@@ -43,8 +45,9 @@ var editWorkorderController = function ($scope, $stateParams, commonDataService,
 	};
 
 	commonDataService.getWorkorder($stateParams.id).then(function (response) {
-	    return $scope.editableWorkOrder = response.data;
+	    $scope.editableWorkOrder = response.data;
 	});
+
 
  
 
