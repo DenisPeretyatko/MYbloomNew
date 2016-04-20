@@ -37,7 +37,9 @@ namespace BloomService.Web.Services.Concrete
         public virtual IEnumerable<TEntity> Add(PropertyDictionary properties)
         {
             var request = new RestRequest(EndPoint, Method.POST);
-            request.AddParameter("properties", request.JsonSerializer.Serialize(properties));
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(properties);
+            //request.AddParameter("properties", request.JsonSerializer.Serialize(properties));
             //request.AddObject(properties);
             request.AddHeader("Authorization", GetAuthToken());
 
