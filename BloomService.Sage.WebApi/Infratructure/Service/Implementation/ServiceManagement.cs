@@ -34,7 +34,7 @@
 
         public string CatalogPath { get; set; }
 
-        public SageAssignment[] AddAssignments(Properties properties)
+        public SageAssignment[] AddAssignments(PropertyDictionary properties)
         {
             var propertiesStr = string.Empty;
             foreach (var property in properties)
@@ -103,7 +103,7 @@
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Departments;
         }
 
-        public SageAssignment[] EditAssignments(Properties properties)
+        public SageAssignment[] EditAssignments(PropertyDictionary properties)
         {
             var propertiesStr = string.Empty;
             foreach (var property in properties)
@@ -251,7 +251,7 @@
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
         }
 
-        public SageWorkOrder[] WorkOrders(Properties properties)
+        public SageWorkOrder[] WorkOrders(PropertyDictionary properties)
         {
             var propertiesStr = string.Empty;
             foreach (var property in properties)

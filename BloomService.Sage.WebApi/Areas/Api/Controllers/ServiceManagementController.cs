@@ -54,7 +54,7 @@ namespace Sage.WebApi.Areas.Api.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Workorders(Properties properties)
+        public ActionResult Workorders(PropertyDictionary properties)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace Sage.WebApi.Areas.Api.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult AddAssignments(Properties properties)
+        public ActionResult AddAssignments(PropertyDictionary properties)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace Sage.WebApi.Areas.Api.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditAssignments(Properties properties)
+        public ActionResult EditAssignments(PropertyDictionary properties)
         {
             try
             {

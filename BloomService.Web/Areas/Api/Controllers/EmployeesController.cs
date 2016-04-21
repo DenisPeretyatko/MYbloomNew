@@ -25,17 +25,17 @@
             return employeeSageApiService.Get(id);
         }
 
-        public IEnumerable<SageEmployee> Post(Properties properties)
+        public IEnumerable<SageEmployee> Post(PropertyDictionary properties)
         {
             return employeeSageApiService.Add(properties);
         }
 
-        public IEnumerable<SageEmployee> Put(Properties properties)
+        public IEnumerable<SageEmployee> Put(PropertyDictionary properties)
         {
             return employeeSageApiService.Edit(properties);
         }
 
-        public IEnumerable<SageEmployee> Delete(Properties properties)
+        public IEnumerable<SageEmployee> Delete(PropertyDictionary properties)
         {
             return employeeSageApiService.Edit(properties);
         }

@@ -13,7 +13,7 @@ namespace Sage.WebApi
             {
                 return base.BindModel(controllerContext, bindingContext);
             }
-            var proporties = new Properties();
+            var proporties = new PropertyDictionary();
             var request = controllerContext.HttpContext.Request;
             string result = string.Empty;
             using (var s = new StreamReader(controllerContext.HttpContext.Request.InputStream))

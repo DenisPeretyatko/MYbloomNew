@@ -12,11 +12,11 @@
         TEntity Get(string id);
 
 
-        IEnumerable<TEntity> Add(Properties properties);
+        IEnumerable<TEntity> Add(PropertyDictionary properties);
 
 
-        IEnumerable<TEntity> Edit(Properties properties);
+        IEnumerable<TEntity> Edit(PropertyDictionary properties);
 
-        IEnumerable<TEntity> Delete(Properties properties);
+        IEnumerable<TEntity> Delete(PropertyDictionary properties);
     }
 }
