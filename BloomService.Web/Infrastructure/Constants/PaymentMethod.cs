@@ -5,13 +5,17 @@ namespace BloomService.Web.Infrastructure.Constants
 {
     public static class PaymentMethod
     {
+        public static readonly string Check = "Check";
+        public static readonly string BillOut = "Bill Out";
+        public static readonly string CreditCard = "Credit Card";
         public static readonly string Cash = "Cash";
-        public static readonly string WireTransfer = "Wire Transfer";
 
         public static List<string> PaymentMethodList = new List<string>
             {
-                Cash,
-                WireTransfer
+                Check,
+                BillOut,
+                CreditCard,
+                Cash
             };
     }
 }

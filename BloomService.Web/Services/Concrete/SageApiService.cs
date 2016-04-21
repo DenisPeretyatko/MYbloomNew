@@ -43,11 +43,8 @@ namespace BloomService.Web.Services.Concrete
             //request.AddObject(properties);
             request.AddHeader("Authorization", GetAuthToken());
 
-            var response2 = restClient.Execute(request);
             var response = restClient.Execute<List<TEntity>>(request);
-
-            var result2 = response2.Content as TEntity;
-
+            
             var results = response.Data;
 
             foreach (var result in results)

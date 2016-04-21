@@ -13,6 +13,7 @@ namespace BloomService.Web
         AutoMapper.Mapper.CreateMap<SageProblem, ProblemModel>();
         AutoMapper.Mapper.CreateMap<SageEquipment, EquipmentModel>();
         AutoMapper.Mapper.CreateMap<SageCustomer, CustomerModel>();
+        AutoMapper.Mapper.CreateMap<SageRepair, RepairModel>();
     }
 }
 }
