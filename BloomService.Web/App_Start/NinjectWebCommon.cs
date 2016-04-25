@@ -87,6 +87,10 @@ namespace BloomService.Web
             kernel.Bind<IRepairSageApiService>().To<RepairSageApiService>();
             kernel.Bind<ICustomerSageApiService>().To<CustomerSageApiService>();
 
+            kernel.Bind<IAPIMobileService>().To<APIMobileService>();
+            kernel.Bind<IImageService>().To<ImageService>();
+            kernel.Bind<IUserService>().To<UserService>();
+
             kernel.Bind<ISageApiService<SageWorkOrder>>().To<SageApiService<SageWorkOrder>>();
 
             var sageApiHost = ConfigurationManager.AppSettings["SageApiHost"];
