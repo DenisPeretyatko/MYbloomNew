@@ -289,7 +289,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\Constants\EstimateRepairHours.cs" />
     <Compile Include="Infrastructure\Constants\PaymentMethod.cs" />
     <Compile Include="Infrastructure\Constants\RateSheets.cs" />
     <Compile Include="Models\CallTypeModel.cs" />

@@ -4,6 +4,7 @@ namespace BloomService.Web.Models
 {
     public class WorkOrderModel
     {
+        public string Id { get; set; }
         public string Customer { get; set; }
         public string Location { get; set; }
         public string Calltype { get; set; }

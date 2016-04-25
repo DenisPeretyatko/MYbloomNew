@@ -57,10 +57,30 @@ namespace BloomService.Web.Controllers
             return Json("success", JsonRequestBehavior.AllowGet);
         }
 
-        [POST("Workorder/Save/{id}")]
-        public ActionResult SaveWorkOrder()
+        [POST("Workorder/Save")]
+        public ActionResult SaveWorkOrder(WorkOrderModel model)
         {
-            return Json("", JsonRequestBehavior.AllowGet);
+            var workorder = new PropertyDictionary
+            {
+                {"ARCustomer", model.Customer},
+                {"Location", model.Location},
+                {"CallType", model.Calltype},
+                {"CallDate", model.Calldate.ToShortDateString()},
+                {"CallTime", model.Calldate.ToShortTimeString()},
+                {"Problem", model.Problem},
+                {"RateSheet", model.Ratesheet},
+                {"Employee", model.Emploee},
+                {"Equipment", model.Equipment},
+                {"EstimatedRepairHours", model.Estimatehours},
+                {"NottoExceed", model.Nottoexceed},
+                {"Comments", model.Locationcomments},
+                {"CustomerPO", model.Customerpo},
+                {"PermissionCode", model.Permissiocode},
+                {"PayMethod", model.Paymentmethods}
+            };
+
+            var saved = _workOrderSageApiService.Edit(workorder);
+            return Json("success", JsonRequestBehavior.AllowGet);
         }
     }
 }

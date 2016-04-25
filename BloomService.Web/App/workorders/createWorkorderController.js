@@ -25,12 +25,6 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
     });
 
     $scope.createWorkOrder = function () {
-        var equipment;
-        if ($scope.lookups.Equipment.selected == null) {
-            equipment = "0";
-        } else {
-            equipment = $scope.lookups.Equipment.selected.Equipment;
-        }
         var workorder = {
             Customer: $scope.lookups.Customers.selected.Customer,
             Location: $scope.lookups.Locations.selected.Location,
@@ -39,7 +33,7 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             Problem: $scope.lookups.Problems.selected.Problem,
             Ratesheet: $scope.lookups.RateSheets.selected,
             Emploee: $scope.lookups.Employes.selected.Employee,
-            Equipment: equipment,
+            Equipment: $scope.lookups.Equipment.selected == null ? "0" : $scope.lookups.Equipment.selected.Equipment,
             Estimatehours: $scope.lookups.Hours.selected.Repair,
             Nottoexceed: $scope.obj.nottoexceed,
             Locationcomments: $scope.obj.locationcomments,
