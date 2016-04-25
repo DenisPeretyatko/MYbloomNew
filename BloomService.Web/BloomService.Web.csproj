@@ -108,18 +108,6 @@
       <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sage.LS1.Core">
-      <HintPath>..\lib\Sage.LS1.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sage.LS1.Messaging">
-      <HintPath>..\lib\Sage.LS1.Messaging.dll</HintPath>
-    </Reference>
-    <Reference Include="Sage.LS1.Messaging.Interfaces">
-      <HintPath>..\lib\Sage.LS1.Messaging.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Sage.LS1.Messaging.Provider">
-      <HintPath>..\lib\Sage.LS1.Messaging.Provider.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -299,33 +287,40 @@
     <Compile Include="Models\RepairModel.cs" />
     <Compile Include="Models\ProblemModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
+    <Compile Include="Models\Request\ImageRequest.cs" />
     <Compile Include="Models\WorkOrderModel.cs" />
+    <Compile Include="Services\Abstract\IAPIMobileService.cs" />
     <Compile Include="Services\Abstract\IAssignmentSageApiService.cs" />
     <Compile Include="Services\Abstract\ICallTypeSageApiService.cs" />
     <Compile Include="Services\Abstract\ICustomerSageApiService.cs" />
     <Compile Include="Services\Abstract\IDepartmentSageApiService.cs" />
     <Compile Include="Services\Abstract\IEmployeeSageApiService.cs" />
     <Compile Include="Services\Abstract\IEquipmentSageApiService.cs" />
+    <Compile Include="Services\Abstract\IImageService.cs" />
     <Compile Include="Services\Abstract\ILocationSageApiService.cs" />
     <Compile Include="Services\Abstract\IPartSageApiService.cs" />
     <Compile Include="Services\Abstract\IProblemSageApiService.cs" />
     <Compile Include="Services\Abstract\IRepairSageApiService.cs" />
     <Compile Include="Services\Abstract\ISageApiService.cs" />
+    <Compile Include="Services\Abstract\IUserService.cs" />
     <Compile Include="Services\Abstract\IWorkOrderSageApiService.cs" />
     <Compile Include="Infrastructure\Hubs\NotificationsHub.cs" />
     <Compile Include="Infrastructure\Hubs\LocationHub.cs" />
     <Compile Include="Infrastructure\JsonHelper.cs" />
+    <Compile Include="Services\Concrete\APIMobileService.cs" />
     <Compile Include="Services\Concrete\AssignmentSageApiService.cs" />
     <Compile Include="Services\Concrete\CallTypeSageApiService.cs" />
     <Compile Include="Services\Concrete\CustomerSageApiService.cs" />
     <Compile Include="Services\Concrete\DepartmentSageApiService.cs" />
     <Compile Include="Services\Concrete\EmployeeSageApiService.cs" />
     <Compile Include="Services\Concrete\EquipmentSageApiService.cs" />
+    <Compile Include="Services\Concrete\ImageService.cs" />
     <Compile Include="Services\Concrete\LocationSageApiService.cs" />
     <Compile Include="Services\Concrete\PartSageApiService.cs" />
     <Compile Include="Services\Concrete\ProblemSageApiService.cs" />
     <Compile Include="Services\Concrete\RepairSageApiService.cs" />
     <Compile Include="Services\Concrete\SageApiService.cs" />
+    <Compile Include="Services\Concrete\UserService.cs" />
     <Compile Include="Services\Concrete\WorkOrderSageApiService.cs" />
     <Compile Include="Models\NotificationModel.cs" />
     <Compile Include="Models\LocationJsonModel.cs" />

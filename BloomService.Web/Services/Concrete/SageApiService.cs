@@ -109,8 +109,8 @@ namespace BloomService.Web.Services.Concrete
             var request = new RestRequest(EndPoint, Method.GET);
             request.AddUrlSegment("id", id);
             request.AddHeader("Authorization", GetAuthToken());
-            var response = restClient.Execute(request);
-            var result = response.Content as TEntity;
+            var response = restClient.Execute<List<TEntity>>(request);
+            var result = response.Data.FirstOrDefault();
 
             unitOfWork.GetEntities<TEntity>().Insert(result);
 
