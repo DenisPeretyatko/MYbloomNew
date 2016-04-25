@@ -31,10 +31,6 @@ namespace BloomService.Web.Controllers
             _customerSageApiService = customerSageApiService;
             _repairSageApiService = repairSageApiService;
         }
-        public ActionResult Index()
-        {
-            return View();
-        }
 
         [GET("Dashboard/Lookups")]
         public ActionResult GetLookups()

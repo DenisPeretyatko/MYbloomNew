@@ -269,6 +269,7 @@
     <Compile Include="Areas\Api\Controllers\RepairsController.cs" />
     <Compile Include="Areas\Api\Controllers\WorkOrdersController.cs" />
     <Compile Include="Controllers\BaseComtroller.cs" />
+    <Compile Include="Controllers\AuthorizationController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\TechnicianController.cs" />
     <Compile Include="Controllers\WorkorderController .cs" />
@@ -343,8 +344,11 @@
     <Content Include="App\common\mainController.js" />
     <Content Include="App\common\views\content.html" />
     <Content Include="App\common\views\footer.html" />
+    <Content Include="App\login\views\login.html" />
     <Content Include="App\common\views\navigation.html" />
     <Content Include="App\common\views\topnavbar.html" />
+    <Content Include="App\login\loginController.js" />
+    <Content Include="App\login\loginModule.js" />
     <Content Include="App\dashboard\dashboardController.js" />
     <Content Include="App\dashboard\dashboardModule.js" />
     <Content Include="App\dashboard\views\dashboard.html" />
@@ -716,10 +720,10 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Scripts\jquery-2.2.2.min.map" />
+    <Content Include="Views\Authorization\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -32,3 +32,6 @@
 .notif_el a {
     line-height: normal;
 }
+.m-t input {
+    max-width: 100%;
+}

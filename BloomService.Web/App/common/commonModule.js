@@ -1,12 +1,12 @@
 /**
  *  Commmon module configuration. Contains all directives and common services
  */
+"use strict";
 
 var commonModuleConfig = function($stateProvider) {
     $stateProvider
-        .state('bloom', {
-            abstract: true,
-            url: "/index",
+        .state('manager.common', {
+            url: "/common",
             templateUrl: "/app/common/views/content.html",
         });
 }
