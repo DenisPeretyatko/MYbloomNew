@@ -10,7 +10,7 @@ namespace BloomService.Web.Services.Concrete
     {
         public string GetId()
         {
-            return "11";
+            return "Rinta, Chriss";
         }
     }
 }
