@@ -12,6 +12,10 @@ var commonDataService = function($http) {
 	    return $http.post("/workorder/Create", workorder);
 	}
 
+	this.saveWorkorder = function (workorder) {
+	    return $http.post("/workorder/Save", workorder);
+	}
+
 	this.getAssigments = function() {
 		return $http.get("/public/mock/getAssigments.json");
 	}
