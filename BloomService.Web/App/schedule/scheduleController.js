@@ -34,9 +34,6 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             editable: true,
             events: $scope.events,
             eventRender: function(event, element) {
-                $('#calendar').find("div[style='height: 34px;']").each(function (i, el) {
-                    $(this).css('height', '28px');
-                });
                 var columns = event.title.split("/");
                 var workorder = columns[0];
 
@@ -52,6 +49,12 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     EndDate: end,
                 };
                 commonDataService.assignWorkorder(assignment);
+                $('#calendar').find("div[style='height: 34px;']").each(function (i, el) {
+                    $(this).css('height', '28px');
+                });
+                $('#calendar').find("div[style='height: 8px;']").each(function (i, el) {
+                    $(this).css('height', '28px');
+                });
             },
             droppable: true, // this allows things to be dropped onto the calendar
             dragRevertDuration: 0,
@@ -161,8 +164,8 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
 
                 $(this).data('event', {
                     title: textTitle,
-                    start: "Thu Apr 28 2016 15:29:07 ",//startDate,
-                    end: "Thu Apr 28 2016 19:29:07 ",//endDate.setHours(startDate.getHours() + parseInt($(this).find('td').last().text())),
+                    start: startDate,
+                    end: endDate.setHours(startDate.getHours() + parseInt($(this).find('td').last().text())),
                     durationEditable: false,
                     stick: true,
                 });
