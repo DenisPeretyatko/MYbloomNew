@@ -14,6 +14,8 @@ namespace BloomService.Web
         AutoMapper.Mapper.CreateMap<SageEquipment, EquipmentModel>();
         AutoMapper.Mapper.CreateMap<SageCustomer, CustomerModel>();
         AutoMapper.Mapper.CreateMap<SageRepair, RepairModel>();
+        AutoMapper.Mapper.CreateMap<SageAssignment, AssignmentModel>();
+        AutoMapper.Mapper.CreateMap<SageWorkOrder, WorkorderViewModel>();
     }
 }
 }

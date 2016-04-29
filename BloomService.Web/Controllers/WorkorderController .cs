@@ -2,7 +2,6 @@
 using AttributeRouting.Web.Mvc;
 using BloomService.Domain.Entities;
 using BloomService.Web.Models;
-using BloomService.Web.Services;
 
 namespace BloomService.Web.Controllers
 {

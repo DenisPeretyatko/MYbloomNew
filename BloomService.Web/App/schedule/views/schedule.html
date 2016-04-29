@@ -33,11 +33,11 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="workorder in unassignedWorkorders" class="drag fc-event" style=" z-index: 999">
-                                <td>{{workorder.number}}</td>
-                                <td>{{workorder.date}}</td>
-                                <td>{{workorder.customer}}</td>
-                                <td>{{workorder.location}}</td>
-                                <td>{{workorder.hours}}</td>
+                                <td>{{workorder.WorkOrder}}</td>
+                                <td>{{workorder.DateEntered}}</td>
+                                <td>{{workorder.ARCustomer}}</td>
+                                <td>{{workorder.Location}}</td>
+                                <td>{{workorder.EstimatedRepairHours}}</td>
                             </tr>
                         </tbody>
                     </table>

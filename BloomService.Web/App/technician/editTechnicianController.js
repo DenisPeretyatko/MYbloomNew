@@ -71,8 +71,10 @@ var editTechnicianController = function($scope, $stateParams) {
     /* Event sources array */
     $scope.eventSources = [$scope.events];    
 
-    $scope.saveTechnician = function() {
-    	console.log("saveTechnician");
+    $scope.saveTechnician = function () {
+
+        var techniciance = {};
+        commonDataService.saveTechnician(techniciance);
     };    
 };
 editTechnicianController.$inject = ["$scope", "$stateParams"];
