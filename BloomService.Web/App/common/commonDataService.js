@@ -16,12 +16,8 @@ var commonDataService = function($http) {
 	    return $http.post("/workorder/Save", workorder);
 	}
 
-	this.getAssigments = function() {
-		return $http.get("/public/mock/getAssigments.json");
-	}
-
-	this.assignWorkorder = function(workorderId, technicianId){
-		$http.post("/technician/id/workorder/id");
+	this.assignWorkorder = function(assignment){
+	    $http.post("/Schedule/Assignments/Create", assignment);
 	}
 
 	this.getDashboard = function() {
@@ -47,8 +43,8 @@ var commonDataService = function($http) {
 	    return $http.get("/Technician");
 	}
 
-	this.saveTechnicianSchedule = function(technicianId, schedule) {
-		$http.post("/technician/id");
+	this.EditTechnician = function (technician) {
+	    $http.post("/Technician/Save", technician);
 	}
 
 	this.getNotifications = function () {

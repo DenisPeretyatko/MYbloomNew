@@ -280,7 +280,9 @@
     <Compile Include="Infrastructure\Constants\PaymentMethod.cs" />
     <Compile Include="Infrastructure\Constants\RateSheets.cs" />
     <Compile Include="Models\CallTypeModel.cs" />
+    <Compile Include="Models\AssignmentModel.cs" />
     <Compile Include="Models\LocationModel.cs" />
+    <Compile Include="Models\ScheduleViewModel.cs" />
     <Compile Include="Models\LookupsModel.cs" />
     <Compile Include="Models\EquipmentModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
@@ -288,7 +290,9 @@
     <Compile Include="Models\ProblemModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\Request\ImageRequest.cs" />
+    <Compile Include="Models\TechnicianModel.cs" />
     <Compile Include="Models\WorkOrderModel.cs" />
+    <Compile Include="Models\AssignmentViewModel.cs" />
     <Compile Include="Services\Abstract\IAPIMobileService.cs" />
     <Compile Include="Services\Abstract\IAssignmentSageApiService.cs" />
     <Compile Include="Services\Abstract\ICallTypeSageApiService.cs" />

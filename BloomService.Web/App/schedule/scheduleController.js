@@ -4,14 +4,9 @@
 
 var scheduleController = function($scope, $interpolate, $timeout, commonDataService) {
     var date = new Date();
-    var d = date.getDate();
-    var m = date.getMonth();
-    var y = date.getFullYear();
 
     // Events
-    $scope.events = [
-        { title: 'All Day Event',start: new Date(y, m, d) },        
-    ];
+    $scope.events = [];
 
     $scope.resources = [];
 
@@ -37,12 +32,33 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             height: 400,
             resourceAreaWidth: '15%',
             editable: true,
+            events: $scope.events,
+            eventRender: function(event, element) {
+                $('#calendar').find("div[style='height: 34px;']").each(function (i, el) {
+                    $(this).css('height', '28px');
+                });
+                var columns = event.title.split("/");
+                var workorder = columns[0];
+
+                var start = new Date(event.start);
+                var end = new Date(event.end);
+                var estimate = end.getHours() - start.getHours();
+
+                var assignment = {
+                    ScheduleDate: start,
+                    Employee: event.resourceId,
+                    WorkOrder: workorder,
+                    EstimatedRepairHours: estimate,
+                    EndDate: end,
+                };
+                commonDataService.assignWorkorder(assignment);
+            },
             droppable: true, // this allows things to be dropped onto the calendar
             dragRevertDuration: 0,
             header: {
                 left: 'prev,next',
                 center: 'title',
-                right: 'timelineMonth,timelineWeek,timelineDay'
+                right: 'timelineWeek,timelineDay'
             },
             drop: function() {
                 $(this).remove();
@@ -56,27 +72,32 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
 
                 labelTds.html($interpolate(cell)(resource));
                 //bodyTds.html(cell);
+                $('#calendar').find("div[style='height: 34px;']").each(function (i, el) {
+                    $(this).css('height', '28px');
+                });
             },
             eventDragStop: function( event, jsEvent, ui, view ) {
                 
                 if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
                     $('#calendar').fullCalendar('removeEvents', event._id);
-                    var columns = event.title.split("\n");
+                    var columns = event.title.split("/");
                     var innerHtml = "";
                     columns.forEach(function(item, i) {
                         innerHtml += "<td>" + columns[i] + "</td>";
                     });
                     var el = $("<tr class='drag fc-event'>").appendTo('.footable tbody').html(innerHtml);
                     el.draggable({
-                        zIndex: 1000,
+                        zIndex: 999,
                         revert: true, 
                         revertDuration: 0 
                     });
-                    el.data('event', { title: event.title, id :event.id, stick: true });
+                    el.data('event', { title: event.title, id: event.id, stick: true });
                 }
             },
             resourceLabelText: 'Technicians',
             resources: $scope.resources,
+            timezone: 'local',
+            forceEventDuration: true,
         }
     };
 
@@ -94,9 +115,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
 
     }
 
-    
-
-    $scope.eventSources = [$scope.events];
+    $scope.eventSources = $scope.events;
     $scope.resouceSources = [$scope.resources];
 
     commonDataService.getTechnicians().then(function(response){
@@ -104,8 +123,8 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
         angular.forEach($scope.activeTechnicians, function(value, key) {
             if (value != null) {
                 this.push({
-                    id : value.number,
-                    title : value.fullName,
+                    id : value.Employee,
+                    title : value.Name,
                     avatarUrl : value.avatarUrl
                 });
             }
@@ -114,14 +133,38 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
 
     commonDataService.getSchedule().then(function(response) {
         var schedule = response.data;
-        $scope.unassignedWorkorders = schedule.unassignedWorkorders;
-        $scope.assigments = schedule.assigments;
+        $scope.unassignedWorkorders = unassignedWO;//schedule.UnassignedWorkorders; --- real data
+        $scope.assigments = schedule.Assigments;
+        angular.forEach($scope.assigments, function (value, key) {
+            if (value != null) {
+                this.push({
+                    id: value.Assignment,
+                    resourceId: value.EmployeeId,
+                    title: value.Center,
+                    start: value.Start,
+                    end: value.End,
+                    durationEditable: false,
+                    editable: false
+                });
+            }
+        }, $scope.events);
 
         $timeout(function () {
             $('.drag').each(function () {
+                var textTitle = '';
+                $(this).find('td').each(function() {
+                    textTitle += $(this).text() + '/';
+                });
+                var startDate = new Date();
+                var endDate = new Date(startDate);
+
+
                 $(this).data('event', {
-                    title: $.trim($(this).text()),
-                    stick: true
+                    title: textTitle,
+                    start: "Thu Apr 28 2016 15:29:07 ",//startDate,
+                    end: "Thu Apr 28 2016 19:29:07 ",//endDate.setHours(startDate.getHours() + parseInt($(this).find('td').last().text())),
+                    durationEditable: false,
+                    stick: true,
                 });
 
                 $(this).draggable({
@@ -140,5 +183,175 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
 
         }, 100);
     });
+    //------------------------ test data for unassigned work order --------------------------------------
+    var unassignedWO = [
+        {
+            "WorkOrder": 11245,
+            "CallType": "Routine Leak T & M",
+            "Problem": "Curb",
+            "EstimatedRepairHours": 3,
+            "Priority": "Normal",
+            "Agreement": 0,
+            "AgreemntPeriod": 0,
+            "AgreemntPeriodSpecified": true,
+            "Center": "Bloom Roofing Systems, Inc - Service",
+            "Area": "Michigan",
+            "Name": "Target - Warren - #2544",
+            "Contact": "MOD",
+            "DateEntered": "28-04-2016",
+            "DateEnteredSpecified": true,
+            "TimeEntered": "/Date(-62135550351000)/",
+            "TimeEnteredSpecified": true,
+            "EnteredBy": "Kris",
+            "Employee": "Alley; Christopher",
+            "DateRun": "",
+            "DateComplete": "",
+            "TimeComplete": "/Date(-62135578800000)/",
+            "TimeCompleteSpecified": true,
+            "CompletedBy": 0,
+            "CompletedBySpecified": true,
+            "Status": "Open",
+            "CustomerPO": "",
+            "QuoteExpirationDate": "",
+            "TaxatCenter": "No",
+            "Amount": 0,
+            "AmountSpecified": true,
+            "SalesTaxAmount": 0,
+            "SalesTaxAmountSpecified": true,
+            "AmountBilled": 0,
+            "AmountBilledSpecified": true,
+            "TotalCost": 0,
+            "TotalCostSpecified": true,
+            "LeadSource": "",
+            "Comments": "This is a test work order!!!",
+            "Equipment": 0,
+            "EquipmentSpecified": true,
+            "WorkOrderType": "Service",
+            "PayMethod": "Bill Out",
+            "PreventiveMaintenance": "No",
+            "RateSheet": "Standard Call Rate",
+            "SalesEmployee": "Kyle Menard",
+            "JobSaleProduct": "",
+            "EstimatedPartsCost": 0,
+            "EstimatedPartsCostSpecified": true,
+            "EstimatedLaborCost": 0,
+            "EstimatedLaborCostSpecified": true,
+            "EstimatedMiscCost": 0,
+            "EstimatedMiscCostSpecified": true,
+            "ActualPartsCost": 0,
+            "ActualPartsCostSpecified": true,
+            "ActualLaborCost": 0,
+            "ActualLaborCostSpecified": true,
+            "ActualMiscCost": 0,
+            "ActualMiscCostSpecified": true,
+            "ActualLaborHours": 0,
+            "ActualLaborHoursSpecified": true,
+            "AlternateWorkOrderNbr": "",
+            "Lead": 0,
+            "LeadSpecified": true,
+            "Misc": "",
+            "CallDate": "/Date(1453525200000)/",
+            "CallDateSpecified": true,
+            "CallTime": "/Date(-62135528400000)/",
+            "CallTimeSpecified": true,
+            "JCJob": "",
+            "JCExtra": "",
+            "Location": "Target - Warren - #2544",
+            "ARCustomer": "ACP",
+            "Department": "Service",
+            "NonBillable": "No",
+            "ChargeBillto": "",
+            "PermissionCode": "uyg",
+            "SalesTaxBilled": 0,
+            "InvoiceDate": "",
+            "DateClosed": "",
+            "NottoExceed": "Blah blah blah.",
+            "AgreemntPeriCustomer": null
+        },
+        {
+            "WorkOrder": 11246,
+            "CallType": "Routine Leak T & M",
+            "Problem": "Roof Leak",
+            "EstimatedRepairHours": 1,
+            "Priority": "Normal",
+            "Agreement": 0,
+            "AgreemntPeriod": 0,
+            "AgreemntPeriodSpecified": true,
+            "Center": "Bloom Roofing Systems, Inc - Service",
+            "Area": "Michigan",
+            "Name": "Beyster Land Company",
+            "Contact": "Pierre",
+            "DateEntered": "28-04-2016",
+            "DateEnteredSpecified": true,
+            "TimeEntered": "/Date(-62135547407000)/",
+            "TimeEnteredSpecified": true,
+            "EnteredBy": "Kris",
+            "Employee": "O'Sullivan; Thomas",
+            "DateRun": "",
+            "DateComplete": "",
+            "TimeComplete": "/Date(-62135578800000)/",
+            "TimeCompleteSpecified": true,
+            "CompletedBy": 0,
+            "CompletedBySpecified": true,
+            "Status": "Open",
+            "CustomerPO": "ws",
+            "QuoteExpirationDate": "",
+            "TaxatCenter": "No",
+            "Amount": 0,
+            "AmountSpecified": true,
+            "SalesTaxAmount": 0,
+            "SalesTaxAmountSpecified": true,
+            "AmountBilled": 0,
+            "AmountBilledSpecified": true,
+            "TotalCost": 0,
+            "TotalCostSpecified": true,
+            "LeadSource": "",
+            "Comments": "ws",
+            "Equipment": 0,
+            "EquipmentSpecified": true,
+            "WorkOrderType": "Service",
+            "PayMethod": "Check",
+            "PreventiveMaintenance": "No",
+            "RateSheet": "Standard Call Rate",
+            "SalesEmployee": "Kyle Menard",
+            "JobSaleProduct": "",
+            "EstimatedPartsCost": 0,
+            "EstimatedPartsCostSpecified": true,
+            "EstimatedLaborCost": 0,
+            "EstimatedLaborCostSpecified": true,
+            "EstimatedMiscCost": 0,
+            "EstimatedMiscCostSpecified": true,
+            "ActualPartsCost": 0,
+            "ActualPartsCostSpecified": true,
+            "ActualLaborCost": 0,
+            "ActualLaborCostSpecified": true,
+            "ActualMiscCost": 0,
+            "ActualMiscCostSpecified": true,
+            "ActualLaborHours": 0,
+            "ActualLaborHoursSpecified": true,
+            "AlternateWorkOrderNbr": "",
+            "Lead": 0,
+            "LeadSpecified": true,
+            "Misc": "",
+            "CallDate": "/Date(1459828800000)/",
+            "CallDateSpecified": true,
+            "CallTime": "/Date(-62135578800000)/",
+            "CallTimeSpecified": true,
+            "JCJob": "",
+            "JCExtra": "",
+            "Location": "Beyster Land Company",
+            "ARCustomer": "NBS",
+            "Department": "Service",
+            "NonBillable": "No",
+            "ChargeBillto": "",
+            "PermissionCode": "ws",
+            "SalesTaxBilled": 0,
+            "InvoiceDate": "",
+            "DateClosed": "",
+            "NottoExceed": "ws",
+            "AgreemntPeriCustomer": null
+        }
+    ];
+
 };
 scheduleController.$inject = ["$scope", "$interpolate", "$timeout", "commonDataService"];
