@@ -4,6 +4,7 @@ namespace BloomService.Web.Models
 {
     public class WorkOrderModel
     {
+        public string Id { get; set; }
         public string Customer { get; set; }
         public string Location { get; set; }
         public string Calltype { get; set; }
@@ -12,7 +13,7 @@ namespace BloomService.Web.Models
         public string Ratesheet { get; set; }
         public string Emploee { get; set; }
         public string Equipment { get; set; }
-        public decimal Estimatehours { get; set; }
+        public string Estimatehours { get; set; }
         public string Nottoexceed { get; set; }
         public string Locationcomments { get; set; }
         public string Customerpo { get; set; }

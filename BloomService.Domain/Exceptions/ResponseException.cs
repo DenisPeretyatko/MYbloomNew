@@ -2,7 +2,8 @@
 {
     using System;
 
-    using BloomService.Domain.Entities.Concrete.MessageResponse;
+    using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.MessageResponse;
 
     public class ResponseException : Exception
     {

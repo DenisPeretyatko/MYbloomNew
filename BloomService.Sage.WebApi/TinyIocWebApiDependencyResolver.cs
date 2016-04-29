@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Dependencies;
+using TinyIoC;
 
 namespace Sage.WebApi
 {
-    using TinyIoC;
-
     public class TinyIocWebApiDependencyResolver : IDependencyResolver
     {
         private bool _disposed;

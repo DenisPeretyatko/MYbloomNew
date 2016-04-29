@@ -4,21 +4,24 @@ using System.IO;
 using System.Web.Http;
 using System.Web.Script.Serialization;
 using BloomService.Domain.Entities;
+using BloomService.Web.Services.Abstract;
+using System.Web.Mvc;
 
 namespace BloomService.Web.Areas.Apimobile.Controllers
 {
-    using BloomService.Domain.Entities.Concrete;
-
     public class WorkOrderController : ApiController
     {
-        public IEnumerable<SageWorkOrder> Get()
+        IAPIMobileService _apiService;
+        public WorkOrderController(IAPIMobileService apiService)
         {
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"public\mock\getWorkorders.json");
-            var sr = new StreamReader(path);
-            var json = sr.ReadToEnd();
-            var list = new JavaScriptSerializer().Deserialize<IEnumerable<SageWorkOrder>>(json);
-            return list;
+            _apiService = apiService;
         }
+
+        public IHttpActionResult Get()
+        {
+            return Json(_apiService.GetWorkOreders());
+        }
+
         public SageWorkOrder Get(string id)
         {
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"public\mock\getWorkorder.json");

@@ -10,19 +10,18 @@ using BloomService.Web.Services.Abstract;
 
 namespace BloomService.Web.Controllers
 {
-    using BloomService.Domain.Entities.Concrete;
-
     public class DashboardController : BaseController
     {
-        private readonly ICallTypeService _callTypeSageApiService;
-        private readonly IEmployeeService _employeeSageApiService;
-        private readonly IEquipmentService _equipmentSageApiService;
-        private readonly ILocationService _locationSageApiService;
-        private readonly IProblemService _problemSageApiService;
-        private readonly ICustomerService _customerSageApiService;
+        private readonly ICallTypeSageApiService _callTypeSageApiService;
+        private readonly IEmployeeSageApiService _employeeSageApiService;
+        private readonly IEquipmentSageApiService _equipmentSageApiService;
+        private readonly ILocationSageApiService _locationSageApiService;
+        private readonly IProblemSageApiService _problemSageApiService;
+        private readonly ICustomerSageApiService _customerSageApiService;
+        private readonly IRepairSageApiService _repairSageApiService;
 
-        public DashboardController(ICallTypeService callTypeSageApiService, IEmployeeService employeeSageApiService, IEquipmentService equipmentSageApiService,
-            ILocationService locationSageApiService, IProblemService problemSageApiService, ICustomerService customerSageApiService)
+        public DashboardController(ICallTypeSageApiService callTypeSageApiService, IEmployeeSageApiService employeeSageApiService, IEquipmentSageApiService equipmentSageApiService,
+            ILocationSageApiService locationSageApiService, IProblemSageApiService problemSageApiService, ICustomerSageApiService customerSageApiService, IRepairSageApiService repairSageApiService)
         {
             _callTypeSageApiService = callTypeSageApiService;
             _employeeSageApiService = employeeSageApiService;
@@ -30,6 +29,7 @@ namespace BloomService.Web.Controllers
             _locationSageApiService = locationSageApiService;
             _problemSageApiService = problemSageApiService;
             _customerSageApiService = customerSageApiService;
+            _repairSageApiService = repairSageApiService;
         }
         public ActionResult Index()
         {
@@ -46,6 +46,7 @@ namespace BloomService.Web.Controllers
             var employes = _employeeSageApiService.Get();
             var equipment = _equipmentSageApiService.Get();
             var customer = _customerSageApiService.Get();
+            var repairs = _repairSageApiService.Get();
 
             lookups.Locations = AutoMapper.Mapper.Map<List<SageLocation>, List<LocationModel>>(locations.ToList());
             lookups.Calltypes = AutoMapper.Mapper.Map<List<SageCallType>, List<CallTypeModel>>(calltypes.ToList());
@@ -53,8 +54,8 @@ namespace BloomService.Web.Controllers
             lookups.Employes = AutoMapper.Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employes.ToList());
             lookups.Equipment = AutoMapper.Mapper.Map<List<SageEquipment>, List<EquipmentModel>>(equipment.ToList());
             lookups.Customers = AutoMapper.Mapper.Map<List<SageCustomer>, List<CustomerModel>>(customer.ToList());
+            lookups.Hours = AutoMapper.Mapper.Map<List<SageRepair>, List<RepairModel>>(repairs.ToList());
             lookups.RateSheets = RateSheets.RateSheetsList;
-            lookups.Hours = EstimateRepairHours.EstimateRepairHoursList;
             lookups.PaymentMethods = PaymentMethod.PaymentMethodList;
 
             return Json(lookups, JsonRequestBehavior.AllowGet);

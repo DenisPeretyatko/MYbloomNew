@@ -1,10 +1,8 @@
-﻿namespace Sage.WebApi
+﻿using System;
+using System.Web;
+
+namespace TinyIoC
 {
-    using System;
-    using System.Web;
-
-    using TinyIoC;
-
     public class HttpContextLifetimeProvider : TinyIoCContainer.ITinyIoCObjectLifetimeProvider
     {
         private readonly string _KeyName = String.Format("TinyIoC.HttpContext.{0}", Guid.NewGuid());
@@ -32,7 +30,7 @@
 
     public static class TinyIoCAspNetExtensions
     {
-        public static TinyIoCContainer.RegisterOptions AsPerRequestSingleton(this TinyIoCContainer.RegisterOptions registerOptions)
+        public static TinyIoC.TinyIoCContainer.RegisterOptions AsPerRequestSingleton(this TinyIoC.TinyIoCContainer.RegisterOptions registerOptions)
         {
             return TinyIoCContainer.RegisterOptions.ToCustomLifetimeManager(registerOptions, new HttpContextLifetimeProvider(), "per request singleton");
         }

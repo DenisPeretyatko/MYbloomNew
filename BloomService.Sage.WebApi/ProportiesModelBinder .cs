@@ -4,7 +4,6 @@ using System.Web.Mvc;
 namespace Sage.WebApi
 {
     using BloomService.Domain.Entities;
-    using BloomService.Domain.Entities.Concrete;
 
     public class ProportiesModelBinder : System.Web.Mvc.DefaultModelBinder
     {

@@ -4,14 +4,13 @@
     using System.Web.Http;
 
     using BloomService.Domain.Entities;
-    using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Services.Abstract;
 
     public class PartsController : ApiController
     {
-        private readonly IPartService partSageApiService;
+        private readonly IPartSageApiService partSageApiService;
 
-        public PartsController(IPartService partSageApiService)
+        public PartsController(IPartSageApiService partSageApiService)
         {
             this.partSageApiService = partSageApiService;
         }
@@ -24,6 +23,21 @@
         public SagePart Get(string id)
         {
             return partSageApiService.Get(id);
+        }
+
+        public IEnumerable<SagePart> Post(PropertyDictionary properties)
+        {
+            return partSageApiService.Add(properties);
+        }
+
+        public IEnumerable<SagePart> Put(PropertyDictionary properties)
+        {
+            return partSageApiService.Edit(properties);
+        }
+
+        public IEnumerable<SagePart> Delete(PropertyDictionary properties)
+        {
+            return partSageApiService.Edit(properties);
         }
     }
 }

@@ -1,12 +1,9 @@
-﻿namespace BloomService.Domain.Repositories.Abstract
-{
-    using BloomService.Domain.Entities;
-    using BloomService.Domain.Entities.Concrete;
+﻿using BloomService.Domain.Entities;
 
+namespace BloomService.Domain.Repositories.Abstract
+{
     public interface IWorkOrderRepository : IRepository<SageWorkOrder>
     {
-        bool Delete(SageWorkOrder entity);
 
-        bool Update(SageWorkOrder entity);
     }
 }

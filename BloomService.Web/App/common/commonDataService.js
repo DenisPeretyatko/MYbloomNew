@@ -9,7 +9,11 @@ var commonDataService = function($http) {
 	}
 
 	this.createWorkorder = function(workorder){
-		$http.post("/workorder/Create", workorder);
+	    return $http.post("/workorder/Create", workorder);
+	}
+
+	this.saveWorkorder = function (workorder) {
+	    return $http.post("/workorder/Save", workorder);
 	}
 
 	this.getAssigments = function() {

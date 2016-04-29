@@ -5,13 +5,11 @@ using System.Web.Http.Dependencies;
 
 namespace Sage.WebApi
 {
-    using TinyIoC;
-
     public class TinyIocMvcDependencyResolver : System.Web.Mvc.IDependencyResolver
     {
-        private TinyIoCContainer _container;
+        private TinyIoC.TinyIoCContainer _container;
         private bool _disposed;
-        public TinyIocMvcDependencyResolver(TinyIoCContainer container)
+        public TinyIocMvcDependencyResolver(TinyIoC.TinyIoCContainer container)
         {
             _container = container;
         }

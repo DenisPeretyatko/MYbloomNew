@@ -4,14 +4,13 @@
     using System.Web.Http;
 
     using BloomService.Domain.Entities;
-    using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Services.Abstract;
 
     public class AssignmentsController : ApiController
     {
-        private readonly IAssignmentService assignmentSageApiService;
+        private readonly IAssignmentSageApiService assignmentSageApiService;
 
-        public AssignmentsController(IAssignmentService assignmentSageApiService)
+        public AssignmentsController(IAssignmentSageApiService assignmentSageApiService)
         {
             this.assignmentSageApiService = assignmentSageApiService;
         }
@@ -32,6 +31,11 @@
         }
 
         public IEnumerable<SageAssignment> Put(PropertyDictionary properties)
+        {
+            return assignmentSageApiService.Edit(properties);
+        }
+
+        public IEnumerable<SageAssignment> Delete(PropertyDictionary properties)
         {
             return assignmentSageApiService.Edit(properties);
         }

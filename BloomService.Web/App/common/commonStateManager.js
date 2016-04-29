@@ -25,7 +25,7 @@
         return _this.lookups = response.data;
     });
 
-    setInterval(setLookups, 30000);
+    setInterval(setLookups, 100000);
     function setLookups() {
         return commonDataService.getLookups().then(function(response) {
             return _this.lookups = response.data;
