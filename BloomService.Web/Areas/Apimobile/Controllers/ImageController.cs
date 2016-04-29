@@ -1,20 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Web;
 using System.Web.Http;
-using BloomService.Web.Services.Abstract;
-using BloomService.Web.Models.Request;
+using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using AttributeRouting.Web.Mvc;
+using BloomService.Domain.Entities;
 
 namespace BloomService.Web.Areas.Apimobile.Controllers
 {
     public class ImageController : ApiController
     {
-        IAPIMobileService _apiService;
-        public ImageController(IAPIMobileService apiService)
+        public string Post(string id, string file)
         {
-            _apiService = apiService;
-        }
-        public string Post(ImageRequest model)
-        {
-            _apiService.AddImage(model.Images, model.IdWorkOrder);
             return "saved";
         }
 

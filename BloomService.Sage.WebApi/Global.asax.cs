@@ -6,6 +6,7 @@ using System.Web.Routing;
 namespace Sage.WebApi
 {
     using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Concrete;
 
     public class WebApiApplication : System.Web.HttpApplication
     {

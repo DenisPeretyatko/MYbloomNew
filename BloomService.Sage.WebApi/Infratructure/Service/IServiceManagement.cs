@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Concrete;
 
     public interface IServiceManagement
     {

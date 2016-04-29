@@ -6,7 +6,8 @@
     using System.Xml.Serialization;
 
     using BloomService.Domain.Entities;
-    using BloomService.Domain.Entities.MessageResponse;
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Entities.Concrete.MessageResponse;
     using BloomService.Domain.Exceptions;
 
     using Sage.Messaging;

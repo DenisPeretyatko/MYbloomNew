@@ -7,9 +7,9 @@ namespace BloomService.Web.Controllers
 {
     public class TechnicianController : BaseController
     {
-        private readonly IEmployeeSageApiService _employeeSageApiService;
+        private readonly IEmployeeService _employeeSageApiService;
 
-        public TechnicianController(IEmployeeSageApiService employeeSageApiService)
+        public TechnicianController(IEmployeeService employeeSageApiService)
         {
             _employeeSageApiService = employeeSageApiService;
         }

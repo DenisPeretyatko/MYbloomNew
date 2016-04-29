@@ -5,6 +5,7 @@ using System.Web.Mvc;
 namespace Sage.WebApi.Areas.Api.Controllers
 {
     using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.Exceptions;
 
     [Authorize]

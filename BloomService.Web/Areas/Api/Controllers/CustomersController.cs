@@ -4,13 +4,14 @@ using System.Web.Http;
 namespace BloomService.Web.Areas.Api.Controllers
 {
     using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Services.Abstract;
 
     public class CustomersController : ApiController
     {
-        private readonly ICustomerSageApiService customerSageApiService;
+        private readonly ICustomerService customerSageApiService;
 
-        public CustomersController(ICustomerSageApiService customerSageApiService)
+        public CustomersController(ICustomerService customerSageApiService)
         {
             this.customerSageApiService = customerSageApiService;
         }
@@ -23,21 +24,6 @@ namespace BloomService.Web.Areas.Api.Controllers
         public SageCustomer Get(string id)
         {
             return customerSageApiService.Get(id);
-        }
-
-        public IEnumerable<SageCustomer> Post(PropertyDictionary properties)
-        {
-            return customerSageApiService.Add(properties);
-        }
-
-        public IEnumerable<SageCustomer> Put(PropertyDictionary properties)
-        {
-            return customerSageApiService.Edit(properties);
-        }
-
-        public IEnumerable<SageCustomer> Delete(PropertyDictionary properties)
-        {
-            return customerSageApiService.Edit(properties);
         }
     }
 }

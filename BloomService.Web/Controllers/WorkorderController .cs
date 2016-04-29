@@ -1,6 +1,5 @@
 ﻿using System.Web.Mvc;
 using AttributeRouting.Web.Mvc;
-using BloomService.Domain.Entities;
 using BloomService.Web.Models;
 using BloomService.Web.Services;
 
@@ -10,9 +9,9 @@ namespace BloomService.Web.Controllers
 
     public class WorkorderController : BaseController
     {
-        private readonly IWorkOrderSageApiService _workOrderSageApiService;
+        private readonly IWorkOrderService _workOrderSageApiService;
 
-        public WorkorderController(IWorkOrderSageApiService workOrderSageApiService)
+        public WorkorderController(IWorkOrderService workOrderSageApiService)
         {
             _workOrderSageApiService = workOrderSageApiService;
         }
@@ -34,53 +33,13 @@ namespace BloomService.Web.Controllers
         [POST("Workorder/Create")]
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
-            var workorder = new PropertyDictionary
-            {
-                {"ARCustomer", model.Customer},
-                {"Location", model.Location},
-                {"CallType", model.Calltype},
-                {"CallDate", model.Calldate.ToShortDateString()},
-                {"CallTime", model.Calldate.ToShortTimeString()},
-                {"Problem", model.Problem},
-                {"RateSheet", model.Ratesheet},
-                {"Employee", model.Emploee},
-                {"Equipment", model.Equipment},
-                {"EstimatedRepairHours", model.Estimatehours},
-                {"NottoExceed", model.Nottoexceed},
-                {"Comments", model.Locationcomments},
-                {"CustomerPO", model.Customerpo},
-                {"PermissionCode", model.Permissiocode},
-                {"PayMethod", model.Paymentmethods}
-            };
-
-            var created = _workOrderSageApiService.Add(workorder);
-            return Json("success", JsonRequestBehavior.AllowGet);
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        [POST("Workorder/Save")]
-        public ActionResult SaveWorkOrder(WorkOrderModel model)
+        [POST("Workorder/Save/{id}")]
+        public ActionResult SaveWorkOrder()
         {
-            var workorder = new PropertyDictionary
-            {
-                {"ARCustomer", model.Customer},
-                {"Location", model.Location},
-                {"CallType", model.Calltype},
-                {"CallDate", model.Calldate.ToShortDateString()},
-                {"CallTime", model.Calldate.ToShortTimeString()},
-                {"Problem", model.Problem},
-                {"RateSheet", model.Ratesheet},
-                {"Employee", model.Emploee},
-                {"Equipment", model.Equipment},
-                {"EstimatedRepairHours", model.Estimatehours},
-                {"NottoExceed", model.Nottoexceed},
-                {"Comments", model.Locationcomments},
-                {"CustomerPO", model.Customerpo},
-                {"PermissionCode", model.Permissiocode},
-                {"PayMethod", model.Paymentmethods}
-            };
-
-            var saved = _workOrderSageApiService.Edit(workorder);
-            return Json("success", JsonRequestBehavior.AllowGet);
+            return Json("", JsonRequestBehavior.AllowGet);
         }
     }
 }
