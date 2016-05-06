@@ -4,6 +4,7 @@ using System.Web.Mvc;
 namespace Sage.WebApi
 {
     using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Concrete;
 
     public class ProportiesModelBinder : System.Web.Mvc.DefaultModelBinder
     {
@@ -13,7 +14,7 @@ namespace Sage.WebApi
             {
                 return base.BindModel(controllerContext, bindingContext);
             }
-            var proporties = new PropertyDictionary();
+            var proporties = new SagePropertyDictionary();
             var request = controllerContext.HttpContext.Request;
             string result = string.Empty;
             using (var s = new StreamReader(controllerContext.HttpContext.Request.InputStream))

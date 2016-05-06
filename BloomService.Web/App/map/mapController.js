@@ -10,7 +10,7 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
     $scope.workorders = [];
     $scope.workorders = state.locations;
     $scope.workorderMarkers = [];
-
+    
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{title}}</h1><div>{{description}}</div></div>");
 
     $scope.$watch(function () { return state.locations; }, function () {

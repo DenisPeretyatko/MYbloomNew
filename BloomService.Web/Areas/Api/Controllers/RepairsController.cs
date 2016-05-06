@@ -4,13 +4,14 @@
     using System.Web.Http;
 
     using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Services.Abstract;
 
     public class RepairsController : ApiController
     {
-        private readonly IRepairSageApiService repairSageApiService;
+        private readonly IRepairService repairSageApiService;
 
-        public RepairsController(IRepairSageApiService repairSageApiService)
+        public RepairsController(IRepairService repairSageApiService)
         {
             this.repairSageApiService = repairSageApiService;
         }
@@ -23,21 +24,6 @@
         public SageRepair Get(string id)
         {
             return repairSageApiService.Get(id);
-        }
-
-        public IEnumerable<SageRepair> Post(PropertyDictionary properties)
-        {
-            return repairSageApiService.Add(properties);
-        }
-
-        public IEnumerable<SageRepair> Put(PropertyDictionary properties)
-        {
-            return repairSageApiService.Edit(properties);
-        }
-
-        public IEnumerable<SageRepair> Delete(PropertyDictionary properties)
-        {
-            return repairSageApiService.Edit(properties);
         }
     }
 }

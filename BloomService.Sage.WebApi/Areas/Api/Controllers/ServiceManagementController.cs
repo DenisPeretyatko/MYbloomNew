@@ -1,98 +1,64 @@
-﻿using AttributeRouting.Web.Mvc;
-using Sage.WebApi.Infratructure.Service;
-using System.Web.Mvc;
-
-namespace Sage.WebApi.Areas.Api.Controllers
+﻿namespace Sage.WebApi.Areas.Api.Controllers
 {
-    using BloomService.Domain.Entities;
+    using System.Web.Mvc;
+
+    using AttributeRouting.Web.Mvc;
+
+    using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.Exceptions;
+
+    using Sage.WebApi.Infratructure.Service;
 
     [Authorize]
     public class ServiceManagementController : BaseApiController
     {
-        private readonly IServiceManagement _serviceManager;
+        private readonly IServiceManagement serviceManager;
 
         public ServiceManagementController(IServiceManagement serviceManager)
         {
-            _serviceManager = serviceManager;
-        }
-        
-        public ActionResult Locations()
-        {
-            return Json(_serviceManager.Locations());
-        }
-
-        public ActionResult Parts()
-        {
-            return Json(_serviceManager.Parts());
-        }
-
-        public ActionResult Problems()
-        {
-            return Json(_serviceManager.Problems());
-        }
-
-        public ActionResult Repairs()
-        {
-            return Json(_serviceManager.Repairs());
-        }
-
-        public ActionResult Employees()
-        {
-            return Json(_serviceManager.Employees());
-        }
-        
-        [GET("api/v1/sm/workorders/{id}")]
-        public ActionResult Workorders(string id)
-        {
-            return id == null ? Json(_serviceManager.WorkOrders()) : Json(_serviceManager.WorkOrders(id));
-        }
-
-        public ActionResult Workorders()
-        {
-            return Json(_serviceManager.WorkOrders());
+            this.serviceManager = serviceManager;
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Workorders(PropertyDictionary properties)
+        public ActionResult AddAssignments(SagePropertyDictionary properties)
         {
             try
             {
-                return Json(_serviceManager.WorkOrders(properties));
+                return Json(serviceManager.AddAssignments(properties));
             }
-            catch(ResponseException ex)
+            catch (ResponseException ex)
             {
                 return Json(ex.Error);
             }
         }
 
-        public ActionResult Calltypes()
+        public ActionResult Agreements()
         {
-            return Json(_serviceManager.Calltypes());
-        }
-
-        public ActionResult Departments()
-        {
-            return Json(_serviceManager.Departments());
-        }
-
-        public ActionResult Equipment()
-        {
-            return Json(_serviceManager.Equipments());
+            return Json(serviceManager.Agreements());
         }
 
         [GET("api/v1/sm/assignments/{id}")]
         public ActionResult Assignments(string id)
         {
-            return id == null ? Json(_serviceManager.Assignments()) : Json(_serviceManager.Assignments(id));
+            return id == null ? Json(serviceManager.Assignments()) : Json(serviceManager.Assignments(id));
+        }
+
+        public ActionResult Calltypes()
+        {
+            return Json(serviceManager.Calltypes());
+        }
+
+        public ActionResult Departments()
+        {
+            return Json(serviceManager.Departments());
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult AddAssignments(PropertyDictionary properties)
+        public ActionResult EditAssignments(SagePropertyDictionary properties)
         {
             try
             {
-                return Json(_serviceManager.AddAssignments(properties));
+                return Json(serviceManager.EditAssignments(properties));
             }
             catch (ResponseException ex)
             {
@@ -100,32 +66,68 @@ namespace Sage.WebApi.Areas.Api.Controllers
             }
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditAssignments(PropertyDictionary properties)
+        public ActionResult Employees()
         {
-            try
-            {
-                return Json(_serviceManager.EditAssignments(properties));
-            }
-            catch (ResponseException ex)
-            {
-                return Json(ex.Error);
-            }
+            return Json(serviceManager.Employees());
         }
-        
-        public ActionResult RateSheets()
+
+        public ActionResult Equipment()
         {
-            return Json(_serviceManager.RateSheet());
+            return Json(serviceManager.Equipments());
         }
-        
+
+        public ActionResult Locations()
+        {
+            return Json(serviceManager.Locations());
+        }
+
+        public ActionResult Parts()
+        {
+            return Json(serviceManager.Parts());
+        }
+
         public ActionResult PermissionCodes()
         {
-            return Json(_serviceManager.PermissionCode());
+            return Json(serviceManager.PermissionCode());
         }
 
-        public ActionResult Agreements()
+        public ActionResult Problems()
         {
-            return Json(_serviceManager.Agreements());
+            return Json(serviceManager.Problems());
+        }
+
+        public ActionResult RateSheets()
+        {
+            return Json(serviceManager.RateSheet());
+        }
+
+        public ActionResult Repairs()
+        {
+            return Json(serviceManager.Repairs());
+        }
+
+        [GET("api/v1/sm/workorders/{id}")]
+        public ActionResult Workorders(string id)
+        {
+            return id == null ? Json(serviceManager.WorkOrders()) : Json(serviceManager.WorkOrders(id));
+        }
+
+        public ActionResult Workorders()
+        {
+            return Json(serviceManager.WorkOrders());
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult Workorders(SagePropertyDictionary properties)
+        {
+            try
+            {
+                return Json(serviceManager.WorkOrders(properties));
+            }
+            catch (ResponseException ex)
+            {
+                return Json(ex.Error);
+            }
         }
     }
 }

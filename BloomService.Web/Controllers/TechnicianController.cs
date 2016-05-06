@@ -1,37 +1,50 @@
-﻿using System.Web.Mvc;
+﻿namespace BloomService.Web.Controllers
+{
+using System.Web.Mvc;
+
 using AttributeRouting.Web.Mvc;
-using BloomService.Web.Infrastructure;
+
 using BloomService.Web.Models;
 using BloomService.Web.Services.Abstract;
 
-namespace BloomService.Web.Controllers
-{
     public class TechnicianController : BaseController
     {
-        private readonly IEmployeeSageApiService _employeeSageApiService;
+        private readonly IEmployeeService _employeeService;
 
-        public TechnicianController(IEmployeeSageApiService employeeSageApiService)
+        public TechnicianController(IEmployeeService employeeService)
         {
-            _employeeSageApiService = employeeSageApiService;
+            _employeeService = employeeService;
+        }
+
+        [POST("Technician/AssignWorkOrder/{id}")]
+        public ActionResult AssignWorkOrder()
+        {
+            return Json(string.Empty, JsonRequestBehavior.AllowGet);
         }
 
         [GET("Technician")]
         public ActionResult GetTechnicians()
         {
-            var list = _employeeSageApiService.Get();
+            var list = _employeeService.Get();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
         [POST("Technician/Save")]
         public ActionResult SaveTechniciance(TechnicianModel model)
         {
-            return Json("success", JsonRequestBehavior.AllowGet);
+            return Json(string.Empty, JsonRequestBehavior.AllowGet);
+        }
+
+        [POST("Technician/SaveLocations/{id}")]
+        public ActionResult SaveTecnitianLocations()
+        {
+            return Json(string.Empty, JsonRequestBehavior.AllowGet);
         }
 
         [POST("Technician/SaveSchedule/{id}")]
         public ActionResult SaveTecnitianSchedule()
         {
-            return Json("", JsonRequestBehavior.AllowGet);
+            return Json(string.Empty, JsonRequestBehavior.AllowGet);
         }
     }
 }

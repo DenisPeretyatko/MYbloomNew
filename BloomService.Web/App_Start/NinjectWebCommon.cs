@@ -11,13 +11,17 @@ namespace BloomService.Web
     using System.Configuration;
     using System.Web;
 
-    using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.UnitOfWork;
+    using BloomService.Web.Managers.Abstract;
+    using BloomService.Web.Managers.Concrete;
     using BloomService.Web.Services.Abstract;
     using BloomService.Web.Services.Concrete;
     using BloomService.Web.Utils;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+
+    using Newtonsoft.Json.Linq;
 
     using Ninject;
     using Ninject.Web.Common;
@@ -27,6 +31,30 @@ namespace BloomService.Web
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
+
+        public static string GetAuthToken()
+        {
+            // var session = HttpContext.Current.Session;
+
+            // if (session != null && session["oauth_token"] != null)
+            // {
+            // return session["oauth_token"].ToString();
+            // }
+            var username = ConfigurationManager.AppSettings["SageUsername"];
+            var password = ConfigurationManager.AppSettings["SagePassword"];
+            var sageApiHost = ConfigurationManager.AppSettings["SageApiHost"];
+            var restClient = new RestClient(sageApiHost);
+            var request = new RestRequest("oauth/token", Method.POST);
+            request.AddParameter("username", username);
+            request.AddParameter("password", password);
+            request.AddParameter("grant_type", "password");
+            var response = restClient.Execute(request);
+            var json = JObject.Parse(response.Content);
+            var result = string.Format("Bearer {0}", json.First.First);
+
+            // session["oauth_token"] = result;
+            return result;
+        }
 
         /// <summary>
         /// Starts the application
@@ -74,30 +102,39 @@ namespace BloomService.Web
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<IWorkOrderSageApiService>().To<WorkOrderSageApiService>();
-            kernel.Bind<ILocationSageApiService>().To<LocationSageApiService>();
-            kernel.Bind<ICallTypeSageApiService>().To<CallTypeSageApiService>();
-            kernel.Bind<IEmployeeSageApiService>().To<EmployeeSageApiService>();
-            kernel.Bind<IAssignmentSageApiService>().To<AssignmentSageApiService>();
-            kernel.Bind<IDepartmentSageApiService>().To<DepartmentSageApiService>();
-            kernel.Bind<IEquipmentSageApiService>().To<EquipmentSageApiService>();
-            kernel.Bind<IDepartmentSageApiService>().To<DepartmentSageApiService>();
-            kernel.Bind<IPartSageApiService>().To<PartSageApiService>();
-            kernel.Bind<IProblemSageApiService>().To<ProblemSageApiService>();
-            kernel.Bind<IRepairSageApiService>().To<RepairSageApiService>();
-            kernel.Bind<ICustomerSageApiService>().To<CustomerSageApiService>();
-
-            kernel.Bind<IAPIMobileService>().To<APIMobileService>();
-            kernel.Bind<IImageService>().To<ImageService>();
-            kernel.Bind<IUserService>().To<UserService>();
-
-            kernel.Bind<ISageApiService<SageWorkOrder>>().To<SageApiService<SageWorkOrder>>();
+            kernel.Bind<IWorkOrderApiManager>().To<WorkOrderApiManager>();
+            kernel.Bind<ILocationApiManager>().To<LocationApiManager>();
+            kernel.Bind<ICallTypeApiManager>().To<CallTypeApiManager>();
+            kernel.Bind<IEmployeeApiManager>().To<EmployeeApiManager>();
+            kernel.Bind<IAssignmentApiManager>().To<AssignmentApiManager>();
+            kernel.Bind<IDepartmentApiManager>().To<DepartmentApiManager>();
+            kernel.Bind<IEquipmentApiManager>().To<EquipmentApiManager>();
+            kernel.Bind<IPartApiManager>().To<PartApiManager>();
+            kernel.Bind<IProblemApiManager>().To<ProblemApiManager>();
+            kernel.Bind<IRepairApiManager>().To<RepairApiManager>();
+            kernel.Bind<ICustomerApiManager>().To<CustomerApiManager>();
 
             var sageApiHost = ConfigurationManager.AppSettings["SageApiHost"];
 
             kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(sageApiHost);
-            kernel.Bind<ISession>().To<BloomServiceSession>().InSingletonScope();
+            kernel.Bind<IToken>().To<SageAuthorisationToken>().WithConstructorArgument(GetAuthToken());
             kernel.Bind<IUnitOfWork>().To<MongoDbUnitOfWork>();
+            kernel.Bind<IWorkOrderService>().To<WorkOrderService>();
+            kernel.Bind<ILocationService>().To<LocationService>();
+            kernel.Bind<ICallTypeService>().To<CallTypeService>();
+            kernel.Bind<IEmployeeService>().To<EmployeeService>();
+            kernel.Bind<IAssignmentService>().To<AssignmentService>();
+            kernel.Bind<IDepartmentService>().To<DepartmentService>();
+            kernel.Bind<IEquipmentService>().To<EquipmentService>();
+            kernel.Bind<IDepartmentService>().To<DepartmentService>();
+            kernel.Bind<IPartService>().To<PartService>();
+            kernel.Bind<IProblemService>().To<ProblemService>();
+            kernel.Bind<IRepairService>().To<RepairService>();
+            kernel.Bind<ICustomerService>().To<CustomerService>();
+
+            kernel.Bind<IApiMobileService>().To<ApiMobileService>();
+            kernel.Bind<IImageService>().To<ImageService>();
+            kernel.Bind<IUserService>().To<UserService>();
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Web.Script.Serialization;
-using BloomService.Web.Models;
-using Microsoft.AspNet.SignalR;
-
-namespace BloomService.Web.Infrastructure.Hubs
+﻿namespace BloomService.Web.Infrastructure.Hubs
 {
+    using System.Collections.Generic;
+    using System.Web.Script.Serialization;
+
+    using BloomService.Web.Models;
+
+    using Microsoft.AspNet.SignalR;
+
     public class LocationHub : Hub
     {
         public void GetLocations()

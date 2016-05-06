@@ -7,8 +7,8 @@ namespace BloomService.Web.Areas.Apimobile.Controllers
 {
     public class ImageController : ApiController
     {
-        IAPIMobileService _apiService;
-        public ImageController(IAPIMobileService apiService)
+        IApiMobileService _apiService;
+        public ImageController(IApiMobileService apiService)
         {
             _apiService = apiService;
         }

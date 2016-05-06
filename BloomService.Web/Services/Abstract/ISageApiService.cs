@@ -3,6 +3,8 @@
     using System.Collections.Generic;
 
     using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Abstract;
+    using BloomService.Domain.Entities.Concrete;
 
     public interface ISageApiService<TEntity> where TEntity : class, IEntity
     {
@@ -12,11 +14,11 @@
         TEntity Get(string id);
 
 
-        IEnumerable<TEntity> Add(PropertyDictionary properties);
+        IEnumerable<TEntity> Add(SagePropertyDictionary properties);
 
 
-        IEnumerable<TEntity> Edit(PropertyDictionary properties);
+        IEnumerable<TEntity> Edit(SagePropertyDictionary properties);
 
-        IEnumerable<TEntity> Delete(PropertyDictionary properties);
+        IEnumerable<TEntity> Delete(SagePropertyDictionary properties);
     }
 }

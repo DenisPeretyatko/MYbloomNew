@@ -1,22 +1,26 @@
-using System.Web.Routing;
-using AttributeRouting.Web.Mvc;
+using BloomService.Web;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(BloomService.Web.AttributeRoutingConfig), "Start")]
+using WebActivator;
 
-namespace BloomService.Web 
+[assembly: PreApplicationStartMethod(typeof(AttributeRoutingConfig), "Start")]
+
+namespace BloomService.Web
 {
-    public static class AttributeRoutingConfig
-	{
-		public static void RegisterRoutes(RouteCollection routes) 
-		{    
-			// See http://github.com/mccalltd/AttributeRouting/wiki for more options.
-			// To debug routes locally using the built in ASP.NET development server, go to /routes.axd
-            
-			routes.MapAttributeRoutes();
-		}
+    using System.Web.Routing;
 
-        public static void Start() 
-		{
+    using AttributeRouting.Web.Mvc;
+
+    public static class AttributeRoutingConfig
+    {
+        public static void RegisterRoutes(RouteCollection routes)
+        {
+            // See http://github.com/mccalltd/AttributeRouting/wiki for more options.
+            // To debug routes locally using the built in ASP.NET development server, go to /routes.axd
+            routes.MapAttributeRoutes();
+        }
+
+        public static void Start()
+        {
             RegisterRoutes(RouteTable.Routes);
         }
     }

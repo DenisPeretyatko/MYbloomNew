@@ -3,14 +3,14 @@
     using System.Collections.Generic;
     using System.Web.Http;
 
-    using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Services.Abstract;
 
     public class LocationsController : ApiController
     {
-        private readonly ILocationSageApiService locationSageApiService;
+        private readonly ILocationService locationSageApiService;
 
-        public LocationsController(ILocationSageApiService locationSageApiService)
+        public LocationsController(ILocationService locationSageApiService)
         {
             this.locationSageApiService = locationSageApiService;
         }
@@ -25,19 +25,14 @@
             return locationSageApiService.Get(id);
         }
 
-        public IEnumerable<SageLocation> Post(PropertyDictionary properties)
+        public IEnumerable<SageLocation> Post(SagePropertyDictionary properties)
         {
             return locationSageApiService.Add(properties);
         }
 
-        public IEnumerable<SageLocation> Put(PropertyDictionary properties)
+        public IEnumerable<SageLocation> Put(SagePropertyDictionary properties)
         {
             return locationSageApiService.Edit(properties);
-        }
-
-        public IEnumerable<SageLocation> Delete(PropertyDictionary properties)
-        {
-            return locationSageApiService.Delete(properties);
         }
     }
 }

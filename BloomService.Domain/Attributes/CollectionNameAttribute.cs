@@ -1,15 +1,14 @@
-﻿using System;
-
-
-namespace BloomService.Domain.Attributes
+﻿namespace BloomService.Domain.Attributes
 {
-    class CollectionNameAttribute : Attribute
-    {
-        public string Name { get; set; }
+    using System;
 
+    public class CollectionNameAttribute : Attribute
+    {
         public CollectionNameAttribute(string name)
         {
             Name = name;
         }
+
+        public string Name { get; set; }
     }
 }

@@ -1,14 +1,13 @@
-﻿using BloomService.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace BloomService.Web.Services.Abstract
+﻿namespace BloomService.Web.Services.Abstract
 {
-    public interface IAPIMobileService
+    using System.Collections.Generic;
+
+    using BloomService.Domain.Entities.Concrete;
+
+    public interface IApiMobileService
     {
-        IEnumerable<SageWorkOrder> GetWorkOreders();
         bool AddImage(IEnumerable<string> images, string idWorkOrder);
+
+        IEnumerable<SageWorkOrder> GetWorkOreders();
     }
 }

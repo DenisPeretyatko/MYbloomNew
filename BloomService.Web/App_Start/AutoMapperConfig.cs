@@ -1,8 +1,10 @@
-﻿using BloomService.Domain.Entities;
-using BloomService.Web.Models;
-
-namespace BloomService.Web
+﻿namespace BloomService.Web
 {
+    using AutoMapper;
+
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Web.Models;
+
     public static class AutoMapperConfig
 {
     public static void RegisterMappings()

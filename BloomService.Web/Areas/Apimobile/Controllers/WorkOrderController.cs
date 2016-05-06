@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Web.Http;
-using System.Web.Script.Serialization;
-using BloomService.Domain.Entities;
-using BloomService.Web.Services.Abstract;
-using System.Web.Mvc;
-
-namespace BloomService.Web.Areas.Apimobile.Controllers
+﻿namespace BloomService.Web.Areas.Apimobile.Controllers
 {
+    using System;
+    using System.IO;
+    using System.Web.Http;
+    using System.Web.Script.Serialization;
+
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Web.Services.Abstract;
+
     public class WorkOrderController : ApiController
     {
-        IAPIMobileService _apiService;
-        public WorkOrderController(IAPIMobileService apiService)
+        readonly IApiMobileService _apiService;
+
+        public WorkOrderController(IApiMobileService apiService)
         {
             _apiService = apiService;
         }

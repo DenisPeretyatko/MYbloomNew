@@ -1,16 +1,17 @@
-﻿using System.Web.Mvc;
-using AttributeRouting.Web.Mvc;
-using BloomService.Web.Infrastructure;
-
-namespace BloomService.Web.Controllers
+﻿namespace BloomService.Web.Controllers
 {
+    using System.Web.Mvc;
+
+    using AttributeRouting.Web.Mvc;
+
+    using BloomService.Web.Infrastructure.Hubs;
+
     public class LocationController : BaseController
     {
-
         [GET("Location")]
         public ActionResult GetLocations()
         {
-            var json = JsonHelper.GetObjects("getLocations.json"); 
+            var json = JsonHelper.GetObjects("getLocations.json");
             return Json(json, JsonRequestBehavior.AllowGet);
         }
 

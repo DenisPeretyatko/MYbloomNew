@@ -1,84 +1,85 @@
-﻿using System.Web.Mvc;
-using AttributeRouting.Web.Mvc;
-using BloomService.Domain.Entities;
-using BloomService.Web.Models;
-
-namespace BloomService.Web.Controllers
+﻿namespace BloomService.Web.Controllers
 {
+using System.Web.Mvc;
+
+using AttributeRouting.Web.Mvc;
+
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Web.Models;
     using BloomService.Web.Services.Abstract;
 
     public class WorkorderController : BaseController
     {
-        private readonly IWorkOrderSageApiService _workOrderSageApiService;
+        private readonly IWorkOrderService _workOrderService;
 
-        public WorkorderController(IWorkOrderSageApiService workOrderSageApiService)
+        public WorkorderController(IWorkOrderService workOrderService)
         {
-            _workOrderSageApiService = workOrderSageApiService;
-        }
-
-        [GET("Workorder")]
-        public ActionResult GetWorkorders()
-        {
-            var list = _workOrderSageApiService.Get();
-            return Json(list, JsonRequestBehavior.AllowGet);
-        }
-
-        [GET("Workorder/{id}")]
-        public ActionResult GetWorkorder(string id)
-        {
-            var workOrder = _workOrderSageApiService.Get(id);
-            return Json(workOrder, JsonRequestBehavior.AllowGet);
+            _workOrderService = workOrderService;
         }
 
         [POST("Workorder/Create")]
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
-            var workorder = new PropertyDictionary
-            {
-                {"ARCustomer", model.Customer},
-                {"Location", model.Location},
-                {"CallType", model.Calltype},
-                {"CallDate", model.Calldate.ToShortDateString()},
-                {"CallTime", model.Calldate.ToShortTimeString()},
-                {"Problem", model.Problem},
-                {"RateSheet", model.Ratesheet},
-                {"Employee", model.Emploee},
-                {"Equipment", model.Equipment},
-                {"EstimatedRepairHours", model.Estimatehours},
-                {"NottoExceed", model.Nottoexceed},
-                {"Comments", model.Locationcomments},
-                {"CustomerPO", model.Customerpo},
-                {"PermissionCode", model.Permissiocode},
-                {"PayMethod", model.Paymentmethods}
-            };
+            var workorder = new SagePropertyDictionary
+                                {
+                                    { "ARCustomer", model.Customer }, 
+                                    { "Location", model.Location }, 
+                                    { "CallType", model.Calltype }, 
+                                    { "CallDate", model.Calldate.ToShortDateString() }, 
+                                    { "CallTime", model.Calldate.ToShortTimeString() }, 
+                                    { "Problem", model.Problem }, 
+                                    { "RateSheet", model.Ratesheet }, 
+                                    { "Employee", model.Emploee }, 
+                                    { "Equipment", model.Equipment }, 
+                                    { "EstimatedRepairHours", model.Estimatehours }, 
+                                    { "NottoExceed", model.Nottoexceed }, 
+                                    { "Comments", model.Locationcomments }, 
+                                    { "CustomerPO", model.Customerpo }, 
+                                    { "PermissionCode", model.Permissiocode }, 
+                                    { "PayMethod", model.Paymentmethods }
+                                };
 
-            var created = _workOrderSageApiService.Add(workorder);
+            var created = _workOrderService.Add(workorder);
             return Json("success", JsonRequestBehavior.AllowGet);
+        }
+
+        [GET("Workorder/{id}")]
+        public ActionResult GetWorkorder(string id)
+        {
+            var workOrder = _workOrderService.Get(id);
+            return Json(workOrder, JsonRequestBehavior.AllowGet);
+        }
+
+        [GET("Workorder")]
+        public ActionResult GetWorkorders()
+        {
+            var list = _workOrderService.Get();
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
 
         [POST("Workorder/Save")]
         public ActionResult SaveWorkOrder(WorkOrderModel model)
         {
-            var workorder = new PropertyDictionary
+            var workorder = new SagePropertyDictionary
             {
-                {"ARCustomer", model.Customer},
-                {"Location", model.Location},
-                {"CallType", model.Calltype},
-                {"CallDate", model.Calldate.ToShortDateString()},
-                {"CallTime", model.Calldate.ToShortTimeString()},
-                {"Problem", model.Problem},
-                {"RateSheet", model.Ratesheet},
-                {"Employee", model.Emploee},
-                {"Equipment", model.Equipment},
-                {"EstimatedRepairHours", model.Estimatehours},
-                {"NottoExceed", model.Nottoexceed},
-                {"Comments", model.Locationcomments},
-                {"CustomerPO", model.Customerpo},
-                {"PermissionCode", model.Permissiocode},
-                {"PayMethod", model.Paymentmethods}
+                                    { "ARCustomer", model.Customer }, 
+                                    { "Location", model.Location }, 
+                                    { "CallType", model.Calltype }, 
+                                    { "CallDate", model.Calldate.ToShortDateString() }, 
+                                    { "CallTime", model.Calldate.ToShortTimeString() }, 
+                                    { "Problem", model.Problem }, 
+                                    { "RateSheet", model.Ratesheet }, 
+                                    { "Employee", model.Emploee }, 
+                                    { "Equipment", model.Equipment }, 
+                                    { "EstimatedRepairHours", model.Estimatehours }, 
+                                    { "NottoExceed", model.Nottoexceed }, 
+                                    { "Comments", model.Locationcomments }, 
+                                    { "CustomerPO", model.Customerpo }, 
+                                    { "PermissionCode", model.Permissiocode }, 
+                                    { "PayMethod", model.Paymentmethods }
             };
 
-            var saved = _workOrderSageApiService.Edit(workorder);
+            var saved = _workOrderService.Edit(workorder);
             return Json("success", JsonRequestBehavior.AllowGet);
         }
     }

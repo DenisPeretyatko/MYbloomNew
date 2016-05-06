@@ -1,29 +1,22 @@
-﻿using BloomService.Domain.Entities;
-using MongoDB.Bson;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-
-namespace BloomService.Domain.Repositories.Abstract
+﻿namespace BloomService.Domain.Repositories.Abstract
 {
-    public interface IRepository<TEntity> where TEntity : IEntity
+    using System;
+    using System.Collections.Generic;
+    using System.Linq.Expressions;
+
+    using BloomService.Domain.Entities.Abstract;
+
+    public interface IRepository<TEntity>
+        where TEntity : IEntity
     {
-        bool Insert(TEntity entity);
+        IEnumerable<TEntity> Get();
 
+        TEntity Get(string id);
 
-        bool Update(TEntity entity);
-
-
-        bool Delete(TEntity entity);
-
+        bool Insert(TEntity item);
 
         IEnumerable<TEntity> SearchFor(Expression<Func<TEntity, bool>> predicate);
 
-
-        IEnumerable<TEntity> GetAll();
-
-
-        TEntity GetById(Int32 id);
-        
+        bool Update(TEntity entity);
     }
 }
