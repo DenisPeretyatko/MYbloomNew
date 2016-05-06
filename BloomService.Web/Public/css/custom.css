@@ -32,3 +32,24 @@
 .notif_el a {
     line-height: normal;
 }
+#avatar {
+    width: 80px;
+    height: 80px;
+    border: solid 1px;
+    margin-right: 8px;
+}
+.avatarImg {
+    -ms-opacity: 0.0;
+    opacity: 0.0;
+    width: 60px;
+    height: 0;
+}
+.upload_avatar input[type="file"]::-webkit-file-upload-button {
+    cursor: pointer;
+    margin: -10px -10px;
+    padding-top: 5px;
+    padding-bottom: 5px; 
+}
+.upload_avatar {
+    margin-bottom: 20px;
+}

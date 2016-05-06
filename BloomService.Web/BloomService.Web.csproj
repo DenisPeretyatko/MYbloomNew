@@ -281,6 +281,7 @@
     <Compile Include="Infrastructure\Constants\RateSheets.cs" />
     <Compile Include="Models\CallTypeModel.cs" />
     <Compile Include="Models\AssignmentModel.cs" />
+    <Compile Include="Models\EntityModel.cs" />
     <Compile Include="Models\LocationModel.cs" />
     <Compile Include="Models\ScheduleViewModel.cs" />
     <Compile Include="Models\LookupsModel.cs" />
@@ -687,9 +688,13 @@
     <None Include="Properties\PublishProfiles\bloom.pubxml" />
     <Content Include="Public\mock\getEmployees.json" />
     <Content Include="Public\mock\getEmployee.json" />
+    <None Include="Properties\PublishProfiles\s.pubxml" />
     <None Include="Scripts\jquery-2.2.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\FileAPI.flash.swf" />
+    <Content Include="Scripts\FileAPI.js" />
+    <Content Include="Scripts\FileAPI.min.js" />
     <Content Include="Scripts\jquery-2.2.2.js" />
     <Content Include="Scripts\jquery-2.2.2.min.js" />
     <Content Include="Public\mock\getNewLocations.json" />
@@ -702,6 +707,12 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\ng-file-upload-all.js" />
+    <Content Include="Scripts\ng-file-upload-all.min.js" />
+    <Content Include="Scripts\ng-file-upload-shim.js" />
+    <Content Include="Scripts\ng-file-upload-shim.min.js" />
+    <Content Include="Scripts\ng-file-upload.js" />
+    <Content Include="Scripts\ng-file-upload.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
@@ -727,6 +738,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Infrastructure\Services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

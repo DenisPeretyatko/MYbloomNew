@@ -1,7 +1,10 @@
-﻿namespace BloomService.Domain.Entities
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace BloomService.Domain.Entities
 {
     public abstract class SageEntity : IEntity
     {
-        string IEntity.Id { get; set; }
+        [BsonId]
+        public string Id { get; set; }
     }
 }

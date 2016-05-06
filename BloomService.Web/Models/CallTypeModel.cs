@@ -2,7 +2,7 @@
 
 namespace BloomService.Web.Models
 {
-    public class CallTypeModel
+    public class CallTypeModel : EntityModel
     {
         [JsonProperty("AgreementRequired")]
         public string AgreementRequired { get; set; }

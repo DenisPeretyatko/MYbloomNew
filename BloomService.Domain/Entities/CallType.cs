@@ -17,7 +17,6 @@
         public string CallBack { get; set; }
 
         [XmlAttribute]
-        [BsonId]
         public string CallType { get; set; }
 
         [XmlAttribute]

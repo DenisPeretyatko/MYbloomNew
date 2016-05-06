@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace BloomService.Web.Models
 {
-    public class CustomerModel
+    public class CustomerModel : EntityModel
     {
         [JsonProperty("Customer")]
         public string Customer { get; set; }

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace BloomService.Web.Models
 {
-    public class EmployeeModel
+    public class EmployeeModel : EntityModel
     {
+        [JsonProperty("Id")]
+        public string Id { get; set; }
         [JsonProperty("Employee")]
         public string Employee { get; set; }
         [JsonProperty("Center")]
@@ -63,5 +66,13 @@ namespace BloomService.Web.Models
         public string WorkSunday { get; set; }
         [JsonProperty("DefaultRepair")]
         public string DefaultRepair { get; set; }
+
+
+        [JsonProperty("AvailableDays")]
+        public List<AvailableDay> AvailableDays { get; set; }
+        [JsonProperty("IsAvailable")]
+        public bool IsAvailable { get; set; }
+        [JsonProperty("Picture")]
+        public string Picture { get; set; }
     }
 }

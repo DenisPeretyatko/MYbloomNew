@@ -99,7 +99,7 @@ namespace BloomService.Web.Services.Concrete
 
         public virtual TEntity Get(string id)
         {
-            var item = unitOfWork.GetEntities<TEntity>().GetById(Int32.Parse(id));
+            var item = unitOfWork.GetEntities<TEntity>().GetById(id);
 
             if (item != null)
             {

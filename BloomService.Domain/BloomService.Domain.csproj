@@ -83,6 +83,7 @@
     <Compile Include="Entities\PropertyDictionary.cs" />
     <Compile Include="Entities\Repair.cs" />
     <Compile Include="Entities\SageEntity.cs" />
+    <Compile Include="Entities\AvailableDay.cs" />
     <Compile Include="Entities\TimeStamp.cs" />
     <Compile Include="Entities\WorkOrder.cs" />
     <Compile Include="Exceptions\ResponseException.cs" />

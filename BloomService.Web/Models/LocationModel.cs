@@ -2,7 +2,7 @@
 
 namespace BloomService.Web.Models
 {
-    public class LocationModel
+    public class LocationModel : EntityModel
     {
         [JsonProperty("SiteType")]
         public string SiteType { get; set; }

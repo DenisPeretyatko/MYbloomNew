@@ -1,4 +1,6 @@
-﻿namespace BloomService.Domain.Entities
+﻿using System.Collections.Generic;
+
+namespace BloomService.Domain.Entities
 {
     using System.Xml.Serialization;
 
@@ -44,7 +46,6 @@
         public string Email { get; set; }
 
         [XmlAttribute]
-        [BsonId]
         public string Employee { get; set; }
 
         [XmlAttribute]
@@ -97,5 +98,13 @@
 
         [XmlAttribute]
         public string ZIP { get; set; }
+
+
+        [XmlAttribute]
+        public List<AvailableDay> AvailableDays { get; set; }
+        [XmlAttribute]
+        public bool IsAvailable { get; set; }
+        [XmlAttribute]
+        public string Picture { get; set; }
     }
 }

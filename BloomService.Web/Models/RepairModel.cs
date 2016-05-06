@@ -2,7 +2,7 @@
 
 namespace BloomService.Web.Models
 {
-    public class RepairModel
+    public class RepairModel : EntityModel
     {
         [JsonProperty("Description")]
         public string Description { get; set; }

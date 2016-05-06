@@ -249,8 +249,7 @@
         public bool TotalCostSpecified { get; set; }
 
         [XmlAttribute]
-        [BsonId]
-        public ushort WorkOrder { get; set; }
+        public string WorkOrder { get; set; }
 
         [XmlAttribute]
         public string WorkOrderType { get; set; }

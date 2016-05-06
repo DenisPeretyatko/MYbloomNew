@@ -162,7 +162,6 @@ namespace BloomService.Domain.Entities
         public string Credit_Rating { get; set; }
 
         [XmlAttribute]
-        [BsonId]
         public string Customer { get; set; }
 
         [XmlAttribute]

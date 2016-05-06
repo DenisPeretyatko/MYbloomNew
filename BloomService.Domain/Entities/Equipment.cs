@@ -1,4 +1,6 @@
-﻿namespace BloomService.Domain.Entities
+﻿using System.Collections.Generic;
+
+namespace BloomService.Domain.Entities
 {
     using System.Xml.Serialization;
 
@@ -20,7 +22,6 @@
         public string Employee { get; set; }
 
         [XmlAttribute]
-        [BsonId]
         public string Equipment { get; set; }
 
         [XmlAttribute]

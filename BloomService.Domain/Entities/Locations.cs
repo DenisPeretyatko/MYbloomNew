@@ -101,7 +101,6 @@
         public string JCJob { get; set; }
 
         [XmlAttribute]
-        [BsonId]
         public string Location { get; set; }
 
         [XmlAttribute]

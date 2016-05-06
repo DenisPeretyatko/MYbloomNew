@@ -7,7 +7,6 @@ namespace BloomService.Domain.Entities
     [CollectionName("ImageWorkOrderCollection")]
     public class ImageWorkOrder : SageEntity
     {
-        [BsonId]
         public string WorkOrder { get; set; }
         public List<string> Images { get; set; }
     }

@@ -42,7 +42,7 @@
             return collection.AsQueryable();
         }
 
-        public TEntity GetById(Int32 id)
+        public TEntity GetById(string id)
         {
             return collection.FindOneByIdAs<TEntity>(id);
         }
@@ -64,7 +64,7 @@
 
         public bool Update(TEntity entity)
         {
-            if (SearchFor(x => x.Id == entity.Id).Any())
+            if (GetById(entity.Id) != null)
             {
                 collection.Remove(Query.EQ("_id", entity.Id));
             }

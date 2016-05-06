@@ -23,7 +23,6 @@
         public string Area { get; set; }
 
         [XmlAttribute]
-        [BsonId]
         public string Assignment { get; set; }
 
         [XmlAttribute]

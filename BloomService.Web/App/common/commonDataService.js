@@ -43,8 +43,12 @@ var commonDataService = function($http) {
 	    return $http.get("/Technician");
 	}
 
-	this.EditTechnician = function (technician) {
-	    $http.post("/Technician/Save", technician);
+	this.getTechnician = function (id) {
+	    return $http.get("/Technician/" + id);
+	}
+
+	this.editTechnician = function (technician) {
+	    return $http.post("/Technician/Save", technician);
 	}
 
 	this.getNotifications = function () {

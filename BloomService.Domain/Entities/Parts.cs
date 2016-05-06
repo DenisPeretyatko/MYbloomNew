@@ -89,7 +89,6 @@
         public string OrderLeadTime { get; set; }
 
         [XmlAttribute]
-        [BsonId]
         public string Part { get; set; }
 
         [XmlAttribute]

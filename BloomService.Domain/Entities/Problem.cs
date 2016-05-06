@@ -32,8 +32,7 @@
         public string Priority { get; set; }
 
         [XmlAttribute]
-        [BsonId]
-        public byte Problem { get; set; }
+        public string Problem { get; set; }
 
         [XmlAttribute]
         public string Skill { get; set; }

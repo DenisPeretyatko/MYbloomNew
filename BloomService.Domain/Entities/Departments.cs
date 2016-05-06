@@ -11,8 +11,7 @@
     public class SageDepartment : SageEntity
     {
         [XmlAttribute]
-        [BsonId]
-        public byte Department { get; set; }
+        public string Department { get; set; }
 
         [XmlAttribute]
         public string Description { get; set; }

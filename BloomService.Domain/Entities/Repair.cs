@@ -20,7 +20,6 @@
         public string JCCostCode { get; set; }
 
         [XmlAttribute]
-        [BsonId]
-        public byte Repair { get; set; }
+        public string Repair { get; set; }
     }
 }

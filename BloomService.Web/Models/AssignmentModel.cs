@@ -2,7 +2,7 @@
 
 namespace BloomService.Web.Models
 {
-    public class AssignmentModel
+    public class AssignmentModel : EntityModel
     {
         [JsonProperty("Alarm")]
         public string Alarm { get; set; }

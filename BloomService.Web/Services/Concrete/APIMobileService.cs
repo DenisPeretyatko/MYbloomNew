@@ -37,7 +37,7 @@ namespace BloomService.Web.Services.Concrete
             var workOrder = _workOrderSageApiService.Get(idWorkOrder);
             if (workOrder == null)
                 return false;
-            var imagesDB = _unitOfWork.GetEntities<ImageWorkOrder>().GetById(int.Parse(idWorkOrder));
+            var imagesDB = _unitOfWork.GetEntities<ImageWorkOrder>().GetById(idWorkOrder);
             var countImage = 0;
             if (imagesDB != null && imagesDB.Images!=null)
             {

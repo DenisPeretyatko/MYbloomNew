@@ -1,3 +1,5 @@
+using BloomService.Domain.Repositories.Abstract;
+using BloomService.Domain.Repositories.Concrete;
 using BloomService.Web;
 
 using WebActivatorEx;
