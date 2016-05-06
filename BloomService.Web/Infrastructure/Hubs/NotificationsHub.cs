@@ -16,7 +16,7 @@ namespace BloomService.Web.Infrastructure.Hubs
                 var json = JsonHelper.GetObjects("getNotifications.json");
                 var serializer = new JavaScriptSerializer();
                 list = serializer.ConvertToType<IEnumerable<NotificationModel>>(json).ToList();
-                
+
             }
             else
             {

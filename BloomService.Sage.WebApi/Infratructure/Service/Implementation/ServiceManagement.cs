@@ -5,8 +5,8 @@
     using System.Linq;
     using System.Xml.Serialization;
 
-    using BloomService.Domain.Entities;
-    using BloomService.Domain.Entities.MessageResponse;
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Entities.Concrete.MessageResponse;
     using BloomService.Domain.Exceptions;
 
     using Sage.Messaging;
@@ -34,7 +34,7 @@
 
         public string CatalogPath { get; set; }
 
-        public SageAssignment[] AddAssignments(PropertyDictionary properties)
+        public SageAssignment[] AddAssignments(SagePropertyDictionary properties)
         {
             var propertiesStr = string.Empty;
             foreach (var property in properties)
@@ -47,19 +47,18 @@
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
         }
 
-        //public SageAssignment[] AddAssignments(SageAssignment assignment)
-        //{
-        //    var propertiesStr = string.Empty;
-        //    foreach (var property in properties)
-        //    {
-        //        propertiesStr += string.Format(Messages.Property, property.Key, property.Value);
-        //    }
+        // public SageAssignment[] AddAssignments(SageAssignment assignment)
+        // {
+        // var propertiesStr = string.Empty;
+        // foreach (var property in properties)
+        // {
+        // propertiesStr += string.Format(Messages.Property, property.Key, property.Value);
+        // }
 
-        //    var message = string.Format(Messages.AddAssignment, propertiesStr);
-        //    var result = SendMessage(message);
-        //    return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
-        //}
-
+        // var message = string.Format(Messages.AddAssignment, propertiesStr);
+        // var result = SendMessage(message);
+        // return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
+        // }
         public object Agreements()
         {
             var result = SendMessage(Messages.Agreements);
@@ -103,7 +102,7 @@
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Departments;
         }
 
-        public SageAssignment[] EditAssignments(PropertyDictionary properties)
+        public SageAssignment[] EditAssignments(SagePropertyDictionary properties)
         {
             var propertiesStr = string.Empty;
             foreach (var property in properties)
@@ -251,7 +250,7 @@
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
         }
 
-        public SageWorkOrder[] WorkOrders(PropertyDictionary properties)
+        public SageWorkOrder[] WorkOrders(SagePropertyDictionary properties)
         {
             var propertiesStr = string.Empty;
             foreach (var property in properties)
@@ -265,9 +264,9 @@
         }
     }
 
-    //public SageWorkOrder[] GetWorkOrders()
-    //{
-    //    var result = SendMessage(Messages.WorkOrders);
-    //    return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
-    //}
+    // public SageWorkOrder[] GetWorkOrders()
+    // {
+    // var result = SendMessage(Messages.WorkOrders);
+    // return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
+    // }
 }

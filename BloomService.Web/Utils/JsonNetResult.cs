@@ -1,20 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Web;
-using System.Web.Mvc;
-
-using Newtonsoft.Json;
-
-namespace BloomService.Web.Utils
+﻿namespace BloomService.Web.Utils
 {
+    using System;
+    using System.IO;
+    using System.Web;
+    using System.Web.Mvc;
+
+    using Newtonsoft.Json;
+
     public class JsonNetResult : JsonResult
     {
         public JsonNetResult()
         {
-            Settings = new JsonSerializerSettings
-                           {
-                               ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                           };
+            Settings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
         }
 
         public JsonSerializerSettings Settings { get; private set; }
@@ -22,17 +19,28 @@ namespace BloomService.Web.Utils
         public override void ExecuteResult(ControllerContext context)
         {
             if (context == null)
+            {
                 throw new ArgumentNullException("context");
-            if (JsonRequestBehavior == JsonRequestBehavior.DenyGet && string.Equals(context.HttpContext.Request.HttpMethod, "GET", StringComparison.OrdinalIgnoreCase))
+            }
+
+            if (JsonRequestBehavior == JsonRequestBehavior.DenyGet
+                && string.Equals(context.HttpContext.Request.HttpMethod, "GET", StringComparison.OrdinalIgnoreCase))
+            {
                 throw new InvalidOperationException("JSON GET is not allowed");
+            }
 
             HttpResponseBase response = context.HttpContext.Response;
             response.ContentType = string.IsNullOrEmpty(ContentType) ? "application/json" : ContentType;
 
             if (ContentEncoding != null)
+            {
                 response.ContentEncoding = ContentEncoding;
+            }
+
             if (Data == null)
+            {
                 return;
+            }
 
             var scriptSerializer = JsonSerializer.Create(Settings);
 

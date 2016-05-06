@@ -6,7 +6,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
     $scope.technician = {};
     $scope.events = [];
 
-    var date = new Date();
+	var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
@@ -28,16 +28,16 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
                 }
             });
         } else {
-            // Events
-            $scope.events = [
-                { resourceId: 'Sun', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
-                { resourceId: 'Mon', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
-                { resourceId: 'Tue', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
-                { resourceId: 'Wed', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
-                { resourceId: 'Thu', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
-                { resourceId: 'Fri', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
-                { resourceId: 'Sat', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) }
-            ];
+    // Events
+    $scope.events = [
+        { resourceId: 'Sun', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
+        { resourceId: 'Mon', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
+        { resourceId: 'Tue', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
+        { resourceId: 'Wed', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
+        { resourceId: 'Thu', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
+        { resourceId: 'Fri', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
+        { resourceId: 'Sat', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) }
+    ];
         }
 
         if ($scope.technician.Picture != null) {
@@ -73,9 +73,9 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
     /* config object */
     $scope.uiConfig = {
         calendar: {
-            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-            now: date,
-            defaultView: 'timelineDay',
+        	schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+        	now: date,
+        	defaultView: 'timelineDay',
             height: 280,
             resourceAreaWidth: 250,
             editable: true,
@@ -93,7 +93,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             eventResize: $scope.alertOnResize,
             events: $scope.eventSources,
             resourceLabelText: 'Availability',
-            resources: [
+			resources: [
 				{ id: 'Sun', title: 'Sunday' },
 				{ id: 'Mon', title: 'Monday' },
 				{ id: 'Tue', title: 'Tuesday' },
@@ -132,6 +132,6 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             };
             fr.readAsDataURL(files[0]);
         }
-    };
+    };    
 };
 editTechnicianController.$inject = ["$scope", "$stateParams", "$state", "commonDataService"];

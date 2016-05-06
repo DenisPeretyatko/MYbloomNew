@@ -3,41 +3,36 @@
     using System.Collections.Generic;
     using System.Web.Http;
 
-    using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Services.Abstract;
 
     public class LocationsController : ApiController
     {
-        private readonly ILocationSageApiService locationSageApiService;
+        private readonly ILocationService locationService;
 
-        public LocationsController(ILocationSageApiService locationSageApiService)
+        public LocationsController(ILocationService locationService)
         {
-            this.locationSageApiService = locationSageApiService;
+            this.locationService = locationService;
         }
 
         public IEnumerable<SageLocation> Get()
         {
-            return locationSageApiService.Get();
+            return locationService.Get();
         }
 
         public SageLocation Get(string id)
         {
-            return locationSageApiService.Get(id);
+            return locationService.Get(id);
         }
 
-        public IEnumerable<SageLocation> Post(PropertyDictionary properties)
+        public IEnumerable<SageLocation> Post(SagePropertyDictionary properties)
         {
-            return locationSageApiService.Add(properties);
+            return locationService.Add(properties);
         }
 
-        public IEnumerable<SageLocation> Put(PropertyDictionary properties)
+        public IEnumerable<SageLocation> Put(SagePropertyDictionary properties)
         {
-            return locationSageApiService.Edit(properties);
-        }
-
-        public IEnumerable<SageLocation> Delete(PropertyDictionary properties)
-        {
-            return locationSageApiService.Delete(properties);
+            return locationService.Edit(properties);
         }
     }
 }

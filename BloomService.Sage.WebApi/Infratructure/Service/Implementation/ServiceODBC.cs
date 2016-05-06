@@ -1,13 +1,13 @@
 ﻿namespace Sage.WebApi.Infratructure.Service.Implementation
 {
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Odbc;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Odbc;
 
     using Sage.WebApi.Infratructure.Constants;
 
     public class ServiceOdbc : IServiceOdbc
-    {
+{
         private ClaimsAgent claimsAgent;
 
         private OdbcConnection odbcConnection;
@@ -69,7 +69,7 @@
                 rows.Add(row);
             }
 
-            return rows;
+            return rows; 
         }
 
         public List<Dictionary<string, object>> Trucks()

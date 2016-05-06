@@ -4,13 +4,14 @@
     using System.Web.Http;
 
     using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Services.Abstract;
 
     public class CallTypesController : ApiController
     {
-        private readonly ICallTypeSageApiService callTypeSageApiService;
+        private readonly ICallTypeService callTypeSageApiService;
 
-        public CallTypesController(ICallTypeSageApiService callTypeSageApiService)
+        public CallTypesController(ICallTypeService callTypeSageApiService)
         {
             this.callTypeSageApiService = callTypeSageApiService;
         }
@@ -23,21 +24,6 @@
         public SageCallType Get(string id)
         {
             return callTypeSageApiService.Get(id);
-        }
-
-        public IEnumerable<SageCallType> Post(PropertyDictionary properties)
-        {
-            return callTypeSageApiService.Add(properties);
-        }
-
-        public IEnumerable<SageCallType> Put(PropertyDictionary properties)
-        {
-            return callTypeSageApiService.Edit(properties);
-        }
-
-        public IEnumerable<SageCallType> Delete(PropertyDictionary properties)
-        {
-            return callTypeSageApiService.Edit(properties);
         }
     }
 }

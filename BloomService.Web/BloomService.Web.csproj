@@ -58,19 +58,15 @@
       <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Hangfire.Core, Version=1.5.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.Core.1.5.6\lib\net45\Hangfire.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Hangfire.SqlServer, Version=1.5.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.SqlServer.1.5.6\lib\net45\Hangfire.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MongoDB.Bson, Version=1.11.0.92, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
-      <HintPath>..\packages\mongocsharpdriver.1.11.0\lib\net35\MongoDB.Bson.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MongoDB.Driver, Version=1.11.0.92, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
-      <HintPath>..\packages\mongocsharpdriver.1.11.0\lib\net35\MongoDB.Driver.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MongoDB.Driver.Core, Version=2.2.3.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MongoDB.Driver.Core.2.2.3\lib\net45\MongoDB.Driver.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
       <Private>True</Private>
@@ -80,6 +76,18 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MongoDB.Bson, Version=1.8.3.9, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <HintPath>..\packages\mongocsharpdriver.1.8.3\lib\net35\MongoDB.Bson.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=1.8.3.9, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <HintPath>..\packages\mongocsharpdriver.1.8.3\lib\net35\MongoDB.Driver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.2.3.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.Core.2.2.3\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -107,6 +115,18 @@
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Sage.LS1.Core">
+      <HintPath>..\lib\Sage.LS1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sage.LS1.Messaging">
+      <HintPath>..\lib\Sage.LS1.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="Sage.LS1.Messaging.Interfaces">
+      <HintPath>..\lib\Sage.LS1.Messaging.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Sage.LS1.Messaging.Provider">
+      <HintPath>..\lib\Sage.LS1.Messaging.Provider.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -268,6 +288,7 @@
     <Compile Include="Areas\Api\Controllers\PartsController.cs" />
     <Compile Include="Areas\Api\Controllers\RepairsController.cs" />
     <Compile Include="Areas\Api\Controllers\WorkOrdersController.cs" />
+    <Compile Include="BackgroundJobs\DbSyncronisationJob.cs" />
     <Compile Include="Controllers\BaseComtroller.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\TechnicianController.cs" />
@@ -277,62 +298,104 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\Constants\PaymentMethod.cs" />
+    <Compile Include="Infrastructure\Constants\EstimateRepairHours.cs" />
     <Compile Include="Infrastructure\Constants\RateSheets.cs" />
+    <Compile Include="Infrastructure\Hubs\JsonHelper.cs" />
+    <Compile Include="Managers\Abstract\EntityManagers\IAddableEntityApiManager.cs" />
+    <Compile Include="Managers\Abstract\EntityManagers\IAddableEditableApiManager.cs" />
+    <Compile Include="Managers\Abstract\EntityManagers\IEditableEntityApiManager.cs" />
+    <Compile Include="Managers\Abstract\ICustomerApiManager.cs" />
+    <Compile Include="Managers\Abstract\IAssignmentApiManager.cs" />
+    <Compile Include="Managers\Abstract\EntityManagers\IEntityApiManager.cs" />
+    <Compile Include="Managers\Abstract\ICallTypeApiManager.cs" />
+    <Compile Include="Managers\Abstract\IDepartmentApiManager.cs" />
+    <Compile Include="Managers\Abstract\IEmployeeApiManager.cs" />
+    <Compile Include="Managers\Abstract\IEquipmentApiManager.cs" />
+    <Compile Include="Managers\Abstract\ILocationApiManager.cs" />
+    <Compile Include="Managers\Abstract\IPartApiManager.cs" />
+    <Compile Include="Managers\Abstract\IProblemApiManager.cs" />
+    <Compile Include="Managers\Abstract\IRepairApiManager.cs" />
+    <Compile Include="Managers\Abstract\IWorkOrderApiManager.cs" />
+    <Compile Include="Managers\Concrete\AssignmentApiManager.cs" />
+    <Compile Include="Managers\Concrete\CallTypeApiManager.cs" />
+    <Compile Include="Managers\Concrete\CustomerApiManager.cs" />
+    <Compile Include="Managers\Concrete\DepartmentApiManager.cs" />
+    <Compile Include="Managers\Concrete\EmployeeApiManager.cs" />
+    <Compile Include="Managers\Concrete\EntityManagers\AddableEditableEntityApiManager.cs" />
+    <Compile Include="Managers\Concrete\EntityManagers\AddableEntityApiManager.cs" />
+    <Compile Include="Managers\Concrete\EntityManagers\EditableEntityApiManager.cs" />
+    <Compile Include="Managers\Concrete\EquipmentApiManager.cs" />
+    <Compile Include="Managers\Concrete\LocationApiManager.cs" />
+    <Compile Include="Managers\Concrete\PartApiManager.cs" />
+    <Compile Include="Managers\Concrete\ProblemApiManager.cs" />
+    <Compile Include="Managers\Concrete\RepairApiManager.cs" />
+    <Compile Include="Managers\Concrete\WorkOrderApiManager.cs" />
+    <Compile Include="Infrastructure\Constants\PaymentMethod.cs" />
     <Compile Include="Models\CallTypeModel.cs" />
     <Compile Include="Models\AssignmentModel.cs" />
     <Compile Include="Models\EntityModel.cs" />
+    <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\LocationModel.cs" />
     <Compile Include="Models\ScheduleViewModel.cs" />
     <Compile Include="Models\LookupsModel.cs" />
     <Compile Include="Models\EquipmentModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
-    <Compile Include="Models\RepairModel.cs" />
     <Compile Include="Models\ProblemModel.cs" />
-    <Compile Include="Models\CustomerModel.cs" />
+    <Compile Include="Services\Abstract\EntityServices\IAddableEditableEntityService.cs" />
+    <Compile Include="Services\Abstract\EntityServices\IAddableEntityService.cs" />
+    <Compile Include="Services\Abstract\IAssignmentService.cs" />
+    <Compile Include="Services\Abstract\ICallTypeService.cs" />
+    <Compile Include="Services\Abstract\ICustomerService.cs" />
+    <Compile Include="Services\Abstract\IDepartmentService.cs" />
+    <Compile Include="Services\Abstract\EntityServices\IEditableEntityService.cs" />
+    <Compile Include="Services\Abstract\IEmployeeService.cs" />
+    <Compile Include="Services\Abstract\IEquipmentService.cs" />
+    <Compile Include="Services\Abstract\ILocationService.cs" />
+    <Compile Include="Services\Abstract\IPartService.cs" />
+    <Compile Include="Services\Abstract\IProblemService.cs" />
+    <Compile Include="Services\Abstract\IRepairService.cs" />
+    <Compile Include="Services\Abstract\EntityServices\IEntityService.cs" />
+    <Compile Include="Services\Abstract\IWorkOrderService.cs" />
+    <Compile Include="Services\Concrete\AssignmentService.cs" />
+    <Compile Include="Services\Concrete\CallTypeService.cs" />
+    <Compile Include="Services\Concrete\CustomerService.cs" />
+    <Compile Include="Services\Concrete\DepartmentService.cs" />
+    <Compile Include="Services\Concrete\EmployeeService.cs" />
+    <Compile Include="Services\Concrete\EntityServices\AddableEditableEntityService.cs" />
+    <Compile Include="Services\Concrete\EntityServices\AddableEntityService.cs" />
+    <Compile Include="Services\Concrete\EntityServices\EditableEntityService.cs" />
+    <Compile Include="Services\Concrete\EquipmentService.cs" />
+    <Compile Include="Services\Concrete\LocationService.cs" />
+    <Compile Include="Services\Concrete\PartService.cs" />
+    <Compile Include="Services\Concrete\ProblemService.cs" />
+    <Compile Include="Services\Concrete\RepairService.cs" />
+    <Compile Include="Managers\Concrete\EntityManagers\EntityApiManager.cs" />
+    <Compile Include="Services\Concrete\EntityServices\EntityService.cs" />
+    <Compile Include="Services\Concrete\WorkOrderService.cs" />
+    <Compile Include="Models\RepairModel.cs" />
     <Compile Include="Models\Request\ImageRequest.cs" />
     <Compile Include="Models\TechnicianModel.cs" />
     <Compile Include="Models\WorkOrderModel.cs" />
     <Compile Include="Models\AssignmentViewModel.cs" />
     <Compile Include="Services\Abstract\IAPIMobileService.cs" />
-    <Compile Include="Services\Abstract\IAssignmentSageApiService.cs" />
-    <Compile Include="Services\Abstract\ICallTypeSageApiService.cs" />
-    <Compile Include="Services\Abstract\ICustomerSageApiService.cs" />
-    <Compile Include="Services\Abstract\IDepartmentSageApiService.cs" />
-    <Compile Include="Services\Abstract\IEmployeeSageApiService.cs" />
-    <Compile Include="Services\Abstract\IEquipmentSageApiService.cs" />
     <Compile Include="Services\Abstract\IImageService.cs" />
-    <Compile Include="Services\Abstract\ILocationSageApiService.cs" />
-    <Compile Include="Services\Abstract\IPartSageApiService.cs" />
-    <Compile Include="Services\Abstract\IProblemSageApiService.cs" />
-    <Compile Include="Services\Abstract\IRepairSageApiService.cs" />
     <Compile Include="Services\Abstract\ISageApiService.cs" />
     <Compile Include="Services\Abstract\IUserService.cs" />
-    <Compile Include="Services\Abstract\IWorkOrderSageApiService.cs" />
     <Compile Include="Infrastructure\Hubs\NotificationsHub.cs" />
     <Compile Include="Infrastructure\Hubs\LocationHub.cs" />
-    <Compile Include="Infrastructure\JsonHelper.cs" />
     <Compile Include="Services\Concrete\APIMobileService.cs" />
-    <Compile Include="Services\Concrete\AssignmentSageApiService.cs" />
-    <Compile Include="Services\Concrete\CallTypeSageApiService.cs" />
-    <Compile Include="Services\Concrete\CustomerSageApiService.cs" />
-    <Compile Include="Services\Concrete\DepartmentSageApiService.cs" />
-    <Compile Include="Services\Concrete\EmployeeSageApiService.cs" />
-    <Compile Include="Services\Concrete\EquipmentSageApiService.cs" />
     <Compile Include="Services\Concrete\ImageService.cs" />
-    <Compile Include="Services\Concrete\LocationSageApiService.cs" />
-    <Compile Include="Services\Concrete\PartSageApiService.cs" />
-    <Compile Include="Services\Concrete\ProblemSageApiService.cs" />
-    <Compile Include="Services\Concrete\RepairSageApiService.cs" />
-    <Compile Include="Services\Concrete\SageApiService.cs" />
     <Compile Include="Services\Concrete\UserService.cs" />
-    <Compile Include="Services\Concrete\WorkOrderSageApiService.cs" />
     <Compile Include="Models\NotificationModel.cs" />
     <Compile Include="Models\LocationJsonModel.cs" />
     <Compile Include="Models\TechnicianViewModel.cs" />
     <Compile Include="Models\WorkorderViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utils\DynamicJsonDeserializer.cs" />
+    <Compile Include="Utils\SageAuthorisationToken.cs" />
+    <Compile Include="Utils\IToken.cs" />
+    <Compile Include="Utils\SageAuthUtility.cs" />
     <Compile Include="Utils\BloomServiceSession.cs" />
     <Compile Include="Utils\ISession.cs" />
     <Compile Include="Utils\JsonNetResult.cs" />
@@ -786,6 +849,11 @@
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

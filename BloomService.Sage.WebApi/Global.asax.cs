@@ -6,6 +6,7 @@ using System.Web.Routing;
 namespace Sage.WebApi
 {
     using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Concrete;
 
     public class WebApiApplication : System.Web.HttpApplication
     {
@@ -17,7 +18,7 @@ namespace Sage.WebApi
             //RouteConfig.RegisterRoutes(RouteTable.Routes);
             AttributeRoutingConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            ModelBinders.Binders.Add(typeof(PropertyDictionary), new ProportiesModelBinder());
+            ModelBinders.Binders.Add(typeof(SagePropertyDictionary), new ProportiesModelBinder());
             IoCConfig.Register();
         }
     }

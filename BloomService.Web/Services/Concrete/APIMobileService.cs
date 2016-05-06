@@ -1,63 +1,76 @@
-﻿using BloomService.Domain.Entities;
-using BloomService.Domain.UnitOfWork;
-using BloomService.Web.Services.Abstract;
-using System.Collections;
+﻿namespace BloomService.Web.Services.Concrete
+{
 using System.Collections.Generic;
 using System.Linq;
+    using System.Web.Hosting;
 
-namespace BloomService.Web.Services.Concrete
-{
-    public class APIMobileService : IAPIMobileService
-    {
-        IWorkOrderSageApiService _workOrderSageApiService;
-        IUserService _userService;
-        IEmployeeSageApiService _employeeSageApiService;
-        IImageService _imageService;
-        IUnitOfWork _unitOfWork;
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.UnitOfWork;
+    using BloomService.Web.Services.Abstract;
 
-        public APIMobileService(IWorkOrderSageApiService workOrderSageApiService, IUserService userService, IEmployeeSageApiService employeeSageApiService, IImageService imageService, IUnitOfWork unitOfWork)
+    public class ApiMobileService : IApiMobileService
         {
-            _imageService = imageService;
-            _workOrderSageApiService = workOrderSageApiService;
-            _userService = userService;
-            _employeeSageApiService = employeeSageApiService;
-            _unitOfWork = unitOfWork;
-        }
+        private readonly IEmployeeService employeeService;
 
-        public IEnumerable<SageWorkOrder> GetWorkOreders()
+        private readonly IImageService imageService;
+
+        private readonly IUnitOfWork unitOfWork;
+
+        private readonly IUserService userService;
+
+        private readonly IWorkOrderService workOrderService;
+
+        public ApiMobileService(
+            IWorkOrderService workOrderService, 
+            IUserService userService, 
+            IEmployeeService employeeService, 
+            IImageService imageService, 
+            IUnitOfWork unitOfWork)
         {
-            var userId = _userService.GetId();
-            var workOrders = _workOrderSageApiService.Get();
-            return workOrders.Where(x=>x.Employee == userId);
+            this.imageService = imageService;
+            this.workOrderService = workOrderService;
+            this.userService = userService;
+            this.employeeService = employeeService;
+            this.unitOfWork = unitOfWork;
         }
 
         public bool AddImage(IEnumerable<string> images, string idWorkOrder)
         {
-            var pathToImage = System.Web.Hosting.HostingEnvironment.MapPath("/Images/");
-            var workOrder = _workOrderSageApiService.Get(idWorkOrder);
+            var pathToImage = HostingEnvironment.MapPath("/Images/");
+            var workOrder = workOrderService.Get(idWorkOrder);
             if (workOrder == null)
+            {
                 return false;
-            var imagesDB = _unitOfWork.GetEntities<ImageWorkOrder>().GetById(idWorkOrder);
+            }
+
+            var imagesDB = unitOfWork.GetEntities<SageImageWorkOrder>().Get(idWorkOrder);
             var countImage = 0;
-            if (imagesDB != null && imagesDB.Images!=null)
+            if (imagesDB != null && imagesDB.Images != null)
             {
                 countImage = imagesDB.Images.Count();
             }
             else
             {
-                imagesDB = new ImageWorkOrder();
-                imagesDB.Images = new List<string>();
-                imagesDB.WorkOrder = idWorkOrder;
+                imagesDB = new SageImageWorkOrder { Images = new List<string>(), WorkOrder = idWorkOrder };
             }
+
             foreach (var image in images)
             {
-                var name = idWorkOrder.ToString() + countImage;
-                var fileName = _imageService.SaveFile(image, pathToImage, name);
+                var name = idWorkOrder + countImage;
+                var fileName = imageService.SaveFile(image, pathToImage, name);
                 imagesDB.Images.Add(fileName);
                 countImage++;
             }
-            _unitOfWork.GetEntities<ImageWorkOrder>().Update(imagesDB);
+
+            unitOfWork.GetEntities<SageImageWorkOrder>().Update(imagesDB);
             return true;
+        }
+
+        public IEnumerable<SageWorkOrder> GetWorkOreders()
+        {
+            var userId = userService.GetId();
+            var workOrders = workOrderService.Get();
+            return workOrders.Where(x => x.Employee == userId);
         }
     }
 }

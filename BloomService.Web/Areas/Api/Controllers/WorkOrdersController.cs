@@ -3,41 +3,36 @@
     using System.Collections.Generic;
     using System.Web.Http;
 
-    using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Services.Abstract;
 
     public class WorkOrdersController : ApiController
     {
-        private readonly IWorkOrderSageApiService workOrderSageApiService;
+        private readonly IWorkOrderService workOrderService;
 
-        public WorkOrdersController(IWorkOrderSageApiService workOrderSageApiService)
+        public WorkOrdersController(IWorkOrderService workOrderService)
         {
-            this.workOrderSageApiService = workOrderSageApiService;
+            this.workOrderService = workOrderService;
         }
 
         public IEnumerable<SageWorkOrder> Get()
         {
-            return workOrderSageApiService.Get();
+            return workOrderService.Get();
         }
 
         public SageWorkOrder Get(string id)
         {
-            return workOrderSageApiService.Get(id);
+            return workOrderService.Get(id);
         }
 
-        public IEnumerable<SageWorkOrder> Post(PropertyDictionary properties)
+        public IEnumerable<SageWorkOrder> Post(SagePropertyDictionary properties)
         {
-            return workOrderSageApiService.Add(properties);
+            return workOrderService.Add(properties);
         }
 
-        public IEnumerable<SageWorkOrder> Put(PropertyDictionary properties)
+        public IEnumerable<SageWorkOrder> Put(SagePropertyDictionary properties)
         {
-            return workOrderSageApiService.Edit(properties);
-        }
-
-        public IEnumerable<SageWorkOrder> Delete(PropertyDictionary properties)
-        {
-            return workOrderSageApiService.Delete(properties);
+            return workOrderService.Edit(properties);
         }
     }
 }

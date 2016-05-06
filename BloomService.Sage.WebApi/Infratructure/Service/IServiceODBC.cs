@@ -1,9 +1,9 @@
 ﻿namespace Sage.WebApi.Infratructure.Service
 {
-    using System.Collections.Generic;
+using System.Collections.Generic;
 
     public interface IServiceOdbc
-    {
+{
         void Connection(string name, string password);
 
         void ConnectionClose();

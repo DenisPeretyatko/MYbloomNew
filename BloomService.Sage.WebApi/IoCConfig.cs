@@ -1,12 +1,13 @@
-﻿using Sage.WebApi.Infratructure.Service;
-using Sage.WebApi.Infratructure.Service.Implementation;
+﻿namespace Sage.WebApi
+{
 using System.Web.Http;
 using System.Web.Mvc;
-using TinyIoC;
 
-namespace Sage.WebApi
-{
     using Sage.WebApi.Infratructure;
+    using Sage.WebApi.Infratructure.Service;
+    using Sage.WebApi.Infratructure.Service.Implementation;
+
+using TinyIoC;
 
     public static class IoCConfig
     {

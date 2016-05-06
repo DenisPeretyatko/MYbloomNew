@@ -4,8 +4,8 @@
 
 var createWorkorderController = function ($scope, $stateParams, $state, state, commonDataService) {
     $scope.obj = {}
-    $scope.customer = '';
-    $scope.location = '';
+	$scope.customer = '';
+	$scope.location = '';
 	$scope.calltype = '';
 	$scope.obj.calldate = '';
 	$scope.problem = '';

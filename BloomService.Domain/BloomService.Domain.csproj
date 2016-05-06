@@ -31,13 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MongoDB.Bson, Version=1.8.3.9, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+    <Reference Include="MongoDB.Bson">
       <HintPath>..\packages\mongocsharpdriver.1.8.3\lib\net35\MongoDB.Bson.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="MongoDB.Driver, Version=1.8.3.9, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+    <Reference Include="MongoDB.Driver">
       <HintPath>..\packages\mongocsharpdriver.1.8.3\lib\net35\MongoDB.Driver.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="MongoDB.Driver.Core, Version=2.2.3.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Driver.Core.2.2.3\lib\net45\MongoDB.Driver.Core.dll</HintPath>
@@ -45,6 +43,10 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -62,36 +64,56 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\CollectionNameAttribute.cs" />
-    <Compile Include="Entities\Assignment.cs" />
-    <Compile Include="Entities\BaseEntity.cs" />
-    <Compile Include="Entities\CallType.cs" />
-    <Compile Include="Entities\Customer.cs" />
-    <Compile Include="Entities\Departments.cs" />
-    <Compile Include="Entities\Employee.cs" />
-    <Compile Include="Entities\Equipment.cs" />
-    <Compile Include="Entities\IEntity.cs" />
-    <Compile Include="Entities\ImageWorkOrder.cs" />
-    <Compile Include="Entities\Locations.cs" />
-    <Compile Include="Entities\MessageResponse\Response.cs" />
-    <Compile Include="Entities\MessageResponse\ResponseError.cs" />
-    <Compile Include="Entities\MessageResponse\ResponseReturnParams.cs" />
-    <Compile Include="Entities\MessageResponse\ResponseReturnParamsReturnParam.cs" />
-    <Compile Include="Entities\MessageResponse\MessageResponses.cs" />
-    <Compile Include="Entities\Parts.cs" />
-    <Compile Include="Entities\Problem.cs" />
-    <Compile Include="Entities\PropertyDictionary.cs" />
-    <Compile Include="Entities\Repair.cs" />
-    <Compile Include="Entities\SageEntity.cs" />
-    <Compile Include="Entities\AvailableDay.cs" />
-    <Compile Include="Entities\TimeStamp.cs" />
-    <Compile Include="Entities\WorkOrder.cs" />
-    <Compile Include="Exceptions\ResponseException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Attributes\CollectionNameAttribute.cs" />
+    <Compile Include="Entities\Concrete\SageAvailableDay.cs" />
+    <Compile Include="Entities\Concrete\SageAssignment.cs" />
+    <Compile Include="Entities\Concrete\SageCallType.cs" />
+    <Compile Include="Entities\Concrete\SageCustomer.cs" />
+    <Compile Include="Entities\Abstract\IEntity.cs" />
+    <Compile Include="Entities\Concrete\SageDepartment.cs" />
+    <Compile Include="Entities\Concrete\SageEmployee.cs" />
+    <Compile Include="Entities\Concrete\SageEquipment.cs" />
+    <Compile Include="Entities\Concrete\SageImageWorkOrder.cs" />
+    <Compile Include="Entities\Concrete\SageLocations.cs" />
+    <Compile Include="Entities\Concrete\MessageResponse\MessageResponses.cs" />
+    <Compile Include="Entities\Concrete\MessageResponse\Response.cs" />
+    <Compile Include="Entities\Concrete\MessageResponse\ResponseError.cs" />
+    <Compile Include="Entities\Concrete\MessageResponse\ResponseReturnParams.cs" />
+    <Compile Include="Entities\Concrete\MessageResponse\ResponseReturnParamsReturnParam.cs" />
+    <Compile Include="Entities\Concrete\SageParts.cs" />
+    <Compile Include="Entities\Concrete\SageProblem.cs" />
+    <Compile Include="Entities\Concrete\SagePropertyDictionary.cs" />
+    <Compile Include="Entities\Concrete\SageRepair.cs" />
+    <Compile Include="Entities\Concrete\SageEntity.cs" />
+    <Compile Include="Entities\Concrete\TimeStamp.cs" />
+    <Compile Include="Entities\Concrete\SageWorkOrder.cs" />
+    <Compile Include="Exceptions\ResponseException.cs" />
+    <Compile Include="Repositories\Abstract\IAssignmentRepository.cs" />
+    <Compile Include="Repositories\Abstract\ILocationRepository.cs" />
     <Compile Include="Repositories\Abstract\IRepository.cs" />
     <Compile Include="Repositories\Abstract\IWorkOrderRepository.cs" />
-    <Compile Include="Repositories\Concrete\MongoRepository.cs" />
+    <Compile Include="Repositories\Concrete\AssignmentRepository.cs" />
+    <Compile Include="Repositories\Concrete\CallTypeRepository.cs" />
+    <Compile Include="Repositories\Concrete\CustomerRepository.cs" />
+    <Compile Include="Repositories\Concrete\DepartmentRepository.cs" />
+    <Compile Include="Repositories\Concrete\EmployeeRepository.cs" />
+    <Compile Include="Repositories\Abstract\IDepartmentRepository.cs" />
+    <Compile Include="Repositories\Abstract\IEmployeeRepository.cs" />
+    <Compile Include="Repositories\Abstract\IRepairRepository.cs" />
+    <Compile Include="Repositories\Abstract\ICallTypeRepository.cs" />
+    <Compile Include="Repositories\Abstract\IPartRepository.cs" />
+    <Compile Include="Repositories\Abstract\ICustomerRepository.cs" />
+    <Compile Include="Repositories\Concrete\EquipmentRepository.cs" />
+    <Compile Include="Repositories\Abstract\IEquipmentRepository.cs" />
+    <Compile Include="Repositories\Concrete\LocationRepository.cs" />
+    <Compile Include="Repositories\Concrete\EntityRepository.cs" />
+    <Compile Include="Repositories\Concrete\PartRepository.cs" />
+    <Compile Include="Repositories\Concrete\ProblemRepository.cs" />
+    <Compile Include="Repositories\Concrete\RepairRepository.cs" />
+    <Compile Include="Repositories\Abstract\IProblemRepository.cs" />
     <Compile Include="Repositories\Concrete\WorkOrderRepository.cs" />
+    <Compile Include="Repositories\MongoDbInitializer.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="UnitOfWork\MongoDbUnitOfWork.cs" />
   </ItemGroup>

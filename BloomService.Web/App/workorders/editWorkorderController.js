@@ -79,13 +79,13 @@ var editWorkorderController = function ($scope, $stateParams, $state, commonData
 	        if (response.data == 'success')
 	            $state.go('manager.workorder.list');
 	    });
-	};
+    };
 
 	commonDataService.getWorkorder($stateParams.id).then(function (response) {
 	    return $scope.editableWorkOrder = response.data;
 	});
     
     //$scope.locations = ["1",  "2", "3", "4"];
-    
+
 };
 editWorkorderController.$inject = ["$scope", "$stateParams", "$state", "commonDataService", "state"];

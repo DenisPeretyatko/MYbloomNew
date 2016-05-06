@@ -1,8 +1,12 @@
-﻿using BloomService.Domain.Entities;
-using BloomService.Web.Models;
-
-namespace BloomService.Web
+﻿namespace BloomService.Web
 {
+    using AutoMapper;
+
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Web.Models;
+
+    using SageAvailableDay = BloomService.Domain.Entities.Concrete.SageAvailableDay;
+
     public static class AutoMapperConfig
 {
     public static void RegisterMappings()
@@ -17,7 +21,7 @@ namespace BloomService.Web
         AutoMapper.Mapper.CreateMap<SageAssignment, AssignmentModel>();
         AutoMapper.Mapper.CreateMap<SageWorkOrder, WorkorderViewModel>();
 
-        AutoMapper.Mapper.CreateMap<Models.AvailableDay, Domain.Entities.AvailableDay>().ReverseMap(); ;
+        AutoMapper.Mapper.CreateMap<Models.AvailableDay, SageAvailableDay>().ReverseMap(); ;
     }
 }
 }

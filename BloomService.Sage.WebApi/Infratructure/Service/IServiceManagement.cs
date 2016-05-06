@@ -2,13 +2,13 @@
 {
     using System.Collections.Generic;
 
-    using BloomService.Domain.Entities;
+    using BloomService.Domain.Entities.Concrete;
 
     public interface IServiceManagement
     {
         string CatalogPath { get; set; }
 
-        SageAssignment[] AddAssignments(PropertyDictionary properties);
+        SageAssignment[] AddAssignments(SagePropertyDictionary properties);
 
         object Agreements();
 
@@ -22,7 +22,7 @@
 
         SageDepartment[] Departments();
 
-        SageAssignment[] EditAssignments(PropertyDictionary properties);
+        SageAssignment[] EditAssignments(SagePropertyDictionary properties);
 
         SageEmployee[] Employees();
 
@@ -46,6 +46,6 @@
 
         SageWorkOrder[] WorkOrders(string number);
 
-        SageWorkOrder[] WorkOrders(PropertyDictionary properties);
+        SageWorkOrder[] WorkOrders(SagePropertyDictionary properties);
     }
 }

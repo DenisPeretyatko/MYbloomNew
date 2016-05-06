@@ -1,19 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.OAuth;
-using System.Threading;
-using Sage.Messaging;
-using Sage.WebApi.Infratructure.Constants;
-using System.Configuration;
-
-namespace Sage.WebApi.Providers
+﻿namespace Sage.WebApi.Providers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Security.Claims;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNet.Identity;
+    using Microsoft.Owin.Security;
+    using Microsoft.Owin.Security.OAuth;
+
+    using Sage.Messaging;
+    using Sage.WebApi.Infratructure.Constants;
+
     public static class ExtendedClaimsProvider
     {
+        public static Claim CreateClaim(string type, string value)
+        {
+            return new Claim(type, value, ClaimValueTypes.String);
+        }
+
         public static IEnumerable<Claim> GetClaims(string name, string pass)
         {
             List<Claim> claims = new List<Claim>();
@@ -21,19 +28,15 @@ namespace Sage.WebApi.Providers
             claims.Add(new Claim(ClaimTypes.Surname, pass));
             return claims;
         }
-
-        public static Claim CreateClaim(string type, string value)
-        {
-            return new Claim(type, value, ClaimValueTypes.String);
-        }
-
     }
 
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
         private readonly string _publicClientId;
 
-        public ApplicationOAuthProvider() { }
+        public ApplicationOAuthProvider()
+        {
+        }
 
         public ApplicationOAuthProvider(string publicClientId)
         {
@@ -43,6 +46,12 @@ namespace Sage.WebApi.Providers
             }
 
             _publicClientId = publicClientId;
+        }
+
+        public static AuthenticationProperties CreateProperties(string userName)
+        {
+            IDictionary<string, string> data = new Dictionary<string, string> { { "userName", userName } };
+            return new AuthenticationProperties(data);
         }
 
         public bool CheckUser(string name, string password, out string resXml)
@@ -59,14 +68,18 @@ namespace Sage.WebApi.Providers
             var result = mb.SendMessage(mtd.Xml, xmlString);
             resXml = result;
             if (result.Contains("Status='failed'"))
+            {
                 return false;
-            return true;
+            }
 
+            return true;
         }
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            var identity = new ClaimsIdentity(ExtendedClaimsProvider.GetClaims(context.UserName, context.Password), DefaultAuthenticationTypes.ExternalCookie);
+            var identity = new ClaimsIdentity(
+                ExtendedClaimsProvider.GetClaims(context.UserName, context.Password), 
+                DefaultAuthenticationTypes.ExternalCookie);
             var ctx = context.OwinContext;
             string resXml;
             if (!CheckUser(context.UserName, context.Password, out resXml))
@@ -74,6 +87,7 @@ namespace Sage.WebApi.Providers
                 context.SetError(resXml);
                 return;
             }
+
             var authenticationManager = ctx.Authentication;
             var claimsPrincipal = new ClaimsPrincipal(identity);
             Thread.CurrentPrincipal = claimsPrincipal;
@@ -115,15 +129,6 @@ namespace Sage.WebApi.Providers
             }
 
             return Task.FromResult<object>(null);
-        }
-
-        public static AuthenticationProperties CreateProperties(string userName)
-        {
-            IDictionary<string, string> data = new Dictionary<string, string>
-            {
-                { "userName", userName }
-            };
-            return new AuthenticationProperties(data);
         }
     }
 }
