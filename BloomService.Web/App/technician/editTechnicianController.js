@@ -28,16 +28,15 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
                 }
             });
         } else {
-    // Events
-    $scope.events = [
-        { resourceId: 'Sun', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
-        { resourceId: 'Mon', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
-        { resourceId: 'Tue', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
-        { resourceId: 'Wed', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
-        { resourceId: 'Thu', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
-        { resourceId: 'Fri', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) },
-        { resourceId: 'Sat', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) }
-    ];
+            // Events
+            $scope.events.push({ resourceId: 'Sun', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ resourceId: 'Mon', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ resourceId: 'Tue', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ resourceId: 'Wed', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ resourceId: 'Thu', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ resourceId: 'Fri', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ resourceId: 'Sat', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+
         }
 
         if ($scope.technician.Picture != null) {
@@ -110,6 +109,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
     $scope.eventSources = [$scope.events];    
 
     $scope.saveTechnician = function () {
+        $scope.file = $("#avatar").attr('src');
         var technician = {
             Id: $stateParams.id,
             AvailableDays: $scope.events,
