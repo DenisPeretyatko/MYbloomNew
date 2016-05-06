@@ -8,31 +8,31 @@
 
     public class WorkOrdersController : ApiController
     {
-        private readonly IWorkOrderService workOrderSageApiService;
+        private readonly IWorkOrderService workOrderService;
 
-        public WorkOrdersController(IWorkOrderService workOrderSageApiService)
+        public WorkOrdersController(IWorkOrderService workOrderService)
         {
-            this.workOrderSageApiService = workOrderSageApiService;
+            this.workOrderService = workOrderService;
         }
 
         public IEnumerable<SageWorkOrder> Get()
         {
-            return workOrderSageApiService.Get();
+            return workOrderService.Get();
         }
 
         public SageWorkOrder Get(string id)
         {
-            return workOrderSageApiService.Get(id);
+            return workOrderService.Get(id);
         }
 
         public IEnumerable<SageWorkOrder> Post(SagePropertyDictionary properties)
         {
-            return workOrderSageApiService.Add(properties);
+            return workOrderService.Add(properties);
         }
 
         public IEnumerable<SageWorkOrder> Put(SagePropertyDictionary properties)
         {
-            return workOrderSageApiService.Edit(properties);
+            return workOrderService.Edit(properties);
         }
     }
 }

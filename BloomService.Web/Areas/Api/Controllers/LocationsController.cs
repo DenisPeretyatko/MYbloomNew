@@ -8,31 +8,31 @@
 
     public class LocationsController : ApiController
     {
-        private readonly ILocationService locationSageApiService;
+        private readonly ILocationService locationService;
 
-        public LocationsController(ILocationService locationSageApiService)
+        public LocationsController(ILocationService locationService)
         {
-            this.locationSageApiService = locationSageApiService;
+            this.locationService = locationService;
         }
 
         public IEnumerable<SageLocation> Get()
         {
-            return locationSageApiService.Get();
+            return locationService.Get();
         }
 
         public SageLocation Get(string id)
         {
-            return locationSageApiService.Get(id);
+            return locationService.Get(id);
         }
 
         public IEnumerable<SageLocation> Post(SagePropertyDictionary properties)
         {
-            return locationSageApiService.Add(properties);
+            return locationService.Add(properties);
         }
 
         public IEnumerable<SageLocation> Put(SagePropertyDictionary properties)
         {
-            return locationSageApiService.Edit(properties);
+            return locationService.Edit(properties);
         }
     }
 }

@@ -9,21 +9,21 @@
 
     public class PartsController : ApiController
     {
-        private readonly IPartService partSageApiService;
+        private readonly IPartService partService;
 
-        public PartsController(IPartService partSageApiService)
+        public PartsController(IPartService partService)
         {
-            this.partSageApiService = partSageApiService;
+            this.partService = partService;
         }
 
         public IEnumerable<SagePart> Get()
         {
-            return partSageApiService.Get();
+            return partService.Get();
         }
 
         public SagePart Get(string id)
         {
-            return partSageApiService.Get(id);
+            return partService.Get(id);
         }
     }
 }

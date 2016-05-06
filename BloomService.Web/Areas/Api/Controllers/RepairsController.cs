@@ -9,21 +9,21 @@
 
     public class RepairsController : ApiController
     {
-        private readonly IRepairService repairSageApiService;
+        private readonly IRepairService repairService;
 
-        public RepairsController(IRepairService repairSageApiService)
+        public RepairsController(IRepairService repairService)
         {
-            this.repairSageApiService = repairSageApiService;
+            this.repairService = repairService;
         }
 
         public IEnumerable<SageRepair> Get()
         {
-            return repairSageApiService.Get();
+            return repairService.Get();
         }
 
         public SageRepair Get(string id)
         {
-            return repairSageApiService.Get(id);
+            return repairService.Get(id);
         }
     }
 }
