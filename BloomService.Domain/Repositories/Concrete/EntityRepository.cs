@@ -1,7 +1,6 @@
 ﻿namespace BloomService.Domain.Repositories.Concrete
 {
     using System;
-    using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
     using System.Linq.Expressions;
@@ -21,11 +20,8 @@
 
         public EntityRepository(string collectionName)
         {
-            //Connection = "mongodb://localhost/BloomServiceCacheStorage";
-
             var mongoDbConnection = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString;
-
-            // Connection = ConfigurationManager.AppSettings["MongoServerSettings"];
+            var mongoDbName = ConfigurationManager.AppSettings["MongoDbName"];
 
             var client = new MongoClient(mongoDbConnection);
             var server = client.GetServer();
@@ -35,12 +31,26 @@
 
         protected string Connection { get; set; }
 
+        public bool Add(TEntity entity)
+        {
+            if (entity.Id == null)
+            {
+                entity.Id = ObjectId.GenerateNewId().ToString();
+            }
+            else if (Get(entity.Id) != null)
+            {
+                collection.Remove(Query.EQ("_id", entity.Id));
+            }
+
+            return collection.Insert(entity).HasLastErrorMessage;
+        }
+
         public bool Delete(TEntity entity)
         {
             return collection.Remove(Query.EQ("_id", entity.Id)).DocumentsAffected > 0;
         }
 
-        public IEnumerable<TEntity> Get()
+        public IQueryable<TEntity> Get()
         {
             return collection.AsQueryable();
         }
@@ -50,30 +60,9 @@
             return collection.FindOneByIdAs<TEntity>(id);
         }
 
-        public bool Insert(TEntity entity)
+        public IQueryable<TEntity> SearchFor(Expression<Func<TEntity, bool>> predicate)
         {
-            if (entity.Id == null)
-            {
-                entity.Id = ObjectId.GenerateNewId().ToString();
-            }
-
-            return collection.Insert(entity).HasLastErrorMessage;
-        }
-
-        public IEnumerable<TEntity> SearchFor(Expression<Func<TEntity, bool>> predicate)
-        {
-            return collection.AsQueryable().Where(predicate.Compile()).ToList();
-        }
-
-        public bool Update(TEntity entity)
-        {
-            if (Get(entity.Id) != null)
-            {
-                collection.Remove(Query.EQ("_id", entity.Id));
-            }
-
-            collection.Insert(entity);
-            return true;
+            return collection.AsQueryable().Where(predicate.Compile()).AsQueryable();
         }
     }
 }

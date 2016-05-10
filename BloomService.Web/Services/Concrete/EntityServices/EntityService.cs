@@ -36,7 +36,7 @@
 
             foreach (var entity in entities)
             {
-                unitOfWork.GetEntities<TEntity>().Insert(entity);
+                unitOfWork.GetEntities<TEntity>().Add(entity);
             }
 
             return entities;
@@ -53,7 +53,7 @@
 
             var entity = sageApiManager.Get(EndPoint, id);
 
-            unitOfWork.GetEntities<TEntity>().Insert(entity);
+            unitOfWork.GetEntities<TEntity>().Add(entity);
 
             return entity;
         }

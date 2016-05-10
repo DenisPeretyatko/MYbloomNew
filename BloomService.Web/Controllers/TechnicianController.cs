@@ -1,57 +1,62 @@
-﻿using System.Web.Mvc;
-
-using AttributeRouting.Web.Mvc;
-
-using BloomService.Domain.UnitOfWork;
-using BloomService.Web.Models;
-using BloomService.Web.Services.Abstract;
-
-namespace BloomService.Web.Controllers
+﻿namespace BloomService.Web.Controllers
 {
     using System.Linq;
+    using System.Web.Mvc;
+
+    using AttributeRouting.Web.Mvc;
+
+    using AutoMapper;
 
     using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.UnitOfWork;
+    using BloomService.Web.Models;
+    using BloomService.Web.Services.Abstract;
 
     public class TechnicianController : BaseController
     {
-        private readonly IEmployeeService _employeeService;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IImageService _imageService;
+        private readonly IEmployeeService employeeService;
 
-        public TechnicianController(IEmployeeService employeeService, IImageService imageService, IUnitOfWork unitOfWork)
-        {
-            this._employeeService = employeeService;
-            this._imageService = imageService;
-            this._unitOfWork = unitOfWork;
-        }
+        private readonly IImageService imageService;
 
-        [GET("Technician")]
-        public ActionResult GetTechnicians()
+        private readonly IUnitOfWork unitOfWork;
+
+        public TechnicianController(
+            IEmployeeService employeeService, 
+            IImageService imageService, 
+            IUnitOfWork unitOfWork)
         {
-            var list = this._employeeService.Get();
-            return Json(list.OrderBy(x=> x.Employee), JsonRequestBehavior.AllowGet);
+            this.employeeService = employeeService;
+            this.imageService = imageService;
+            this.unitOfWork = unitOfWork;
         }
 
         [GET("Technician/{id}")]
         public ActionResult GetTechnician(string id)
         {
-            var technician = this._employeeService.Get(id);
+            var technician = this.employeeService.Get(id);
             return Json(technician, JsonRequestBehavior.AllowGet);
+        }
+
+        [GET("Technician")]
+        public ActionResult GetTechnicians()
+        {
+            var list = this.employeeService.Get();
+            return Json(list.OrderBy(x => x.Employee), JsonRequestBehavior.AllowGet);
         }
 
         [POST("Technician/Save")]
         public ActionResult SaveTechniciance(TechnicianModel model)
         {
-            var employee = this._employeeService.Get(model.Id);
-            var technician = AutoMapper.Mapper.Map<SageEmployee, EmployeeModel>(employee);
+            var employee = this.employeeService.Get(model.Id);
+            var technician = Mapper.Map<SageEmployee, EmployeeModel>(employee);
             technician.AvailableDays = model.AvailableDays;
             technician.IsAvailable = model.IsAvailable;
             technician.Picture = model.Picture;
 
-            var updatedTechnician = AutoMapper.Mapper.Map<EmployeeModel, SageEmployee>(technician);
-            
-            this._unitOfWork.GetEntities<SageEmployee>().Update(updatedTechnician);
-            
+            var updatedTechnician = Mapper.Map<EmployeeModel, SageEmployee>(technician);
+
+            this.unitOfWork.GetEntities<SageEmployee>().Add(updatedTechnician);
+
             return Json("success", JsonRequestBehavior.AllowGet);
         }
     }
