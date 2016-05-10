@@ -5,7 +5,5 @@
     public interface ILocationRepository : IRepository<SageLocation>
     {
         bool Delete(SageLocation entity);
-
-        bool Update(SageLocation entity);
     }
 }

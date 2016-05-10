@@ -62,7 +62,7 @@ using System.Linq;
                 countImage++;
             }
 
-            unitOfWork.GetEntities<SageImageWorkOrder>().Update(imagesDB);
+            this.unitOfWork.GetEntities<SageImageWorkOrder>().Add(imagesDB);
             return true;
         }
 

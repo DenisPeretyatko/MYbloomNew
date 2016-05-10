@@ -16,19 +16,19 @@
 
     public class DashboardController : BaseController
     {
-        private readonly ICallTypeService _callTypeService;
+        private readonly ICallTypeService callTypeService;
 
-        private readonly ICustomerService _customerService;
+        private readonly ICustomerService customerService;
 
-        private readonly IEmployeeService _employeeService;
+        private readonly IEmployeeService employeeService;
 
-        private readonly IEquipmentService _equipmentService;
+        private readonly IEquipmentService equipmentService;
 
-        private readonly ILocationService _locationService;
+        private readonly ILocationService locationService;
 
-        private readonly IProblemService _problemService;
+        private readonly IProblemService problemService;
 
-        private readonly IRepairService _repairService;
+        private readonly IRepairService repairService;
 
         public DashboardController(
             ICallTypeService callTypeService, 
@@ -39,13 +39,13 @@
             ICustomerService customerService, 
             IRepairService repairService)
         {
-            _callTypeService = callTypeService;
-            _employeeService = employeeService;
-            _equipmentService = equipmentService;
-            _locationService = locationService;
-            _problemService = problemService;
-            _customerService = customerService;
-            _repairService = repairService;
+            this.callTypeService = callTypeService;
+            this.employeeService = employeeService;
+            this.equipmentService = equipmentService;
+            this.locationService = locationService;
+            this.problemService = problemService;
+            this.customerService = customerService;
+            this.repairService = repairService;
         }
 
         [GET("Dashboard")]
@@ -59,13 +59,13 @@
         public ActionResult GetLookups()
         {
             var lookups = new LookupsModel();
-            var locations = _locationService.Get();
-            var calltypes = _callTypeService.Get();
-            var problems = _problemService.Get();
-            var employes = _employeeService.Get();
-            var equipment = _equipmentService.Get();
-            var customer = _customerService.Get();
-            var repairs = _repairService.Get();
+            var locations = locationService.Get();
+            var calltypes = callTypeService.Get();
+            var problems = problemService.Get();
+            var employes = employeeService.Get();
+            var equipment = equipmentService.Get();
+            var customer = customerService.Get();
+            var repairs = repairService.Get();
 
             lookups.Locations = AutoMapper.Mapper.Map<List<SageLocation>, List<LocationModel>>(locations.ToList());
             lookups.Calltypes = AutoMapper.Mapper.Map<List<SageCallType>, List<CallTypeModel>>(calltypes.ToList());
