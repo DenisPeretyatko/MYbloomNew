@@ -21,8 +21,8 @@ namespace Sage.WebApi.Areas.HelpPage.SampleGeneration
                 throw new ArgumentNullException("mediaType");
             }
 
-            ActionName = String.Empty;
-            ControllerName = String.Empty;
+            ActionName = string.Empty;
+            ControllerName = string.Empty;
             MediaType = mediaType;
             ParameterNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }
@@ -56,14 +56,17 @@ namespace Sage.WebApi.Areas.HelpPage.SampleGeneration
             {
                 throw new InvalidEnumArgumentException("sampleDirection", (int)sampleDirection, typeof(SampleDirection));
             }
+
             if (controllerName == null)
             {
                 throw new ArgumentNullException("controllerName");
             }
+
             if (actionName == null)
             {
                 throw new ArgumentNullException("actionName");
             }
+
             if (parameterNames == null)
             {
                 throw new ArgumentNullException("parameterNames");
@@ -138,8 +141,8 @@ namespace Sage.WebApi.Areas.HelpPage.SampleGeneration
                 return false;
             }
 
-            return String.Equals(ControllerName, otherKey.ControllerName, StringComparison.OrdinalIgnoreCase) &&
-                String.Equals(ActionName, otherKey.ActionName, StringComparison.OrdinalIgnoreCase) &&
+            return string.Equals(ControllerName, otherKey.ControllerName, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(ActionName, otherKey.ActionName, StringComparison.OrdinalIgnoreCase) &&
                 (MediaType == otherKey.MediaType || (MediaType != null && MediaType.Equals(otherKey.MediaType))) &&
                 ParameterType == otherKey.ParameterType &&
                 SampleDirection == otherKey.SampleDirection &&
@@ -153,14 +156,17 @@ namespace Sage.WebApi.Areas.HelpPage.SampleGeneration
             {
                 hashCode ^= MediaType.GetHashCode();
             }
+
             if (SampleDirection != null)
             {
                 hashCode ^= SampleDirection.GetHashCode();
             }
+
             if (ParameterType != null)
             {
                 hashCode ^= ParameterType.GetHashCode();
             }
+
             foreach (string parameterName in ParameterNames)
             {
                 hashCode ^= parameterName.ToUpperInvariant().GetHashCode();

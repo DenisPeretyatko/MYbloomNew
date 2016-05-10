@@ -23,6 +23,7 @@ namespace Sage.WebApi
 
             return new TinyIocWebApiDependencyResolver(_container.GetChildContainer());
         }
+
         public void Dispose()
         {
             Dispose(true);
@@ -51,6 +52,7 @@ namespace Sage.WebApi
                 return null;
             }
         }
+
         public IEnumerable<object> GetServices(Type serviceType)
         {
             try

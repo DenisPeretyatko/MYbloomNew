@@ -5,7 +5,7 @@ namespace Sage.WebApi.Areas.HelpPage.SampleGeneration
     /// </summary>
     public enum SampleDirection
     {
-        Request = 0,
+        Request = 0, 
         Response
     }
 }

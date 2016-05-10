@@ -13,6 +13,7 @@ namespace Sage.WebApi.Areas.HelpPage.SampleGeneration
             {
                 throw new ArgumentNullException("text");
             }
+
             Text = text;
         }
 

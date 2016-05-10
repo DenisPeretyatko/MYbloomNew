@@ -1,6 +1,7 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
+
 using Sage.WebApi.Areas.HelpPage.ModelDescriptions;
 using Sage.WebApi.Areas.HelpPage.Models;
 
@@ -33,7 +34,7 @@ namespace Sage.WebApi.Areas.HelpPage.Controllers
 
         public ActionResult Api(string apiId)
         {
-            if (!String.IsNullOrEmpty(apiId))
+            if (!string.IsNullOrEmpty(apiId))
             {
                 HelpPageApiModel apiModel = Configuration.GetHelpPageApiModel(apiId);
                 if (apiModel != null)
@@ -47,7 +48,7 @@ namespace Sage.WebApi.Areas.HelpPage.Controllers
 
         public ActionResult ResourceModel(string modelName)
         {
-            if (!String.IsNullOrEmpty(modelName))
+            if (!string.IsNullOrEmpty(modelName))
             {
                 ModelDescriptionGenerator modelDescriptionGenerator = Configuration.GetModelDescriptionGenerator();
                 ModelDescription modelDescription;

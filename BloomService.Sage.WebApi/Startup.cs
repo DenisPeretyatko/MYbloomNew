@@ -1,13 +1,16 @@
 ﻿using System;
-using Microsoft.Owin;
-using Owin;
-using Microsoft.Owin.Security.OAuth;
-using Sage.WebApi.Providers;
-using System.Web.Http;
 using System.Configuration;
+using System.Web.Http;
+
+using Microsoft.Owin;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.DataHandler.Encoder;
 using Microsoft.Owin.Security.Jwt;
-using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.OAuth;
+
+using Owin;
+
+using Sage.WebApi.Providers;
 
 [assembly: OwinStartup(typeof(Sage.WebApi.Startup))]
 
@@ -29,11 +32,11 @@ namespace Sage.WebApi
             // Configure the db context and user manager to use a single instance per request
             OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
             {
-                //For Dev enviroment only (on production should be AllowInsecureHttp = false)
-                AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("/oauth/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
-                Provider = new ApplicationOAuthProvider(),
+                // For Dev enviroment only (on production should be AllowInsecureHttp = false)
+                AllowInsecureHttp = true, 
+                TokenEndpointPath = new PathString("/oauth/token"), 
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1), 
+                Provider = new ApplicationOAuthProvider(), 
                 AccessTokenFormat = new CustomJwtFormat("http://localhost:12442")
             };
 
@@ -51,8 +54,8 @@ namespace Sage.WebApi
             app.UseJwtBearerAuthentication(
                 new JwtBearerAuthenticationOptions
                 {
-                    AuthenticationMode = AuthenticationMode.Active,
-                    AllowedAudiences = new[] { audienceId },
+                    AuthenticationMode = AuthenticationMode.Active, 
+                    AllowedAudiences = new[] { audienceId }, 
                     IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]
                     {
                         new SymmetricKeyIssuerSecurityTokenProvider(issuer, audienceSecret)

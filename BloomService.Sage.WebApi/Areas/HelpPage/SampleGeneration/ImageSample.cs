@@ -17,6 +17,7 @@ namespace Sage.WebApi.Areas.HelpPage.SampleGeneration
             {
                 throw new ArgumentNullException("src");
             }
+
             Src = src;
         }
 

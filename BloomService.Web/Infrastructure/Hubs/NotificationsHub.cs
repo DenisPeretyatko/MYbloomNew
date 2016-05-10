@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Script.Serialization;
+
 using BloomService.Web.Models;
+
 using Microsoft.AspNet.SignalR;
 
 namespace BloomService.Web.Infrastructure.Hubs
@@ -24,6 +26,7 @@ namespace BloomService.Web.Infrastructure.Hubs
                 model.Add(model.Last());
                 list = model;
             }
+
             Clients.All.updateNotifications(list);
         }
     }

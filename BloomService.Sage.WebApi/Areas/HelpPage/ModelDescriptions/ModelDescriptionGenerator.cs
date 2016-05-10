@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Xml.Serialization;
+
 using Newtonsoft.Json;
 
 namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
@@ -21,67 +22,67 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
         // Modify this to support more data annotation attributes.
         private readonly IDictionary<Type, Func<object, string>> AnnotationTextGenerator = new Dictionary<Type, Func<object, string>>
         {
-            { typeof(RequiredAttribute), a => "Required" },
+            { typeof(RequiredAttribute), a => "Required" }, 
             { typeof(RangeAttribute), a =>
                 {
                     RangeAttribute range = (RangeAttribute)a;
-                    return String.Format(CultureInfo.CurrentCulture, "Range: inclusive between {0} and {1}", range.Minimum, range.Maximum);
+                    return string.Format(CultureInfo.CurrentCulture, "Range: inclusive between {0} and {1}", range.Minimum, range.Maximum);
                 }
-            },
+            }, 
             { typeof(MaxLengthAttribute), a =>
                 {
                     MaxLengthAttribute maxLength = (MaxLengthAttribute)a;
-                    return String.Format(CultureInfo.CurrentCulture, "Max length: {0}", maxLength.Length);
+                    return string.Format(CultureInfo.CurrentCulture, "Max length: {0}", maxLength.Length);
                 }
-            },
+            }, 
             { typeof(MinLengthAttribute), a =>
                 {
                     MinLengthAttribute minLength = (MinLengthAttribute)a;
-                    return String.Format(CultureInfo.CurrentCulture, "Min length: {0}", minLength.Length);
+                    return string.Format(CultureInfo.CurrentCulture, "Min length: {0}", minLength.Length);
                 }
-            },
+            }, 
             { typeof(StringLengthAttribute), a =>
                 {
                     StringLengthAttribute strLength = (StringLengthAttribute)a;
-                    return String.Format(CultureInfo.CurrentCulture, "String length: inclusive between {0} and {1}", strLength.MinimumLength, strLength.MaximumLength);
+                    return string.Format(CultureInfo.CurrentCulture, "String length: inclusive between {0} and {1}", strLength.MinimumLength, strLength.MaximumLength);
                 }
-            },
+            }, 
             { typeof(DataTypeAttribute), a =>
                 {
                     DataTypeAttribute dataType = (DataTypeAttribute)a;
-                    return String.Format(CultureInfo.CurrentCulture, "Data type: {0}", dataType.CustomDataType ?? dataType.DataType.ToString());
+                    return string.Format(CultureInfo.CurrentCulture, "Data type: {0}", dataType.CustomDataType ?? dataType.DataType.ToString());
                 }
-            },
+            }, 
             { typeof(RegularExpressionAttribute), a =>
                 {
                     RegularExpressionAttribute regularExpression = (RegularExpressionAttribute)a;
-                    return String.Format(CultureInfo.CurrentCulture, "Matching regular expression pattern: {0}", regularExpression.Pattern);
+                    return string.Format(CultureInfo.CurrentCulture, "Matching regular expression pattern: {0}", regularExpression.Pattern);
                 }
-            },
+            }, 
         };
 
         // Modify this to add more default documentations.
         private readonly IDictionary<Type, string> DefaultTypeDocumentation = new Dictionary<Type, string>
         {
-            { typeof(Int16), "integer" },
-            { typeof(Int32), "integer" },
-            { typeof(Int64), "integer" },
-            { typeof(UInt16), "unsigned integer" },
-            { typeof(UInt32), "unsigned integer" },
-            { typeof(UInt64), "unsigned integer" },
-            { typeof(Byte), "byte" },
-            { typeof(Char), "character" },
-            { typeof(SByte), "signed byte" },
-            { typeof(Uri), "URI" },
-            { typeof(Single), "decimal number" },
-            { typeof(Double), "decimal number" },
-            { typeof(Decimal), "decimal number" },
-            { typeof(String), "string" },
-            { typeof(Guid), "globally unique identifier" },
-            { typeof(TimeSpan), "time interval" },
-            { typeof(DateTime), "date" },
-            { typeof(DateTimeOffset), "date" },
-            { typeof(Boolean), "boolean" },
+            { typeof(Int16), "integer" }, 
+            { typeof(Int32), "integer" }, 
+            { typeof(Int64), "integer" }, 
+            { typeof(UInt16), "unsigned integer" }, 
+            { typeof(UInt32), "unsigned integer" }, 
+            { typeof(UInt64), "unsigned integer" }, 
+            { typeof(Byte), "byte" }, 
+            { typeof(Char), "character" }, 
+            { typeof(SByte), "signed byte" }, 
+            { typeof(Uri), "URI" }, 
+            { typeof(Single), "decimal number" }, 
+            { typeof(Double), "decimal number" }, 
+            { typeof(Decimal), "decimal number" }, 
+            { typeof(String), "string" }, 
+            { typeof(Guid), "globally unique identifier" }, 
+            { typeof(TimeSpan), "time interval" }, 
+            { typeof(DateTime), "date" }, 
+            { typeof(DateTimeOffset), "date" }, 
+            { typeof(Boolean), "boolean" }, 
         };
 
         private Lazy<IModelDocumentationProvider> _documentationProvider;
@@ -127,12 +128,12 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
                 if (modelType != modelDescription.ModelType)
                 {
                     throw new InvalidOperationException(
-                        String.Format(
-                            CultureInfo.CurrentCulture,
+                        string.Format(
+                            CultureInfo.CurrentCulture, 
                             "A model description could not be created. Duplicate model name '{0}' was found for types '{1}' and '{2}'. " +
-                            "Use the [ModelName] attribute to change the model name for at least one of the types so that it has a unique name.",
-                            modelName,
-                            modelDescription.ModelType.FullName,
+                            "Use the [ModelName] attribute to change the model name for at least one of the types so that it has a unique name.", 
+                            modelName, 
+                            modelDescription.ModelType.FullName, 
                             modelType.FullName));
                 }
 
@@ -161,6 +162,7 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
                         return GenerateCollectionModelDescription(modelType, genericArguments[0]);
                     }
                 }
+
                 if (genericArguments.Length == 2)
                 {
                     Type dictionaryType = typeof(IDictionary<,>).MakeGenericType(genericArguments);
@@ -205,7 +207,7 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
         private static string GetMemberName(MemberInfo member, bool hasDataContractAttribute)
         {
             JsonPropertyAttribute jsonProperty = member.GetCustomAttribute<JsonPropertyAttribute>();
-            if (jsonProperty != null && !String.IsNullOrEmpty(jsonProperty.PropertyName))
+            if (jsonProperty != null && !string.IsNullOrEmpty(jsonProperty.PropertyName))
             {
                 return jsonProperty.PropertyName;
             }
@@ -213,7 +215,7 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
             if (hasDataContractAttribute)
             {
                 DataMemberAttribute dataMember = member.GetCustomAttribute<DataMemberAttribute>();
-                if (dataMember != null && !String.IsNullOrEmpty(dataMember.Name))
+                if (dataMember != null && !string.IsNullOrEmpty(dataMember.Name))
                 {
                     return dataMember.Name;
                 }
@@ -256,6 +258,7 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
             {
                 return documentation;
             }
+
             if (DocumentationProvider != null)
             {
                 documentation = DocumentationProvider.GetDocumentation(type);
@@ -277,7 +280,7 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
                     annotations.Add(
                         new ParameterAnnotation
                         {
-                            AnnotationAttribute = attribute,
+                            AnnotationAttribute = attribute, 
                             Documentation = textGenerator(attribute)
                         });
                 }
@@ -291,13 +294,14 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
                 {
                     return -1;
                 }
+
                 if (y.AnnotationAttribute is RequiredAttribute)
                 {
                     return 1;
                 }
 
                 // Sort the rest based on alphabetic order of the documentation
-                return String.Compare(x.Documentation, y.Documentation, StringComparison.OrdinalIgnoreCase);
+                return string.Compare(x.Documentation, y.Documentation, StringComparison.OrdinalIgnoreCase);
             });
 
             foreach (ParameterAnnotation annotation in annotations)
@@ -313,8 +317,8 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
             {
                 return new CollectionModelDescription
                 {
-                    Name = ModelNameHelper.GetModelName(modelType),
-                    ModelType = modelType,
+                    Name = ModelNameHelper.GetModelName(modelType), 
+                    ModelType = modelType, 
                     ElementDescription = collectionModelDescription
                 };
             }
@@ -326,8 +330,8 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
         {
             ComplexTypeModelDescription complexModelDescription = new ComplexTypeModelDescription
             {
-                Name = ModelNameHelper.GetModelName(modelType),
-                ModelType = modelType,
+                Name = ModelNameHelper.GetModelName(modelType), 
+                ModelType = modelType, 
                 Documentation = CreateDefaultDocumentation(modelType)
             };
 
@@ -384,9 +388,9 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
 
             return new DictionaryModelDescription
             {
-                Name = ModelNameHelper.GetModelName(modelType),
-                ModelType = modelType,
-                KeyModelDescription = keyModelDescription,
+                Name = ModelNameHelper.GetModelName(modelType), 
+                ModelType = modelType, 
+                KeyModelDescription = keyModelDescription, 
                 ValueModelDescription = valueModelDescription
             };
         }
@@ -395,8 +399,8 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
         {
             EnumTypeModelDescription enumDescription = new EnumTypeModelDescription
             {
-                Name = ModelNameHelper.GetModelName(modelType),
-                ModelType = modelType,
+                Name = ModelNameHelper.GetModelName(modelType), 
+                ModelType = modelType, 
                 Documentation = CreateDefaultDocumentation(modelType)
             };
             bool hasDataContractAttribute = modelType.GetCustomAttribute<DataContractAttribute>() != null;
@@ -406,16 +410,18 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
                 {
                     EnumValueDescription enumValue = new EnumValueDescription
                     {
-                        Name = field.Name,
+                        Name = field.Name, 
                         Value = field.GetRawConstantValue().ToString()
                     };
                     if (DocumentationProvider != null)
                     {
                         enumValue.Documentation = DocumentationProvider.GetDocumentation(field);
                     }
+
                     enumDescription.Values.Add(enumValue);
                 }
             }
+
             GeneratedModels.Add(enumDescription.Name, enumDescription);
 
             return enumDescription;
@@ -428,9 +434,9 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
 
             return new KeyValuePairModelDescription
             {
-                Name = ModelNameHelper.GetModelName(modelType),
-                ModelType = modelType,
-                KeyModelDescription = keyModelDescription,
+                Name = ModelNameHelper.GetModelName(modelType), 
+                ModelType = modelType, 
+                KeyModelDescription = keyModelDescription, 
                 ValueModelDescription = valueModelDescription
             };
         }
@@ -439,8 +445,8 @@ namespace Sage.WebApi.Areas.HelpPage.ModelDescriptions
         {
             SimpleTypeModelDescription simpleModelDescription = new SimpleTypeModelDescription
             {
-                Name = ModelNameHelper.GetModelName(modelType),
-                ModelType = modelType,
+                Name = ModelNameHelper.GetModelName(modelType), 
+                ModelType = modelType, 
                 Documentation = CreateDefaultDocumentation(modelType)
             };
             GeneratedModels.Add(simpleModelDescription.Name, simpleModelDescription);

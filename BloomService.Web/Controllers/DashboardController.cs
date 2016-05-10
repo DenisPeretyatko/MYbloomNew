@@ -67,13 +67,13 @@
             var customer = customerService.Get();
             var repairs = repairService.Get();
 
-            lookups.Locations = AutoMapper.Mapper.Map<List<SageLocation>, List<LocationModel>>(locations.ToList());
-            lookups.Calltypes = AutoMapper.Mapper.Map<List<SageCallType>, List<CallTypeModel>>(calltypes.ToList());
-            lookups.Problems = AutoMapper.Mapper.Map<List<SageProblem>, List<ProblemModel>>(problems.ToList());
-            lookups.Employes = AutoMapper.Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employes.ToList());
-            lookups.Equipment = AutoMapper.Mapper.Map<List<SageEquipment>, List<EquipmentModel>>(equipment.ToList());
-            lookups.Customers = AutoMapper.Mapper.Map<List<SageCustomer>, List<CustomerModel>>(customer.ToList());
-            lookups.Hours = AutoMapper.Mapper.Map<List<SageRepair>, List<RepairModel>>(repairs.ToList());
+            lookups.Locations = Mapper.Map<List<SageLocation>, List<LocationModel>>(locations.ToList());
+            lookups.Calltypes = Mapper.Map<List<SageCallType>, List<CallTypeModel>>(calltypes.ToList());
+            lookups.Problems = Mapper.Map<List<SageProblem>, List<ProblemModel>>(problems.ToList());
+            lookups.Employes = Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employes.ToList());
+            lookups.Equipment = Mapper.Map<List<SageEquipment>, List<EquipmentModel>>(equipment.ToList());
+            lookups.Customers = Mapper.Map<List<SageCustomer>, List<CustomerModel>>(customer.ToList());
+            lookups.Hours = Mapper.Map<List<SageRepair>, List<RepairModel>>(repairs.ToList());
             lookups.RateSheets = RateSheets.RateSheetsList;
             lookups.PaymentMethods = PaymentMethod.PaymentMethodList;
 

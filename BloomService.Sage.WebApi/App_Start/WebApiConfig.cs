@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+
 using Microsoft.Owin.Security.OAuth;
 
 namespace Sage.WebApi
@@ -16,8 +17,8 @@ namespace Sage.WebApi
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                name: "DefaultApi", 
+                routeTemplate: "api/{controller}/{id}", 
                 defaults: new { id = RouteParameter.Optional }
             );
         }

@@ -1,8 +1,8 @@
 ﻿namespace Sage.WebApi.Infratructure.Service.Implementation
 {
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Odbc;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.Odbc;
 
     using Sage.WebApi.Infratructure.Constants;
 

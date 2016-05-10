@@ -4,7 +4,6 @@ using System.Collections.Generic;
 namespace Sage.WebApi.Models
 {
     // Models returned by AccountController actions.
-
     public class ExternalLoginViewModel
     {
         public string Name { get; set; }
