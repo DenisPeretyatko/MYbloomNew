@@ -1,4 +1,4 @@
-﻿namespace BloomService.Domain.Entities.Concrete
+﻿namespace BloomService.Domain.Entities.Concrete.Auxiliary
 {
     using System.Xml.Serialization;
 

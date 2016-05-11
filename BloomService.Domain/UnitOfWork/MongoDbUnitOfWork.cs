@@ -14,6 +14,8 @@
 
         private ICallTypeRepository callTypeRepository;
 
+        private IChangeRepository changeRepository;
+
         private ICustomerRepository customerRepository;
 
         private IDepartmentRepository departmentRepository;
@@ -47,6 +49,15 @@
             {
                 return callTypeRepository
                        ?? (callTypeRepository = new CallTypeRepository(GetCollectionName<SageCallType>()));
+            }
+        }
+
+        public IChangeRepository Changes
+        {
+            get
+            {
+                return changeRepository
+                       ?? (changeRepository = new ChangeRepository(GetCollectionName<SageChange>()));
             }
         }
 

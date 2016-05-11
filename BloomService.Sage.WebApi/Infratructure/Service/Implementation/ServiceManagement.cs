@@ -263,10 +263,4 @@
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
         }
     }
-
-    // public SageWorkOrder[] GetWorkOrders()
-    // {
-    // var result = SendMessage(Messages.WorkOrders);
-    // return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
-    // }
 }

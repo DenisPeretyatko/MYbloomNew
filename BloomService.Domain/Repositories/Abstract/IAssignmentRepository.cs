@@ -5,7 +5,5 @@
     public interface IAssignmentRepository : IRepository<SageAssignment>
     {
         bool Delete(SageAssignment entity);
-
-        bool Update(SageAssignment entity);
     }
 }

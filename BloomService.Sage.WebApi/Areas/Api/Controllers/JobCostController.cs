@@ -1,5 +1,6 @@
-﻿using Sage.WebApi.Infratructure.Service;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+
+using Sage.WebApi.Infratructure.Service;
 
 namespace Sage.WebApi.Areas.Api.Controllers
 {
@@ -12,6 +13,7 @@ namespace Sage.WebApi.Areas.Api.Controllers
         {
             _serviceODBCr = serviceODBCr;
         }
+
         public ActionResult Trucks()
         {
             return Json(_serviceODBCr.Trucks(), JsonRequestBehavior.AllowGet);

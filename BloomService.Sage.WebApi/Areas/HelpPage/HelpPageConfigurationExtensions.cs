@@ -11,6 +11,7 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
+
 using Sage.WebApi.Areas.HelpPage.ModelDescriptions;
 using Sage.WebApi.Areas.HelpPage.Models;
 
@@ -181,7 +182,7 @@ namespace Sage.WebApi.Areas.HelpPage
         public static HelpPageSampleGenerator GetHelpPageSampleGenerator(this HttpConfiguration config)
         {
             return (HelpPageSampleGenerator)config.Properties.GetOrAdd(
-                typeof(HelpPageSampleGenerator),
+                typeof(HelpPageSampleGenerator), 
                 k => new HelpPageSampleGenerator());
         }
 
@@ -193,8 +194,8 @@ namespace Sage.WebApi.Areas.HelpPage
         public static void SetHelpPageSampleGenerator(this HttpConfiguration config, HelpPageSampleGenerator sampleGenerator)
         {
             config.Properties.AddOrUpdate(
-                typeof(HelpPageSampleGenerator),
-                k => sampleGenerator,
+                typeof(HelpPageSampleGenerator), 
+                k => sampleGenerator, 
                 (k, o) => sampleGenerator);
         }
 
@@ -206,7 +207,7 @@ namespace Sage.WebApi.Areas.HelpPage
         public static ModelDescriptionGenerator GetModelDescriptionGenerator(this HttpConfiguration config)
         {
             return (ModelDescriptionGenerator)config.Properties.GetOrAdd(
-                typeof(ModelDescriptionGenerator),
+                typeof(ModelDescriptionGenerator), 
                 k => InitializeModelDescriptionGenerator(config));
         }
 
@@ -225,7 +226,7 @@ namespace Sage.WebApi.Areas.HelpPage
             if (!config.Properties.TryGetValue(modelId, out model))
             {
                 Collection<ApiDescription> apiDescriptions = config.Services.GetApiExplorer().ApiDescriptions;
-                ApiDescription apiDescription = apiDescriptions.FirstOrDefault(api => String.Equals(api.GetFriendlyId(), apiDescriptionId, StringComparison.OrdinalIgnoreCase));
+                ApiDescription apiDescription = apiDescriptions.FirstOrDefault(api => string.Equals(api.GetFriendlyId(), apiDescriptionId, StringComparison.OrdinalIgnoreCase));
                 if (apiDescription != null)
                 {
                     model = GenerateApiModel(apiDescription, config);
@@ -240,7 +241,7 @@ namespace Sage.WebApi.Areas.HelpPage
         {
             HelpPageApiModel apiModel = new HelpPageApiModel()
             {
-                ApiDescription = apiDescription,
+                ApiDescription = apiDescription, 
             };
 
             ModelDescriptionGenerator modelGenerator = config.GetModelDescriptionGenerator();
@@ -275,20 +276,19 @@ namespace Sage.WebApi.Areas.HelpPage
                     // [TypeConverter(typeof(PointConverter))]
                     // public class Point
                     // {
-                    //     public Point(int x, int y)
-                    //     {
-                    //         X = x;
-                    //         Y = y;
-                    //     }
-                    //     public int X { get; set; }
-                    //     public int Y { get; set; }
+                    // public Point(int x, int y)
+                    // {
+                    // X = x;
+                    // Y = y;
+                    // }
+                    // public int X { get; set; }
+                    // public int Y { get; set; }
                     // }
                     // Class Point is bindable with a TypeConverter, so Point will be added to UriParameters collection.
-                    // 
                     // public class Point
                     // {
-                    //     public int X { get; set; }
-                    //     public int Y { get; set; }
+                    // public int X { get; set; }
+                    // public int Y { get; set; }
                     // }
                     // Regular complex class Point will have properties X and Y added to UriParameters collection.
                     if (complexTypeDescription != null
@@ -339,14 +339,14 @@ namespace Sage.WebApi.Areas.HelpPage
             return TypeDescriptor.GetConverter(parameterType).CanConvertFrom(typeof(string));
         }
 
-        private static ParameterDescription AddParameterDescription(HelpPageApiModel apiModel,
+        private static ParameterDescription AddParameterDescription(HelpPageApiModel apiModel, 
             ApiParameterDescription apiParameter, ModelDescription typeDescription)
         {
             ParameterDescription parameterDescription = new ParameterDescription
             {
-                Name = apiParameter.Name,
-                Documentation = apiParameter.Documentation,
-                TypeDescription = typeDescription,
+                Name = apiParameter.Name, 
+                Documentation = apiParameter.Documentation, 
+                TypeDescription = typeDescription, 
             };
 
             apiModel.UriParameters.Add(parameterDescription);
@@ -406,8 +406,8 @@ namespace Sage.WebApi.Areas.HelpPage
             }
             catch (Exception e)
             {
-                apiModel.ErrorMessages.Add(String.Format(CultureInfo.CurrentCulture,
-                    "An exception has occurred while generating the sample. Exception message: {0}",
+                apiModel.ErrorMessages.Add(string.Format(CultureInfo.CurrentCulture, 
+                    "An exception has occurred while generating the sample. Exception message: {0}", 
                     HelpPageSampleGenerator.UnwrapException(e).Message));
             }
         }
@@ -454,6 +454,7 @@ namespace Sage.WebApi.Areas.HelpPage
                     modelGenerator.GetOrCreateModelDescription(parameterType);
                 }
             }
+
             return modelGenerator;
         }
 

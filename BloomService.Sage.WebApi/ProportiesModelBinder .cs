@@ -6,14 +6,15 @@ namespace Sage.WebApi
     using BloomService.Domain.Entities;
     using BloomService.Domain.Entities.Concrete;
 
-    public class ProportiesModelBinder : System.Web.Mvc.DefaultModelBinder
+    public class ProportiesModelBinder : DefaultModelBinder
     {
-        public override object BindModel(ControllerContext controllerContext, System.Web.Mvc.ModelBindingContext bindingContext)
+        public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
             if (!IsJSONRequest(controllerContext))
             {
                 return base.BindModel(controllerContext, bindingContext);
             }
+
             var proporties = new SagePropertyDictionary();
             var request = controllerContext.HttpContext.Request;
             string result = string.Empty;
@@ -36,9 +37,11 @@ namespace Sage.WebApi
                     if (i != proportyFields.Length - 1)
                         value += ":";
                 }
-                var replaceSympol = new char[] { '\"', '\n', '\t', '\r', ' ', '\t' };
+
+                var replaceSympol = new[] { '\"', '\n', '\t', '\r', ' ', '\t' };
                 proporties.Add(proportyFields[0].Trim(replaceSympol), value.Trim(replaceSympol));
             }
+
             return proporties;
         }
 

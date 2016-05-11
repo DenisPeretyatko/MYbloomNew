@@ -12,6 +12,6 @@
 
         TEntity Get(string id);
 
-        //IEnumerable<TEntity> Delete(PropertyDictionary properties);
+        // IEnumerable<TEntity> Delete(PropertyDictionary properties);
     }
 }

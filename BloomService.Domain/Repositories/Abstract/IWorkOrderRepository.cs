@@ -5,7 +5,5 @@
     public interface IWorkOrderRepository : IRepository<SageWorkOrder>
     {
         bool Delete(SageWorkOrder entity);
-
-        bool Update(SageWorkOrder entity);
     }
 }

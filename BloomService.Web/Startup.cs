@@ -8,8 +8,8 @@ namespace BloomService.Web
 {
     using System.Configuration;
 
-    //using Hangfire;
-    //using Hangfire.Mongo;
+    using Hangfire;
+    using Hangfire.Mongo;
 
     using Owin;
 
@@ -22,10 +22,10 @@ namespace BloomService.Web
             var syncDbConnection = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString;
             var syncDbName = ConfigurationManager.AppSettings["SyncDb"];
 
-            //    GlobalConfiguration.Configuration.UseMongoStorage(syncDbConnection, syncDbName);
+            GlobalConfiguration.Configuration.UseMongoStorage(syncDbConnection, syncDbName);
 
-            //    app.UseHangfireDashboard();
-            //    app.UseHangfireServer();
+            app.UseHangfireDashboard();
+            app.UseHangfireServer();
         }
     }
 }

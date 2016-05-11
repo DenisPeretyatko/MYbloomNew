@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Web.Http;
 
-    using BloomService.Domain.Entities;
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Services.Abstract;
 

@@ -1,8 +1,8 @@
 ﻿namespace BloomService.Web.Controllers
 {
-using System.Web.Mvc;
+    using System.Web.Mvc;
 
-using AttributeRouting.Web.Mvc;
+    using AttributeRouting.Web.Mvc;
 
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Models;
@@ -10,11 +10,11 @@ using AttributeRouting.Web.Mvc;
 
     public class WorkorderController : BaseController
     {
-        private readonly IWorkOrderService _workOrderService;
+        private readonly IWorkOrderService workOrderService;
 
         public WorkorderController(IWorkOrderService workOrderService)
         {
-            _workOrderService = workOrderService;
+            this.workOrderService = workOrderService;
         }
 
         [POST("Workorder/Create")]
@@ -39,21 +39,21 @@ using AttributeRouting.Web.Mvc;
                                     { "PayMethod", model.Paymentmethods }
                                 };
 
-            var created = _workOrderService.Add(workorder);
+            var created = workOrderService.Add(workorder);
             return Json("success", JsonRequestBehavior.AllowGet);
         }
 
         [GET("Workorder/{id}")]
         public ActionResult GetWorkorder(string id)
         {
-            var workOrder = _workOrderService.Get(id);
+            var workOrder = workOrderService.Get(id);
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
         [GET("Workorder")]
         public ActionResult GetWorkorders()
         {
-            var list = _workOrderService.Get();
+            var list = workOrderService.Get();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
@@ -79,7 +79,7 @@ using AttributeRouting.Web.Mvc;
                                     { "PayMethod", model.Paymentmethods }
             };
 
-            var saved = _workOrderService.Edit(workorder);
+            var saved = workOrderService.Edit(workorder);
             return Json("success", JsonRequestBehavior.AllowGet);
         }
     }

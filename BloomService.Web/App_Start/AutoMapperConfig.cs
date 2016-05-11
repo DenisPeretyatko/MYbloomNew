@@ -5,23 +5,21 @@
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Models;
 
-    using SageAvailableDay = BloomService.Domain.Entities.Concrete.SageAvailableDay;
-
     public static class AutoMapperConfig
-{
-    public static void RegisterMappings()
     {
-        AutoMapper.Mapper.CreateMap<SageLocation, LocationModel>();
-        AutoMapper.Mapper.CreateMap<SageCallType, CallTypeModel>();
-        AutoMapper.Mapper.CreateMap<SageEmployee, EmployeeModel>().ReverseMap();
-        AutoMapper.Mapper.CreateMap<SageProblem, ProblemModel>();
-        AutoMapper.Mapper.CreateMap<SageEquipment, EquipmentModel>();
-        AutoMapper.Mapper.CreateMap<SageCustomer, CustomerModel>();
-        AutoMapper.Mapper.CreateMap<SageRepair, RepairModel>();
-        AutoMapper.Mapper.CreateMap<SageAssignment, AssignmentModel>();
-        AutoMapper.Mapper.CreateMap<SageWorkOrder, WorkorderViewModel>();
+        public static void RegisterMappings()
+        {
+            Mapper.CreateMap<SageLocation, LocationModel>();
+            Mapper.CreateMap<SageCallType, CallTypeModel>();
+            Mapper.CreateMap<SageEmployee, EmployeeModel>().ReverseMap();
+            Mapper.CreateMap<SageProblem, ProblemModel>();
+            Mapper.CreateMap<SageEquipment, EquipmentModel>();
+            Mapper.CreateMap<SageCustomer, CustomerModel>();
+            Mapper.CreateMap<SageRepair, RepairModel>();
+            Mapper.CreateMap<SageAssignment, AssignmentModel>();
+            Mapper.CreateMap<SageWorkOrder, WorkorderViewModel>();
 
-        AutoMapper.Mapper.CreateMap<Models.AvailableDay, SageAvailableDay>().ReverseMap(); ;
+            Mapper.CreateMap<AvailableDay, SageAvailableDay>().ReverseMap();
+        }
     }
-}
 }

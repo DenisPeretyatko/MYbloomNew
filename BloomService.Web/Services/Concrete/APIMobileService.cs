@@ -1,7 +1,7 @@
 ﻿namespace BloomService.Web.Services.Concrete
 {
-using System.Collections.Generic;
-using System.Linq;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Hosting;
 
     using BloomService.Domain.Entities.Concrete;
@@ -62,7 +62,7 @@ using System.Linq;
                 countImage++;
             }
 
-            unitOfWork.GetEntities<SageImageWorkOrder>().Update(imagesDB);
+            unitOfWork.GetEntities<SageImageWorkOrder>().Add(imagesDB);
             return true;
         }
 

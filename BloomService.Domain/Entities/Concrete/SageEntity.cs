@@ -4,6 +4,7 @@
 
     using MongoDB.Bson.Serialization.Attributes;
 
+    [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class SageEntity : IEntity
     {
         [BsonId]

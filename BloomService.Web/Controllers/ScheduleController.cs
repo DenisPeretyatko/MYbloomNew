@@ -29,16 +29,16 @@
         {
             this.assignmentService = assignmentService;
             this.workOrderService = workOrderService;
-            this.employeeSageApService = employeeService;
+            employeeSageApService = employeeService;
         }
 
         [GET("Schedule")]
         public ActionResult GetSchedules()
         {
             var model = new ScheduleViewModel();
-            var sageAssignments = this.assignmentService.Get().ToList();
+            var sageAssignments = assignmentService.Get().ToList();
             var assignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(sageAssignments);
-            var employees = this.employeeSageApService.Get().ToList();
+            var employees = employeeSageApService.Get().ToList();
             foreach (var item in assignments)
             {
                 var employee = employees.FirstOrDefault(e => e.Name == item.Employee);
@@ -51,7 +51,7 @@
                 item.End = startDate.AddHours(Convert.ToDouble(item.EstimatedRepairHours)).ToString();
             }
 
-            var workorders = this.workOrderService.Get().ToList();
+            var workorders = workOrderService.Get().ToList();
             var unassignedWorkorders =
                 workorders.Where(
                     x =>
@@ -60,7 +60,7 @@
             model.Assigments = assignments;
 
             model.UnassignedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(unassignedWorkorders);
-            return this.Json(model, JsonRequestBehavior.AllowGet);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [POST("Schedule/Assignments/Create")]
@@ -77,8 +77,8 @@
                                       { "Endtime", model.EndDate.ToShortTimeString() }
                                   };
 
-            var created = this.assignmentService.Add(assignmanet);
-            return this.Json("success", JsonRequestBehavior.AllowGet);
+            var created = assignmentService.Add(assignmanet);
+            return Json("success", JsonRequestBehavior.AllowGet);
         }
     }
 }

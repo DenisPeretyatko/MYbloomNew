@@ -3508,8 +3508,8 @@ namespace TinyIoC
                 var concreteTypes =
                     types.Where(
                         type =>
-                        type.IsClass() && (type.IsAbstract() == false) && type != this.GetType()
-                        && (type.DeclaringType != this.GetType()) && !type.IsGenericTypeDefinition()).ToList();
+                        type.IsClass() && (type.IsAbstract() == false) && type != GetType()
+                        && (type.DeclaringType != GetType()) && !type.IsGenericTypeDefinition()).ToList();
 
                 foreach (var type in concreteTypes)
                 {
@@ -3526,7 +3526,7 @@ namespace TinyIoC
                 var abstractInterfaceTypes = from type in types
                                              where
                                                  (type.IsInterface() || type.IsAbstract())
-                                                 && (type.DeclaringType != this.GetType())
+                                                 && (type.DeclaringType != GetType())
                                                  && !type.IsGenericTypeDefinition()
                                              select type;
 
@@ -3725,9 +3725,9 @@ namespace TinyIoC
 
                 if (factory.Constructor == null)
                 {
-                    return this.GetBestConstructor(factory.CreatesType, parameters, options) != null ? true : false;
+                    return GetBestConstructor(factory.CreatesType, parameters, options) != null ? true : false;
                 }
-                return this.CanConstruct(factory.Constructor, parameters, options);
+                return CanConstruct(factory.Constructor, parameters, options);
             }
 
 #if RESOLVE_OPEN_GENERICS
@@ -3745,9 +3745,9 @@ namespace TinyIoC
 
                     if (factory.Constructor == null)
                     {
-                        return this.GetBestConstructor(factory.CreatesType, parameters, options) != null ? true : false;
+                        return GetBestConstructor(factory.CreatesType, parameters, options) != null ? true : false;
                     }
-                    return this.CanConstruct(factory.Constructor, parameters, options);
+                    return CanConstruct(factory.Constructor, parameters, options);
                 }
             }
 #endif
@@ -3757,7 +3757,7 @@ namespace TinyIoC
             if (!String.IsNullOrEmpty(name)
                 && options.NamedResolutionFailureAction == NamedResolutionFailureActions.Fail)
             {
-                return this._Parent != null ? _Parent.CanResolveInternal(registration, parameters, options) : false;
+                return _Parent != null ? _Parent.CanResolveInternal(registration, parameters, options) : false;
             }
 
             // Attemped unnamed fallback container resolution if relevant and requested
@@ -3771,7 +3771,7 @@ namespace TinyIoC
                         return true;
                     }
 
-                    return this.GetBestConstructor(factory.CreatesType, parameters, options) != null ? true : false;
+                    return GetBestConstructor(factory.CreatesType, parameters, options) != null ? true : false;
                 }
             }
 
@@ -3793,9 +3793,9 @@ namespace TinyIoC
                 || (checkType.IsGenericType()
                     && options.UnregisteredResolutionAction == UnregisteredResolutionActions.GenericsOnly))
             {
-                return this.GetBestConstructor(checkType, parameters, options) != null
+                return GetBestConstructor(checkType, parameters, options) != null
                            ? true
-                           : this._Parent != null
+                           : _Parent != null
                                  ? _Parent.CanResolveInternal(registration, parameters, options)
                                  : false;
             }

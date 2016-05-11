@@ -41,7 +41,7 @@
 
             foreach (var entity in entities)
             {
-                Repository.Insert(entity);
+                Repository.Add(entity);
             }
 
             return entities;
@@ -58,7 +58,7 @@
 
             var entity = sageApiManager.Get(EndPoint, id);
 
-            Repository.Insert(entity);
+            Repository.Add(entity);
 
             return entity;
         }

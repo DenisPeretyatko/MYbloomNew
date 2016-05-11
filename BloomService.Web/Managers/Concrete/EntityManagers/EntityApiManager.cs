@@ -18,9 +18,8 @@
         public EntityApiManager(IRestClient restClient, IToken token)
         {
             this.restClient = restClient;
-            
-            // this.restClient.AddHandler("application/json", new DynamicJsonDeserializer());
 
+            // this.restClient.AddHandler("application/json", new DynamicJsonDeserializer());
             this.token = token;
         }
 

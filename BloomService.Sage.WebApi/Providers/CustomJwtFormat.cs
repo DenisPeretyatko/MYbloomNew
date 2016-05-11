@@ -1,10 +1,12 @@
-﻿using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.DataHandler.Encoder;
-using System;
+﻿using System;
 using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Threading;
+
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.DataHandler.Encoder;
+
 using Thinktecture.IdentityModel.Tokens;
 
 namespace Sage.WebApi.Providers
