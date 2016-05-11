@@ -9,6 +9,10 @@
     [XmlType(AnonymousType = true)]
     public class SageWorkOrder : SageEntity
     {
+        public decimal Latitude { get; set; }
+
+        public decimal Longitude { get; set; }
+
         [XmlAttribute]
         public decimal ActualLaborCost { get; set; }
 

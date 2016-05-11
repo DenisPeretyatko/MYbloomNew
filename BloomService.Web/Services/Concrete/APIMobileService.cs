@@ -70,7 +70,17 @@ using System.Linq;
         {
             var userId = userService.GetId();
             var workOrders = workOrderService.Get();
-            return workOrders.Where(x => x.Employee == userId);
+            var result = workOrders.Where(x => x.Employee == userId);
+            var locations = unitOfWork.Locations.Get();
+            foreach (var order in result)
+            {
+                var location = locations.FirstOrDefault(x => x.Name == order.Location);
+                if (location == null)
+                    continue;
+                order.Latitude = location.Latitude;
+                order.Longitude = location.Longitude;
+            }
+            return result;
         }
     }
 }
