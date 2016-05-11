@@ -4,6 +4,8 @@
     using System.Linq;
 
     using BloomService.Domain.Entities.Abstract;
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Repositories.Abstract;
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract.EntityManagers;
     using BloomService.Web.Services.Abstract.EntityServices;
@@ -19,13 +21,16 @@
         {
             this.unitOfWork = unitOfWork;
             this.sageApiManager = sageApiManager;
+            Repository = unitOfWork.GetEntities<TEntity>();
         }
 
         public string EndPoint { get; set; }
 
+        protected IRepository<TEntity> Repository { get; set; }
+
         public virtual IEnumerable<TEntity> Get()
         {
-            var items = unitOfWork.GetEntities<TEntity>().Get().Take(20).ToArray();
+            var items = Repository.Get().Take(20).ToArray();
 
             if (items.Any())
             {
@@ -36,7 +41,7 @@
 
             foreach (var entity in entities)
             {
-                unitOfWork.GetEntities<TEntity>().Insert(entity);
+                Repository.Insert(entity);
             }
 
             return entities;
@@ -44,7 +49,7 @@
 
         public virtual TEntity Get(string id)
         {
-            var item = unitOfWork.GetEntities<TEntity>().Get(id);
+            var item = Repository.Get(id);
 
             if (item != null)
             {
@@ -53,9 +58,19 @@
 
             var entity = sageApiManager.Get(EndPoint, id);
 
-            unitOfWork.GetEntities<TEntity>().Insert(entity);
+            Repository.Insert(entity);
 
             return entity;
+        }
+
+        protected string GetEntityId(SagePropertyDictionary sageProperties)
+        {
+            return GetType().GetProperty(GetEntityName()).GetValue(this, null).ToString();
+        }
+
+        protected string GetEntityName()
+        {
+            return typeof(TEntity).Name;
         }
     }
 }

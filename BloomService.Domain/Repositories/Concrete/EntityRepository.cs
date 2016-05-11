@@ -17,7 +17,7 @@
     public class EntityRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity
     {
-        private readonly MongoCollection<TEntity> collection;
+        protected readonly MongoCollection<TEntity> collection;
 
         public EntityRepository(string collectionName)
         {
@@ -50,7 +50,7 @@
             return collection.FindOneByIdAs<TEntity>(id);
         }
 
-        public bool Insert(TEntity entity)
+        public virtual bool Insert(TEntity entity)
         {
             if (entity.Id == null)
             {

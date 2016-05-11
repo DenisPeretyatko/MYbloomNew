@@ -8,6 +8,10 @@
     [CollectionName("LocationCollection")]
     public class SageLocation : SageEntity
     {
+        public decimal Latitude { get; set; }
+
+        public decimal Longitude { get; set; }
+
         [XmlAttribute]
         public string ABN { get; set; }
 

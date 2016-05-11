@@ -1,5 +1,6 @@
 ﻿namespace BloomService.Web.Services.Concrete
 {
+    using System.Collections.Generic;
     using System.Configuration;
 
     using BloomService.Domain.Entities.Concrete;
@@ -19,7 +20,7 @@
         {
             this.unitOfWork = unitOfWork;
             this.locationApiManager = locationApiManager;
-
+            Repository = unitOfWork.Locations;
             EndPoint = ConfigurationManager.AppSettings["LocationEndPoint"];
         }
     }
