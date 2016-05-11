@@ -5,6 +5,7 @@
 var editTechnicianController = function ($scope, $stateParams, $state, commonDataService) {
     $scope.technician = {};
     $scope.events = [];
+    $scope.color = '';
 
 	var date = new Date();
     var d = date.getDate();
@@ -29,18 +30,21 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             });
         } else {
             // Events
-            $scope.events.push({ resourceId: 'Sun', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Mon', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Tue', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Wed', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Thu', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Fri', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Sat', title: 'Available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ resourceId: 'Sun', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ resourceId: 'Mon', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ resourceId: 'Tue', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ resourceId: 'Wed', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ resourceId: 'Thu', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ resourceId: 'Fri', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ resourceId: 'Sat', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
 
         }
 
         if ($scope.technician.Picture != null) {
             $("#avatar").attr('src', $scope.technician.Picture);
+        }
+        if ($scope.technician.Color != null) {
+            $("#colorId").backgroundColor = $scope.technician.Color;
         }
     });
     
@@ -75,16 +79,16 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
         	schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
         	now: date,
         	defaultView: 'timelineDay',
-            height: 280,
+            height: 300,
             resourceAreaWidth: 250,
             editable: true,
             businessHours: true,
             eventOverlap: false,
             disableDragging: true,
             header: {
-                left: '',
-                center: '',
-                right: ''
+                left: 'prev,next',
+                center: 'title',
+                right: 'timelineWeek,timelineDay'
             },
             eventLimit: true,
             eventClick: $scope.alertOnEventClick,
@@ -132,6 +136,15 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             };
             fr.readAsDataURL(files[0]);
         }
-    };    
+    };
+
+       
+    $('#colorId').colorpicker({
+        color: '#fff',
+        align: 'right',
+        }).on('changeColor', function (ev) {
+            $scope.color = ev.color.toHex();
+            this.backgroundColor = $scope.color;
+        });
 };
 editTechnicianController.$inject = ["$scope", "$stateParams", "$state", "commonDataService"];

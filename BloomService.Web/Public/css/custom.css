@@ -53,3 +53,14 @@
 .upload_avatar {
     margin-bottom: 20px;
 }
+.edit_technician .fc-event {
+    background-color: #ed5565;
+    border-color: #ed5565;
+}
+#colorId {
+    width: 50px;
+    height: 50px;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #ed5565;
+}

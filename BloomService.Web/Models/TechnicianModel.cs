@@ -14,6 +14,8 @@ namespace BloomService.Web.Models
         public bool IsAvailable { get; set; }
         [JsonProperty("Picture")]
         public string Picture { get; set; }
+        [JsonProperty("Color")]
+        public string Color { get; set; }
     }
 
     public class AvailableDay

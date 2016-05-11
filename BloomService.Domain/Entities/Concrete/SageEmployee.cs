@@ -103,5 +103,7 @@
         public bool IsAvailable { get; set; }
         [XmlAttribute]
         public string Picture { get; set; }
+        [XmlAttribute]
+        public string Color { get; set; }
     }
 }
