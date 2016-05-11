@@ -62,7 +62,7 @@
                 countImage++;
             }
 
-            this.unitOfWork.GetEntities<SageImageWorkOrder>().Add(imagesDB);
+            unitOfWork.GetEntities<SageImageWorkOrder>().Add(imagesDB);
             return true;
         }
 

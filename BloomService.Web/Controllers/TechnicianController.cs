@@ -33,21 +33,21 @@
         [GET("Technician/{id}")]
         public ActionResult GetTechnician(string id)
         {
-            var technician = this.employeeService.Get(id);
+            var technician = employeeService.Get(id);
             return Json(technician, JsonRequestBehavior.AllowGet);
         }
 
         [GET("Technician")]
         public ActionResult GetTechnicians()
         {
-            var list = this.employeeService.Get();
+            var list = employeeService.Get();
             return Json(list.OrderBy(x => x.Employee), JsonRequestBehavior.AllowGet);
         }
 
         [POST("Technician/Save")]
         public ActionResult SaveTechniciance(TechnicianModel model)
         {
-            var employee = this.employeeService.Get(model.Id);
+            var employee = employeeService.Get(model.Id);
             var technician = Mapper.Map<SageEmployee, EmployeeModel>(employee);
             technician.AvailableDays = model.AvailableDays;
             technician.IsAvailable = model.IsAvailable;
@@ -55,7 +55,7 @@
 
             var updatedTechnician = Mapper.Map<EmployeeModel, SageEmployee>(technician);
 
-            this.unitOfWork.GetEntities<SageEmployee>().Add(updatedTechnician);
+            employeeService.EditToMongo(updatedTechnician);
 
             return Json("success", JsonRequestBehavior.AllowGet);
         }

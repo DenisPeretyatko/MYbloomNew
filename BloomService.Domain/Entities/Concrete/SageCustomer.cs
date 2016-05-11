@@ -4,6 +4,7 @@
     using System.Xml.Serialization;
 
     using BloomService.Domain.Attributes;
+    using BloomService.Domain.Entities.Concrete.Auxiliary;
 
     [XmlType(AnonymousType = true)]
     [CollectionName("CustomerCollection")]

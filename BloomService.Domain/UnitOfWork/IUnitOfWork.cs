@@ -27,6 +27,8 @@
 
         IWorkOrderRepository WorkOrders { get; }
 
+        IChangeRepository Changes { get; }
+
         IRepository<TEntity> GetEntities<TEntity>() where TEntity : class, IEntity;
     }
 }

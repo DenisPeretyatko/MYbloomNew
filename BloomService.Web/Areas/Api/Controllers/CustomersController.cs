@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Web.Http;
-
-namespace BloomService.Web.Areas.Api.Controllers
+﻿namespace BloomService.Web.Areas.Api.Controllers
 {
-    using BloomService.Domain.Entities;
+    using System.Collections.Generic;
+    using System.Web.Http;
+
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Services.Abstract;
 

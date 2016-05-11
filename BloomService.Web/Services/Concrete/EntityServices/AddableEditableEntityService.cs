@@ -1,9 +1,11 @@
 ﻿namespace BloomService.Web.Services.Concrete.EntityServices
 {
+    using System;
     using System.Collections.Generic;
 
     using BloomService.Domain.Entities.Abstract;
     using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Entities.Concrete.Auxiliary;
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract.EntityManagers;
     using BloomService.Web.Services.Abstract.EntityServices;
@@ -24,12 +26,36 @@
 
         public virtual IEnumerable<TEntity> Add(SagePropertyDictionary properties)
         {
-            return sageApiManager.Add(EndPoint, properties);
+            var result = sageApiManager.Add(EndPoint, properties);
+
+            unitOfWork.Changes.Add(
+                new SageChange
+                {
+                    Change = ChangeType.Create,
+                    EntityId = GetEntityId(properties),
+                    EntityType = GetEntityName(),
+                    Status = StatusType.NotSynchronized,
+                    ChangeTime = DateTime.UtcNow
+                });
+
+            return result;
         }
 
         public virtual IEnumerable<TEntity> Edit(SagePropertyDictionary properties)
         {
-            return sageApiManager.Edit(EndPoint, properties);
+            var result = sageApiManager.Edit(EndPoint, properties);
+
+            unitOfWork.Changes.Add(
+               new SageChange
+               {
+                   Change = ChangeType.Update,
+                   EntityId = GetEntityId(properties),
+                   EntityType = GetEntityName(),
+                   Status = StatusType.NotSynchronized,
+                   ChangeTime = DateTime.UtcNow
+               });
+
+            return result;
         }
     }
 }

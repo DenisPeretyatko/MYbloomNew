@@ -1,5 +1,3 @@
-using BloomService.Domain.Repositories.Abstract;
-using BloomService.Domain.Repositories.Concrete;
 using BloomService.Web;
 
 using WebActivatorEx;
@@ -13,7 +11,6 @@ namespace BloomService.Web
     using System.Configuration;
     using System.Web;
 
-    using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Managers.Concrete;
