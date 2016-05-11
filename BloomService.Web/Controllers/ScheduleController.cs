@@ -64,9 +64,12 @@
         }
 
         [POST("Schedule/Assignments/Create")]
-        public ActionResult SaveTecnitianLocations(AssignmentViewModel model)
+        public ActionResult CreateAssignment(AssignmentViewModel model)
         {
-            var assignmanet = new SagePropertyDictionary
+            var databaseAssignment = assignmentService.Get().FirstOrDefault(a=> a.WorkOrder == model.WorkOrder);
+            if (databaseAssignment == null)
+            {
+                var assignmanet = new SagePropertyDictionary
                                   {
                                       { "ScheduleDate", model.ScheduleDate.ToShortDateString() }, 
                                       { "Employee", model.Employee }, 
@@ -77,7 +80,24 @@
                                       { "Endtime", model.EndDate.ToShortTimeString() }
                                   };
 
-            var created = this.assignmentService.Add(assignmanet);
+                var created = this.assignmentService.Add(assignmanet);
+            }
+            else
+            {
+                var assignmanet = new SagePropertyDictionary
+                                  {
+                                      { "Assignment", databaseAssignment.Assignment }, 
+                                      { "ScheduleDate", model.ScheduleDate.ToShortDateString() }, 
+                                      { "Employee", model.Employee }, 
+                                      { "WorkOrder", model.WorkOrder }, 
+                                      { "EstimatedRepairHours", model.EstimatedRepairHours }, 
+                                      { "StartTime", model.ScheduleDate.ToShortTimeString() }, 
+                                      { "Enddate", model.EndDate.ToShortDateString() }, 
+                                      { "Endtime", model.EndDate.ToShortTimeString() }
+                                  };
+                var edited = this.assignmentService.Edit(assignmanet);
+            }
+            
             return this.Json("success", JsonRequestBehavior.AllowGet);
         }
     }

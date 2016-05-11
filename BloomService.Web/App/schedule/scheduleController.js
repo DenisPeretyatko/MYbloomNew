@@ -16,7 +16,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
     };
     /* message on Drop */
     $scope.alertOnDrop = function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view){
-        $scope.alertMessage = (event.title +': Droped to make dayDelta ' + dayDelta);
+        $scope.alertMessage = (event.title + ': Droped to make dayDelta ' + dayDelta);
     };
     /* message on Resize */
     $scope.alertOnResize = function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ){
@@ -33,7 +33,14 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             resourceAreaWidth: '15%',
             editable: true,
             events: $scope.events,
-            eventRender: function(event, element) {
+            eventRender: function (event, element) {
+                $('#calendar').find("div[style='height: 34px;']").each(function (i, el) {
+                    $(this).css('height', '28px');
+                });
+                $('#calendar').find("div[style='height: 8px;']").each(function (i, el) {
+                    $(this).css('height', '28px');
+                });
+
                 var columns = event.title.split("/");
                 var workorder = columns[0];
 
@@ -49,12 +56,6 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     EndDate: end,
                 };
                 commonDataService.assignWorkorder(assignment);
-                $('#calendar').find("div[style='height: 34px;']").each(function (i, el) {
-                    $(this).css('height', '28px');
-                });
-                $('#calendar').find("div[style='height: 8px;']").each(function (i, el) {
-                    $(this).css('height', '28px');
-                });
             },
             droppable: true, // this allows things to be dropped onto the calendar
             dragRevertDuration: 0,
@@ -147,7 +148,8 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     start: value.Start,
                     end: value.End,
                     durationEditable: false,
-                    editable: false
+                    editable: false,
+                    assigmentId: value.Assigments
                 });
             }
         }, $scope.events);
@@ -166,6 +168,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     title: textTitle,
                     start: startDate,
                     end: endDate.setHours(startDate.getHours() + parseInt($(this).find('td').last().text())),
+                    workorderId: parseInt($(this).find('td').first().text()),
                     durationEditable: false,
                     stick: true,
                 });
