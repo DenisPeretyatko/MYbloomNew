@@ -461,6 +461,7 @@
     <Content Include="Public\css\patterns\otis_redding.png" />
     <Content Include="Public\css\patterns\shattered.png" />
     <Content Include="Public\css\patterns\triangular.png" />
+    <Content Include="Public\css\plugins\colorpicker\colorpicker.css" />
     <Content Include="Public\css\plugins\datapicker\angular-datapicker.css" />
     <Content Include="Public\css\plugins\footable\fonts\footable.svg" />
     <Content Include="Public\css\plugins\footable\footable.core.css" />
@@ -486,6 +487,7 @@
     <Content Include="Public\images\a8.jpg" />
     <Content Include="Public\images\technician1.png" />
     <Content Include="Public\images\technician2.png" />
+    <Content Include="Public\images\user.png" />
     <Content Include="Public\images\workorder1.png" />
     <Content Include="Public\images\workorder2.png" />
     <Content Include="Public\js\angular\angular-animate.js" />
@@ -521,6 +523,8 @@
     <Content Include="Public\js\jquery\jquery-ui-1.10.4.min.js" />
     <Content Include="Public\js\jquery\jquery-ui.custom.min.js" />
     <Content Include="Public\js\jquery\moment.min.js" />
+    <Content Include="Public\js\plugins\colorpicker\bootstrap-colorpicker-module.js" />
+    <Content Include="Public\js\plugins\colorpicker\bootstrap-colorpicker.min.js" />
     <Content Include="Public\js\plugins\datapicker\angular-datepicker.js" />
     <Content Include="Public\js\plugins\flot\angular-flot.js" />
     <Content Include="Public\js\plugins\flot\curvedLines.js" />

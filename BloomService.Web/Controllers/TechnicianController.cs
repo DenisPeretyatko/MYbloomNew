@@ -47,6 +47,7 @@ namespace BloomService.Web.Controllers
             technician.AvailableDays = model.AvailableDays;
             technician.IsAvailable = model.IsAvailable;
             technician.Picture = model.Picture;
+            technician.Color = model.Color;
 
             var updatedTechnician = AutoMapper.Mapper.Map<EmployeeModel, SageEmployee>(technician);
             

@@ -128,7 +128,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                 this.push({
                     id : value.Employee,
                     title : value.Name,
-                    avatarUrl : value.avatarUrl
+                    avatarUrl : value.Picture != null? value.Picture : "public/images/user.png"
                 });
             }
         }, $scope.resources);

@@ -3,21 +3,26 @@
         <h2>Edit Technician</h2>
     </div>
 </div>
-
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
-                <div class="ibox-content">
-                    <form role="form" name="edit_technician_form" novalidate >
-                        <div class="form-group col-xs-6">
+                <div class="ibox-content edit_technician">
+                    <form role="form" name="edit_technician_form" novalidate>
+                        <div class="form-group col-xs-4">
                             <label>Available</label>
                             <br />
                             <br />
                             <input type="checkbox" class="js-switch" ui-switch="{color:'#ED5565', secondaryColor:'#1AB394'}" ng-model="notAvailable" />
                         </div>
-                        <div class="form-group col-xs-6">
-                            <label class="pull-right">Image</label>
+                        <div class="form-group col-xs-4">
+                            <label>Select color</label>
+                            <br />
+                            <br />
+                            <a data-color="rgb(0, 0, 0)" id="colorId" class="btn small demo colorpicker-element" href="#"></a>
+                        </div>
+                        <div class="form-group col-xs-4">
+                            <label class="pull-right">Picture</label>
                             <br />
                             <br />
                             <img id="avatar" class="img-circle pull-right" alt="" />
@@ -29,10 +34,9 @@
                             <div class="upload_avatar btn btn-sm btn-primary pull-right">
                                 <input id="loaded_img" type="file" ngf-accept="'image/*'" accept="image/*" class="avatarImg"
                                        onchange="angular.element(this).scope().uploadFile(this.files)" />
-                                <strong>Select Image</strong>
+                                <strong>Select Picture</strong>
                             </div>
                         </div>
-
                         <div class="form-group ui-calendar">
                             <label>Weekly Schedule</label>
                             <div ui-calendar="uiConfig.calendar" calendar="schedule" class="calendar" ng-model="eventSources"></div>
@@ -44,10 +48,10 @@
     </div>
     <div class="row">
         <div class="col-lg-12">
-             <div class="form-group">
-                 <button class="btn btn-sm btn-primary" type="submit" ng-click="saveTechnician()"><strong>Save</strong></button>
+            <div class="form-group">
+                <button class="btn btn-sm btn-primary" type="submit" ng-click="saveTechnician()"><strong>Save</strong></button>
                 <button class="btn btn-sm btn-danger" type="cancel" back><strong>Cancel</strong></button>
-             </div>
-       </div>
+            </div>
+        </div>
     </div>
 </div>
