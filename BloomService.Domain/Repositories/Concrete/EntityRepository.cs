@@ -62,7 +62,7 @@
 
         public IEnumerable<TEntity> SearchFor(Expression<Func<TEntity, bool>> predicate)
         {
-            return collection.AsQueryable().Where(predicate.Compile()).ToList();
+            return collection.AsQueryable().Where(predicate.Compile());
         }
 
         public bool Update(TEntity entity)

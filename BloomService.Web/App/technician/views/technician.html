@@ -23,8 +23,8 @@
                             <td>{{technician.Employee}}</td>
                             <td>{{technician.Name}}</td>
                             <td>
-                                <span class="label" ng-class="technician.Inactive == 'No' ? 'label-primary' : 'label-danger'">
-                                    {{technician.Inactive == 'No' ? "Available" : "Not Available" }}
+                                <span class="label" ng-class="technician.IsAvailable == true ? 'label-primary' : 'label-danger'">
+                                    {{technician.IsAvailable == true ? "Available" : "Not Available" }}
                                 </span>
                             </td>
                             <td class="center">

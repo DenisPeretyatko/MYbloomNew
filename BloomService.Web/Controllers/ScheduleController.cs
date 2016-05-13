@@ -23,8 +23,8 @@
         private readonly IWorkOrderService workOrderService;
 
         public ScheduleController(
-            IAssignmentService assignmentService, 
-            IWorkOrderService workOrderService, 
+            IAssignmentService assignmentService,
+            IWorkOrderService workOrderService,
             IEmployeeService employeeService)
         {
             this.assignmentService = assignmentService;
@@ -44,8 +44,8 @@
                 var employee = employees.FirstOrDefault(e => e.Name == item.Employee);
                 item.EmployeeId = employee != null ? employee.Employee : null;
                 var startDate = DateTime.ParseExact(
-                    item.ScheduleDate + " " + item.StartTime, 
-                    "yyyy-MM-dd HH:mm:ss", 
+                    item.ScheduleDate + " " + item.StartTime,
+                    "yyyy-MM-dd HH:mm:ss",
                     CultureInfo.InvariantCulture);
                 item.Start = startDate.ToString();
                 item.End = startDate.AddHours(Convert.ToDouble(item.EstimatedRepairHours)).ToString();
@@ -66,25 +66,8 @@
         [POST("Schedule/Assignments/Create")]
         public ActionResult CreateAssignment(AssignmentViewModel model)
         {
-            var databaseAssignment = assignmentService.Get().FirstOrDefault(a=> a.WorkOrder == model.WorkOrder);
-            if (databaseAssignment == null)
-            {
-                var assignmanet = new SagePropertyDictionary
-                                  {
-                                      { "ScheduleDate", model.ScheduleDate.ToShortDateString() }, 
-                                      { "Employee", model.Employee }, 
-                                      { "WorkOrder", model.WorkOrder }, 
-                                      { "EstimatedRepairHours", model.EstimatedRepairHours }, 
-                                      { "StartTime", model.ScheduleDate.ToShortTimeString() }, 
-                                      { "Enddate", model.EndDate.ToShortDateString() }, 
-                                      { "Endtime", model.EndDate.ToShortTimeString() }
-                                  };
-
-                var created = this.assignmentService.Add(assignmanet);
-            }
-            else
-            {
-                var assignmanet = new SagePropertyDictionary
+            var databaseAssignment = assignmentService.GetByWorkOrderId(model.WorkOrder);
+            var assignmanet = new SagePropertyDictionary
                                   {
                                       { "Assignment", databaseAssignment.Assignment }, 
                                       { "ScheduleDate", model.ScheduleDate.ToShortDateString() }, 
@@ -95,9 +78,28 @@
                                       { "Enddate", model.EndDate.ToShortDateString() }, 
                                       { "Endtime", model.EndDate.ToShortTimeString() }
                                   };
-                var edited = this.assignmentService.Edit(assignmanet);
-            }
+            var edited = this.assignmentService.Edit(assignmanet);
             
+            return this.Json("success", JsonRequestBehavior.AllowGet);
+        }
+
+        [POST("Schedule/Assignments/Delete")]
+        public ActionResult DeleteAssignment(AssignmentViewModel model)
+        {
+            var databaseAssignment = assignmentService.GetByWorkOrderId(model.WorkOrder);
+            var assignmanet = new SagePropertyDictionary
+                                {
+                                    { "Assignment", databaseAssignment.Assignment }, 
+                                    { "ScheduleDate", model.ScheduleDate.ToShortDateString() }, 
+                                    { "Employee", model.Employee }, 
+                                    { "WorkOrder", model.WorkOrder }, 
+                                    { "EstimatedRepairHours", model.EstimatedRepairHours }, 
+                                    { "StartTime", model.ScheduleDate.ToShortTimeString() }, 
+                                    { "Enddate", model.EndDate.ToShortDateString() }, 
+                                    { "Endtime", model.EndDate.ToShortTimeString() }
+                                };
+            var edited = this.assignmentService.Edit(assignmanet);
+
             return this.Json("success", JsonRequestBehavior.AllowGet);
         }
     }

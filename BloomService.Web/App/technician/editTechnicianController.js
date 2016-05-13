@@ -7,10 +7,20 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
     $scope.events = [];
     $scope.color = '';
 
-	var date = new Date();
-    var d = date.getDate();
-    var m = date.getMonth();
-    var y = date.getFullYear();
+    var date = new Date();
+
+    function getMonday(d) {
+        d = new Date(d);
+        var day = d.getDay(),
+            diff = d.getDate() - day + (day == 0 ? -6 : 0);
+        return new Date(d.setDate(diff));
+    }
+
+    var sunday = getMonday(date);
+
+    var sundayD = sunday.getDate();
+    var sundayM = sunday.getMonth();
+    var sundayY = sunday.getFullYear();
 
     commonDataService.getTechnician($stateParams.id).then(function (response) {
         $scope.technician = response.data;
@@ -30,13 +40,14 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             });
         } else {
             // Events
-            $scope.events.push({ resourceId: 'Sun', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Mon', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Tue', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Wed', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Thu', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Fri', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Sat', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
+            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD, 8), end: new Date(sundayY, sundayM, sundayD, 18) });
+            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD + 1, 8), end: new Date(sundayY, sundayM, sundayD + 1, 18) });
+            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD + 2, 8), end: new Date(sundayY, sundayM, sundayD + 2, 18) });
+            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD + 3, 8), end: new Date(sundayY, sundayM, sundayD + 3, 18) });
+            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD + 4, 8), end: new Date(sundayY, sundayM, sundayD + 4, 18) });
+            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD + 5, 8), end: new Date(sundayY, sundayM, sundayD + 5, 18) });
+            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD + 6, 8), end: new Date(sundayY, sundayM, sundayD + 6, 18) });
+
 
         }
 
@@ -78,8 +89,8 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
         calendar: {
         	schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
         	now: date,
-        	defaultView: 'timelineDay',
-            height: 300,
+        	defaultView: 'agendaWeek',
+            height: 630,
             resourceAreaWidth: 250,
             editable: true,
             businessHours: true,
@@ -88,7 +99,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             header: {
                 left: 'prev,next',
                 center: 'title',
-                right: 'timelineWeek,timelineDay'
+                right: 'agendaWeek'
             },
             eventLimit: true,
             eventClick: $scope.alertOnEventClick,
@@ -96,15 +107,15 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             eventResize: $scope.alertOnResize,
             events: $scope.eventSources,
             resourceLabelText: 'Availability',
-			resources: [
-				{ id: 'Sun', title: 'Sunday' },
-				{ id: 'Mon', title: 'Monday' },
-				{ id: 'Tue', title: 'Tuesday' },
-				{ id: 'Wed', title: 'Wednesday' },
-				{ id: 'Thu', title: 'Thursday' },
-				{ id: 'Fri', title: 'Friday' },
-				{ id: 'Sat', title: 'Saturday' }
-            ],
+			//resources: [
+			//	{ id: 'Sun', title: 'Sunday' },
+			//	{ id: 'Mon', title: 'Monday' },
+			//	{ id: 'Tue', title: 'Tuesday' },
+			//	{ id: 'Wed', title: 'Wednesday' },
+			//	{ id: 'Thu', title: 'Thursday' },
+			//	{ id: 'Fri', title: 'Friday' },
+			//	{ id: 'Sat', title: 'Saturday' }
+            //],
             timezone: 'local'
         }
     };

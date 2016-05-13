@@ -26,15 +26,15 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
 
     $scope.createWorkOrder = function () {
         var workorder = {
-            Customer: $scope.lookups.Customers.selected.Customer,
-            Location: $scope.lookups.Locations.selected.Location,
-            Calltype: $scope.lookups.Calltypes.selected.CallType,
+            Customer: $scope.lookups.Customers.selected == null ? "" : $scope.lookups.Customers.selected.Customer,
+            Location: $scope.lookups.Locations.selected == null ? "" : $scope.lookups.Locations.selected.Location,
+            Calltype: $scope.lookups.Calltypes.selected == null ? "" : $scope.lookups.Calltypes.selected.CallType,
             Calldate: $scope.obj.calldate,
-            Problem: $scope.lookups.Problems.selected.Problem,
+            Problem: $scope.lookups.Problems.selected == null ? "" : $scope.lookups.Problems.selected.Problem,
             Ratesheet: $scope.lookups.RateSheets.selected,
-            Emploee: $scope.lookups.Employes.selected.Employee,
+            Emploee: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.Employee,
             Equipment: $scope.lookups.Equipment.selected == null ? "0" : $scope.lookups.Equipment.selected.Equipment,
-            Estimatehours: $scope.lookups.Hours.selected.Repair,
+            Estimatehours: $scope.lookups.Hours.selected == null ? "" : $scope.lookups.Hours.selected.Repair,
             Nottoexceed: $scope.obj.nottoexceed,
             Locationcomments: $scope.obj.locationcomments,
             Customerpo: $scope.obj.customerpo,

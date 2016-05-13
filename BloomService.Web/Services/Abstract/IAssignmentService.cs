@@ -5,5 +5,6 @@
 
     public interface IAssignmentService : IAddableEntityService<SageAssignment>, IEditableEntityService<SageAssignment>
     {
+        SageAssignment GetByWorkOrderId(string id);
     }
 }
