@@ -4,11 +4,13 @@
     using System.Xml.Serialization;
 
     using BloomService.Domain.Attributes;
-
+    using System.Collections.Generic;
     [CollectionName("WorkOrderCollection")]
     [XmlType(AnonymousType = true)]
     public class SageWorkOrder : SageEntity
     {
+        public List<ImageLocation> Images { get; set; }
+
         public decimal Latitude { get; set; }
 
         public decimal Longitude { get; set; }

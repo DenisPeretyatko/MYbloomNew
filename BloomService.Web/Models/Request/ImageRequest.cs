@@ -7,7 +7,9 @@ namespace BloomService.Web.Models.Request
 {
     public class ImageRequest
     {
-        public IEnumerable<string> Images { get; set; }
+        public string Image { get; set; }
         public string IdWorkOrder { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
     }
 }

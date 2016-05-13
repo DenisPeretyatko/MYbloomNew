@@ -20,6 +20,7 @@
             }
             var parametersSearch = entity.Address + " " + entity.Address2 + " " + entity.City + " " + entity.ZIP + " " + entity.State;
             var location = GoogleApi.GetLocation(parametersSearch);
+            System.Threading.Thread.Sleep(1000);
             if (location != null && location.result != null && location.result.Any())
             {
                 var geometry = location.result.FirstOrDefault().geometry;
