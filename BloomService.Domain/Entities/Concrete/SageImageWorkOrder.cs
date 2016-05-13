@@ -7,8 +7,17 @@
     [CollectionName("ImageWorkOrderCollection")]
     public class SageImageWorkOrder : SageEntity
     {
-        public List<string> Images { get; set; }
+        public List<ImageLocation> Images { get; set; }
 
         public string WorkOrder { get; set; }
+    }
+
+    public class ImageLocation
+    {
+        public string Image { get; set; }
+
+        public decimal Latitude { get; set; }
+
+        public decimal Longitude { get; set; }
     }
 }

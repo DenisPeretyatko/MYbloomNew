@@ -67,12 +67,12 @@
 
         public bool Update(TEntity entity)
         {
-            if (Get(entity.Id) != null)
+            if (SearchFor(x => x.Id == entity.Id).Any())
             {
                 collection.Remove(Query.EQ("_id", entity.Id));
             }
-
-            collection.Insert(entity);
+            entity.Id = ObjectId.GenerateNewId().ToString();
+            var result = collection.Insert(entity);
             return true;
         }
     }
