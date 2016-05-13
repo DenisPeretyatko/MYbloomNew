@@ -64,3 +64,8 @@
     border-radius: 50%;
     background-color: #ed5565;
 }
+
+#external-events-listing .fc-event {
+    cursor: pointer;
+    margin: 10px 0;
+}

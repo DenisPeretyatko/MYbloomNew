@@ -5,22 +5,19 @@
 var editTechnicianController = function ($scope, $stateParams, $state, commonDataService) {
     $scope.technician = {};
     $scope.events = [];
+    $scope.createdEvents = [];
     $scope.color = '';
 
     var date = new Date();
 
-    function getMonday(d) {
+    function getSunday(d) {
         d = new Date(d);
         var day = d.getDay(),
             diff = d.getDate() - day + (day == 0 ? -6 : 0);
         return new Date(d.setDate(diff));
     }
 
-    var sunday = getMonday(date);
-
-    var sundayD = sunday.getDate();
-    var sundayM = sunday.getMonth();
-    var sundayY = sunday.getFullYear();
+    var sunday = getSunday(date);
 
     commonDataService.getTechnician($stateParams.id).then(function (response) {
         $scope.technician = response.data;
@@ -38,22 +35,12 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
                     });
                 }
             });
-        } else {
-            // Events
-            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD, 8), end: new Date(sundayY, sundayM, sundayD, 18) });
-            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD + 1, 8), end: new Date(sundayY, sundayM, sundayD + 1, 18) });
-            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD + 2, 8), end: new Date(sundayY, sundayM, sundayD + 2, 18) });
-            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD + 3, 8), end: new Date(sundayY, sundayM, sundayD + 3, 18) });
-            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD + 4, 8), end: new Date(sundayY, sundayM, sundayD + 4, 18) });
-            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD + 5, 8), end: new Date(sundayY, sundayM, sundayD + 5, 18) });
-            $scope.events.push({ title: 'Not available', start: new Date(sundayY, sundayM, sundayD + 6, 8), end: new Date(sundayY, sundayM, sundayD + 6, 18) });
-
-
         }
 
         if ($scope.technician.Picture != null) {
             $("#avatar").attr('src', $scope.technician.Picture);
         }
+
         if ($scope.technician.Color != null) {
             $("#colorId").backgroundColor = $scope.technician.Color;
         }
@@ -87,36 +74,33 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
     /* config object */
     $scope.uiConfig = {
         calendar: {
-        	schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-        	now: date,
-        	defaultView: 'agendaWeek',
+            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+            now: date,
+            defaultView: 'agendaWeek',
             height: 630,
-            resourceAreaWidth: 250,
             editable: true,
-            businessHours: true,
-            eventOverlap: false,
-            disableDragging: true,
+            droppable: true, // this allows things to be dropped onto the calendar
+            dragRevertDuration: 0,
+            eventReceive: function(event) {
+                $scope.createdEvents.push({ title: event.title, start: event.start, end: event.end });
+            },
+            eventDragStop: function(event, jsEvent, ui, view) {
+
+                if (isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
+                    $('.calendar').fullCalendar('removeEvents', event._id);
+                }
+            },
             header: {
                 left: 'prev,next',
                 center: 'title',
                 right: 'agendaWeek'
             },
-            eventLimit: true,
             eventClick: $scope.alertOnEventClick,
             eventDrop: $scope.alertOnDrop,
             eventResize: $scope.alertOnResize,
             events: $scope.eventSources,
-            resourceLabelText: 'Availability',
-			//resources: [
-			//	{ id: 'Sun', title: 'Sunday' },
-			//	{ id: 'Mon', title: 'Monday' },
-			//	{ id: 'Tue', title: 'Tuesday' },
-			//	{ id: 'Wed', title: 'Wednesday' },
-			//	{ id: 'Thu', title: 'Thursday' },
-			//	{ id: 'Fri', title: 'Friday' },
-			//	{ id: 'Sat', title: 'Saturday' }
-            //],
-            timezone: 'local'
+            timezone: 'local',
+            forceEventDuration: true,
         }
     };
 
@@ -127,7 +111,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
         $scope.file = $("#avatar").attr('src');
         var technician = {
             Id: $stateParams.id,
-            AvailableDays: $scope.events,
+            AvailableDays: $scope.events.concat($scope.createdEvents),
             IsAvailable: $scope.notAvailable,
             Picture: $scope.file
         };
@@ -157,5 +141,41 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             $scope.color = ev.color.toHex();
             this.backgroundColor = $scope.color;
         });
+
+    var isEventOverDiv = function (x, y) {
+        var external_events = $('#external-events-listing');
+        var offset = external_events.offset();
+        offset.right = external_events.width() + offset.left;
+        offset.bottom = external_events.height() + offset.top;
+        var scroll = $(window).scrollTop();
+
+        if (x >= offset.left
+            && y + scroll >= offset.top
+            && x <= offset.right
+            && y + scroll <= offset.bottom) { return true; }
+        return false;
+
+    }
+
+    $('#external-events-listing div').each(function () {
+        $(this).data('event', {
+            title: 'Not available',
+            stick: true,
+        });
+
+        $(this).draggable({
+            zIndex: 999,
+            revert: true,
+            revertDuration: 0
+        });
+    });
+
+    $('.fc-button-prev span').click(function () {
+        $('.calendar').fullCalendar('rerenderEvents');
+    });
+
+    $('.fc-button-next span').click(function () {
+        $('.calendar').fullCalendar('rerenderEvents');
+    });
 };
 editTechnicianController.$inject = ["$scope", "$stateParams", "$state", "commonDataService"];

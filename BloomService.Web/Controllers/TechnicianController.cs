@@ -42,6 +42,7 @@ namespace BloomService.Web.Controllers
         [POST("Technician/Save")]
         public ActionResult SaveTechniciance(TechnicianModel model)
         {
+
             var employee = this._employeeService.Get(model.Id);
             var technician = AutoMapper.Mapper.Map<SageEmployee, EmployeeModel>(employee);
             technician.AvailableDays = model.AvailableDays;
