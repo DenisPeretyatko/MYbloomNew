@@ -100,6 +100,7 @@
     <Compile Include="Entities\Concrete\SageWorkOrder.cs" />
     <Compile Include="Exceptions\ResponseException.cs" />
     <Compile Include="Repositories\Abstract\IAssignmentRepository.cs" />
+    <Compile Include="Repositories\Abstract\IChangeRepository.cs" />
     <Compile Include="Repositories\Abstract\ILocationRepository.cs" />
     <Compile Include="Repositories\Abstract\IRepository.cs" />
     <Compile Include="Repositories\Abstract\IWorkOrderRepository.cs" />
@@ -116,7 +117,6 @@
     <Compile Include="Repositories\Abstract\ICustomerRepository.cs" />
     <Compile Include="Repositories\Concrete\EquipmentRepository.cs" />
     <Compile Include="Repositories\Abstract\IEquipmentRepository.cs" />
-    <Compile Include="Repositories\Abstract\IChangeRepository.cs" />
     <Compile Include="Repositories\Concrete\ChangeRepository.cs" />
     <Compile Include="Repositories\Concrete\LocationRepository.cs" />
     <Compile Include="Repositories\Concrete\EntityRepository.cs" />
@@ -125,7 +125,6 @@
     <Compile Include="Repositories\Concrete\RepairRepository.cs" />
     <Compile Include="Repositories\Abstract\IProblemRepository.cs" />
     <Compile Include="Repositories\Concrete\WorkOrderRepository.cs" />
-    <Compile Include="Repositories\MongoDbInitializer.cs" />
     <Compile Include="Services\GoogleApi.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="UnitOfWork\MongoDbUnitOfWork.cs" />
