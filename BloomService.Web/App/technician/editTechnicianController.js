@@ -98,7 +98,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             eventClick: $scope.alertOnEventClick,
             eventDrop: $scope.alertOnDrop,
             eventResize: $scope.alertOnResize,
-            events: $scope.eventSources,
+            events: $scope.events,
             timezone: 'local',
             forceEventDuration: true,
         }
@@ -170,12 +170,5 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
         });
     });
 
-    $('.fc-button-prev span').click(function () {
-        $('.calendar').fullCalendar('rerenderEvents');
-    });
-
-    $('.fc-button-next span').click(function () {
-        $('.calendar').fullCalendar('rerenderEvents');
-    });
 };
 editTechnicianController.$inject = ["$scope", "$stateParams", "$state", "commonDataService"];
