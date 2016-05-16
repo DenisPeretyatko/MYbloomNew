@@ -9,19 +9,27 @@
             <div class="ibox">
                 <div class="ibox-content edit_technician">
                     <form role="form" name="edit_technician_form" novalidate>
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-3">
                             <label>Available</label>
                             <br />
                             <br />
                             <input type="checkbox" class="js-switch" ui-switch="{color:'#ED5565', secondaryColor:'#1AB394'}" ng-model="notAvailable" />
                         </div>
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-3 " id="external-events-listing">
+                            <label>Drag to set not available time</label>
+                            <br />
+                            <br />
+                            <div>
+                                <div class='fc-event col-xs-6'>Not available</div>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-3">
                             <label>Select color</label>
                             <br />
                             <br />
                             <a data-color="rgb(0, 0, 0)" id="colorId" class="btn small demo colorpicker-element" href="#"></a>
                         </div>
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-3">
                             <label class="pull-right">Picture</label>
                             <br />
                             <br />

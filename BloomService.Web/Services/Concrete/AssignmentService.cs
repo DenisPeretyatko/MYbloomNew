@@ -1,4 +1,6 @@
-﻿namespace BloomService.Web.Services.Concrete
+﻿using System.Linq;
+
+namespace BloomService.Web.Services.Concrete
 {
     using System.Configuration;
     using System.Linq;

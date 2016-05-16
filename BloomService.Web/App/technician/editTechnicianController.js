@@ -5,12 +5,19 @@
 var editTechnicianController = function ($scope, $stateParams, $state, commonDataService) {
     $scope.technician = {};
     $scope.events = [];
+    $scope.createdEvents = [];
     $scope.color = '';
 
-	var date = new Date();
-    var d = date.getDate();
-    var m = date.getMonth();
-    var y = date.getFullYear();
+    var date = new Date();
+
+    function getSunday(d) {
+        d = new Date(d);
+        var day = d.getDay(),
+            diff = d.getDate() - day + (day == 0 ? -6 : 0);
+        return new Date(d.setDate(diff));
+    }
+
+    var sunday = getSunday(date);
 
     commonDataService.getTechnician($stateParams.id).then(function (response) {
         $scope.technician = response.data;
@@ -28,21 +35,12 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
                     });
                 }
             });
-        } else {
-            // Events
-            $scope.events.push({ resourceId: 'Sun', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Mon', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Tue', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Wed', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Thu', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Fri', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-            $scope.events.push({ resourceId: 'Sat', title: 'Not available', start: new Date(y, m, d, 8), end: new Date(y, m, d, 18) });
-
         }
 
         if ($scope.technician.Picture != null) {
             $("#avatar").attr('src', $scope.technician.Picture);
         }
+
         if ($scope.technician.Color != null) {
             $("#colorId").backgroundColor = $scope.technician.Color;
         }
@@ -76,36 +74,33 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
     /* config object */
     $scope.uiConfig = {
         calendar: {
-        	schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-        	now: date,
-        	defaultView: 'timelineDay',
-            height: 300,
-            resourceAreaWidth: 250,
+            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+            now: date,
+            defaultView: 'agendaWeek',
+            height: 630,
             editable: true,
-            businessHours: true,
-            eventOverlap: false,
-            disableDragging: true,
+            droppable: true, // this allows things to be dropped onto the calendar
+            dragRevertDuration: 0,
+            eventReceive: function(event) {
+                $scope.createdEvents.push({ title: event.title, start: event.start, end: event.end });
+            },
+            eventDragStop: function(event, jsEvent, ui, view) {
+
+                if (isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
+                    $('.calendar').fullCalendar('removeEvents', event._id);
+                }
+            },
             header: {
                 left: 'prev,next',
                 center: 'title',
-                right: 'timelineWeek,timelineDay'
+                right: 'agendaWeek'
             },
-            eventLimit: true,
             eventClick: $scope.alertOnEventClick,
             eventDrop: $scope.alertOnDrop,
             eventResize: $scope.alertOnResize,
-            events: $scope.eventSources,
-            resourceLabelText: 'Availability',
-			resources: [
-				{ id: 'Sun', title: 'Sunday' },
-				{ id: 'Mon', title: 'Monday' },
-				{ id: 'Tue', title: 'Tuesday' },
-				{ id: 'Wed', title: 'Wednesday' },
-				{ id: 'Thu', title: 'Thursday' },
-				{ id: 'Fri', title: 'Friday' },
-				{ id: 'Sat', title: 'Saturday' }
-            ],
-            timezone: 'local'
+            events: $scope.events,
+            timezone: 'local',
+            forceEventDuration: true,
         }
     };
 
@@ -116,7 +111,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
         $scope.file = $("#avatar").attr('src');
         var technician = {
             Id: $stateParams.id,
-            AvailableDays: $scope.events,
+            AvailableDays: $scope.events.concat($scope.createdEvents),
             IsAvailable: $scope.notAvailable,
             Picture: $scope.file
         };
@@ -146,5 +141,34 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             $scope.color = ev.color.toHex();
             this.backgroundColor = $scope.color;
         });
+
+    var isEventOverDiv = function (x, y) {
+        var external_events = $('#external-events-listing');
+        var offset = external_events.offset();
+        offset.right = external_events.width() + offset.left;
+        offset.bottom = external_events.height() + offset.top;
+        var scroll = $(window).scrollTop();
+
+        if (x >= offset.left
+            && y + scroll >= offset.top
+            && x <= offset.right
+            && y + scroll <= offset.bottom) { return true; }
+        return false;
+
+    }
+
+    $('#external-events-listing div').each(function () {
+        $(this).data('event', {
+            title: 'Not available',
+            stick: true,
+        });
+
+        $(this).draggable({
+            zIndex: 999,
+            revert: true,
+            revertDuration: 0
+        });
+    });
+
 };
 editTechnicianController.$inject = ["$scope", "$stateParams", "$state", "commonDataService"];

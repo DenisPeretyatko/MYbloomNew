@@ -7,9 +7,10 @@
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Services.Abstract;
-
+    using Models.Request;
+    using System.Configuration;
     public class ApiMobileService : IApiMobileService
-        {
+    {
         private readonly IEmployeeService employeeService;
 
         private readonly IImageService imageService;
@@ -21,10 +22,10 @@
         private readonly IWorkOrderService workOrderService;
 
         public ApiMobileService(
-            IWorkOrderService workOrderService, 
-            IUserService userService, 
-            IEmployeeService employeeService, 
-            IImageService imageService, 
+            IWorkOrderService workOrderService,
+            IUserService userService,
+            IEmployeeService employeeService,
+            IImageService imageService,
             IUnitOfWork unitOfWork)
         {
             this.imageService = imageService;
@@ -34,16 +35,16 @@
             this.unitOfWork = unitOfWork;
         }
 
-        public bool AddImage(IEnumerable<string> images, string idWorkOrder)
+        public bool AddImage(ImageRequest model)
         {
             var pathToImage = HostingEnvironment.MapPath("/Images/");
-            var workOrder = workOrderService.Get(idWorkOrder);
+            var workOrder = unitOfWork.GetEntities<SageWorkOrder>().SearchFor(x => x.WorkOrder == model.IdWorkOrder);
             if (workOrder == null)
             {
                 return false;
             }
 
-            var imagesDB = unitOfWork.GetEntities<SageImageWorkOrder>().Get(idWorkOrder);
+            var imagesDB = unitOfWork.GetEntities<SageImageWorkOrder>().SearchFor(x => x.WorkOrder == model.IdWorkOrder).FirstOrDefault();
             var countImage = 0;
             if (imagesDB != null && imagesDB.Images != null)
             {
@@ -51,17 +52,19 @@
             }
             else
             {
-                imagesDB = new SageImageWorkOrder { Images = new List<string>(), WorkOrder = idWorkOrder };
+                imagesDB = new SageImageWorkOrder { Images = new List<ImageLocation>(), WorkOrder = model.IdWorkOrder };
             }
 
-            foreach (var image in images)
+            var name = model.IdWorkOrder + "id" + countImage;
+            var fileName = imageService.SaveFile(model.Image, pathToImage, name);
+            var image = new ImageLocation()
             {
-                var name = idWorkOrder + countImage;
-                var fileName = imageService.SaveFile(image, pathToImage, name);
-                imagesDB.Images.Add(fileName);
-                countImage++;
-            }
-
+                Image = fileName,
+                Latitude = model.Latitude,
+                Longitude = model.Longitude
+            };
+            imagesDB.Images.Add(image);
+            countImage++;
             unitOfWork.GetEntities<SageImageWorkOrder>().Add(imagesDB);
             return true;
         }
@@ -74,6 +77,15 @@
             var locations = unitOfWork.Locations.Get();
             foreach (var order in result)
             {
+                var images = unitOfWork.GetEntities<SageImageWorkOrder>().SearchFor(x => x.WorkOrder == order.WorkOrder).FirstOrDefault();
+                if (images != null)
+                {
+                    foreach(var image in images.Images)
+                    {
+                        image.Image = ConfigurationManager.AppSettings["BSUrl"] + "/Images/" + image.Image;
+                    }
+                    order.Images = images.Images;
+                }
                 var location = locations.FirstOrDefault(x => x.Name == order.Location);
                 if (location == null)
                     continue;

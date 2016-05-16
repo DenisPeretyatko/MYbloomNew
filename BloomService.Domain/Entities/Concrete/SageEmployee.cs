@@ -1,4 +1,6 @@
-﻿namespace BloomService.Domain.Entities.Concrete
+﻿using System.ComponentModel;
+
+namespace BloomService.Domain.Entities.Concrete
 {
     using System.Collections.Generic;
     using System.Xml.Serialization;
@@ -9,6 +11,7 @@
     [CollectionName("EmployeeCollection")]
     public class SageEmployee : SageEntity
     {
+        private bool _available = true;
         [XmlAttribute]
         public string Address { get; set; }
 
@@ -100,7 +103,11 @@
         [XmlAttribute]
         public List<SageAvailableDay> AvailableDays { get; set; }
         [XmlAttribute]
-        public bool IsAvailable { get; set; }
+        [DefaultValue(true)]
+        public bool IsAvailable {
+            get { return _available; }
+            set { _available = value; }
+        }
         [XmlAttribute]
         public string Picture { get; set; }
         [XmlAttribute]

@@ -25,7 +25,7 @@ namespace BloomService.Web.Models
         public string Id { get; set; }
         [JsonProperty("resourceId")] 
         public string ResourceId { get; set; }
-        [JsonProperty("end")] 
+        [JsonProperty("_end")] 
         public string End { get; set; }
         [JsonProperty("start")] 
         public string Start { get; set; }
