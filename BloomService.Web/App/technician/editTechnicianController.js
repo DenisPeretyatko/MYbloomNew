@@ -7,13 +7,14 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
     $scope.events = [];
     $scope.createdEvents = [];
     $scope.color = '';
+    $scope.obj = {};
 
     var date = new Date();
 
     commonDataService.getTechnician($stateParams.id).then(function (response) {
         $scope.technician = response.data;
 
-        $scope.notAvailable = $scope.technician.IsAvailable;
+        $scope.obj.notAvailable = $scope.technician.IsAvailable;
         
         if ($scope.technician.AvailableDays != null) {
             angular.forEach($scope.technician.AvailableDays, function (value, key) {
@@ -105,7 +106,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
         var technician = {
             Id: $stateParams.id,
             AvailableDays: $scope.events.concat($scope.createdEvents),
-            IsAvailable: $scope.notAvailable,
+            IsAvailable: $scope.obj.notAvailable,
             Picture: $scope.file
         };
         commonDataService.editTechnician(technician).then(function (response) {
