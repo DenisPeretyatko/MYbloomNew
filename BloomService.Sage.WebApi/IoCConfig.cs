@@ -17,6 +17,7 @@
             
             container.Register<IServiceManagement, ServiceManagement>().AsPerRequestSingleton();
             container.Register<IServiceOdbc, ServiceOdbc>().AsPerRequestSingleton();
+            container.Register<IServiceAuthorization, ServiceAuthorization>().AsPerRequestSingleton();
             container.Register<SageWebConfig>().AsPerRequestSingleton();
             container.Register<ClaimsAgent>().AsPerRequestSingleton();
             DependencyResolver.SetResolver(new TinyIocMvcDependencyResolver(container));
