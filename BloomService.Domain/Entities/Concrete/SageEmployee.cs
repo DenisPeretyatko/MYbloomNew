@@ -100,17 +100,17 @@ namespace BloomService.Domain.Entities.Concrete
         public string ZIP { get; set; }
 
 
-        [XmlAttribute]
+        [XmlIgnore]
         public List<SageAvailableDay> AvailableDays { get; set; }
-        [XmlAttribute]
+        [XmlIgnore]
         [DefaultValue(true)]
         public bool IsAvailable {
             get { return _available; }
             set { _available = value; }
         }
-        [XmlAttribute]
+        [XmlIgnore]
         public string Picture { get; set; }
-        [XmlAttribute]
+        [XmlIgnore]
         public string Color { get; set; }
     }
 }
