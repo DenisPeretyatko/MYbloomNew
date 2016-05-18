@@ -293,6 +293,7 @@
     <Compile Include="Areas\Api\Controllers\RepairsController.cs" />
     <Compile Include="Areas\Api\Controllers\WorkOrdersController.cs" />
     <Compile Include="BackgroundJobs\BackgroundJobManager.cs" />
+    <Compile Include="BackgroundJobs\IOSNotifications.cs" />
     <Compile Include="Controllers\BaseComtroller.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\TechnicianController.cs" />
@@ -345,6 +346,10 @@
     <Compile Include="Models\EquipmentModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\ProblemModel.cs" />
+    <Compile Include="Notifications\Feedback.cs" />
+    <Compile Include="Notifications\NotificationAlert.cs" />
+    <Compile Include="Notifications\NotificationPayload.cs" />
+    <Compile Include="Notifications\PushNotification.cs" />
     <Compile Include="Services\Abstract\EntityServices\IAddableEditableEntityService.cs" />
     <Compile Include="Services\Abstract\EntityServices\IAddableEntityService.cs" />
     <Compile Include="Services\Abstract\IAssignmentService.cs" />
@@ -754,6 +759,8 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="App_Data\aps_dev.p12" />
+    <Content Include="App_Data\aps_prod.p12" />
     <None Include="Properties\PublishProfiles\b.pubxml" />
     <None Include="Properties\PublishProfiles\bloom.pubxml" />
     <Content Include="Public\mock\getEmployees.json" />

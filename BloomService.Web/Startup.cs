@@ -12,6 +12,7 @@ namespace BloomService.Web
     using Hangfire.Mongo;
 
     using Owin;
+    using BackgroundJobs;
 
     public class Startup
     {
@@ -26,6 +27,8 @@ namespace BloomService.Web
 
             app.UseHangfireDashboard();
             app.UseHangfireServer();
+
+            RecurringJob.AddOrUpdate(() => IOSNotifications.SendNotifications(), ConfigurationManager.AppSettings["delay"]);
         }
     }
 }
