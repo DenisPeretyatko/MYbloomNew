@@ -48,10 +48,6 @@
                         {
                             name: 'ui.switchery',
                             files: ['public/css/plugins/switchery/switchery.css','public/js/plugins/switchery/switchery.js','public/js/plugins/switchery/ng-switchery.js']
-                        },
-                        {
-                            name: 'colorpicker.module',
-                            files: ['public/js/plugins/colorpicker/bootstrap-colorpicker-module.js', 'public/css/plugins/colorpicker/colorpicker.css', 'public/js/plugins/colorpicker/bootstrap-colorpicker.min.js']
                         }
                     ]);
                 }

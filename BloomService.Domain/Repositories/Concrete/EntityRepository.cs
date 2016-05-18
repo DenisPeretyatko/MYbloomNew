@@ -31,7 +31,7 @@
 
         protected string Connection { get; set; }
 
-        public bool Add(TEntity entity)
+        public virtual bool Add(TEntity entity)
         {
             if (entity.Id == null)
             {
