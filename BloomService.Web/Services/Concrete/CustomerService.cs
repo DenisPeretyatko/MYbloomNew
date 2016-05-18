@@ -6,7 +6,6 @@
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
-    using BloomService.Web.Services.Concrete.EntityServices;
 
     public class CustomerService : EntityService<SageCustomer>, ICustomerService
     {

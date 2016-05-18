@@ -1,22 +1,22 @@
-﻿using System.Web.Mvc;
+﻿namespace Sage.WebApi.Areas.Api.Controllers
+{
+using System.Web.Mvc;
 
 using Sage.WebApi.Infratructure.Service;
 
-namespace Sage.WebApi.Areas.Api.Controllers
-{
     [Authorize]
     public class JobCostController : BaseApiController
     {
-        private readonly IServiceOdbc _serviceODBCr;
+        private readonly IServiceOdbc serviceOdbc;
 
-        public JobCostController(IServiceOdbc serviceODBCr)
+        public JobCostController(IServiceOdbc serviceOdbc)
         {
-            _serviceODBCr = serviceODBCr;
+            this.serviceOdbc = serviceOdbc;
         }
 
         public ActionResult Trucks()
         {
-            return Json(_serviceODBCr.Trucks(), JsonRequestBehavior.AllowGet);
+            return Json(serviceOdbc.Trucks(), JsonRequestBehavior.AllowGet);
         }
     }
 }

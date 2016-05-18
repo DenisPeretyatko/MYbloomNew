@@ -33,12 +33,6 @@ namespace BloomService.Web
 
         public static string GetAuthToken()
         {
-            // var session = HttpContext.Current.Session;
-
-            // if (session != null && session["oauth_token"] != null)
-            // {
-            // return session["oauth_token"].ToString();
-            // }
             var username = ConfigurationManager.AppSettings["SageUsername"];
             var password = ConfigurationManager.AppSettings["SagePassword"];
             var sageApiHost = ConfigurationManager.AppSettings["SageApiHost"];
@@ -50,8 +44,6 @@ namespace BloomService.Web
             var response = restClient.Execute(request);
             var json = JObject.Parse(response.Content);
             var result = string.Format("Bearer {0}", json.First.First);
-
-            // session["oauth_token"] = result;
             return result;
         }
 
