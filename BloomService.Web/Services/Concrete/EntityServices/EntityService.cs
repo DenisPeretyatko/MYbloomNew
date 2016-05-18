@@ -30,7 +30,7 @@
 
         public virtual IEnumerable<TEntity> Get()
         {
-            var items = Repository.Get().Take(20).ToArray();
+            var items = Repository.Get();
 
             if (items.Any())
             {
@@ -65,7 +65,7 @@
 
         protected string GetEntityId(SagePropertyDictionary sageProperties)
         {
-            return GetType().GetProperty(GetEntityName()).GetValue(this, null).ToString();
+            return "";//GetType().GetProperty(GetEntityName()).GetValue(this, null).ToString();
         }
 
         protected string GetEntityName()

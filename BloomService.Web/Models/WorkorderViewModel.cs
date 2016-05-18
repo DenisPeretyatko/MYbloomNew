@@ -2,11 +2,11 @@
 {
     public class WorkorderViewModel
     {
-        public int Number { get; set; }
-        public string Date { get; set; }
-        public string Customer { get; set; }
+        public string WorkOrder { get; set; }
+        public string DateEntered { get; set; }
+        public string ARCustomer { get; set; }
         public string Location { get; set; }
-        public decimal Hours { get; set; }
+        public string EstimatedRepairHours { get; set; }
         public string Status { get; set; }
     }
 }

@@ -19,6 +19,7 @@
         {
             this.unitOfWork = unitOfWork;
             this.problemApiManager = problemApiManager;
+            Repository = unitOfWork.Problems;
 
             EndPoint = ConfigurationManager.AppSettings["ProblemEndPoint"];
         }

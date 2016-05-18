@@ -38,5 +38,10 @@
 
             return collection.Insert(entity).HasLastErrorMessage;
         }
+
+        public override IQueryable<SageLocation> Get()
+        {
+            return base.Get().Take(20);
+        }
     }
 }

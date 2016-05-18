@@ -19,6 +19,7 @@
         {
             this.unitOfWork = unitOfWork;
             this.customerApiManager = customerApiManager;
+            Repository = unitOfWork.Customers;
 
             EndPoint = ConfigurationManager.AppSettings["CustomerEndPoint"];
         }

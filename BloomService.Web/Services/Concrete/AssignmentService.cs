@@ -22,18 +22,19 @@ namespace BloomService.Web.Services.Concrete
         {
             this.unitOfWork = unitOfWork;
             this.assignmentApiManager = assignmentApiManager;
+            Repository = unitOfWork.Assignments;
 
             EndPoint = ConfigurationManager.AppSettings["AssignmentEndPoint"];
         }
 
         public virtual SageAssignment GetByWorkOrderId(string id)
         {
-            var item = unitOfWork.Assignments.SearchFor(a => a.WorkOrder == id).SingleOrDefault();
+            //var item = unitOfWork.Assignments.SearchFor(a => a.WorkOrder == id).SingleOrDefault();
 
-            if (item != null)
-            {
-                return item;
-            }
+            //if (item != null)
+            //{
+            //    return item;
+            //}
 
             var entity = assignmentApiManager.Get(EndPoint).SingleOrDefault(a => a.WorkOrder == id);
 

@@ -56,7 +56,7 @@
 
             var updatedTechnician = Mapper.Map<EmployeeModel, SageEmployee>(technician);
 
-            employeeService.EditToMongo(updatedTechnician);
+            unitOfWork.GetEntities<SageEmployee>().Add(updatedTechnician);
 
             return Json("success", JsonRequestBehavior.AllowGet);
         }

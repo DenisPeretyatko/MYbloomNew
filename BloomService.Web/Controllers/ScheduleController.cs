@@ -52,11 +52,20 @@
             }
 
             var workorders = workOrderService.Get().ToList();
+            foreach (var item in assignments)
+            {
+                var workorder = workorders.FirstOrDefault(w => w.WorkOrder == item.WorkOrder);
+                if (workorder != null)
+                {
+                    item.Customer = workorder.ARCustomer;
+                    item.Location = workorder.Location;
+                }
+            }
             var unassignedWorkorders =
                 workorders.Where(
                     x =>
-                    x.Status == "Open"
-                    && assignments.All(a => a.WorkOrder != x.WorkOrder.ToString(CultureInfo.InvariantCulture))).ToList();
+                        x.Status == "Open"
+                        && assignments.Any(a => a.WorkOrder == x.WorkOrder && a.Employee == "")).ToList();
             model.Assigments = assignments;
 
             model.UnassignedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(unassignedWorkorders);

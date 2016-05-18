@@ -19,7 +19,7 @@
         {
             this.unitOfWork = unitOfWork;
             this.workOrderApiManager = workOrderApiManager;
-
+            Repository = unitOfWork.WorkOrders;
             EndPoint = ConfigurationManager.AppSettings["WorkOrderEndPoint"];
         }
     }

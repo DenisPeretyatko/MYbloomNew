@@ -19,6 +19,7 @@
         {
             this.unitOfWork = unitOfWork;
             this.partApiManager = partApiManager;
+            Repository = unitOfWork.Parts;
 
             EndPoint = ConfigurationManager.AppSettings["PartEndPoint"];
         }

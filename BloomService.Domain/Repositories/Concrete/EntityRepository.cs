@@ -50,7 +50,7 @@
             return collection.Remove(Query.EQ("_id", entity.Id)).DocumentsAffected > 0;
         }
 
-        public IQueryable<TEntity> Get()
+        public virtual IQueryable<TEntity> Get()
         {
             return collection.AsQueryable();
         }

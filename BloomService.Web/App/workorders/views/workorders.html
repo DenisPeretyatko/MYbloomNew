@@ -28,8 +28,8 @@
                         <tbody>
                         <tr ng-repeat="workorder in workorders">
                             <td>{{workorder.WorkOrder}}</td>
-                            <td>{{workorder.DateRun}}</td>
-                            <td>{{workorder.Contact}}</td>
+                            <td>{{workorder.DateEntered}}</td>
+                            <td>{{workorder.ARCustomer}}</td>
                             <td>{{workorder.Location}}</td>
                             <td>
                                 <span class="label" ng-class="workorder.status == 'closed' ? 'label-danger' : 'label-primary' ">
