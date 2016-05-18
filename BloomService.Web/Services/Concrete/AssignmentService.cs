@@ -2,6 +2,7 @@
 
 namespace BloomService.Web.Services.Concrete
 {
+    using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
 
@@ -9,9 +10,8 @@ namespace BloomService.Web.Services.Concrete
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
-    using BloomService.Web.Services.Concrete.EntityServices;
 
-    public class AssignmentService : AddableEditableEntityService<SageAssignment>, IAssignmentService
+    public class AssignmentService : EntityService<SageAssignment>, IAssignmentService
     {
         private readonly IAssignmentApiManager assignmentApiManager;
 

@@ -35,6 +35,11 @@ namespace Sage.WebApi.Areas.Api
                 "api/v1/jc/{action}/{id}", 
                 new { controller = "JobCost", action = "{action}", id = UrlParameter.Optional }
             );
+            context.MapRoute(
+                "Api_Au",
+                "api/v1/Authorization/{action}/{id}",
+                new { controller = "Authorization", action = "{action}", id = UrlParameter.Optional }
+            );
         }
     }
 }

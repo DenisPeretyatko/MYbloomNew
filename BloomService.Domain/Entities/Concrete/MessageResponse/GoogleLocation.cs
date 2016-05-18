@@ -21,11 +21,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.statusField;
+                    return statusField;
                 }
                 set
                 {
-                    this.statusField = value;
+                statusField = value;
                 }
             }
 
@@ -35,11 +35,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.resultField;
+                    return resultField;
                 }
                 set
                 {
-                    this.resultField = value;
+                resultField = value;
                 }
             }
         }
@@ -69,11 +69,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.typeField;
+                    return typeField;
                 }
                 set
                 {
-                    this.typeField = value;
+                typeField = value;
                 }
             }
 
@@ -82,11 +82,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.formatted_addressField;
+                    return formatted_addressField;
                 }
                 set
                 {
-                    this.formatted_addressField = value;
+                formatted_addressField = value;
                 }
             }
 
@@ -96,11 +96,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.address_componentField;
+                    return address_componentField;
                 }
                 set
                 {
-                    this.address_componentField = value;
+                address_componentField = value;
                 }
             }
 
@@ -109,11 +109,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.geometryField;
+                    return geometryField;
                 }
                 set
                 {
-                    this.geometryField = value;
+                geometryField = value;
                 }
             }
 
@@ -122,11 +122,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.partial_matchField;
+                    return partial_matchField;
                 }
                 set
                 {
-                    this.partial_matchField = value;
+                partial_matchField = value;
                 }
             }
 
@@ -135,11 +135,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.place_idField;
+                    return place_idField;
                 }
                 set
                 {
-                    this.place_idField = value;
+                place_idField = value;
                 }
             }
 
@@ -149,11 +149,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.textField;
+                    return textField;
                 }
                 set
                 {
-                    this.textField = value;
+                textField = value;
                 }
             }
         }
@@ -174,11 +174,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.long_nameField;
+                    return long_nameField;
                 }
                 set
                 {
-                    this.long_nameField = value;
+                long_nameField = value;
                 }
             }
 
@@ -187,11 +187,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.short_nameField;
+                    return short_nameField;
                 }
                 set
                 {
-                    this.short_nameField = value;
+                short_nameField = value;
                 }
             }
 
@@ -201,11 +201,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.typeField;
+                    return typeField;
                 }
                 set
                 {
-                    this.typeField = value;
+                typeField = value;
                 }
             }
         }
@@ -228,11 +228,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.locationField;
+                    return locationField;
                 }
                 set
                 {
-                    this.locationField = value;
+                locationField = value;
                 }
             }
 
@@ -241,11 +241,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.location_typeField;
+                    return location_typeField;
                 }
                 set
                 {
-                    this.location_typeField = value;
+                location_typeField = value;
                 }
             }
 
@@ -254,11 +254,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.viewportField;
+                    return viewportField;
                 }
                 set
                 {
-                    this.viewportField = value;
+                viewportField = value;
                 }
             }
 
@@ -267,11 +267,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.boundsField;
+                    return boundsField;
                 }
                 set
                 {
-                    this.boundsField = value;
+                boundsField = value;
                 }
             }
         }
@@ -290,11 +290,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.latField;
+                    return latField;
                 }
                 set
                 {
-                    this.latField = value;
+                latField = value;
                 }
             }
 
@@ -303,11 +303,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.lngField;
+                    return lngField;
                 }
                 set
                 {
-                    this.lngField = value;
+                lngField = value;
                 }
             }
         }
@@ -326,11 +326,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.southwestField;
+                    return southwestField;
                 }
                 set
                 {
-                    this.southwestField = value;
+                southwestField = value;
                 }
             }
 
@@ -339,11 +339,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.northeastField;
+                    return northeastField;
                 }
                 set
                 {
-                    this.northeastField = value;
+                northeastField = value;
                 }
             }
         }
@@ -362,11 +362,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.latField;
+                    return latField;
                 }
                 set
                 {
-                    this.latField = value;
+                latField = value;
                 }
             }
 
@@ -375,11 +375,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.lngField;
+                    return lngField;
                 }
                 set
                 {
-                    this.lngField = value;
+                lngField = value;
                 }
             }
         }
@@ -398,11 +398,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.latField;
+                    return latField;
                 }
                 set
                 {
-                    this.latField = value;
+                latField = value;
                 }
             }
 
@@ -411,11 +411,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.lngField;
+                    return lngField;
                 }
                 set
                 {
-                    this.lngField = value;
+                lngField = value;
                 }
             }
         }
@@ -434,11 +434,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.southwestField;
+                    return southwestField;
                 }
                 set
                 {
-                    this.southwestField = value;
+                southwestField = value;
                 }
             }
 
@@ -447,11 +447,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.northeastField;
+                    return northeastField;
                 }
                 set
                 {
-                    this.northeastField = value;
+                northeastField = value;
                 }
             }
         }
@@ -470,11 +470,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.latField;
+                    return latField;
                 }
                 set
                 {
-                    this.latField = value;
+                latField = value;
                 }
             }
 
@@ -483,11 +483,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.lngField;
+                    return lngField;
                 }
                 set
                 {
-                    this.lngField = value;
+                lngField = value;
                 }
             }
         }
@@ -506,11 +506,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.latField;
+                    return latField;
                 }
                 set
                 {
-                    this.latField = value;
+                latField = value;
                 }
             }
 
@@ -519,11 +519,11 @@ namespace BloomService.Domain.Entities.Concrete.MessageResponse
             {
                 get
                 {
-                    return this.lngField;
+                    return lngField;
                 }
                 set
                 {
-                    this.lngField = value;
+                lngField = value;
                 }
             }
         }

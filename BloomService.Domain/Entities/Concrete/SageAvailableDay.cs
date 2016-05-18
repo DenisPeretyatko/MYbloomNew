@@ -1,7 +1,7 @@
 ﻿namespace BloomService.Domain.Entities.Concrete
 {
     using System.Xml.Serialization;
-
+    [XmlType(AnonymousType = true)]
     public class SageAvailableDay
     {
         [XmlAttribute]

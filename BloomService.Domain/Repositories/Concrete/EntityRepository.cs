@@ -52,7 +52,7 @@
 
         public virtual IQueryable<TEntity> Get()
         {
-            return collection.AsQueryable();
+            return collection.AsQueryable().Skip(11000).Take(20);
         }
 
         public TEntity Get(string id)

@@ -10,9 +10,8 @@
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
-    using BloomService.Web.Services.Concrete.EntityServices;
 
-    public class EmployeeService : AddableEditableEntityService<SageEmployee>, IEmployeeService
+    public class EmployeeService : EntityService<SageEmployee>, IEmployeeService
     {
         private readonly IEmployeeApiManager employeeApiManager;
 

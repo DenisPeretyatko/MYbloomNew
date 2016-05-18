@@ -18,7 +18,7 @@
     {
         private readonly IAssignmentService assignmentService;
 
-        private readonly IEmployeeService employeeSageApService;
+        private readonly IEmployeeService employeeService;
 
         private readonly IWorkOrderService workOrderService;
 
@@ -29,7 +29,7 @@
         {
             this.assignmentService = assignmentService;
             this.workOrderService = workOrderService;
-            employeeSageApService = employeeService;
+            this.employeeService = employeeService;
         }
 
         [GET("Schedule")]
@@ -38,7 +38,7 @@
             var model = new ScheduleViewModel();
             var sageAssignments = assignmentService.Get().ToList();
             var assignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(sageAssignments);
-            var employees = employeeSageApService.Get().ToList();
+            var employees = employeeService.Get().ToList();
             foreach (var item in assignments)
             {
                 var employee = employees.FirstOrDefault(e => e.Name == item.Employee);

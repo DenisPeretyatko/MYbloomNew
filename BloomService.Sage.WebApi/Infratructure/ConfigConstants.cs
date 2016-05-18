@@ -6,10 +6,14 @@
     {
         public string CatalogPath { get; }
         public string ConnectionString { get; }
+        public string TimberlineDataConnectionString { get; private set; }
+        public string TimberlineServiceManagementConnectionString { get; private set; }
+
         public SageWebConfig()
         {
             CatalogPath = ConfigurationManager.AppSettings["catalogPath"];
-            ConnectionString = ConfigurationManager.AppSettings["connectionString"];
+            TimberlineDataConnectionString = ConfigurationManager.AppSettings["connectionString"];
+            TimberlineServiceManagementConnectionString = "DSN=Timberline Service Management;";
         }
     }
 }
