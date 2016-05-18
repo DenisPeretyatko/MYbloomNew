@@ -1,9 +1,9 @@
 ﻿namespace BloomService.Web.Services.Abstract
 {
     using BloomService.Domain.Entities.Concrete;
-    using BloomService.Web.Services.Abstract.EntityServices;
+    using BloomService.Web.Services.Concrete;
 
-    public interface IAssignmentService : IAddableEntityService<SageAssignment>, IEditableEntityService<SageAssignment>
+    public interface IAssignmentService : IEntityService<SageAssignment>
     {
     }
 }

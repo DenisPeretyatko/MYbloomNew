@@ -97,13 +97,13 @@
         public string ZIP { get; set; }
 
 
-        [XmlAttribute]
+        [XmlIgnore]
         public List<SageAvailableDay> AvailableDays { get; set; }
-        [XmlAttribute]
+        [XmlIgnore]
         public bool IsAvailable { get; set; }
-        [XmlAttribute]
+        [XmlIgnore]
         public string Picture { get; set; }
-        [XmlAttribute]
+        [XmlIgnore]
         public string Color { get; set; }
     }
 }

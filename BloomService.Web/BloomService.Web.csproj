@@ -147,6 +147,7 @@
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ServiceModel.Activities" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -305,12 +306,9 @@
     <Compile Include="Infrastructure\Constants\EstimateRepairHours.cs" />
     <Compile Include="Infrastructure\Constants\RateSheets.cs" />
     <Compile Include="Infrastructure\Hubs\JsonHelper.cs" />
-    <Compile Include="Managers\Abstract\EntityManagers\IAddableEntityApiManager.cs" />
-    <Compile Include="Managers\Abstract\EntityManagers\IAddableEditableApiManager.cs" />
-    <Compile Include="Managers\Abstract\EntityManagers\IEditableEntityApiManager.cs" />
     <Compile Include="Managers\Abstract\ICustomerApiManager.cs" />
     <Compile Include="Managers\Abstract\IAssignmentApiManager.cs" />
-    <Compile Include="Managers\Abstract\EntityManagers\IEntityApiManager.cs" />
+    <Compile Include="Managers\Abstract\IEntityApiManager.cs" />
     <Compile Include="Managers\Abstract\ICallTypeApiManager.cs" />
     <Compile Include="Managers\Abstract\IDepartmentApiManager.cs" />
     <Compile Include="Managers\Abstract\IEmployeeApiManager.cs" />
@@ -325,9 +323,6 @@
     <Compile Include="Managers\Concrete\CustomerApiManager.cs" />
     <Compile Include="Managers\Concrete\DepartmentApiManager.cs" />
     <Compile Include="Managers\Concrete\EmployeeApiManager.cs" />
-    <Compile Include="Managers\Concrete\EntityManagers\AddableEditableEntityApiManager.cs" />
-    <Compile Include="Managers\Concrete\EntityManagers\AddableEntityApiManager.cs" />
-    <Compile Include="Managers\Concrete\EntityManagers\EditableEntityApiManager.cs" />
     <Compile Include="Managers\Concrete\EquipmentApiManager.cs" />
     <Compile Include="Managers\Concrete\LocationApiManager.cs" />
     <Compile Include="Managers\Concrete\PartApiManager.cs" />
@@ -345,36 +340,30 @@
     <Compile Include="Models\EquipmentModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\ProblemModel.cs" />
-    <Compile Include="Services\Abstract\EntityServices\IAddableEditableEntityService.cs" />
-    <Compile Include="Services\Abstract\EntityServices\IAddableEntityService.cs" />
     <Compile Include="Services\Abstract\IAssignmentService.cs" />
     <Compile Include="Services\Abstract\ICallTypeService.cs" />
     <Compile Include="Services\Abstract\ICustomerService.cs" />
     <Compile Include="Services\Abstract\IDepartmentService.cs" />
-    <Compile Include="Services\Abstract\EntityServices\IEditableEntityService.cs" />
     <Compile Include="Services\Abstract\IEmployeeService.cs" />
     <Compile Include="Services\Abstract\IEquipmentService.cs" />
     <Compile Include="Services\Abstract\ILocationService.cs" />
     <Compile Include="Services\Abstract\IPartService.cs" />
     <Compile Include="Services\Abstract\IProblemService.cs" />
     <Compile Include="Services\Abstract\IRepairService.cs" />
-    <Compile Include="Services\Abstract\EntityServices\IEntityService.cs" />
+    <Compile Include="Services\Abstract\IEntityService.cs" />
     <Compile Include="Services\Abstract\IWorkOrderService.cs" />
     <Compile Include="Services\Concrete\AssignmentService.cs" />
     <Compile Include="Services\Concrete\CallTypeService.cs" />
     <Compile Include="Services\Concrete\CustomerService.cs" />
     <Compile Include="Services\Concrete\DepartmentService.cs" />
     <Compile Include="Services\Concrete\EmployeeService.cs" />
-    <Compile Include="Services\Concrete\EntityServices\AddableEditableEntityService.cs" />
-    <Compile Include="Services\Concrete\EntityServices\AddableEntityService.cs" />
-    <Compile Include="Services\Concrete\EntityServices\EditableEntityService.cs" />
     <Compile Include="Services\Concrete\EquipmentService.cs" />
     <Compile Include="Services\Concrete\LocationService.cs" />
     <Compile Include="Services\Concrete\PartService.cs" />
     <Compile Include="Services\Concrete\ProblemService.cs" />
     <Compile Include="Services\Concrete\RepairService.cs" />
-    <Compile Include="Managers\Concrete\EntityManagers\EntityApiManager.cs" />
-    <Compile Include="Services\Concrete\EntityServices\EntityService.cs" />
+    <Compile Include="Managers\Concrete\EntityApiManager.cs" />
+    <Compile Include="Services\Concrete\EntityService.cs" />
     <Compile Include="Services\Concrete\WorkOrderService.cs" />
     <Compile Include="Models\RepairModel.cs" />
     <Compile Include="Models\Request\ImageRequest.cs" />
@@ -808,6 +797,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Infrastructure\Services\" />
+    <Folder Include="Managers\Abstract\EntityManagers\" />
+    <Folder Include="Managers\Concrete\EntityManagers\" />
+    <Folder Include="Services\Abstract\EntityServices\" />
+    <Folder Include="Services\Concrete\EntityServices\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

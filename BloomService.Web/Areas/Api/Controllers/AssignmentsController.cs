@@ -3,37 +3,36 @@
     using System.Collections.Generic;
     using System.Web.Http;
 
-    using BloomService.Domain.Entities;
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Services.Abstract;
 
     public class AssignmentsController : ApiController
     {
-        private readonly IAssignmentService assignmentSageApiService;
+        private readonly IAssignmentService assignmentService;
 
-        public AssignmentsController(IAssignmentService assignmentSageApiService)
+        public AssignmentsController(IAssignmentService assignmentService)
         {
-            this.assignmentSageApiService = assignmentSageApiService;
+            this.assignmentService = assignmentService;
         }
 
         public IEnumerable<SageAssignment> Get()
         {
-            return assignmentSageApiService.Get();
+            return assignmentService.Get();
         }
 
         public SageAssignment Get(string id)
         {
-            return assignmentSageApiService.Get(id);
+            return assignmentService.Get(id);
         }
 
         public IEnumerable<SageAssignment> Post(SagePropertyDictionary properties)
         {
-            return assignmentSageApiService.Add(properties);
+            return assignmentService.Add(properties);
         }
 
         public IEnumerable<SageAssignment> Put(SagePropertyDictionary properties)
         {
-            return assignmentSageApiService.Edit(properties);
+            return assignmentService.Edit(properties);
         }
     }
 }

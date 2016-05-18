@@ -7,17 +7,17 @@
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.Entities.Concrete.Auxiliary;
     using BloomService.Domain.UnitOfWork;
-    using BloomService.Web.Managers.Abstract.EntityManagers;
+    using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract.EntityServices;
 
     public class AddableEntityService<TEntity> : EntityService<TEntity>, IAddableEntityService<TEntity>
         where TEntity : class, IEntity
     {
-        private readonly IAddableEntityApiManager<TEntity> sageApiManager;
+        private readonly IEntityApiManager<TEntity> sageApiManager;
 
         private readonly IUnitOfWork unitOfWork;
 
-        public AddableEntityService(IUnitOfWork unitOfWork, IAddableEntityApiManager<TEntity> sageApiManager)
+        public AddableEntityService(IUnitOfWork unitOfWork, IEntityApiManager<TEntity> sageApiManager)
             : base(unitOfWork, sageApiManager)
         {
             this.unitOfWork = unitOfWork;

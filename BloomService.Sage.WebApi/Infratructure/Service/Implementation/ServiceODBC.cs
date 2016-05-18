@@ -3,32 +3,35 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Odbc;
+    using System.Linq;
 
     using Sage.WebApi.Infratructure.Constants;
 
     public class ServiceOdbc : IServiceOdbc
-{
+    {
+        private readonly string timberlineDataConnectionString;
+        private readonly string timberlineServiceManagementConnectionString;
+
         private ClaimsAgent claimsAgent;
+
+        private bool isOpened;
 
         private OdbcConnection odbcConnection;
 
         private DataSet odbcDataSet;
 
-        private bool isOpened;
-
-        private readonly string dbPath;
-
         public ServiceOdbc(ClaimsAgent claimsAgent, SageWebConfig configConstants)
         {
             this.claimsAgent = claimsAgent;
-            dbPath = configConstants.ConnectionString;
+            timberlineDataConnectionString = configConstants.TimberlineDataConnectionString;
+            timberlineServiceManagementConnectionString = configConstants.TimberlineServiceManagementConnectionString;
         }
 
-        public void Connection(string name, string password)
+
+        public void Connection(string connectionString)
         {
-            var connectionString = string.Format("UID={0};pwd={1};DBQ={2}", name, password, dbPath);
             odbcDataSet = new DataSet("myData");
-            odbcConnection = new OdbcConnection("Driver={Timberline Data};" + connectionString);
+            odbcConnection = new OdbcConnection(connectionString);
             odbcConnection.Open();
             isOpened = true;
         }
@@ -41,15 +44,16 @@
 
         public List<Dictionary<string, object>> Customers()
         {
-            return GetTable(Queryes.SelectCustomer);
+            var connectionString = string.Format("UID={0};pwd={1};DBQ={2}", claimsAgent.Name, claimsAgent.Password, timberlineDataConnectionString);
+            return GetTable(Queryes.SelectCustomer, connectionString);
         }
 
-        public List<Dictionary<string, object>> GetTable(string request)
+        public List<Dictionary<string, object>> GetTable(string request, string connectionString)
         {
             var claimsAgent = new ClaimsAgent();
             if (!isOpened)
             {
-                Connection(claimsAgent.Name, claimsAgent.Password);
+                Connection(connectionString);
             }
 
             var dataAdapter = new OdbcDataAdapter(request, odbcConnection);
@@ -57,24 +61,38 @@
             odbcConnection.Close();
             var table = odbcDataSet.Tables["Table"];
             var rows = new List<Dictionary<string, object>>();
-            Dictionary<string, object> row;
+
             foreach (DataRow dr in table.Rows)
             {
-                row = new Dictionary<string, object>();
-                foreach (DataColumn col in table.Columns)
-                {
-                    row.Add(col.ColumnName, dr[col]);
-                }
-
+                var row = table.Columns.Cast<DataColumn>().ToDictionary(col => col.ColumnName, col => dr[col]);
                 rows.Add(row);
             }
 
-            return rows; 
+            return rows;
+        }
+
+        public void ExecuteScript(string request, string connectionString)
+        {
+            var claimsAgent = new ClaimsAgent();
+            if (!isOpened)
+            {
+                Connection(connectionString);
+            }
+
+            var odbcCommand = odbcConnection.CreateCommand();
+            odbcCommand.CommandText = request;
+            odbcCommand.ExecuteReader();
         }
 
         public List<Dictionary<string, object>> Trucks()
         {
-            return GetTable(Queryes.SelectTrucks);
+            return GetTable(Queryes.SelectTrucks, timberlineDataConnectionString);
+        }
+
+        public void UnassignWorkOrder(string id)
+        {
+            var query = Queryes.GetAssignment.Replace("%ID%", id);
+            ExecuteScript(query, timberlineServiceManagementConnectionString);
         }
     }
 }

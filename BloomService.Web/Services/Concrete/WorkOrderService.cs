@@ -6,9 +6,8 @@
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
-    using BloomService.Web.Services.Concrete.EntityServices;
 
-    public class WorkOrderService : AddableEditableEntityService<SageWorkOrder>, IWorkOrderService
+    public class WorkOrderService : EntityService<SageWorkOrder>, IWorkOrderService
     {
         private readonly IUnitOfWork unitOfWork;
 
