@@ -19,6 +19,7 @@
         {
             this.unitOfWork = unitOfWork;
             this.equipmentApiManager = equipmentApiManager;
+            Repository = unitOfWork.Equipment;
 
             EndPoint = ConfigurationManager.AppSettings["EquipmentEndPoint"];
         }

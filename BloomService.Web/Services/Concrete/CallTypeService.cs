@@ -19,6 +19,7 @@
         {
             this.unitOfWork = unitOfWork;
             this.callTypeApiManager = callTypeApiManager;
+            Repository = unitOfWork.CallTypes;
 
             EndPoint = ConfigurationManager.AppSettings["CallTypeEndPoint"];
         }

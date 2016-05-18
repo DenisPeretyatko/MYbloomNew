@@ -1,4 +1,6 @@
-﻿namespace BloomService.Domain.Repositories.Concrete
+﻿using System.Linq;
+
+namespace BloomService.Domain.Repositories.Concrete
 {
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.Repositories.Abstract;
@@ -8,6 +10,11 @@
         public WorkOrderRepository(string collectionName)
             : base(collectionName)
         {
+        }
+
+        public override IQueryable<SageWorkOrder> Get()
+        {
+            return base.Get().Skip(11206).Take(20);
         }
     }
 }

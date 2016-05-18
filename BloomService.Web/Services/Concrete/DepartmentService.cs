@@ -19,6 +19,7 @@
         {
             this.unitOfWork = unitOfWork;
             this.departmentApiManager = departmentApiManager;
+            Repository = unitOfWork.Departments;
 
             EndPoint = ConfigurationManager.AppSettings["DepartmentEndPoint"];
         }

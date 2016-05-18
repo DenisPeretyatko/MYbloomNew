@@ -19,6 +19,7 @@
         {
             this.unitOfWork = unitOfWork;
             this.repairApiManager = repairApiManager;
+            Repository = unitOfWork.Repairs;
 
             EndPoint = ConfigurationManager.AppSettings["RepairEndPoint"];
         }
