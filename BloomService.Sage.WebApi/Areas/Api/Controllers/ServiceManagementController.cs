@@ -13,10 +13,12 @@
     public class ServiceManagementController : BaseApiController
     {
         private readonly IServiceManagement serviceManager;
+        private readonly IServiceOdbc serviceOdbc;
 
-        public ServiceManagementController(IServiceManagement serviceManager)
+        public ServiceManagementController(IServiceManagement serviceManager, IServiceOdbc serviceOdbc)
         {
             this.serviceManager = serviceManager;
+            this.serviceOdbc = serviceOdbc;
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
@@ -41,6 +43,13 @@
         public ActionResult Assignments(string id)
         {
             return id == null ? Json(serviceManager.Assignments()) : Json(serviceManager.Assignments(id));
+        }
+
+        [HttpDelete]
+        public ActionResult UnassignWorkOrder(string id)
+        {
+            serviceOdbc.UnassignWorkOrder(id);
+            return Json(serviceManager.WorkOrders());
         }
 
         public ActionResult Calltypes()

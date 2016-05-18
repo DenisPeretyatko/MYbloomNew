@@ -4,12 +4,11 @@ namespace BloomService.Web.Managers.Concrete
 
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Managers.Abstract;
-    using BloomService.Web.Managers.Concrete.EntityManagers;
     using BloomService.Web.Utils;
 
     using RestSharp;
 
-    public class AssignmentApiManager : AddableEditableEntityApiManager<SageAssignment>, IAssignmentApiManager
+    public class AssignmentApiManager : EntityApiManager<SageAssignment>, IAssignmentApiManager
     {
         private readonly IRestClient restClient;
 
@@ -24,22 +23,14 @@ namespace BloomService.Web.Managers.Concrete
 
         public override IEnumerable<SageAssignment> Add(string endPoint, SagePropertyDictionary properties)
         {
-            var request = new RestRequest("api/v1/sm/addassignments", Method.POST) { RequestFormat = DataFormat.Json };
-            request.AddBody(properties);
-            request.AddHeader("Authorization", token.Token);
-            var response = restClient.Execute<List<SageAssignment>>(request);
-            var results = response.Data;
-            return results;
+            endPoint = "api/v1/sm/addassignments";
+            return base.Add(endPoint, properties);
         }
-
+       
         public override IEnumerable<SageAssignment> Edit(string endPoint, SagePropertyDictionary properties)
         {
-            var request = new RestRequest("api/v1/sm/editassignments", Method.POST) { RequestFormat = DataFormat.Json };
-            request.AddBody(properties);
-            request.AddHeader("Authorization", token.Token);
-            var response = restClient.Execute<List<SageAssignment>>(request);
-            var results = response.Data;
-            return results;
+            endPoint = "api/v1/sm/editassignments";
+            return base.Edit(endPoint, properties);
         }
     }
 }

@@ -7,33 +7,22 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
     $scope.events = [];
     $scope.createdEvents = [];
     $scope.color = '';
+    $scope.obj = {};
 
     var date = new Date();
-
-    function getSunday(d) {
-        d = new Date(d);
-        var day = d.getDay(),
-            diff = d.getDate() - day + (day == 0 ? -6 : 0);
-        return new Date(d.setDate(diff));
-    }
-
-    var sunday = getSunday(date);
 
     commonDataService.getTechnician($stateParams.id).then(function (response) {
         $scope.technician = response.data;
 
-        $scope.notAvailable = $scope.technician.IsAvailable;
+        $scope.obj.notAvailable = $scope.technician.IsAvailable;
         
         if ($scope.technician.AvailableDays != null) {
             angular.forEach($scope.technician.AvailableDays, function (value, key) {
-                if (value != null) {
-                    $scope.events.push({
-                        start: new Date(value.Start),
-                        end: new Date(value.End),
-                        resourceId: value.ResourceId,
-                        title: value.Title,
-                    });
-                }
+                $scope.events.push({
+                    start: new Date(value.Start),
+                    end: new Date(value.End),
+                    title: value.Title
+                });
             });
         }
 
@@ -53,7 +42,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
 
     $scope.alertOnDrop = function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
         angular.forEach($scope.events, function (value, key) {
-            if (value._id == event._id) {
+            if (value.__id == event.__id) {
                 value.start = event.start;
                 value.end = event.end;
             }
@@ -63,7 +52,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
 
     $scope.alertOnResize = function (event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
         angular.forEach($scope.events, function (value, key) {
-            if (value._id == event._id) {
+            if (value.__id == event.__id) {
                 value.start = event.start;
                 value.end = event.end;
             }
@@ -82,12 +71,17 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             droppable: true, // this allows things to be dropped onto the calendar
             dragRevertDuration: 0,
             eventReceive: function(event) {
-                $scope.createdEvents.push({ title: event.title, start: event.start, end: event.end });
+                $scope.events.push({ title: event.title, start: event.start, end: event.end });
             },
             eventDragStop: function(event, jsEvent, ui, view) {
 
                 if (isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
                     $('.calendar').fullCalendar('removeEvents', event._id);
+                    angular.forEach($scope.events, function (value, key) {
+                        if (value.__id == event.__id) {
+                            $scope.events.splice($scope.events.indexOf(value), 1);
+                        }
+                    });
                 }
             },
             header: {
@@ -100,19 +94,19 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             eventResize: $scope.alertOnResize,
             events: $scope.events,
             timezone: 'local',
-            forceEventDuration: true,
+            forceEventDuration: true
         }
     };
 
     /* Event sources array */
-    $scope.eventSources = [$scope.events];    
+    $scope.eventSources = $scope.events;    
 
     $scope.saveTechnician = function () {
         $scope.file = $("#avatar").attr('src');
         var technician = {
             Id: $stateParams.id,
             AvailableDays: $scope.events.concat($scope.createdEvents),
-            IsAvailable: $scope.notAvailable,
+            IsAvailable: $scope.obj.notAvailable,
             Picture: $scope.file
         };
         commonDataService.editTechnician(technician).then(function (response) {
@@ -159,8 +153,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
 
     $('#external-events-listing div').each(function () {
         $(this).data('event', {
-            title: 'Not available',
-            stick: true,
+            title: 'Not available'
         });
 
         $(this).draggable({

@@ -6,7 +6,6 @@
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
-    using BloomService.Web.Services.Concrete.EntityServices;
 
     public class EquipmentService : EntityService<SageEquipment>, IEquipmentService
     {
@@ -19,6 +18,7 @@
         {
             this.unitOfWork = unitOfWork;
             this.equipmentApiManager = equipmentApiManager;
+            Repository = unitOfWork.Equipment;
 
             EndPoint = ConfigurationManager.AppSettings["EquipmentEndPoint"];
         }

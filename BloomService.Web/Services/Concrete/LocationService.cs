@@ -2,14 +2,14 @@
 {
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Net;
 
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
-    using BloomService.Web.Services.Concrete.EntityServices;
 
-    public class LocationService : AddableEditableEntityService<SageLocation>, ILocationService
+    public class LocationService : EntityService<SageLocation>, ILocationService
     {
         private readonly ILocationApiManager locationApiManager;
 

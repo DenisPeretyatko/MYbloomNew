@@ -6,7 +6,6 @@
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
-    using BloomService.Web.Services.Concrete.EntityServices;
 
     public class RepairService : EntityService<SageRepair>, IRepairService
     {
@@ -19,6 +18,7 @@
         {
             this.unitOfWork = unitOfWork;
             this.repairApiManager = repairApiManager;
+            Repository = unitOfWork.Repairs;
 
             EndPoint = ConfigurationManager.AppSettings["RepairEndPoint"];
         }

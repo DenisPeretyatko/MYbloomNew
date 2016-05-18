@@ -74,9 +74,14 @@ namespace BloomService.Web.Models
         public string TimeEntered { get; set; }
         [JsonProperty("WorkOrder")]
         public string WorkOrder { get; set; }
+
         [JsonProperty("Start")]
         public string Start { get; set; }
         [JsonProperty("End")]
         public string End { get; set; }
+        [JsonProperty("Location")]
+        public string Location { get; set; }
+        [JsonProperty("Customer")]
+        public string Customer { get; set; }
     }
 }

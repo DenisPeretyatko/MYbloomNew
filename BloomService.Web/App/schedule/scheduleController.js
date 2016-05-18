@@ -27,8 +27,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
 
 
     var saveEvent = function(event) {
-        var columns = event.title.split("/");
-        var workorder = columns[0];
+        var workorder = event.title;
 
         var start = new Date(event.start);
         var end = new Date(event.end);
@@ -56,6 +55,9 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             editable: true,
             events: $scope.events,
             eventRender: function (event, element) {
+                element.qtip({
+                    content: event.description
+                });
                 $('#calendar').find("div[style='height: 34px;']").each(function (i, el) {
                     $(this).css('height', '28px');
                 });
@@ -103,6 +105,22 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                         revertDuration: 0 
                     });
                     el.data('event', { title: event.title, id: event.id, stick: true });
+
+                    var cols = event.title.split("/");
+                    var workorder = cols[0];
+
+                    var start = new Date(event.start);
+                    var end = new Date(event.end);
+                    var estimate = end.getHours() - start.getHours();
+
+                    var assignment = {
+                        ScheduleDate: start,
+                        Employee: event.resourceId,
+                        WorkOrder: workorder,
+                        EstimatedRepairHours: estimate,
+                        EndDate: end,
+                    };
+                    commonDataService.unAssignWorkorder(assignment);
                 }
                 $('#calendar').find("div[style='height: 34px;']").each(function (i, el) {
                     $(this).css('height', '28px');
@@ -110,22 +128,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                 $('#calendar').find("div[style='height: 8px;']").each(function (i, el) {
                     $(this).css('height', '28px');
                 });
-
-                var cols = event.title.split("/");
-                var workorder = cols[0];
-
-                var start = new Date(event.start);
-                var end = new Date(event.end);
-                var estimate = end.getHours() - start.getHours();
-
-                var assignment = {
-                    ScheduleDate: start,
-                    Employee: event.resourceId,
-                    WorkOrder: workorder,
-                    EstimatedRepairHours: estimate,
-                    EndDate: end,
-                };
-                commonDataService.unAssignWorkorder(assignment);
+           
             },
             eventReceive: function(event) {
                  saveEvent(event);
@@ -169,41 +172,47 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
 
     commonDataService.getSchedule().then(function(response) {
         var schedule = response.data;
-        $scope.unassignedWorkorders = unassignedWO;//schedule.UnassignedWorkorders; --- real data
+        $scope.unassignedWorkorders = schedule.UnassignedWorkorders;
         $scope.assigments = schedule.Assigments;
         angular.forEach($scope.assigments, function (value, key) {
             if (value != null) {
                 this.push({
                     id: value.Assignment,
                     resourceId: value.EmployeeId,
-                    title: value.Center,
+                    title: value.WorkOrder,
                     start: value.Start,
                     end: value.End,
-                    durationEditable: false,
-                    editable: false,
-                    assigmentId: value.Assigments
+                    assigmentId: value.Assigments,
+                    workorderId: value.WorkOrder,
+                    description: value.Customer + '/' + value.Location 
                 });
             }
         }, $scope.events);
 
         $timeout(function () {
             $('.drag').each(function () {
-                var textTitle = '';
-                $(this).find('td').each(function() {
-                    textTitle += $(this).text() + '/';
+                var descr = '';
+                $(this).find('td').each(function (i, e) {
+                    if (i == 2) {
+                        descr += $(this).text() + '/';
+                    }
+                    if (i == 3) {
+                        descr += $(this).text();
+                    }
                 });
                 var startDate = new Date();
                 var endDate = new Date(startDate);
 
+                var rows = $(this).find('td');
 
                 $(this).data('event', {
-                    title: textTitle,
+                    title: parseInt($(this).find('td').first().text()), //textTitle,
                     start: startDate,
-                    end: endDate.setHours(startDate.getHours() + parseInt($(this).find('td').last().text())),
-                    workorderId: parseInt($(this).find('td').first().text()),
-                    durationEditable: false,
+                    end: endDate.setHours(startDate.getHours() + parseInt(rows.last().text())),
+                    workorderId: rows.first().text(),
                     stick: true,
-                });
+                    description: descr
+            });
 
                 $(this).draggable({
                     zIndex: 999,
@@ -221,175 +230,5 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
 
         }, 100);
     });
-    //------------------------ test data for unassigned work order --------------------------------------
-    var unassignedWO = [
-        {
-            "WorkOrder": 11252,
-            "CallType": "Routine Leak T & M",
-            "Problem": "Roof Leak",
-            "EstimatedRepairHours": 3,
-            "Priority": "Normal",
-            "Agreement": 0,
-            "AgreemntPeriod": 0,
-            "AgreemntPeriodSpecified": true,
-            "Center": "Bloom Roofing Systems, Inc - Service",
-            "Area": "Michigan",
-            "Name": "Auto Owners Creyts Warehouse",
-            "Contact": "Rob Crowe",
-            "DateEntered": "12-05-2016",
-            "DateEnteredSpecified": true,
-            "TimeEntered": "/Date(-62135547879000)/",
-            "TimeEnteredSpecified": true,
-            "EnteredBy": "Kris",
-            "Employee": "",
-            "DateRun": "",
-            "DateComplete": "",
-            "TimeComplete": "/Date(-62135578800000)/",
-            "TimeCompleteSpecified": true,
-            "CompletedBy": 0,
-            "CompletedBySpecified": true,
-            "Status": "Open",
-            "CustomerPO": "",
-            "QuoteExpirationDate": "",
-            "TaxatCenter": "No",
-            "Amount": 0,
-            "AmountSpecified": true,
-            "SalesTaxAmount": 0,
-            "SalesTaxAmountSpecified": true,
-            "AmountBilled": 0,
-            "AmountBilledSpecified": true,
-            "TotalCost": 0,
-            "TotalCostSpecified": true,
-            "LeadSource": "",
-            "Comments": "",
-            "Equipment": 0,
-            "EquipmentSpecified": true,
-            "WorkOrderType": "Service",
-            "PayMethod": "Bill Out",
-            "PreventiveMaintenance": "No",
-            "RateSheet": "Standard Call Rate",
-            "SalesEmployee": "",
-            "JobSaleProduct": "",
-            "EstimatedPartsCost": 0,
-            "EstimatedPartsCostSpecified": true,
-            "EstimatedLaborCost": 0,
-            "EstimatedLaborCostSpecified": true,
-            "EstimatedMiscCost": 0,
-            "EstimatedMiscCostSpecified": true,
-            "ActualPartsCost": 0,
-            "ActualPartsCostSpecified": true,
-            "ActualLaborCost": 0,
-            "ActualLaborCostSpecified": true,
-            "ActualMiscCost": 0,
-            "ActualMiscCostSpecified": true,
-            "ActualLaborHours": 0,
-            "ActualLaborHoursSpecified": true,
-            "AlternateWorkOrderNbr": "",
-            "Lead": 0,
-            "LeadSpecified": true,
-            "Misc": "",
-            "CallDate": "/Date(1463025600000)/",
-            "CallDateSpecified": true,
-            "CallTime": "/Date(-62135547879000)/",
-            "CallTimeSpecified": true,
-            "JCJob": "R-14-0920",
-            "JCExtra": "",
-            "Location": "Auto Owners Creyts Warehouse",
-            "ARCustomer": "",
-            "Department": "Service",
-            "NonBillable": "No",
-            "ChargeBillto": "",
-            "PermissionCode": "",
-            "SalesTaxBilled": 0,
-            "InvoiceDate": "",
-            "DateClosed": "",
-            "NottoExceed": "",
-            "AgreemntPeriCustomer": null
-        },
-        {
-            "WorkOrder": 11253,
-            "CallType": "Routine Leak T & M",
-            "Problem": "Curb",
-            "EstimatedRepairHours": 3,
-            "Priority": "Normal",
-            "Agreement": 0,
-            "AgreemntPeriod": 0,
-            "AgreemntPeriodSpecified": true,
-            "Center": "Bloom Roofing Systems, Inc - Service",
-            "Area": "Michigan",
-            "Name": "Target - Warren - #2544",
-            "Contact": "MOD",
-            "DateEntered": "12-05-2016",
-            "DateEnteredSpecified": true,
-            "TimeEntered": "/Date(-62135547473000)/",
-            "TimeEnteredSpecified": true,
-            "EnteredBy": "Kris",
-            "Employee": "",
-            "DateRun": "",
-            "DateComplete": "",
-            "TimeComplete": "/Date(-62135578800000)/",
-            "TimeCompleteSpecified": true,
-            "CompletedBy": 0,
-            "CompletedBySpecified": true,
-            "Status": "Open",
-            "CustomerPO": "t",
-            "QuoteExpirationDate": "",
-            "TaxatCenter": "No",
-            "Amount": 0,
-            "AmountSpecified": true,
-            "SalesTaxAmount": 0,
-            "SalesTaxAmountSpecified": true,
-            "AmountBilled": 0,
-            "AmountBilledSpecified": true,
-            "TotalCost": 0,
-            "TotalCostSpecified": true,
-            "LeadSource": "",
-            "Comments": "This is a test work order!!!",
-            "Equipment": 0,
-            "EquipmentSpecified": true,
-            "WorkOrderType": "Service",
-            "PayMethod": "Bill Out",
-            "PreventiveMaintenance": "No",
-            "RateSheet": "Standard Call Rate",
-            "SalesEmployee": "Kyle Menard",
-            "JobSaleProduct": "",
-            "EstimatedPartsCost": 0,
-            "EstimatedPartsCostSpecified": true,
-            "EstimatedLaborCost": 0,
-            "EstimatedLaborCostSpecified": true,
-            "EstimatedMiscCost": 0,
-            "EstimatedMiscCostSpecified": true,
-            "ActualPartsCost": 0,
-            "ActualPartsCostSpecified": true,
-            "ActualLaborCost": 0,
-            "ActualLaborCostSpecified": true,
-            "ActualMiscCost": 0,
-            "ActualMiscCostSpecified": true,
-            "ActualLaborHours": 0,
-            "ActualLaborHoursSpecified": true,
-            "AlternateWorkOrderNbr": "",
-            "Lead": 0,
-            "LeadSpecified": true,
-            "Misc": "",
-            "CallDate": "/Date(1453525200000)/",
-            "CallDateSpecified": true,
-            "CallTime": "/Date(-62135528400000)/",
-            "CallTimeSpecified": true,
-            "JCJob": "",
-            "JCExtra": "",
-            "Location": "Target - Warren - #2544",
-            "ARCustomer": "TARGETXX",
-            "Department": "Service",
-            "NonBillable": "No",
-            "ChargeBillto": "",
-            "PermissionCode": "",
-            "SalesTaxBilled": 0,
-            "InvoiceDate": "",
-            "DateClosed": "",
-            "NottoExceed": "Blah blah blah.",
-            "AgreemntPeriCustomer": null
-        }
-    ];
-
 };
 scheduleController.$inject = ["$scope", "$interpolate", "$timeout", "commonDataService"];
