@@ -16,7 +16,7 @@
     public class EntityRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity
     {
-        protected readonly MongoCollection<TEntity> collection;
+        protected readonly MongoCollection<TEntity> Collection;
 
         public EntityRepository(string collectionName)
         {
@@ -26,7 +26,7 @@
             var client = new MongoClient(mongoDbConnection);
             var server = client.GetServer();
             var database = server.GetDatabase("local");
-            collection = database.GetCollection<TEntity>(collectionName);
+            Collection = database.GetCollection<TEntity>(collectionName);
         }
 
         protected string Connection { get; set; }
@@ -39,30 +39,30 @@
         }
             else if (Get(entity.Id) != null)
         {
-                collection.Remove(Query.EQ("_id", entity.Id));
+                Collection.Remove(Query.EQ("_id", entity.Id));
         }
 
-            return collection.Insert(entity).HasLastErrorMessage;
+            return Collection.Insert(entity).HasLastErrorMessage;
         }
 
-        public bool Delete(TEntity entity)
+        public virtual bool Delete(TEntity entity)
             {
-            return collection.Remove(Query.EQ("_id", entity.Id)).DocumentsAffected > 0;
+            return Collection.Remove(Query.EQ("_id", entity.Id)).DocumentsAffected > 0;
         }
 
         public virtual IQueryable<TEntity> Get()
         {
-            return collection.AsQueryable();
+            return Collection.AsQueryable();
         }
 
-        public TEntity Get(string id)
+        public virtual TEntity Get(string id)
             {
-            return collection.FindOneByIdAs<TEntity>(id);
+            return Collection.FindOneByIdAs<TEntity>(id);
             }
 
-        public IQueryable<TEntity> SearchFor(Expression<Func<TEntity, bool>> predicate)
+        public virtual IQueryable<TEntity> SearchFor(Expression<Func<TEntity, bool>> predicate)
         {
-            return collection.AsQueryable().Where(predicate.Compile()).AsQueryable();
+            return Collection.AsQueryable().Where(predicate.Compile()).AsQueryable();
         }
     }
 }

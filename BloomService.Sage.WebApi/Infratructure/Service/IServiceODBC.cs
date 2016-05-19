@@ -4,13 +4,13 @@
 
     public interface IServiceOdbc
 {
-        void Connection(string connectionString);
+        void ConnectionTSM(string connectionString);
 
-        void ConnectionClose();
+        void TdConnectionClose();
 
         List<Dictionary<string, object>> Customers();
 
-        List<Dictionary<string, object>> GetTable(string request, string connectionString);
+        List<Dictionary<string, object>> GetTable(string request);
 
         List<Dictionary<string, object>> Trucks();
 
