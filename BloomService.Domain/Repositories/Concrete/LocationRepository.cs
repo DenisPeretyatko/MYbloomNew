@@ -15,7 +15,7 @@
         {
         }
 
-        public bool Insert(SageLocation entity)
+        public override bool Add(SageLocation entity)
         {
             if (entity.Id == null)
             {

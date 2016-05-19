@@ -31,7 +31,7 @@
 
         protected string Connection { get; set; }
 
-        public bool Add(TEntity entity)
+        public virtual bool Add(TEntity entity)
         {
             if (entity.Id == null)
             {
@@ -52,7 +52,7 @@
 
         public virtual IQueryable<TEntity> Get()
         {
-            return collection.AsQueryable().Skip(11000).Take(20);
+            return collection.AsQueryable();
         }
 
         public TEntity Get(string id)
