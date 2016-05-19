@@ -16,7 +16,7 @@
     public class EntityRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity
     {
-        protected readonly MongoCollection<TEntity> collection;
+        protected readonly MongoCollection<TEntity> Collection;
 
         public EntityRepository(string collectionName)
         {
@@ -26,43 +26,43 @@
             var client = new MongoClient(mongoDbConnection);
             var server = client.GetServer();
             var database = server.GetDatabase("local");
-            collection = database.GetCollection<TEntity>(collectionName);
+            Collection = database.GetCollection<TEntity>(collectionName);
         }
 
         protected string Connection { get; set; }
 
-        public bool Add(TEntity entity)
+        public virtual bool Add(TEntity entity)
         {
             if (entity.Id == null)
             {
                 entity.Id = ObjectId.GenerateNewId().ToString();
-        }
+            }
             else if (Get(entity.Id) != null)
-        {
-                collection.Remove(Query.EQ("_id", entity.Id));
-        }
-
-            return collection.Insert(entity).HasLastErrorMessage;
-        }
-
-        public bool Delete(TEntity entity)
             {
-            return collection.Remove(Query.EQ("_id", entity.Id)).DocumentsAffected > 0;
-        }
-
-        public IQueryable<TEntity> Get()
-        {
-            return collection.AsQueryable().Skip(11000).Take(20);
-        }
-
-        public TEntity Get(string id)
-            {
-            return collection.FindOneByIdAs<TEntity>(id);
+                Collection.Remove(Query.EQ("_id", entity.Id));
             }
 
-        public IQueryable<TEntity> SearchFor(Expression<Func<TEntity, bool>> predicate)
+            return Collection.Insert(entity).HasLastErrorMessage;
+        }
+
+        public virtual bool Delete(TEntity entity)
         {
-            return collection.AsQueryable().Where(predicate.Compile()).AsQueryable();
+            return Collection.Remove(Query.EQ("_id", entity.Id)).DocumentsAffected > 0;
+        }
+
+        public virtual IQueryable<TEntity> Get()
+        {
+            return Collection.AsQueryable();
+        }
+
+        public virtual TEntity Get(string id)
+        {
+            return Collection.FindOneByIdAs<TEntity>(id);
+        }
+
+        public virtual IQueryable<TEntity> SearchFor(Expression<Func<TEntity, bool>> predicate)
+        {
+            return Collection.AsQueryable().Where(predicate.Compile()).AsQueryable();
         }
     }
 }

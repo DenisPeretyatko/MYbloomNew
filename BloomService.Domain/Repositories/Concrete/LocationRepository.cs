@@ -36,7 +36,7 @@
                 }
             }
 
-            return collection.Insert(entity).HasLastErrorMessage;
+            return Collection.Insert(entity).HasLastErrorMessage;
         }
     }
 }

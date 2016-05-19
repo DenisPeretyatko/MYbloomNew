@@ -14,9 +14,11 @@
 
         private ClaimsAgent claimsAgent;
 
-        private bool isOpened;
+        private bool isOpenedTSM;
+        private bool isOpenedTD;
 
-        private OdbcConnection odbcConnection;
+        private OdbcConnection tdOdbcConnection;
+        private OdbcConnection tsmOdbcConnection;
 
         private DataSet odbcDataSet;
 
@@ -28,65 +30,79 @@
         }
 
 
-        public void Connection(string connectionString)
+        public void ConnectionTSM(string connectionString)
         {
-            odbcDataSet = new DataSet("myData");
-            odbcConnection = new OdbcConnection(connectionString);
-            odbcConnection.Open();
-            isOpened = true;
+            tsmOdbcConnection = new OdbcConnection(connectionString);
+            tsmOdbcConnection.Open();
+            isOpenedTSM = true;
         }
 
-        public void ConnectionClose()
+        public void ConnectionTD(string name, string password)
         {
-            odbcConnection.Close();
-            isOpened = false;
+            var connectionString = string.Format("UID={0};pwd={1};DBQ={2}", name, password, timberlineDataConnectionString);
+            odbcDataSet = new DataSet("myData");
+            tdOdbcConnection = new OdbcConnection("Driver={Timberline Data};" + connectionString);
+            tdOdbcConnection.Open();
+            isOpenedTD = true;
+        }
+
+        public void TdConnectionClose()
+        {
+            tdOdbcConnection.Close();
+            isOpenedTD = false;
+        }
+
+        public void TsmConnectionClose()
+        {
+            tsmOdbcConnection.Close();
+            isOpenedTSM = false;
         }
 
         public List<Dictionary<string, object>> Customers()
         {
-            var connectionString = string.Format("UID={0};pwd={1};DBQ={2}", claimsAgent.Name, claimsAgent.Password, timberlineDataConnectionString);
-            return GetTable(Queryes.SelectCustomer, connectionString);
+            return GetTable(Queryes.SelectCustomer);
         }
 
-        public List<Dictionary<string, object>> GetTable(string request, string connectionString)
+        public List<Dictionary<string, object>> GetTable(string request)
         {
             var claimsAgent = new ClaimsAgent();
-            if (!isOpened)
-            {
-                Connection(connectionString);
-            }
-
-            var dataAdapter = new OdbcDataAdapter(request, odbcConnection);
+            if (!isOpenedTD)
+                ConnectionTD(claimsAgent.Name, claimsAgent.Password);
+            OdbcDataAdapter dataAdapter = new OdbcDataAdapter(request, tdOdbcConnection);
             dataAdapter.Fill(odbcDataSet);
-            odbcConnection.Close();
+            TdConnectionClose();
             var table = odbcDataSet.Tables["Table"];
-            var rows = new List<Dictionary<string, object>>();
-
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            Dictionary<string, object> row;
             foreach (DataRow dr in table.Rows)
             {
-                var row = table.Columns.Cast<DataColumn>().ToDictionary(col => col.ColumnName, col => dr[col]);
+                row = new Dictionary<string, object>();
+                foreach (DataColumn col in table.Columns)
+                {
+                    row.Add(col.ColumnName, dr[col]);
+                }
                 rows.Add(row);
             }
-
             return rows;
         }
 
         public void ExecuteScript(string request, string connectionString)
         {
             var claimsAgent = new ClaimsAgent();
-            if (!isOpened)
+            if (!isOpenedTSM)
             {
-                Connection(connectionString);
+                ConnectionTSM(connectionString);
             }
 
-            var odbcCommand = odbcConnection.CreateCommand();
+            var odbcCommand = tsmOdbcConnection.CreateCommand();
             odbcCommand.CommandText = request;
             odbcCommand.ExecuteReader();
+            TsmConnectionClose();
         }
 
         public List<Dictionary<string, object>> Trucks()
         {
-            return GetTable(Queryes.SelectTrucks, timberlineDataConnectionString);
+            return GetTable(Queryes.SelectTrucks);
         }
 
         public void UnassignWorkOrder(string id)
