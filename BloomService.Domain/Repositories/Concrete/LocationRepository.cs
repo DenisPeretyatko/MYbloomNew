@@ -15,7 +15,7 @@
         {
         }
 
-        public bool Insert(SageLocation entity)
+        public override bool Add(SageLocation entity)
         {
             if (entity.Id == null)
             {
@@ -36,7 +36,7 @@
                 }
             }
 
-            return collection.Insert(entity).HasLastErrorMessage;
+            return Collection.Insert(entity).HasLastErrorMessage;
         }
 
         public override IQueryable<SageLocation> Get()

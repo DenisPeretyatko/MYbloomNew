@@ -31,7 +31,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
         }
 
         if ($scope.technician.Color != null) {
-            $("#colorId").backgroundColor = $scope.technician.Color;
+            $('#colorId .input-group-addon i').css('backgroundColor', $scope.technician.Color);
         }
     });
     
@@ -107,7 +107,8 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             Id: $stateParams.id,
             AvailableDays: $scope.events.concat($scope.createdEvents),
             IsAvailable: $scope.obj.notAvailable,
-            Picture: $scope.file
+            Picture: $scope.file,
+            Color: $scope.color
         };
         commonDataService.editTechnician(technician).then(function (response) {
             if (response.data == 'success')
@@ -127,14 +128,9 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
         }
     };
 
-       
-    $('#colorId').colorpicker({
-        color: '#fff',
-        align: 'right',
-        }).on('changeColor', function (ev) {
-            $scope.color = ev.color.toHex();
-            this.backgroundColor = $scope.color;
-        });
+    $('#colorId').colorpicker().on('changeColor', function(e) {
+            $scope.color = e.color.toHex();
+    });
 
     var isEventOverDiv = function (x, y) {
         var external_events = $('#external-events-listing');
