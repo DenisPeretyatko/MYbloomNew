@@ -6,6 +6,7 @@
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
+    using Domain.Extensions;
 
     public class CallTypeService : EntityService<SageCallType>, ICallTypeService
     {
@@ -13,14 +14,17 @@
 
         private readonly IUnitOfWork unitOfWork;
 
-        public CallTypeService(IUnitOfWork unitOfWork, ICallTypeApiManager callTypeApiManager)
+        private readonly BloomServiceConfiguration _settings;
+
+        public CallTypeService(IUnitOfWork unitOfWork, ICallTypeApiManager callTypeApiManager, BloomServiceConfiguration bloomConfiguration)
             : base(unitOfWork, callTypeApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.callTypeApiManager = callTypeApiManager;
             Repository = unitOfWork.CallTypes;
+            _settings = bloomConfiguration;
 
-            EndPoint = ConfigurationManager.AppSettings["CallTypeEndPoint"];
+            EndPoint = _settings.CallTypeEndPoint;
         }
     }
 }

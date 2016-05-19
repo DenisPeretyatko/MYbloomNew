@@ -120,22 +120,22 @@
     </Reference>
     <Reference Include="Sage.Data.CRE.Interfaces, Version=14.1.0.0, Culture=neutral, PublicKeyToken=3e78b2cabf12f868, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Sage.Data.CRE.Interfaces.dll</HintPath>
+      <HintPath>lib\Sage.Data.CRE.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="Sage.LS1.Core">
-      <HintPath>..\lib\Sage.LS1.Core.dll</HintPath>
+      <HintPath>lib\Sage.LS1.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sage.LS1.Messaging, Version=14.1.0.0, Culture=neutral, PublicKeyToken=3e78b2cabf12f868, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Sage.LS1.Messaging.dll</HintPath>
+      <HintPath>lib\Sage.LS1.Messaging.dll</HintPath>
     </Reference>
     <Reference Include="Sage.LS1.Messaging.Interfaces, Version=14.1.0.0, Culture=neutral, PublicKeyToken=3e78b2cabf12f868, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Sage.LS1.Messaging.Interfaces.dll</HintPath>
+      <HintPath>lib\Sage.LS1.Messaging.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="Sage.LS1.Messaging.Provider, Version=14.1.0.0, Culture=neutral, PublicKeyToken=3e78b2cabf12f868, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Sage.LS1.Messaging.Provider.dll</HintPath>
+      <HintPath>lib\Sage.LS1.Messaging.Provider.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

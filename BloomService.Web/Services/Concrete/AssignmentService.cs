@@ -10,6 +10,7 @@ namespace BloomService.Web.Services.Concrete
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
+    using Domain.Extensions;
 
     public class AssignmentService : EntityService<SageAssignment>, IAssignmentService
     {
@@ -17,14 +18,17 @@ namespace BloomService.Web.Services.Concrete
 
         private readonly IUnitOfWork unitOfWork;
 
-        public AssignmentService(IUnitOfWork unitOfWork, IAssignmentApiManager assignmentApiManager)
+        private readonly BloomServiceConfiguration _settings;
+
+        public AssignmentService(IUnitOfWork unitOfWork, IAssignmentApiManager assignmentApiManager, BloomServiceConfiguration bloomCobfiguration)
             : base(unitOfWork, assignmentApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.assignmentApiManager = assignmentApiManager;
             Repository = unitOfWork.Assignments;
+            _settings = bloomCobfiguration;
 
-            EndPoint = ConfigurationManager.AppSettings["AssignmentEndPoint"];
+            EndPoint = _settings.AssignmentEndPoint;
         }
 
         public virtual SageAssignment GetByWorkOrderId(string id)

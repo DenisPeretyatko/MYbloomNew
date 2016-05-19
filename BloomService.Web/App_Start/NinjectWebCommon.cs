@@ -26,6 +26,8 @@ namespace BloomService.Web
     using Ninject.Web.Common;
 
     using RestSharp;
+    using Domain.Exceptions;
+    using Domain.Extensions;
 
     public static class NinjectWebCommon
     {
@@ -93,6 +95,8 @@ namespace BloomService.Web
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            var setting = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
+            kernel.Bind<BloomServiceConfiguration>().ToConstant(setting);
             kernel.Bind<IWorkOrderApiManager>().To<WorkOrderApiManager>();
             kernel.Bind<ILocationApiManager>().To<LocationApiManager>();
             kernel.Bind<ICallTypeApiManager>().To<CallTypeApiManager>();

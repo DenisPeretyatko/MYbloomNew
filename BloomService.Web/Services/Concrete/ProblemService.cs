@@ -6,6 +6,7 @@
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
+    using Domain.Extensions;
 
     public class ProblemService : EntityService<SageProblem>, IProblemService
     {
@@ -13,14 +14,17 @@
 
         private readonly IUnitOfWork unitOfWork;
 
-        public ProblemService(IUnitOfWork unitOfWork, IProblemApiManager problemApiManager)
+        private readonly BloomServiceConfiguration _settings;
+
+        public ProblemService(IUnitOfWork unitOfWork, IProblemApiManager problemApiManager, BloomServiceConfiguration bloomConfiguration)
             : base(unitOfWork, problemApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.problemApiManager = problemApiManager;
             Repository = unitOfWork.Problems;
+            _settings = bloomConfiguration;
 
-            EndPoint = ConfigurationManager.AppSettings["ProblemEndPoint"];
+            EndPoint = _settings.ProblemEndPoint;
         }
     }
 }

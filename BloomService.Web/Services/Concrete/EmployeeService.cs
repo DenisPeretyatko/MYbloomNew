@@ -10,6 +10,7 @@
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
+    using Domain.Extensions;
 
     public class EmployeeService : EntityService<SageEmployee>, IEmployeeService
     {
@@ -17,14 +18,17 @@
 
         private readonly IUnitOfWork unitOfWork;
 
-        public EmployeeService(IUnitOfWork unitOfWork, IEmployeeApiManager employeeApiManager)
+        private readonly BloomServiceConfiguration _settings;
+
+        public EmployeeService(IUnitOfWork unitOfWork, IEmployeeApiManager employeeApiManager, BloomServiceConfiguration bloomConfiguration)
             : base(unitOfWork, employeeApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.employeeApiManager = employeeApiManager;
             Repository = unitOfWork.Employees;
+            _settings = bloomConfiguration;
 
-            EndPoint = ConfigurationManager.AppSettings["EmployeeEndPoint"];
+            EndPoint = _settings.EmployeeEndPoint;
         }
 
         public IEnumerable<SageEmployee> EditToMongo(SageEmployee employee)

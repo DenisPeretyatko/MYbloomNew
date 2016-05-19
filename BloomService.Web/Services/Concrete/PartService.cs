@@ -6,6 +6,7 @@
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
+    using Domain.Extensions;
 
     public class PartService : EntityService<SagePart>, IPartService
     {
@@ -13,14 +14,17 @@
 
         private readonly IUnitOfWork unitOfWork;
 
-        public PartService(IUnitOfWork unitOfWork, IPartApiManager partApiManager)
+        private readonly BloomServiceConfiguration _settings;
+
+        public PartService(IUnitOfWork unitOfWork, IPartApiManager partApiManager, BloomServiceConfiguration bloomConfiguration)
             : base(unitOfWork, partApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.partApiManager = partApiManager;
             Repository = unitOfWork.Parts;
+            _settings = bloomConfiguration;
 
-            EndPoint = ConfigurationManager.AppSettings["PartEndPoint"];
+            EndPoint = _settings.PartEndPoint;
         }
     }
 }

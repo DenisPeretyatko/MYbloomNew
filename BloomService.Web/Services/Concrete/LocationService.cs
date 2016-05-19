@@ -8,6 +8,7 @@
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
+    using Domain.Extensions;
 
     public class LocationService : EntityService<SageLocation>, ILocationService
     {
@@ -15,13 +16,16 @@
 
         private readonly IUnitOfWork unitOfWork;
 
-        public LocationService(IUnitOfWork unitOfWork, ILocationApiManager locationApiManager)
+        private readonly BloomServiceConfiguration _settings;
+
+        public LocationService(IUnitOfWork unitOfWork, ILocationApiManager locationApiManager, BloomServiceConfiguration bloomConfiguration)
             : base(unitOfWork, locationApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.locationApiManager = locationApiManager;
             Repository = unitOfWork.Locations;
-            EndPoint = ConfigurationManager.AppSettings["LocationEndPoint"];
+            _settings = bloomConfiguration;
+            EndPoint = _settings.LocationEndPoint;
         }
     }
 }
