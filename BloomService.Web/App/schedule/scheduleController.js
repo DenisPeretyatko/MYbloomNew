@@ -128,11 +128,12 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
         var offset = external_events.offset();
         offset.right = external_events.width() + offset.left;
         offset.bottom = external_events.height() + offset.top;
+        var scroll = $(window).scrollTop();
 
         if (x >= offset.left
-            && y >= offset.top
+            && y + scroll >= offset.top
             && x <= offset.right
-            && y <= offset.bottom) { return true; }
+            && y + scroll <= offset.bottom) { return true; }
         return false;
 
     }
