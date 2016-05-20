@@ -20,8 +20,8 @@ var commonDataService = function($http) {
 	    $http.post("/Schedule/Assignments/Create", assignment);
 	}
 
-	this.unAssignWorkorder = function (workorderId) {
-	    $http.post("/Schedule/Assignments/Delete/" + workorderId);
+	this.unAssignWorkorder = function (assignment) {
+	    $http.post("/Schedule/Assignments/Delete", assignment);
 	}
 
 	this.getDashboard = function() {

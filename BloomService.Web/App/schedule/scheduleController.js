@@ -102,8 +102,22 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                         revertDuration: 0 
                     });
                     el.data('event', { title: event.title, id: event.id, stick: true });
+                    
 
-                    commonDataService.unAssignWorkorder(event.title);
+                    var workorder = event.title;
+
+                    var start = new Date(event.start);
+                    var end = new Date(event.end);
+                    var estimate = end.getHours() - start.getHours();
+
+                    var assignment = {
+                        ScheduleDate: start,
+                        Employee: event.resourceId,
+                        WorkOrder: workorder,
+                        EstimatedRepairHours: estimate,
+                        EndDate: end,
+                    };
+                    commonDataService.unAssignWorkorder(assignment);
                 }
                 $('#calendar').find("div[style='height: 34px;']").each(function (i, el) {
                     $(this).css('height', '28px');

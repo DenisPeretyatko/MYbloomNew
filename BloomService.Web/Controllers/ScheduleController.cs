@@ -1,4 +1,6 @@
-﻿namespace BloomService.Web.Controllers
+﻿using BloomService.Domain.UnitOfWork;
+
+namespace BloomService.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -22,14 +24,17 @@
 
         private readonly IWorkOrderService workOrderService;
 
+        private readonly IUnitOfWork unitOfWork;
+
         public ScheduleController(
             IAssignmentService assignmentService,
             IWorkOrderService workOrderService,
-            IEmployeeService employeeService)
+            IEmployeeService employeeService, IUnitOfWork unitOfWork)
         {
             this.assignmentService = assignmentService;
             this.workOrderService = workOrderService;
             this.employeeService = employeeService;
+            this.unitOfWork = unitOfWork;
         }
 
         [GET("Schedule")]
@@ -79,24 +84,49 @@
             var assignmanet = new SagePropertyDictionary
                                   {
                                       { "Assignment", databaseAssignment.Assignment }, 
-                                      { "ScheduleDate", model.ScheduleDate.ToShortDateString() }, 
+                                      { "ScheduleDate", model.ScheduleDate.ToString("yyyy-MM-dd") }, 
                                       { "Employee", model.Employee }, 
                                       { "WorkOrder", model.WorkOrder }, 
                                       { "EstimatedRepairHours", model.EstimatedRepairHours }, 
-                                      { "StartTime", model.ScheduleDate.ToShortTimeString() }, 
-                                      { "Enddate", model.EndDate.ToShortDateString() }, 
-                                      { "Endtime", model.EndDate.ToShortTimeString() }
+                                      { "StartTime", model.ScheduleDate.TimeOfDay.ToString() }, 
+                                      { "Enddate", model.EndDate.ToString("yyyy-MM-dd") }, 
+                                      { "Endtime", model.EndDate.TimeOfDay.ToString() }
                                   };
             var edited = this.assignmentService.Edit(assignmanet);
-            
+            if (edited != null)
+            {
+                databaseAssignment.ScheduleDate = model.ScheduleDate.ToString("yyyy-MM-dd");
+                databaseAssignment.Employee = model.Employee;
+                databaseAssignment.WorkOrder = model.WorkOrder;
+                databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
+                databaseAssignment.StartTime = model.ScheduleDate.TimeOfDay.ToString();
+                databaseAssignment.Enddate = model.EndDate.ToString("yyyy-MM-dd");
+                databaseAssignment.Endtime = model.EndDate.TimeOfDay.ToString();
+
+                unitOfWork.GetEntities<SageAssignment>().Add(databaseAssignment);
+            }
+
             return this.Json("success", JsonRequestBehavior.AllowGet);
         }
 
-        [POST("Schedule/Assignments/Delete/{workorderId}")]
-        public ActionResult DeleteAssignment(string workorderId)
+        [POST("Schedule/Assignments/Delete")]
+        public ActionResult DeleteAssignment(AssignmentViewModel model)
         {
-            var edited = workOrderService.Delete(workorderId);
+            //TODO 
+            var databaseAssignment = assignmentService.GetByWorkOrderId(model.WorkOrder);
+            //if (edited != null)
+            //{
+                databaseAssignment.Employee = "";
+                databaseAssignment.WorkOrder = model.WorkOrder;
+                databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
+                databaseAssignment.StartTime = model.ScheduleDate.TimeOfDay.ToString();
+                databaseAssignment.Enddate = model.EndDate.ToString("yyyy-MM-dd");
+                databaseAssignment.Endtime = model.EndDate.TimeOfDay.ToString();
 
+                unitOfWork.GetEntities<SageAssignment>().Add(databaseAssignment);
+            //}
+            
+            workOrderService.Delete(model.WorkOrder); 
             return Json("success", JsonRequestBehavior.AllowGet);
         }
     }
