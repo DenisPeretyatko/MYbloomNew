@@ -81,7 +81,7 @@
             var userId = userService.GetId();
             var workOrders = workOrderService.Get();
             var result = workOrders.Where(x => x.Employee == userId);
-            var locations = unitOfWork.Locations.Get();
+            var locations = unitOfWork.GetEntities<SageLocation>().Get();
             foreach (var order in result)
             {
                 var images = unitOfWork.GetEntities<SageImageWorkOrder>().SearchFor(x => x.WorkOrder == order.WorkOrder).FirstOrDefault();
