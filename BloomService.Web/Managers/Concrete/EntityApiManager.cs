@@ -66,8 +66,8 @@
 
         public virtual IEnumerable<TEntity> Edit(string endPoint, SagePropertyDictionary properties)
         {
-            var request = new RestRequest(endPoint, Method.PUT) { RequestFormat = DataFormat.Json };
-            request.AddObject(properties);
+            var request = new RestRequest(endPoint, Method.POST) { RequestFormat = DataFormat.Json };
+            request.AddBody(properties);
             request.AddHeader("Authorization", token.Token);
             var response = restClient.Execute<List<TEntity>>(request);
             var result = response.Data;

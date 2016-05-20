@@ -118,12 +118,12 @@
 
         protected string GetEntityId(SagePropertyDictionary sageProperties)
         {
-            return GetType().GetProperty(GetEntityName()).GetValue(this, null).ToString();
+            return sageProperties.SingleOrDefault(x => x.Key == GetEntityName()).Value;
         }
 
         protected string GetEntityName()
         {
-            return typeof(TEntity).Name;
+            return typeof(TEntity).Name.Replace("Sage","");
         }
     }
 }

@@ -754,8 +754,8 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="App_Data\aps_dev.p12" />
-    <Content Include="App_Data\aps_prod.p12" />
+    <Content Include="App_Data\SertificatesToIOS\aps_dev.p12" />
+    <Content Include="App_Data\SertificatesToIOS\aps_prod.p12" />
     <None Include="Properties\PublishProfiles\b.pubxml" />
     <None Include="Properties\PublishProfiles\bloom.pubxml" />
     <Content Include="Public\mock\getEmployees.json" />
