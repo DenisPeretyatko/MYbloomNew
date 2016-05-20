@@ -93,11 +93,8 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                 
                 if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
                     $('#calendar').fullCalendar('removeEvents', event._id);
-                    var columns = event.title.split("/");
-                    var innerHtml = "";
-                    columns.forEach(function(item, i) {
-                        innerHtml += "<td>" + columns[i] + "</td>";
-                    });
+                    var innerHtml = "<td>" + event.title + "</td>" + "<td>" + event.dateFoo + "</td>" + "<td>" + event.customerFoo + "</td>" +
+                                    "<td>" + event.locationFoo + "</td>" + "<td>" + parseInt(event.hourFoo) + "</td>";
                     var el = $("<tr class='drag fc-event'>").appendTo('.footable tbody').html(innerHtml);
                     el.draggable({
                         zIndex: 999,
@@ -106,21 +103,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     });
                     el.data('event', { title: event.title, id: event.id, stick: true });
 
-                    var cols = event.title.split("/");
-                    var workorder = cols[0];
-
-                    var start = new Date(event.start);
-                    var end = new Date(event.end);
-                    var estimate = end.getHours() - start.getHours();
-
-                    var assignment = {
-                        ScheduleDate: start,
-                        Employee: event.resourceId,
-                        WorkOrder: workorder,
-                        EstimatedRepairHours: estimate,
-                        EndDate: end,
-                    };
-                    commonDataService.unAssignWorkorder(assignment);
+                    commonDataService.unAssignWorkorder(event.title);
                 }
                 $('#calendar').find("div[style='height: 34px;']").each(function (i, el) {
                     $(this).css('height', '28px');
@@ -176,6 +159,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
         $scope.assigments = schedule.Assigments;
         angular.forEach($scope.assigments, function (value, key) {
             if (value != null) {
+                var spliter = (value.Customer == '' || value.Location == '') ? '' : '/';
                 this.push({
                     id: value.Assignment,
                     resourceId: value.EmployeeId,
@@ -184,7 +168,11 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     end: value.End,
                     assigmentId: value.Assigments,
                     workorderId: value.WorkOrder,
-                    description: value.Customer + '/' + value.Location 
+                    description: value.Customer + spliter + value.Location,
+                    dateFoo: value.DateEntered,
+                    customerFoo: value.Customer,
+                    locationFoo: value.Location,
+                    hourFoo: value.EstimatedRepairHours
                 });
             }
         }, $scope.events);
@@ -194,10 +182,11 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                 var descr = '';
                 $(this).find('td').each(function (i, e) {
                     if (i == 2) {
-                        descr += $(this).text() + '/';
+                        var spliter = (e.innerText == '' || e[i + 1] == '') ? '' : '/';
+                        descr += e.innerText + spliter;
                     }
                     if (i == 3) {
-                        descr += $(this).text();
+                        descr += e.innerText;
                     }
                 });
                 var startDate = new Date();

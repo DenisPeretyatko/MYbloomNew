@@ -92,24 +92,12 @@
             return this.Json("success", JsonRequestBehavior.AllowGet);
         }
 
-        [POST("Schedule/Assignments/Delete")]
-        public ActionResult DeleteAssignment(AssignmentViewModel model)
+        [POST("Schedule/Assignments/Delete/{workorderId}")]
+        public ActionResult DeleteAssignment(string workorderId)
         {
-            var databaseAssignment = assignmentService.GetByWorkOrderId(model.WorkOrder);
-            var assignmanet = new SagePropertyDictionary
-                                {
-                                    { "Assignment", databaseAssignment.Assignment }, 
-                                    { "ScheduleDate", model.ScheduleDate.ToShortDateString() }, 
-                                    { "Employee", model.Employee }, 
-                                    { "WorkOrder", model.WorkOrder }, 
-                                    { "EstimatedRepairHours", model.EstimatedRepairHours }, 
-                                    { "StartTime", model.ScheduleDate.ToShortTimeString() }, 
-                                    { "Enddate", model.EndDate.ToShortDateString() }, 
-                                    { "Endtime", model.EndDate.ToShortTimeString() }
-                                };
-            var edited = this.assignmentService.Edit(assignmanet);
+            var edited = workOrderService.Delete(workorderId);
 
-            return this.Json("success", JsonRequestBehavior.AllowGet);
+            return Json("success", JsonRequestBehavior.AllowGet);
         }
     }
 }

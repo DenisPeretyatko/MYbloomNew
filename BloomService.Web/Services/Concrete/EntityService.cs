@@ -83,7 +83,7 @@
 
         public virtual IEnumerable<TEntity> Get()
         {
-            var items = Repository.Get().Take(20).ToArray();
+            var items = Repository.Get().ToArray();
 
             if (items.Any())
             {
