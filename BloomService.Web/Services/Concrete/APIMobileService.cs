@@ -9,6 +9,9 @@
     using BloomService.Web.Services.Abstract;
     using Models.Request;
     using System.Configuration;
+    using Domain.Exceptions;
+    using Domain.Extensions;
+
     public class ApiMobileService : IApiMobileService
     {
         private readonly IEmployeeService employeeService;
@@ -21,18 +24,22 @@
 
         private readonly IWorkOrderService workOrderService;
 
+        private readonly BloomServiceConfiguration _settings;
+
         public ApiMobileService(
             IWorkOrderService workOrderService,
             IUserService userService,
             IEmployeeService employeeService,
             IImageService imageService,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            BloomServiceConfiguration bloomConfiguration)
         {
             this.imageService = imageService;
             this.workOrderService = workOrderService;
             this.userService = userService;
             this.employeeService = employeeService;
             this.unitOfWork = unitOfWork;
+            _settings = bloomConfiguration;
         }
 
         public bool AddImage(ImageRequest model)
@@ -82,7 +89,7 @@
                 {
                     foreach(var image in images.Images)
                     {
-                        image.Image = ConfigurationManager.AppSettings["BSUrl"] + "/Images/" + image.Image;
+                        image.Image = _settings.BSUrl + "/Images/" + image.Image;
                     }
                     order.Images = images.Images;
                 }
