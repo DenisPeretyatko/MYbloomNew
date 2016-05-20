@@ -43,7 +43,5 @@
         {
             return base.Get().Take(20);
         }
-
-
     }
 }
