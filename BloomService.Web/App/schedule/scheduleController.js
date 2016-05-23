@@ -171,11 +171,16 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
     commonDataService.getSchedule().then(function(response) {
         var schedule = response.data;
         $scope.unassignedWorkorders = schedule.UnassignedWorkorders;
+        angular.forEach($scope.unassignedWorkorders, function(value, key) {
+            if (value != null) {
+                value.DateEntered = formatDate(new Date(value.DateEntered));
+            };
+        });
         $scope.assigments = schedule.Assigments;
         angular.forEach($scope.assigments, function (value, key) {
             if (value != null) {
                 var spliter = (value.Customer == '' || value.Location == '') ? '' : '/';
-                this.push({
+                $scope.events.push({
                     id: value.Assignment,
                     resourceId: value.EmployeeId,
                     title: value.WorkOrder,
@@ -190,7 +195,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     hourFoo: value.EstimatedRepairHours
                 });
             }
-        }, $scope.events);
+        });
 
         $timeout(function () {
             $('.drag').each(function () {
@@ -234,5 +239,10 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
 
         }, 100);
     });
+
+    function formatDate(inputdate) {
+        return inputdate.getMonth() + 1 + "-" + inputdate.getDate() + "-" + inputdate.getFullYear();
+    }
+
 };
 scheduleController.$inject = ["$scope", "$interpolate", "$timeout", "commonDataService"];
