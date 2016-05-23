@@ -93,11 +93,8 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                 
                 if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
                     $('#calendar').fullCalendar('removeEvents', event._id);
-                    var columns = event.title.split("/");
-                    var innerHtml = "";
-                    columns.forEach(function(item, i) {
-                        innerHtml += "<td>" + columns[i] + "</td>";
-                    });
+                    var innerHtml = "<td>" + event.title + "</td>" + "<td>" + event.dateFoo + "</td>" + "<td>" + event.customerFoo + "</td>" +
+                                    "<td>" + event.locationFoo + "</td>" + "<td>" + parseInt(event.hourFoo) + "</td>";
                     var el = $("<tr class='drag fc-event'>").appendTo('.footable tbody').html(innerHtml);
                     el.draggable({
                         zIndex: 999,
@@ -105,9 +102,9 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                         revertDuration: 0 
                     });
                     el.data('event', { title: event.title, id: event.id, stick: true });
+                    
 
-                    var cols = event.title.split("/");
-                    var workorder = cols[0];
+                    var workorder = event.title;
 
                     var start = new Date(event.start);
                     var end = new Date(event.end);
@@ -135,7 +132,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             },
             resourceLabelText: 'Technicians',
             resources: $scope.resources,
-            timezone: 'local',
+            //timezone: 'local',
             forceEventDuration: true,
         }
     };
@@ -145,11 +142,12 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
         var offset = external_events.offset();
         offset.right = external_events.width() + offset.left;
         offset.bottom = external_events.height() + offset.top;
+        var scroll = $(window).scrollTop();
 
         if (x >= offset.left
-            && y >= offset.top
+            && y + scroll >= offset.top
             && x <= offset.right
-            && y <= offset.bottom) { return true; }
+            && y + scroll <= offset.bottom) { return true; }
         return false;
 
     }
@@ -173,10 +171,16 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
     commonDataService.getSchedule().then(function(response) {
         var schedule = response.data;
         $scope.unassignedWorkorders = schedule.UnassignedWorkorders;
+        angular.forEach($scope.unassignedWorkorders, function(value, key) {
+            if (value != null) {
+                value.DateEntered = formatDate(new Date(value.DateEntered));
+            };
+        });
         $scope.assigments = schedule.Assigments;
         angular.forEach($scope.assigments, function (value, key) {
             if (value != null) {
-                this.push({
+                var spliter = (value.Customer == '' || value.Location == '') ? '' : '/';
+                $scope.events.push({
                     id: value.Assignment,
                     resourceId: value.EmployeeId,
                     title: value.WorkOrder,
@@ -184,20 +188,25 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     end: value.End,
                     assigmentId: value.Assigments,
                     workorderId: value.WorkOrder,
-                    description: value.Customer + '/' + value.Location 
+                    description: value.Customer + spliter + value.Location,
+                    dateFoo: value.DateEntered,
+                    customerFoo: value.Customer,
+                    locationFoo: value.Location,
+                    hourFoo: value.EstimatedRepairHours
                 });
             }
-        }, $scope.events);
+        });
 
         $timeout(function () {
             $('.drag').each(function () {
                 var descr = '';
                 $(this).find('td').each(function (i, e) {
                     if (i == 2) {
-                        descr += $(this).text() + '/';
+                        var spliter = (e.innerText == '' || e[i + 1] == '') ? '' : '/';
+                        descr += e.innerText + spliter;
                     }
                     if (i == 3) {
-                        descr += $(this).text();
+                        descr += e.innerText;
                     }
                 });
                 var startDate = new Date();
@@ -210,7 +219,6 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     start: startDate,
                     end: endDate.setHours(startDate.getHours() + parseInt(rows.last().text())),
                     workorderId: rows.first().text(),
-                    stick: true,
                     description: descr
             });
 
@@ -230,5 +238,10 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
 
         }, 100);
     });
+
+    function formatDate(inputdate) {
+        return inputdate.getMonth() + 1 + "-" + inputdate.getDate() + "-" + inputdate.getFullYear();
+    }
+
 };
 scheduleController.$inject = ["$scope", "$interpolate", "$timeout", "commonDataService"];

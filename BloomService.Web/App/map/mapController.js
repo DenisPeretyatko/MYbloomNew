@@ -8,7 +8,6 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
     $scope.workorders = [];
-    $scope.workorders = state.locations;
     $scope.workorderMarkers = [];
     
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{title}}</h1><div>{{description}}</div></div>");
@@ -18,6 +17,11 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
         angular.forEach(state.locations, function (workorder) {
            
           var content = tooltip(workorder);
+
+          var pos = {
+              lat: parseFloat(workorder.Latitude),
+              lng: parseFloat(workorder.Longitude)
+          }
 
           var marker = new google.maps.Marker({
             position: workorder.location,
@@ -56,9 +60,9 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
         });
     });
 
-    //commonDataService.getLocations().then(function(response) {
-    //  	$scope.workorders = response.data;
-	//  });
+    commonDataService.getLocations().then(function(response) {
+      	$scope.workorders = response.data;
+	  });
 
     commonDataService.getTrucks().then(function(response) {
         $scope.trucks = response.data;

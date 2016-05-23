@@ -4,6 +4,7 @@ namespace BloomService.Web.Models
 {
     public class AssignmentViewModel
     {
+        public string Id { get; set; }
         public DateTime ScheduleDate { get; set; }
         public string Employee { get; set; }
         public string WorkOrder { get; set; }

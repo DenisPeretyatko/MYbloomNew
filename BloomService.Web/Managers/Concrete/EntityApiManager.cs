@@ -47,7 +47,7 @@
         public virtual IEnumerable<TEntity> Delete(string endPoint, string id)
         {
             var request = new RestRequest(endPoint, Method.DELETE) { RequestFormat = DataFormat.Json };
-            request.AddUrlSegment("id", id);
+            request.AddParameter("id", id);
             request.AddHeader("Authorization", token.Token);
             var response = restClient.Execute<List<TEntity>>(request);
             var results = response.Data;
@@ -66,8 +66,8 @@
 
         public virtual IEnumerable<TEntity> Edit(string endPoint, SagePropertyDictionary properties)
         {
-            var request = new RestRequest(endPoint, Method.PUT) { RequestFormat = DataFormat.Json };
-            request.AddObject(properties);
+            var request = new RestRequest(endPoint, Method.POST) { RequestFormat = DataFormat.Json };
+            request.AddBody(properties);
             request.AddHeader("Authorization", token.Token);
             var response = restClient.Execute<List<TEntity>>(request);
             var result = response.Data;
