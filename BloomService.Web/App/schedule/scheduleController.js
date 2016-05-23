@@ -219,7 +219,6 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     start: startDate,
                     end: endDate.setHours(startDate.getHours() + parseInt(rows.last().text())),
                     workorderId: rows.first().text(),
-                    stick: true,
                     description: descr
             });
 

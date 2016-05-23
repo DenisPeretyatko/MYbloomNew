@@ -95,8 +95,14 @@ namespace BloomService.Web.Controllers
             var edited = this.assignmentService.Edit(assignmanet);
             if (edited != null)
             {
+                var employees = employeeService.Get().ToList();
+                var employee = employees.FirstOrDefault(e => e.Employee == model.Employee);
+                if (employee != null)
+                {
+                    var empl = employee.Name;
+                    databaseAssignment.Employee = empl;
+                }
                 databaseAssignment.ScheduleDate = model.ScheduleDate.ToString("yyyy-MM-dd");
-                databaseAssignment.Employee = model.Employee;
                 databaseAssignment.WorkOrder = model.WorkOrder;
                 databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
                 databaseAssignment.StartTime = model.ScheduleDate.TimeOfDay.ToString();
