@@ -132,7 +132,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             },
             resourceLabelText: 'Technicians',
             resources: $scope.resources,
-            timezone: 'local',
+            //timezone: 'local',
             forceEventDuration: true,
         }
     };
