@@ -20,7 +20,6 @@ namespace Sage.WebApi
             AttributeRoutingConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             ModelBinders.Binders.Add(typeof(SagePropertyDictionary), new ProportiesModelBinder());
-            IoCConfig.Register();
         }
     }
 }

@@ -26,7 +26,6 @@ namespace BloomService.Web
     using Ninject.Web.Common;
 
     using RestSharp;
-    using Domain.Exceptions;
     using Domain.Extensions;
 
     public static class NinjectWebCommon
@@ -109,7 +108,7 @@ namespace BloomService.Web
             kernel.Bind<IRepairApiManager>().To<RepairApiManager>();
             kernel.Bind<ICustomerApiManager>().To<CustomerApiManager>();
 
-            var sageApiHost = ConfigurationManager.AppSettings["SageApiHost"];
+            var sageApiHost = setting.SageApiHost;
 
             kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(sageApiHost);
             kernel.Bind<IToken>().To<SageAuthorisationToken>().WithConstructorArgument(GetAuthToken());

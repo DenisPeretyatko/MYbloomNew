@@ -36,17 +36,17 @@
             if (entity.Id == null)
             {
                 entity.Id = ObjectId.GenerateNewId().ToString();
-        }
+            }
             else if (Get(entity.Id) != null)
-        {
+            {
                 Collection.Remove(Query.EQ("_id", entity.Id));
-        }
+            }
 
             return Collection.Insert(entity).HasLastErrorMessage;
         }
 
         public virtual bool Delete(TEntity entity)
-            {
+        {
             return Collection.Remove(Query.EQ("_id", entity.Id)).DocumentsAffected > 0;
         }
 
@@ -56,14 +56,13 @@
         }
 
         public virtual TEntity Get(string id)
-            {
+        {
             return Collection.FindOneByIdAs<TEntity>(id);
-            }
+        }
 
         public virtual IQueryable<TEntity> SearchFor(Expression<Func<TEntity, bool>> predicate)
         {
-            var t= Collection.AsQueryable().Where(predicate);
-            return t;
+            return Collection.AsQueryable().Where(predicate.Compile()).AsQueryable();
         }
     }
 }
