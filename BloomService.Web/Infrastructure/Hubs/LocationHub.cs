@@ -11,10 +11,10 @@
     {
         public void GetLocations()
         {
-            var json = JsonHelper.GetObjects("getNewLocations.json");
-            var serializer = new JavaScriptSerializer();
-            var list = serializer.ConvertToType<IEnumerable<LocationJsonModel>>(json);
-            Clients.All.updateLocations(list);
+            //var json = JsonHelper.GetObjects("getNewLocations.json");
+            //var serializer = new JavaScriptSerializer();
+            //var list = serializer.ConvertToType<IEnumerable<LocationJsonModel>>(json);
+            //Clients.All.updateLocations(list);
         }
     }
 }

@@ -11,9 +11,5 @@ namespace BloomService.Domain.Repositories.Concrete
             : base(collectionName)
         {
         }
-        public override IQueryable<SageProblem> Get()
-        {
-            return base.Get().Take(20);
-        }
     }
 }

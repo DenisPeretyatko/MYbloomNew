@@ -11,7 +11,12 @@ namespace BloomService.Domain.Entities.Concrete
     [CollectionName("EmployeeCollection")]
     public class SageEmployee : SageEntity
     {
+        public decimal Latitude { get; set; }
+
+        public decimal Longitude { get; set; }
+
         private bool _available = true;
+
         [XmlAttribute]
         public string Address { get; set; }
 

@@ -8,15 +8,15 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
     $scope.workorders = [];
-    $scope.workorderMarkers = [];
+    $scope.truckMarkers = [];
     
-    var tooltip = $interpolate("<div><h1 class='firstHeading'>{{title}}</h1><div>{{description}}</div></div>");
+    var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
+    var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
 
     $scope.$watch(function () { return state.locations; }, function () {
-        angular.forEach($scope.workorderMarkers, function(marker) { marker.setMap(null); });
         angular.forEach(state.locations, function (workorder) {
            
-          var content = tooltip(workorder);
+          var content = tooltipWO(workorder);
 
           var pos = {
               lat: parseFloat(workorder.Latitude),
@@ -24,12 +24,12 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
           }
 
           var marker = new google.maps.Marker({
-            position: workorder.location,
+            position: pos,
             map: $scope.locationMap,
-            icon: workorder.icon,
-            title:  workorder.title
+            icon: "/public/images/workorder1.png",
+            title:  workorder.WorkOrder
           });
-          $scope.workorderMarkers.push(marker);
+
           marker.addListener('click', function() {
             var infowindow = new google.maps.InfoWindow({
                content: content
@@ -39,18 +39,24 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
         });
     });
 
-    $scope.$watch("trucks", function(trucks){
-        angular.forEach(trucks, function (truck){  
+    $scope.$watch(function () { return state.trucks; }, function () {
+        angular.forEach($scope.truckMarkers, function (marker) { marker.setMap(null); });
+        angular.forEach($scope.trucks, function (truck) {
 
           var content = tooltip(truck);
 
-          var marker = new google.maps.Marker({
-            position: truck.location,
-            map: $scope.locationMap,
-            icon: truck.icon,
-            title: truck.title
-          });
+          var pos = {
+              lat: parseFloat(truck.Latitude),
+              lng: parseFloat(truck.Longitude)
+          }
 
+          var marker = new google.maps.Marker({
+            position: pos,
+            map: $scope.locationMap,
+            icon: "/public/images/technician2.png",
+            title: truck.Employee
+          });
+          $scope.truckMarkers.push(marker);
           marker.addListener('click', function() {
             var infowindow = new google.maps.InfoWindow({
                content: content
