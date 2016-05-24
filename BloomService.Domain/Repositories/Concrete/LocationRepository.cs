@@ -31,7 +31,8 @@
             }
             if (workOrders.Any(x => x.Location == entity.Name))
             {
-                var parametersSearch = entity.Address + " " + entity.Address2 + " " + entity.City + " " + entity.ZIP + " " + entity.State;
+                System.Threading.Thread.Sleep(1000);
+                var parametersSearch = entity.Address + " " + entity.City + " " + entity.ZIP + " " + entity.State;
                 var location = GoogleApi.GetLocation(parametersSearch);
                 if (location != null && location.result != null && location.result.Any())
                 {
