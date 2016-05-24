@@ -79,7 +79,7 @@
         public IEnumerable<SageWorkOrder> GetWorkOreders()
         {
             var userId = userService.GetId();
-            var workOrders = workOrderService.Get();
+            var workOrders = unitOfWork.GetEntities<SageWorkOrder>().Get().Where(x=>x.Status=="Open").ToList();
             var result = workOrders.Where(x => x.Employee == userId);
             var locations = unitOfWork.GetEntities<SageLocation>().Get();
             foreach (var order in result)
