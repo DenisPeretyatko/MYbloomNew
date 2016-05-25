@@ -114,6 +114,7 @@ namespace BloomService.Web.Services.Concrete
                 Date = DateTime.Now
             };
             unitOfWork.TechnicianLocation.Add(techLocation);
+            return techLocation;
         }
     }
 }
