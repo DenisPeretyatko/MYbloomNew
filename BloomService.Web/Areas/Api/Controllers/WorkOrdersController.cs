@@ -25,12 +25,12 @@
             return workOrderService.Get(id);
         }
 
-        public IEnumerable<SageWorkOrder> Post(SagePropertyDictionary properties)
+        public IEnumerable<SageWorkOrder> Post(Dictionary<string, string> properties)
         {
             return workOrderService.Add(properties);
         }
 
-        public IEnumerable<SageWorkOrder> Put(SagePropertyDictionary properties)
+        public IEnumerable<SageWorkOrder> Put(Dictionary<string, string> properties)
         {
             return workOrderService.Edit(properties);
         }

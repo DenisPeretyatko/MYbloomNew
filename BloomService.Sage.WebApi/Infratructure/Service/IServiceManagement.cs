@@ -8,7 +8,7 @@
     {
         string CatalogPath { get; set; }
 
-        SageAssignment[] AddAssignments(SagePropertyDictionary properties);
+        SageAssignment[] AddAssignments(Dictionary<string, string> properties);
 
         object Agreements();
 
@@ -22,7 +22,7 @@
 
         SageDepartment[] Departments();
 
-        SageAssignment[] EditAssignments(SagePropertyDictionary properties);
+        SageAssignment[] EditAssignments(Dictionary<string, string> properties);
 
         SageEmployee[] Employees();
 
@@ -46,6 +46,6 @@
 
         SageWorkOrder[] WorkOrders(string number);
 
-        SageWorkOrder[] WorkOrders(SagePropertyDictionary properties);
+        SageWorkOrder[] WorkOrders(Dictionary<string, string> properties);
     }
 }

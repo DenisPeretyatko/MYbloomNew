@@ -8,11 +8,11 @@
     public interface IEntityService<out TEntity>
         where TEntity : class, IEntity
     {
-        IEnumerable<TEntity> Add(SagePropertyDictionary properties);
+        IEnumerable<TEntity> Add(Dictionary<string, string> properties);
 
         IEnumerable<TEntity> Delete(string id);
 
-        IEnumerable<TEntity> Edit(SagePropertyDictionary properties);
+        IEnumerable<TEntity> Edit(Dictionary<string, string> properties);
 
         IEnumerable<TEntity> Get();
 

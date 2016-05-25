@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Concrete\Auxiliary\SageResponse.cs" />
     <Compile Include="Entities\Concrete\MessageResponse\GoogleLocation.cs" />
     <Compile Include="Entities\Concrete\Auxiliary\ChangeType.cs" />
     <Compile Include="Entities\Concrete\SageChange.cs" />

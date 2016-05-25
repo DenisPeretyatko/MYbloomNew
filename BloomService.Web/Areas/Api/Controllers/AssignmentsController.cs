@@ -25,12 +25,12 @@
             return assignmentService.Get(id);
         }
 
-        public IEnumerable<SageAssignment> Post(SagePropertyDictionary properties)
+        public IEnumerable<SageAssignment> Post(Dictionary<string, string> properties)
         {
             return assignmentService.Add(properties);
         }
 
-        public IEnumerable<SageAssignment> Put(SagePropertyDictionary properties)
+        public IEnumerable<SageAssignment> Put(Dictionary<string, string> properties)
         {
             return assignmentService.Edit(properties);
         }

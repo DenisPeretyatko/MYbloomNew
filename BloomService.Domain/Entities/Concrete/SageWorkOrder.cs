@@ -1,20 +1,15 @@
 ﻿namespace BloomService.Domain.Entities.Concrete
 {
     using System;
+    using System.Collections.Generic;
     using System.Xml.Serialization;
 
     using BloomService.Domain.Attributes;
-    using System.Collections.Generic;
+
     [CollectionName("WorkOrderCollection")]
     [XmlType(AnonymousType = true)]
     public class SageWorkOrder : SageEntity
     {
-        public List<ImageLocation> Images { get; set; }
-
-        public decimal Latitude { get; set; }
-
-        public decimal Longitude { get; set; }
-
         [XmlAttribute]
         public decimal ActualLaborCost { get; set; }
 
@@ -159,6 +154,8 @@
         [XmlAttribute]
         public decimal EstimatedRepairHours { get; set; }
 
+        public List<ImageLocation> Images { get; set; }
+
         [XmlAttribute]
         public string InvoiceDate { get; set; }
 
@@ -171,6 +168,8 @@
         [XmlAttribute]
         public string JobSaleProduct { get; set; }
 
+        public decimal Latitude { get; set; }
+
         [XmlAttribute]
         public byte Lead { get; set; }
 
@@ -182,6 +181,8 @@
 
         [XmlAttribute]
         public string Location { get; set; }
+
+        public decimal Longitude { get; set; }
 
         [XmlAttribute]
         public string Misc { get; set; }

@@ -54,7 +54,7 @@
             return results;
         }
 
-        public virtual IEnumerable<TEntity> Add(string endPoint, SagePropertyDictionary properties)
+        public virtual IEnumerable<TEntity> Add(string endPoint, Dictionary<string, string> properties)
         {
             var request = new RestRequest(endPoint, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(properties);
@@ -64,7 +64,7 @@
             return results;
         }
 
-        public virtual IEnumerable<TEntity> Edit(string endPoint, SagePropertyDictionary properties)
+        public virtual IEnumerable<TEntity> Edit(string endPoint, Dictionary<string, string> properties)
         {
             var request = new RestRequest(endPoint, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(properties);

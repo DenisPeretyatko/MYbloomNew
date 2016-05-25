@@ -8,11 +8,11 @@
     public interface IEntityApiManager<TEntity>
         where TEntity : IEntity
     {
-        IEnumerable<TEntity> Add(string endPoint, SagePropertyDictionary properties);
+        IEnumerable<TEntity> Add(string endPoint, Dictionary<string, string> properties);
 
         IEnumerable<TEntity> Delete(string endPoint, string id);
 
-        IEnumerable<TEntity> Edit(string endPoint, SagePropertyDictionary properties);
+        IEnumerable<TEntity> Edit(string endPoint, Dictionary<string, string> properties);
 
         IEnumerable<TEntity> Get(string endPoint);
 
