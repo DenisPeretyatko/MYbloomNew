@@ -9,12 +9,14 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
     $scope.trucks = [];
     $scope.workorders = [];
     $scope.truckMarkers = [];
-    
+    $scope.obj = {};
+    $scope.obj.mapDate = new Date();
+
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
 
-    $scope.$watch(function () { return state.locations; }, function () {
-        angular.forEach(state.locations, function (workorder) {
+    $scope.$watch(function () { return $scope.workorders; }, function () {
+        angular.forEach($scope.workorders, function (workorder) {
            
           var content = tooltipWO(workorder);
 
@@ -66,12 +68,17 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
         });
     });
 
-    commonDataService.getLocations().then(function(response) {
-      	$scope.workorders = response.data;
-	  });
-
     commonDataService.getTrucks().then(function(response) {
         $scope.trucks = response.data;
+    });
+
+    $scope.$watch(function () { return $scope.obj.mapDate; }, function () {
+        var model = {
+            DateWorkOrder: new Date($scope.obj.mapDate)
+        }
+        commonDataService.getLocations(model).then(function (response) {
+            $scope.workorders = response.data;
+        });
     });
 };
 mapController.$inject = ["$scope", "$http", "$compile", "$interpolate", "commonDataService", "state"];

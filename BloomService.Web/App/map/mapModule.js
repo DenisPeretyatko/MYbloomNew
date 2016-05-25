@@ -21,6 +21,10 @@ var mapModuleConfig = function($stateProvider) {
                             name: 'ui.map',
                             files: ['public/js/plugins/uimaps/ui-map.js']
                         },
+                        {
+                            name: 'datePicker',
+                            files: ['public/css/plugins/datapicker/angular-datapicker.css', 'public/js/plugins/datapicker/angular-datepicker.js']
+                        },
                     ]);
                 }
             }

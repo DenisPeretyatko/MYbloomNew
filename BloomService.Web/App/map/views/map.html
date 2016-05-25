@@ -2,13 +2,21 @@
     <div class="col-lg-9">
         <h2>Map</h2>
     </div>
+    <div class="col-lg-3">
+        <div class="form-group map_date">
+            <div class="input-group date">
+                <input type="datetime" class="form-control" date-time ng-model="obj.mapDate" view="date" auto-close="true" min-view="date" format="YYYY-MM-DD">
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight fill">
     <div class="row">
         <div class="col-md-12">
             <div class="ibox">
                 <div class="ibox-content">
-                    <section id="map" >
+                    <section id="map">
                         <div ui-map="locationMap" ui-options="mapOptions" class="google-map" style="height: 730px; min-height: 100%;"></div>
                     </section>
                 </div>

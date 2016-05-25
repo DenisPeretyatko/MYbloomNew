@@ -1,5 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using BloomService.Domain.Entities.Concrete;
 using BloomService.Domain.UnitOfWork;
+using BloomService.Web.Models;
 using BloomService.Web.Services.Abstract;
 
 namespace BloomService.Web.Controllers
@@ -25,10 +30,18 @@ namespace BloomService.Web.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [GET("Location")]
-        public ActionResult GetLocations()
+        [POST("Location")]
+        public ActionResult GetLocations(MapViewModel model)
         {
-            var workOrders = _workOrderService.Get().Where(x => x.Status == "Open");
+            var date = model.DateWorkOrder;
+            if (date == DateTime.MinValue)
+            {
+                date = DateTime.Now;
+            }
+            //date.Date.ToString("yy-MM-dd")
+            var workOrders = _workOrderService.Get().Where(x => x.Status == "Open" && x.Employee != "");
+                    
+            
             var locations = _unitOfWork.Locations.Get();
             foreach (var item in workOrders)
             {
@@ -39,7 +52,6 @@ namespace BloomService.Web.Controllers
                     item.Longitude = itemLocation.Longitude;
                 }
             }
-            //var workOrders = JsonHelper.GetObjects("getLocations.json");
             return Json(workOrders, JsonRequestBehavior.AllowGet);
         }
 
@@ -58,7 +70,6 @@ namespace BloomService.Web.Controllers
                     item.Longitude = itemLocation.Longitude;
                 }
             }
-            //var json = JsonHelper.GetObjects("getTrucks.json");
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
     }

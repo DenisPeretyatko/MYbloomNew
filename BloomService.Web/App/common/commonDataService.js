@@ -31,8 +31,8 @@ var commonDataService = function($http) {
 	    return $http.get("/Dashboard/Lookups");
 	}
 
-	this.getLocations = function() {
-	    return $http.get("/Location");
+	this.getLocations = function(map) {
+	    return $http.post("/Location", map);
 	}
 
 	this.getTrucks = function() {
