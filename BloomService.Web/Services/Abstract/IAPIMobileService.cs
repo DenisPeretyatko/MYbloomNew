@@ -9,5 +9,7 @@
         bool AddImage(ImageRequest model);
 
         IEnumerable<SageWorkOrder> GetWorkOreders();
+
+        SageTechnicianLocation SaveTechnicianLocation(string technicianId, decimal lat, decimal lng);
     }
 }

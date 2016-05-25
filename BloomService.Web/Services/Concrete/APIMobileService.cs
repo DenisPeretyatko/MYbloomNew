@@ -1,4 +1,6 @@
-﻿namespace BloomService.Web.Services.Concrete
+﻿using System;
+
+namespace BloomService.Web.Services.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -100,6 +102,18 @@
                 order.Longitude = location.Longitude;
             }
             return result;
+        }
+
+        public SageTechnicianLocation SaveTechnicianLocation(string technicianId, decimal lat, decimal lng)
+        {
+             var techLocation = new SageTechnicianLocation
+            {
+                Employee = technicianId,
+                Latitude = lat,
+                Longitude = lng,
+                Date = DateTime.Now
+            };
+            unitOfWork.TechnicianLocation.Add(techLocation);
         }
     }
 }

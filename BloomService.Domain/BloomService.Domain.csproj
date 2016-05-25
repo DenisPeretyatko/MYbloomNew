@@ -73,6 +73,7 @@
     <Compile Include="Entities\Concrete\MessageResponse\GoogleLocation.cs" />
     <Compile Include="Entities\Concrete\Auxiliary\ChangeType.cs" />
     <Compile Include="Entities\Concrete\SageChange.cs" />
+    <Compile Include="Entities\Concrete\SageTechnicianLocation.cs" />
     <Compile Include="Entities\Concrete\Auxiliary\StatusType.cs" />
     <Compile Include="Extensions\BloomServiceConfiguration.cs" />
     <Compile Include="Models\Requests\AuthorizationRequest.cs" />
@@ -103,12 +104,14 @@
     <Compile Include="Entities\Concrete\SageWorkOrder.cs" />
     <Compile Include="Exceptions\ResponseException.cs" />
     <Compile Include="Repositories\Abstract\IAssignmentRepository.cs" />
+    <Compile Include="Repositories\Abstract\ITechnicianLocationRepository.cs" />
     <Compile Include="Repositories\Abstract\IChangeRepository.cs" />
     <Compile Include="Repositories\Abstract\ILocationRepository.cs" />
     <Compile Include="Repositories\Abstract\IRepository.cs" />
     <Compile Include="Repositories\Abstract\IWorkOrderRepository.cs" />
     <Compile Include="Repositories\Concrete\AssignmentRepository.cs" />
     <Compile Include="Repositories\Concrete\CallTypeRepository.cs" />
+    <Compile Include="Repositories\Concrete\TechnicianLocationRepository.cs" />
     <Compile Include="Repositories\Concrete\CustomerRepository.cs" />
     <Compile Include="Repositories\Concrete\DepartmentRepository.cs" />
     <Compile Include="Repositories\Concrete\EmployeeRepository.cs" />

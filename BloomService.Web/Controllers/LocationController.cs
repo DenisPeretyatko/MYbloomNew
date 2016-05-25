@@ -59,11 +59,11 @@ namespace BloomService.Web.Controllers
         public ActionResult GetTrucks()
         {
             var employees = _employeeService.Get();
-            var locations = _unitOfWork.Locations.Get();
+            var techLocations = _unitOfWork.TechnicianLocation.Get();
 
             foreach (var item in employees)
             {
-                var itemLocation = locations.FirstOrDefault(l => l.Employee == item.Name);
+                var itemLocation = techLocations.FirstOrDefault(tl => tl.Employee == item.Name);
                 if (itemLocation != null)
                 {
                     item.Latitude = itemLocation.Latitude;
