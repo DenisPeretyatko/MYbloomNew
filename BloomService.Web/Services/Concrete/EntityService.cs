@@ -30,7 +30,7 @@
 
         protected IRepository<TEntity> Repository { get; set; }
 
-        public virtual IEnumerable<TEntity> Add(SagePropertyDictionary properties)
+        public virtual IEnumerable<TEntity> Add(Dictionary<string, string> properties)
         {
             var result = sageApiManager.Add(EndPoint, properties);
 
@@ -64,7 +64,7 @@
             return result;
         }
 
-        public virtual IEnumerable<TEntity> Edit(SagePropertyDictionary properties)
+        public virtual IEnumerable<TEntity> Edit(Dictionary<string, string> properties)
         {
             var result = sageApiManager.Edit(EndPoint, properties);
 
@@ -116,7 +116,7 @@
             return entity;
         }
 
-        protected string GetEntityId(SagePropertyDictionary sageProperties)
+        protected string GetEntityId(Dictionary<string, string> sageProperties)
         {
             return sageProperties.SingleOrDefault(x => x.Key == GetEntityName()).Value;
         }

@@ -7,7 +7,7 @@
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Models;
     using BloomService.Web.Services.Abstract;
-
+    using System.Collections.Generic;
     public class WorkorderController : BaseController
     {
         private readonly IWorkOrderService workOrderService;
@@ -20,26 +20,28 @@
         [POST("Workorder/Create")]
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
-            var workorder = new SagePropertyDictionary
-                                {
-                                    { "ARCustomer", model.Customer }, 
-                                    { "Location", model.Location }, 
-                                    { "CallType", model.Calltype }, 
-                                    { "CallDate", model.Calldate.ToShortDateString() }, 
-                                    { "CallTime", model.Calldate.ToShortTimeString() }, 
-                                    { "Problem", model.Problem }, 
-                                    { "RateSheet", model.Ratesheet }, 
-                                    { "Employee", model.Emploee }, 
-                                    { "Equipment", model.Equipment }, 
-                                    { "EstimatedRepairHours", model.Estimatehours }, 
-                                    { "NottoExceed", model.Nottoexceed }, 
-                                    { "Comments", model.Locationcomments }, 
-                                    { "CustomerPO", model.Customerpo }, 
-                                    { "PermissionCode", model.Permissiocode }, 
-                                    { "PayMethod", model.Paymentmethods }
-                                };
+            //var workorder = new Dictionary<string, string>
+            //                    {
+            //                        { "ARCustomer", model.Customer }, 
+            //                        { "Location", model.Location }, 
+            //                        { "CallType", model.Calltype }, 
+            //                        { "CallDate", model.Calldate.ToShortDateString() }, 
+            //                        { "CallTime", model.Calldate.ToShortTimeString() }, 
+            //                        { "Problem", model.Problem }, 
+            //                        { "RateSheet", model.Ratesheet }, 
+            //                        { "Employee", model.Emploee }, 
+            //                        { "Equipment", model.Equipment }, 
+            //                        { "EstimatedRepairHours", model.Estimatehours }, 
+            //                        { "NottoExceed", model.Nottoexceed }, 
+            //                        { "Comments", model.Locationcomments }, 
+            //                        { "CustomerPO", model.Customerpo }, 
+            //                        { "PermissionCode", model.Permissiocode }, 
+            //                        { "PayMethod", model.Paymentmethods }
+            //                    };
 
-            var created = workOrderService.Add(workorder);
+            var workOrder = AutoMapper.Mapper.Map<SageWorkOrder>(model);
+
+            var created = workOrderService.Add(workOrder);
             return Json("success", JsonRequestBehavior.AllowGet);
         }
 
@@ -60,8 +62,9 @@
         [POST("Workorder/Save")]
         public ActionResult SaveWorkOrder(WorkOrderModel model)
         {
-            var workorder = new SagePropertyDictionary
+            var workorder = new Dictionary<string, string>
             {
+                                    { "Id", model.Id },
                                     { "ARCustomer", model.Customer }, 
                                     { "Location", model.Location }, 
                                     { "CallType", model.Calltype }, 

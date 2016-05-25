@@ -25,12 +25,12 @@
             return locationService.Get(id);
         }
 
-        public IEnumerable<SageLocation> Post(SagePropertyDictionary properties)
+        public IEnumerable<SageLocation> Post(Dictionary<string, string> properties)
         {
             return locationService.Add(properties);
         }
 
-        public IEnumerable<SageLocation> Put(SagePropertyDictionary properties)
+        public IEnumerable<SageLocation> Put(Dictionary<string, string> properties)
         {
             return locationService.Edit(properties);
         }

@@ -81,7 +81,7 @@ namespace BloomService.Web.Controllers
         public ActionResult CreateAssignment(AssignmentViewModel model)
         {
             var databaseAssignment = assignmentService.GetByWorkOrderId(model.WorkOrder);
-            var assignmanet = new SagePropertyDictionary
+            var assignmanet = new Dictionary<string, string>
                                   {
                                       { "Assignment", databaseAssignment.Assignment }, 
                                       { "ScheduleDate", model.ScheduleDate.ToString("yyyy-MM-dd") }, 

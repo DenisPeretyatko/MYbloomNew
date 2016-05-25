@@ -300,6 +300,7 @@
     <Compile Include="Areas\Api\Controllers\AuthorizationController.cs" />
     <Compile Include="Areas\Api\Controllers\BaseApiController.cs" />
     <Compile Include="Areas\Api\Controllers\JobCostController.cs" />
+    <Compile Include="Areas\Api\Controllers\ServiceManagementApiController.cs" />
     <Compile Include="Areas\Api\Controllers\ServiceManagementController.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
@@ -354,6 +355,11 @@
     <Compile Include="Providers\CustomJwtFormat.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="TinyIoC.cs" />
+    <Compile Include="TinyIoCAspNetExtensions.cs" />
+    <Compile Include="TinyIocMvcDependencyResolver .cs" />
+    <Compile Include="TinyIocWebApiDependencyResolver.cs" />
+    <Compile Include="Utils\SagePropertyConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

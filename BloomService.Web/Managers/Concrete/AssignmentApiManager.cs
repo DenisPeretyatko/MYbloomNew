@@ -21,13 +21,13 @@ namespace BloomService.Web.Managers.Concrete
             this.token = token;
         }
 
-        public override IEnumerable<SageAssignment> Add(string endPoint, SagePropertyDictionary properties)
+        public override IEnumerable<SageAssignment> Add(string endPoint, Dictionary<string, string> properties)
         {
             endPoint = "api/v1/sm/addassignments";
             return base.Add(endPoint, properties);
         }
        
-        public override IEnumerable<SageAssignment> Edit(string endPoint, SagePropertyDictionary properties)
+        public override IEnumerable<SageAssignment> Edit(string endPoint, Dictionary<string, string> properties)
         {
             endPoint = "api/v1/sm/editassignments";
             return base.Edit(endPoint, properties);
