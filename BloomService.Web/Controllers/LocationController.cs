@@ -63,7 +63,7 @@ namespace BloomService.Web.Controllers
 
             foreach (var item in employees)
             {
-                var itemLocation = techLocations.FirstOrDefault(tl => tl.Employee == item.Name);
+                var itemLocation = techLocations.Where(tl => tl.Employee == item.Employee).OrderByDescending(x => x.Date).FirstOrDefault();
                 if (itemLocation != null)
                 {
                     item.Latitude = itemLocation.Latitude;

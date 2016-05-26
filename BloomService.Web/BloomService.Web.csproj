@@ -333,6 +333,8 @@
     <Compile Include="Infrastructure\Constants\PaymentMethod.cs" />
     <Compile Include="Models\CallTypeModel.cs" />
     <Compile Include="Models\AssignmentModel.cs" />
+    <Compile Include="Models\ChartModel.cs" />
+    <Compile Include="Models\DashboardViewModel.cs" />
     <Compile Include="Models\EntityModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\LocationModel.cs" />

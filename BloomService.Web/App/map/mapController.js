@@ -41,7 +41,7 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
         });
     });
 
-    $scope.$watch(function () { return state.trucks; }, function () {
+    $scope.$watch(function () { return $scope.trucks; }, function () {
         angular.forEach($scope.truckMarkers, function (marker) { marker.setMap(null); });
         angular.forEach($scope.trucks, function (truck) {
 
@@ -56,7 +56,7 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
             position: pos,
             map: $scope.locationMap,
             icon: "/public/images/technician2.png",
-            title: truck.Employee
+            title: truck.Name
           });
           $scope.truckMarkers.push(marker);
           marker.addListener('click', function() {

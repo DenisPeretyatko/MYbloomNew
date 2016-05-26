@@ -1,4 +1,7 @@
-﻿namespace BloomService.Web.Controllers
+﻿using System;
+using System.Globalization;
+
+namespace BloomService.Web.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -30,6 +33,8 @@
 
         private readonly IRepairService repairService;
 
+        private readonly IWorkOrderService workOrderService;
+
         public DashboardController(
             ICallTypeService callTypeService, 
             IEmployeeService employeeService, 
@@ -37,7 +42,8 @@
             ILocationService locationService, 
             IProblemService problemService, 
             ICustomerService customerService, 
-            IRepairService repairService)
+            IRepairService repairService, 
+            IWorkOrderService workOrderService)
         {
             this.callTypeService = callTypeService;
             this.employeeService = employeeService;
@@ -46,13 +52,30 @@
             this.problemService = problemService;
             this.customerService = customerService;
             this.repairService = repairService;
+            this.workOrderService = workOrderService;
         }
 
         [GET("Dashboard")]
         public ActionResult GetDashboard()
         {
-            var json = JsonHelper.GetObjects("getDashboard.json");
-            return Json(json, JsonRequestBehavior.AllowGet);
+            var dashboard = new DashboardViewModel();
+            var listWO = workOrderService.Get().Where(x => x.Status == "Open");
+            var chart = new List<ChartModel>();
+            var chartModel = new ChartModel();
+            
+            var chartData = new List<List<object>>
+            {
+                new List<object> {"Open", listWO.Count()},
+                new List<object> {"Assigned", listWO.Count(x => x.Employee != "")},
+                new List<object> {"Roof leak", listWO.Count(x => x.Problem == "Roof leak")},
+                new List<object> {"Closed today", listWO.Count(x => x.DateClosed == DateTime.Now.ToString("yyyy-MM-dd"))},
+            };
+            chartModel.data= chartData;
+            chart.Add(chartModel);
+            
+            dashboard.Chart = chart;
+            dashboard.WorkOrders = listWO;
+            return Json(dashboard, JsonRequestBehavior.AllowGet);
         }
 
         [GET("Dashboard/Lookups")]
