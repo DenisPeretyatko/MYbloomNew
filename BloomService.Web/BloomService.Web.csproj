@@ -277,7 +277,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Apimobile\Controllers\EquipmentController.cs" />
     <Compile Include="Areas\Apimobile\Controllers\LocationController.cs" />
     <Compile Include="Areas\Apimobile\Controllers\AuthorizationController.cs" />
     <Compile Include="Areas\Apimobile\Controllers\ImageController.cs" />
@@ -345,6 +347,7 @@
     <Compile Include="Notifications\NotificationAlert.cs" />
     <Compile Include="Notifications\NotificationPayload.cs" />
     <Compile Include="Notifications\PushNotification.cs" />
+    <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Services\Abstract\IAssignmentService.cs" />
     <Compile Include="Services\Abstract\ICallTypeService.cs" />
     <Compile Include="Services\Abstract\ICustomerService.cs" />

@@ -14,12 +14,12 @@ namespace BloomService.Web
     using Owin;
     using BackgroundJobs;
 
-    public class Startup
+    public partial class Startup
     {
         public void Configuration(IAppBuilder app)
         {
             app.MapSignalR();
-
+            ConfigureAuth(app);
             var syncDbConnection = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString;
             var syncDbName = ConfigurationManager.AppSettings["SyncDb"];
 

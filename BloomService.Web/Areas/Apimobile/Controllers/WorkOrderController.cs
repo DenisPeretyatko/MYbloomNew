@@ -8,6 +8,7 @@
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Services.Abstract;
 
+    [Authorize]
     public class WorkOrderController : ApiController
     {
         readonly IApiMobileService _apiService;

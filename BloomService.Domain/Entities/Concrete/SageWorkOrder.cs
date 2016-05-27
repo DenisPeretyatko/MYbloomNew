@@ -9,6 +9,9 @@
     [XmlType(AnonymousType = true)]
     public class SageWorkOrder : SageEntity
     {
+        [XmlIgnore]
+        public List<SageEquipment> Equipments { get; set; }
+
         public List<ImageLocation> Images { get; set; }
 
         public decimal Latitude { get; set; }

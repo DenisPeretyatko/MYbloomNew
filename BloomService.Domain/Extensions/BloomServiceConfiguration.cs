@@ -19,6 +19,7 @@ namespace BloomService.Domain.Extensions
                 //Path mapped from URL
                 var configuration = new BloomServiceConfiguration
                 {
+                    AuthorizationEndPoint = nameValueCollection["AuthorizationEndPoint"],
                     SageUsername = nameValueCollection["SageUsername"],
                     SagePassword = nameValueCollection["SagePassword"],
                     EndPointBase = nameValueCollection["EndPointBase"],
@@ -67,6 +68,7 @@ namespace BloomService.Domain.Extensions
             }
         }
 
+        public string AuthorizationEndPoint { get; set; }
         public string SageUsername { get; set; }
         public string SagePassword { get; set; }
         public string EndPointBase { get; set; }

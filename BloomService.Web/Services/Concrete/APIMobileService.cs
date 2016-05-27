@@ -78,12 +78,13 @@
 
         public IEnumerable<SageWorkOrder> GetWorkOreders()
         {
-            var userId = userService.GetId();
+            var userId = userService.Name;
             var workOrders = unitOfWork.GetEntities<SageWorkOrder>().Get().Where(x=>x.Status=="Open").ToList();
             var result = workOrders.Where(x => x.Employee == userId);
             var locations = unitOfWork.GetEntities<SageLocation>().Get();
             foreach (var order in result)
             {
+                order.Equipments = new List<SageEquipment>();
                 var images = unitOfWork.GetEntities<SageImageWorkOrder>().SearchFor(x => x.WorkOrder == order.WorkOrder).FirstOrDefault();
                 if (images != null)
                 {
@@ -98,7 +99,20 @@
                     continue;
                 order.Latitude = location.Latitude;
                 order.Longitude = location.Longitude;
+                if(order.Equipment!=0)
+                {
+                    var equipments = unitOfWork.GetEntities<SageEquipment>().SearchFor(x => x.Equipment == order.Equipment.ToString());
+                    order.Equipments.AddRange(equipments);
+                }
             }
+            return result;
+        }
+
+        public IEnumerable<SageEquipment> GetEquipments()
+        {
+            var userId = userService.Name;
+            var equipments = unitOfWork.GetEntities<SageEquipment>().Get();
+            var result = equipments.Where(x => x.Employee == userId);
             return result;
         }
     }

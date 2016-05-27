@@ -9,5 +9,7 @@
         bool AddImage(ImageRequest model);
 
         IEnumerable<SageWorkOrder> GetWorkOreders();
+
+        IEnumerable<SageEquipment> GetEquipments();
     }
 }

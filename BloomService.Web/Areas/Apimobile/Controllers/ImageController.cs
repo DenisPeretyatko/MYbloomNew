@@ -6,6 +6,7 @@ using BloomService.Web.Services.Abstract;
 
 namespace BloomService.Web.Areas.Apimobile.Controllers
 {
+    [Authorize]
     public class ImageController : ApiController
     {
         IApiMobileService _apiService;
