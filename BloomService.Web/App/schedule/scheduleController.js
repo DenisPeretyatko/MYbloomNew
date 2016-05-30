@@ -133,6 +133,8 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             },
             eventReceive: function (event) {
                 event = setTechnicianColor(event);
+                var date = new Date(event.start);
+                event.end._d = new Date(date.setHours(date.getHours() + parseInt(event.hourFoo)));
                 $('#calendar').fullCalendar('rerenderEvents');
                  saveEvent(event);
             },
