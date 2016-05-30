@@ -13,7 +13,7 @@ namespace BloomService.Domain.Repositories.Concrete
         }
         public override IQueryable<SageAssignment> Get()
         {
-            return base.Get().Skip(10431).Take(20);
+            return base.Get().Skip(10445).Take(20);
         }
     }
 }

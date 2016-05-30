@@ -62,7 +62,7 @@
 
         public virtual IQueryable<TEntity> SearchFor(Expression<Func<TEntity, bool>> predicate)
         {
-            return Collection.AsQueryable().Where(predicate.Compile()).AsQueryable();
+            return Collection.AsQueryable().Where(predicate);
         }
     }
 }
