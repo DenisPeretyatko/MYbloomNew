@@ -111,6 +111,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                         customerFoo: event.customerFoo,
                         locationFoo: event.locationFoo,
                         hourFoo: parseInt(event.hourFoo),
+                        durationEditable: false
                     });
 
                     $('#calendar').fullCalendar('removeEvents', event._id);
@@ -202,7 +203,8 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     customerFoo: value.Customer,
                     locationFoo: value.Location,
                     hourFoo: value.EstimatedRepairHours,
-                    color: value.Color == "" ? "" : value.Color
+                    color: value.Color == "" ? "" : value.Color,
+                    durationEditable: false
             });
             }
         });
@@ -236,6 +238,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     customerFoo: fooElements[2],
                     locationFoo: fooElements[3],
                     hourFoo: fooElements[4],
+                    durationEditable: false
             });
 
                 $(this).draggable({
