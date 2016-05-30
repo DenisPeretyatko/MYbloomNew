@@ -35,6 +35,8 @@ namespace BloomService.Web.Controllers
 
         private readonly IWorkOrderService workOrderService;
 
+        private readonly IAssignmentService assignmentService;
+
         public DashboardController(
             ICallTypeService callTypeService, 
             IEmployeeService employeeService, 
@@ -43,7 +45,7 @@ namespace BloomService.Web.Controllers
             IProblemService problemService, 
             ICustomerService customerService, 
             IRepairService repairService, 
-            IWorkOrderService workOrderService)
+            IWorkOrderService workOrderService, IAssignmentService assignmentService)
         {
             this.callTypeService = callTypeService;
             this.employeeService = employeeService;
@@ -53,6 +55,7 @@ namespace BloomService.Web.Controllers
             this.customerService = customerService;
             this.repairService = repairService;
             this.workOrderService = workOrderService;
+            this.assignmentService = assignmentService;
         }
 
         [GET("Dashboard")]
@@ -60,13 +63,14 @@ namespace BloomService.Web.Controllers
         {
             var dashboard = new DashboardViewModel();
             var listWO = workOrderService.Get().Where(x => x.Status == "Open");
+            var assignments = assignmentService.Get().Where(x => x.Employee == "");
             var chart = new List<ChartModel>();
             var chartModel = new ChartModel();
             
             var chartData = new List<List<object>>
             {
                 new List<object> {"Open", listWO.Count()},
-                new List<object> {"Assigned", listWO.Count(x => x.Employee != "")},
+                new List<object> {"Assigned", listWO.Count(x => assignments.Any(a => a.WorkOrder == x.WorkOrder))},
                 new List<object> {"Roof leak", listWO.Count(x => x.Problem == "Roof leak")},
                 new List<object> {"Closed today", listWO.Count(x => x.DateClosed == DateTime.Now.ToString("yyyy-MM-dd"))},
             };
