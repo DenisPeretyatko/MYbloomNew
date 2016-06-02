@@ -57,7 +57,6 @@ namespace BloomService.Web.Controllers
             this.workOrderService = workOrderService;
             this.assignmentService = assignmentService;
         }
-
         [GET("Dashboard")]
         public ActionResult GetDashboard()
         {

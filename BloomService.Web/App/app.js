@@ -12,7 +12,7 @@ var mainModuleConfig = function($stateProvider, $urlRouterProvider, $ocLazyLoadP
     $stateProvider
         .state('manager', {
             url: "/manager",
-            templateUrl: "/app/common/views/content.html",
+            templateUrl: "/app/login/views/login.html",
             data: { pageTitle: 'Example view' }
         });
 }
@@ -29,7 +29,9 @@ mainModuleConfig.$inject = ["$stateProvider", "$urlRouterProvider", "$ocLazyLoad
         'bloom.map',                    // Map
         'bloom.schedule',               // Schedule
         'bloom.technician',             // Technician
-        'bloom.workorder'               // Workorder
+
+        'bloom.workorder',              // Workorder
+        'bloom.login'                   // Login
     ])
     .config(mainModuleConfig)
     .run(function($rootScope, $state) {

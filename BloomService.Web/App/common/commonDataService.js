@@ -58,5 +58,9 @@ var commonDataService = function($http) {
 	this.getNotifications = function () {
 	    return $http.get("/Dashboard/SendNotification");
 	}
+
+	this.getToken = function (username, password) {
+	    return $http.get("/Authorization/Login/" + username + "/" + password);
+	}
 }
 commonDataService.$inject = ['$http'];
