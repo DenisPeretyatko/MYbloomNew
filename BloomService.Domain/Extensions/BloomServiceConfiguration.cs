@@ -38,7 +38,8 @@ namespace BloomService.Domain.Extensions
                     BSUrl = nameValueCollection["BSUrl"],
                     devSertificatePath = nameValueCollection["devSertificatePath"],
                     prodSertificatePath = nameValueCollection["prodSertificatePath"],
-                    delay = nameValueCollection["delay"]
+                    delay = nameValueCollection["delay"],
+                    AuthorizationEndPoint = nameValueCollection["AuthorizationEndPoint"]
                 };
 
                 return configuration;
@@ -87,5 +88,6 @@ namespace BloomService.Domain.Extensions
         public string devSertificatePath { get; set; }
         public string prodSertificatePath { get; set; }
         public string delay { get; set; }
+        public string AuthorizationEndPoint { get; set; }
     }
 }

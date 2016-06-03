@@ -2,7 +2,7 @@
  * Bloom service angular application
  */
 var mainModuleConfig = function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
-    $urlRouterProvider.otherwise("/manager");
+    $urlRouterProvider.otherwise("/login");
 
     $ocLazyLoadProvider.config({
         // Set to true if you want to see what and when is dynamically loaded
@@ -10,10 +10,15 @@ var mainModuleConfig = function($stateProvider, $urlRouterProvider, $ocLazyLoadP
     });
 
     $stateProvider
-        .state('manager', {
-            url: "/manager",
+        .state('login', {
+            url: "/login",
             templateUrl: "/app/login/views/login.html",
             data: { pageTitle: 'Example view' }
+        })
+        .state('manager', {
+            url: "/manager",
+            templateUrl: "/app/common/views/content.html",
+            data: { pageTitle: 'BS' }
         });
 }
 mainModuleConfig.$inject = ["$stateProvider", "$urlRouterProvider", "$ocLazyLoadProvider"];
