@@ -34,6 +34,8 @@
 
         private IWorkOrderRepository workOrderRepository;
 
+        private ITechnicianLocationRepository technicianLocationRepository;
+
         public IAssignmentRepository Assignments
         {
             get
@@ -137,6 +139,15 @@
             {
                 return workOrderRepository
                        ?? (workOrderRepository = new WorkOrderRepository(GetCollectionName<SageWorkOrder>()));
+            }
+        }
+
+        public ITechnicianLocationRepository TechnicianLocation
+        {
+            get
+            {
+                return technicianLocationRepository
+                       ?? (technicianLocationRepository = new TechnicianLocationRepository(GetCollectionName<SageTechnicianLocation>()));
             }
         }
 

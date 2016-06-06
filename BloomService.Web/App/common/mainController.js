@@ -2,8 +2,9 @@
  * mainController - controller
  */
 
-var mainController = function ($scope, commonDataService, state) {
-    $scope.userName = 'Nick Saroki';
+var mainController = function ($scope, commonDataService, state, $window) {
+    angular.element(window).on;
+    $scope.userName = window.localStorage.getItem('UserName')
     $scope.notifications = [];
     $scope.notifications = state.notifications;
     $scope.allnotifications = false;

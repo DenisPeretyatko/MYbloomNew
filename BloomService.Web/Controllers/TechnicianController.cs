@@ -12,6 +12,8 @@
     using BloomService.Web.Models;
     using BloomService.Web.Services.Abstract;
 
+
+    [Authorize]
     public class TechnicianController : BaseController
     {
         private readonly IEmployeeService employeeService;

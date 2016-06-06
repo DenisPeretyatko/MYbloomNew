@@ -17,11 +17,15 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
     /* message on Drop */
     $scope.alertOnDrop = function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view){
         $scope.alertMessage = (event.title + ': Droped to make dayDelta ' + dayDelta);
+        event = setTechnicianColor(event);
+        $('#calendar').fullCalendar('rerenderEvents');
         saveEvent(event);
     };
     /* message on Resize */
     $scope.alertOnResize = function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ){
         $scope.alertMessage = (event.title + ': Resized to make dayDelta ' + minuteDelta);
+        event = setTechnicianColor(event);
+        $('#calendar').fullCalendar('rerenderEvents');
         saveEvent(event);
     };
 
@@ -42,7 +46,13 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
         };
         commonDataService.assignWorkorder(assignment);
     };
-
+    var setTechnicianColor = function (event) {
+        var resource = $scope.resources.find(function (element) {
+            return element.id === event.resourceId;
+        });
+        event.color = resource.color;
+        return event;
+    }
 
     /* config object */
     $scope.uiConfig = {
@@ -58,13 +68,6 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                 element.qtip({
                     content: event.description
                 });
-                $('#calendar').find("div[style='height: 34px;']").each(function (i, el) {
-                    $(this).css('height', '28px');
-                });
-                $('#calendar').find("div[style='height: 8px;']").each(function (i, el) {
-                    $(this).css('height', '28px');
-                });
-               
             },
             droppable: true, // this allows things to be dropped onto the calendar
             dragRevertDuration: 0,
@@ -80,19 +83,15 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             eventDrop: $scope.alertOnDrop,
             eventResize: $scope.alertOnResize,
             resourceRender: function(resource, labelTds, bodyTds) {
-                var cell = '<span class="client-avatar" style="height: 40px;"><img alt="image" src="{{avatarUrl}}">&nbsp;' + 
-                           '<a class="client-link">{{title}}</a></span>';
-
+                var cell = '<div style="height: 34px;">' +
+                    '<span class="client-avatar"><img alt="image" src="{{avatarUrl}}" style="height: 28px; margin: 3px;">&nbsp;</span>' +
+                    '<span class="fc-cell-text">{{title}}</span>' +
+                    '</div>';
                 labelTds.html($interpolate(cell)(resource));
-                //bodyTds.html(cell);
-                $('#calendar').find("div[style='height: 34px;']").each(function (i, el) {
-                    $(this).css('height', '28px');
-                });
             },
             eventDragStop: function( event, jsEvent, ui, view ) {
                 
                 if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
-                    $('#calendar').fullCalendar('removeEvents', event._id);
                     var innerHtml = "<td>" + event.title + "</td>" + "<td>" + event.dateFoo + "</td>" + "<td>" + event.customerFoo + "</td>" +
                                     "<td>" + event.locationFoo + "</td>" + "<td>" + parseInt(event.hourFoo) + "</td>";
                     var el = $("<tr class='drag fc-event'>").appendTo('.footable tbody').html(innerHtml);
@@ -101,8 +100,21 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                         revert: true, 
                         revertDuration: 0 
                     });
-                    el.data('event', { title: event.title, id: event.id, stick: true });
-                    
+                    el.data('event', {
+                        title: event.title,
+                        id: event.id,
+                        start: event.start,
+                        end: event.end,
+                        workorderId: event.workorderId,
+                        description: event.description,
+                        dateFoo: event.dateFoo,
+                        customerFoo: event.customerFoo,
+                        locationFoo: event.locationFoo,
+                        hourFoo: parseInt(event.hourFoo),
+                        durationEditable: false
+                    });
+
+                    $('#calendar').fullCalendar('removeEvents', event._id);
 
                     var workorder = event.title;
 
@@ -119,20 +131,17 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     };
                     commonDataService.unAssignWorkorder(assignment);
                 }
-                $('#calendar').find("div[style='height: 34px;']").each(function (i, el) {
-                    $(this).css('height', '28px');
-                });
-                $('#calendar').find("div[style='height: 8px;']").each(function (i, el) {
-                    $(this).css('height', '28px');
-                });
-           
             },
-            eventReceive: function(event) {
+            eventReceive: function (event) {
+                event = setTechnicianColor(event);
+                var date = new Date(event.start);
+                event.end._d = new Date(date.setHours(date.getHours() + parseInt(event.hourFoo)));
+                $('#calendar').fullCalendar('rerenderEvents');
                  saveEvent(event);
             },
             resourceLabelText: 'Technicians',
+            timezone: 'local',
             resources: $scope.resources,
-            //timezone: 'local',
             forceEventDuration: true,
         }
     };
@@ -162,7 +171,8 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                 this.push({
                     id : value.Employee,
                     title : value.Name,
-                    avatarUrl : value.Picture != null? value.Picture : "public/images/user.png"
+                    avatarUrl: value.Picture != null ? value.Picture : "public/images/user.png",
+                    color: value.Color == "" ? "" : value.Color
                 });
             }
         }, $scope.resources);
@@ -184,22 +194,25 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     id: value.Assignment,
                     resourceId: value.EmployeeId,
                     title: value.WorkOrder,
-                    start: value.Start,
-                    end: value.End,
+                    start: new Date(value.Start +' UTC'),
+                    end: new Date(value.End +' UTC'),
                     assigmentId: value.Assigments,
                     workorderId: value.WorkOrder,
                     description: value.Customer + spliter + value.Location,
                     dateFoo: value.DateEntered,
                     customerFoo: value.Customer,
                     locationFoo: value.Location,
-                    hourFoo: value.EstimatedRepairHours
-                });
+                    hourFoo: value.EstimatedRepairHours,
+                    color: value.Color == "" ? "" : value.Color,
+                    durationEditable: false
+            });
             }
         });
 
         $timeout(function () {
             $('.drag').each(function () {
                 var descr = '';
+                var fooElements = [];
                 $(this).find('td').each(function (i, e) {
                     if (i == 2) {
                         var spliter = (e.innerText == '' || e[i + 1] == '') ? '' : '/';
@@ -208,6 +221,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     if (i == 3) {
                         descr += e.innerText;
                     }
+                    fooElements[i] = e.innerText;
                 });
                 var startDate = new Date();
                 var endDate = new Date(startDate);
@@ -219,7 +233,12 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     start: startDate,
                     end: endDate.setHours(startDate.getHours() + parseInt(rows.last().text())),
                     workorderId: rows.first().text(),
-                    description: descr
+                    description: descr,
+                    dateFoo: fooElements[1],
+                    customerFoo: fooElements[2],
+                    locationFoo: fooElements[3],
+                    hourFoo: fooElements[4],
+                    durationEditable: false
             });
 
                 $(this).draggable({
@@ -228,14 +247,6 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     revertDuration: 0
                 });
             });
-
-            function resizeGhost(event, ui) {
-                var helper = ui.helper;
-                var element = $(event.target);
-                helper.width(element.width());
-                helper.height(element.height());
-            }
-
         }, 100);
     });
 

@@ -83,5 +83,7 @@ namespace BloomService.Web.Models
         public string Location { get; set; }
         [JsonProperty("Customer")]
         public string Customer { get; set; }
+        [JsonProperty("Color")]
+        public string Color { get; set; }
     }
 }

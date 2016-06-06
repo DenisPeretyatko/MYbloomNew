@@ -17,7 +17,8 @@
 
         public IEnumerable<SageWorkOrder> Get()
         {
-            return workOrderService.Get();
+            var result = workOrderService.Get();
+            return result;
         }
 
         public SageWorkOrder Get(string id)

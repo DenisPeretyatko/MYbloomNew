@@ -3,63 +3,89 @@
  */
  "use strict";
 
-var dashboardController = function ($scope, commonDataService) {
+ var dashboardController = function ($scope, $interpolate, commonDataService) {
 
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
-    $scope.workoders = [];
+    $scope.workorders = [];
+    $scope.truckMarkers = [];
 
-    $scope.$watch("workoders", function(workoders){
-        angular.forEach(workoders, function (workoder){  
+    var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
+    var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
 
-          var marker = new google.maps.Marker({
-            position: workoder.location,
-            map: $scope.locationMap,
-            icon: workoder.icon,
-            title: workoder.title
-          });
+    $scope.Parse = function (value) {
+        return new Date(parseInt(value.substr(6)));
+    };
 
-          marker.addListener('click', function() {
-            var infowindow = new google.maps.InfoWindow({
-               content: 'workoder'
+    $scope.$watch(function () { return $scope.workorders; }, function () {
+        angular.forEach($scope.workorders, function (workorder) {
+
+            var content = tooltipWO(workorder);
+
+            var pos = {
+                lat: parseFloat(workorder.Latitude),
+                lng: parseFloat(workorder.Longitude)
+            }
+
+            var marker = new google.maps.Marker({
+                position: pos,
+                map: $scope.locationMap,
+                icon: "/public/images/workorder1.png",
+                title: workorder.WorkOrder
             });
-            infowindow.open($scope.locationMap, marker);
-          });
+
+            marker.addListener('click', function () {
+                var infowindow = new google.maps.InfoWindow({
+                    content: content
+                });
+                infowindow.open($scope.locationMap, marker);
+            });
         });
     });
 
-    $scope.$watch("trucks", function(trucks){
-        angular.forEach(trucks, function (truck){  
+    $scope.$watch(function () { return $scope.trucks; }, function () {
+        angular.forEach($scope.truckMarkers, function (marker) { marker.setMap(null); });
+        angular.forEach($scope.trucks, function (truck) {
 
-          var marker = new google.maps.Marker({
-            position: truck.location,
-            map: $scope.locationMap,
-            icon: truck.icon,
-            title: truck.title
-          });
+            var content = tooltip(truck);
 
-          marker.addListener('click', function() {
-            var infowindow = new google.maps.InfoWindow({
-               content: 'truck'
+            var pos = {
+                lat: parseFloat(truck.Latitude),
+                lng: parseFloat(truck.Longitude)
+            }
+
+            var marker = new google.maps.Marker({
+                position: pos,
+                map: $scope.locationMap,
+                icon: "/public/images/technician2.png",
+                title: truck.Name
             });
-            infowindow.open($scope.locationMap, marker);
-          });
+            $scope.truckMarkers.push(marker);
+            marker.addListener('click', function () {
+                var infowindow = new google.maps.InfoWindow({
+                    content: content
+                });
+                infowindow.open($scope.locationMap, marker);
+            });
         });
     });
 
-    commonDataService.getLocations().then(function(response) {
-        $scope.workoders = response.data;
-      });
-
-    commonDataService.getTrucks().then(function(response) {
+    commonDataService.getTrucks().then(function (response) {
         $scope.trucks = response.data;
     });
+    var model = {
+        DateWorkOrder: new Date()
+    }
+    commonDataService.getLocations(model).then(function (response) {
+        $scope.workorders = response.data;
+    });
+
 
     commonDataService.getDashboard().then(function(response) {
         var dashboard = response.data;
-        $scope.workorders = dashboard.workorders;
-        $scope.chartData = dashboard.chart;
+        $scope.listworkorders = dashboard.WorkOrders;
+        $scope.chartData = dashboard.Chart;
         $scope.flotChartOptions = flotChartOptions;
     });
 };
-dashboardController.$inject = ["$scope", "commonDataService"];
+ dashboardController.$inject = ["$scope", "$interpolate", "commonDataService"];

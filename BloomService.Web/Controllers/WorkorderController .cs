@@ -8,6 +8,8 @@
     using BloomService.Web.Models;
     using BloomService.Web.Services.Abstract;
 
+
+    [Authorize]
     public class WorkorderController : BaseController
     {
         private readonly IWorkOrderService workOrderService;

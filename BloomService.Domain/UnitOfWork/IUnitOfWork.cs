@@ -29,6 +29,8 @@
 
         IChangeRepository Changes { get; }
 
+        ITechnicianLocationRepository TechnicianLocation { get; }
+
         IRepository<TEntity> GetEntities<TEntity>() where TEntity : class, IEntity;
     }
 }

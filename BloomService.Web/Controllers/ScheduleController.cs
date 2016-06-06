@@ -16,6 +16,8 @@ namespace BloomService.Web.Controllers
     using BloomService.Web.Models;
     using BloomService.Web.Services.Abstract;
 
+
+    [Authorize]
     public class ScheduleController : BaseController
     {
         private readonly IAssignmentService assignmentService;
@@ -43,8 +45,9 @@ namespace BloomService.Web.Controllers
             var model = new ScheduleViewModel();
             var sageAssignments = assignmentService.Get().ToList();
             var assignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(sageAssignments);
+            var assignedAs = assignments.Where(x => x.Employee != "");
             var employees = employeeService.Get().ToList();
-            foreach (var item in assignments)
+            foreach (var item in assignedAs)
             {
                 var employee = employees.FirstOrDefault(e => e.Name == item.Employee);
                 item.EmployeeId = employee != null ? employee.Employee : null;
@@ -54,10 +57,11 @@ namespace BloomService.Web.Controllers
                     CultureInfo.InvariantCulture);
                 item.Start = startDate.ToString();
                 item.End = startDate.AddHours(Convert.ToDouble(item.EstimatedRepairHours)).ToString();
+                item.Color = employee.Color ?? "";
             }
 
             var workorders = workOrderService.Get().ToList();
-            foreach (var item in assignments)
+            foreach (var item in assignedAs)
             {
                 var workorder = workorders.FirstOrDefault(w => w.WorkOrder == item.WorkOrder);
                 if (workorder != null)
@@ -66,11 +70,12 @@ namespace BloomService.Web.Controllers
                     item.Location = workorder.Location;
                 }
             }
+            var unassignedAs = assignments.Where(x => x.Employee == "");
             var unassignedWorkorders =
                 workorders.Where(
                     x =>
                         x.Status == "Open"
-                        && assignments.Any(a => a.WorkOrder == x.WorkOrder && a.Employee == "")).ToList();
+                        && unassignedAs.Any(a => a.WorkOrder == x.WorkOrder)).ToList();
             model.Assigments = assignments;
 
             model.UnassignedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(unassignedWorkorders);
@@ -80,17 +85,18 @@ namespace BloomService.Web.Controllers
         [POST("Schedule/Assignments/Create")]
         public ActionResult CreateAssignment(AssignmentViewModel model)
         {
+            var d = model.ScheduleDate.ToUniversalTime();
             var databaseAssignment = assignmentService.GetByWorkOrderId(model.WorkOrder);
             var assignmanet = new SagePropertyDictionary
                                   {
                                       { "Assignment", databaseAssignment.Assignment }, 
-                                      { "ScheduleDate", model.ScheduleDate.ToString("yyyy-MM-dd") }, 
+                                      { "ScheduleDate", model.ScheduleDate.ToUniversalTime().ToString("yyyy-MM-dd") }, 
                                       { "Employee", model.Employee }, 
                                       { "WorkOrder", model.WorkOrder }, 
                                       { "EstimatedRepairHours", model.EstimatedRepairHours }, 
-                                      { "StartTime", model.ScheduleDate.TimeOfDay.ToString() }, 
-                                      { "Enddate", model.EndDate.ToString("yyyy-MM-dd") }, 
-                                      { "Endtime", model.EndDate.TimeOfDay.ToString() }
+                                      { "StartTime", model.ScheduleDate.ToUniversalTime().TimeOfDay.ToString() }, 
+                                      { "Enddate", model.EndDate.ToUniversalTime().ToString("yyyy-MM-dd") }, 
+                                      { "Endtime", model.EndDate.ToUniversalTime().TimeOfDay.ToString() }
                                   };
             var edited = this.assignmentService.Edit(assignmanet);
             if (edited != null)
@@ -102,12 +108,12 @@ namespace BloomService.Web.Controllers
                     var empl = employee.Name;
                     databaseAssignment.Employee = empl;
                 }
-                databaseAssignment.ScheduleDate = model.ScheduleDate.ToString("yyyy-MM-dd");
+                databaseAssignment.ScheduleDate = model.ScheduleDate.ToUniversalTime().ToString("yyyy-MM-dd");
                 databaseAssignment.WorkOrder = model.WorkOrder;
                 databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
-                databaseAssignment.StartTime = model.ScheduleDate.TimeOfDay.ToString();
-                databaseAssignment.Enddate = model.EndDate.ToString("yyyy-MM-dd");
-                databaseAssignment.Endtime = model.EndDate.TimeOfDay.ToString();
+                databaseAssignment.StartTime = model.ScheduleDate.ToUniversalTime().TimeOfDay.ToString();
+                databaseAssignment.Enddate = model.EndDate.ToUniversalTime().ToString("yyyy-MM-dd");
+                databaseAssignment.Endtime = model.EndDate.ToUniversalTime().TimeOfDay.ToString();
 
                 unitOfWork.GetEntities<SageAssignment>().Add(databaseAssignment);
             }
@@ -125,9 +131,9 @@ namespace BloomService.Web.Controllers
                 databaseAssignment.Employee = "";
                 databaseAssignment.WorkOrder = model.WorkOrder;
                 databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
-                databaseAssignment.StartTime = model.ScheduleDate.TimeOfDay.ToString();
-                databaseAssignment.Enddate = model.EndDate.ToString("yyyy-MM-dd");
-                databaseAssignment.Endtime = model.EndDate.TimeOfDay.ToString();
+                databaseAssignment.StartTime = model.ScheduleDate.ToUniversalTime().TimeOfDay.ToString();
+                databaseAssignment.Enddate = model.EndDate.ToUniversalTime().ToString("yyyy-MM-dd");
+                databaseAssignment.Endtime = model.EndDate.ToUniversalTime().TimeOfDay.ToString();
 
                 unitOfWork.GetEntities<SageAssignment>().Add(databaseAssignment);
             //}

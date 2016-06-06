@@ -49,18 +49,25 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="workorder in workorders">
-                            <td>{{workorder.number}}</td>
-                            <td>{{workorder.date}}</td>
-                            <td>{{workorder.customer}}</td>
-                            <td>{{workorder.location}}</td>
-                            <td>
-                                <span class="label" ng-class="workorder.status == 'closed' ? 'label-danger' : 'label-primary' ">
-                                    {{workorder.status == 'closed' ? "Closed" : "Open" }}
-                                </span>
-                            </td>
-                        </tr>
+                            <tr ng-repeat="workorder in listworkorders">
+                                <td>{{workorder.WorkOrder}}</td>
+                                <td>{{Parse(workorder.DateEntered)|date:mediumTime}}</td>
+                                <td>{{workorder.ARCustomer}}</td>
+                                <td>{{workorder.Location}}</td>
+                                <td>
+                                    <span class="label" ng-class="workorder.status == 'closed' ? 'label-danger' : 'label-primary' ">
+                                        {{workorder.Status == 'closed' ? "Closed" : "Open" }}
+                                    </span>
+                                </td>
+                            </tr>
                         </tbody>
+                        <tfoot class="hide-if-no-paging">
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    <ul class="pagination"></ul>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

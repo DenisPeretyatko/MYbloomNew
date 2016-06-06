@@ -1,5 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using BloomService.Domain.Entities.Concrete;
 using BloomService.Domain.UnitOfWork;
+using BloomService.Web.Models;
 using BloomService.Web.Services.Abstract;
 
 namespace BloomService.Web.Controllers
@@ -10,6 +15,8 @@ namespace BloomService.Web.Controllers
 
     using BloomService.Web.Infrastructure.Hubs;
 
+
+    [Authorize]
     public class LocationController : BaseController
     {
         private readonly IWorkOrderService _workOrderService;
@@ -25,10 +32,18 @@ namespace BloomService.Web.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [GET("Location")]
-        public ActionResult GetLocations()
+        [POST("Location")]
+        public ActionResult GetLocations(MapViewModel model)
         {
-            var workOrders = _workOrderService.Get().Where(x => x.Status == "Open");
+            var date = model.DateWorkOrder;
+            if (date == DateTime.MinValue)
+            {
+                date = DateTime.Now;
+            }
+            //date.Date.ToString("yy-MM-dd")
+            var workOrders = _workOrderService.Get().Where(x => x.Status == "Open" && x.Employee != "");
+                    
+            
             var locations = _unitOfWork.Locations.Get();
             foreach (var item in workOrders)
             {
@@ -39,7 +54,6 @@ namespace BloomService.Web.Controllers
                     item.Longitude = itemLocation.Longitude;
                 }
             }
-            //var workOrders = JsonHelper.GetObjects("getLocations.json");
             return Json(workOrders, JsonRequestBehavior.AllowGet);
         }
 
@@ -47,18 +61,17 @@ namespace BloomService.Web.Controllers
         public ActionResult GetTrucks()
         {
             var employees = _employeeService.Get();
-            var locations = _unitOfWork.Locations.Get();
+            var techLocations = _unitOfWork.TechnicianLocation.Get();
 
             foreach (var item in employees)
             {
-                var itemLocation = locations.FirstOrDefault(l => l.Employee == item.Name);
+                var itemLocation = techLocations.Where(tl => tl.Employee == item.Employee).OrderByDescending(x => x.Date).FirstOrDefault();
                 if (itemLocation != null)
                 {
                     item.Latitude = itemLocation.Latitude;
                     item.Longitude = itemLocation.Longitude;
                 }
             }
-            //var json = JsonHelper.GetObjects("getTrucks.json");
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
     }
