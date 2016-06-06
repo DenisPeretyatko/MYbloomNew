@@ -31,7 +31,7 @@
         public SageWorkOrder Add(SageWorkOrder workOrder)
         {
             var response = workOrderApiManager.Add(EndPoint, workOrder);
-            if (response.IsSucceed)
+            if (response != null && response.IsSucceed)
             {
                 unitOfWork.WorkOrders.Add(workOrder);
                 unitOfWork.Changes.Add(
@@ -41,8 +41,8 @@
                             EntityId = workOrder.WorkOrder, 
                             EntityType = GetEntityName(), 
                             Status = StatusType.NotSynchronized, 
-                            ChangeTime = DateTime.UtcNow
-                        });
+                            ChangeTime = DateTime.UtcNow.ToString()
+                    });
             }
 
             var result = (SageWorkOrder)response.Entity;
@@ -82,8 +82,8 @@
                         EntityId = GetEntityId(properties), 
                         EntityType = GetEntityName(), 
                         Status = StatusType.NotSynchronized, 
-                        ChangeTime = DateTime.UtcNow
-                    });
+                        ChangeTime = DateTime.UtcNow.ToString()
+                });
 
             return result;
         }

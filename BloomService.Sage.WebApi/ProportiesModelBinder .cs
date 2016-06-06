@@ -1,11 +1,9 @@
-﻿using System.IO;
-using System.Web.Mvc;
-
-namespace Sage.WebApi
+﻿namespace Sage.WebApi
 {
-    using BloomService.Domain.Entities;
-    using BloomService.Domain.Entities.Concrete;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Web.Mvc;
+
     public class ProportiesModelBinder : DefaultModelBinder
     {
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
@@ -29,13 +27,18 @@ namespace Sage.WebApi
             {
                 var proportyFields = property.Split(':');
                 if (proportyFields.Length < 2)
+                {
                     continue;
+                }
+
                 var value = string.Empty;
                 for (var i = 1; i < proportyFields.Length; i++)
                 {
                     value += proportyFields[i];
                     if (i != proportyFields.Length - 1)
+                    {
                         value += ":";
+                    }
                 }
 
                 var replaceSympol = new[] { '\"', '\n', '\t', '\r', ' ', '\t' };

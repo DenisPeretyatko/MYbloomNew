@@ -46,19 +46,7 @@
             var result = SendMessage(message);
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
         }
-
-        // public SageAssignment[] AddAssignments(SageAssignment assignment)
-        // {
-        // var propertiesStr = string.Empty;
-        // foreach (var property in properties)
-        // {
-        // propertiesStr += string.Format(Messages.Property, property.Key, property.Value);
-        // }
-
-        // var message = string.Format(Messages.AddAssignment, propertiesStr);
-        // var result = SendMessage(message);
-        // return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
-        // }
+       
         public object Agreements()
         {
             var result = SendMessage(Messages.Agreements);
@@ -191,7 +179,7 @@
         {
             if (!isCreated)
             {
-                Create(claimsAgent.Name, claimsAgent.Password);
+                Create("kris", "sageDEV!!");
             }
 
             var response = messageBoard.SendMessage(messageTypeDescriptor.Xml, message);

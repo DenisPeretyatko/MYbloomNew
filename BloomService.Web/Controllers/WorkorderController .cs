@@ -82,6 +82,10 @@
                                     { "PayMethod", model.Paymentmethods }
             };
 
+            var workOrder = AutoMapper.Mapper.Map<SageWorkOrder>(model);
+
+            var created = workOrderService.Add(workOrder);
+
             var saved = workOrderService.Edit(workorder);
             return Json("success", JsonRequestBehavior.AllowGet);
         }

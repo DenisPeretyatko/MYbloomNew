@@ -5,8 +5,8 @@ using System.Web.Routing;
 
 namespace Sage.WebApi
 {
-    using BloomService.Domain.Entities;
-    using BloomService.Domain.Entities.Concrete;
+    using AutoMapper;
+    using Mapping;
     using System.Collections.Generic;
     public class WebApiApplication : System.Web.HttpApplication
     {
@@ -19,7 +19,13 @@ namespace Sage.WebApi
             // RouteConfig.RegisterRoutes(RouteTable.Routes);
             AttributeRoutingConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            ModelBinders.Binders.Add(typeof(SagePropertyDictionary), new ProportiesModelBinder());
+            ModelBinders.Binders.Add(typeof(Dictionary<string, string>), new ProportiesModelBinder());
+
+            Mapper.Initialize(
+                cfg =>
+                {
+                    cfg.AddProfile(new SageWebApiMappingProfile());
+                });
         }
     }
 }

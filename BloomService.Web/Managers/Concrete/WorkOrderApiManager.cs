@@ -25,9 +25,21 @@ namespace BloomService.Web.Managers.Concrete
 
         public SageResponse Add(string endPoint, SageWorkOrder workOrder)
         {
-            endPoint = workOrder.WorkOrder != null ? "api/v2/sm/workorders/edit" : "api/v2/sm/workorders/add";
+            IRestRequest request;
+            if(workOrder.WorkOrder == null)
+            {
+                endPoint = "api/v2/sm/workorders/add";
+                request = new RestRequest(endPoint, Method.POST);
+            }
+            else
+            {
+                endPoint = "api/v2/sm/workorders/edit";
+                request = new RestRequest(endPoint, Method.PUT);
+            }
 
-            var request = new RestRequest(endPoint, Method.POST) { RequestFormat = DataFormat.Json };
+            request.RequestFormat = DataFormat.Json;
+
+                       
             request.AddBody(workOrder);
             request.AddHeader("Authorization", token.Token);
             var response = restClient.Execute<SageResponse>(request);

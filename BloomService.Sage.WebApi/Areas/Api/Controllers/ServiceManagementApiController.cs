@@ -10,6 +10,8 @@
     using Sage.WebApi.Infratructure.Service;
     using Sage.WebApi.Utils;
     using System;
+
+    [Authorize]
     public class ServiceManagementApiController : ApiController
     {
         private readonly IServiceManagement serviceManager;
@@ -284,13 +286,29 @@
             try
             {
                 var result = new SageResponse
-                                 {
-                                     IsSucceed = true, 
-                                     Entities =
-                                         id == null
-                                             ? serviceManager.WorkOrders()
-                                             : serviceManager.WorkOrders(id)
-                                 };
+                {
+                    IsSucceed = true,
+                    Entity = serviceManager.WorkOrders(id).SingleOrDefault()
+                };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                return result;
+            }
+        }
+
+        [HttpGet, Route("api/v2/sm/workorders/get")]
+        public SageResponse GetWorkorders()
+        {
+            try
+            {
+                var result = new SageResponse
+                {
+                    IsSucceed = true,
+                    Entities = serviceOdbc.WorkOrders().ToArray()
+                };
                 return result;
             }
             catch (ResponseException exception)

@@ -58,6 +58,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, commonData
 
     $scope.saveWorkOrder = function () {
         var workorder = {
+            WorkOrder: $scope.editableWorkOrder.WorkOrder,
             Id: $stateParams.id,
             Customer: $scope.lookups.Customers.selected == null ? "" : $scope.lookups.Customers.selected.Customer,
             Location: $scope.lookups.Locations.selected == null ? "" : $scope.lookups.Locations.selected.Location,

@@ -41,8 +41,8 @@
                         EntityId = GetEntityId(properties), 
                         EntityType = GetEntityName(), 
                         Status = StatusType.NotSynchronized, 
-                        ChangeTime = DateTime.UtcNow
-                    });
+                        ChangeTime = DateTime.UtcNow.ToString()
+                });
 
             return result;
         }
@@ -58,7 +58,7 @@
                     EntityId = id,
                     EntityType = GetEntityName(),
                     Status = StatusType.NotSynchronized,
-                    ChangeTime = DateTime.UtcNow
+                    ChangeTime = DateTime.UtcNow.ToString()
                 });
 
             return result;
@@ -75,8 +75,8 @@
                         EntityId = GetEntityId(properties), 
                         EntityType = GetEntityName(), 
                         Status = StatusType.NotSynchronized, 
-                        ChangeTime = DateTime.UtcNow
-                    });
+                        ChangeTime = DateTime.UtcNow.ToString()
+                });
 
             return result;
         }
