@@ -13,6 +13,10 @@
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
 
+    $scope.Parse = function (value) {
+        return new Date(parseInt(value.substr(6)));
+    };
+
     $scope.$watch(function () { return $scope.workorders; }, function () {
         angular.forEach($scope.workorders, function (workorder) {
 

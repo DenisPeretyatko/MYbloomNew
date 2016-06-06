@@ -51,7 +51,7 @@
                         <tbody>
                             <tr ng-repeat="workorder in listworkorders">
                                 <td>{{workorder.WorkOrder}}</td>
-                                <td>{{workorder.DateEntered}}</td>
+                                <td>{{Parse(workorder.DateEntered)|date:mediumTime}}</td>
                                 <td>{{workorder.ARCustomer}}</td>
                                 <td>{{workorder.Location}}</td>
                                 <td>
