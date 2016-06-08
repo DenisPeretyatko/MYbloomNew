@@ -19,6 +19,22 @@ var commonDataService = function($http, $window) {
 	    });
 	}
 
+	this.getWorkorderPage = function (index) {
+	    return $http.get("/WorkorderPage/" + index, {
+	        headers: {
+	            'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+	        }
+	    });
+	}
+
+	this.countPage = function (index) {
+	    return $http.get("/WorkorderPageCount", {
+	        headers: {
+	            'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+	        }
+	    });
+	}
+
 	this.createWorkorder = function(workorder){
 	    return $http.post("/workorder/Create", workorder, {
 	        headers: {

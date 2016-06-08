@@ -770,6 +770,7 @@
     <None Include="Properties\PublishProfiles\bloom.pubxml" />
     <Content Include="Public\mock\getEmployees.json" />
     <Content Include="Public\mock\getEmployee.json" />
+    <None Include="Properties\PublishProfiles\BS.pubxml" />
     <None Include="Properties\PublishProfiles\s.pubxml" />
     <Content Include="Public\js\plugins\colorpicker\css\bootstrap-colorpicker.css.map" />
     <Content Include="Public\js\plugins\colorpicker\css\bootstrap-colorpicker.min.css.map" />

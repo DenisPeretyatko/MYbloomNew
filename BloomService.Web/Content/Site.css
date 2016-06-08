@@ -22,3 +22,11 @@ select,
 textarea {
     max-width: 280px;
 }
+
+#content {
+  max-width: 200px;
+  margin: 20px auto 0 auto;
+}
+#pagination {
+  text-align: center;
+}
