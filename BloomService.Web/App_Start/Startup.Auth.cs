@@ -25,7 +25,7 @@ namespace BloomService.Web
             PublicClientId = "self";
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
-                TokenEndpointPath = new PathString("/Token"),
+                TokenEndpointPath = new PathString("/apimobile/Token"),
                 Provider = new ApplicationOAuthProvider(PublicClientId),
                 AuthorizeEndpointPath = new PathString("/Account/Login"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
