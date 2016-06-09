@@ -465,6 +465,7 @@
     <Content Include="Public\css\patterns\header-profile-skin-2.png" />
     <Content Include="Public\css\patterns\header-profile-skin-3.png" />
     <Content Include="Public\css\patterns\header-profile.png" />
+    <Content Include="Content\Images\logo.png" />
     <Content Include="Public\css\patterns\otis_redding.png" />
     <Content Include="Public\css\patterns\shattered.png" />
     <Content Include="Public\css\patterns\triangular.png" />
