@@ -8,13 +8,9 @@
     using BloomService.Domain.Entities.Concrete;
 
     using Sage.WebApi.Infratructure.Constants;
-    using System;
     using Utils;
     using AutoMapper;
     using Models.DbModels;
-    using System.Web.Script.Serialization;
-    using System.IO;
-    using System.Xml.Serialization;
     public class ServiceOdbc : IServiceOdbc
     {
         private readonly string timberlineDataConnectionString;
@@ -56,8 +52,16 @@
         {
             var properties = SagePropertyConverter.ConvertToProperties(workOrder);
             var query = Queryes.BuildEditWorkOrderQuery(properties);
+            ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query);
+        }
+
+        public void CreateWorkOrder(SageWorkOrder workOrder)
+        {
+            var properties = SagePropertyConverter.ConvertToProperties(workOrder);
+            var query = Queryes.BuildCreateWorkOrderQuery(properties);
             ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
+
 
         public List<SageWorkOrder> WorkOrders()
         {

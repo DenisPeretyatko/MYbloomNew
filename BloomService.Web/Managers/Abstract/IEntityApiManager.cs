@@ -1,21 +1,19 @@
 ﻿namespace BloomService.Web.Managers.Abstract
 {
-    using System.Collections.Generic;
-
     using BloomService.Domain.Entities.Abstract;
-    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Entities.Concrete.Auxiliary;
 
     public interface IEntityApiManager<TEntity>
         where TEntity : IEntity
     {
-        IEnumerable<TEntity> Add(string endPoint, Dictionary<string, string> properties);
+        SageResponse<TEntity> Add(TEntity entity);
 
-        IEnumerable<TEntity> Delete(string endPoint, string id);
+        SageResponse<TEntity> Delete(string id);
 
-        IEnumerable<TEntity> Edit(string endPoint, Dictionary<string, string> properties);
+        SageResponse<TEntity> Edit(TEntity entity);
 
-        IEnumerable<TEntity> Get(string endPoint);
+        SageResponse<TEntity> Get();
 
-        TEntity Get(string endPoint, string id);
+        SageResponse<TEntity> Get(string id);
     }
 }

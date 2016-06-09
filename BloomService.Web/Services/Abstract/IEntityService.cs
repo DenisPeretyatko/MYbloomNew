@@ -3,16 +3,16 @@
     using System.Collections.Generic;
 
     using BloomService.Domain.Entities.Abstract;
-    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Entities.Concrete.Auxiliary;
 
-    public interface IEntityService<out TEntity>
+    public interface IEntityService<TEntity>
         where TEntity : class, IEntity
     {
-        IEnumerable<TEntity> Add(Dictionary<string, string> properties);
+        SageResponse<TEntity> Add(TEntity entity);
 
-        IEnumerable<TEntity> Delete(string id);
+        SageResponse<TEntity> Delete(string id);
 
-        IEnumerable<TEntity> Edit(Dictionary<string, string> properties);
+        SageResponse<TEntity> Edit(TEntity entity);
 
         IEnumerable<TEntity> Get();
 

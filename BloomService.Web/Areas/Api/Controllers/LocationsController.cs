@@ -1,6 +1,7 @@
 ﻿namespace BloomService.Web.Areas.Api.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Http;
 
     using BloomService.Domain.Entities.Concrete;
@@ -15,24 +16,48 @@
             this.locationService = locationService;
         }
 
-        public IEnumerable<SageLocation> Get()
+        public IHttpActionResult Get()
         {
-            return locationService.Get();
+            var result = locationService.Get();
+            if (result.Any())
+            {
+                return Ok(result);
+            }
+
+            return NotFound();
         }
 
-        public SageLocation Get(string id)
+        public IHttpActionResult Get(string id)
         {
-            return locationService.Get(id);
+            var result = locationService.Get(id);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+
+            return NotFound();
         }
 
-        public IEnumerable<SageLocation> Post(Dictionary<string, string> properties)
+        public IHttpActionResult Post(SageLocation location)
         {
-            return locationService.Add(properties);
+            var result = locationService.Add(location);
+            if (result.IsSucceed)
+            {
+                return Ok(result.Entity);
+            }
+
+            return NotFound();
         }
 
-        public IEnumerable<SageLocation> Put(Dictionary<string, string> properties)
+        public IHttpActionResult Put(SageLocation location)
         {
-            return locationService.Edit(properties);
+            var result = locationService.Edit(location);
+            if (result.IsSucceed)
+            {
+                return Ok();
+            }
+
+            return NotFound();
         }
     }
 }

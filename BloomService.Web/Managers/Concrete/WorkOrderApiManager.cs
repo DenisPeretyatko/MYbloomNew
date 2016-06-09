@@ -23,43 +23,48 @@ namespace BloomService.Web.Managers.Concrete
             this.token = token;
         }
 
-        public SageResponse Add(string endPoint, SageWorkOrder workOrder)
+        public SageResponse<SageWorkOrder> Add(SageWorkOrder workOrder)
         {
+            bool isCreate;
             IRestRequest request;
             if(workOrder.WorkOrder == null)
             {
-                endPoint = "api/v2/sm/workorders/add";
-                request = new RestRequest(endPoint, Method.POST);
+                EndPoint = EndPoints.AddWorkOrder;
+                request = new RestRequest(EndPoint, Method.POST);
+                isCreate = true;
             }
             else
             {
-                endPoint = "api/v2/sm/workorders/edit";
-                request = new RestRequest(endPoint, Method.PUT);
+                EndPoint = EndPoints.EditWorkOrder;
+                request = new RestRequest(EndPoint, Method.PUT);
             }
 
             request.RequestFormat = DataFormat.Json;
-
                        
-            request.AddBody(workOrder);
+            request.AddObject(workOrder);
             request.AddHeader("Authorization", token.Token);
-            var response = restClient.Execute<SageResponse>(request);
+            var response = restClient.Execute<SageResponse<SageWorkOrder>>(request);
             var results = response.Data;
+            if(results != null && results.IsSucceed)
+            {
+
+            }
             return results;
         }
 
-        public override IEnumerable<SageWorkOrder> Delete(string endPoint, string id)
+        public override SageResponse<SageWorkOrder> Delete(string id)
         {
-            endPoint = "api/v1/sm/UnassignWorkOrder";
-            return base.Delete(endPoint, id);
+            EndPoint = EndPoints.UnassignWorkOrders;
+            return base.Delete(id);
         }
 
-        public SageResponse Edit(string endPoint, SageWorkOrder workOrder)
+        public override SageResponse<SageWorkOrder> Get()
         {
-            endPoint = "api/v2/sm/workorders/edit";
-            var request = new RestRequest(endPoint, Method.POST) { RequestFormat = DataFormat.Json };
-            request.AddBody(workOrder);
+            EndPoint = EndPoints.GetWorkorder;
+            var request = new RestRequest(EndPoint, Method.GET);
             request.AddHeader("Authorization", token.Token);
-            var response = restClient.Execute<SageResponse>(request);
+
+            var response = restClient.Execute<SageResponse<SageWorkOrder>>(request);
             var results = response.Data;
             return results;
         }

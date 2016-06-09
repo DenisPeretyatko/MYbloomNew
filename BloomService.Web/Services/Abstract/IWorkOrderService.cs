@@ -4,6 +4,5 @@
 
     public interface IWorkOrderService : IEntityService<SageWorkOrder>
     {
-        SageWorkOrder Add(SageWorkOrder workOrder);
     }
 }

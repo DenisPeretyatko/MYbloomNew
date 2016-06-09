@@ -15,7 +15,10 @@ namespace Sage.WebApi.Utils
 
             foreach (KeyValuePair<string, object> item in source)
             {
-                someObjectType.GetProperty(item.Key).SetValue(someObject, item.Value, null);
+                if (item.Value.GetType() != typeof(DBNull))
+                {
+                    someObjectType.GetProperty(item.Key).SetValue(someObject, item.Value, null);
+                }
             }
 
             return someObject;
@@ -28,8 +31,6 @@ namespace Sage.WebApi.Utils
                 propInfo => propInfo.Name,
                 propInfo => propInfo.GetValue(source, null)
             );
-
         }
     }
-
 }

@@ -1,6 +1,7 @@
 ﻿namespace BloomService.Web.Areas.Api.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Http;
 
     using BloomService.Domain.Entities.Concrete;
@@ -15,24 +16,48 @@
             this.assignmentService = assignmentService;
         }
 
-        public IEnumerable<SageAssignment> Get()
+        public IHttpActionResult Get()
         {
-            return assignmentService.Get();
+            var result = assignmentService.Get();
+            if (result.Any())
+            {
+                return Ok(result);
+            }
+
+            return NotFound();
         }
 
-        public SageAssignment Get(string id)
+        public IHttpActionResult Get(string id)
         {
-            return assignmentService.Get(id);
+            var result = assignmentService.Get(id);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+
+            return NotFound();
         }
 
-        public IEnumerable<SageAssignment> Post(Dictionary<string, string> properties)
+        public IHttpActionResult Post(SageAssignment assignment)
         {
-            return assignmentService.Add(properties);
+            var result = assignmentService.Add(assignment);
+            if (result.IsSucceed)
+            {
+                return Ok(result.Entity);
+            }
+
+            return NotFound();
         }
 
-        public IEnumerable<SageAssignment> Put(Dictionary<string, string> properties)
+        public IHttpActionResult Put(SageAssignment assignment)
         {
-            return assignmentService.Edit(properties);
+            var result = assignmentService.Edit(assignment);
+            if (result.IsSucceed)
+            {
+                return Ok();
+            }
+
+            return NotFound();
         }
     }
 }

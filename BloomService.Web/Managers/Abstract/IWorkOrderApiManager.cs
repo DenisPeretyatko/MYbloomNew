@@ -5,8 +5,6 @@
 
     public interface IWorkOrderApiManager : IEntityApiManager<SageWorkOrder>
     {
-        //SageWorkOrder Add(string endPoint, SageWorkOrder workOrder);
-
-        SageResponse Add(string endPoint, SageWorkOrder workOrder);
+        SageResponse<SageWorkOrder> Add( SageWorkOrder workOrder);
     }
 }

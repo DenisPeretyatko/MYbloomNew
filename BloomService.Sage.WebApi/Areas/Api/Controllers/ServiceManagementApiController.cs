@@ -25,267 +25,284 @@
         }
 
         [HttpPost, Route("api/v2/sm/assignments/add")]
-        public SageResponse AddAssignment(SageAssignment assignment)
+        public SageResponse<SageAssignment> AddAssignment(SageAssignment assignment)
         {
             try
             {
                 var properties = SagePropertyConverter.ConvertToProperties(assignment);
                 var resultAssignment = serviceManager.AddAssignments(properties).SingleOrDefault();
-                var result = new SageResponse { IsSucceed = true, Entity = resultAssignment };
+                var result = new SageResponse<SageAssignment> { IsSucceed = true, Entity = resultAssignment };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageAssignment> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpPost, Route("api/v2/sm/workorders/add")]
-        public SageResponse AddWorkOrder(SageWorkOrder workOrder)
+        public SageResponse<SageWorkOrder> AddWorkOrder(SageWorkOrder workOrder)
         {
             try
             {
                 var properties = SagePropertyConverter.ConvertToProperties(workOrder);
                 var resultWorkOrder = serviceManager.WorkOrders(properties).SingleOrDefault();
+                //var resultWorkOrder = serviceOdbc.CreateWorkOrder(properties);
 
-                var result = new SageResponse { IsSucceed = true, Entity = resultWorkOrder };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = true, Entity = resultWorkOrder };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Message };
+                return result;
+            }
+        }
+
+        [HttpGet, Route("api/v2/sm/assignments/get")]
+        public SageResponse<SageAssignment> GetAssignments(string id)
+        {
+            try
+            {
+                var result = new SageResponse<SageAssignment>
+                {
+                    IsSucceed = true,
+                    Entities = serviceManager.Assignments().ToList()
+                };         
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageAssignment> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpGet, Route("api/v2/sm/assignments/get/{id}")]
-        public SageResponse GetAssignments(string id)
+        public SageResponse<SageAssignment> GetAssignment(string id)
         {
             try
             {
-                var result = new SageResponse
-                                 {
-                                     IsSucceed = true, 
-                                     Entities =
-                                         id == null
-                                             ? serviceManager.Assignments()
-                                             : serviceManager.Assignments(id)
-                                 };
+                var result = new SageResponse<SageAssignment>
+                {
+                    IsSucceed = true,
+                    Entity = serviceManager.Assignments(id).FirstOrDefault()
+                };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageAssignment> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpGet, Route("api/v2/sm/calltypes/get")]
-        public SageResponse GetCalltypes()
+        public SageResponse<SageCallType> GetCalltypes()
         {
             try
             {
-                var result = new SageResponse { IsSucceed = true, Entities = serviceManager.Calltypes() };
+                var result = new SageResponse<SageCallType> { IsSucceed = true, Entities = serviceManager.Calltypes().ToList() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageCallType> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpGet, Route("api/v2/sm/departments/get")]
-        public SageResponse GetDepartments()
+        public SageResponse<SageDepartment> GetDepartments()
         {
             try
             {
-                var result = new SageResponse { IsSucceed = true, Entities = serviceManager.Departments() };
+                var result = new SageResponse<SageDepartment> { IsSucceed = true, Entities = serviceManager.Departments().ToList() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageDepartment> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpPut, Route("api/v2/sm/assignments/edit")]
-        public SageResponse EditAssignment(SageAssignment assignment)
+        public SageResponse<SageAssignment> EditAssignment(SageAssignment assignment)
         {
             try
             {
                 var properties = SagePropertyConverter.ConvertToProperties(assignment);
                 serviceManager.EditAssignments(properties);
-                var result = new SageResponse { IsSucceed = true };
+                var result = new SageResponse<SageAssignment> { IsSucceed = true };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageAssignment> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpPut, Route("api/v2/sm/workorders/edit")]
-        public SageResponse EditWorkOrder(SageWorkOrder workOrder)
+        public SageResponse<SageWorkOrder> EditWorkOrder(SageWorkOrder workOrder)
         {
             try
             {
                 serviceOdbc.EditWorkOrder(workOrder);
-                var result = new SageResponse { IsSucceed = true };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = true };
                 return result;
             }
             catch (Exception exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpGet, Route("api/v2/sm/employees/get")]
-        public SageResponse GetEmployees()
+        public SageResponse<SageEmployee> GetEmployees()
         {
             try
             {
-                var result = new SageResponse { IsSucceed = true, Entities = serviceManager.Employees() };
+                var result = new SageResponse<SageEmployee> { IsSucceed = true, Entities = serviceManager.Employees().ToList() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageEmployee> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpGet, Route("api/v2/sm/equipment/get")]
-        public SageResponse GetEquipment()
+        public SageResponse<SageEquipment> GetEquipment()
         {
             try
             {
-                var result = new SageResponse { IsSucceed = true, Entities = serviceManager.Equipments() };
+                var result = new SageResponse<SageEquipment> { IsSucceed = true, Entities = serviceManager.Equipments().ToList() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageEquipment> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpGet, Route("api/v2/sm/location/get")]
-        public SageResponse GetLocations()
+        public SageResponse<SageLocation> GetLocations()
         {
             try
             {
-                var result = new SageResponse { IsSucceed = true, Entities = serviceManager.Locations() };
+                var result = new SageResponse<SageLocation> { IsSucceed = true, Entities = serviceManager.Locations().ToList() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageLocation> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpGet, Route("api/v2/sm/parts/get")]
-        public SageResponse GetParts()
+        public SageResponse<SagePart> GetParts()
         {
             try
             {
-                var result = new SageResponse { IsSucceed = true, Entities = serviceManager.Parts() };
+                var result = new SageResponse<SagePart> { IsSucceed = true, Entities = serviceManager.Parts().ToList() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SagePart> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpGet, Route("api/v2/sm/permissioncodes/get")]
-        public SageResponse GetPermissionCodes()
+        public SageResponse<SageEntity> GetPermissionCodes()
         {
             try
             {
-                var result = new SageResponse { IsSucceed = true, Strings = serviceManager.PermissionCode() };
+                var result = new SageResponse<SageEntity> { IsSucceed = true, Strings = serviceManager.PermissionCode().ToList() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageEntity> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpGet, Route("api/v2/sm/problems/get")]
-        public SageResponse GetProblems()
+        public SageResponse<SageProblem> GetProblems()
         {
             try
             {
-                var result = new SageResponse { IsSucceed = true, Entities = serviceManager.Problems() };
+                var result = new SageResponse<SageProblem> { IsSucceed = true, Entities = serviceManager.Problems().ToList() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageProblem> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpGet, Route("api/v2/sm/ratesheets/get")]
-        public SageResponse GetRateSheets()
+        public SageResponse<SageEntity> GetRateSheets()
         {
             try
             {
-                var result = new SageResponse { IsSucceed = true, Strings = serviceManager.RateSheet() };
+                var result = new SageResponse<SageEntity> { IsSucceed = true, Strings = serviceManager.RateSheet().ToList() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageEntity> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpGet, Route("api/v2/sm/repairs/get")]
-        public SageResponse GetRepairs()
+        public SageResponse<SageRepair> GetRepairs()
         {
             try
             {
-                var result = new SageResponse { IsSucceed = true, Entities = serviceManager.Repairs() };
+                var result = new SageResponse<SageRepair> { IsSucceed = true, Entities = serviceManager.Repairs().ToList() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageRepair> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
-        [HttpDelete, Route("api/v2/sm/workorders/get/{id}")]
-        public SageResponse UnassignWorkOrders(string id)
+        [HttpDelete, Route("api/v2/sm/workorders/unassign/{id}")]
+        public SageResponse<SageWorkOrder> UnassignWorkOrders(string id)
         {
             try
             {
                 serviceOdbc.UnassignWorkOrder(id);
-                var result = new SageResponse { IsSucceed = true };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = true };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpGet, Route("api/v2/sm/workorders/get/{id}")]
-        public SageResponse GetWorkorders(string id)
+        public SageResponse<SageWorkOrder> GetWorkorders(string id)
         {
             try
             {
-                var result = new SageResponse
+                var result = new SageResponse<SageWorkOrder>
                 {
                     IsSucceed = true,
                     Entity = serviceManager.WorkOrders(id).SingleOrDefault()
@@ -294,26 +311,26 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }
 
         [HttpGet, Route("api/v2/sm/workorders/get")]
-        public SageResponse GetWorkorders()
+        public SageResponse<SageWorkOrder> GetWorkorders()
         {
             try
             {
-                var result = new SageResponse
+                var result = new SageResponse<SageWorkOrder>
                 {
                     IsSucceed = true,
-                    Entities = serviceOdbc.WorkOrders().ToArray()
+                    Entities = serviceOdbc.WorkOrders().ToList()
                 };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Message };
                 return result;
             }
         }

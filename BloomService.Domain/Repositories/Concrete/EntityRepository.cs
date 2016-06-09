@@ -36,11 +36,11 @@
             if (entity.Id == null)
             {
                 entity.Id = ObjectId.GenerateNewId().ToString();
-        }
+             }
             else if (Get(entity.Id) != null)
-        {
+            {
                 Collection.Remove(Query.EQ("_id", entity.Id));
-        }
+            }
 
             return Collection.Insert(entity).HasLastErrorMessage;
         }

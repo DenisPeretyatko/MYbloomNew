@@ -7,113 +7,136 @@ namespace Sage.WebApi.Models.DbModels
     [MapsTo(typeof(SageWorkOrder))]
     public class WorkOrderDbModel
     {
-        [MapsFromProperty(typeof(SageWorkOrder), "ActualLaborCost")]
-        public decimal ACTLABORCOST { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "ActualLaborHours")]
-        public decimal ACTLABORHOURS { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "ActualMiscCost")]
-        public decimal ACTMISCCOST { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "ActualPartsCost")]
-        public decimal ACTPARTSCOST { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "Agreement")]
+        [MapsToProperty(typeof(SageWorkOrder), "ActualLaborCost")]
+        public double ACTLABORCOST { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "ActualLaborHours")]
+        public double ACTLABORHOURS { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "ActualMiscCost")]
+        public double ACTMISCCOST { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "ActualPartsCost")]
+        public double ACTPARTSCOST { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "Agreement")]
         public int AGREEMENTNBR { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "AlternateWorkOrderNbr")]
+        [MapsToProperty(typeof(SageWorkOrder), "AlternateWorkOrderNbr")]
         public string ALTWONBR { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "AmountBilled")]
-        public decimal AMTBILLED { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "ARCustomer")]
+        [MapsToProperty(typeof(SageWorkOrder), "AmountBilled")]
+        public double AMTBILLED { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "ARCustomer")]
         public string ARCUST { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "Area")]
+        [MapsToProperty(typeof(SageWorkOrder), "Area")]
         public int AREA { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "CallDate")]
+        [MapsToProperty(typeof(SageWorkOrder), "CallDate")]
         public DateTime CALLDATE { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "CallTime")]
-        public DateTime CALLTIME { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "CallType")]
+        [MapsToProperty(typeof(SageWorkOrder), "CallTime")]
+        public TimeSpan CALLTIME { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "CallType")]
         public int CALLTYPECODE { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "Center")]
+        [MapsToProperty(typeof(SageWorkOrder), "Center")]
         public int CENTERNBR { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "ChargeBillto")]
+        [MapsToProperty(typeof(SageWorkOrder), "ChargeBillto")]
         public short CHARGEBILLTO { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "Comments")]
+        [MapsToProperty(typeof(SageWorkOrder), "Comments")]
         public string COMMENTS { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "CompletedBy")]
+        [MapsToProperty(typeof(SageWorkOrder), "CompletedBy")]
         public int COMPLETEBY { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "Contact")]
+        [MapsToProperty(typeof(SageWorkOrder), "Contact")]
         public string CONTACT { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "CustomerPO")]
+        [MapsToProperty(typeof(SageWorkOrder), "CustomerPO")]
         public string CUSTOMERPO { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "DateClosed")]
+        [MapsToProperty(typeof(SageWorkOrder), "DateClosed")]
         public DateTime DATECLOSED { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "DateComplete")]
+        [MapsToProperty(typeof(SageWorkOrder), "DateComplete")]
         public DateTime DATECOMPLETE { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "DateEntered")]
+        [MapsToProperty(typeof(SageWorkOrder), "DateEntered")]
         public DateTime DATEENTER { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "DateRun")]
+        [MapsToProperty(typeof(SageWorkOrder), "DateRun")]
         public DateTime DATERUN { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "Department")]
+        [MapsToProperty(typeof(SageWorkOrder), "Department")]
         public int DEPT { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "EnteredBy")]
+        [MapsToProperty(typeof(SageWorkOrder), "EnteredBy")]
         public string ENTERBY { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "EstimatedLaborCost")]
-        public decimal ESTLABORCOST { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "EstimatedMiscCost")]
-        public decimal ESTMISCCOST { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "EstimatedPartsCost")]
-        public decimal ESTPARTSCOST { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "EstimatedRepairHours")]
-        public decimal ESTREPAIRHRS { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "InvoiceDate")]
+        [MapsToProperty(typeof(SageWorkOrder), "EstimatedLaborCost")]
+        public double ESTLABORCOST { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "EstimatedMiscCost")]
+        public double ESTMISCCOST { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "EstimatedPartsCost")]
+        public double ESTPARTSCOST { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "EstimatedRepairHours")]
+        public double ESTREPAIRHRS { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "InvoiceDate")]
         public DateTime INVOICEDATE { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "JCExtra")]
+        [MapsToProperty(typeof(SageWorkOrder), "JCExtra")]
         public string JCEXTRA { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "JCJob")]
+        [MapsToProperty(typeof(SageWorkOrder), "JCJob")]
         public string JCJOB { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "JobSaleProduct")]
+        [MapsToProperty(typeof(SageWorkOrder), "JobSaleProduct")]
         public int JOBSALEPRODUCT { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "Lead")]
+        [MapsToProperty(typeof(SageWorkOrder), "Lead")]
         public int LEADNBR { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "LeadSource")]
+        [MapsToProperty(typeof(SageWorkOrder), "LeadSource")]
         public int LEADSRCNBR { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "Misc")]
+        [MapsToProperty(typeof(SageWorkOrder), "Misc")]
         public string MISC { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "Name")]
+        [MapsToProperty(typeof(SageWorkOrder), "Name")]
         public string NAME { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "NottoExceed")]
+        [MapsToProperty(typeof(SageWorkOrder), "NottoExceed")]
         public string NOTTOEXCEED { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "PayMethod")]
+        [MapsToProperty(typeof(SageWorkOrder), "PayMethod")]
         public int PAYMETHOD { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "PermissionCode")]
+        [MapsToProperty(typeof(SageWorkOrder), "PermissionCode")]
         public string PERMISSIONCODE { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "Priority")]
+        [MapsToProperty(typeof(SageWorkOrder), "Priority")]
         public int PRIORITY { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "Problem")]
+        [MapsToProperty(typeof(SageWorkOrder), "Problem")]
         public int PROBLEMCODE { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "PreventiveMaintenance")]
+        [MapsToProperty(typeof(SageWorkOrder), "PreventiveMaintenance")]
         public string QPM { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "QuoteExpirationDate")]
+        [MapsToProperty(typeof(SageWorkOrder), "QuoteExpirationDate")]
         public DateTime QUOTEEXPDATE { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "RateSheet")]
+        [MapsToProperty(typeof(SageWorkOrder), "RateSheet")]
         public int RATESHEETNBR { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "SalesEmployee")]
+        [MapsToProperty(typeof(SageWorkOrder), "SalesEmployee")]
         public int SALESMANNBR { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "SalesTaxAmount")]
-        public decimal SALESTAXAMT { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "SalesTaxBilled")]
-        public decimal SALESTAXBILLED { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "Status")]
+        [MapsToProperty(typeof(SageWorkOrder), "SalesTaxAmount")]
+        public double SALESTAXAMT { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "SalesTaxBilled")]
+        public double SALESTAXBILLED { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "Status")]
         public int STATUS { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "Employee")]
+        [MapsToProperty(typeof(SageWorkOrder), "Employee")]
         public int TECHNICIAN { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "TimeComplete")]
-        public DateTime TIMECOMPLETE { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "TimeEntered")]
-        public DateTime TIMEENTER { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "TotalCost")]
-        public decimal TOTALCOST { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "WorkOrderType")]
+        [MapsToProperty(typeof(SageWorkOrder), "TimeComplete")]
+        public TimeSpan TIMECOMPLETE { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "TimeEntered")]
+        public TimeSpan TIMEENTER { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "TotalCost")]
+        public double TOTALCOST { get; set; }
+        [MapsToProperty(typeof(SageWorkOrder), "WorkOrderType")]
         public int WOTYPE { get; set; }
-        [MapsFromProperty(typeof(SageWorkOrder), "WorkOrder")]
+        [MapsToProperty(typeof(SageWorkOrder), "WorkOrder")]
         public int WRKORDNBR { get; set; }
+        public int AGREEMENTSEQ { get; set; }
+        public short BILLINGLEVEL { get; set; }
+        public short CREDCARDEXP { get; set; }
+        public string CREDCARDNBR { get; set; }
+        public int CREDCARDTYPE { get; set; }
+        public short JCCOSTING { get; set; }
+        public string PMLEASE { get; set; }
+        public short PMLEASEREVISION { get; set; }
+        public string PMPROPERTY { get; set; }
+        public short PMRELATIONSHIP { get; set; }
+        public string PMTENANT { get; set; }
+        public string PMUNIT { get; set; }
+        public string QNONBILLABLE { get; set; }
+        public string QPRINTED { get; set; }
+        public string QTAXATCENTER { get; set; }
+        public DateTime SCHEDDATE { get; set; }
+        public string SELECTEDTOBILL { get; set; }
+        public string SELECTEDTOCLOSE { get; set; }
+        public int SERVSITENBR { get; set; }
+        public string SPARE { get; set; }
+        public string SPARE3 { get; set; }
+        public int SYSEQPNBR { get; set; }
+        public double WRKORDAMT { get; set; }
     }
 }

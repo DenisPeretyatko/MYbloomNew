@@ -23,7 +23,7 @@
                 var name = property.Name;
                 var value = property.GetGetMethod().Invoke(entity, null);
 
-                if (value != null && value.ToString() != "1/1/0001 5:00:00 AM")
+                if (value != null && !value.ToString().Contains("1/1/0001"))
                 {
                     propertyDictionary.Add(name, value.ToString());
                 }

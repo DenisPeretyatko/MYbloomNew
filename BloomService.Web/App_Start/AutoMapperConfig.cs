@@ -20,6 +20,8 @@
             Mapper.CreateMap<SageWorkOrder, WorkorderViewModel>().ReverseMap();
             Mapper.CreateMap<SageWorkOrder, WorkOrderModel>().ReverseMap();
             Mapper.CreateMap<AvailableDay, SageAvailableDay>().ReverseMap();
+
+            Mapper.CreateMap<AssignmentViewModel, SageAssignment>().ReverseMap();
         }
     }
 }

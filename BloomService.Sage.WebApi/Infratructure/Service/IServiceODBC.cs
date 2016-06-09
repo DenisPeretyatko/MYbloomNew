@@ -14,5 +14,7 @@
         void EditWorkOrder(SageWorkOrder workOrder);
 
         List<SageWorkOrder> WorkOrders();
+
+        void CreateWorkOrder(SageWorkOrder workOrder);
     }
 }
