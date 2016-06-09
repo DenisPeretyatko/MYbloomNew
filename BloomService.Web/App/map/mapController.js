@@ -51,11 +51,11 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
               lat: parseFloat(truck.Latitude),
               lng: parseFloat(truck.Longitude)
           }
-
+          var icon = truck.Color == null ? "/Images/Technicians/technician4.png" : "/Images/Technicians/" + truck.Color.replace('#', '') + ".png";
           var marker = new google.maps.Marker({
             position: pos,
             map: $scope.locationMap,
-            icon: "/public/images/technician2.png",
+            icon: icon,
             title: truck.Name
           });
           $scope.truckMarkers.push(marker);

@@ -141,11 +141,6 @@ var commonDataService = function($http, $window) {
 	    angular.element($window).on;
 	    window.localStorage.setItem('UserName', user);
 	    return $http.post('apimobile/Token', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
-	    //return $http.post("/Token", { 'username': user, 'password': pass, 'grant_type': 'password', headers: {
-	    //    'AuthorizationType': 'usernamepassword',
-	    //    'Content-Type': 'application/json'
-	    //}
-	    //});
 	}
 }
 commonDataService.$inject = ['$http'];

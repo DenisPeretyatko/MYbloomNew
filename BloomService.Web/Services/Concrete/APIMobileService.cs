@@ -81,6 +81,7 @@ namespace BloomService.Web.Services.Concrete
         public IEnumerable<SageWorkOrder> GetWorkOreders()
         {
             var userId = "Rinta, Chriss";
+
             var workOrders = unitOfWork.GetEntities<SageWorkOrder>().Get().Where(x=>x.Status=="Open").ToList();
             var result = workOrders.Where(x => x.Employee == userId);
             var locations = unitOfWork.GetEntities<SageLocation>().Get();
