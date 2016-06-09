@@ -23,7 +23,7 @@ var flotChartOptions =
         tickLength: 0,
         tickDecimals: 0
     },
-    colors: ["#1ab394"],
+    colors: ["#df4242"],
     grid: {
         color: "#999999",
         hoverable: true,
