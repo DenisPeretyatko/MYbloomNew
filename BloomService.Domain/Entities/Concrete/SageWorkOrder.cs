@@ -82,7 +82,7 @@
         public bool CallDateSpecified { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public DateTime CallTime { get; set; }
+        public TimeSpan CallTime { get; set; }
 
         [XmlIgnore]
         public bool CallTimeSpecified { get; set; }
@@ -238,13 +238,13 @@
         public string TaxatCenter { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public DateTime TimeComplete { get; set; }
+        public TimeSpan TimeComplete { get; set; }
 
         [XmlIgnore]
         public bool TimeCompleteSpecified { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public DateTime TimeEntered { get; set; }
+        public TimeSpan TimeEntered { get; set; }
 
         [XmlIgnore]
         public bool TimeEnteredSpecified { get; set; }

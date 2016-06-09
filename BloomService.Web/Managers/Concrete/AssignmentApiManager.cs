@@ -1,8 +1,7 @@
 namespace BloomService.Web.Managers.Concrete
 {
-    using System.Collections.Generic;
-
     using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Entities.Concrete.Auxiliary;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Utils;
 
@@ -21,16 +20,16 @@ namespace BloomService.Web.Managers.Concrete
             this.token = token;
         }
 
-        public override IEnumerable<SageAssignment> Add(string endPoint, SagePropertyDictionary properties)
+        public override SageResponse<SageAssignment> Add(SageAssignment assignment)
         {
-            endPoint = "api/v1/sm/addassignments";
-            return base.Add(endPoint, properties);
+            EndPoint = EndPoints.AddAssignment;
+            return base.Add(assignment);
         }
-       
-        public override IEnumerable<SageAssignment> Edit(string endPoint, SagePropertyDictionary properties)
+
+        public override SageResponse<SageAssignment> Edit(SageAssignment assignment)
         {
-            endPoint = "api/v1/sm/editassignments";
-            return base.Edit(endPoint, properties);
+            EndPoint = EndPoints.EditAssignment;
+            return base.Edit(assignment);
         }
     }
 }

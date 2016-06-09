@@ -10,8 +10,6 @@ namespace BloomService.Web.Services.Concrete
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Services.Abstract;
     using Models.Request;
-    using System.Configuration;
-    using Domain.Exceptions;
     using Domain.Extensions;
 
     public class ApiMobileService : IApiMobileService

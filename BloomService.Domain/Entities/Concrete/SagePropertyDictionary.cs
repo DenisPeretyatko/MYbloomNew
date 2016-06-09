@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class SagePropertyDictionary : Dictionary<string, string>
-    {
-    }
+    //public class Dictionary<string, string> : Dictionary<string, string>
+    //{
+    //}
 }

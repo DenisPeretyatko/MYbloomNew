@@ -8,7 +8,7 @@
     using BloomService.Domain.Exceptions;
 
     using Sage.WebApi.Infratructure.Service;
-
+    using System.Collections.Generic;
     [Authorize]
     public class ServiceManagementController : BaseApiController
     {
@@ -22,7 +22,7 @@
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult AddAssignments(SagePropertyDictionary properties)
+        public ActionResult AddAssignments(Dictionary<string, string> properties)
         {
             try
             {
@@ -63,7 +63,7 @@
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditAssignments(SagePropertyDictionary properties)
+        public ActionResult EditAssignments(Dictionary<string, string> properties)
         {
             try
             {
@@ -127,7 +127,7 @@
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Workorders(SagePropertyDictionary properties)
+        public ActionResult Workorders(Dictionary<string, string> properties)
         {
             try
             {

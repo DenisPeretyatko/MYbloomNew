@@ -34,7 +34,7 @@
 
         public string CatalogPath { get; set; }
 
-        public SageAssignment[] AddAssignments(SagePropertyDictionary properties)
+        public SageAssignment[] AddAssignments(Dictionary<string, string> properties)
         {
             var propertiesStr = string.Empty;
             foreach (var property in properties)
@@ -46,19 +46,7 @@
             var result = SendMessage(message);
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
         }
-
-        // public SageAssignment[] AddAssignments(SageAssignment assignment)
-        // {
-        // var propertiesStr = string.Empty;
-        // foreach (var property in properties)
-        // {
-        // propertiesStr += string.Format(Messages.Property, property.Key, property.Value);
-        // }
-
-        // var message = string.Format(Messages.AddAssignment, propertiesStr);
-        // var result = SendMessage(message);
-        // return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
-        // }
+       
         public object Agreements()
         {
             var result = SendMessage(Messages.Agreements);
@@ -102,7 +90,7 @@
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Departments;
         }
 
-        public SageAssignment[] EditAssignments(SagePropertyDictionary properties)
+        public SageAssignment[] EditAssignments(Dictionary<string, string> properties)
         {
             var propertiesStr = string.Empty;
             foreach (var property in properties)
@@ -191,7 +179,7 @@
         {
             if (!isCreated)
             {
-                Create(claimsAgent.Name, claimsAgent.Password);
+                Create("kris", "sageDEV!!");
             }
 
             var response = messageBoard.SendMessage(messageTypeDescriptor.Xml, message);
@@ -250,7 +238,7 @@
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
         }
 
-        public SageWorkOrder[] WorkOrders(SagePropertyDictionary properties)
+        public SageWorkOrder[] WorkOrders(Dictionary<string, string> properties)
         {
             var propertiesStr = string.Empty;
             foreach (var property in properties)
