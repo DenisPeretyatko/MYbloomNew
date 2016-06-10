@@ -11,45 +11,68 @@
                     <div class="ibox-tools">
                         <a ui-sref="manager.workorder.create" class="btn btn-primary">New...</a>
                     </div>
-                </div>            
+                </div>
                 <div class="ibox-content">
                     <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
                     <table class="footable table table-stripped" data-page-size="12" data-filter=#filter>
                         <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Date</th>
-                            <th data-hide="phone,tablet">Customer</th>
-                            <th data-hide="phone,tablet">Location</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
+                            <tr>
+                                <th>#</th>
+                                <th>Date</th>
+                                <th data-hide="phone,tablet">Customer</th>
+                                <th data-hide="phone,tablet">Location</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="workorder in workorders">
-                            <td>{{workorder.WorkOrder}}</td>
-                            <td>{{Parse(workorder.DateEntered)|date:mediumTime}}</td>
-                            <td>{{workorder.ARCustomer}}</td>
-                            <td>{{workorder.Location}}</td>
-                            <td>
-                                <span class="label" ng-class="workorder.status == 'closed' ? 'label-danger' : 'label-primary' ">
-                                    {{workorder.Status == 'closed' ? "Closed" : "Open" }}
-                                </span>
-                            </td>
-                            <td class="center">
-                                <a ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})" class="btn btn-primary btn-xs">Edit...</a>
-                            </td>
-                        </tr>
+                            <tr ng-repeat="workorder in workorders">
+                                <td>{{workorder.WorkOrder}}</td>
+                                <td>{{Parse(workorder.DateEntered)|date:mediumTime}}</td>
+                                <td>{{workorder.ARCustomer}}</td>
+                                <td>{{workorder.Location}}</td>
+                                <td>
+                                    <span class="label" ng-class="workorder.status == 'closed' ? 'label-danger' : 'label-primary' ">
+                                        {{workorder.Status == 'closed' ? "Closed" : "Open" }}
+                                    </span>
+                                </td>
+                                <td class="center">
+                                    <a ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})" class="btn btn-primary btn-xs">Edit...</a>
+                                </td>
+                            </tr>
                         </tbody>
                         <tfoot class="hide-if-no-paging">
-                          <tr>
-                            <td colspan="6" class="text-center">
-                                <ul class="pagination">
-                                </ul>
-                            </td>
-                          </tr>
+                            <!--<tr>
+                              <td colspan="6" class="text-center">
+                                  <div id="pagination" class="row">
+                                      <button class="pull-left btn btn-primary btn-sm" ng-disabled="firstPage()" ng-click="pageBack()">Back</button>
+                                      <span>{{currentPage+1}} from {{numberOfPages()}}</span>
+                                      <button class="pull-right  btn btn-primary btn-sm" ng-disabled="lastPage()" ng-click="pageForward()">Next</button>
+                                  </div>
+                              </td>
+                            </tr>-->
                         </tfoot>
                     </table>
+                    <div id="pagination">
+                        <ul class="list-inline">
+                            <li>
+                                <button type ="button" class="fc-agendaWeek-button fc-button fc-state-default fc-corner-left fc-corner-right fc-state-active" ng-disabled="firstPage()" ng-click="pageBack()" style="margin-right:10px"><</button>
+
+                            </li>
+                            <li>
+                                <b font-size:14px">Page </b>
+                            </li>
+                            <li>
+                                <div class="inline"><input ng-keypress="checkIfEnterKeyWasPressed($event)" type="text" value="{{currentPage+1}}" ng-model="currentPage" class="form-control input-sm m-b-xs" style="width:50px" /></div>
+                            </li>
+                            <li>
+                                <b font-size:14px"> from  <text style="color:#df4242; font-size:14px">{{numberOfPages}}</text></b>
+                            </li>
+                            <li>
+                                <button type ="button" class="fc-agendaWeek-button fc-button fc-state-default fc-corner-left fc-corner-right fc-state-active" ng-disabled="lastPage()" ng-click="pageForward()" style="margin-left:10px">></button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

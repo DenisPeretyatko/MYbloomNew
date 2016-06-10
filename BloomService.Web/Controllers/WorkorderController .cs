@@ -9,6 +9,7 @@ namespace BloomService.Web.Controllers
 
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Models;
+    using System.Linq;
     using BloomService.Web.Services.Abstract;
 
 
@@ -65,8 +66,27 @@ namespace BloomService.Web.Controllers
         [GET("Workorder")]
         public ActionResult GetWorkorders()
         {
-            var list = workOrderService.Get();
+            var list = workOrderService.Get().Skip(11220).Take(20);
             return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        [GET("WorkorderPage/{index}")]
+        public ActionResult GetWorkorderPage(int index)
+        {
+            var list = workOrderService.GetPage(index);
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public class Count
+        {
+            public int CountPage { get; set; }
+        }
+
+        [GET("WorkorderPageCount")]
+        public ActionResult GetWorkorderPageCount()
+        {
+            var result = new Count() { CountPage = workOrderService.CountPage() };
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [POST("Workorder/Save")]

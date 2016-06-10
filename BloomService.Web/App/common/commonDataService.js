@@ -19,8 +19,24 @@ var commonDataService = function($http, $window) {
 	    });
 	}
 
-	this.getWorkorderPictures = function (id) {
-	    return $http.get("/Workorderpictures/" + id, {
+	this.getWorkorderPictures = function(id) {
+        return $http.get("/Workorderpictures/" + id, {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    }
+
+    this.getWorkorderPage = function (index) {
+	    return $http.get("/WorkorderPage/" + index, {
+	        headers: {
+	            'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+	        }
+	    });
+	}
+
+	this.countPage = function (index) {
+	    return $http.get("/WorkorderPageCount", {
 	        headers: {
 	            'Authorization': 'bearer ' + window.localStorage.getItem('Token')
 	        }
@@ -132,12 +148,7 @@ var commonDataService = function($http, $window) {
 	    var data = "grant_type=password&username=" + user + "&password=" + pass;
 	    angular.element($window).on;
 	    window.localStorage.setItem('UserName', user);
-	    return $http.post('Token', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
-	    //return $http.post("/Token", { 'username': user, 'password': pass, 'grant_type': 'password', headers: {
-	    //    'AuthorizationType': 'usernamepassword',
-	    //    'Content-Type': 'application/json'
-	    //}
-	    //});
+	    return $http.post('apimobile/Token', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
 	}
 }
 commonDataService.$inject = ['$http'];

@@ -16,6 +16,10 @@
 
         IEnumerable<TEntity> Get();
 
+        IEnumerable<TEntity> GetPage(int numberPage);
+
+        int CountPage();
+
         TEntity Get(string id);
     }
 }

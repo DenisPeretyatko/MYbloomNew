@@ -3,7 +3,6 @@ using System.Web.Http;
 
 namespace BloomService.Web.Areas.Apimobile.Controllers
 {
-    [Authorize]
     public class EquipmentsController : ApiController
     {
         readonly IApiMobileService _apiService;

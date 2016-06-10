@@ -36,13 +36,13 @@
 
             unitOfWork.Changes.Add(
                 new SageChange
-                    {
-                        Change = ChangeType.Create, 
-                        EntityId = GetEntityId(properties), 
-                        EntityType = GetEntityName(), 
-                        Status = StatusType.NotSynchronized, 
-                        ChangeTime = DateTime.UtcNow
-                    });
+                {
+                    Change = ChangeType.Create,
+                    EntityId = GetEntityId(properties),
+                    EntityType = GetEntityName(),
+                    Status = StatusType.NotSynchronized,
+                    ChangeTime = DateTime.UtcNow
+                });
 
             return result;
         }
@@ -77,14 +77,14 @@
                         Status = StatusType.NotSynchronized, 
                         ChangeTime = DateTime.UtcNow
                     });
-            Repository.UpdateEntity(result.Single());
+            //Repository.UpdateEntity(result.Single());
 
             return result;
         }
 
         public virtual IEnumerable<TEntity> Get()
         {
-            var items = Repository.Get().Take(20).ToArray();
+            var items = Repository.Get().ToArray();
 
             if (items.Any())
             {
@@ -99,6 +99,37 @@
             }
 
             return entities;
+        }
+
+        public virtual IEnumerable<TEntity> GetPage(int numberPage)
+        {
+            if(numberPage == 0)
+                return new TEntity[0];
+            var items = Repository.Get().ToList();
+
+            if (items.Any())
+            {
+                var result = new TEntity[12];
+                var index = (numberPage - 1) * 12;
+                if(index > items.Count())
+                    return new TEntity[0];
+                var max = (index + 12) > items.Count() ? (index + 12) - items.Count : 12;
+                items.CopyTo(index, result, 0, max);
+                return result;
+            }
+            var entities = sageApiManager.Get(EndPoint);
+            foreach (var entity in entities)
+            {
+                Repository.Add(entity);
+            }
+
+            return entities;
+        }
+
+        public virtual int CountPage()
+        {
+            var items = Repository.Get().ToList();
+            return items.Count / 12 - 1 + (items.Count % 12 == 0 ? 0 : 1);
         }
 
         public virtual TEntity Get(string id)
@@ -124,7 +155,7 @@
 
         protected string GetEntityName()
         {
-            return typeof(TEntity).Name.Replace("Sage","");
+            return typeof(TEntity).Name.Replace("Sage", "");
         }
     }
 }

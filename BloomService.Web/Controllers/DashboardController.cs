@@ -63,7 +63,7 @@ namespace BloomService.Web.Controllers
         public ActionResult GetDashboard()
         {
             var dashboard = new DashboardViewModel();
-            var listWO = workOrderService.Get().Where(x => x.Status == "Open");
+            var listWO = workOrderService.Get().Skip(11220).Take(20).Where(x => x.Status == "Open");
             var assignments = assignmentService.Get().Where(x => x.Employee == "");
             var chart = new List<ChartModel>();
             var chartModel = new ChartModel();

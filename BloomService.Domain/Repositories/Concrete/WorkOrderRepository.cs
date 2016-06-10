@@ -14,7 +14,7 @@ namespace BloomService.Domain.Repositories.Concrete
 
         public override IQueryable<SageWorkOrder> Get()
         {
-            return base.Get().Skip(11220).Take(20);
+            return base.Get();
         }
     }
 }

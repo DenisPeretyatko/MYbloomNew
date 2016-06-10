@@ -147,6 +147,7 @@
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Activities" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -166,6 +167,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Windows" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -465,6 +467,7 @@
     <Content Include="Public\css\patterns\header-profile-skin-2.png" />
     <Content Include="Public\css\patterns\header-profile-skin-3.png" />
     <Content Include="Public\css\patterns\header-profile.png" />
+    <Content Include="Content\Images\logo.png" />
     <Content Include="Public\css\patterns\otis_redding.png" />
     <Content Include="Public\css\patterns\shattered.png" />
     <Content Include="Public\css\patterns\triangular.png" />
@@ -770,6 +773,7 @@
     <None Include="Properties\PublishProfiles\bloom.pubxml" />
     <Content Include="Public\mock\getEmployees.json" />
     <Content Include="Public\mock\getEmployee.json" />
+    <None Include="Properties\PublishProfiles\BS.pubxml" />
     <None Include="Properties\PublishProfiles\s.pubxml" />
     <Content Include="Public\js\plugins\colorpicker\css\bootstrap-colorpicker.css.map" />
     <Content Include="Public\js\plugins\colorpicker\css\bootstrap-colorpicker.min.css.map" />

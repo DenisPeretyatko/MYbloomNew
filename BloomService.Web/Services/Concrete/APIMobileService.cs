@@ -80,7 +80,8 @@ namespace BloomService.Web.Services.Concrete
 
         public IEnumerable<SageWorkOrder> GetWorkOreders()
         {
-            var userId = userService.Name;
+            var userId = "Rinta, Chriss";
+
             var workOrders = unitOfWork.GetEntities<SageWorkOrder>().Get().Where(x=>x.Status=="Open").ToList();
             var result = workOrders.Where(x => x.Employee == userId);
             var locations = unitOfWork.GetEntities<SageLocation>().Get();
@@ -112,7 +113,7 @@ namespace BloomService.Web.Services.Concrete
 
         public IEnumerable<SageEquipment> GetEquipments()
         {
-            var userId = userService.Name;
+            var userId = "Rinta, Chriss";
             var equipments = unitOfWork.GetEntities<SageEquipment>().Get();
             var result = equipments.Where(x => x.Employee == userId);
             return result;
