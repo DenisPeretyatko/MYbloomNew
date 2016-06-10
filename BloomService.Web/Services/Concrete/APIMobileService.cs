@@ -61,7 +61,7 @@ namespace BloomService.Web.Services.Concrete
             }
             else
             {
-                imagesDB = new SageImageWorkOrder { Images = new List<ImageLocation>(), WorkOrder = model.IdWorkOrder };
+                imagesDB = new SageImageWorkOrder { Images = new List<ImageLocation>(), WorkOrder = model.IdWorkOrder, WorkOrderBsonId = workOrder.Single().Id};
             }
 
             var name = model.IdWorkOrder + "id" + countImage;

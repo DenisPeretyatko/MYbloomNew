@@ -1,4 +1,6 @@
-﻿namespace BloomService.Web.Services.Concrete
+﻿using System.Linq;
+
+namespace BloomService.Web.Services.Concrete
 {
     using System.Collections.Generic;
     using System.Configuration;
@@ -30,6 +32,12 @@
         public IEnumerable<SageWorkOrder> UnAssign(string id) 
         {
             return workOrderApiManager.Delete(EndPoint, id);
+        }
+
+        public SageImageWorkOrder GetPictures(string id)
+        {
+            var pictureLocation = unitOfWork.GetEntities<SageImageWorkOrder>().SearchFor(x => x.WorkOrderBsonId == id);
+            return pictureLocation.Any() ? pictureLocation.Single() : null;
         }
     }
 }

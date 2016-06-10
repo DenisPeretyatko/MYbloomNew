@@ -19,6 +19,14 @@ var commonDataService = function($http, $window) {
 	    });
 	}
 
+	this.getWorkorderPictures = function (id) {
+	    return $http.get("/Workorderpictures/" + id, {
+	        headers: {
+	            'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+	        }
+	    });
+	}
+
 	this.createWorkorder = function(workorder){
 	    return $http.post("/workorder/Create", workorder, {
 	        headers: {

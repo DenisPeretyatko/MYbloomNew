@@ -16,5 +16,7 @@
         TEntity Get(string id);
 
         IQueryable<TEntity> SearchFor(Expression<Func<TEntity, bool>> predicate);
+
+        bool UpdateEntity(TEntity item);
     }
 }

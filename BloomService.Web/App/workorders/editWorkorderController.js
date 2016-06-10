@@ -72,7 +72,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, commonData
 	        Locationcomments: $scope.obj.locationcomments,
 	        Customerpo: $scope.obj.customerpo,
 	        Permissiocode: $scope.obj.permissiocode,
-	        Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected
+	        Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected,
+            WorkOrder: $scope.editableWorkOrder.WorkOrder
 	    };
 
 	    commonDataService.saveWorkorder(workorder).then(function (response) {
@@ -83,6 +84,10 @@ var editWorkorderController = function ($scope, $stateParams, $state, commonData
 
 	commonDataService.getWorkorder($stateParams.id).then(function (response) {
 	    return $scope.editableWorkOrder = response.data;
+	});
+
+	commonDataService.getWorkorderPictures($stateParams.id).then(function (response) {
+	    return $scope.pictures = response.data;
 	});
     
     //$scope.locations = ["1",  "2", "3", "4"];

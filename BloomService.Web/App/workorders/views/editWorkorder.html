@@ -175,17 +175,15 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Piture</th>
-                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr class="gradeX">
-                                    <td>1</td>
-                                    <td>Drill</td>
-                                    <td class="center">
-                                        <a ui-sref="manager.technician.edit" class="btn btn-danger btn-xs">Remove</a>
-                                    </td>
-                                </tr>
+                                    <tr class="gradeX" ng-repeat="picture in pictures.Images">
+                                        <td>{{picture.Image}}</td>
+                                        <td>
+                                            <img height="300" width="300" src="/Images/{{picture.Image}}" />
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

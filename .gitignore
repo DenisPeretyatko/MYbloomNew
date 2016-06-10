@@ -116,3 +116,4 @@ UpgradeLog*.XML
 
 #Entire .vs folder should be ignored (applicationhost.config etc.)
 .vs/**/*.*
+BloomService.Web/Images/**/*.*

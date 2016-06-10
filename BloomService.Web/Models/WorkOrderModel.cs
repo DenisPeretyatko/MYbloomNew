@@ -33,5 +33,7 @@
         public string Problem { get; set; }
 
         public string Ratesheet { get; set; }
+
+        public string WorkOrder { get; set; }
     }
 }

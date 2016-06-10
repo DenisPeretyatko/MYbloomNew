@@ -1,4 +1,7 @@
-﻿namespace BloomService.Web.Controllers
+﻿using System.Linq;
+using BloomService.Web.Services.Concrete;
+
+namespace BloomService.Web.Controllers
 {
     using System.Web.Mvc;
 
@@ -52,6 +55,13 @@
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
+        [GET("Workorderpictures/{id}")]
+        public ActionResult GetWorkOrdersPictures(string id)
+        {
+            var pictures = workOrderService.GetPictures(id);
+            return Json(pictures, JsonRequestBehavior.AllowGet);
+        }
+
         [GET("Workorder")]
         public ActionResult GetWorkorders()
         {
@@ -78,7 +88,8 @@
                                     { "Comments", model.Locationcomments }, 
                                     { "CustomerPO", model.Customerpo }, 
                                     { "PermissionCode", model.Permissiocode }, 
-                                    { "PayMethod", model.Paymentmethods }
+                                    { "PayMethod", model.Paymentmethods },
+                                    { "WorkOrder", model.WorkOrder }
             };
 
             var saved = workOrderService.Edit(workorder);

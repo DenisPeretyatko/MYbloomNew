@@ -64,5 +64,10 @@
         {
             return Collection.AsQueryable().Where(predicate);
         }
+
+        public virtual bool UpdateEntity(TEntity item)
+        {
+            return string.IsNullOrEmpty(item.Id) ? Add(item) : Collection.Save<TEntity>(item).HasLastErrorMessage;
+        }
     }
 }

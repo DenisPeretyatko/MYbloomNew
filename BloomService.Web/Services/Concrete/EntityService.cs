@@ -77,6 +77,7 @@
                         Status = StatusType.NotSynchronized, 
                         ChangeTime = DateTime.UtcNow
                     });
+            Repository.UpdateEntity(result.Single());
 
             return result;
         }
