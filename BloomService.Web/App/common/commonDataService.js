@@ -27,16 +27,16 @@ var commonDataService = function($http, $window) {
         });
     }
 
-    this.getWorkorderPage = function (index) {
-	    return $http.get("/WorkorderPage/" + index, {
+    this.getWorkorderPage = function (index, search) {
+	    return $http.get("/WorkorderPage?index=" + index + "&searchString="+search , {
 	        headers: {
 	            'Authorization': 'bearer ' + window.localStorage.getItem('Token')
 	        }
 	    });
 	}
 
-	this.countPage = function (index) {
-	    return $http.get("/WorkorderPageCount", {
+	this.countPage = function (search) {
+	    return $http.get("/WorkorderPageCount/" + search, {
 	        headers: {
 	            'Authorization': 'bearer ' + window.localStorage.getItem('Token')
 	        }

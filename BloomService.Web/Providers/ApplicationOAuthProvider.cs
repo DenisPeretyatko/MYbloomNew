@@ -39,6 +39,7 @@ namespace BloomService.Web.Providers
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
         private readonly string _publicClientId;
+        private AuthorizationType type;
 
         public ApplicationOAuthProvider(string publicClientId)
         {
@@ -77,6 +78,11 @@ namespace BloomService.Web.Providers
             {
                 return;
             }
+            if (user.Id == null)
+                user.Id = "";
+            if (user.Mail == null)
+                user.Mail = "";
+            type = user.Type;
             var identity = new ClaimsIdentity(ExtendedClaimsProvider.GetClaims(context.UserName, context.Password, user.Id, user.Type.ToString(), user.Mail), DefaultAuthenticationTypes.ExternalCookie);
             var ctx = context.OwinContext;
             var authenticationManager = ctx.Authentication;
@@ -88,6 +94,7 @@ namespace BloomService.Web.Providers
 
         public override Task TokenEndpoint(OAuthTokenEndpointContext context)
         {
+            context.AdditionalResponseParameters.Add("Type", type);
             return Task.FromResult<object>(null);
         }
 

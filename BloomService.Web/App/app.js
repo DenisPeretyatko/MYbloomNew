@@ -39,7 +39,14 @@ mainModuleConfig.$inject = ["$stateProvider", "$urlRouterProvider", "$ocLazyLoad
         'bloom.login'                   // Login
     ])
     .config(mainModuleConfig)
-    .run(function($rootScope, $state) {
+    .run(function ($rootScope, $state, $location) {
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            angular.element(window).on;
+            var token = window.localStorage.getItem('Token');
+            if((token == '' || token == null) && toState.Name != 'login')
+                $location.url('/login');
+        });
         $rootScope.$state = $state;
     });    
 })();
+

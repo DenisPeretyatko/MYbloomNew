@@ -70,10 +70,10 @@ namespace BloomService.Web.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        [GET("WorkorderPage/{index}")]
-        public ActionResult GetWorkorderPage(int index)
+        [GET("WorkorderPage")]
+        public ActionResult GetWorkorderPage(int index, string searchString)
         {
-            var list = workOrderService.GetPage(index);
+            var list = workOrderService.GetPage(index, searchString);
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
@@ -82,10 +82,10 @@ namespace BloomService.Web.Controllers
             public int CountPage { get; set; }
         }
 
-        [GET("WorkorderPageCount")]
-        public ActionResult GetWorkorderPageCount()
+        [GET("WorkorderPageCount/{searchString}")]
+        public ActionResult GetWorkorderPageCount(string searchString)
         {
-            var result = new Count() { CountPage = workOrderService.CountPage() };
+            var result = new Count() { CountPage = workOrderService.CountPage(searchString) };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

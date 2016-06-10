@@ -15,7 +15,7 @@
     public class EntityService<TEntity> : IEntityService<TEntity>
         where TEntity : class, IEntity
     {
-        private readonly IEntityApiManager<TEntity> sageApiManager;
+        protected readonly IEntityApiManager<TEntity> sageApiManager;
 
         private readonly IUnitOfWork unitOfWork;
 
@@ -101,7 +101,7 @@
             return entities;
         }
 
-        public virtual IEnumerable<TEntity> GetPage(int numberPage)
+        public virtual IEnumerable<TEntity> GetPage(int numberPage, string searchString)
         {
             if(numberPage == 0)
                 return new TEntity[0];
@@ -126,7 +126,7 @@
             return entities;
         }
 
-        public virtual int CountPage()
+        public virtual int CountPage(string searchString)
         {
             var items = Repository.Get().ToList();
             return items.Count / 12 - 1 + (items.Count % 12 == 0 ? 0 : 1);
