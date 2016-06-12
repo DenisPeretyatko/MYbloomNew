@@ -5,6 +5,7 @@ using BloomService.Domain.Models.Requests;
 using BloomService.Domain.Models.Responses;
 using System.Web.Script.Serialization;
 using BloomService.Web.Services.Concrete;
+using BloomService.Web.Managers;
 
 namespace BloomService.Web.Controllers
 {
@@ -22,7 +23,7 @@ namespace BloomService.Web.Controllers
         [Route("Authorization/Login/{name}/{password}")]
         public ActionResult Login(string name, string password)
         {
-            var request = new RestRequest(_configuration.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
+            var request = new RestRequest(EndPoints.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
             var requestBody = new AuthorizationRequest()
             {
                 Name = name,

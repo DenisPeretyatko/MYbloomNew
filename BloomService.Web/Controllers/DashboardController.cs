@@ -31,7 +31,7 @@ namespace BloomService.Web.Controllers
             this.locationService = locationService;
             _repository = repository;
         }
-
+        [AllowAnonymous]
         [HttpGet]
         [Route("")]
         public ActionResult Index()
