@@ -3,26 +3,24 @@
 namespace BloomService.Web.Controllers
 {
     using System.Web.Mvc;
-
-    using AttributeRouting.Web.Mvc;
-
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Web.Models;
+    using Domain.Entities.Concrete;
+    using Models;
     using System.Linq;
     using Domain.Repositories.Abstract;
     using System;
 
-    [Authorize]
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
+        private const int _itemsOnPage = 12;
 
         public WorkorderController(IRepository repository)
         {
             _repository = repository;
         }
 
-        [POST("Workorder/Create")]
+        [HttpPost]
+        [Route("Workorder/Create")]
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
             var workorder = new SageWorkOrder()
@@ -48,47 +46,50 @@ namespace BloomService.Web.Controllers
             return Json("success", JsonRequestBehavior.AllowGet);
         }
 
-        [GET("Workorder/{id}")]
+        [HttpGet]
+        [Route("Workorder/{id}")]
         public ActionResult GetWorkorder(string id)
         {
             var workOrder = _repository.Get<SageWorkOrder>(id);
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
-        [GET("Workorderpictures/{id}")]
+        [HttpGet]
+        [Route("Workorderpictures/{id}")]
         public ActionResult GetWorkOrdersPictures(string id)
         {
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrderBsonId == id).Single();
             return Json(pictures, JsonRequestBehavior.AllowGet);
         }
 
-        [GET("Workorder")]
+        [HttpGet]
+        [Route("Workorder")]
         public ActionResult GetWorkorders()
         {
-            var list = _repository.GetAll<SageWorkOrder>(); //workOrderService.Get().Skip(11220).Take(20);
+            var list = _repository.GetAll<SageWorkOrder>();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        [GET("WorkorderPage/{index}")]
+        [HttpGet]
+        [Route("WorkorderPage/{index}")]
         public ActionResult GetWorkorderPage(int index)
         {
-            var list = workOrderService.GetPage(index);
+            var entitiesCount = _repository.GetAll<SageWorkOrder>().Count();
+            var list = _repository.GetAll<SageWorkOrder>().Skip((index - 1) * _itemsOnPage).Take(_itemsOnPage);
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        public class Count
-        {
-            public int CountPage { get; set; }
-        }
-
-        [GET("WorkorderPageCount")]
+        [HttpGet]
+        [Route("WorkorderPageCount")]
         public ActionResult GetWorkorderPageCount()
         {
-            var result = new Count() { CountPage = workOrderService.CountPage() };
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var entitiesCount = _repository.GetAll<SageWorkOrder>().Count();
+            var countPage = entitiesCount % _itemsOnPage == 0 ? entitiesCount / _itemsOnPage : entitiesCount / _itemsOnPage + 1;
+            return Json(countPage, JsonRequestBehavior.AllowGet);
         }
 
-        [POST("Workorder/Save")]
+        [HttpPost]
+        [Route("Workorder/Save")]
         public ActionResult SaveWorkOrder(WorkOrderModel model)
         {
             //var workorder = new SagePropertyDictionary

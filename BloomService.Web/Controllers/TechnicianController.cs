@@ -2,7 +2,6 @@
 {
     using System.Linq;
     using System.Web.Mvc;
-    using AttributeRouting.Web.Mvc;
 
     using AutoMapper;
 
@@ -14,7 +13,6 @@
     using System.Web.Hosting;
     using Domain.Repositories.Abstract;
 
-    [Authorize]
     public class TechnicianController : BaseController
     {
 
@@ -28,22 +26,25 @@
             _repository = repository;
         }
 
-        [GET("Technician/{id}")]
+        [HttpGet]
+        [Route("Technician/{id}")]
         public ActionResult GetTechnician(string id)
         {
             var technician = _repository.Get<SageEmployee>(id);
             return Json(technician, JsonRequestBehavior.AllowGet);
         }
 
-        [GET("Technician")]
+        [HttpGet]
+        [Route("Technician")]
         public ActionResult GetTechnicians()
         {
             var list = _repository.GetAll<SageEmployee>();
             return Json(list.OrderBy(x => x.Employee), JsonRequestBehavior.AllowGet);
         }
 
-        [POST("Technician/Save")]
-        public ActionResult SaveTechniciance(TechnicianModel model)
+        [HttpPost]
+        [Route("Technician/Save")]
+        public ActionResult SaveTechnician(TechnicianModel model)
         {
             var employee = _repository.Get<SageEmployee>(model.Id);
             var technician = Mapper.Map<SageEmployee, EmployeeModel>(employee);

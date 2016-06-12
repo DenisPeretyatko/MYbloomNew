@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using AttributeRouting.Web.Mvc;
 using BloomService.Domain.Extensions;
 using System.Configuration;
 using RestSharp;
@@ -16,7 +15,9 @@ namespace BloomService.Web.Controllers
             return View();
         }
 
-        [GET("Authorization/Login/{name}/{password}")]
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("Authorization/Login/{name}/{password}")]
         public ActionResult Login(string name, string password)
         {
             var token = NinjectWebCommon.GetAuthToken();

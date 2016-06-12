@@ -6,12 +6,9 @@ using BloomService.Web.Services.Abstract;
 namespace BloomService.Web.Controllers
 {
     using System.Web.Mvc;
-
-    using AttributeRouting.Web.Mvc;
     using Domain.Repositories.Abstract;
     using Domain.Entities.Concrete;
 
-    [Authorize]
     public class LocationController : BaseController
     {
         private readonly ILocationService _locationService;
@@ -24,7 +21,8 @@ namespace BloomService.Web.Controllers
             _repository = repository;
         }
 
-        [POST("Location")]
+        [HttpPost]
+        [Route("Location")]
         public ActionResult GetLocations(MapViewModel model)
         {
             var date = model.DateWorkOrder;
@@ -49,7 +47,8 @@ namespace BloomService.Web.Controllers
             return Json(workOrders, JsonRequestBehavior.AllowGet);
         }
 
-        [GET("Location/Trucks")]
+        [HttpPost]
+        [Route("Location/Trucks")]
         public ActionResult GetTrucks()
         {
             var employees = _repository.GetAll<SageEmployee>();

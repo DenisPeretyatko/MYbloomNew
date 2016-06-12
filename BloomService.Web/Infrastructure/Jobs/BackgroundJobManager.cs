@@ -1,28 +1,22 @@
-﻿namespace BloomService.Web.BackgroundJobs
+﻿using BloomService.Web.Utils;
+using Ninject;
+using RestSharp;
+
+namespace BloomService.Web.BackgroundJobs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Domain.Entities.Concrete.Auxiliary;
-    using BloomService.Domain.UnitOfWork;
-    using BloomService.Web.Utils;
-
-    using Ninject;
-
-    using RestSharp;
-
     public class BackgroundJobManager
     {
-        [Inject]
-        private IRestClient RestClient { get; set; }
+        //[Inject]
+        private IRestClient _restClient { get; set; }
 
-        [Inject]
-        private IToken Token { get; set; }
+        //[Inject]
+        private IToken _token { get; set; }
 
-        [Inject]
-        private IUnitOfWork UnitOfWork { get; set; }
+        public BackgroundJobManager(IRestClient restClient, IToken token)
+        {
+            _restClient = restClient;
+            _token = token;
+        }
 
         //public void DbSync()
         //{

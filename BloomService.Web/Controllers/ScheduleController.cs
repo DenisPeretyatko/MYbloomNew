@@ -6,16 +6,12 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using AttributeRouting.Web.Mvc;
-
     using AutoMapper;
 
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Web.Models;
-    using BloomService.Web.Services.Abstract;
+    using Domain.Entities.Concrete;
+    using Models;
     using Domain.Repositories.Abstract;
 
-    [Authorize]
     public class ScheduleController : BaseController
     {
 
@@ -26,14 +22,15 @@
             _repository = repository;
         }
 
-        [GET("Schedule")]
+        [HttpGet]
+        [Route("Schedule")]
         public ActionResult GetSchedules()
         {
             var model = new ScheduleViewModel();
             var sageAssignments = _repository.GetAll<SageAssignment>().ToList();
             var assignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(sageAssignments);
             var assignedAs = assignments.Where(x => x.Employee != "");
-            var employees = _repository.GetAll<SageEmployee>().ToList();
+            var employees = _repository.GetAll<SageEmployee>().ToArray();
             foreach (var item in assignedAs)
             {
                 var employee = employees.FirstOrDefault(e => e.Name == item.Employee);
@@ -47,10 +44,10 @@
                 item.Color = employee.Color ?? "";
             }
 
-            var workorders = _repository.GetAll<SageWorkOrder>().ToList();
+            var workorders = _repository.GetAll<SageWorkOrder>().ToArray();
             foreach (var item in assignedAs)
             {
-                var workorder = workorders.FirstOrDefault(w => w.WorkOrder == item.WorkOrder);
+                var workorder = workorders.SingleOrDefault(w => w.WorkOrder == item.WorkOrder);
                 if (workorder != null)
                 {
                     item.Customer = workorder.ARCustomer;
@@ -69,7 +66,8 @@
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        [POST("Schedule/Assignments/Create")]
+        [HttpPost]
+        [Route("Schedule/Assignments/Create")]
         public ActionResult CreateAssignment(AssignmentViewModel model)
         {
             var d = model.ScheduleDate.ToUniversalTime();
@@ -85,11 +83,12 @@
                                       { "Enddate", model.EndDate.ToUniversalTime().ToString("yyyy-MM-dd") }, 
                                       { "Endtime", model.EndDate.ToUniversalTime().TimeOfDay.ToString() }
                                   };
-            var edited = this.assignmentService.Edit(assignmanet);
+            //TODO add sage api service 
+            //var edited = this.assignmentService.Edit(assignmanet);
+            var edited = string.Empty;
             if (edited != null)
             {
-                var employees = _repository.GetAll<SageEmployee>();
-                var employee = employees.FirstOrDefault(e => e.Employee == model.Employee);
+                var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
                 if (employee != null)
                 {
                     var empl = employee.Name;
@@ -108,7 +107,8 @@
             return this.Json("success", JsonRequestBehavior.AllowGet);
         }
 
-        [POST("Schedule/Assignments/Delete")]
+        [HttpPost]
+        [Route("Schedule/Assignments/Delete")]
         public ActionResult DeleteAssignment(AssignmentViewModel model)
         {
             //TODO 

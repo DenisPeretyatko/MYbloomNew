@@ -42,18 +42,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AttributeRouting, Version=3.5.6.0, Culture=neutral, PublicKeyToken=c10f85d521a011a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\AttributeRouting.Core.3.5.6\lib\net40\AttributeRouting.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="AttributeRouting.Web, Version=3.5.6.0, Culture=neutral, PublicKeyToken=c10f85d521a011a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\AttributeRouting.Core.Web.3.5.6\lib\net40\AttributeRouting.Web.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="AttributeRouting.Web.Mvc, Version=3.5.6.0, Culture=neutral, PublicKeyToken=c10f85d521a011a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\AttributeRouting.3.5.6\lib\net40\AttributeRouting.Web.Mvc.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
@@ -285,24 +273,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Areas\Apimobile\Controllers\EquipmentController.cs" />
-    <Compile Include="Areas\Apimobile\Controllers\LocationController.cs" />
-    <Compile Include="Areas\Apimobile\Controllers\AuthorizationController.cs" />
-    <Compile Include="Areas\Apimobile\Controllers\ImageController.cs" />
-    <Compile Include="Areas\Apimobile\Controllers\WorkOrderController.cs" />
-    <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
-    <Compile Include="Areas\Api\Controllers\AssignmentsController.cs" />
-    <Compile Include="Areas\Api\Controllers\CallTypesController.cs" />
-    <Compile Include="Areas\Api\Controllers\CustomersController.cs" />
-    <Compile Include="Areas\Api\Controllers\DepartmentsController.cs" />
-    <Compile Include="Areas\Api\Controllers\EmployeesController.cs" />
-    <Compile Include="Areas\Api\Controllers\EquipmentController.cs" />
-    <Compile Include="Areas\Api\Controllers\LocationsController.cs" />
-    <Compile Include="Areas\Api\Controllers\PartsController.cs" />
-    <Compile Include="Areas\Api\Controllers\RepairsController.cs" />
-    <Compile Include="Areas\Api\Controllers\WorkOrdersController.cs" />
-    <Compile Include="BackgroundJobs\BackgroundJobManager.cs" />
-    <Compile Include="BackgroundJobs\IOSNotifications.cs" />
+    <Compile Include="Infrastructure\Jobs\BackgroundJobManager.cs" />
+    <Compile Include="Infrastructure\Jobs\IOSNotifications.cs" />
+    <Compile Include="Controllers\ApiMobileController.cs" />
     <Compile Include="Controllers\BaseComtroller.cs" />
     <Compile Include="Controllers\AuthorizationController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
@@ -316,6 +289,8 @@
     <Compile Include="Infrastructure\BloomServiceConfiguration.cs" />
     <Compile Include="Infrastructure\Constants\EstimateRepairHours.cs" />
     <Compile Include="Infrastructure\Constants\RateSheets.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\ISageApiProxy.cs" />
+    <Compile Include="Infrastructure\Services\SageApiProxy.cs" />
     <Compile Include="Infrastructure\Utils\JsonHelper.cs" />
     <Compile Include="Infrastructure\Mongo\IRepository.cs" />
     <Compile Include="Infrastructure\Mongo\MongoRepository.cs" />
@@ -350,6 +325,7 @@
     <Compile Include="Models\EntityModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\LocationModel.cs" />
+    <Compile Include="Models\LoginResponseModel.cs" />
     <Compile Include="Models\MapViewModel.cs" />
     <Compile Include="Models\ScheduleViewModel.cs" />
     <Compile Include="Models\LookupsModel.cs" />
@@ -361,24 +337,22 @@
     <Compile Include="Infrastructure\Notifications\NotificationPayload.cs" />
     <Compile Include="Infrastructure\Notifications\PushNotification.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
-    <Compile Include="Infrastructure\Services\Abstract\ILocationService.cs" />
-    <Compile Include="Infrastructure\Services\Abstract\IEntityService.cs" />
-    <Compile Include="Infrastructure\Services\Concrete\LocationService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\ILocationService.cs" />
+    <Compile Include="Infrastructure\Services\LocationService.cs" />
     <Compile Include="Managers\Concrete\EntityApiManager.cs" />
-    <Compile Include="Infrastructure\Services\Concrete\EntityService.cs" />
     <Compile Include="Models\RepairModel.cs" />
     <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\TechnicianModel.cs" />
     <Compile Include="Models\WorkOrderModel.cs" />
     <Compile Include="Models\AssignmentViewModel.cs" />
-    <Compile Include="Infrastructure\Services\Abstract\IAPIMobileService.cs" />
-    <Compile Include="Infrastructure\Services\Abstract\IImageService.cs" />
-    <Compile Include="Infrastructure\Services\Abstract\IUserService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IApiMobileService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IImageService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IUserService.cs" />
     <Compile Include="Infrastructure\Hubs\NotificationsHub.cs" />
     <Compile Include="Infrastructure\Hubs\LocationHub.cs" />
-    <Compile Include="Infrastructure\Services\Concrete\APIMobileService.cs" />
-    <Compile Include="Infrastructure\Services\Concrete\ImageService.cs" />
-    <Compile Include="Infrastructure\Services\Concrete\UserService.cs" />
+    <Compile Include="Infrastructure\Services\ApiMobileService.cs" />
+    <Compile Include="Infrastructure\Services\ImageService.cs" />
+    <Compile Include="Infrastructure\Services\UserService.cs" />
     <Compile Include="Models\NotificationModel.cs" />
     <Compile Include="Models\LocationJsonModel.cs" />
     <Compile Include="Models\TechnicianViewModel.cs" />
@@ -809,7 +783,10 @@
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
     <Content Include="Views\Authorization\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Infrastructure\Extensions\" />
+    <Folder Include="Infrastructure\Queries\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

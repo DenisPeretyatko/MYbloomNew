@@ -7,8 +7,6 @@ namespace BloomService.Web.Controllers
     using System.Linq;
     using System.Web.Mvc;
 
-    using AttributeRouting.Web.Mvc;
-
     using AutoMapper;
 
     using Domain.Entities.Concrete;
@@ -20,7 +18,6 @@ namespace BloomService.Web.Controllers
 
     public class DashboardController : BaseController
     {
-
         private readonly ILocationService locationService;
 
         private readonly IRepository _repository;
@@ -32,13 +29,13 @@ namespace BloomService.Web.Controllers
             this.locationService = locationService;
             _repository = repository;
         }
-        [GET("Dashboard")]
-        [Authorize]
+        [HttpGet]
+        [Route("Dashboard")]
         public ActionResult GetDashboard()
         {
             var dashboard = new DashboardViewModel();
-            var listWO = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open");
-            var assignments = _repository.SearchFor<SageAssignment>(x => x.Employee == "");
+            var listWO = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToArray();
+            var assignments = _repository.SearchFor<SageAssignment>(x => x.Employee == "").ToArray();
             var chart = new List<ChartModel>();
             var chartModel = new ChartModel();
             
@@ -57,8 +54,8 @@ namespace BloomService.Web.Controllers
             return Json(dashboard, JsonRequestBehavior.AllowGet);
         }
 
-        [GET("Dashboard/Lookups")]
-        [Authorize]
+        [HttpGet]
+        [Route("Dashboard/Lookups")]
         public ActionResult GetLookups()
         {
             var lookups = new LookupsModel();
@@ -88,7 +85,8 @@ namespace BloomService.Web.Controllers
             return View();
         }
 
-        [GET("Dashboard/SendNotification")]
+        [HttpGet]
+        [Route("Dashboard/SendNotification")]
         public ActionResult SendNotification()
         {
             var json = JsonHelper.GetObjects("getNotifications.json");

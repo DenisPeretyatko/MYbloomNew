@@ -6,54 +6,44 @@ namespace BloomService.Web.Services.Concrete
     using System.Linq;
     using System.Web.Hosting;
 
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Domain.UnitOfWork;
-    using BloomService.Web.Services.Abstract;
+    using Domain.Entities.Concrete;
+    using Abstract;
     using Models.Request;
-    using System.Configuration;
-    using Domain.Exceptions;
     using Domain.Extensions;
+    using Domain.Repositories.Abstract;
 
     public class ApiMobileService : IApiMobileService
     {
-        private readonly IEmployeeService employeeService;
 
         private readonly IImageService imageService;
 
-        private readonly IUnitOfWork unitOfWork;
-
         private readonly IUserService userService;
-
-        private readonly IWorkOrderService workOrderService;
 
         private readonly BloomServiceConfiguration _settings;
 
+        private readonly IRepository _repository;
+
         public ApiMobileService(
-            IWorkOrderService workOrderService,
             IUserService userService,
-            IEmployeeService employeeService,
             IImageService imageService,
-            IUnitOfWork unitOfWork,
-            BloomServiceConfiguration bloomConfiguration)
+            BloomServiceConfiguration bloomConfiguration, IRepository repository)
         {
             this.imageService = imageService;
-            this.workOrderService = workOrderService;
             this.userService = userService;
-            this.employeeService = employeeService;
-            this.unitOfWork = unitOfWork;
             _settings = bloomConfiguration;
+            _repository = repository;
         }
 
         public bool AddImage(ImageModel model)
         {
             var pathToImage = HostingEnvironment.MapPath("/Images/");
-            var workOrder = unitOfWork.GetEntities<SageWorkOrder>().SearchFor(x => x.WorkOrder == model.IdWorkOrder);
+            var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.IdWorkOrder).SingleOrDefault();
             if (workOrder == null)
             {
                 return false;
             }
 
-            var imagesDB = unitOfWork.GetEntities<SageImageWorkOrder>().SearchFor(x => x.WorkOrder == model.IdWorkOrder).FirstOrDefault();
+            var imagesDB = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.IdWorkOrder).SingleOrDefault();
             var countImage = 0;
             if (imagesDB != null && imagesDB.Images != null)
             {
@@ -61,7 +51,7 @@ namespace BloomService.Web.Services.Concrete
             }
             else
             {
-                imagesDB = new SageImageWorkOrder { Images = new List<ImageLocation>(), WorkOrder = model.IdWorkOrder, WorkOrderBsonId = workOrder.Single().Id};
+                imagesDB = new SageImageWorkOrder { Images = new List<ImageLocation>(), WorkOrder = model.IdWorkOrder, WorkOrderBsonId = workOrder.Id};
             }
 
             var name = model.IdWorkOrder + "id" + countImage;
@@ -74,7 +64,7 @@ namespace BloomService.Web.Services.Concrete
             };
             imagesDB.Images.Add(image);
             countImage++;
-            unitOfWork.GetEntities<SageImageWorkOrder>().Add(imagesDB);
+            _repository.Add(imagesDB);
             return true;
         }
 
@@ -82,13 +72,13 @@ namespace BloomService.Web.Services.Concrete
         {
             var userId = "Rinta, Chriss";
 
-            var workOrders = unitOfWork.GetEntities<SageWorkOrder>().Get().Where(x=>x.Status=="Open").ToList();
+            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
             var result = workOrders.Where(x => x.Employee == userId);
-            var locations = unitOfWork.GetEntities<SageLocation>().Get();
+            var locations = _repository.GetAll<SageLocation>();
             foreach (var order in result)
             {
                 order.Equipments = new List<SageEquipment>();
-                var images = unitOfWork.GetEntities<SageImageWorkOrder>().SearchFor(x => x.WorkOrder == order.WorkOrder).FirstOrDefault();
+                var images = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == order.WorkOrder).SingleOrDefault();
                 if (images != null)
                 {
                     foreach(var image in images.Images)
@@ -104,7 +94,7 @@ namespace BloomService.Web.Services.Concrete
                 order.Longitude = location.Longitude;
                 if(order.Equipment!=0)
                 {
-                    var equipments = unitOfWork.GetEntities<SageEquipment>().SearchFor(x => x.Equipment == order.Equipment.ToString());
+                    var equipments = _repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment.ToString());
                     order.Equipments.AddRange(equipments);
                 }
             }
@@ -114,8 +104,7 @@ namespace BloomService.Web.Services.Concrete
         public IEnumerable<SageEquipment> GetEquipments()
         {
             var userId = "Rinta, Chriss";
-            var equipments = unitOfWork.GetEntities<SageEquipment>().Get();
-            var result = equipments.Where(x => x.Employee == userId);
+            var result = _repository.SearchFor<SageEquipment>(x => x.Employee == userId);
             return result;
         }
         public SageTechnicianLocation SaveTechnicianLocation(string technicianId, decimal lat, decimal lng)
@@ -127,7 +116,7 @@ namespace BloomService.Web.Services.Concrete
                 Longitude = lng,
                 Date = DateTime.Now
             };
-            unitOfWork.TechnicianLocation.Add(techLocation);
+            _repository.Add(techLocation);
             return techLocation;
         }
     }

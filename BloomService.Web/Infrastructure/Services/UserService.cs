@@ -6,7 +6,6 @@ using System.Web;
 using BloomService.Web.Services.Abstract;
 using System.Security.Claims;
 using System.Threading;
-using BloomService.Domain.UnitOfWork;
 
 namespace BloomService.Web.Services.Concrete
 {
@@ -19,7 +18,7 @@ namespace BloomService.Web.Services.Concrete
         public string Mail { get; set; }
         public string Type { get; set; }
 
-        public UserService(IUnitOfWork unitOfWork)
+        public UserService()
         {
             var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
 
@@ -34,9 +33,9 @@ namespace BloomService.Web.Services.Concrete
             Mail = identity.Claims.Where(c => c.Type == ClaimTypes.Email)
                                .Select(c => c.Value).SingleOrDefault();
 
-            var user = unitOfWork.Employees.Get().FirstOrDefault(x => x.Employee == Id);
-            if (user != null)
-                Name = user.Name;
+            //var user = unitOfWork.Employees.Get().FirstOrDefault(x => x.Employee == Id);
+            //if (user != null)
+            //    Name = user.Name;
         }
     }
 }
