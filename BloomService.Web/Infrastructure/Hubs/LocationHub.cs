@@ -1,20 +1,20 @@
-﻿namespace BloomService.Web.Infrastructure.Hubs
-{
-    using System.Collections.Generic;
-    using System.Web.Script.Serialization;
+﻿//namespace BloomService.Web.Infrastructure.Hubs
+//{
+//    using System.Collections.Generic;
+//    using System.Web.Script.Serialization;
 
-    using BloomService.Web.Models;
+//    using BloomService.Web.Models;
 
-    using Microsoft.AspNet.SignalR;
+//    using Microsoft.AspNet.SignalR;
 
-    public class LocationHub : Hub
-    {
-        public void GetLocations()
-        {
-            //var json = JsonHelper.GetObjects("getNewLocations.json");
-            //var serializer = new JavaScriptSerializer();
-            //var list = serializer.ConvertToType<IEnumerable<LocationJsonModel>>(json);
-            //Clients.All.updateLocations(list);
-        }
-    }
-}
+//    public class LocationHub : Hub
+//    {
+//        public void GetLocations()
+//        {
+//            //var json = JsonHelper.GetObjects("getNewLocations.json");
+//            //var serializer = new JavaScriptSerializer();
+//            //var list = serializer.ConvertToType<IEnumerable<LocationJsonModel>>(json);
+//            //Clients.All.updateLocations(list);
+//        }
+//    }
+//}

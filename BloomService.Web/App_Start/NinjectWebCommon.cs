@@ -27,6 +27,8 @@ namespace BloomService.Web
 
     using RestSharp;
     using Domain.Extensions;
+    using Domain.Repositories.Abstract;
+    using Domain.Repositories.Concrete;
 
     public static class NinjectWebCommon
     {
@@ -95,6 +97,10 @@ namespace BloomService.Web
         private static void RegisterServices(IKernel kernel)
         {
             var setting = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
+            var connectionString = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString;
+
+            kernel.Bind<IRepository>().To<MongoRepository>().WithConstructorArgument(connectionString);
+
             kernel.Bind<BloomServiceConfiguration>().ToConstant(setting);
             kernel.Bind<IWorkOrderApiManager>().To<WorkOrderApiManager>();
             kernel.Bind<ILocationApiManager>().To<LocationApiManager>();
@@ -112,19 +118,10 @@ namespace BloomService.Web
 
             kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(sageApiHost);
             kernel.Bind<IToken>().To<SageAuthorisationToken>().WithConstructorArgument(GetAuthToken());
-            kernel.Bind<IUnitOfWork>().To<MongoDbUnitOfWork>();
             kernel.Bind<IWorkOrderService>().To<WorkOrderService>();
             kernel.Bind<ILocationService>().To<LocationService>();
-            kernel.Bind<ICallTypeService>().To<CallTypeService>();
             kernel.Bind<IEmployeeService>().To<EmployeeService>();
             kernel.Bind<IAssignmentService>().To<AssignmentService>();
-            kernel.Bind<IDepartmentService>().To<DepartmentService>();
-            kernel.Bind<IEquipmentService>().To<EquipmentService>();
-            kernel.Bind<IDepartmentService>().To<DepartmentService>();
-            kernel.Bind<IPartService>().To<PartService>();
-            kernel.Bind<IProblemService>().To<ProblemService>();
-            kernel.Bind<IRepairService>().To<RepairService>();
-            kernel.Bind<ICustomerService>().To<CustomerService>();
 
             kernel.Bind<IApiMobileService>().To<ApiMobileService>();
             kernel.Bind<IImageService>().To<ImageService>();

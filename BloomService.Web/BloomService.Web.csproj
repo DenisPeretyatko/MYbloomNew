@@ -80,16 +80,20 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MongoDB.Bson, Version=1.8.3.9, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MongoDB.Bson.2.2.3\lib\net45\MongoDB.Bson.dll</HintPath>
+    <Reference Include="MongoDB.Bson, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Bson.2.2.4\lib\net45\MongoDB.Bson.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="MongoDB.Driver, Version=1.8.3.9, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MongoDB.Driver.2.2.3\lib\net45\MongoDB.Driver.dll</HintPath>
+    <Reference Include="MongoDB.Driver, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.2.2.4\lib\net45\MongoDB.Driver.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="MongoDB.Driver.Core, Version=2.2.3.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MongoDB.Driver.Core.2.2.3\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+    <Reference Include="MongoDB.Driver.Core, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.Core.2.2.4\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Legacy, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\mongocsharpdriver.2.2.4\lib\net45\MongoDB.Driver.Legacy.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -309,9 +313,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\BloomServiceConfiguration.cs" />
     <Compile Include="Infrastructure\Constants\EstimateRepairHours.cs" />
     <Compile Include="Infrastructure\Constants\RateSheets.cs" />
-    <Compile Include="Infrastructure\Hubs\JsonHelper.cs" />
+    <Compile Include="Infrastructure\Utils\JsonHelper.cs" />
+    <Compile Include="Infrastructure\Mongo\IRepository.cs" />
+    <Compile Include="Infrastructure\Mongo\MongoRepository.cs" />
     <Compile Include="Managers\Abstract\ICustomerApiManager.cs" />
     <Compile Include="Managers\Abstract\IAssignmentApiManager.cs" />
     <Compile Include="Managers\Abstract\IEntityApiManager.cs" />
@@ -349,62 +356,40 @@
     <Compile Include="Models\EquipmentModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\ProblemModel.cs" />
-    <Compile Include="Notifications\Feedback.cs" />
-    <Compile Include="Notifications\NotificationAlert.cs" />
-    <Compile Include="Notifications\NotificationPayload.cs" />
-    <Compile Include="Notifications\PushNotification.cs" />
+    <Compile Include="Infrastructure\Notifications\Feedback.cs" />
+    <Compile Include="Infrastructure\Notifications\NotificationAlert.cs" />
+    <Compile Include="Infrastructure\Notifications\NotificationPayload.cs" />
+    <Compile Include="Infrastructure\Notifications\PushNotification.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
-    <Compile Include="Services\Abstract\IAssignmentService.cs" />
-    <Compile Include="Services\Abstract\ICallTypeService.cs" />
-    <Compile Include="Services\Abstract\ICustomerService.cs" />
-    <Compile Include="Services\Abstract\IDepartmentService.cs" />
-    <Compile Include="Services\Abstract\IEmployeeService.cs" />
-    <Compile Include="Services\Abstract\IEquipmentService.cs" />
-    <Compile Include="Services\Abstract\ILocationService.cs" />
-    <Compile Include="Services\Abstract\IPartService.cs" />
-    <Compile Include="Services\Abstract\IProblemService.cs" />
-    <Compile Include="Services\Abstract\IRepairService.cs" />
-    <Compile Include="Services\Abstract\IEntityService.cs" />
-    <Compile Include="Services\Abstract\IWorkOrderService.cs" />
-    <Compile Include="Services\Concrete\AssignmentService.cs" />
-    <Compile Include="Services\Concrete\CallTypeService.cs" />
-    <Compile Include="Services\Concrete\CustomerService.cs" />
-    <Compile Include="Services\Concrete\DepartmentService.cs" />
-    <Compile Include="Services\Concrete\EmployeeService.cs" />
-    <Compile Include="Services\Concrete\EquipmentService.cs" />
-    <Compile Include="Services\Concrete\LocationService.cs" />
-    <Compile Include="Services\Concrete\PartService.cs" />
-    <Compile Include="Services\Concrete\ProblemService.cs" />
-    <Compile Include="Services\Concrete\RepairService.cs" />
+    <Compile Include="Infrastructure\Services\Abstract\ILocationService.cs" />
+    <Compile Include="Infrastructure\Services\Abstract\IEntityService.cs" />
+    <Compile Include="Infrastructure\Services\Concrete\LocationService.cs" />
     <Compile Include="Managers\Concrete\EntityApiManager.cs" />
-    <Compile Include="Services\Concrete\EntityService.cs" />
-    <Compile Include="Services\Concrete\WorkOrderService.cs" />
+    <Compile Include="Infrastructure\Services\Concrete\EntityService.cs" />
     <Compile Include="Models\RepairModel.cs" />
-    <Compile Include="Models\Request\ImageRequest.cs" />
+    <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\TechnicianModel.cs" />
     <Compile Include="Models\WorkOrderModel.cs" />
     <Compile Include="Models\AssignmentViewModel.cs" />
-    <Compile Include="Services\Abstract\IAPIMobileService.cs" />
-    <Compile Include="Services\Abstract\IImageService.cs" />
-    <Compile Include="Services\Abstract\IUserService.cs" />
+    <Compile Include="Infrastructure\Services\Abstract\IAPIMobileService.cs" />
+    <Compile Include="Infrastructure\Services\Abstract\IImageService.cs" />
+    <Compile Include="Infrastructure\Services\Abstract\IUserService.cs" />
     <Compile Include="Infrastructure\Hubs\NotificationsHub.cs" />
     <Compile Include="Infrastructure\Hubs\LocationHub.cs" />
-    <Compile Include="Services\Concrete\APIMobileService.cs" />
-    <Compile Include="Services\Concrete\ImageService.cs" />
-    <Compile Include="Services\Concrete\UserService.cs" />
+    <Compile Include="Infrastructure\Services\Concrete\APIMobileService.cs" />
+    <Compile Include="Infrastructure\Services\Concrete\ImageService.cs" />
+    <Compile Include="Infrastructure\Services\Concrete\UserService.cs" />
     <Compile Include="Models\NotificationModel.cs" />
     <Compile Include="Models\LocationJsonModel.cs" />
     <Compile Include="Models\TechnicianViewModel.cs" />
     <Compile Include="Models\WorkorderViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Utils\DynamicJsonDeserializer.cs" />
-    <Compile Include="Utils\SageAuthorisationToken.cs" />
-    <Compile Include="Utils\IToken.cs" />
-    <Compile Include="Utils\SageAuthUtility.cs" />
-    <Compile Include="Utils\BloomServiceSession.cs" />
-    <Compile Include="Utils\ISession.cs" />
-    <Compile Include="Utils\JsonNetResult.cs" />
+    <Compile Include="Infrastructure\Utils\DynamicJsonDeserializer.cs" />
+    <Compile Include="Infrastructure\Utils\SageAuthorisationToken.cs" />
+    <Compile Include="Infrastructure\Utils\IToken.cs" />
+    <Compile Include="Infrastructure\Utils\SageAuthUtility.cs" />
+    <Compile Include="Infrastructure\Utils\JsonNetResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App\app.js" />
@@ -758,11 +743,6 @@
     <Content Include="Public\mock\getWorkorder.json" />
     <Content Include="Public\mock\getWorkorders.json" />
     <Content Include="Public\mock\getLookups.json" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
@@ -829,12 +809,9 @@
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
     <Content Include="Views\Authorization\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Infrastructure\Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BloomService.Domain\BloomService.Domain.csproj">

@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using BloomService.Web.Services.Concrete;
 
 namespace BloomService.Web.Controllers
 {
@@ -10,63 +9,63 @@ namespace BloomService.Web.Controllers
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Models;
     using System.Linq;
-    using BloomService.Web.Services.Abstract;
-
+    using Domain.Repositories.Abstract;
+    using System;
 
     [Authorize]
     public class WorkorderController : BaseController
     {
-        private readonly IWorkOrderService workOrderService;
+        private readonly IRepository _repository;
 
-        public WorkorderController(IWorkOrderService workOrderService)
+        public WorkorderController(IRepository repository)
         {
-            this.workOrderService = workOrderService;
+            _repository = repository;
         }
 
         [POST("Workorder/Create")]
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
-            var workorder = new SagePropertyDictionary
-                                {
-                                    { "ARCustomer", model.Customer }, 
-                                    { "Location", model.Location }, 
-                                    { "CallType", model.Calltype }, 
-                                    { "CallDate", model.Calldate.ToShortDateString() }, 
-                                    { "CallTime", model.Calldate.ToShortTimeString() }, 
-                                    { "Problem", model.Problem }, 
-                                    { "RateSheet", model.Ratesheet }, 
-                                    { "Employee", model.Emploee }, 
-                                    { "Equipment", model.Equipment }, 
-                                    { "EstimatedRepairHours", model.Estimatehours }, 
-                                    { "NottoExceed", model.Nottoexceed }, 
-                                    { "Comments", model.Locationcomments }, 
-                                    { "CustomerPO", model.Customerpo }, 
-                                    { "PermissionCode", model.Permissiocode }, 
-                                    { "PayMethod", model.Paymentmethods }
-                                };
+            var workorder = new SageWorkOrder()
+            {
+                ARCustomer = model.Customer,
+                Location = model.Location,
+                CallType = model.Calltype,
+                CallDate = model.Calldate.Date,
+                CallTime = model.Calldate,
+                Problem = model.Problem,
+                RateSheet = model.Ratesheet,
+                Employee = model.Emploee,
+                Equipment = Convert.ToUInt16(model.Equipment),
+                EstimatedRepairHours = Convert.ToDecimal(model.Estimatehours),
+                NottoExceed = model.Nottoexceed,
+                Comments = model.Locationcomments,
+                CustomerPO = model.Customerpo,
+                PermissionCode = model.Permissiocode,
+                PayMethod = model.Paymentmethods
+            };
 
-            var created = workOrderService.Add(workorder);
+            _repository.Add(workorder);
             return Json("success", JsonRequestBehavior.AllowGet);
         }
 
         [GET("Workorder/{id}")]
         public ActionResult GetWorkorder(string id)
         {
-            var workOrder = workOrderService.Get(id);
+            var workOrder = _repository.Get<SageWorkOrder>(id);
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
         [GET("Workorderpictures/{id}")]
         public ActionResult GetWorkOrdersPictures(string id)
         {
-            var pictures = workOrderService.GetPictures(id);
+            var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrderBsonId == id).Single();
             return Json(pictures, JsonRequestBehavior.AllowGet);
         }
 
         [GET("Workorder")]
         public ActionResult GetWorkorders()
         {
-            var list = workOrderService.Get().Skip(11220).Take(20);
+            var list = _repository.GetAll<SageWorkOrder>(); //workOrderService.Get().Skip(11220).Take(20);
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
@@ -92,27 +91,28 @@ namespace BloomService.Web.Controllers
         [POST("Workorder/Save")]
         public ActionResult SaveWorkOrder(WorkOrderModel model)
         {
-            var workorder = new SagePropertyDictionary
-            {
-                                    { "ARCustomer", model.Customer }, 
-                                    { "Location", model.Location }, 
-                                    { "CallType", model.Calltype }, 
-                                    { "CallDate", model.Calldate.ToShortDateString() }, 
-                                    { "CallTime", model.Calldate.ToShortTimeString() }, 
-                                    { "Problem", model.Problem }, 
-                                    { "RateSheet", model.Ratesheet }, 
-                                    { "Employee", model.Emploee }, 
-                                    { "Equipment", model.Equipment }, 
-                                    { "EstimatedRepairHours", model.Estimatehours }, 
-                                    { "NottoExceed", model.Nottoexceed }, 
-                                    { "Comments", model.Locationcomments }, 
-                                    { "CustomerPO", model.Customerpo }, 
-                                    { "PermissionCode", model.Permissiocode }, 
-                                    { "PayMethod", model.Paymentmethods },
-                                    { "WorkOrder", model.WorkOrder }
-            };
+            //var workorder = new SagePropertyDictionary
+            //{
+            //                        { "ARCustomer", model.Customer }, 
+            //                        { "Location", model.Location }, 
+            //                        { "CallType", model.Calltype }, 
+            //                        { "CallDate", model.Calldate.ToShortDateString() }, 
+            //                        { "CallTime", model.Calldate.ToShortTimeString() }, 
+            //                        { "Problem", model.Problem }, 
+            //                        { "RateSheet", model.Ratesheet }, 
+            //                        { "Employee", model.Emploee }, 
+            //                        { "Equipment", model.Equipment }, 
+            //                        { "EstimatedRepairHours", model.Estimatehours }, 
+            //                        { "NottoExceed", model.Nottoexceed }, 
+            //                        { "Comments", model.Locationcomments }, 
+            //                        { "CustomerPO", model.Customerpo }, 
+            //                        { "PermissionCode", model.Permissiocode }, 
+            //                        { "PayMethod", model.Paymentmethods },
+            //                        { "WorkOrder", model.WorkOrder }
+            //};
 
-            var saved = workOrderService.Edit(workorder);
+            var workorder = _repository.Get<SageWorkOrder>(model.Id);
+            _repository.Update(workorder);
             return Json("success", JsonRequestBehavior.AllowGet);
         }
     }

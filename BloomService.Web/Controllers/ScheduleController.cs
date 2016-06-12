@@ -1,6 +1,4 @@
-﻿using BloomService.Domain.UnitOfWork;
-
-namespace BloomService.Web.Controllers
+﻿namespace BloomService.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -15,38 +13,27 @@ namespace BloomService.Web.Controllers
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Models;
     using BloomService.Web.Services.Abstract;
-
+    using Domain.Repositories.Abstract;
 
     [Authorize]
     public class ScheduleController : BaseController
     {
-        private readonly IAssignmentService assignmentService;
 
-        private readonly IEmployeeService employeeService;
+        private readonly IRepository _repository;
 
-        private readonly IWorkOrderService workOrderService;
-
-        private readonly IUnitOfWork unitOfWork;
-
-        public ScheduleController(
-            IAssignmentService assignmentService,
-            IWorkOrderService workOrderService,
-            IEmployeeService employeeService, IUnitOfWork unitOfWork)
+        public ScheduleController(IRepository repository)
         {
-            this.assignmentService = assignmentService;
-            this.workOrderService = workOrderService;
-            this.employeeService = employeeService;
-            this.unitOfWork = unitOfWork;
+            _repository = repository;
         }
 
         [GET("Schedule")]
         public ActionResult GetSchedules()
         {
             var model = new ScheduleViewModel();
-            var sageAssignments = assignmentService.Get().ToList();
+            var sageAssignments = _repository.GetAll<SageAssignment>().ToList();
             var assignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(sageAssignments);
             var assignedAs = assignments.Where(x => x.Employee != "");
-            var employees = employeeService.Get().ToList();
+            var employees = _repository.GetAll<SageEmployee>().ToList();
             foreach (var item in assignedAs)
             {
                 var employee = employees.FirstOrDefault(e => e.Name == item.Employee);
@@ -60,7 +47,7 @@ namespace BloomService.Web.Controllers
                 item.Color = employee.Color ?? "";
             }
 
-            var workorders = workOrderService.Get().ToList();
+            var workorders = _repository.GetAll<SageWorkOrder>().ToList();
             foreach (var item in assignedAs)
             {
                 var workorder = workorders.FirstOrDefault(w => w.WorkOrder == item.WorkOrder);
@@ -86,7 +73,7 @@ namespace BloomService.Web.Controllers
         public ActionResult CreateAssignment(AssignmentViewModel model)
         {
             var d = model.ScheduleDate.ToUniversalTime();
-            var databaseAssignment = assignmentService.GetByWorkOrderId(model.WorkOrder);
+            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
             var assignmanet = new SagePropertyDictionary
                                   {
                                       { "Assignment", databaseAssignment.Assignment }, 
@@ -101,7 +88,7 @@ namespace BloomService.Web.Controllers
             var edited = this.assignmentService.Edit(assignmanet);
             if (edited != null)
             {
-                var employees = employeeService.Get().ToList();
+                var employees = _repository.GetAll<SageEmployee>();
                 var employee = employees.FirstOrDefault(e => e.Employee == model.Employee);
                 if (employee != null)
                 {
@@ -115,7 +102,7 @@ namespace BloomService.Web.Controllers
                 databaseAssignment.Enddate = model.EndDate.ToUniversalTime().ToString("yyyy-MM-dd");
                 databaseAssignment.Endtime = model.EndDate.ToUniversalTime().TimeOfDay.ToString();
 
-                unitOfWork.GetEntities<SageAssignment>().Add(databaseAssignment);
+                _repository.Add(databaseAssignment);
             }
 
             return this.Json("success", JsonRequestBehavior.AllowGet);
@@ -125,7 +112,7 @@ namespace BloomService.Web.Controllers
         public ActionResult DeleteAssignment(AssignmentViewModel model)
         {
             //TODO 
-            var databaseAssignment = assignmentService.GetByWorkOrderId(model.WorkOrder);
+            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.Id).Single();
             //if (edited != null)
             //{
                 databaseAssignment.Employee = "";
@@ -135,10 +122,11 @@ namespace BloomService.Web.Controllers
                 databaseAssignment.Enddate = model.EndDate.ToUniversalTime().ToString("yyyy-MM-dd");
                 databaseAssignment.Endtime = model.EndDate.ToUniversalTime().TimeOfDay.ToString();
 
-                unitOfWork.GetEntities<SageAssignment>().Add(databaseAssignment);
+                _repository.Add(databaseAssignment);
             //}
-            
-            workOrderService.Delete(model.WorkOrder); 
+
+            var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).Single();
+            _repository.Delete<SageWorkOrder>(workOrder);
             return Json("success", JsonRequestBehavior.AllowGet);
         }
     }

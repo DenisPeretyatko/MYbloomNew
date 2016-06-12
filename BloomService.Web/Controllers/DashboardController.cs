@@ -11,60 +11,34 @@ namespace BloomService.Web.Controllers
 
     using AutoMapper;
 
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Web.Infrastructure.Constants;
-    using BloomService.Web.Infrastructure.Hubs;
-    using BloomService.Web.Models;
-    using BloomService.Web.Services.Abstract;
-
+    using Domain.Entities.Concrete;
+    using Infrastructure.Constants;
+    using Infrastructure.Hubs;
+    using Models;
+    using Services.Abstract;
+    using Domain.Repositories.Abstract;
 
     public class DashboardController : BaseController
     {
-        private readonly ICallTypeService callTypeService;
-
-        private readonly ICustomerService customerService;
-
-        private readonly IEmployeeService employeeService;
-
-        private readonly IEquipmentService equipmentService;
 
         private readonly ILocationService locationService;
 
-        private readonly IProblemService problemService;
+        private readonly IRepository _repository;
 
-        private readonly IRepairService repairService;
-
-        private readonly IWorkOrderService workOrderService;
-
-        private readonly IAssignmentService assignmentService;
-
-        public DashboardController(
-            ICallTypeService callTypeService, 
-            IEmployeeService employeeService, 
-            IEquipmentService equipmentService, 
-            ILocationService locationService, 
-            IProblemService problemService, 
-            ICustomerService customerService, 
-            IRepairService repairService, 
-            IWorkOrderService workOrderService, IAssignmentService assignmentService)
+        public DashboardController( 
+            ILocationService locationService,
+            IRepository repository)
         {
-            this.callTypeService = callTypeService;
-            this.employeeService = employeeService;
-            this.equipmentService = equipmentService;
             this.locationService = locationService;
-            this.problemService = problemService;
-            this.customerService = customerService;
-            this.repairService = repairService;
-            this.workOrderService = workOrderService;
-            this.assignmentService = assignmentService;
+            _repository = repository;
         }
         [GET("Dashboard")]
         [Authorize]
         public ActionResult GetDashboard()
         {
             var dashboard = new DashboardViewModel();
-            var listWO = workOrderService.Get().Skip(11220).Take(20).Where(x => x.Status == "Open");
-            var assignments = assignmentService.Get().Where(x => x.Employee == "");
+            var listWO = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open");
+            var assignments = _repository.SearchFor<SageAssignment>(x => x.Employee == "");
             var chart = new List<ChartModel>();
             var chartModel = new ChartModel();
             
@@ -88,13 +62,13 @@ namespace BloomService.Web.Controllers
         public ActionResult GetLookups()
         {
             var lookups = new LookupsModel();
-            var locations = locationService.Get();
-            var calltypes = callTypeService.Get();
-            var problems = problemService.Get();
-            var employes = employeeService.Get();
-            var equipment = equipmentService.Get();
-            var customer = customerService.Get();
-            var repairs = repairService.Get();
+            var locations = _repository.GetAll<SageLocation>();
+            var calltypes = _repository.GetAll<SageCallType>();
+            var problems = _repository.GetAll<SageProblem>();
+            var employes = _repository.GetAll<SageEmployee>();
+            var equipment = _repository.GetAll<SageEquipment>();
+            var customer = _repository.GetAll<SageCustomer>();
+            var repairs = _repository.GetAll<SageRepair>();
 
             lookups.Locations = Mapper.Map<List<SageLocation>, List<LocationModel>>(locations.ToList());
             lookups.Calltypes = Mapper.Map<List<SageCallType>, List<CallTypeModel>>(calltypes.ToList());

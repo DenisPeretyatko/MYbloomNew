@@ -6,52 +6,46 @@
 
     using AutoMapper;
 
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Domain.UnitOfWork;
-    using BloomService.Web.Models;
-    using BloomService.Web.Services.Abstract;
+    using Domain.Entities.Concrete;
+    using Models;
+    using Services.Abstract;
     using System.Drawing;
     using System.Drawing.Imaging;
-    using System;
-    using System.Globalization;
     using System.Web.Hosting;
+    using Domain.Repositories.Abstract;
+
     [Authorize]
     public class TechnicianController : BaseController
     {
-        private readonly IEmployeeService employeeService;
 
         private readonly IImageService imageService;
 
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IRepository _repository;
 
-        public TechnicianController(
-            IEmployeeService employeeService, 
-            IImageService imageService, 
-            IUnitOfWork unitOfWork)
+        public TechnicianController(IImageService imageService, IRepository repository)
         {
-            this.employeeService = employeeService;
             this.imageService = imageService;
-            this.unitOfWork = unitOfWork;
+            _repository = repository;
         }
 
         [GET("Technician/{id}")]
         public ActionResult GetTechnician(string id)
         {
-            var technician = employeeService.Get(id);
+            var technician = _repository.Get<SageEmployee>(id);
             return Json(technician, JsonRequestBehavior.AllowGet);
         }
 
         [GET("Technician")]
         public ActionResult GetTechnicians()
         {
-            var list = employeeService.Get();
+            var list = _repository.GetAll<SageEmployee>();
             return Json(list.OrderBy(x => x.Employee), JsonRequestBehavior.AllowGet);
         }
 
         [POST("Technician/Save")]
         public ActionResult SaveTechniciance(TechnicianModel model)
         {
-            var employee = employeeService.Get(model.Id);
+            var employee = _repository.Get<SageEmployee>(model.Id);
             var technician = Mapper.Map<SageEmployee, EmployeeModel>(employee);
             technician.AvailableDays = model.AvailableDays;
             technician.IsAvailable = model.IsAvailable;
@@ -84,8 +78,7 @@
 
             }
             var updatedTechnician = Mapper.Map<EmployeeModel, SageEmployee>(technician);
-
-            unitOfWork.GetEntities<SageEmployee>().Add(updatedTechnician);
+            _repository.Update(updatedTechnician);
 
             return Json("success", JsonRequestBehavior.AllowGet);
         }

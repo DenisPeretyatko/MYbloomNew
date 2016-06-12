@@ -14,7 +14,7 @@ namespace BloomService.Web.Areas.Apimobile.Controllers
             _apiService = apiService;
         }
 
-        public string Post(ImageRequest model)
+        public string Post(ImageModel model)
         {
             _apiService.AddImage(model);
             return "saved";

@@ -1,12 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using BloomService.Domain.Entities;
-using BloomService.Web.Infrastructure;
+﻿using System.Web.Mvc;
 using AttributeRouting.Web.Mvc;
-using BloomService.Web.Infrastructure.Constants;
-using BloomService.Web.Models;
-using BloomService.Web.Services.Abstract;
 using BloomService.Domain.Extensions;
 using System.Configuration;
 using RestSharp;

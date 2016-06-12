@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using BloomService.Domain.Entities.Concrete;
-using BloomService.Domain.UnitOfWork;
 using BloomService.Web.Models;
 using BloomService.Web.Services.Abstract;
 
@@ -12,24 +8,20 @@ namespace BloomService.Web.Controllers
     using System.Web.Mvc;
 
     using AttributeRouting.Web.Mvc;
-
-    using BloomService.Web.Infrastructure.Hubs;
-
+    using Domain.Repositories.Abstract;
+    using Domain.Entities.Concrete;
 
     [Authorize]
     public class LocationController : BaseController
     {
-        private readonly IWorkOrderService _workOrderService;
         private readonly ILocationService _locationService;
-        private readonly IEmployeeService _employeeService;
-        private readonly IUnitOfWork _unitOfWork;
 
-        public LocationController(IWorkOrderService workOrderService, ILocationService locationService, IEmployeeService employeeService, IUnitOfWork unitOfWork)
+        private readonly IRepository _repository;
+
+        public LocationController(ILocationService locationService, IRepository repository)
         {
-            _workOrderService = workOrderService;
             _locationService = locationService;
-            _employeeService = employeeService;
-            _unitOfWork = unitOfWork;
+            _repository = repository;
         }
 
         [POST("Location")]
@@ -41,10 +33,10 @@ namespace BloomService.Web.Controllers
                 date = DateTime.Now;
             }
             //date.Date.ToString("yy-MM-dd")
-            var workOrders = _workOrderService.Get().Where(x => x.Status == "Open" && x.Employee != "");
-                    
-            
-            var locations = _unitOfWork.Locations.Get();
+            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.Employee != "");
+
+
+            var locations = _repository.GetAll<SageLocation>();
             foreach (var item in workOrders)
             {
                 var itemLocation = locations.FirstOrDefault(l => l.Name == item.Location);
@@ -60,8 +52,8 @@ namespace BloomService.Web.Controllers
         [GET("Location/Trucks")]
         public ActionResult GetTrucks()
         {
-            var employees = _employeeService.Get();
-            var techLocations = _unitOfWork.TechnicianLocation.Get();
+            var employees = _repository.GetAll<SageEmployee>();
+            var techLocations = _repository.GetAll<SageTechnicianLocation>();
 
             foreach (var item in employees)
             {

@@ -28,7 +28,7 @@ namespace BloomService.Web
             app.UseHangfireDashboard();
             app.UseHangfireServer();
 
-            RecurringJob.AddOrUpdate(() => IOSNotifications.SendNotifications(), ConfigurationManager.AppSettings["delay"]);
+           // RecurringJob.AddOrUpdate(() => IOSNotifications.SendNotifications(), ConfigurationManager.AppSettings["delay"]);
         }
     }
 }
