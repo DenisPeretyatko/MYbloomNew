@@ -10,9 +10,6 @@ namespace BloomService.Web
     using System;
     using System.Configuration;
     using System.Web;
-
-    using Managers.Abstract;
-    using Managers.Concrete;
     using Services.Abstract;
     using Services.Concrete;
     using Utils;
@@ -26,9 +23,10 @@ namespace BloomService.Web
 
     using RestSharp;
     using Domain.Extensions;
-    using Domain.Entities.Concrete;
     using Domain.Repositories.Abstract;
     using Domain.Repositories.Concrete;
+    using Infrastructure.Services.Abstract;
+    using Infrastructure.Services.Concrete;
 
     public static class NinjectWebCommon
     {
@@ -102,23 +100,13 @@ namespace BloomService.Web
 
             kernel.Bind<IRepository>().To<MongoRepository>().WithConstructorArgument(connectionString);
             kernel.Bind<BloomServiceConfiguration>().ToConstant(setting);
-            kernel.Bind<IWorkOrderApiManager>().To<WorkOrderApiManager>();
-            kernel.Bind<ILocationApiManager>().To<LocationApiManager>();
-            kernel.Bind<ICallTypeApiManager>().To<CallTypeApiManager>();
-            kernel.Bind<IEmployeeApiManager>().To<EmployeeApiManager>();
-            kernel.Bind<IAssignmentApiManager>().To<AssignmentApiManager>();
-            kernel.Bind<IDepartmentApiManager>().To<DepartmentApiManager>();
-            kernel.Bind<IEquipmentApiManager>().To<EquipmentApiManager>();
-            kernel.Bind<IPartApiManager>().To<PartApiManager>();
-            kernel.Bind<IProblemApiManager>().To<ProblemApiManager>();
-            kernel.Bind<IRepairApiManager>().To<RepairApiManager>();
-            kernel.Bind<ICustomerApiManager>().To<CustomerApiManager>();
             kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(sageApiHost);
             kernel.Bind<IToken>().To<SageAuthorisationToken>().WithConstructorArgument(GetAuthToken());
             kernel.Bind<ILocationService>().To<LocationService>();
             kernel.Bind<IApiMobileService>().To<ApiMobileService>();
             kernel.Bind<IImageService>().To<ImageService>();
             kernel.Bind<IUserService>().To<UserService>();
+            kernel.Bind<ISageApiProxy>().To<SageApiProxy>();
         }
     }
 }

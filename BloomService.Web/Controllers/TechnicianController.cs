@@ -15,7 +15,6 @@
 
     public class TechnicianController : BaseController
     {
-
         private readonly IImageService imageService;
 
         private readonly IRepository _repository;
