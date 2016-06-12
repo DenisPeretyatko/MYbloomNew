@@ -22,7 +22,7 @@ namespace BloomService.Web.Services.Concrete
 
         private readonly IUnitOfWork unitOfWork;
 
-        private readonly IUserService userService;
+        private readonly IAuthorizationService userService;
 
         private readonly IWorkOrderService workOrderService;
 
@@ -30,7 +30,7 @@ namespace BloomService.Web.Services.Concrete
 
         public ApiMobileService(
             IWorkOrderService workOrderService,
-            IUserService userService,
+            IAuthorizationService userService,
             IEmployeeService employeeService,
             IImageService imageService,
             IUnitOfWork unitOfWork,
@@ -46,7 +46,8 @@ namespace BloomService.Web.Services.Concrete
 
         public bool AddImage(ImageModel model)
         {
-            var pathToImage = HostingEnvironment.MapPath("/Images/");
+            var basePath = HostingEnvironment.MapPath("/Public/WorkOrder/");
+            var pathToImage = string.Format("{0}{1}/", basePath, model.IdWorkOrder);
             var workOrder = unitOfWork.GetEntities<SageWorkOrder>().SearchFor(x => x.WorkOrder == model.IdWorkOrder);
             if (workOrder == null)
             {
@@ -93,7 +94,7 @@ namespace BloomService.Web.Services.Concrete
                 {
                     foreach(var image in images.Images)
                     {
-                        image.Image = _settings.BSUrl + "/Images/" + image.Image;
+                        image.Image = string.Format("{0}/Public/WorkOrder/{1}/{2}", _settings.BSUrl, order.WorkOrder, image.Image);
                     }
                     order.Images = images.Images;
                 }

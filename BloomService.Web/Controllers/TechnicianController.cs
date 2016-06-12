@@ -50,32 +50,14 @@
             technician.AvailableDays = model.AvailableDays;
             technician.IsAvailable = model.IsAvailable;
             technician.Picture = model.Picture;
-            try
+
+            var pathToIcon = HostingEnvironment.MapPath("/Public/images/technician.png");
+            var pathToResultFolder = HostingEnvironment.MapPath("/Public/technician/");
+            var pathToResultIcon = pathToResultFolder + technician.Employee + "/" + technician.Employee + ".png";
+
+            if (imageService.CreateIcon(pathToIcon, model.Color, pathToResultIcon, Color.FromArgb(0, 13, 255)))
             {
-                if (model.Color != null)
-                {
-                    var pathToImage = HostingEnvironment.MapPath("/Images/Technicians/");
-                    Image image = Image.FromFile(pathToImage + "technician4.png");
-                    Graphics imageGraphics = Graphics.FromImage(image);
-
-                    ColorMap[] colorSwapper = new ColorMap[1];
-                    colorSwapper[0] = new ColorMap();
-                    colorSwapper[0].OldColor = Color.FromArgb(0, 13, 255);
-                    colorSwapper[0].NewColor = System.Drawing.ColorTranslator.FromHtml(model.Color);
-                    ImageAttributes imageAttr = new ImageAttributes();
-                    imageAttr.SetRemapTable(colorSwapper);
-                    imageGraphics.DrawImage(image, new Rectangle(0, 0,
-                                                  image.Width, image.Height), 0, 0, image.Width,
-                                                  image.Height, GraphicsUnit.Pixel, imageAttr);
-                    var fileName = model.Color.Remove(0,1);
-                    image.Save(pathToImage + fileName + ".png", ImageFormat.Png);
-
-                }
                 technician.Color = model.Color;
-            }
-            catch
-            {
-
             }
             var updatedTechnician = Mapper.Map<EmployeeModel, SageEmployee>(technician);
             _repository.Update(updatedTechnician);

@@ -10,8 +10,7 @@ namespace BloomService.Web
     using System;
     using System.Configuration;
     using System.Web;
-
-    using BloomService.Domain.UnitOfWork;
+    
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Managers.Concrete;
     using BloomService.Web.Services.Abstract;
@@ -33,22 +32,6 @@ namespace BloomService.Web
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
-
-        public static string GetAuthToken()
-        {
-            var username = ConfigurationManager.AppSettings["SageUsername"];
-            var password = ConfigurationManager.AppSettings["SagePassword"];
-            var sageApiHost = ConfigurationManager.AppSettings["SageApiHost"];
-            var restClient = new RestClient(sageApiHost);
-            var request = new RestRequest("oauth/token", Method.POST);
-            request.AddParameter("username", username);
-            request.AddParameter("password", password);
-            request.AddParameter("grant_type", "password");
-            var response = restClient.Execute(request);
-            var json = JObject.Parse(response.Content);
-            var result = string.Format("Bearer {0}", json.First.First);
-            return result;
-        }
 
         /// <summary>
         /// Starts the application
@@ -125,7 +108,7 @@ namespace BloomService.Web
 
             kernel.Bind<IApiMobileService>().To<ApiMobileService>();
             kernel.Bind<IImageService>().To<ImageService>();
-            kernel.Bind<IUserService>().To<UserService>();
+            kernel.Bind<IAuthorizationService>().To<AuthorizationService>();
         }
     }
 }

@@ -4,6 +4,7 @@
 
     using BloomService.Domain.Entities.Concrete;
     using Models.Request;
+
     public interface IApiMobileService
     {
         bool AddImage(ImageModel model);

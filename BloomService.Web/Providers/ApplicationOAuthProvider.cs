@@ -1,83 +1,44 @@
-﻿using BloomService.Domain.Extensions;
-using BloomService.Domain.Models.Requests;
-using BloomService.Domain.Models.Responses;
+﻿using BloomService.Web.Services.Abstract;
+using BloomService.Web.Services.Concrete;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
-using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Script.Serialization;
 
 namespace BloomService.Web.Providers
 {
-    public static class ExtendedClaimsProvider
-    {
-        public static IEnumerable<Claim> GetClaims(string name, string pass, string id, string type, string mail)
-        {
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, name));
-            claims.Add(new Claim(ClaimTypes.Surname, pass));
-            claims.Add(new Claim(ClaimTypes.Role, type));
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, id));
-            claims.Add(new Claim(ClaimTypes.Email, mail));
-            return claims;
-        }
-
-        public static Claim CreateClaim(string type, string value)
-        {
-            return new Claim(type, value, ClaimValueTypes.String);
-        }
-    }
 
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
         private readonly string _publicClientId;
+        private readonly IAuthorizationService _authorizationService;
 
-        public ApplicationOAuthProvider(string publicClientId)
+        public ApplicationOAuthProvider(string publicClientId, IAuthorizationService authorizationService)
         {
+            if(authorizationService == null)
+            {
+                throw new ArgumentNullException("authorizationService");
+            }
             if (publicClientId == null)
             {
                 throw new ArgumentNullException("publicClientId");
             }
-
+            _authorizationService = authorizationService;
             _publicClientId = publicClientId;
-        }
-
-        public AuthorizationResponse CheckUser(string name, string password)
-        {
-            var token = NinjectWebCommon.GetAuthToken();
-            var settings = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
-            var request = new RestRequest(settings.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
-            var requestBody = new AuthorizationRequest()
-            {
-                Name = name,
-                Password = password
-            };
-            request.AddBody(requestBody);
-            request.AddHeader("Authorization", token);
-            var restClient = new RestClient(settings.SageApiHost);
-            var response = restClient.Execute<AuthorizationResponse>(request);
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                return null;
-            var results = new JavaScriptSerializer().Deserialize<AuthorizationResponse>(response.Content);
-            return results;
         }
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            var user = CheckUser(context.UserName, context.Password);
+            var user = _authorizationService.CheckUser(context.UserName, context.Password);
             if (user == null)
             {
                 return;
             }
-            var identity = new ClaimsIdentity(ExtendedClaimsProvider.GetClaims(context.UserName, context.Password, user.Id, user.Type.ToString(), user.Mail), DefaultAuthenticationTypes.ExternalCookie);
+            var identity = new ClaimsIdentity(_authorizationService.SetClaims(context.UserName, context.Password, user.Id, user.Type.ToString(), user.Mail), DefaultAuthenticationTypes.ExternalCookie);
             var ctx = context.OwinContext;
             var authenticationManager = ctx.Authentication;
             var claimsPrincipal = new ClaimsPrincipal(identity);
