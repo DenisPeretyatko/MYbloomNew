@@ -14,10 +14,7 @@ namespace Sage.WebApi.App_Start
     using Infratructure.Service.Implementation;
     using Infratructure.Service;
     using Infratructure;
-    using Ninject.Parameters;
-    using System.Security.Claims;
-    using System.Threading;
-    using System.Linq;
+
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -70,8 +67,6 @@ namespace Sage.WebApi.App_Start
         {
             var setting = SageWebConfig.FromWebConfig(ConfigurationManager.AppSettings);
             kernel.Bind<SageWebConfig>().ToConstant(setting);
-
-            
 
             kernel.Bind<IServiceManagement>().To<ServiceManagement>();
             kernel.Bind<IServiceOdbc>().To<ServiceOdbc>();
