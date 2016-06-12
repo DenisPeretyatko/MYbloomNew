@@ -293,6 +293,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\SageApiController.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
