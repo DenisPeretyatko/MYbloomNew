@@ -14,17 +14,12 @@
 
         private readonly IUnitOfWork unitOfWork;
 
-        private readonly BloomServiceConfiguration _settings;
-
-        public ProblemService(IUnitOfWork unitOfWork, IProblemApiManager problemApiManager, BloomServiceConfiguration bloomConfiguration)
+        public ProblemService(IUnitOfWork unitOfWork, IProblemApiManager problemApiManager)
             : base(unitOfWork, problemApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.problemApiManager = problemApiManager;
             Repository = unitOfWork.Problems;
-            _settings = bloomConfiguration;
-
-            EndPoint = _settings.ProblemEndPoint;
         }
     }
 }

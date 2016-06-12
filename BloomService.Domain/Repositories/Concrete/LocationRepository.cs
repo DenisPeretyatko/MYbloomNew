@@ -27,9 +27,9 @@
             if(workOrders == null)
             {
                 var workOrderRepository = new MongoDbUnitOfWork().GetEntities<SageWorkOrder>();
-                workOrders = workOrderRepository.Get().Where(x => x.Status == "Open").ToList();
+                workOrders = workOrderRepository.Get().Where(x => x.Status == "0").ToList();
             }
-            if (workOrders.Any(x => x.Location == entity.Name))
+            if (workOrders.Any(x => x.Location == entity.Location))
             {
                 System.Threading.Thread.Sleep(1000);
                 var parametersSearch = entity.Address + " " + entity.City + " " + entity.ZIP + " " + entity.State;

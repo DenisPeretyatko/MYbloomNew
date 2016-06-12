@@ -37,7 +37,7 @@ namespace BloomService.Web.Controllers
         {
             var date = model.DateWorkOrder;
             if (date == DateTime.MinValue)
-            {
+        {
                 date = DateTime.Now;
             }
             //date.Date.ToString("yy-MM-dd")

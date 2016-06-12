@@ -3,13 +3,13 @@
 namespace BloomService.Web.Services.Concrete
 {
     using System.Collections.Generic;
-    using System.Configuration;
 
     using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Entities.Concrete.Auxiliary;
+    using BloomService.Domain.Extensions;
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
-    using Domain.Extensions;
 
     public class WorkOrderService : EntityService<SageWorkOrder>, IWorkOrderService
     {
@@ -17,21 +17,49 @@ namespace BloomService.Web.Services.Concrete
 
         private readonly IWorkOrderApiManager workOrderApiManager;
 
-        private readonly BloomServiceConfiguration _settings;
-
-        public WorkOrderService(IUnitOfWork unitOfWork, IWorkOrderApiManager workOrderApiManager, BloomServiceConfiguration bloomConfiguration)
+        public WorkOrderService(
+            IUnitOfWork unitOfWork, 
+            IWorkOrderApiManager workOrderApiManager)
             : base(unitOfWork, workOrderApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.workOrderApiManager = workOrderApiManager;
             Repository = unitOfWork.WorkOrders;
-            _settings = bloomConfiguration;
-            EndPoint = _settings.WorkOrderEndPoint;
         }
 
-        public IEnumerable<SageWorkOrder> UnAssign(string id) 
+        public override SageResponse<SageWorkOrder> Add(SageWorkOrder workOrder)
         {
-            return workOrderApiManager.Delete(EndPoint, id);
+            var result = workOrderApiManager.Add(workOrder);
+            if (result != null && result.IsSucceed)
+            {
+                unitOfWork.WorkOrders.Add(workOrder);
+                unitOfWork.Changes.Add(ChangeType.Create, workOrder.WorkOrder, GetEntityName());
+            }
+
+            return result;
+        }
+
+        public override SageResponse<SageWorkOrder> Edit(SageWorkOrder workOrder)
+        {
+            var result = workOrderApiManager.Add(workOrder);
+
+            if (result != null && result.IsSucceed)
+            {
+                unitOfWork.WorkOrders.Add(workOrder);
+                unitOfWork.Changes.Add(ChangeType.Create, workOrder.WorkOrder, GetEntityName());
+            }
+
+            return result;
+        }
+
+        public IEnumerable<SageWorkOrder> UnAssign(string id)
+        {
+            return workOrderApiManager.Delete(id).Entities;
+        }
+
+        public SageResponse<SageWorkOrder> AddEquipment(Dictionary<string, string> properties)
+        {
+            return workOrderApiManager.AddEquipment(properties);
         }
 
         public SageImageWorkOrder GetPictures(string id)

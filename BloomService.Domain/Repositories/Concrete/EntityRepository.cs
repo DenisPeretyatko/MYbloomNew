@@ -36,7 +36,7 @@
             if (entity.Id == null)
             {
                 entity.Id = ObjectId.GenerateNewId().ToString();
-            }
+             }
             else if (Get(entity.Id) != null)
             {
                 Collection.Remove(Query.EQ("_id", entity.Id));
@@ -46,7 +46,7 @@
         }
 
         public virtual bool Delete(TEntity entity)
-        {
+            {
             return Collection.Remove(Query.EQ("_id", entity.Id)).DocumentsAffected > 0;
         }
 
@@ -56,9 +56,9 @@
         }
 
         public virtual TEntity Get(string id)
-        {
+            {
             return Collection.FindOneByIdAs<TEntity>(id);
-        }
+            }
 
         public virtual IQueryable<TEntity> SearchFor(Expression<Func<TEntity, bool>> predicate)
         {

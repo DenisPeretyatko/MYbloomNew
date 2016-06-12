@@ -26,26 +26,9 @@ namespace BloomService.Web.Controllers
         [POST("Workorder/Create")]
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
-            var workorder = new SagePropertyDictionary
-                                {
-                                    { "ARCustomer", model.Customer }, 
-                                    { "Location", model.Location }, 
-                                    { "CallType", model.Calltype }, 
-                                    { "CallDate", model.Calldate.ToShortDateString() }, 
-                                    { "CallTime", model.Calldate.ToShortTimeString() }, 
-                                    { "Problem", model.Problem }, 
-                                    { "RateSheet", model.Ratesheet }, 
-                                    { "Employee", model.Emploee }, 
-                                    { "Equipment", model.Equipment }, 
-                                    { "EstimatedRepairHours", model.Estimatehours }, 
-                                    { "NottoExceed", model.Nottoexceed }, 
-                                    { "Comments", model.Locationcomments }, 
-                                    { "CustomerPO", model.Customerpo }, 
-                                    { "PermissionCode", model.Permissiocode }, 
-                                    { "PayMethod", model.Paymentmethods }
-                                };
+            var workOrder = AutoMapper.Mapper.Map<SageWorkOrder>(model);
 
-            var created = workOrderService.Add(workorder);
+            var created = workOrderService.Add(workOrder);
             return Json("success", JsonRequestBehavior.AllowGet);
         }
 
@@ -92,27 +75,8 @@ namespace BloomService.Web.Controllers
         [POST("Workorder/Save")]
         public ActionResult SaveWorkOrder(WorkOrderModel model)
         {
-            var workorder = new SagePropertyDictionary
-            {
-                                    { "ARCustomer", model.Customer }, 
-                                    { "Location", model.Location }, 
-                                    { "CallType", model.Calltype }, 
-                                    { "CallDate", model.Calldate.ToShortDateString() }, 
-                                    { "CallTime", model.Calldate.ToShortTimeString() }, 
-                                    { "Problem", model.Problem }, 
-                                    { "RateSheet", model.Ratesheet }, 
-                                    { "Employee", model.Emploee }, 
-                                    { "Equipment", model.Equipment }, 
-                                    { "EstimatedRepairHours", model.Estimatehours }, 
-                                    { "NottoExceed", model.Nottoexceed }, 
-                                    { "Comments", model.Locationcomments }, 
-                                    { "CustomerPO", model.Customerpo }, 
-                                    { "PermissionCode", model.Permissiocode }, 
-                                    { "PayMethod", model.Paymentmethods },
-                                    { "WorkOrder", model.WorkOrder }
-            };
-
-            var saved = workOrderService.Edit(workorder);
+            var workOrder = AutoMapper.Mapper.Map<SageWorkOrder>(model);
+            var saved = workOrderService.Edit(workOrder);
             return Json("success", JsonRequestBehavior.AllowGet);
         }
     }

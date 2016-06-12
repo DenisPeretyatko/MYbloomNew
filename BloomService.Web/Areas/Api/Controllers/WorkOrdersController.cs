@@ -1,6 +1,6 @@
 ﻿namespace BloomService.Web.Areas.Api.Controllers
 {
-    using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Http;
 
     using BloomService.Domain.Entities.Concrete;
@@ -15,25 +15,48 @@
             this.workOrderService = workOrderService;
         }
 
-        public IEnumerable<SageWorkOrder> Get()
+        public IHttpActionResult Get()
         {
             var result = workOrderService.Get();
-            return result;
+            if (result.Any())
+            {
+                return Ok(result);
         }
 
-        public SageWorkOrder Get(string id)
-        {
-            return workOrderService.Get(id);
+            return NotFound();
         }
 
-        public IEnumerable<SageWorkOrder> Post(SagePropertyDictionary properties)
+        public IHttpActionResult Get(string id)
         {
-            return workOrderService.Add(properties);
+            var result = workOrderService.Get(id);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+
+            return NotFound();
         }
 
-        public IEnumerable<SageWorkOrder> Put(SagePropertyDictionary properties)
+        public IHttpActionResult Post(SageWorkOrder workOrder)
         {
-            return workOrderService.Edit(properties);
+            var result = workOrderService.Add(workOrder);
+            if (result.IsSucceed)
+        {
+                return Ok(result.Entity);
+            }
+
+            return NotFound();
+        }
+
+        public IHttpActionResult Put(SageWorkOrder workOrder)
+        {
+            var result = workOrderService.Edit(workOrder);
+            if (result.IsSucceed)
+        {
+                return Ok();
+            }
+
+            return NotFound();
         }
     }
 }

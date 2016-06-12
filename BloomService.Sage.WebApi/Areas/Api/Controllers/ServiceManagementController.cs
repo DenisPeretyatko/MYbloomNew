@@ -4,11 +4,10 @@
 
     using AttributeRouting.Web.Mvc;
 
-    using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.Exceptions;
 
     using Sage.WebApi.Infratructure.Service;
-
+    using System.Collections.Generic;
     [Authorize]
     public class ServiceManagementController : BaseApiController
     {
@@ -22,7 +21,7 @@
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult AddAssignments(SagePropertyDictionary properties)
+        public ActionResult AddAssignments(Dictionary<string, string> properties)
         {
             try
             {
@@ -63,7 +62,7 @@
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditAssignments(SagePropertyDictionary properties)
+        public ActionResult EditAssignments(Dictionary<string, string> properties)
         {
             try
             {
@@ -74,6 +73,20 @@
                 return Json(ex.Error);
             }
         }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult AddWorkOrderItem(Dictionary<string, string> properties)
+        {
+            try
+            {
+                return Json(serviceManager.AddWorkOrderItem(properties));
+            }
+            catch (ResponseException ex)
+            {
+                return Json(ex.Error);
+            }
+        }
+
 
         public ActionResult Employees()
         {
@@ -127,7 +140,7 @@
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Workorders(SagePropertyDictionary properties)
+        public ActionResult Workorders(Dictionary<string, string> properties)
         {
             try
             {

@@ -17,6 +17,8 @@ namespace BloomService.Web.Managers.Concrete
         {
             this.restClient = restClient;
             this.token = token;
+
+            GetEndPoint = EndPoints.GetParts;
         }
     }
 }

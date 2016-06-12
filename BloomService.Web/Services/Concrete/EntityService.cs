@@ -1,11 +1,9 @@
 ﻿namespace BloomService.Web.Services.Concrete
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using BloomService.Domain.Entities.Abstract;
-    using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.Entities.Concrete.Auxiliary;
     using BloomService.Domain.Repositories.Abstract;
     using BloomService.Domain.UnitOfWork;
@@ -26,59 +24,29 @@
             Repository = unitOfWork.GetEntities<TEntity>();
         }
 
-        public string EndPoint { get; set; }
 
         protected IRepository<TEntity> Repository { get; set; }
 
-        public virtual IEnumerable<TEntity> Add(SagePropertyDictionary properties)
+        public virtual SageResponse<TEntity> Add(TEntity entity)
         {
-            var result = sageApiManager.Add(EndPoint, properties);
+            var result = sageApiManager.Add(entity);
+            return result;
+        }
 
-            unitOfWork.Changes.Add(
-                new SageChange
+        public virtual SageResponse<TEntity> Delete(string id)
+        {
+            var result = sageApiManager.Delete(id);
+            if (result.IsSucceed)
                 {
-                    Change = ChangeType.Create,
-                    EntityId = GetEntityId(properties),
-                    EntityType = GetEntityName(),
-                    Status = StatusType.NotSynchronized,
-                    ChangeTime = DateTime.UtcNow
-                });
+                unitOfWork.Changes.Add(ChangeType.Delete, id, GetEntityName());
+            }
 
             return result;
         }
 
-        public virtual IEnumerable<TEntity> Delete(string id)
-        {
-            var result = sageApiManager.Delete(EndPoint, id);
-
-            unitOfWork.Changes.Add(
-                new SageChange
+        public virtual SageResponse<TEntity> Edit(TEntity entity)
                 {
-                    Change = ChangeType.Delete,
-                    EntityId = id,
-                    EntityType = GetEntityName(),
-                    Status = StatusType.NotSynchronized,
-                    ChangeTime = DateTime.UtcNow
-                });
-
-            return result;
-        }
-
-        public virtual IEnumerable<TEntity> Edit(SagePropertyDictionary properties)
-        {
-            var result = sageApiManager.Edit(EndPoint, properties);
-
-            unitOfWork.Changes.Add(
-                new SageChange
-                    {
-                        Change = ChangeType.Update, 
-                        EntityId = GetEntityId(properties), 
-                        EntityType = GetEntityName(), 
-                        Status = StatusType.NotSynchronized, 
-                        ChangeTime = DateTime.UtcNow
-                    });
-            //Repository.UpdateEntity(result.Single());
-
+            var result = sageApiManager.Edit(entity);
             return result;
         }
 
@@ -91,14 +59,19 @@
                 return items;
             }
 
-            var entities = sageApiManager.Get(EndPoint);
+            var response = sageApiManager.Get();
 
+            if (response.IsSucceed)
+            {
+                var entities = response.Entities;
             foreach (var entity in entities)
             {
                 Repository.Add(entity);
             }
+                return entities;
+            }
 
-            return entities;
+            return new List<TEntity>();
         }
 
         public virtual IEnumerable<TEntity> GetPage(int numberPage, string searchString)
@@ -117,7 +90,7 @@
                 items.CopyTo(index, result, 0, max);
                 return result;
             }
-            var entities = sageApiManager.Get(EndPoint);
+            var entities = sageApiManager.Get().Entities;
             foreach (var entity in entities)
             {
                 Repository.Add(entity);
@@ -141,21 +114,21 @@
                 return item;
             }
 
-            var entity = sageApiManager.Get(EndPoint, id);
+            var entity = sageApiManager.Get(id);
 
-            Repository.Add(entity);
+            Repository.Add(entity.Entity);
 
-            return entity;
+            return entity.Entity;
         }
 
-        protected string GetEntityId(SagePropertyDictionary sageProperties)
+        protected string GetEntityId(Dictionary<string, string> sageProperties)
         {
             return sageProperties.SingleOrDefault(x => x.Key == GetEntityName()).Value;
         }
 
         protected string GetEntityName()
         {
-            return typeof(TEntity).Name.Replace("Sage", "");
+            return typeof(TEntity).Name.Replace("Sage", string.Empty);
         }
     }
 }

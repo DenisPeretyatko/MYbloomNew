@@ -1,6 +1,4 @@
-﻿using BloomService.Domain.UnitOfWork;
-
-namespace BloomService.Web.Controllers
+﻿namespace BloomService.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -13,6 +11,7 @@ namespace BloomService.Web.Controllers
     using AutoMapper;
 
     using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Models;
     using BloomService.Web.Services.Abstract;
 
@@ -24,14 +23,15 @@ namespace BloomService.Web.Controllers
 
         private readonly IEmployeeService employeeService;
 
-        private readonly IWorkOrderService workOrderService;
-
         private readonly IUnitOfWork unitOfWork;
+
+        private readonly IWorkOrderService workOrderService;
 
         public ScheduleController(
             IAssignmentService assignmentService,
             IWorkOrderService workOrderService,
-            IEmployeeService employeeService, IUnitOfWork unitOfWork)
+            IEmployeeService employeeService, 
+            IUnitOfWork unitOfWork)
         {
             this.assignmentService = assignmentService;
             this.workOrderService = workOrderService;
@@ -87,18 +87,8 @@ namespace BloomService.Web.Controllers
         {
             var d = model.ScheduleDate.ToUniversalTime();
             var databaseAssignment = assignmentService.GetByWorkOrderId(model.WorkOrder);
-            var assignmanet = new SagePropertyDictionary
-                                  {
-                                      { "Assignment", databaseAssignment.Assignment }, 
-                                      { "ScheduleDate", model.ScheduleDate.ToUniversalTime().ToString("yyyy-MM-dd") }, 
-                                      { "Employee", model.Employee }, 
-                                      { "WorkOrder", model.WorkOrder }, 
-                                      { "EstimatedRepairHours", model.EstimatedRepairHours }, 
-                                      { "StartTime", model.ScheduleDate.ToUniversalTime().TimeOfDay.ToString() }, 
-                                      { "Enddate", model.EndDate.ToUniversalTime().ToString("yyyy-MM-dd") }, 
-                                      { "Endtime", model.EndDate.ToUniversalTime().TimeOfDay.ToString() }
-                                  };
-            var edited = this.assignmentService.Edit(assignmanet);
+            var assignment = Mapper.Map<SageAssignment>(model);
+            var edited = assignmentService.Edit(assignment);
             if (edited != null)
             {
                 var employees = employeeService.Get().ToList();
@@ -118,17 +108,18 @@ namespace BloomService.Web.Controllers
                 unitOfWork.GetEntities<SageAssignment>().Add(databaseAssignment);
             }
 
-            return this.Json("success", JsonRequestBehavior.AllowGet);
+            return Json("success", JsonRequestBehavior.AllowGet);
         }
 
         [POST("Schedule/Assignments/Delete")]
         public ActionResult DeleteAssignment(AssignmentViewModel model)
         {
-            //TODO 
+            // TODO 
             var databaseAssignment = assignmentService.GetByWorkOrderId(model.WorkOrder);
-            //if (edited != null)
-            //{
-                databaseAssignment.Employee = "";
+
+            // if (edited != null)
+            // {
+            databaseAssignment.Employee = string.Empty;
                 databaseAssignment.WorkOrder = model.WorkOrder;
                 databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
                 databaseAssignment.StartTime = model.ScheduleDate.ToUniversalTime().TimeOfDay.ToString();
@@ -136,8 +127,8 @@ namespace BloomService.Web.Controllers
                 databaseAssignment.Endtime = model.EndDate.ToUniversalTime().TimeOfDay.ToString();
 
                 unitOfWork.GetEntities<SageAssignment>().Add(databaseAssignment);
-            //}
             
+            // }
             workOrderService.Delete(model.WorkOrder); 
             return Json("success", JsonRequestBehavior.AllowGet);
         }

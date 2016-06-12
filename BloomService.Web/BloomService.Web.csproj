@@ -336,6 +336,7 @@
     <Compile Include="Managers\Concrete\RepairApiManager.cs" />
     <Compile Include="Managers\Concrete\WorkOrderApiManager.cs" />
     <Compile Include="Infrastructure\Constants\PaymentMethod.cs" />
+    <Compile Include="Managers\EndPoints.cs" />
     <Compile Include="Models\CallTypeModel.cs" />
     <Compile Include="Models\AssignmentModel.cs" />
     <Compile Include="Models\ChartModel.cs" />
