@@ -10,11 +10,6 @@ namespace BloomService.Web.Controllers
 {
     public class AuthorizationController : BaseController
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         [AllowAnonymous]
         [HttpGet]
         [Route("Authorization/Login/{name}/{password}")]

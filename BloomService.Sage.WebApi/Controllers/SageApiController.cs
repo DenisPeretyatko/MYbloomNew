@@ -6,23 +6,30 @@
     using BloomService.Domain.Entities.Concrete.Auxiliary;
     using BloomService.Domain.Exceptions;
 
-    using Sage.WebApi.Infratructure.Service;
-    using Sage.WebApi.Utils;
+    using Infratructure.Service;
+    using Utils;
     using System;
     using System.Collections.Generic;
-    using Newtonsoft.Json;
     using System.Web.Http;
-    [System.Web.Mvc.Authorize]
-    public class ServiceManagementApiController : ApiController
+
+    [Authorize]
+    public class SageApiController : ApiController
     {
         private readonly IServiceManagement serviceManager;
 
         private readonly IServiceOdbc serviceOdbc;
 
-        public ServiceManagementApiController(IServiceManagement serviceManager, IServiceOdbc serviceOdbc)
+        public SageApiController(IServiceManagement serviceManager, IServiceOdbc serviceOdbc)
         {
             this.serviceManager = serviceManager;
             this.serviceOdbc = serviceOdbc;
+        }
+
+        //TODO: Add to API v2
+        public SageResponse<SageCustomer> Customers()
+        {
+            //return Json(serviceOdbc.Customers());
+            return null;
         }
 
         [HttpPost, Route("api/v2/sm/assignments/add")]

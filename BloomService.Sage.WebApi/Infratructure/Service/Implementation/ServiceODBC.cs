@@ -32,23 +32,23 @@
 
         public List<Dictionary<string, object>> Customers()
         {
-            return ExecuteQueryAndGetData(timberlineDataConnectionString, Queryes.SelectCustomer);
+            return ExecuteQueryAndGetData(timberlineDataConnectionString, Queries.SelectCustomer);
         }
 
         public List<Dictionary<string, object>> Trucks()
         {
-            return ExecuteQueryAndGetData(timberlineDataConnectionString, Queryes.SelectTrucks);
+            return ExecuteQueryAndGetData(timberlineDataConnectionString, Queries.SelectTrucks);
         }
 
         public void UnassignWorkOrder(string id)
         {
-            var query = Queryes.SelectAssignment.Replace("%ID%", id);
+            var query = Queries.SelectAssignment.Replace("%ID%", id);
             ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
 
         public SageWorkOrder EditWorkOrder(SageWorkOrder workOrder)
         {
-            var query = Queryes.BuildEditWorkOrderQuery(workOrder);
+            var query = Queries.BuildEditWorkOrderQuery(workOrder);
             var properties = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query).SingleOrDefault();
             if (properties != null)
             {
@@ -79,7 +79,7 @@
         }
         public List<SageWorkOrder> WorkOrders()
         {
-            var query = Queryes.SelectWorkOrders;
+            var query = Queries.SelectWorkOrders;
             var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query);
             var result = DictionaryToWorkOrderList(response);
             return result;

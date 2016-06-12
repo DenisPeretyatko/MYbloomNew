@@ -80,6 +80,8 @@ namespace BloomService.Web.Controllers
             return Json(lookups, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        [Route("")]
         public ActionResult Index()
         {
             return View();
