@@ -760,7 +760,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Scripts\jquery-2.2.2.min.map" />
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
-    <Content Include="Views\Authorization\Index.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

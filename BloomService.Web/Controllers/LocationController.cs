@@ -41,7 +41,7 @@ namespace BloomService.Web.Controllers
             return Json(workOrders, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("Location/Trucks")]
         public ActionResult GetTrucks()
         {

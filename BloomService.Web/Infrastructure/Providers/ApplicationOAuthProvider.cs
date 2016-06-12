@@ -1,6 +1,7 @@
 ﻿using BloomService.Domain.Extensions;
 using BloomService.Domain.Models.Requests;
 using BloomService.Domain.Models.Responses;
+using BloomService.Web.Managers;
 using BloomService.Web.Services.Concrete;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -54,7 +55,7 @@ namespace BloomService.Web.Providers
         {
             var token = AuthorizationService.GetAuthToken();
             var settings = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
-            var request = new RestRequest(settings.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
+            var request = new RestRequest(EndPoints.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
             var requestBody = new AuthorizationRequest()
             {
                 Name = name,

@@ -13,6 +13,7 @@ using System.Web.Script.Serialization;
 using BloomService.Domain.Repositories.Abstract;
 using BloomService.Web.Models;
 using BloomService.Domain.Entities.Concrete;
+using BloomService.Web.Managers;
 
 namespace BloomService.Web.Services.Concrete
 {
@@ -67,7 +68,7 @@ namespace BloomService.Web.Services.Concrete
         {
             var token = GetAuthToken();
             var settings = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
-            var request = new RestRequest(settings.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
+            var request = new RestRequest(EndPoints.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
             var requestBody = new AuthorizationRequest()
             {
                 Name = name,
