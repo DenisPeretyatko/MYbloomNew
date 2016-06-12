@@ -26,6 +26,7 @@
         }
 
         //TODO: Add to API v2
+        [HttpGet, Route("api/v2/ar/customers")]
         public SageResponse<SageCustomer> Customers()
         {
             //return Json(serviceOdbc.Customers());
