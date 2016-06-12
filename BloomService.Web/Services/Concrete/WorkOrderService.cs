@@ -17,14 +17,12 @@
 
         public WorkOrderService(
             IUnitOfWork unitOfWork, 
-            IWorkOrderApiManager workOrderApiManager, 
-            BloomServiceConfiguration bloomConfiguration)
+            IWorkOrderApiManager workOrderApiManager)
             : base(unitOfWork, workOrderApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.workOrderApiManager = workOrderApiManager;
             Repository = unitOfWork.WorkOrders;
-            EndPoint = bloomConfiguration.WorkOrderEndPoint;
         }
 
         public override SageResponse<SageWorkOrder> Add(SageWorkOrder workOrder)
@@ -55,6 +53,11 @@
         public IEnumerable<SageWorkOrder> UnAssign(string id)
         {
             return workOrderApiManager.Delete(id).Entities;
+        }
+
+        public SageResponse<SageWorkOrder> AddEquipment(Dictionary<string, string> properties)
+        {
+            return workOrderApiManager.AddEquipment(properties);
         }
     }
 }

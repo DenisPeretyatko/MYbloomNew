@@ -21,22 +21,25 @@ namespace BloomService.Web.Managers.Concrete
         {
             this.restClient = restClient;
             this.token = token;
+
+            CreateEndPoint = EndPoints.AddWorkOrder;
+            EditEndPoint = EndPoints.EditWorkOrder;
+            DeleteEndPoint = EndPoints.UnassignWorkOrders;
+            GetEndPoint = EndPoints.GetWorkorder;
         }
 
-        public SageResponse<SageWorkOrder> Add(SageWorkOrder workOrder)
+        public override SageResponse<SageWorkOrder> Add(SageWorkOrder workOrder)
         {
             bool isCreate;
             IRestRequest request;
             if(workOrder.WorkOrder == null)
             {
-                EndPoint = EndPoints.AddWorkOrder;
-                request = new RestRequest(EndPoint, Method.POST);
+                request = new RestRequest(CreateEndPoint, Method.POST);
                 isCreate = true;
             }
             else
             {
-                EndPoint = EndPoints.EditWorkOrder;
-                request = new RestRequest(EndPoint, Method.PUT);
+                request = new RestRequest(EditEndPoint, Method.PUT);
             }
 
             request.RequestFormat = DataFormat.Json;
@@ -52,18 +55,11 @@ namespace BloomService.Web.Managers.Concrete
             return results;
         }
 
-        public override SageResponse<SageWorkOrder> Delete(string id)
+        public SageResponse<SageWorkOrder> AddEquipment(Dictionary<string, string> properties)
         {
-            EndPoint = EndPoints.UnassignWorkOrders;
-            return base.Delete(id);
-        }
-
-        public override SageResponse<SageWorkOrder> Get()
-        {
-            EndPoint = EndPoints.GetWorkorder;
-            var request = new RestRequest(EndPoint, Method.GET);
+            var request = new RestRequest(CreateEndPoint, Method.PUT) { RequestFormat = DataFormat.Json };
+            request.AddBody(properties);
             request.AddHeader("Authorization", token.Token);
-
             var response = restClient.Execute<SageResponse<SageWorkOrder>>(request);
             var results = response.Data;
             return results;

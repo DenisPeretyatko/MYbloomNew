@@ -1,7 +1,6 @@
 ﻿namespace Sage.WebApi.Areas.Api.Controllers
 {
     using System.Linq;
-    using System.Web.Http;
 
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.Entities.Concrete.Auxiliary;
@@ -10,8 +9,10 @@
     using Sage.WebApi.Infratructure.Service;
     using Sage.WebApi.Utils;
     using System;
-
-    [Authorize]
+    using System.Collections.Generic;
+    using Newtonsoft.Json;
+    using System.Web.Http;
+    [System.Web.Mvc.Authorize]
     public class ServiceManagementApiController : ApiController
     {
         private readonly IServiceManagement serviceManager;
@@ -48,7 +49,6 @@
             {
                 var properties = SagePropertyConverter.ConvertToProperties(workOrder);
                 var resultWorkOrder = serviceManager.WorkOrders(properties).SingleOrDefault();
-                //var resultWorkOrder = serviceOdbc.CreateWorkOrder(properties);
 
                 var result = new SageResponse<SageWorkOrder> { IsSucceed = true, Entity = resultWorkOrder };
                 return result;
@@ -59,9 +59,9 @@
                 return result;
             }
         }
-
-        [HttpGet, Route("api/v2/sm/assignments/get")]
-        public SageResponse<SageAssignment> GetAssignments(string id)
+       
+        [HttpGet, Route("api/v2/sm/assignments/get/")]
+        public SageResponse<SageAssignment> GetAssignments()
         {
             try
             {
@@ -69,7 +69,7 @@
                 {
                     IsSucceed = true,
                     Entities = serviceManager.Assignments().ToList()
-                };         
+                };
                 return result;
             }
             catch (ResponseException exception)
@@ -150,8 +150,11 @@
         {
             try
             {
-                serviceOdbc.EditWorkOrder(workOrder);
-                var result = new SageResponse<SageWorkOrder> { IsSucceed = true };
+                var result = new SageResponse<SageWorkOrder>
+                {
+                    IsSucceed = true,
+                    Entity = serviceOdbc.EditWorkOrder(workOrder)
+            };
                 return result;
             }
             catch (Exception exception)
@@ -324,8 +327,23 @@
                 var result = new SageResponse<SageWorkOrder>
                 {
                     IsSucceed = true,
-                    Entities = serviceOdbc.WorkOrders().ToList()
+                    Entities = serviceManager.WorkOrders().ToList()
                 };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Message };
+                return result;
+            }
+        }
+
+        [HttpPut, Route("api/v2/sm/workorders/equipment/add")]
+        public SageResponse<SageWorkOrder> AddEquipment(Dictionary<string, string> properties)
+        {
+            try
+            {
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = serviceManager.AddWorkOrderItem(properties) };
                 return result;
             }
             catch (ResponseException exception)

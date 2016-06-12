@@ -47,5 +47,7 @@
         SageWorkOrder[] WorkOrders(string number);
 
         SageWorkOrder[] WorkOrders(Dictionary<string, string> properties);
+
+        bool AddWorkOrderItem(Dictionary<string, string> properties);
     }
 }

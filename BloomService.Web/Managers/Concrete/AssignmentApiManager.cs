@@ -18,18 +18,10 @@ namespace BloomService.Web.Managers.Concrete
         {
             this.restClient = restClient;
             this.token = token;
-        }
 
-        public override SageResponse<SageAssignment> Add(SageAssignment assignment)
-        {
-            EndPoint = EndPoints.AddAssignment;
-            return base.Add(assignment);
-        }
-
-        public override SageResponse<SageAssignment> Edit(SageAssignment assignment)
-        {
-            EndPoint = EndPoints.EditAssignment;
-            return base.Edit(assignment);
+            GetEndPoint = EndPoints.GetAssignments;
+            CreateEndPoint = EndPoints.AddAssignment;
+            EditEndPoint = EndPoints.EditAssignment;
         }
     }
 }

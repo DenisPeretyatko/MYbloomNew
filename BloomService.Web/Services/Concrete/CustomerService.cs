@@ -14,17 +14,12 @@
 
         private readonly IUnitOfWork unitOfWork;
 
-        private readonly BloomServiceConfiguration _settings;
-
-        public CustomerService(IUnitOfWork unitOfWork, ICustomerApiManager customerApiManager, BloomServiceConfiguration bloomConfiguration)
+        public CustomerService(IUnitOfWork unitOfWork, ICustomerApiManager customerApiManager)
             : base(unitOfWork, customerApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.customerApiManager = customerApiManager;
             Repository = unitOfWork.Customers;
-            _settings = bloomConfiguration;
-
-            EndPoint = _settings.CustomerEndPoint;
         }
     }
 }

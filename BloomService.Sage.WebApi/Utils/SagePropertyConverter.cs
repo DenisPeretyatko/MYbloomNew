@@ -9,11 +9,6 @@
     {
         public static Dictionary<string, string> ConvertToProperties<TEntity>(TEntity entity) where TEntity : SageEntity
         {
-            //var properties = (from x in entity.GetType().GetProperties() select x).ToDictionary(
-            //    x => x.Name, 
-            //    x =>
-            //    x.GetGetMethod().Invoke(entity, null) == null ? string.Empty : x.GetGetMethod().Invoke(entity, null).ToString());
-
             var propertyDictionary = new Dictionary<string, string>();
 
             var properties = entity.GetType().GetProperties();

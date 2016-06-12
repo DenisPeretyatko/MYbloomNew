@@ -16,16 +16,12 @@
 
         private readonly IUnitOfWork unitOfWork;
 
-        private readonly BloomServiceConfiguration _settings;
-
-        public LocationService(IUnitOfWork unitOfWork, ILocationApiManager locationApiManager, BloomServiceConfiguration bloomConfiguration)
+        public LocationService(IUnitOfWork unitOfWork, ILocationApiManager locationApiManager)
             : base(unitOfWork, locationApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.locationApiManager = locationApiManager;
             Repository = unitOfWork.Locations;
-            _settings = bloomConfiguration;
-            EndPoint = _settings.LocationEndPoint;
         }
     }
 }

@@ -11,7 +11,7 @@
     using BloomService.Web.Services.Abstract;
 
     public class EntityService<TEntity> : IEntityService<TEntity>
-        where TEntity : class, Domain.Entities.Abstract.IEntity
+        where TEntity : class, IEntity
     {
         private readonly IEntityApiManager<TEntity> sageApiManager;
 
@@ -24,7 +24,6 @@
             Repository = unitOfWork.GetEntities<TEntity>();
         }
 
-        public string EndPoint { get; set; }
 
         protected IRepository<TEntity> Repository { get; set; }
 
@@ -38,7 +37,7 @@
         {
             var result = sageApiManager.Delete(id);
             if (result.IsSucceed)
-                {
+            {
                 unitOfWork.Changes.Add(ChangeType.Delete, id, GetEntityName());
             }
 
@@ -46,7 +45,7 @@
         }
 
         public virtual SageResponse<TEntity> Edit(TEntity entity)
-                    {
+        {
             var result = sageApiManager.Edit(entity);
             return result;
         }
@@ -60,14 +59,19 @@
                 return items;
             }
 
-            var entities = sageApiManager.Get();
-
-            foreach (var entity in entities.Entities)
+            var response = sageApiManager.Get();
+                        
+            if (response.IsSucceed)
             {
-                Repository.Add(entity);
+                var entities = response.Entities;
+                foreach (var entity in entities)
+                {
+                    Repository.Add(entity);
+                }
+                return entities;
             }
-
-            return entities.Entities;
+            
+            return new List<TEntity>();
         }
 
         public virtual IEnumerable<TEntity> GetPage(int numberPage)
@@ -86,7 +90,7 @@
                 items.CopyTo(index, result, 0, max);
                 return result;
             }
-            var entities = sageApiManager.Get(EndPoint);
+            var entities = sageApiManager.Get().Entities;
             foreach (var entity in entities)
             {
                 Repository.Add(entity);

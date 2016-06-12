@@ -21,8 +21,6 @@
             this.unitOfWork = unitOfWork;
             this.equipmentApiManager = equipmentApiManager;
             Repository = unitOfWork.Equipment;
-
-            EndPoint = bloomConfiguration.EquipmentEndPoint;
         }
     }
 }

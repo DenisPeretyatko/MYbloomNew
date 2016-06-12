@@ -11,6 +11,7 @@
     using Utils;
     using AutoMapper;
     using Models.DbModels;
+    using System;
     public class ServiceOdbc : IServiceOdbc
     {
         private readonly string timberlineDataConnectionString;
@@ -24,8 +25,8 @@
             this.claimsAgent = claimsAgent;
             timberlineDataConnectionString = "Driver={Timberline Data};" + string.Format(
                 "UID={0};pwd={1};DBQ={2}",
-                claimsAgent.Name,
-                claimsAgent.Password, configConstants.TimberlineDataConnectionString);
+                /*claimsAgent.Name*/ "kris",
+                /*claimsAgent.Password*/ "sageDEV!!", configConstants.TimberlineDataConnectionString);
             timberlineServiceManagementConnectionString = configConstants.TimberlineServiceManagementConnectionString;
         }
 
@@ -36,10 +37,7 @@
 
         public List<Dictionary<string, object>> Trucks()
         {
-            //return ExecuteQueryAndGetData(timberlineDataConnectionString, Queryes.SelectTrucks);
-            var query = Queryes.SelectWorkOrders;
-            var result = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query);
-            return result;
+            return ExecuteQueryAndGetData(timberlineDataConnectionString, Queryes.SelectTrucks);
         }
 
         public void UnassignWorkOrder(string id)
@@ -48,21 +46,37 @@
             ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
 
-        public void EditWorkOrder(SageWorkOrder workOrder)
+        public SageWorkOrder EditWorkOrder(SageWorkOrder workOrder)
         {
-            var properties = SagePropertyConverter.ConvertToProperties(workOrder);
-            var query = Queryes.BuildEditWorkOrderQuery(properties);
-            ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query);
+            var query = Queryes.BuildEditWorkOrderQuery(workOrder);
+            var properties = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query).SingleOrDefault();
+            if (properties != null)
+            {
+                var result = new SageWorkOrder()
+                {
+                    ARCustomer = properties.ContainsKey("ARCUST") ? properties["ARCUST"].ToString() : string.Empty,
+                    Location = properties.ContainsKey("SERVSITENBR") ? properties["SERVSITENBR"].ToString() : string.Empty,
+                    CallType = properties.ContainsKey("CALLTYPECODE") ? properties["CALLTYPECODE"].ToString() : string.Empty,
+                    CallDate = properties.ContainsKey("CALLDATE") ? Convert.ToDateTime(properties["CALLDATE"]) : DateTime.MinValue,
+                    CallTime = properties.ContainsKey("CALLTIME") ? TimeSpan.Parse(properties["CALLTIME"].ToString()) : TimeSpan.MinValue,
+                    Problem = properties.ContainsKey("PROBLEMCODE") ? properties["PROBLEMCODE"].ToString() : string.Empty,
+                    RateSheet = properties.ContainsKey("RATESHEETNBR") ? properties["RATESHEETNBR"].ToString() : string.Empty,
+                    Employee = properties.ContainsKey("TECHNICIAN") ? properties["TECHNICIAN"].ToString() : string.Empty,
+                    EstimatedRepairHours = properties.ContainsKey("ESTREPAIRHRS") ? Convert.ToDecimal(properties["ESTREPAIRHRS"]) : Decimal.MinusOne,
+                    NottoExceed = properties.ContainsKey("NOTTOEXCEED") ? properties["NOTTOEXCEED"].ToString() : string.Empty,
+                    Comments = properties.ContainsKey("COMMENTS") ? properties["COMMENTS"].ToString() : string.Empty,
+                    CustomerPO = properties.ContainsKey("CUSTOMERPO") ? properties["CUSTOMERPO"].ToString() : string.Empty,
+                    PermissionCode = properties.ContainsKey("PERMISSIONCODE") ? properties["PERMISSIONCODE"].ToString() : string.Empty,
+                    PayMethod = properties.ContainsKey("PAYMETHOD") ? properties["PAYMETHOD"].ToString() : string.Empty,
+
+                };
+
+                return result;
+            }
+
+            return null;
+
         }
-
-        public void CreateWorkOrder(SageWorkOrder workOrder)
-        {
-            var properties = SagePropertyConverter.ConvertToProperties(workOrder);
-            var query = Queryes.BuildCreateWorkOrderQuery(properties);
-            ExecuteQuery(timberlineServiceManagementConnectionString, query);
-        }
-
-
         public List<SageWorkOrder> WorkOrders()
         {
             var query = Queryes.SelectWorkOrders;
@@ -74,7 +88,7 @@
         private List<SageWorkOrder> DictionaryToWorkOrderList(List<Dictionary<string, object>> response)
         {
             var result = new List<SageWorkOrder>();
-            foreach(var item in response)
+            foreach (var item in response)
             {
                 var workOrderDbModel = item.ToObject<WorkOrderDbModel>();
                 var workOrder = Mapper.Map<SageWorkOrder>(workOrderDbModel);

@@ -103,6 +103,19 @@
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
         }
 
+        public bool AddWorkOrderItem(Dictionary<string, string> properties)
+        {
+            var propertiesStr = string.Empty;
+            foreach (var property in properties)
+            {
+                propertiesStr += string.Format(Messages.Property, property.Key, property.Value);
+            }
+
+            var messages = string.Format(Messages.AddWorkOrderItem, propertiesStr);
+            var result = SendMessage(messages);
+            return true;
+        }
+
         public SageEmployee[] Employees()
         {
             var result = SendMessage(Messages.Employees);

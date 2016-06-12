@@ -14,15 +14,12 @@
 
         public PartService(
             IUnitOfWork unitOfWork, 
-            IPartApiManager partApiManager, 
-            BloomServiceConfiguration bloomConfiguration)
+            IPartApiManager partApiManager)
             : base(unitOfWork, partApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.partApiManager = partApiManager;
             Repository = unitOfWork.Parts;
-
-            EndPoint = bloomConfiguration.PartEndPoint;
         }
     }
 }

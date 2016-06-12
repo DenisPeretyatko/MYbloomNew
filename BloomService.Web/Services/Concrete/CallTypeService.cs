@@ -14,15 +14,12 @@
 
         public CallTypeService(
             IUnitOfWork unitOfWork, 
-            ICallTypeApiManager callTypeApiManager, 
-            BloomServiceConfiguration bloomConfiguration)
+            ICallTypeApiManager callTypeApiManager)
             : base(unitOfWork, callTypeApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.callTypeApiManager = callTypeApiManager;
             Repository = unitOfWork.CallTypes;
-
-            EndPoint = bloomConfiguration.CallTypeEndPoint;
         }
     }
 }

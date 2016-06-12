@@ -16,15 +16,12 @@
 
         public AssignmentService(
             IUnitOfWork unitOfWork, 
-            IAssignmentApiManager assignmentApiManager, 
-            BloomServiceConfiguration bloomCobfiguration)
+            IAssignmentApiManager assignmentApiManager)
             : base(unitOfWork, assignmentApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.assignmentApiManager = assignmentApiManager;
             Repository = unitOfWork.Assignments;
-
-            EndPoint = bloomCobfiguration.AssignmentEndPoint;
         }
 
         public virtual SageAssignment GetByWorkOrderId(string id)

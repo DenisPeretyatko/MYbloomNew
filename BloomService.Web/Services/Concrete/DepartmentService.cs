@@ -14,17 +14,12 @@
 
         private readonly IUnitOfWork unitOfWork;
 
-        private readonly BloomServiceConfiguration _settings;
-
-        public DepartmentService(IUnitOfWork unitOfWork, IDepartmentApiManager departmentApiManager, BloomServiceConfiguration bloomConfiguration)
+        public DepartmentService(IUnitOfWork unitOfWork, IDepartmentApiManager departmentApiManager)
             : base(unitOfWork, departmentApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.departmentApiManager = departmentApiManager;
             Repository = unitOfWork.Departments;
-            _settings = bloomConfiguration;
-
-            EndPoint = _settings.DepartmentEndPoint;
         }
     }
 }

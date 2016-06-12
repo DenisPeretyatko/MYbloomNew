@@ -132,46 +132,5 @@
             workOrderService.Delete(model.WorkOrder); 
             return Json("success", JsonRequestBehavior.AllowGet);
         }
-
-        [GET("Schedule")]
-        public ActionResult GetSchedules()
-        {
-            var model = new ScheduleViewModel();
-            var sageAssignments = assignmentService.Get().ToList();
-            var assignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(sageAssignments);
-            var employees = employeeService.Get().ToList();
-            foreach (var item in assignments)
-            {
-                var employee = employees.FirstOrDefault(e => e.Name == item.Employee);
-                item.EmployeeId = employee != null ? employee.Employee : null;
-                var startDate = DateTime.ParseExact(
-                    item.ScheduleDate + " " + item.StartTime, 
-                    "yyyy-MM-dd HH:mm:ss", 
-                    CultureInfo.InvariantCulture);
-                item.Start = startDate.ToString();
-                item.End = startDate.AddHours(Convert.ToDouble(item.EstimatedRepairHours)).ToString();
-            }
-
-            var workorders = workOrderService.Get().ToList();
-            foreach (var item in assignments)
-            {
-                var workorder = workorders.FirstOrDefault(w => w.WorkOrder == item.WorkOrder);
-                if (workorder != null)
-                {
-                    item.Customer = workorder.ARCustomer;
-                    item.Location = workorder.Location;
-                }
-            }
-
-            var unassignedWorkorders =
-                workorders.Where(
-                    x =>
-                    x.Status == "Open" && assignments.Any(a => a.WorkOrder == x.WorkOrder && a.Employee == string.Empty))
-                    .ToList();
-            model.Assigments = assignments;
-
-            model.UnassignedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(unassignedWorkorders);
-            return Json(model, JsonRequestBehavior.AllowGet);
-        }
     }
 }

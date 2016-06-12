@@ -1,5 +1,6 @@
 ﻿namespace BloomService.Web.Managers.Concrete
 {
+    using System;
     using BloomService.Domain.Entities.Abstract;
     using BloomService.Domain.Entities.Concrete.Auxiliary;
     using BloomService.Web.Managers.Abstract;
@@ -17,17 +18,20 @@
         public EntityApiManager(IRestClient restClient, IToken token)
         {
             this.restClient = restClient;
-
-            //this.restClient.AddHandler("application/json", new DynamicJsonDeserializer());
-            restClient.AddHandler("text/plain", new JsonDeserializer());
             this.token = token;
         }
 
-        protected string EndPoint { get; set; }
+        public string DeleteEndPoint { get; set; }
+
+        public string EditEndPoint { get; set; }
+
+        public string GetEndPoint { get; set; }
+
+        public string CreateEndPoint { get; set; }
 
         public virtual SageResponse<TEntity> Add(TEntity entity)
         {
-            var request = new RestRequest(EndPoint, Method.POST) { RequestFormat = DataFormat.Json };
+            var request = new RestRequest(CreateEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(entity);
             request.AddHeader("Authorization", token.Token);
             var response = restClient.Execute<SageResponse<TEntity>>(request);
@@ -37,7 +41,7 @@
 
         public virtual SageResponse<TEntity> Delete(string id)
         {
-            var request = new RestRequest(EndPoint, Method.DELETE) { RequestFormat = DataFormat.Json };
+            var request = new RestRequest(DeleteEndPoint, Method.DELETE) { RequestFormat = DataFormat.Json };
             request.AddParameter("id", id);
             request.AddHeader("Authorization", token.Token);
             var response = restClient.Execute<SageResponse<TEntity>>(request);
@@ -47,7 +51,7 @@
 
         public virtual SageResponse<TEntity> Edit(TEntity entity)
         {
-            var request = new RestRequest(EndPoint, Method.POST) { RequestFormat = DataFormat.Json };
+            var request = new RestRequest(EditEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(entity);
             request.AddHeader("Authorization", token.Token);
             var response = restClient.Execute<SageResponse<TEntity>>(request);
@@ -57,7 +61,7 @@
 
         public virtual SageResponse<TEntity> Get()
         {
-            var request = new RestRequest(EndPoint, Method.GET) { RequestFormat = DataFormat.Json };
+            var request = new RestRequest(GetEndPoint, Method.GET) { RequestFormat = DataFormat.Json };
             request.AddHeader("Authorization", token.Token);
             var response = restClient.Execute<SageResponse<TEntity>>(request);
             var results = response.Data;
@@ -66,7 +70,7 @@
 
         public virtual SageResponse<TEntity> Get(string id)
         {
-            var request = new RestRequest(EndPoint, Method.GET) { RequestFormat = DataFormat.Json };
+            var request = new RestRequest(GetEndPoint, Method.GET) { RequestFormat = DataFormat.Json };
             request.AddUrlSegment("id", id);
             request.AddHeader("Authorization", token.Token);
             var response = restClient.Execute<SageResponse<TEntity>>(request);

@@ -4,7 +4,6 @@
 
     using AttributeRouting.Web.Mvc;
 
-    using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.Exceptions;
 
     using Sage.WebApi.Infratructure.Service;
@@ -74,6 +73,20 @@
                 return Json(ex.Error);
             }
         }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult AddWorkOrderItem(Dictionary<string, string> properties)
+        {
+            try
+            {
+                return Json(serviceManager.AddWorkOrderItem(properties));
+            }
+            catch (ResponseException ex)
+            {
+                return Json(ex.Error);
+            }
+        }
+
 
         public ActionResult Employees()
         {

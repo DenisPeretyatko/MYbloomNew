@@ -42,6 +42,7 @@ namespace Sage.WebApi.Mapping
                 .ForMember(dest => dest.JobSaleProduct, opts => opts.MapFrom(src => src.JOBSALEPRODUCT))
                 .ForMember(dest => dest.Lead, opts => opts.MapFrom(src => src.LEADNBR))
                 .ForMember(dest => dest.LeadSource, opts => opts.MapFrom(src => src.LEADSRCNBR))
+                .ForMember(dest => dest.Location, opts => opts.MapFrom(src => src.SERVSITENBR))
                 .ForMember(dest => dest.Misc, opts => opts.MapFrom(src => src.MISC))
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.NAME))
                 .ForMember(dest => dest.NottoExceed, opts => opts.MapFrom(src => src.NOTTOEXCEED))
