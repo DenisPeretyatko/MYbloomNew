@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using BloomService.Web.Models;
 using BloomService.Web.Services.Abstract;
 
@@ -8,6 +7,7 @@ namespace BloomService.Web.Controllers
     using System.Web.Mvc;
     using Domain.Repositories.Abstract;
     using Domain.Entities.Concrete;
+    using Infrastructure.Extensions;
 
     public class LocationController : BaseController
     {
@@ -25,15 +25,9 @@ namespace BloomService.Web.Controllers
         [Route("Location")]
         public ActionResult GetLocations(MapViewModel model)
         {
-            var date = model.DateWorkOrder;
-            if (date == DateTime.MinValue)
-            {
-                date = DateTime.Now;
-            }
-            //date.Date.ToString("yy-MM-dd")
-            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.Employee != "");
-                    
-            
+            var date = model.DateWorkOrder.NowIfMin();
+
+            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.Employee != "");                    
             var locations = _repository.GetAll<SageLocation>();
             foreach (var item in workOrders)
             {

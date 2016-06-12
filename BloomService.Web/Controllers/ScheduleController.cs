@@ -11,15 +11,19 @@
     using Domain.Entities.Concrete;
     using Models;
     using Domain.Repositories.Abstract;
+    using Infrastructure.Services.Abstract;
+    using Infrastructure.Extensions;
 
     public class ScheduleController : BaseController
     {
 
         private readonly IRepository _repository;
+        private readonly ISageApiProxy _sageApiProxy;
 
-        public ScheduleController(IRepository repository)
+        public ScheduleController(IRepository repository, ISageApiProxy sageApiProxy)
         {
             _repository = repository;
+            _sageApiProxy = sageApiProxy;
         }
 
         [HttpGet]
@@ -55,15 +59,11 @@
                 }
             }
             var unassignedAs = assignments.Where(x => x.Employee == "");
-            var unassignedWorkorders =
-                workorders.Where(
-                    x =>
-                        x.Status == "Open"
-                        && unassignedAs.Any(a => a.WorkOrder == x.WorkOrder)).ToList();
+            var unassignedWorkorders = workorders.Where(x => x.Status == "Open" && unassignedAs.Any(a => a.WorkOrder == x.WorkOrder)).ToList();
             model.Assigments = assignments;
 
             model.UnassignedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(unassignedWorkorders);
-            return Json(model, JsonRequestBehavior.AllowGet);
+            return Success();
         }
 
         [HttpPost]
@@ -72,23 +72,7 @@
         {
             var d = model.ScheduleDate.ToUniversalTime();
             var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
-            var assignmanet = new SagePropertyDictionary
-                                  {
-                                      { "Assignment", databaseAssignment.Assignment }, 
-                                      { "ScheduleDate", model.ScheduleDate.ToUniversalTime().ToString("yyyy-MM-dd") }, 
-                                      { "Employee", model.Employee }, 
-                                      { "WorkOrder", model.WorkOrder }, 
-                                      { "EstimatedRepairHours", model.EstimatedRepairHours }, 
-                                      { "StartTime", model.ScheduleDate.ToUniversalTime().TimeOfDay.ToString() }, 
-                                      { "Enddate", model.EndDate.ToUniversalTime().ToString("yyyy-MM-dd") }, 
-                                      { "Endtime", model.EndDate.ToUniversalTime().TimeOfDay.ToString() }
-                                  };
-            //TODO add sage api service 
-            //var edited = this.assignmentService.Edit(assignmanet);
-            var edited = string.Empty;
-            var databaseAssignment = assignmentService.GetByWorkOrderId(model.WorkOrder);
-            var assignment = Mapper.Map<SageAssignment>(model);
-            var edited = assignmentService.Edit(assignment);
+            var edited = _sageApiProxy.EditAssignment(databaseAssignment);
             if (edited != null)
             {
                 var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
@@ -97,17 +81,17 @@
                     var empl = employee.Name;
                     databaseAssignment.Employee = empl;
                 }
-                databaseAssignment.ScheduleDate = model.ScheduleDate.ToUniversalTime().ToString("yyyy-MM-dd");
+                databaseAssignment.ScheduleDate = model.ScheduleDate.ToSageDate();
                 databaseAssignment.WorkOrder = model.WorkOrder;
                 databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
-                databaseAssignment.StartTime = model.ScheduleDate.ToUniversalTime().TimeOfDay.ToString();
-                databaseAssignment.Enddate = model.EndDate.ToUniversalTime().ToString("yyyy-MM-dd");
-                databaseAssignment.Endtime = model.EndDate.ToUniversalTime().TimeOfDay.ToString();
+                databaseAssignment.StartTime = model.ScheduleDate.ToSageTime();
+                databaseAssignment.Enddate = model.EndDate.ToSageDate();
+                databaseAssignment.Endtime = model.EndDate.ToSageTime();
 
                 _repository.Add(databaseAssignment);
             }
 
-            return Json("success", JsonRequestBehavior.AllowGet);
+            return Success();
         }
 
         [HttpPost]
@@ -116,21 +100,22 @@
         {
             //TODO 
             var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.Id).Single();
+
             //if (edited != null)
             //{
-                databaseAssignment.Employee = "";
-                databaseAssignment.WorkOrder = model.WorkOrder;
-                databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
-                databaseAssignment.StartTime = model.ScheduleDate.ToUniversalTime().TimeOfDay.ToString();
-                databaseAssignment.Enddate = model.EndDate.ToUniversalTime().ToString("yyyy-MM-dd");
-                databaseAssignment.Endtime = model.EndDate.ToUniversalTime().TimeOfDay.ToString();
+            //    databaseAssignment.Employee = "";
+            //    databaseAssignment.WorkOrder = model.WorkOrder;
+            //    databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
+            //    databaseAssignment.StartTime = model.ScheduleDate.ToSageTime();
+            //    databaseAssignment.Enddate = model.EndDate.ToSageDate();
+            //    databaseAssignment.Endtime = model.EndDate.ToSageTime();
 
-                _repository.Add(databaseAssignment);
+            //    _repository.Add(databaseAssignment);
             //}
             
             var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).Single();
-            _repository.Delete<SageWorkOrder>(workOrder);
-            return Json("success", JsonRequestBehavior.AllowGet);
+            _repository.Delete(workOrder);
+            return Success();
         }
     }
 }

@@ -21,7 +21,7 @@
         public static string GetRepairs = endPointBase + "repairs/get";
         public static string UnassignWorkOrders = endPointBase + "workorders/unassign";
         public static string GetWorkorder = endPointBase + "workorders/get";
-        public static string GetCustomer = "api/v1/ar/customers/get";
+        public static string GetCustomer = "api/v2/ar/customers";
         public static string AddEquipmentToWorkOrder = "api/v2/sm/workorders/equipment/add";
     }
 }

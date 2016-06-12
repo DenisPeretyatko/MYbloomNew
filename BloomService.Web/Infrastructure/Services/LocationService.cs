@@ -1,13 +1,10 @@
 ﻿namespace BloomService.Web.Services.Concrete
 {
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Net;
 
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Web.Managers.Abstract;
-    using BloomService.Web.Services.Abstract;
-    using Domain.Extensions;
+    using Domain.Entities.Concrete;
+    using Abstract;
     using Domain.Repositories.Abstract;
     using MongoDB.Bson;
     using System.Linq;

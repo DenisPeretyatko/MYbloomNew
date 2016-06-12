@@ -4,7 +4,6 @@
 
     public class WorkOrderModel
     {
-        public string WorkOrder { get; set; }
         public DateTime Calldate { get; set; }
 
         public string Calltype { get; set; }

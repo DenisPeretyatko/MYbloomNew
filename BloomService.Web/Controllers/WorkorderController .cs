@@ -8,15 +8,18 @@ namespace BloomService.Web.Controllers
     using System.Linq;
     using Domain.Repositories.Abstract;
     using System;
+    using Infrastructure.Services.Abstract;
 
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
+        private readonly ISageApiProxy _sageApiProxy;
         private const int _itemsOnPage = 12;
 
-        public WorkorderController(IRepository repository)
+        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy)
         {
             _repository = repository;
+            _sageApiProxy = sageApiProxy;
         }
 
         [HttpPost]
@@ -29,7 +32,7 @@ namespace BloomService.Web.Controllers
                 Location = model.Location,
                 CallType = model.Calltype,
                 CallDate = model.Calldate.Date,
-                CallTime = model.Calldate,
+                CallTime = model.Calldate.TimeOfDay,
                 Problem = model.Problem,
                 RateSheet = model.Ratesheet,
                 Employee = model.Emploee,
@@ -42,8 +45,12 @@ namespace BloomService.Web.Controllers
                 PayMethod = model.Paymentmethods
             };
 
-            _repository.Add(workorder);
-            return Json("success", JsonRequestBehavior.AllowGet);
+            var result = _sageApiProxy.AddWorkOrder(workorder);
+            if (!result.IsSucceed)
+                return Error("Was not able to save workorder to sage");
+
+             _repository.Add(workorder);
+            return Success();
         }
 
         [HttpGet]
@@ -114,7 +121,7 @@ namespace BloomService.Web.Controllers
 
             var workorder = _repository.Get<SageWorkOrder>(model.Id);
             _repository.Update(workorder);
-            return Json("success", JsonRequestBehavior.AllowGet);
+            return Success();
         }
     }
 }

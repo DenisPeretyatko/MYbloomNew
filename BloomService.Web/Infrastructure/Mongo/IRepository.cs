@@ -14,7 +14,7 @@
 
         TEntity Get<TEntity>(string id) where TEntity : IEntity;
 
-        IQueryable<TEntity> SearchFor<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : IEntity;
+        IQueryable<TEntity> SearchFor<TEntity>(Expression<Func<TEntity, bool>> predicate = null) where TEntity : IEntity;
 
         bool Update<TEntity>(TEntity item) where TEntity : IEntity;
 

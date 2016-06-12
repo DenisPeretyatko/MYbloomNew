@@ -1,21 +1,10 @@
-﻿using BloomService.Web.Utils;
-using Ninject;
-using RestSharp;
-
-namespace BloomService.Web.BackgroundJobs
+﻿namespace BloomService.Web.BackgroundJobs
 {
     public class BackgroundJobManager
     {
-        //[Inject]
-        private IRestClient _restClient { get; set; }
-
-        //[Inject]
-        private IToken _token { get; set; }
-
-        public BackgroundJobManager(IRestClient restClient, IToken token)
+        public BackgroundJobManager()
         {
-            _restClient = restClient;
-            _token = token;
+            
         }
 
         //public void DbSync()
@@ -34,10 +23,5 @@ namespace BloomService.Web.BackgroundJobs
         //        var results = response.Data;
         //    }
         //}
-
-        //private void SynchronizeStatement(SageChange change)
-        //{
-        //}
-
     }
 }

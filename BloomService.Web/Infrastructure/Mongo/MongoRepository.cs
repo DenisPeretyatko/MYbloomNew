@@ -64,9 +64,9 @@
             return GetCollection<TEntity>().FindOneByIdAs<TEntity>(id);
         }
 
-        public virtual IQueryable<TEntity> SearchFor<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : IEntity
+        public virtual IQueryable<TEntity> SearchFor<TEntity>(Expression<Func<TEntity, bool>> predicate = null) where TEntity : IEntity
         {
-            return GetCollection<TEntity>().AsQueryable().Where(predicate);
+            return predicate == null ? GetAll<TEntity>() : GetCollection<TEntity>().AsQueryable().Where(predicate);
         }
 
         public virtual bool Update<TEntity>(TEntity item) where TEntity : IEntity

@@ -265,7 +265,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\AttributeRoutingConfig.cs" />
     <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -273,6 +272,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Infrastructure\Extensions\DateTimeExtensions.cs" />
     <Compile Include="Infrastructure\Jobs\BackgroundJobManager.cs" />
     <Compile Include="Infrastructure\Jobs\IOSNotifications.cs" />
     <Compile Include="Controllers\ApiMobileController.cs" />
@@ -289,34 +289,15 @@
     <Compile Include="Infrastructure\BloomServiceConfiguration.cs" />
     <Compile Include="Infrastructure\Constants\EstimateRepairHours.cs" />
     <Compile Include="Infrastructure\Constants\RateSheets.cs" />
+    <Compile Include="Infrastructure\Queries\AssignmentQueries.cs" />
+    <Compile Include="Infrastructure\Queries\WorkorderQueries.cs" />
+    <Compile Include="Infrastructure\Services\AuthorizationService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IAuthorizationService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\ISageApiProxy.cs" />
     <Compile Include="Infrastructure\Services\SageApiProxy.cs" />
     <Compile Include="Infrastructure\Utils\JsonHelper.cs" />
     <Compile Include="Infrastructure\Mongo\IRepository.cs" />
     <Compile Include="Infrastructure\Mongo\MongoRepository.cs" />
-    <Compile Include="Managers\Abstract\ICustomerApiManager.cs" />
-    <Compile Include="Managers\Abstract\IAssignmentApiManager.cs" />
-    <Compile Include="Managers\Abstract\IEntityApiManager.cs" />
-    <Compile Include="Managers\Abstract\ICallTypeApiManager.cs" />
-    <Compile Include="Managers\Abstract\IDepartmentApiManager.cs" />
-    <Compile Include="Managers\Abstract\IEmployeeApiManager.cs" />
-    <Compile Include="Managers\Abstract\IEquipmentApiManager.cs" />
-    <Compile Include="Managers\Abstract\ILocationApiManager.cs" />
-    <Compile Include="Managers\Abstract\IPartApiManager.cs" />
-    <Compile Include="Managers\Abstract\IProblemApiManager.cs" />
-    <Compile Include="Managers\Abstract\IRepairApiManager.cs" />
-    <Compile Include="Managers\Abstract\IWorkOrderApiManager.cs" />
-    <Compile Include="Managers\Concrete\AssignmentApiManager.cs" />
-    <Compile Include="Managers\Concrete\CallTypeApiManager.cs" />
-    <Compile Include="Managers\Concrete\CustomerApiManager.cs" />
-    <Compile Include="Managers\Concrete\DepartmentApiManager.cs" />
-    <Compile Include="Managers\Concrete\EmployeeApiManager.cs" />
-    <Compile Include="Managers\Concrete\EquipmentApiManager.cs" />
-    <Compile Include="Managers\Concrete\LocationApiManager.cs" />
-    <Compile Include="Managers\Concrete\PartApiManager.cs" />
-    <Compile Include="Managers\Concrete\ProblemApiManager.cs" />
-    <Compile Include="Managers\Concrete\RepairApiManager.cs" />
-    <Compile Include="Managers\Concrete\WorkOrderApiManager.cs" />
     <Compile Include="Infrastructure\Constants\PaymentMethod.cs" />
     <Compile Include="Infrastructure\Constants\EndPoints.cs" />
     <Compile Include="Models\CallTypeModel.cs" />
@@ -337,10 +318,10 @@
     <Compile Include="Infrastructure\Notifications\NotificationAlert.cs" />
     <Compile Include="Infrastructure\Notifications\NotificationPayload.cs" />
     <Compile Include="Infrastructure\Notifications\PushNotification.cs" />
-    <Compile Include="Providers\ApplicationOAuthProvider.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Infrastructure\Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\ILocationService.cs" />
     <Compile Include="Infrastructure\Services\LocationService.cs" />
-    <Compile Include="Managers\Concrete\EntityApiManager.cs" />
     <Compile Include="Models\RepairModel.cs" />
     <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\TechnicianModel.cs" />
@@ -361,9 +342,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Infrastructure\Utils\DynamicJsonDeserializer.cs" />
-    <Compile Include="Infrastructure\Utils\SageAuthorisationToken.cs" />
-    <Compile Include="Infrastructure\Utils\IToken.cs" />
-    <Compile Include="Infrastructure\Utils\SageAuthUtility.cs" />
     <Compile Include="Infrastructure\Utils\JsonNetResult.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -784,10 +762,7 @@
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
     <Content Include="Views\Authorization\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Infrastructure\Extensions\" />
-    <Folder Include="Infrastructure\Queries\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
