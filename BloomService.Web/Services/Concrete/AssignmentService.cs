@@ -1,16 +1,12 @@
-﻿using System.Linq;
-
-namespace BloomService.Web.Services.Concrete
+﻿namespace BloomService.Web.Services.Concrete
 {
-    using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
 
     using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Extensions;
     using BloomService.Domain.UnitOfWork;
     using BloomService.Web.Managers.Abstract;
     using BloomService.Web.Services.Abstract;
-    using Domain.Extensions;
 
     public class AssignmentService : EntityService<SageAssignment>, IAssignmentService
     {
@@ -18,17 +14,14 @@ namespace BloomService.Web.Services.Concrete
 
         private readonly IUnitOfWork unitOfWork;
 
-        private readonly BloomServiceConfiguration _settings;
-
-        public AssignmentService(IUnitOfWork unitOfWork, IAssignmentApiManager assignmentApiManager, BloomServiceConfiguration bloomCobfiguration)
+        public AssignmentService(
+            IUnitOfWork unitOfWork, 
+            IAssignmentApiManager assignmentApiManager)
             : base(unitOfWork, assignmentApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.assignmentApiManager = assignmentApiManager;
             Repository = unitOfWork.Assignments;
-            _settings = bloomCobfiguration;
-
-            EndPoint = _settings.AssignmentEndPoint;
         }
 
         public virtual SageAssignment GetByWorkOrderId(string id)
@@ -40,7 +33,7 @@ namespace BloomService.Web.Services.Concrete
                 return item;
             }
 
-            var entity = assignmentApiManager.Get(EndPoint).SingleOrDefault(a => a.WorkOrder == id);
+            var entity = assignmentApiManager.Get().Entities.SingleOrDefault(a => a.WorkOrder == id);
 
             if (entity != null)
             {

@@ -14,17 +14,12 @@
 
         private readonly IUnitOfWork unitOfWork;
 
-        private readonly BloomServiceConfiguration _settings;
-
         public RepairService(IUnitOfWork unitOfWork, IRepairApiManager repairApiManager, BloomServiceConfiguration bloomConfiguration)
             : base(unitOfWork, repairApiManager)
         {
             this.unitOfWork = unitOfWork;
             this.repairApiManager = repairApiManager;
             Repository = unitOfWork.Repairs;
-            _settings = bloomConfiguration;
-
-            EndPoint = _settings.RepairEndPoint;
         }
     }
 }

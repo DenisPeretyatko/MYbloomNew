@@ -27,7 +27,7 @@ namespace BloomService.Web
 
     using RestSharp;
     using Domain.Extensions;
-
+    using Domain.Entities.Concrete;
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
@@ -125,6 +125,12 @@ namespace BloomService.Web
             kernel.Bind<IProblemService>().To<ProblemService>();
             kernel.Bind<IRepairService>().To<RepairService>();
             kernel.Bind<ICustomerService>().To<CustomerService>();
+
+            //kernel.Bind<IEntityApiManager<SageCustomer>>().To<CustomerApiManager>();
+            //kernel.Bind<IEntityApiManager<SageAssignment>>().To<AssignmentApiManager>();
+            //kernel.Bind<IEntityApiManager<SageCallType>>().To<CallTypeApiManager>();
+            //kernel.Bind<IEntityApiManager<SageCustomer>>().To<CustomerApiManager>();
+            //kernel.Bind<IEntityApiManager<SageCustomer>>().To<CustomerApiManager>();
 
             kernel.Bind<IApiMobileService>().To<ApiMobileService>();
             kernel.Bind<IImageService>().To<ImageService>();
