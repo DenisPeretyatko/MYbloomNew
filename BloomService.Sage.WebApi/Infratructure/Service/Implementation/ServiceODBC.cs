@@ -5,110 +5,124 @@
     using System.Data.Odbc;
     using System.Linq;
 
-    using Sage.WebApi.Infratructure.Constants;
+    using BloomService.Domain.Entities.Concrete;
 
+    using Sage.WebApi.Infratructure.Constants;
+    using Utils;
+    using AutoMapper;
+    using Models.DbModels;
+    using System;
     public class ServiceOdbc : IServiceOdbc
     {
         private readonly string timberlineDataConnectionString;
+
         private readonly string timberlineServiceManagementConnectionString;
 
         private ClaimsAgent claimsAgent;
 
-        private bool isOpenedTSM;
-        private bool isOpenedTD;
-
-        private OdbcConnection tdOdbcConnection;
-        private OdbcConnection tsmOdbcConnection;
-
-        private DataSet odbcDataSet;
-
         public ServiceOdbc(ClaimsAgent claimsAgent, SageWebConfig configConstants)
         {
             this.claimsAgent = claimsAgent;
-            timberlineDataConnectionString = configConstants.TimberlineDataConnectionString;
+            timberlineDataConnectionString = "Driver={Timberline Data};" + string.Format(
+                "UID={0};pwd={1};DBQ={2}",
+                /*claimsAgent.Name*/ "kris",
+                /*claimsAgent.Password*/ "sageDEV!!", configConstants.TimberlineDataConnectionString);
             timberlineServiceManagementConnectionString = configConstants.TimberlineServiceManagementConnectionString;
-        }
-
-
-        public void ConnectionTSM(string connectionString)
-        {
-            tsmOdbcConnection = new OdbcConnection(connectionString);
-            tsmOdbcConnection.Open();
-            isOpenedTSM = true;
-        }
-
-        public void ConnectionTD(string name, string password)
-        {
-            var connectionString = string.Format("UID={0};pwd={1};DBQ={2}", name, password, timberlineDataConnectionString);
-            odbcDataSet = new DataSet("myData");
-            tdOdbcConnection = new OdbcConnection("Driver={Timberline Data};" + connectionString);
-            tdOdbcConnection.Open();
-            isOpenedTD = true;
-        }
-
-        public void TdConnectionClose()
-        {
-            tdOdbcConnection.Close();
-            isOpenedTD = false;
-        }
-
-        public void TsmConnectionClose()
-        {
-            tsmOdbcConnection.Close();
-            isOpenedTSM = false;
         }
 
         public List<Dictionary<string, object>> Customers()
         {
-            return GetTable(Queryes.SelectCustomer);
-        }
-
-        public List<Dictionary<string, object>> GetTable(string request)
-        {
-            var claimsAgent = new ClaimsAgent();
-            if (!isOpenedTD)
-                ConnectionTD(claimsAgent.Name, claimsAgent.Password);
-            OdbcDataAdapter dataAdapter = new OdbcDataAdapter(request, tdOdbcConnection);
-            dataAdapter.Fill(odbcDataSet);
-            TdConnectionClose();
-            var table = odbcDataSet.Tables["Table"];
-            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
-            Dictionary<string, object> row;
-            foreach (DataRow dr in table.Rows)
-            {
-                row = new Dictionary<string, object>();
-                foreach (DataColumn col in table.Columns)
-                {
-                    row.Add(col.ColumnName, dr[col]);
-                }
-                rows.Add(row);
-            }
-            return rows;
-        }
-
-        public void ExecuteScript(string request, string connectionString)
-        {
-            var claimsAgent = new ClaimsAgent();
-            if (!isOpenedTSM)
-            {
-                ConnectionTSM(connectionString);
-            }
-
-            var odbcCommand = tsmOdbcConnection.CreateCommand();
-            odbcCommand.CommandText = request;
-            odbcCommand.ExecuteReader();
-            TsmConnectionClose();
+            return ExecuteQueryAndGetData(timberlineDataConnectionString, Queryes.SelectCustomer);
         }
 
         public List<Dictionary<string, object>> Trucks()
         {
-            return GetTable(Queryes.SelectTrucks);
+            return ExecuteQueryAndGetData(timberlineDataConnectionString, Queryes.SelectTrucks);
         }
 
         public void UnassignWorkOrder(string id)
         {
-            var query = Queryes.GetAssignment.Replace("%ID%", id);
-            ExecuteScript(query, timberlineServiceManagementConnectionString);
+            var query = Queryes.SelectAssignment.Replace("%ID%", id);
+            ExecuteQuery(timberlineServiceManagementConnectionString, query);
+        }
+
+        public SageWorkOrder EditWorkOrder(SageWorkOrder workOrder)
+        {
+            var query = Queryes.BuildEditWorkOrderQuery(workOrder);
+            var properties = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query).SingleOrDefault();
+            if (properties != null)
+            {
+                var result = new SageWorkOrder()
+                {
+                    ARCustomer = properties.ContainsKey("ARCUST") ? properties["ARCUST"].ToString() : string.Empty,
+                    Location = properties.ContainsKey("SERVSITENBR") ? properties["SERVSITENBR"].ToString() : string.Empty,
+                    CallType = properties.ContainsKey("CALLTYPECODE") ? properties["CALLTYPECODE"].ToString() : string.Empty,
+                    CallDate = properties.ContainsKey("CALLDATE") ? Convert.ToDateTime(properties["CALLDATE"]) : DateTime.MinValue,
+                    CallTime = properties.ContainsKey("CALLTIME") ? TimeSpan.Parse(properties["CALLTIME"].ToString()) : TimeSpan.MinValue,
+                    Problem = properties.ContainsKey("PROBLEMCODE") ? properties["PROBLEMCODE"].ToString() : string.Empty,
+                    RateSheet = properties.ContainsKey("RATESHEETNBR") ? properties["RATESHEETNBR"].ToString() : string.Empty,
+                    Employee = properties.ContainsKey("TECHNICIAN") ? properties["TECHNICIAN"].ToString() : string.Empty,
+                    EstimatedRepairHours = properties.ContainsKey("ESTREPAIRHRS") ? Convert.ToDecimal(properties["ESTREPAIRHRS"]) : Decimal.MinusOne,
+                    NottoExceed = properties.ContainsKey("NOTTOEXCEED") ? properties["NOTTOEXCEED"].ToString() : string.Empty,
+                    Comments = properties.ContainsKey("COMMENTS") ? properties["COMMENTS"].ToString() : string.Empty,
+                    CustomerPO = properties.ContainsKey("CUSTOMERPO") ? properties["CUSTOMERPO"].ToString() : string.Empty,
+                    PermissionCode = properties.ContainsKey("PERMISSIONCODE") ? properties["PERMISSIONCODE"].ToString() : string.Empty,
+                    PayMethod = properties.ContainsKey("PAYMETHOD") ? properties["PAYMETHOD"].ToString() : string.Empty,
+
+                };
+
+                return result;
+            }
+
+            return null;
+
+        }
+        public List<SageWorkOrder> WorkOrders()
+        {
+            var query = Queryes.SelectWorkOrders;
+            var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query);
+            var result = DictionaryToWorkOrderList(response);
+            return result;
+        }
+
+        private List<SageWorkOrder> DictionaryToWorkOrderList(List<Dictionary<string, object>> response)
+        {
+            var result = new List<SageWorkOrder>();
+            foreach (var item in response)
+            {
+                var workOrderDbModel = item.ToObject<WorkOrderDbModel>();
+                var workOrder = Mapper.Map<SageWorkOrder>(workOrderDbModel);
+                result.Add(workOrder);
+            }
+
+            return result;
+        }
+
+        public DataSet ExecuteQuery(string connectionString, string query)
+        {
+            var dataSet = new DataSet();
+
+            using (OdbcConnection connection = new OdbcConnection(connectionString))
+            using (OdbcCommand command = new OdbcCommand(query, connection))
+            using (OdbcDataAdapter adapter = new OdbcDataAdapter(command))
+            {
+                adapter.Fill(dataSet);
+            }
+
+            return dataSet;
+        }
+
+        public List<Dictionary<string, object>> ExecuteQueryAndGetData(string connectionString, string query)
+        {
+            var table = ExecuteQuery(connectionString, query).Tables["Table"];
+            var rows = new List<Dictionary<string, object>>();
+            foreach (DataRow dr in table.Rows)
+            {
+                var row = table.Columns.Cast<DataColumn>().ToDictionary(col => col.ColumnName, col => dr[col]);
+                rows.Add(row);
+            }
+
+            return rows;
         }
     }
 }

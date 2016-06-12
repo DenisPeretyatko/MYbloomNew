@@ -32,8 +32,8 @@ namespace BloomService.Web.Controllers
             }
             //date.Date.ToString("yy-MM-dd")
             var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.Employee != "");
-
-
+                    
+            
             var locations = _repository.GetAll<SageLocation>();
             foreach (var item in workOrders)
             {

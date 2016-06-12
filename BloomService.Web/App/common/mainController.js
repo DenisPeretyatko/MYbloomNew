@@ -16,6 +16,12 @@ var mainController = function ($scope, commonDataService, state, $window) {
         $scope.notifications = state.notifications;
     });
 
+    $scope.Logout = function() {
+        window.localStorage.setItem('UserName', '')
+        window.localStorage.setItem('Token', '');
+        $state.go('login');
+    }
+
     $scope.showAlerts = function() {
         $scope.allnotifications = true;
     }

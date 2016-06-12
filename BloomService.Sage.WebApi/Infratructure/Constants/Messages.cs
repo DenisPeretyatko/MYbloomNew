@@ -21,5 +21,6 @@
         public static readonly string AddAssignment = "<Message><AddAssignment><Properties>{0}</Properties></AddAssignment></Message>";
         public static readonly string EditAssignment = "<Message><EditAssignment><Properties>{0}</Properties></EditAssignment></Message>";
         public static readonly string RateSheet = "<Message><Get Entity='RateSheet'><AllProperties/></Get></Message>";
+        public static readonly string AddWorkOrderItem = "<Message><AddWorkOrderItem><Properties>{0}</Properties></AddWorkOrderItem></Message>";
     }
 }

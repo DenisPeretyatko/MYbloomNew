@@ -26,6 +26,7 @@ namespace BloomService.Web
 
     using RestSharp;
     using Domain.Extensions;
+    using Domain.Entities.Concrete;
     using Domain.Repositories.Abstract;
     using Domain.Repositories.Concrete;
 

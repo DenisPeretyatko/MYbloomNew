@@ -13,8 +13,8 @@
         [XmlAttribute]
         public ChangeType Change { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public DateTime ChangeTime { get; set; }
+        [XmlAttribute]
+        public string ChangeTime { get; set; }
 
         [XmlAttribute]
         public string EntityId { get; set; }

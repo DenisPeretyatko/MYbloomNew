@@ -86,6 +86,9 @@
             //TODO add sage api service 
             //var edited = this.assignmentService.Edit(assignmanet);
             var edited = string.Empty;
+            var databaseAssignment = assignmentService.GetByWorkOrderId(model.WorkOrder);
+            var assignment = Mapper.Map<SageAssignment>(model);
+            var edited = assignmentService.Edit(assignment);
             if (edited != null)
             {
                 var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
@@ -104,7 +107,7 @@
                 _repository.Add(databaseAssignment);
             }
 
-            return this.Json("success", JsonRequestBehavior.AllowGet);
+            return Json("success", JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -124,7 +127,7 @@
 
                 _repository.Add(databaseAssignment);
             //}
-
+            
             var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).Single();
             _repository.Delete<SageWorkOrder>(workOrder);
             return Json("success", JsonRequestBehavior.AllowGet);

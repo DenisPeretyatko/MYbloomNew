@@ -9,17 +9,19 @@
     {
         public static void RegisterMappings()
         {
-            Mapper.CreateMap<SageLocation, LocationModel>();
-            Mapper.CreateMap<SageCallType, CallTypeModel>();
+            Mapper.CreateMap<SageLocation, LocationModel>().ReverseMap();
+            Mapper.CreateMap<SageCallType, CallTypeModel>().ReverseMap();
             Mapper.CreateMap<SageEmployee, EmployeeModel>().ReverseMap();
-            Mapper.CreateMap<SageProblem, ProblemModel>();
-            Mapper.CreateMap<SageEquipment, EquipmentModel>();
-            Mapper.CreateMap<SageCustomer, CustomerModel>();
-            Mapper.CreateMap<SageRepair, RepairModel>();
-            Mapper.CreateMap<SageAssignment, AssignmentModel>();
-            Mapper.CreateMap<SageWorkOrder, WorkorderViewModel>();
-
+            Mapper.CreateMap<SageProblem, ProblemModel>().ReverseMap();
+            Mapper.CreateMap<SageEquipment, EquipmentModel>().ReverseMap();
+            Mapper.CreateMap<SageCustomer, CustomerModel>().ReverseMap();
+            Mapper.CreateMap<SageRepair, RepairModel>().ReverseMap();
+            Mapper.CreateMap<SageAssignment, AssignmentModel>().ReverseMap();
+            Mapper.CreateMap<SageWorkOrder, WorkorderViewModel>().ReverseMap();
+            Mapper.CreateMap<SageWorkOrder, WorkOrderModel>().ReverseMap();
             Mapper.CreateMap<AvailableDay, SageAvailableDay>().ReverseMap();
+
+            Mapper.CreateMap<AssignmentViewModel, SageAssignment>().ReverseMap();
         }
     }
 }

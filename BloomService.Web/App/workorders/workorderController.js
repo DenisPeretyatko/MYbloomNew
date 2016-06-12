@@ -4,13 +4,11 @@
 
 var workorderController = function ($scope, $timeout, commonDataService) {
 
-    commonDataService.getWorkorderPage(1).then(function (response) {
+    commonDataService.getWorkorderPage(1, '').then(function (response) {
         $scope.workorders = response.data;
-        $timeout(function () {
-            $(".footable").trigger("footable_redraw");
-        }, 100);
     });
 
+    $scope.search = '';
     $scope.currentPage = 1;
     $scope.itemsPerPage = 12;
     $scope.numberOfPages = 0;
@@ -33,22 +31,31 @@ var workorderController = function ($scope, $timeout, commonDataService) {
 
     $scope.pageBack = function () {
         $scope.currentPage = $scope.currentPage - 1;
-        commonDataService.getWorkorderPage($scope.currentPage).then(function (response) {
+        commonDataService.getWorkorderPage($scope.currentPage, $scope.search).then(function (response) {
             $scope.workorders = response.data;
         })
     }
 
     $scope.pageForward = function () {
         $scope.currentPage = $scope.currentPage - 1 + 2;
-        commonDataService.getWorkorderPage($scope.currentPage).then(function (response) {
+        commonDataService.getWorkorderPage($scope.currentPage, $scope.search).then(function (response) {
             $scope.workorders = response.data;
         })
     }
 
+    $scope.checkIfEnterKeyWasPressedSearch = function ($event) {
+        var keyCode = $event.which || $event.keyCode;
+        $interval(function () {
+            commonDataService.getWorkorderPage(1, $scope.search).then(function (response) {
+                $scope.workorders = response.data;
+            })
+        }, 1000);
+    };
+
     $scope.checkIfEnterKeyWasPressed = function ($event) {
         var keyCode = $event.which || $event.keyCode;
         if (keyCode === 13) {
-            commonDataService.getWorkorderPage($scope.currentPage).then(function (response) {
+            commonDataService.getWorkorderPage($scope.currentPage, $scope.search).then(function (response) {
                 $scope.workorders = response.data;
             })
         }
