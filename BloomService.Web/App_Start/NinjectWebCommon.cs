@@ -13,14 +13,9 @@ namespace BloomService.Web
     using Services.Abstract;
     using Services.Concrete;
     using Utils;
-
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-
-    using Newtonsoft.Json.Linq;
-
     using Ninject;
     using Ninject.Web.Common;
-
     using RestSharp;
     using Domain.Extensions;
     using Domain.Repositories.Abstract;
@@ -31,22 +26,6 @@ namespace BloomService.Web
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
-
-        public static string GetAuthToken()
-        {
-            var username = ConfigurationManager.AppSettings["SageUsername"];
-            var password = ConfigurationManager.AppSettings["SagePassword"];
-            var sageApiHost = ConfigurationManager.AppSettings["SageApiHost"];
-            var restClient = new RestClient(sageApiHost);
-            var request = new RestRequest("oauth/token", Method.POST);
-            request.AddParameter("username", username);
-            request.AddParameter("password", password);
-            request.AddParameter("grant_type", "password");
-            var response = restClient.Execute(request);
-            var json = JObject.Parse(response.Content);
-            var result = string.Format("Bearer {0}", json.First.First);
-            return result;
-        }
 
         /// <summary>
         /// Starts the application
@@ -101,12 +80,12 @@ namespace BloomService.Web
             kernel.Bind<IRepository>().To<MongoRepository>().WithConstructorArgument(connectionString);
             kernel.Bind<BloomServiceConfiguration>().ToConstant(setting);
             kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(sageApiHost);
-            kernel.Bind<IToken>().To<SageAuthorisationToken>().WithConstructorArgument(GetAuthToken());
             kernel.Bind<ILocationService>().To<LocationService>();
             kernel.Bind<IApiMobileService>().To<ApiMobileService>();
             kernel.Bind<IImageService>().To<ImageService>();
             kernel.Bind<IUserService>().To<UserService>();
             kernel.Bind<ISageApiProxy>().To<SageApiProxy>();
+            kernel.Bind<IAuthorizationService>().To<AuthorizationService>();
         }
     }
 }

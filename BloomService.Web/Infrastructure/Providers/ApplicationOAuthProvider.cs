@@ -1,6 +1,7 @@
 ﻿using BloomService.Domain.Extensions;
 using BloomService.Domain.Models.Requests;
 using BloomService.Domain.Models.Responses;
+using BloomService.Web.Services.Concrete;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
@@ -8,11 +9,9 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Script.Serialization;
 
 namespace BloomService.Web.Providers
@@ -53,7 +52,7 @@ namespace BloomService.Web.Providers
 
         public AuthorizationResponse CheckUser(string name, string password)
         {
-            var token = NinjectWebCommon.GetAuthToken();
+            var token = AuthorizationService.GetAuthToken();
             var settings = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
             var request = new RestRequest(settings.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
             var requestBody = new AuthorizationRequest()

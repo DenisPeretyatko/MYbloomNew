@@ -265,7 +265,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\AttributeRoutingConfig.cs" />
     <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -292,6 +291,8 @@
     <Compile Include="Infrastructure\Constants\RateSheets.cs" />
     <Compile Include="Infrastructure\Queries\AssignmentQueries.cs" />
     <Compile Include="Infrastructure\Queries\WorkorderQueries.cs" />
+    <Compile Include="Infrastructure\Services\AuthorizationService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IAuthorizationService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\ISageApiProxy.cs" />
     <Compile Include="Infrastructure\Services\SageApiProxy.cs" />
     <Compile Include="Infrastructure\Utils\JsonHelper.cs" />
@@ -317,7 +318,8 @@
     <Compile Include="Infrastructure\Notifications\NotificationAlert.cs" />
     <Compile Include="Infrastructure\Notifications\NotificationPayload.cs" />
     <Compile Include="Infrastructure\Notifications\PushNotification.cs" />
-    <Compile Include="Providers\ApplicationOAuthProvider.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Infrastructure\Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\ILocationService.cs" />
     <Compile Include="Infrastructure\Services\LocationService.cs" />
     <Compile Include="Models\RepairModel.cs" />
@@ -340,9 +342,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Infrastructure\Utils\DynamicJsonDeserializer.cs" />
-    <Compile Include="Infrastructure\Utils\SageAuthorisationToken.cs" />
-    <Compile Include="Infrastructure\Utils\IToken.cs" />
-    <Compile Include="Infrastructure\Utils\SageAuthUtility.cs" />
     <Compile Include="Infrastructure\Utils\JsonNetResult.cs" />
   </ItemGroup>
   <ItemGroup>

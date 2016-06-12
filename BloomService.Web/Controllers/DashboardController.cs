@@ -15,6 +15,8 @@ namespace BloomService.Web.Controllers
     using Models;
     using Services.Abstract;
     using Domain.Repositories.Abstract;
+    using Infrastructure.Queries;
+    using Infrastructure.Extensions;
 
     public class DashboardController : BaseController
     {
@@ -29,12 +31,20 @@ namespace BloomService.Web.Controllers
             this.locationService = locationService;
             _repository = repository;
         }
+
+        [HttpGet]
+        [Route("")]
+        public ActionResult Index()
+        {
+            return View();
+        }
+
         [HttpGet]
         [Route("Dashboard")]
         public ActionResult GetDashboard()
         {
             var dashboard = new DashboardViewModel();
-            var listWO = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToArray();
+            var listWO = _repository.SearchFor<SageWorkOrder>().Open().ToArray();
             var assignments = _repository.SearchFor<SageAssignment>(x => x.Employee == "").ToArray();
             var chart = new List<ChartModel>();
             var chartModel = new ChartModel();
@@ -44,7 +54,7 @@ namespace BloomService.Web.Controllers
                 new List<object> {"Open", listWO.Count()},
                 new List<object> {"Assigned", listWO.Count(x => assignments.Any(a => a.WorkOrder == x.WorkOrder))},
                 new List<object> {"Roof leak", listWO.Count(x => x.Problem == "Roof leak")},
-                new List<object> {"Closed today", listWO.Count(x => x.DateClosed == DateTime.Now.ToString("yyyy-MM-dd"))},
+                new List<object> {"Closed today", listWO.Count(x => x.DateClosed == DateTime.Now.ToSageDate())},
             };
             chartModel.data= chartData;
             chart.Add(chartModel);
@@ -78,13 +88,6 @@ namespace BloomService.Web.Controllers
             lookups.PaymentMethods = PaymentMethod.PaymentMethodList;
 
             return Json(lookups, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        [Route("")]
-        public ActionResult Index()
-        {
-            return View();
         }
 
         [HttpGet]
