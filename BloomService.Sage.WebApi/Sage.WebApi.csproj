@@ -304,12 +304,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\AttributeRoutingConfig.cs" />
-    <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\SageApiController.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
@@ -346,7 +341,7 @@
     <Compile Include="Infratructure\Constants\Messages.cs" />
     <Compile Include="Infratructure\Constants\Queries.cs" />
     <Compile Include="Infratructure\ClaimsAgent.cs" />
-    <Compile Include="Infratructure\ConfigConstants.cs" />
+    <Compile Include="Infratructure\SageWebConfig.cs" />
     <Compile Include="Infratructure\Service\Implementation\ServiceAuthorization.cs" />
     <Compile Include="Infratructure\Service\IServiceAuthorization.cs" />
     <Compile Include="Infratructure\Service\IServiceManagement.cs" />
@@ -361,7 +356,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infratructure\ModelBinders\ProportiesModelBinder .cs" />
     <Compile Include="Infratructure\Providers\ApplicationOAuthProvider.cs" />
-    <Compile Include="Infratructure\Providers\CustomJwtFormat.cs" />
     <Compile Include="Infratructure\Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Infratructure\Utils\ObjectExtensions.cs" />
@@ -402,7 +396,9 @@
     </Content>
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
