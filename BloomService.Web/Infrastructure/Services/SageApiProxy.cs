@@ -18,7 +18,7 @@ namespace BloomService.Web.Infrastructure.Services.Concrete
         {
         }
 
-        public SageResponse<SageCustomer> Customers()
+        public SageResponse<SageCustomer> GetCustomers()
         {
             return GetAll<SageCustomer>(EndPoints.GetCustomer);
         }
