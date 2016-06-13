@@ -36,12 +36,10 @@ namespace BloomService.Web.Services.Concrete
             this.httpContextProvider = httpContextProvider;
         }
 
-        public string SaveFile(string file, string path, string userId)
+        public string SavePhotoForWorkOrder(string file, string path, string userId)
         {
             if (file == null)
-            {
                 return string.Empty;
-            }
 
             byte[] imgData = Convert.FromBase64String(file);
 
@@ -49,10 +47,14 @@ namespace BloomService.Web.Services.Concrete
               imgData.Length);
             ms.Write(imgData, 0, imgData.Length);
             Image image = Image.FromStream(ms, true);
+            if (!ValidateImage(image))
+                return string.Empty;
+
             string name;
             string ext = "jpg";
             if (_knownImageFormats.TryGetValue(image.RawFormat.Guid, out name))
                 ext = name.ToLower();
+
             var di = new DirectoryInfo(path);
             if (!di.Exists)
                 di.Create();
@@ -63,7 +65,7 @@ namespace BloomService.Web.Services.Concrete
             return newPath;
         }
 
-        public bool CreateIcon(string pathToIcon, string color, string resultIconPath, Color oldColor)
+        private bool CreateIcon(string pathToIcon, string color, string resultIconPath, Color oldColor)
         {
             try
             {
@@ -92,7 +94,7 @@ namespace BloomService.Web.Services.Concrete
             }
         }
 
-        public bool BuildTechnicianColor(TechnicianModel technician)
+        public bool BuildTechnicianIcons(TechnicianModel technician)
         {
             var pathToTechnicianIcon = httpContextProvider.MapPath(urlToTechnicianIcon);
             var pathToResultIconTechnician = string.Format("{0}/{1}/technician.png", 
@@ -137,20 +139,19 @@ namespace BloomService.Web.Services.Concrete
             return newImage;
         }
 
-        private Image ValidateImage(HttpPostedFileBase file)
+        private bool ValidateImage(Image file)
         {
             try
             {
-                var img = Image.FromStream(file.InputStream, true, true);
-                if (IsOneOfValidFormats(img.RawFormat))
+                if (IsOneOfValidFormats(file.RawFormat))
                 {
-                    return img;
+                    return true;
                 }
             }
             catch
             {
             }
-            return null;
+            return false;
         }
 
         private bool IsOneOfValidFormats(ImageFormat rawFormat)
