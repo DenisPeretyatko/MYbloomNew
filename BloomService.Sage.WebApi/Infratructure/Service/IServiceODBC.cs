@@ -5,7 +5,7 @@
 
     public interface IServiceOdbc
 {
-        List<Dictionary<string, object>> Customers();
+        List<SageCustomer> Customers();
 
         List<Dictionary<string, object>> Trucks();
 

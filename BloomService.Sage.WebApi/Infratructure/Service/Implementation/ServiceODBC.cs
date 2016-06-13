@@ -30,14 +30,18 @@
             timberlineServiceManagementConnectionString = configConstants.TimberlineServiceManagementConnectionString;
         }
 
-        public List<Dictionary<string, object>> Customers()
+        public List<SageCustomer> Customers()
         {
-            return ExecuteQueryAndGetData(timberlineDataConnectionString, Queries.SelectCustomer);
+            var response = ExecuteQueryAndGetData(timberlineDataConnectionString, Queries.SelectCustomer);
+            var result = new List<SageCustomer>();
+            response.ForEach(x => result.Add(x.ToObject<SageCustomer>()));
+            return result;
         }
 
         public List<Dictionary<string, object>> Trucks()
         {
-            return ExecuteQueryAndGetData(timberlineDataConnectionString, Queries.SelectTrucks);
+            var result = ExecuteQueryAndGetData(timberlineDataConnectionString, Queries.SelectTrucks);
+            return result;
         }
 
         public void UnassignWorkOrder(string id)
@@ -58,7 +62,6 @@
                     Location = properties.ContainsKey("SERVSITENBR") ? properties["SERVSITENBR"].ToString() : string.Empty,
                     CallType = properties.ContainsKey("CALLTYPECODE") ? properties["CALLTYPECODE"].ToString() : string.Empty,
                     CallDate = properties.ContainsKey("CALLDATE") ? Convert.ToDateTime(properties["CALLDATE"]) : DateTime.MinValue,
-                    CallTime = properties.ContainsKey("CALLTIME") ? TimeSpan.Parse(properties["CALLTIME"].ToString()) : TimeSpan.MinValue,
                     Problem = properties.ContainsKey("PROBLEMCODE") ? properties["PROBLEMCODE"].ToString() : string.Empty,
                     RateSheet = properties.ContainsKey("RATESHEETNBR") ? properties["RATESHEETNBR"].ToString() : string.Empty,
                     Employee = properties.ContainsKey("TECHNICIAN") ? properties["TECHNICIAN"].ToString() : string.Empty,
