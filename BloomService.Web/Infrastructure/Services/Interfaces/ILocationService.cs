@@ -4,6 +4,6 @@
 
     public interface ILocationService
     {
-        bool ResolveLocation(SageLocation entity);
+        void ResolveLocation(SageLocation entity);
     }
 }

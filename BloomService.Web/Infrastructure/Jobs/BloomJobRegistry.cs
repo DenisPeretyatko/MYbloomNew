@@ -168,6 +168,11 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 entity.Id = mongoEntity.Id;
                                 if (mongoEntity.Longitude == 0 || mongoEntity.Latitude == 0)
                                     _locationService.ResolveLocation(entity);
+                                else
+                                {
+                                    entity.Latitude = mongoEntity.Latitude;
+                                    entity.Longitude = mongoEntity.Longitude;
+                                }
                                 _repository.Update(entity);
                             }
                         }

@@ -45,7 +45,8 @@
                     CultureInfo.InvariantCulture);
                 item.Start = startDate.ToString();
                 item.End = startDate.AddHours(Convert.ToDouble(item.EstimatedRepairHours)).ToString();
-                item.Color = employee.Color ?? "";
+                //item.Color = employee.Color ?? "";
+                item.Color = employee != null ? employee.Color ?? "" : "";
             }
 
             var workorders = _repository.GetAll<SageWorkOrder>().ToArray();
@@ -63,7 +64,7 @@
             model.Assigments = assignments;
 
             model.UnassignedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(unassignedWorkorders);
-            return Success();
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
