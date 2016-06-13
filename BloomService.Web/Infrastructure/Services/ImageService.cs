@@ -10,6 +10,11 @@ using BloomService.Web.Services.Abstract;
 using System.Drawing.Drawing2D;
 using BloomService.Web.Models;
 using BloomService.Web.Infrastructure.Services.Interfaces;
+using BloomService.Web.Models.Request;
+using BloomService.Domain.Entities.Concrete;
+using BloomService.Domain.Repositories.Abstract;
+using BloomService.Domain.Extensions;
+using System.Configuration;
 
 namespace BloomService.Web.Services.Concrete
 {
@@ -21,38 +26,100 @@ namespace BloomService.Web.Services.Concrete
             { ImageFormat.Jpeg.Guid, "jpeg"},
             { ImageFormat.Png.Guid, "png"}
         };
- 
+
         private readonly IHttpContextProvider httpContextProvider;
+        private readonly IRepository repository;
 
         private readonly string urlToTechnicianIcon = "/Public/images/technician.png";
         private readonly string urlToWorkOrderIcon = "/Public/images/workorder.png";
         private readonly string urlToFolderTecnician = "/Public/technician/";
         private readonly string urlToFolderWorkOrder = "/Public/workorder/";
+        private readonly string urlToFolderPhotoWorkOrders = "/Public/images/";
         private readonly Color colorTechnicianIcon = Color.FromArgb(0, 13, 255);
         private readonly Color colorWorkOrderIcon = Color.FromArgb(0, 13, 255);
+        private readonly BloomServiceConfiguration settings;
 
-        public ImageService(IHttpContextProvider httpContextProvider)
+        public ImageService(IHttpContextProvider httpContextProvider, IRepository repository)
         {
             this.httpContextProvider = httpContextProvider;
+            this.repository = repository;
+            settings = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
         }
 
-        public string SaveFile(string file, string path, string userId)
+        public bool SavePhotoForWorkOrder(ImageModel model)
+        {
+            var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.IdWorkOrder).SingleOrDefault();
+            if (workOrder == null)
+            {
+                return false;
+            }
+
+            var imagesDb = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.IdWorkOrder).SingleOrDefault();
+            var countImage = 0;
+            if (imagesDb != null && imagesDb.Images != null)
+            {
+                countImage = imagesDb.Images.Count();
+            }
+            else
+            {
+                imagesDb = new SageImageWorkOrder
+                {
+                    Images = new List<ImageLocation>(),
+                    WorkOrder = model.IdWorkOrder,
+                    WorkOrderBsonId = workOrder.Id
+                };
+            }
+
+            var pathToImage = string.Format("{0}/{1}/", httpContextProvider.MapPath(urlToFolderPhotoWorkOrders), model.IdWorkOrder);
+            var nameBig = countImage.ToString();
+            var nameSmall = "small" + countImage;
+            var fileName = SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, settings.SizeBigPhoto);
+            SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, settings.SizeSmallPhoto);
+
+            var image = new ImageLocation { Image = fileName, Latitude = model.Latitude, Longitude = model.Longitude };
+            imagesDb.Images.Add(image);
+            repository.Add(imagesDb);
+            return true;
+        }
+
+        private List<ImageLocation> GetPhotoForWorkOrder(string idWorkOrder, bool big, string prefixUrl = null)
+        {
+            var pathToImage = string.Format("{1}/{2}/", urlToFolderPhotoWorkOrders, idWorkOrder);
+            if (prefixUrl != null)
+                pathToImage = prefixUrl + pathToImage;
+
+            var images = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == idWorkOrder).SingleOrDefault();
+            if (images != null)
+            {
+                foreach (var image in images.Images)
+                {
+                    if (!big)
+                        image.Image = pathToImage + "small" + image.Image;
+                    image.Image = pathToImage + image.Image;
+                }
+            }
+            return images.Images;
+        }
+
+        private string SavePhotoForWorkOrder(string file, string path, string userId, int MaxSize)
         {
             if (file == null)
-            {
                 return string.Empty;
-            }
 
             byte[] imgData = Convert.FromBase64String(file);
 
-            MemoryStream ms = new MemoryStream(imgData, 0, 
+            MemoryStream ms = new MemoryStream(imgData, 0,
               imgData.Length);
             ms.Write(imgData, 0, imgData.Length);
             Image image = Image.FromStream(ms, true);
+            if (!ValidateImage(image))
+                return string.Empty;
+
             string name;
             string ext = "jpg";
             if (_knownImageFormats.TryGetValue(image.RawFormat.Guid, out name))
                 ext = name.ToLower();
+
             var di = new DirectoryInfo(path);
             if (!di.Exists)
                 di.Create();
@@ -63,7 +130,7 @@ namespace BloomService.Web.Services.Concrete
             return newPath;
         }
 
-        public bool CreateIcon(string pathToIcon, string color, string resultIconPath, Color oldColor)
+        private bool CreateIcon(string pathToIcon, string color, string resultIconPath, Color oldColor)
         {
             try
             {
@@ -92,14 +159,14 @@ namespace BloomService.Web.Services.Concrete
             }
         }
 
-        public bool BuildTechnicianColor(TechnicianModel technician)
+        public bool BuildTechnicianIcons(TechnicianModel technician)
         {
             var pathToTechnicianIcon = httpContextProvider.MapPath(urlToTechnicianIcon);
-            var pathToResultIconTechnician = string.Format("{0}/{1}/technician.png", 
+            var pathToResultIconTechnician = string.Format("{0}/{1}/technician.png",
                 httpContextProvider.MapPath(urlToFolderTecnician), technician.Id);
 
             var pathToWorkOrderIcon = httpContextProvider.MapPath(urlToWorkOrderIcon);
-            var pathToResultIconWorkOrder = string.Format("{0}/{1}/workOrder.png", 
+            var pathToResultIconWorkOrder = string.Format("{0}/{1}/workOrder.png",
                 httpContextProvider.MapPath(urlToFolderWorkOrder),
                 technician.Id
                 );
@@ -107,6 +174,7 @@ namespace BloomService.Web.Services.Concrete
             return CreateIcon(pathToTechnicianIcon, technician.Color, pathToResultIconTechnician, colorTechnicianIcon)
                    && CreateIcon(pathToWorkOrderIcon, technician.Color, pathToResultIconWorkOrder, colorWorkOrderIcon);
         }
+
 
         private Image ResizeImage(Image image, Size size, bool preserveAspectRatio = true)
         {
@@ -137,20 +205,19 @@ namespace BloomService.Web.Services.Concrete
             return newImage;
         }
 
-        private Image ValidateImage(HttpPostedFileBase file)
+        private bool ValidateImage(Image file)
         {
             try
             {
-                var img = Image.FromStream(file.InputStream, true, true);
-                if (IsOneOfValidFormats(img.RawFormat))
+                if (IsOneOfValidFormats(file.RawFormat))
                 {
-                    return img;
+                    return true;
                 }
             }
             catch
             {
             }
-            return null;
+            return false;
         }
 
         private bool IsOneOfValidFormats(ImageFormat rawFormat)
