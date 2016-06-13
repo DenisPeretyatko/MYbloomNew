@@ -285,6 +285,7 @@
     <Compile Include="Infrastructure\Dependecy\Ninject\NinjectResolver.cs" />
     <Compile Include="Infrastructure\Dependecy\Ninject\NinjectScope.cs" />
     <Compile Include="Infrastructure\Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\TypeExtensions.cs" />
     <Compile Include="Controllers\ApiMobileController.cs" />
     <Compile Include="Controllers\BaseComtroller.cs" />

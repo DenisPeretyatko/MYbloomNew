@@ -2,6 +2,7 @@
 using BloomService.Domain.Extensions;
 using BloomService.Domain.Repositories.Abstract;
 using BloomService.Web.Infrastructure.Dependecy;
+using BloomService.Web.Infrastructure.Extensions;
 using BloomService.Web.Infrastructure.Services.Abstract;
 using BloomService.Web.Notifications;
 using Common.Logging;
@@ -28,14 +29,28 @@ namespace BloomService.Web.Infrastructure.Jobs
             //Send silent push notifications to iOS
             Schedule(() =>
             {
-                var path = _settings.devSertificatePath;
-                var payload1 = new NotificationPayload("e85fe6a013ee9df5b5e7ad9307b9021bdd31aff066587553e0a65f146657a628", "Message", 1, "default", 1);
-
-                var p = new List<NotificationPayload>();
-                p.Add(payload1);
-                PushNotification push = new PushNotification(true, path, null);
-                push.P12File = path;
-                push.SendToApple(p);
+                var technicians = _repository.SearchFor<SageEmployee>(x => x.IsAvailable && !string.IsNullOrEmpty( x.IosDeviceToken));
+                foreach(var technician in technicians)
+                {
+                    if(technician.AvailableDays != null && technician.AvailableDays.Any())
+                    {
+                        foreach(var avaibleDay in technician.AvailableDays)
+                        {
+                            var startTime = avaibleDay.Start.TryAsDateTime();
+                            var endTime = avaibleDay.End.TryAsDateTime();
+                            if(startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
+                            {
+                                var path = _settings.devSertificatePath;
+                                var payload1 = new NotificationPayload(technician.IosDeviceToken, "RequestSendLocation", 1, "default", 1);
+                                var p = new List<NotificationPayload>();
+                                p.Add(payload1);
+                                PushNotification push = new PushNotification(true, path, null);
+                                push.P12File = path;
+                                push.SendToApple(p);
+                            }
+                        }
+                    }
+                }
             }).ToRunNow().AndEvery(15).Minutes();
 
             //Sync sage and mongoDb

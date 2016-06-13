@@ -117,5 +117,8 @@ namespace BloomService.Domain.Entities.Concrete
         public string Picture { get; set; }
         [XmlIgnore]
         public string Color { get; set; }
+
+        [XmlIgnore]
+        public string IosDeviceToken { get; set; }
     }
 }
