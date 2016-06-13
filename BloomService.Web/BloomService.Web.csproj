@@ -305,7 +305,9 @@
     <Compile Include="Infrastructure\Queries\AssignmentQueries.cs" />
     <Compile Include="Infrastructure\Queries\WorkorderQueries.cs" />
     <Compile Include="Infrastructure\Services\AuthorizationService.cs" />
+    <Compile Include="Infrastructure\Services\HttpContextProvider.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IAuthorizationService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IHttpContextProvider.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\ISageApiProxy.cs" />
     <Compile Include="Infrastructure\Services\SageApiProxy.cs" />
     <Compile Include="Infrastructure\Utils\JsonHelper.cs" />

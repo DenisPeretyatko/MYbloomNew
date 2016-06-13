@@ -52,7 +52,7 @@
             technician.Picture = model.Picture;
 
 
-            var pathToIcon = HttpContext.Server.MapPath();//HostingEnvironment.MapPath("/Public/images/technician.png");
+            var pathToIcon = HostingEnvironment.MapPath("/Public/images/technician.png");
             var pathToResultFolder = HostingEnvironment.MapPath("/Public/technician/");
             var pathToResultIcon = pathToResultFolder + technician.Employee + "/" + technician.Employee + ".png";
 
