@@ -2,6 +2,7 @@
 using System.Security.Principal;
 using System.Threading;
 using System.Web;
+using System.Web.Hosting;
 
 namespace BloomService.Web.Infrastructure.Services
 {
@@ -25,6 +26,11 @@ namespace BloomService.Web.Infrastructure.Services
         public IPrincipal GetUser()
         {
             return Thread.CurrentPrincipal;
+        }
+
+        public string MapPath(string path)
+        {
+            return HostingEnvironment.MapPath(path);
         }
     }
 }

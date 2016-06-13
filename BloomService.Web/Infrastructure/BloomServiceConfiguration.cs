@@ -29,9 +29,7 @@ namespace BloomService.Domain.Extensions
                     SyncDb = nameValueCollection["SyncDb"],
                     SageApiHost = nameValueCollection["SageApiHost"],
                     BSUrl = nameValueCollection["BSUrl"],
-                    devSertificatePath = nameValueCollection["devSertificatePath"],
-                    prodSertificatePath = nameValueCollection["prodSertificatePath"],
-                    delay = nameValueCollection["delay"]
+                    SertificateUrl = nameValueCollection["SertificateUrl"],
                 };
 
                 return configuration;
@@ -59,8 +57,6 @@ namespace BloomService.Domain.Extensions
         public string SyncDb { get; set; }
         public string SageApiHost { get; set; }
         public string BSUrl { get; set; }
-        public string devSertificatePath { get; set; }
-        public string prodSertificatePath { get; set; }
-        public string delay { get; set; }
+        public string SertificateUrl { get; set; }
     }
 }

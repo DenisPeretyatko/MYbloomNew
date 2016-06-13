@@ -12,5 +12,6 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
         HttpRequest GetHttpRequest();
         HttpResponse GetHttpResponse();
         IPrincipal GetUser();
+        string MapPath(string path);
     }
 }
