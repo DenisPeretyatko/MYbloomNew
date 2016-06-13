@@ -94,18 +94,8 @@
             foreach (var order in result)
             {
                 order.Equipments = new List<SageEquipment>();
-                var images =
-                    repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == order.WorkOrder).SingleOrDefault();
-                if (images != null)
-                {
-                    foreach (var image in images.Images)
-                    {
-                        image.Image = settings.BSUrl + "/Images/" + image.Image;
-                    }
 
-                    order.Images = images.Images;
-                }
-
+                order.Images = imageService.GetPhotoForWorkOrder(order.WorkOrder, false, settings.BSUrl);
                 var location = locations.FirstOrDefault(x => x.Name == order.Location);
                 if (location == null)
                 {
@@ -128,36 +118,10 @@
         [Route("Apimobile/Image")]
         public ActionResult PostImage(ImageModel model)
         {
-            var pathToImage = HostingEnvironment.MapPath("/Images/");
-            var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.IdWorkOrder).SingleOrDefault();
-            if (workOrder == null)
-            {
-                return Error("Add image faild");
-            }
-
-            var imagesDb =
-                repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.IdWorkOrder).SingleOrDefault();
-            var countImage = 0;
-            if (imagesDb != null && imagesDb.Images != null)
-            {
-                countImage = imagesDb.Images.Count();
-            }
+            if (imageService.SavePhotoForWorkOrder(model))
+                return Success();
             else
-            {
-                imagesDb = new SageImageWorkOrder
-                               {
-                                   Images = new List<ImageLocation>(), 
-                                   WorkOrder = model.IdWorkOrder, 
-                                   WorkOrderBsonId = workOrder.Id
-                               };
-            }
-
-            var name = model.IdWorkOrder + "id" + countImage;
-            var fileName = imageService.SaveFile(model.Image, pathToImage, name);
-            var image = new ImageLocation { Image = fileName, Latitude = model.Latitude, Longitude = model.Longitude };
-            imagesDb.Images.Add(image);
-            repository.Add(imagesDb);
-            return Success();
+                return Error("Add image faild");
         }
 
         [HttpPost]
