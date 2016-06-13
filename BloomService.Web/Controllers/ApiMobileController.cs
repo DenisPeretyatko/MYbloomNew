@@ -24,7 +24,7 @@ namespace BloomService.Web.Controllers
 
         [HttpGet]
         [Route("Apimobile/Token")]
-        public ActionResult Get(string name, string password)
+        public ActionResult Get(string name, string password, string deviceToken)
         {
             var token = GetToken(name, password);
             if (token == null)
