@@ -20,7 +20,6 @@ namespace BloomService.Web
     using Domain.Repositories.Abstract;
     using Domain.Repositories.Concrete;
     using Infrastructure.Services.Abstract;
-    using Infrastructure.Services.Concrete;
     using Infrastructure.Services.Interfaces;
     using Infrastructure.Services;
     using Infrastructure.Dependecy;
