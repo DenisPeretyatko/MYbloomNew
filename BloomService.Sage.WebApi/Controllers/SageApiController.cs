@@ -8,11 +8,10 @@
 
     using Infratructure.Service;
     using Utils;
-    using System;
     using System.Collections.Generic;
     using System.Web.Http;
-
-    [Authorize]
+    using BloomService.Domain.Entities.Concrete.MessageResponse;
+    [System.Web.Mvc.Authorize]
     public class SageApiController : ApiController
     {
         private readonly IServiceManagement serviceManager;
@@ -25,12 +24,19 @@
             this.serviceOdbc = serviceOdbc;
         }
 
-        //TODO: Add to API v2
         [HttpGet, Route("api/v2/ar/customers")]
         public SageResponse<SageCustomer> Customers()
         {
-            //return Json(serviceOdbc.Customers());
-            return null;
+            try
+            {
+                var result = new SageResponse<SageCustomer> { IsSucceed = true, Entities = serviceOdbc.Customers() };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageCustomer> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
         }
 
         [HttpPost, Route("api/v2/sm/assignments/add")]
@@ -45,7 +51,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageAssignment> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageAssignment> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -63,7 +69,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -82,7 +88,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageAssignment> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageAssignment> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -92,16 +98,17 @@
         {
             try
             {
+                var assignments = serviceManager.Assignments(id);
                 var result = new SageResponse<SageAssignment>
                 {
                     IsSucceed = true,
-                    Entity = serviceManager.Assignments(id).FirstOrDefault()
+                    Entity = assignments == null ? null : assignments.FirstOrDefault()
                 };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageAssignment> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageAssignment> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -116,7 +123,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageCallType> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageCallType> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -131,7 +138,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageDepartment> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageDepartment> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -148,7 +155,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageAssignment> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageAssignment> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -165,9 +172,9 @@
             };
                 return result;
             }
-            catch (Exception exception)
+            catch (ResponseException exception)
             {
-                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -182,7 +189,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageEmployee> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageEmployee> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -197,7 +204,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageEquipment> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageEquipment> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -212,7 +219,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageLocation> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageLocation> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -227,7 +234,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SagePart> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SagePart> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -242,7 +249,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageEntity> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageEntity> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -257,7 +264,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageProblem> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageProblem> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -272,7 +279,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageEntity> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageEntity> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -287,7 +294,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageRepair> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageRepair> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -297,13 +304,17 @@
         {
             try
             {
+                if(id == string.Empty)
+                {
+                    throw new ResponseException(new ResponseError() { Message = "WorkOrder id is empty"});
+                }
                 serviceOdbc.UnassignWorkOrder(id);
                 var result = new SageResponse<SageWorkOrder> { IsSucceed = true };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -322,7 +333,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -341,7 +352,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -356,7 +367,7 @@
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Message };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
