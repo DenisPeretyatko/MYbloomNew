@@ -100,7 +100,6 @@
     <Compile Include="Entities\Concrete\SagePropertyDictionary.cs" />
     <Compile Include="Entities\Concrete\SageRepair.cs" />
     <Compile Include="Entities\Concrete\SageEntity.cs" />
-    <Compile Include="Entities\Concrete\Auxiliary\TimeStamp.cs" />
     <Compile Include="Entities\Concrete\SageWorkOrder.cs" />
     <Compile Include="Exceptions\ResponseException.cs" />
   </ItemGroup>

@@ -20,12 +20,12 @@
         public SageApiProxy(IRestClient restClient)
         {
             _restClient = restClient;
-            this.token = AuthorizationService.GetAuthToken();
+            token = AuthorizationService.GetAuthToken();
         }
 
         public SageResponse<SageAssignment> AddAssignment(SageAssignment assignment)
         {
-            return this.Add(assignment, EndPoints.AddAssignment);
+            return Add(assignment, EndPoints.AddAssignment);
         }
 
         public SageResponse<SageWorkOrder> AddEquipment(Dictionary<string, string> properties)
@@ -35,113 +35,113 @@
                                   RequestFormat = DataFormat.Json
                               };
             request.AddBody(properties);
-            request.AddHeader("Authorization", this.token);
-            var response = this._restClient.Execute<SageResponse<SageWorkOrder>>(request);
+            request.AddHeader("Authorization", token);
+            var response = _restClient.Execute<SageResponse<SageWorkOrder>>(request);
             var results = response.Data;
             return results;
         }
 
         public SageResponse<SageWorkOrder> AddWorkOrder(SageWorkOrder workOrder)
         {
-            return this.Add(workOrder, EndPoints.AddWorkOrder);
+            return Add(workOrder, EndPoints.AddWorkOrder);
         }
 
         public SageResponse<SageAssignment> EditAssignment(SageAssignment assignment)
         {
-            return this.Edit(assignment, EndPoints.EditAssignment);
+            return Edit(assignment, EndPoints.EditAssignment);
         }
 
         public SageResponse<SageWorkOrder> EditWorkOrder(SageWorkOrder workOrder)
         {
-            return this.Edit(workOrder, EndPoints.EditWorkOrder);
+            return Edit(workOrder, EndPoints.EditWorkOrder);
         }
 
         public SageResponse<SageAssignment> GetAssignment(string id)
         {
-            return this.Get<SageAssignment>(id, EndPoints.GetAssignments);
+            return Get<SageAssignment>(id, EndPoints.GetAssignments);
         }
 
         public SageResponse<SageAssignment> GetAssignments()
         {
-            return this.GetAll<SageAssignment>(EndPoints.GetAssignments);
+            return GetAll<SageAssignment>(EndPoints.GetAssignments);
         }
 
         public SageResponse<SageCallType> GetCalltypes()
         {
-            return this.GetAll<SageCallType>(EndPoints.GetCalltypes);
+            return GetAll<SageCallType>(EndPoints.GetCalltypes);
         }
 
         public SageResponse<SageCustomer> GetCustomers()
         {
-            return this.GetAll<SageCustomer>(EndPoints.GetCustomer);
+            return GetAll<SageCustomer>(EndPoints.GetCustomer);
         }
 
         public SageResponse<SageDepartment> GetDepartments()
         {
-            return this.GetAll<SageDepartment>(EndPoints.GetDepartments);
+            return GetAll<SageDepartment>(EndPoints.GetDepartments);
         }
 
         public SageResponse<SageEmployee> GetEmployees()
         {
-            return this.GetAll<SageEmployee>(EndPoints.GetEmployees);
+            return GetAll<SageEmployee>(EndPoints.GetEmployees);
         }
 
         public SageResponse<SageEquipment> GetEquipment()
         {
-            return this.GetAll<SageEquipment>(EndPoints.GetEquipment);
+            return GetAll<SageEquipment>(EndPoints.GetEquipment);
         }
 
         public SageResponse<SageLocation> GetLocations()
         {
-            return this.GetAll<SageLocation>(EndPoints.GetLocations);
+            return GetAll<SageLocation>(EndPoints.GetLocations);
         }
 
         public SageResponse<SagePart> GetParts()
         {
-            return this.GetAll<SagePart>(EndPoints.GetParts);
+            return GetAll<SagePart>(EndPoints.GetParts);
         }
 
         public SageResponse<SageEntity> GetPermissionCodes()
         {
-            return this.GetAll<SageEntity>(EndPoints.GetPermissionCodes);
+            return GetAll<SageEntity>(EndPoints.GetPermissionCodes);
         }
 
         public SageResponse<SageProblem> GetProblems()
         {
-            return this.GetAll<SageProblem>(EndPoints.GetProblems);
+            return GetAll<SageProblem>(EndPoints.GetProblems);
         }
 
         public SageResponse<SageEntity> GetRateSheets()
         {
-            return this.GetAll<SageEntity>(EndPoints.GetRateSheets);
+            return GetAll<SageEntity>(EndPoints.GetRateSheets);
         }
 
         public SageResponse<SageRepair> GetRepairs()
         {
-            return this.GetAll<SageRepair>(EndPoints.GetRepairs);
+            return GetAll<SageRepair>(EndPoints.GetRepairs);
         }
 
         public SageResponse<SageWorkOrder> GetWorkorder(string id)
         {
-            return this.Get<SageWorkOrder>(id, EndPoints.GetWorkorder);
+            return Get<SageWorkOrder>(id, EndPoints.GetWorkorder);
         }
 
         public SageResponse<SageWorkOrder> GetWorkorders()
         {
-            return this.GetAll<SageWorkOrder>(EndPoints.GetWorkorder);
+            return GetAll<SageWorkOrder>(EndPoints.GetWorkorder);
         }
 
         public SageResponse<SageWorkOrder> UnassignWorkOrders(string id)
         {
-            return this.Get<SageWorkOrder>(id, EndPoints.UnassignWorkOrders);
+            return Get<SageWorkOrder>(id, EndPoints.UnassignWorkOrders);
         }
 
         private SageResponse<TEntity> Add<TEntity>(TEntity entity, string endPoint) where TEntity : IEntity
         {
             var request = new RestRequest(endPoint, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(entity);
-            request.AddHeader("Authorization", this.token);
-            var response = this._restClient.Execute<SageResponse<TEntity>>(request);
+            request.AddHeader("Authorization", token);
+            var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var results = response.Data;
             return results;
         }
@@ -150,8 +150,8 @@
         {
             var request = new RestRequest(endPoint, Method.DELETE) { RequestFormat = DataFormat.Json };
             request.AddParameter("id", id);
-            request.AddHeader("Authorization", this.token);
-            var response = this._restClient.Execute<SageResponse<TEntity>>(request);
+            request.AddHeader("Authorization", token);
+            var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var results = response.Data;
             return results;
         }
@@ -160,8 +160,8 @@
         {
             var request = new RestRequest(endPoint, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(entity);
-            request.AddHeader("Authorization", this.token);
-            var response = this._restClient.Execute<SageResponse<TEntity>>(request);
+            request.AddHeader("Authorization", token);
+            var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var result = response.Data;
             return result;
         }
@@ -170,8 +170,8 @@
         {
             var request = new RestRequest(endPoint, Method.GET) { RequestFormat = DataFormat.Json };
             request.AddUrlSegment("id", id);
-            request.AddHeader("Authorization", this.token);
-            var response = this._restClient.Execute<SageResponse<TEntity>>(request);
+            request.AddHeader("Authorization", token);
+            var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var result = response.Data;
             return result;
         }
@@ -179,8 +179,8 @@
         private SageResponse<TEntity> GetAll<TEntity>(string endPoint) where TEntity : IEntity
         {
             var request = new RestRequest(endPoint, Method.GET) { RequestFormat = DataFormat.Json };
-            request.AddHeader("Authorization", this.token);
-            var response = this._restClient.Execute<SageResponse<TEntity>>(request);
+            request.AddHeader("Authorization", token);
+            var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var results = response.Data;
             return results;
         }
