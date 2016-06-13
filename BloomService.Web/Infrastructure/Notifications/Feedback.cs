@@ -9,8 +9,8 @@ namespace BloomService.Web.Notifications
     {
         public Feedback()
         {
-            this.DeviceToken = string.Empty;
-            this.Timestamp = DateTime.MinValue;
+            DeviceToken = string.Empty;
+            Timestamp = DateTime.MinValue;
         }
 
         public string DeviceToken { get; set; }

@@ -66,7 +66,7 @@ namespace BloomService.Web.Notifications
         public void AddCustom(string key, params object[] values)
         {
             if (values != null)
-                this.CustomItems.Add(key, values);
+                CustomItems.Add(key, values);
         }
 
         public string ToJson()
@@ -75,53 +75,53 @@ namespace BloomService.Web.Notifications
 
             JObject aps = new JObject();
 
-            if (!this.Alert.IsEmpty)
+            if (!Alert.IsEmpty)
             {
-                if (!string.IsNullOrEmpty(this.Alert.Body)
-                    && string.IsNullOrEmpty(this.Alert.LocalizedKey)
-                    && string.IsNullOrEmpty(this.Alert.ActionLocalizedKey)
-                    && (this.Alert.LocalizedArgs == null || this.Alert.LocalizedArgs.Count <= 0))
+                if (!string.IsNullOrEmpty(Alert.Body)
+                    && string.IsNullOrEmpty(Alert.LocalizedKey)
+                    && string.IsNullOrEmpty(Alert.ActionLocalizedKey)
+                    && (Alert.LocalizedArgs == null || Alert.LocalizedArgs.Count <= 0))
                 {
-                    aps["alert"] = new JValue(this.Alert.Body);
+                    aps["alert"] = new JValue(Alert.Body);
                 }
                 else
                 {
                     JObject jsonAlert = new JObject();
 
-                    if (!string.IsNullOrEmpty(this.Alert.LocalizedKey))
-                        jsonAlert["loc-key"] = new JValue(this.Alert.LocalizedKey);
+                    if (!string.IsNullOrEmpty(Alert.LocalizedKey))
+                        jsonAlert["loc-key"] = new JValue(Alert.LocalizedKey);
 
-                    if (this.Alert.LocalizedArgs != null && this.Alert.LocalizedArgs.Count > 0)
-                        jsonAlert["loc-args"] = new JArray(this.Alert.LocalizedArgs.ToArray());
+                    if (Alert.LocalizedArgs != null && Alert.LocalizedArgs.Count > 0)
+                        jsonAlert["loc-args"] = new JArray(Alert.LocalizedArgs.ToArray());
 
-                    if (!string.IsNullOrEmpty(this.Alert.Body))
-                        jsonAlert["body"] = new JValue(this.Alert.Body);
+                    if (!string.IsNullOrEmpty(Alert.Body))
+                        jsonAlert["body"] = new JValue(Alert.Body);
 
-                    if (!string.IsNullOrEmpty(this.Alert.ActionLocalizedKey))
-                        jsonAlert["action-loc-key"] = new JValue(this.Alert.ActionLocalizedKey);
+                    if (!string.IsNullOrEmpty(Alert.ActionLocalizedKey))
+                        jsonAlert["action-loc-key"] = new JValue(Alert.ActionLocalizedKey);
 
                     aps["alert"] = jsonAlert;
                 }
             }
 
-            if (this.Badge.HasValue)
-                aps["badge"] = new JValue(this.Badge.Value);
+            if (Badge.HasValue)
+                aps["badge"] = new JValue(Badge.Value);
 
-            if (!string.IsNullOrEmpty(this.Sound))
-                aps["sound"] = new JValue(this.Sound);
+            if (!string.IsNullOrEmpty(Sound))
+                aps["sound"] = new JValue(Sound);
 
 
-            if (this.Content_available == 1)
-                aps["content-available"] = new JValue(this.Content_available);
+            if (Content_available == 1)
+                aps["content-available"] = new JValue(Content_available);
 
             json["aps"] = aps;
 
-            foreach (string key in this.CustomItems.Keys)
+            foreach (string key in CustomItems.Keys)
             {
-                if (this.CustomItems[key].Length == 1)
-                    json[key] = new JValue(this.CustomItems[key][0]);
-                else if (this.CustomItems[key].Length > 1)
-                    json[key] = new JArray(this.CustomItems[key]);
+                if (CustomItems[key].Length == 1)
+                    json[key] = new JValue(CustomItems[key][0]);
+                else if (CustomItems[key].Length > 1)
+                    json[key] = new JArray(CustomItems[key]);
             }
 
             string rawString = json.ToString(Newtonsoft.Json.Formatting.None, null);

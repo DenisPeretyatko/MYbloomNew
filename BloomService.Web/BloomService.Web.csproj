@@ -347,7 +347,6 @@
     <Compile Include="Infrastructure\Services\Interfaces\IUserService.cs" />
     <Compile Include="Infrastructure\Hubs\NotificationsHub.cs" />
     <Compile Include="Infrastructure\Hubs\LocationHub.cs" />
-    <Compile Include="Infrastructure\Services\ApiMobileService.cs" />
     <Compile Include="Infrastructure\Services\ImageService.cs" />
     <Compile Include="Infrastructure\Services\UserService.cs" />
     <Compile Include="Models\NotificationModel.cs" />
