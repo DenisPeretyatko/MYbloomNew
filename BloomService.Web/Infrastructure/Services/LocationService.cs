@@ -1,12 +1,9 @@
 ﻿namespace BloomService.Web.Services.Concrete
 {
-    using System.Collections.Generic;
     using System.Net;
 
     using Domain.Entities.Concrete;
     using Abstract;
-    using Domain.Repositories.Abstract;
-    using MongoDB.Bson;
     using System.Linq;
     using Domain.Entities.Concrete.MessageResponse;
     using System.Text;
@@ -18,37 +15,20 @@
     {
         private static readonly string url = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false";
 
-        private List<SageWorkOrder> workOrders;
-        private readonly IRepository _repository;
-
-        public LocationService(IRepository repository)
+        public void ResolveLocation(SageLocation sageLocation)
         {
-            _repository = repository;
-        }
-
-        public bool ResolveLocation(SageLocation entity)
-        {
-            if (entity.Id == null)
-                entity.Id = ObjectId.GenerateNewId().ToString();
-            if (workOrders == null)
-                workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
-
-            if (workOrders.Any(x => x.Location == entity.Name))
+            Thread.Sleep(1000);
+            var parametersSearch = sageLocation.Address + " " + sageLocation.City + " " + sageLocation.ZIP + " " + sageLocation.State;
+            var location = GetLocation(parametersSearch);
+            if (location != null && location.result != null && location.result.Any())
             {
-                Thread.Sleep(100);
-                var parametersSearch = entity.Address + " " + entity.City + " " + entity.ZIP + " " + entity.State;
-                var location = GetLocation(parametersSearch);
-                if (location != null && location.result != null && location.result.Any())
+                var geometry = location.result.FirstOrDefault().geometry;
+                if (geometry != null && geometry.location != null)
                 {
-                    var geometry = location.result.FirstOrDefault().geometry;
-                    if (geometry != null && geometry.location != null)
-                    {
-                        entity.Latitude = geometry.location.lat;
-                        entity.Longitude = geometry.location.lng;
-                    }
+                    sageLocation.Latitude = geometry.location.lat;
+                    sageLocation.Longitude = geometry.location.lng;
                 }
             }
-            return _repository.Update(entity);
         }
 
 
@@ -56,7 +36,7 @@
         {
             ASCIIEncoding encoding = new ASCIIEncoding();
             var searchUrl = string.Format(url, address);
-            var request = HttpWebRequest.Create(searchUrl);
+            var request = WebRequest.Create(searchUrl);
             request.Method = "POST";
             var newStream = request.GetRequestStream();
             newStream.Close();

@@ -28,7 +28,7 @@ namespace BloomService.Web.Controllers
             var date = model.DateWorkOrder.NowIfMin();
 
             var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.Employee != "");                    
-            var locations = _repository.GetAll<SageLocation>();
+            var locations = _repository.GetAll<SageLocation>().ToArray();
             foreach (var item in workOrders)
             {
                 var itemLocation = locations.FirstOrDefault(l => l.Name == item.Location);

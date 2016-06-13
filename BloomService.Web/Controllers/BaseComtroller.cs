@@ -1,4 +1,6 @@
-﻿namespace BloomService.Web.Controllers
+﻿using BloomService.Web.Utils;
+
+namespace BloomService.Web.Controllers
 {
     using System.Web.Mvc;
 
@@ -14,5 +16,17 @@
         {
             return Json(new { success = false, message }, JsonRequestBehavior.AllowGet);
         }
+
+          protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
+          {
+             return new JsonNetResult
+              {
+                  Data = data,
+                  ContentType = contentType,
+                  ContentEncoding = contentEncoding,
+                  JsonRequestBehavior = behavior,
+                  MaxJsonLength = int.MaxValue
+              };
+          }
     }
 }
