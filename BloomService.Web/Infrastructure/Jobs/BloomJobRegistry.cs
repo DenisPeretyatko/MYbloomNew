@@ -7,6 +7,7 @@ using BloomService.Web.Infrastructure.Services;
 using BloomService.Web.Infrastructure.Services.Abstract;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using BloomService.Web.Notifications;
+using BloomService.Web.Services.Abstract;
 using Common.Logging;
 using FluentScheduler;
 using System;
@@ -24,6 +25,7 @@ namespace BloomService.Web.Infrastructure.Jobs
         private readonly object _iosPushNotificationLock = new object();
         private readonly object _syncSageLock = new object();
         private readonly IHttpContextProvider _httpContextProvider;
+        private readonly ILocationService _locationService;
 
 
         public BloomJobRegistry()
@@ -32,36 +34,37 @@ namespace BloomService.Web.Infrastructure.Jobs
             _settings = ComponentContainer.Current.Get<BloomServiceConfiguration>();
             _repository = ComponentContainer.Current.Get<IRepository>();
             _httpContextProvider = ComponentContainer.Current.Get<IHttpContextProvider>();
+            _locationService = ComponentContainer.Current.Get<ILocationService>();
 
             //Send silent push notifications to iOS
-            //Schedule(() =>
-            //{
-            //    lock (_iosPushNotificationLock)
-            //    {
-            //        var path = _httpContextProvider.MapPath(_settings.SertificateUrl);
-            //        var technicians = _repository.SearchFor<SageEmployee>(x => x.IsAvailable && !string.IsNullOrEmpty(x.IosDeviceToken));
-            //        foreach (var technician in technicians)
-            //        {
-            //            if (technician.AvailableDays != null && technician.AvailableDays.Any())
-            //            {
-            //                foreach (var avaibleDay in technician.AvailableDays)
-            //                {
-            //                    var startTime = avaibleDay.Start.TryAsDateTime();
-            //                    var endTime = avaibleDay.End.TryAsDateTime();
-            //                    if (startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
-            //                    {
-            //                        var notificationPayload = new NotificationPayload(technician.IosDeviceToken, "RequestSendLocation", 1, "default", 1);
-            //                        var p = new List<NotificationPayload>();
-            //                        p.Add(notificationPayload);
-            //                        PushNotification push = new PushNotification(true, path, null);
-            //                        push.P12File = path;
-            //                        push.SendToApple(p);
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}).ToRunNow().AndEvery(15).Minutes();
+            Schedule(() =>
+            {
+                lock (_iosPushNotificationLock)
+                {
+                    var path = _httpContextProvider.MapPath(_settings.SertificateUrl);
+                    var technicians = _repository.SearchFor<SageEmployee>(x => x.IsAvailable && !string.IsNullOrEmpty(x.IosDeviceToken));
+                    foreach (var technician in technicians)
+                    {
+                        if (technician.AvailableDays != null && technician.AvailableDays.Any())
+                        {
+                            foreach (var avaibleDay in technician.AvailableDays)
+                            {
+                                var startTime = avaibleDay.Start.TryAsDateTime();
+                                var endTime = avaibleDay.End.TryAsDateTime();
+                                if (startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
+                                {
+                                    var notificationPayload = new NotificationPayload(technician.IosDeviceToken, "RequestSendLocation", 1, "default", 1);
+                                    var p = new List<NotificationPayload>();
+                                    p.Add(notificationPayload);
+                                    PushNotification push = new PushNotification(true, path, null);
+                                    push.P12File = path;
+                                    push.SendToApple(p);
+                                }
+                            }
+                        }
+                    }
+                }
+            }).ToRunNow().AndEvery(15).Minutes();
 
             //Sync sage and mongoDb
             Schedule(() =>
@@ -154,11 +157,17 @@ namespace BloomService.Web.Infrastructure.Jobs
                         foreach (var entity in locations.Entities)
                         {
                             var mongoEntity = _repository.SearchFor<SageLocation>(x => x.Location == entity.Location).SingleOrDefault();
+                            
                             if (mongoEntity == null)
+                            {
+                                _locationService.ResolveLocation(entity);
                                 _repository.Add(entity);
+                            } 
                             else
                             {
                                 entity.Id = mongoEntity.Id;
+                                if (mongoEntity.Longitude == 0 || mongoEntity.Latitude == 0)
+                                    _locationService.ResolveLocation(entity);
                                 _repository.Update(entity);
                             }
                         }

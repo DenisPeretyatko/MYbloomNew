@@ -30,6 +30,8 @@ namespace BloomService.Domain.Extensions
                     SageApiHost = nameValueCollection["SageApiHost"],
                     BSUrl = nameValueCollection["BSUrl"],
                     SertificateUrl = nameValueCollection["SertificateUrl"],
+                    SizeBigPhoto = int.Parse(nameValueCollection["SizeBigPhoto"]),
+                    SizeSmallPhoto = int.Parse(nameValueCollection["SizeSmallPhoto"])
                 };
 
                 return configuration;
@@ -58,5 +60,7 @@ namespace BloomService.Domain.Extensions
         public string SageApiHost { get; set; }
         public string BSUrl { get; set; }
         public string SertificateUrl { get; set; }
+        public int SizeBigPhoto { get; set; }
+        public int SizeSmallPhoto { get; set; }
     }
 }

@@ -1,10 +1,14 @@
-﻿using System.Drawing;
+﻿using BloomService.Domain.Entities.Concrete;
+using BloomService.Web.Models;
+using BloomService.Web.Models.Request;
+using System.Collections.Generic;
 
 namespace BloomService.Web.Services.Abstract
 {
     public interface IImageService
     {
-        string SaveFile(string file, string path, string userId);
-        bool CreateIcon(string nameIcon, string color, string id, Color oldColor);
+        bool SavePhotoForWorkOrder(ImageModel model);
+        bool BuildTechnicianIcons(TechnicianModel technician);
+        List<ImageLocation> GetPhotoForWorkOrder(string idWorkOrder, bool big, string prefixUrl = null);
     }
 }
