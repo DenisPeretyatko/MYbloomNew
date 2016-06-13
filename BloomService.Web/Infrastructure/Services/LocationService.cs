@@ -12,6 +12,7 @@
     using System.Text;
     using System.Xml.Serialization;
     using System.IO;
+    using System.Threading;
 
     public class LocationService : ILocationService
     {
@@ -34,7 +35,7 @@
 
             if (workOrders.Any(x => x.Location == entity.Name))
             {
-                System.Threading.Thread.Sleep(1000);
+                Thread.Sleep(100);
                 var parametersSearch = entity.Address + " " + entity.City + " " + entity.ZIP + " " + entity.State;
                 var location = GetLocation(parametersSearch);
                 if (location != null && location.result != null && location.result.Any())
