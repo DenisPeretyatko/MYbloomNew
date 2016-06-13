@@ -34,34 +34,34 @@ namespace BloomService.Web.Infrastructure.Jobs
             _httpContextProvider = ComponentContainer.Current.Get<IHttpContextProvider>();
 
             //Send silent push notifications to iOS
-            Schedule(() =>
-            {
-                lock (_iosPushNotificationLock)
-                {
-                    var path = _httpContextProvider.MapPath(_settings.SertificateUrl);
-                    var technicians = _repository.SearchFor<SageEmployee>(x => x.IsAvailable && !string.IsNullOrEmpty(x.IosDeviceToken));
-                    foreach (var technician in technicians)
-                    {
-                        if (technician.AvailableDays != null && technician.AvailableDays.Any())
-                        {
-                            foreach (var avaibleDay in technician.AvailableDays)
-                            {
-                                var startTime = avaibleDay.Start.TryAsDateTime();
-                                var endTime = avaibleDay.End.TryAsDateTime();
-                                if (startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
-                                {
-                                    var notificationPayload = new NotificationPayload(technician.IosDeviceToken, "RequestSendLocation", 1, "default", 1);
-                                    var p = new List<NotificationPayload>();
-                                    p.Add(notificationPayload);
-                                    PushNotification push = new PushNotification(true, path, null);
-                                    push.P12File = path;
-                                    push.SendToApple(p);
-                                }
-                            }
-                        }
-                    }
-                }
-            }).ToRunNow().AndEvery(15).Minutes();
+            //Schedule(() =>
+            //{
+            //    lock (_iosPushNotificationLock)
+            //    {
+            //        var path = _httpContextProvider.MapPath(_settings.SertificateUrl);
+            //        var technicians = _repository.SearchFor<SageEmployee>(x => x.IsAvailable && !string.IsNullOrEmpty(x.IosDeviceToken));
+            //        foreach (var technician in technicians)
+            //        {
+            //            if (technician.AvailableDays != null && technician.AvailableDays.Any())
+            //            {
+            //                foreach (var avaibleDay in technician.AvailableDays)
+            //                {
+            //                    var startTime = avaibleDay.Start.TryAsDateTime();
+            //                    var endTime = avaibleDay.End.TryAsDateTime();
+            //                    if (startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
+            //                    {
+            //                        var notificationPayload = new NotificationPayload(technician.IosDeviceToken, "RequestSendLocation", 1, "default", 1);
+            //                        var p = new List<NotificationPayload>();
+            //                        p.Add(notificationPayload);
+            //                        PushNotification push = new PushNotification(true, path, null);
+            //                        push.P12File = path;
+            //                        push.SendToApple(p);
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}).ToRunNow().AndEvery(15).Minutes();
 
             //Sync sage and mongoDb
             Schedule(() =>
@@ -245,7 +245,27 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
                     catch (Exception ex)
                     {
-                        _log.ErrorFormat("Can`t sync SageWorkOrder {0}", ex);
+                        _log.ErrorFormat("Can`t sync SageCustomer {0}", ex);
+                    }
+
+                    try
+                    {
+                        var parts = _proxy.GetParts();
+                        foreach (var entity in parts.Entities)
+                        {
+                            var mongoEntity = _repository.SearchFor<SagePart>(x => x.Part == entity.Part).SingleOrDefault();
+                            if (mongoEntity == null)
+                                _repository.Add(entity);
+                            else
+                            {
+                                entity.Id = mongoEntity.Id;
+                                _repository.Update(entity);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.ErrorFormat("Can`t sync SagePart {0}", ex);
                     }
                 }
             }).ToRunNow().AndEvery(1).Hours();
