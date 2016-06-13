@@ -10,7 +10,7 @@ namespace BloomService.Web.Infrastructure.Services.Abstract
 {
     public interface ISageApiProxy
     {
-        SageResponse<SageCustomer> Customers();
+        SageResponse<SageCustomer> GetCustomers();
         SageResponse<SageAssignment> AddAssignment(SageAssignment assignment);
         SageResponse<SageWorkOrder> AddWorkOrder(SageWorkOrder workOrder);
         SageResponse<SageAssignment> GetAssignments();

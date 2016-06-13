@@ -8,11 +8,9 @@ namespace BloomService.Web
 {
     using System.Configuration;
 
-    using Hangfire;
-    using Hangfire.Mongo;
-
     using Owin;
-    using BackgroundJobs;
+    using Infrastructure.Jobs;
+    using FluentScheduler;
 
     public partial class Startup
     {
@@ -20,15 +18,6 @@ namespace BloomService.Web
         {
             app.MapSignalR();
             ConfigureAuth(app);
-            var syncDbConnection = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString;
-            var syncDbName = ConfigurationManager.AppSettings["SyncDb"];
-
-            GlobalConfiguration.Configuration.UseMongoStorage(syncDbConnection, syncDbName);
-
-            app.UseHangfireDashboard();
-            app.UseHangfireServer();
-
-            //RecurringJob.AddOrUpdate(() => IOSNotifications.SendNotifications(), ConfigurationManager.AppSettings["delay"]);
         }
     }
 }

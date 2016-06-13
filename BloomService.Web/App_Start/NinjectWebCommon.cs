@@ -1,9 +1,9 @@
 using BloomService.Web;
-
 using WebActivatorEx;
 
 [assembly: PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
+
 
 namespace BloomService.Web
 {
@@ -12,7 +12,6 @@ namespace BloomService.Web
     using System.Web;
     using Services.Abstract;
     using Services.Concrete;
-    using Utils;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
     using Ninject;
     using Ninject.Web.Common;
@@ -22,6 +21,8 @@ namespace BloomService.Web
     using Domain.Repositories.Concrete;
     using Infrastructure.Services.Abstract;
     using Infrastructure.Services.Concrete;
+    using Infrastructure.Dependecy;
+    using Infrastructure.Dependecy.Ninject;
 
     public static class NinjectWebCommon
     {
@@ -37,9 +38,6 @@ namespace BloomService.Web
             Bootstrapper.Initialize(CreateKernel);
         }
 
-        /// <summary>
-        /// Stops the application.
-        /// </summary>
         public static void Stop()
         {
             Bootstrapper.ShutDown();
@@ -86,6 +84,10 @@ namespace BloomService.Web
             kernel.Bind<IUserService>().To<UserService>();
             kernel.Bind<ISageApiProxy>().To<SageApiProxy>();
             kernel.Bind<IAuthorizationService>().To<AuthorizationService>();
+
+            ComponentContainer.Current = new NinjectComponentContainer(kernel, new[] {
+                    typeof(MongoRepository).Assembly
+            });
         }
     }
 }
