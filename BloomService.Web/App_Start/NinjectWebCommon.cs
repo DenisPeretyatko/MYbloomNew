@@ -81,7 +81,6 @@ namespace BloomService.Web
             kernel.Bind<IHttpContextProvider>().To<HttpContextProvider>();
             kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(sageApiHost);
             kernel.Bind<ILocationService>().To<LocationService>();
-            kernel.Bind<IApiMobileService>().To<ApiMobileService>();
             kernel.Bind<IImageService>().To<ImageService>();
             kernel.Bind<IUserService>().To<UserService>();
             kernel.Bind<ISageApiProxy>().To<SageApiProxy>();

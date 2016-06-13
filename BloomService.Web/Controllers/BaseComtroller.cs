@@ -7,7 +7,7 @@
     {
         protected ActionResult Success()
         {
-            return Json( new { success = true }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
         protected ActionResult Error(string message)
