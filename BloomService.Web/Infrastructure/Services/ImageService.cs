@@ -8,6 +8,8 @@ using System.Web;
 
 using BloomService.Web.Services.Abstract;
 using System.Drawing.Drawing2D;
+using BloomService.Web.Models;
+using BloomService.Web.Infrastructure.Services.Interfaces;
 
 namespace BloomService.Web.Services.Concrete
 {
@@ -19,7 +21,21 @@ namespace BloomService.Web.Services.Concrete
             { ImageFormat.Jpeg.Guid, "jpeg"},
             { ImageFormat.Png.Guid, "png"}
         };
-    
+ 
+        private readonly IHttpContextProvider httpContextProvider;
+
+        private readonly string urlToTechnicianIcon = "/Public/images/technician.png";
+        private readonly string urlToWorkOrderIcon = "/Public/images/workorder.png";
+        private readonly string urlToFolderTecnician = "/Public/technician/";
+        private readonly string urlToFolderWorkOrder = "/Public/workorder/";
+        private readonly Color colorTechnicianIcon = Color.FromArgb(0, 13, 255);
+        private readonly Color colorWorkOrderIcon = Color.FromArgb(0, 13, 255);
+
+        public ImageService(IHttpContextProvider httpContextProvider)
+        {
+            this.httpContextProvider = httpContextProvider;
+        }
+
         public string SaveFile(string file, string path, string userId)
         {
             if (file == null)
@@ -76,6 +92,22 @@ namespace BloomService.Web.Services.Concrete
             }
         }
 
+        public bool BuildTechnicianColor(TechnicianModel technician)
+        {
+            var pathToTechnicianIcon = httpContextProvider.MapPath(urlToTechnicianIcon);
+            var pathToResultIconTechnician = string.Format("{0}/{1}/technician.png", 
+                httpContextProvider.MapPath(urlToFolderTecnician), technician.Id);
+
+            var pathToWorkOrderIcon = httpContextProvider.MapPath(urlToWorkOrderIcon);
+            var pathToResultIconWorkOrder = string.Format("{0}/{1}/workOrder.png", 
+                httpContextProvider.MapPath(urlToFolderWorkOrder),
+                technician.Id
+                );
+
+            return CreateIcon(pathToTechnicianIcon, technician.Color, pathToResultIconTechnician, colorTechnicianIcon)
+                   && CreateIcon(pathToWorkOrderIcon, technician.Color, pathToResultIconWorkOrder, colorWorkOrderIcon);
+        }
+
         private Image ResizeImage(Image image, Size size, bool preserveAspectRatio = true)
         {
             int newWidth;
@@ -104,8 +136,6 @@ namespace BloomService.Web.Services.Concrete
             }
             return newImage;
         }
-
-
 
         private Image ValidateImage(HttpPostedFileBase file)
         {

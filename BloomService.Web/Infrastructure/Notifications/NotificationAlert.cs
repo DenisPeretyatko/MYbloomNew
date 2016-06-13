@@ -19,7 +19,7 @@ namespace BloomService.Web.Notifications
 
         public void AddLocalizedArgs(params object[] values)
         {
-            this.LocalizedArgs.AddRange(values);
+            LocalizedArgs.AddRange(values);
         }
 
         public bool IsEmpty
