@@ -11,265 +11,268 @@
     public class SageCustomer : SageEntity
     {
         [XmlAttribute]
-        public string AB_Company_ID { get; set; }
+        public string ABCompanyID { get; set; }
 
         [XmlAttribute]
         public string ABN { get; set; }
 
         [XmlAttribute]
-        public string Addon_Table { get; set; }
+        public string AddonTable { get; set; }
 
         [XmlAttribute]
-        public string Address_1 { get; set; }
+        public string Address1 { get; set; }
 
         [XmlAttribute]
-        public string Address_2 { get; set; }
+        public string Address2 { get; set; }
 
         [XmlAttribute]
-        public string Address_3 { get; set; }
+        public string Address3 { get; set; }
 
         [XmlAttribute]
-        public string Address_4 { get; set; }
+        public string Address4 { get; set; }
 
         [XmlAttribute]
-        public string Auto_Text { get; set; }
+        public string AutoText { get; set; }
 
         [XmlAttribute]
         public string Billing { get; set; }
 
         [XmlAttribute]
-        public string Billing_Address_1 { get; set; }
+        public string BillingAddress1 { get; set; }
 
         [XmlAttribute]
-        public string Billing_Address_3 { get; set; }
+        public string BillingAddress2 { get; set; }
 
         [XmlAttribute]
-        public string Billing_Address_4 { get; set; }
+        public string BillingAddress3 { get; set; }
 
         [XmlAttribute]
-        public string Billing_City { get; set; }
+        public string BillingAddress4 { get; set; }
 
         [XmlAttribute]
-        public string Billing_Contact { get; set; }
+        public string BillingCity { get; set; }
 
         [XmlAttribute]
-        public string Billing_Email_Address { get; set; }
+        public string BillingContact { get; set; }
 
         [XmlAttribute]
-        public string Billing_Freq { get; set; }
+        public string BillingEmailAddress { get; set; }
 
         [XmlAttribute]
-        public string Billing_State { get; set; }
+        public string BillingFreq { get; set; }
 
         [XmlAttribute]
-        public string Billing_ZIP_Code { get; set; }
+        public string BillingState { get; set; }
 
         [XmlAttribute]
-        public object Checklist_1_Date { get; set; }
+        public string BillingZIPCode { get; set; }
 
         [XmlAttribute]
-        public bool Checklist_10 { get; set; }
+        public object Checklist1Date { get; set; }
 
         [XmlAttribute]
-        public object Checklist_10_Date { get; set; }
+        public bool Checklist10 { get; set; }
 
         [XmlAttribute]
-        public bool Checklist_2 { get; set; }
+        public object Checklist10Date { get; set; }
 
         [XmlAttribute]
-        public object Checklist_2_Date { get; set; }
+        public bool Checklist2 { get; set; }
 
         [XmlAttribute]
-        public bool Checklist_3 { get; set; }
+        public object Checklist2Date { get; set; }
 
         [XmlAttribute]
-        public object Checklist_3_Date { get; set; }
+        public bool Checklist3 { get; set; }
 
         [XmlAttribute]
-        public bool Checklist_4 { get; set; }
+        public object Checklist3Date { get; set; }
 
         [XmlAttribute]
-        public object Checklist_4_Date { get; set; }
+        public bool Checklist4 { get; set; }
 
         [XmlAttribute]
-        public bool Checklist_5 { get; set; }
+        public object Checklist4Date { get; set; }
 
         [XmlAttribute]
-        public object Checklist_5_Date { get; set; }
+        public bool Checklist5 { get; set; }
 
         [XmlAttribute]
-        public bool Checklist_6 { get; set; }
+        public object Checklist5Date { get; set; }
 
         [XmlAttribute]
-        public object Checklist_6_Date { get; set; }
+        public bool Checklist6 { get; set; }
 
         [XmlAttribute]
-        public bool Checklist_7 { get; set; }
+        public object Checklist6Date { get; set; }
 
         [XmlAttribute]
-        public object Checklist_7_Date { get; set; }
+        public bool Checklist7 { get; set; }
 
         [XmlAttribute]
-        public bool Checklist_8 { get; set; }
+        public object Checklist7Date { get; set; }
 
         [XmlAttribute]
-        public object Checklist_8_Date { get; set; }
+        public bool Checklist8 { get; set; }
 
         [XmlAttribute]
-        public bool Checklist_9 { get; set; }
+        public object Checklist8Date { get; set; }
 
         [XmlAttribute]
-        public object Checklist_9_Date { get; set; }
+        public bool Checklist9 { get; set; }
+
+        [XmlAttribute]
+        public object Checklist9Date { get; set; }
 
         [XmlAttribute]
         public string City { get; set; }
 
         [XmlAttribute]
-        public string Contact_10 { get; set; }
+        public string Contact10 { get; set; }
 
         [XmlAttribute]
-        public string Contact_2 { get; set; }
+        public string Contact2 { get; set; }
 
         [XmlAttribute]
-        public string Contact_3 { get; set; }
+        public string Contact3 { get; set; }
 
         [XmlAttribute]
-        public string Contact_4 { get; set; }
+        public string Contact4 { get; set; }
 
         [XmlAttribute]
-        public string Contact_5 { get; set; }
+        public string Contact5 { get; set; }
 
         [XmlAttribute]
-        public string Contact_6 { get; set; }
+        public string Contact6 { get; set; }
 
         [XmlAttribute]
-        public string Contact_7 { get; set; }
+        public string Contact7 { get; set; }
 
         [XmlAttribute]
-        public string Contact_8 { get; set; }
+        public string Contact8 { get; set; }
 
         [XmlAttribute]
-        public string Contact_9 { get; set; }
+        public string Contact9 { get; set; }
 
         [XmlAttribute]
-        public int Credit_Limit { get; set; }
+        public double CreditLimit { get; set; }
 
         [XmlAttribute]
-        public string Credit_Rating { get; set; }
+        public string CreditRating { get; set; }
 
         [XmlAttribute]
         public string Customer { get; set; }
 
         [XmlAttribute]
-        public object Customer_File_Links { get; set; }
+        public object CustomerFileLinks { get; set; }
 
         [XmlAttribute]
-        public object Customer_Notes { get; set; }
+        public object CustomerNotes { get; set; }
 
         [XmlAttribute]
-        public string Customer_Type { get; set; }
+        public string CustomerType { get; set; }
 
         [XmlAttribute]
-        public DateTime Date_Established { get; set; }
+        public DateTime DateEstablished { get; set; }
 
         [XmlAttribute]
-        public DateTime Date_Stamp { get; set; }
+        public DateTime DateStamp { get; set; }
 
         [XmlAttribute]
-        public int Days_Before_Due { get; set; }
+        public int DaysBeforeDue { get; set; }
 
         [XmlAttribute]
-        public int Discount { get; set; }
+        public double Discount { get; set; }
 
         [XmlAttribute]
-        public string Email_Address { get; set; }
+        public string EmailAddress { get; set; }
 
         [XmlAttribute]
-        public string Equipment_Exempt_Status { get; set; }
+        public string EquipmentExemptStatus { get; set; }
 
         [XmlAttribute]
-        public string Equipment_Rate_Table { get; set; }
+        public string EquipmentRateTable { get; set; }
 
         [XmlAttribute]
-        public bool Exempt_from_Finance_Charge { get; set; }
+        public bool ExemptfromFinanceCharge { get; set; }
 
         [XmlAttribute]
         public string Fax { get; set; }
 
         [XmlAttribute]
-        public int Finance_Charge_Flat_Rate { get; set; }
+        public double FinanceChargeFlatRate { get; set; }
 
         [XmlAttribute]
-        public int Finance_Charge_Percentage_Rate { get; set; }
+        public double FinanceChargePercentageRate { get; set; }
 
         [XmlAttribute]
-        public string Finance_Charge_Rate_Type { get; set; }
+        public string FinanceChargeRateType { get; set; }
 
         [XmlAttribute]
-        public string GL_Prefix { get; set; }
+        public string GLPrefix { get; set; }
 
         [XmlAttribute]
-        public string Invoice_Format { get; set; }
+        public string InvoiceFormat { get; set; }
 
         [XmlAttribute]
-        public object Invoice_Header { get; set; }
+        public object InvoiceHeader { get; set; }
 
         [XmlAttribute]
-        public string Key_1 { get; set; }
+        public string Key1 { get; set; }
 
         [XmlAttribute]
-        public string Key_2 { get; set; }
+        public string Key2 { get; set; }
 
         [XmlAttribute]
-        public string Labor_Exempt_Status { get; set; }
+        public string LaborExemptStatus { get; set; }
 
         [XmlAttribute]
-        public string Labor_Rate_Table { get; set; }
+        public string LaborRateTable { get; set; }
 
         [XmlAttribute]
-        public int LastAutoNumber { get; set; }
+        public long LastAutoNumber { get; set; }
 
         [XmlAttribute]
-        public string Markup_Table { get; set; }
+        public string MarkupTable { get; set; }
 
         [XmlAttribute]
-        public string Material_Exempt_Status { get; set; }
+        public string MaterialExemptStatus { get; set; }
 
         [XmlAttribute]
-        public string Material_Rate_Table { get; set; }
+        public string MaterialRateTable { get; set; }
 
         [XmlAttribute]
         public string Name { get; set; }
 
         [XmlAttribute]
-        public string Operator_Stamp { get; set; }
+        public string OperatorStamp { get; set; }
 
         [XmlAttribute]
-        public string Other_Exempt_Status { get; set; }
+        public string OtherExemptStatus { get; set; }
 
         [XmlAttribute]
-        public string Other_Rate_Table { get; set; }
+        public string OtherRateTable { get; set; }
 
         [XmlAttribute]
-        public string Overhead_Exempt_Status { get; set; }
+        public string OverheadExemptStatus { get; set; }
 
         [XmlAttribute]
-        public string Overhead_Rate_Table { get; set; }
+        public string OverheadRateTable { get; set; }
 
         [XmlAttribute]
-        public bool PO_Required { get; set; }
+        public bool PORequired { get; set; }
 
         [XmlAttribute]
-        public string Resale_Cert { get; set; }
+        public string ResaleCert { get; set; }
 
         [XmlAttribute]
-        public int RetainRetainageage { get; set; }
+        public double Retainage { get; set; }
 
         [XmlAttribute]
-        public bool Send_Statement { get; set; }
+        public bool SendStatement { get; set; }
 
         [XmlAttribute]
-        public string SM_Invoice_Format { get; set; }
+        public string SMInvoiceFormat { get; set; }
 
         [XmlAttribute]
         public string State { get; set; }
@@ -278,37 +281,37 @@
         public string Status { get; set; }
 
         [XmlAttribute]
-        public string Subcontract_Exempt_Status { get; set; }
+        public string SubcontractExemptStatus { get; set; }
 
         [XmlAttribute]
-        public string Subcontract_Rate_Table { get; set; }
+        public string SubcontractRateTable { get; set; }
 
         [XmlAttribute]
-        public string Tax_Group { get; set; }
+        public string TaxGroup { get; set; }
 
         [XmlAttribute]
         public string Telephone { get; set; }
 
         [XmlAttribute]
-        public object Text_2 { get; set; }
+        public object Text2 { get; set; }
 
         [XmlAttribute]
-        public object Text_3 { get; set; }
+        public object Text3 { get; set; }
 
         [XmlAttribute]
-        public object Text_4 { get; set; }
+        public object Text4 { get; set; }
 
         [XmlAttribute]
-        public object Text_5 { get; set; }
+        public object Text5 { get; set; }
 
         [XmlAttribute]
-        public object Text_6 { get; set; }
+        public object Text6 { get; set; }
 
         [XmlAttribute]
-        public TimeStamp Time_Stamp { get; set; }
+        public TimeSpan TimeStamp { get; set; }
 
         [XmlAttribute]
-        public string Total_Billed_Exempt_Status { get; set; }
+        public string TotalBilledExemptStatus { get; set; }
 
         [XmlAttribute]
         public string Trade { get; set; }
@@ -317,6 +320,6 @@
         public bool Warranty { get; set; }
 
         [XmlAttribute]
-        public string ZIP_Code { get; set; }
+        public string ZIPCode { get; set; }
     }
 }
