@@ -32,7 +32,6 @@ namespace BloomService.Web.Controllers
                 Location = model.Location,
                 CallType = model.Calltype,
                 CallDate = model.Calldate.Date,
-                CallTime = model.Calldate.TimeOfDay,
                 Problem = model.Problem,
                 RateSheet = model.Ratesheet,
                 Employee = model.Emploee,
