@@ -21,9 +21,10 @@ namespace BloomService.Web
     using Domain.Repositories.Concrete;
     using Infrastructure.Services.Abstract;
     using Infrastructure.Services.Concrete;
+    using Infrastructure.Services.Interfaces;
+    using Infrastructure.Services;
     using Infrastructure.Dependecy;
     using Infrastructure.Dependecy.Ninject;
-
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
@@ -77,6 +78,8 @@ namespace BloomService.Web
 
             kernel.Bind<IRepository>().To<MongoRepository>().WithConstructorArgument(connectionString);
             kernel.Bind<BloomServiceConfiguration>().ToConstant(setting);
+
+            kernel.Bind<IHttpContextProvider>().To<HttpContextProvider>();
             kernel.Bind<IRestClient>().To<RestClient>().WithConstructorArgument(sageApiHost);
             kernel.Bind<ILocationService>().To<LocationService>();
             kernel.Bind<IApiMobileService>().To<ApiMobileService>();
