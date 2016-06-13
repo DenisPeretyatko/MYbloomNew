@@ -47,7 +47,7 @@
             technician.IsAvailable = model.IsAvailable;
             technician.Picture = model.Picture;
             
-            if (imageService.BuildTechnicianColor(model))
+            if (imageService.BuildTechnicianIcons(model))
             {
                 technician.Color = model.Color;
             }

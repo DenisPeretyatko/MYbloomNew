@@ -82,7 +82,7 @@ namespace BloomService.Web.Services.Concrete
             return true;
         }
 
-        private List<ImageLocation> GetPhotoForWorkOrder(string idWorkOrder, bool big, string prefixUrl = null)
+        public List<ImageLocation> GetPhotoForWorkOrder(string idWorkOrder, bool big, string prefixUrl = null)
         {
             var pathToImage = string.Format("{1}/{2}/", urlToFolderPhotoWorkOrders, idWorkOrder);
             if (prefixUrl != null)
