@@ -260,5 +260,8 @@
 
         [XmlAttribute]
         public string WorkOrderType { get; set; }
+
+        [XmlIgnore]
+        public string AssignmentId { get; set; }
     }
 }
