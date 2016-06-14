@@ -2,23 +2,23 @@
  * editWorkorderController - controller
  */
 
-var editWorkorderController = function ($scope, $stateParams, $state, commonDataService, state) {
+var editWorkorderController = function ($scope, $stateParams, $state,$interpolate, commonDataService, state) {
 
     $scope.obj = {}
-    $scope.customer = '';
-    $scope.location = '';
-    $scope.calltype = '';
-    $scope.obj.calldate = '';
-    $scope.problem = '';
-    $scope.ratesheet = '';
-    $scope.emploee = '';
-    $scope.equipment = '';
-    $scope.estimatehours = '';
-    $scope.obj.nottoexceed = '';
-    $scope.obj.locationcomments = '';
-    $scope.obj.customerpo = '';
-    $scope.obj.permissiocode = '';
-    $scope.paymentmethods = '';
+    $scope.customer = "";
+    $scope.location = "";
+    $scope.calltype = "";
+    $scope.obj.calldate = "";
+    $scope.problem = "";
+    $scope.ratesheet = "";
+    $scope.emploee = "";
+    $scope.equipment = "";
+    $scope.estimatehours = "";
+    $scope.obj.nottoexceed = "";
+    $scope.obj.locationcomments = "";
+    $scope.obj.customerpo = "";
+    $scope.obj.permissiocode = "";
+    $scope.paymentmethods = "";
     $scope.lookups = state.lookups;
 
     $scope.$watch(function () { return state.lookups; }, function () {
@@ -78,8 +78,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, commonData
 	    };
 
 	    commonDataService.saveWorkorder(workorder).then(function (response) {
-	        if (response.data == 'success')
-	            $state.go('manager.workorder.list');
+	        if (response.data == "success")
+	            $state.go("manager.workorder.list");
 	    });
     };
 
@@ -90,8 +90,18 @@ var editWorkorderController = function ($scope, $stateParams, $state, commonData
 	commonDataService.getWorkorderPictures($stateParams.id).then(function (response) {
 	    return $scope.pictures = response.data;
 	});
-    
+
+    $scope.addRow = function() {
+        var html = $('.equip .hiddenrow').first().clone();
+        html.removeClass("hiddenrow");
+        $(".equip tbody").append(html);
+    }
+
+    $scope.deleteRow = function ($event) {
+        var el = angular.element($event.target);
+        el.parent().parent().remove();
+    }
     //$scope.locations = ["1",  "2", "3", "4"];
 
 };
-editWorkorderController.$inject = ["$scope", "$stateParams", "$state", "commonDataService", "state"];
+editWorkorderController.$inject = ["$scope", "$stateParams", "$state", "$interpolate", "commonDataService", "state"];

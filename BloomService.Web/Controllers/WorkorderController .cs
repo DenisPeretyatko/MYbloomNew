@@ -28,20 +28,20 @@ namespace BloomService.Web.Controllers
         {
             var workorder = new SageWorkOrder()
             {
-                ARCustomer = model.Customer,
+                //ARCustomer = model.Customer,
                 Location = model.Location,
-                CallType = model.Calltype,
+                //CallType = model.Calltype,
                 CallDate = model.Calldate.Date,
                 Problem = model.Problem,
-                RateSheet = model.Ratesheet,
+                //RateSheet = model.Ratesheet,
                 Employee = model.Emploee,
-                Equipment = Convert.ToUInt16(model.Equipment),
+                //Equipment = Convert.ToUInt16(model.Equipment),
                 EstimatedRepairHours = Convert.ToDecimal(model.Estimatehours),
                 NottoExceed = model.Nottoexceed,
                 Comments = model.Locationcomments,
-                CustomerPO = model.Customerpo,
-                PermissionCode = model.Permissiocode,
-                PayMethod = model.Paymentmethods
+                //CustomerPO = model.Customerpo,
+                //PermissionCode = model.Permissiocode,
+                //PayMethod = model.Paymentmethods
             };
 
             var result = _sageApiProxy.AddWorkOrder(workorder);
@@ -77,8 +77,8 @@ namespace BloomService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("WorkorderPage/{index}")]
-        public ActionResult GetWorkorderPage(int index)
+        [Route("WorkorderPage")]
+        public ActionResult GetWorkorderPage(int index, string searchString)
         {
             var entitiesCount = _repository.GetAll<SageWorkOrder>().Count();
             var list = _repository.GetAll<SageWorkOrder>().Skip((index - 1) * _itemsOnPage).Take(_itemsOnPage);
