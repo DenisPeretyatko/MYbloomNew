@@ -12,6 +12,7 @@ using Common.Logging;
 using FluentScheduler;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace BloomService.Web.Infrastructure.Jobs
@@ -73,6 +74,26 @@ namespace BloomService.Web.Infrastructure.Jobs
                 {
                     try
                     {
+                        var workOrders = _proxy.GetWorkorders();
+                        foreach (var entity in workOrders.Entities)
+                        {
+                            var mongoEntity = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == entity.WorkOrder).SingleOrDefault();
+                            if (mongoEntity == null)
+                                _repository.Add(entity);
+                            else
+                            {
+                                entity.Id = mongoEntity.Id;
+                                _repository.Update(entity);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.ErrorFormat("Can`t sync SageWorkOrder {0}", ex);
+                    }
+
+                    try
+                    {
                         var callTypeArray = _proxy.GetCalltypes();
                         foreach (var entity in callTypeArray.Entities)
                         {
@@ -94,15 +115,45 @@ namespace BloomService.Web.Infrastructure.Jobs
                     try
                     {
                         var assignments = _proxy.GetAssignments();
-                        foreach (var entity in assignments.Entities)
+                        var testList = assignments.Entities.Where(x => !string.IsNullOrEmpty(x.WorkOrder));
+                        foreach (var assigment in assignments.Entities)
                         {
-                            var mongoEntity = _repository.SearchFor<SageAssignment>(x => x.Assignment == entity.Assignment).SingleOrDefault();
+                            var mongoEntity = _repository.SearchFor<SageAssignment>(x => x.Assignment == assigment.Assignment).SingleOrDefault();
                             if (mongoEntity == null)
-                                _repository.Add(entity);
+                            {
+                                if(assigment.Employee != "")
+                                {
+                                    var employee = _repository.SearchFor<SageEmployee>(e => e.Name == assigment.Employee).SingleOrDefault();
+                                    assigment.EmployeeId = employee != null ? employee.Employee : null;
+                                    var assignmentDateString = assigment.ScheduleDate + " " + assigment.StartTime;
+                                    var assignmentDate = DateTime.ParseExact(assignmentDateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                    assigment.Start = assignmentDate.ToString();
+                                    assigment.End = assignmentDate.AddHours(assigment.EstimatedRepairHours.AsDouble()).ToString();
+                                    assigment.Color = employee?.Color ?? "";
+                                }
+                                else
+                                {
+                                    var workorder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == assigment.WorkOrder).SingleOrDefault();
+                                    if (workorder != null)
+                                    {
+                                        assigment.Customer = workorder.ARCustomer;
+                                        assigment.Location = workorder.Location;
+                                        workorder.AssignmentId = assigment.Id;
+                                        _repository.Update(workorder);
+                                    } 
+                                }
+                                _repository.Add(assigment);
+                            }   
                             else
                             {
-                                entity.Id = mongoEntity.Id;
-                                _repository.Update(entity);
+                                assigment.Id = mongoEntity.Id;
+                                assigment.EmployeeId = mongoEntity.EmployeeId;
+                                assigment.Start = mongoEntity.Start;
+                                assigment.End = mongoEntity.End;
+                                assigment.Color = mongoEntity.Color;
+                                assigment.Customer = mongoEntity.Customer;
+                                assigment.Location = mongoEntity.Location;
+                                _repository.Update(assigment);
                             }
                         }
                     }
@@ -122,6 +173,11 @@ namespace BloomService.Web.Infrastructure.Jobs
                             else
                             {
                                 entity.Id = mongoEntity.Id;
+                                entity.Color = mongoEntity.Color;
+                                entity.Picture = mongoEntity.Picture;
+                                entity.AvailableDays = mongoEntity.AvailableDays;
+                                entity.IsAvailable = mongoEntity.IsAvailable;
+                                entity.IosDeviceToken = mongoEntity.IosDeviceToken;
                                 _repository.Update(entity);
                             }
                         }
@@ -151,36 +207,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         _log.ErrorFormat("Can`t sync SageEquipment {0}", ex);
                     }
 
-                    try
-                    {
-                        var locations = _proxy.GetLocations();
-                        foreach (var entity in locations.Entities)
-                        {
-                            var mongoEntity = _repository.SearchFor<SageLocation>(x => x.Location == entity.Location).SingleOrDefault();
-                            
-                            if (mongoEntity == null)
-                            {
-                                _locationService.ResolveLocation(entity);
-                                _repository.Add(entity);
-                            } 
-                            else
-                            {
-                                entity.Id = mongoEntity.Id;
-                                if (mongoEntity.Longitude == 0 || mongoEntity.Latitude == 0)
-                                    _locationService.ResolveLocation(entity);
-                                else
-                                {
-                                    entity.Latitude = mongoEntity.Latitude;
-                                    entity.Longitude = mongoEntity.Longitude;
-                                }
-                                _repository.Update(entity);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _log.ErrorFormat("Can`t sync SageLocation {0}", ex);
-                    }
+
 
                     try
                     {
@@ -224,23 +251,32 @@ namespace BloomService.Web.Infrastructure.Jobs
 
                     try
                     {
-                        var workOrders = _proxy.GetWorkorders();
-                        foreach (var entity in workOrders.Entities)
+                        var locations = _proxy.GetLocations();
+                        foreach (var entity in locations.Entities)
                         {
-                            var mongoEntity = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == entity.WorkOrder).SingleOrDefault();
+                            var mongoEntity = _repository.SearchFor<SageLocation>(x => x.Location == entity.Location).SingleOrDefault();
+
                             if (mongoEntity == null)
+                            {
+                                var hasOpenWorkOrder = _repository.SearchFor<SageWorkOrder>(x => x.Location == entity.Name && x.Status == "Open").Any();
+                                if (hasOpenWorkOrder)
+                                    _locationService.ResolveLocation(entity);
                                 _repository.Add(entity);
+                            }
                             else
                             {
                                 entity.Id = mongoEntity.Id;
+                                entity.Latitude = mongoEntity.Latitude;
+                                entity.Longitude = mongoEntity.Longitude;
                                 _repository.Update(entity);
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        _log.ErrorFormat("Can`t sync SageWorkOrder {0}", ex);
+                        _log.ErrorFormat("Can`t sync SageLocation {0}", ex);
                     }
+
 
                     try
                     {

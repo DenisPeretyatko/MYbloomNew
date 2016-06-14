@@ -22,5 +22,39 @@ namespace BloomService.Web.Infrastructure.Extensions
         {
             return text.Safe(string.Empty);
         }
+
+        public static double AsDouble(this string text)
+        {
+            return double.Parse(text);
+        }
+
+        public static double? AsDoubleSafe(this string text)
+        {
+            double result;
+            return double.TryParse(text, out result) ? result : (double?)null;
+        }
+
+        public static double AsDoubleSafe(this string text, double defaultValue)
+        {
+            double result;
+            return double.TryParse(text, out result) ? result : defaultValue;
+        }
+
+        public static int AsInt(this string text)
+        {
+            return int.Parse(text);
+        }
+
+        public static int? AsIntSafe(this string text)
+        {
+            int result;
+            return int.TryParse(text, out result) ? result : (int?)null;
+        }
+
+        public static int AsIntSafe(this string text, int defaultValue)
+        {
+            int result;
+            return int.TryParse(text, out result) ? result : defaultValue;
+        }
     }
 }

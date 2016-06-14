@@ -28,7 +28,7 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
           var marker = new google.maps.Marker({
             position: pos,
             map: $scope.locationMap,
-            icon: "/public/images/workorder1.png",
+            icon: "/public/images/workorder.png",
             title:  workorder.WorkOrder
           });
 
@@ -51,7 +51,7 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
               lat: parseFloat(truck.Latitude),
               lng: parseFloat(truck.Longitude)
           }
-          var icon = truck.Color == null ? "/Images/Technicians/technician4.png" : "/Images/Technicians/" + truck.Color.replace('#', '') + ".png";
+          var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png";
           var marker = new google.maps.Marker({
             position: pos,
             map: $scope.locationMap,

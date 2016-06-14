@@ -51,7 +51,8 @@
         }
 
         [HttpGet]
-        [Route("Apimobile/Token")]
+        [AllowAnonymous]
+        [Route("Apimobile/Authorization")]
         public ActionResult Get(string name, string password)
         {
             var token = GetToken(name, password);
@@ -156,7 +157,7 @@
             postData += "&grant_type=" + "password";
             byte[] data = encoding.GetBytes(postData);
 
-            var url = ConfigurationManager.AppSettings["url"] + "apimobile/Token";
+            var url = ConfigurationManager.AppSettings["BSurl"] + "/apimobile/Token";
             var request = WebRequest.Create(url);
             request.Headers.Add(HttpRequestHeader.Authorization, "usernamepassword");
             request.ContentType = "application/x-www-form-urlencoded";

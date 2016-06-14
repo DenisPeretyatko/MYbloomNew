@@ -12,7 +12,6 @@ namespace BloomService.Web.Controllers
     public class LocationController : BaseController
     {
         private readonly ILocationService _locationService;
-
         private readonly IRepository _repository;
 
         public LocationController(ILocationService locationService, IRepository repository)
@@ -27,16 +26,16 @@ namespace BloomService.Web.Controllers
         {
             var date = model.DateWorkOrder.NowIfMin();
 
-            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.Employee != "");                    
+            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.Employee != "").ToList();
             var locations = _repository.GetAll<SageLocation>().ToArray();
             foreach (var item in workOrders)
             {
                 var itemLocation = locations.FirstOrDefault(l => l.Name == item.Location);
-                if (itemLocation != null)
-                {
-                    item.Latitude = itemLocation.Latitude;
-                    item.Longitude = itemLocation.Longitude;
-                }
+                if (itemLocation == null)
+                    continue;
+
+                item.Latitude = itemLocation.Latitude;
+                item.Longitude = itemLocation.Longitude;
             }
             return Json(workOrders, JsonRequestBehavior.AllowGet);
         }
@@ -45,17 +44,17 @@ namespace BloomService.Web.Controllers
         [Route("Location/Trucks")]
         public ActionResult GetTrucks()
         {
-            var employees = _repository.GetAll<SageEmployee>();
+            var employees = _repository.GetAll<SageEmployee>().ToList();
             var techLocations = _repository.GetAll<SageTechnicianLocation>();
 
-            foreach (var item in employees)
+            foreach (var employee in employees)
             {
-                var itemLocation = techLocations.Where(tl => tl.Employee == item.Employee).OrderByDescending(x => x.Date).FirstOrDefault();
-                if (itemLocation != null)
-                {
-                    item.Latitude = itemLocation.Latitude;
-                    item.Longitude = itemLocation.Longitude;
-                }
+                var itemLocation = techLocations.Where(x => x.Employee == employee.Employee).OrderByDescending(x => x.Date).FirstOrDefault();
+                if (itemLocation == null)
+                    continue;
+
+                employee.Latitude = itemLocation.Latitude;
+                employee.Longitude = itemLocation.Longitude;
             }
             return Json(employees, JsonRequestBehavior.AllowGet);
         }

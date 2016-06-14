@@ -2,7 +2,7 @@
  * editWorkorderController - controller
  */
 
-var editWorkorderController = function ($scope, $stateParams, $state,$interpolate, commonDataService, state) {
+var editWorkorderController = function ($scope, $stateParams, $state, $compile, commonDataService, state) {
 
     $scope.obj = {}
     $scope.customer = "";
@@ -12,7 +12,7 @@ var editWorkorderController = function ($scope, $stateParams, $state,$interpolat
     $scope.problem = "";
     $scope.ratesheet = "";
     $scope.emploee = "";
-    $scope.equipment = "";
+    $scope.equipment = [];
     $scope.estimatehours = "";
     $scope.obj.nottoexceed = "";
     $scope.obj.locationcomments = "";
@@ -92,7 +92,8 @@ var editWorkorderController = function ($scope, $stateParams, $state,$interpolat
 	});
 
     $scope.addRow = function() {
-        var html = $('.equip .hiddenrow').first().clone();
+        var html = $(".hiddenrow").clone();
+        html.addClass("gradeX");
         html.removeClass("hiddenrow");
         $(".equip tbody").append(html);
     }
@@ -104,4 +105,4 @@ var editWorkorderController = function ($scope, $stateParams, $state,$interpolat
     //$scope.locations = ["1",  "2", "3", "4"];
 
 };
-editWorkorderController.$inject = ["$scope", "$stateParams", "$state", "$interpolate", "commonDataService", "state"];
+editWorkorderController.$inject = ["$scope", "$stateParams", "$state", "$compile", "commonDataService", "state"];
