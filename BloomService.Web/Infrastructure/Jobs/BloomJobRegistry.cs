@@ -246,25 +246,32 @@ namespace BloomService.Web.Infrastructure.Jobs
 
                     try
                     {
-                        var workOrders = _proxy.GetWorkorders();
-                        foreach (var entity in workOrders.Entities)
+                        var locations = _proxy.GetLocations();
+                        foreach (var entity in locations.Entities)
                         {
-                            var mongoEntity = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == entity.WorkOrder).SingleOrDefault();
+                            var mongoEntity = _repository.SearchFor<SageLocation>(x => x.Location == entity.Location).SingleOrDefault();
+
                             if (mongoEntity == null)
+                            {
+                                var hasOpenWorkOrder = _repository.SearchFor<SageWorkOrder>(x => x.Location == entity.Name && x.Status == "Open").Any();
+                                if (hasOpenWorkOrder)
+                                    _locationService.ResolveLocation(entity);
                                 _repository.Add(entity);
+                            }
                             else
                             {
                                 entity.Id = mongoEntity.Id;
+                                entity.Latitude = mongoEntity.Latitude;
+                                entity.Longitude = mongoEntity.Longitude;
                                 _repository.Update(entity);
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        _log.ErrorFormat("Can`t sync SageWorkOrder {0}", ex);
+                        _log.ErrorFormat("Can`t sync SageLocation {0}", ex);
                     }
 
-                    
 
                     try
                     {
