@@ -108,7 +108,7 @@
         public string TimeEntered { get; set; }
 
         [XmlAttribute]
-        public string WorkorderId { get; set; }
+        public string WorkOrder { get; set; }
 
         [XmlIgnore]
         public string Start { get; set; }

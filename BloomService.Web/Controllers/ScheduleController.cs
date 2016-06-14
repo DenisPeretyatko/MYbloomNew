@@ -31,7 +31,7 @@
         {
             var lastMonth = DateTime.Now.AddMonths(-1);
             var model = new ScheduleViewModel();
-            var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.WorkorderId)).ToList();
+            var assignments = _repository.SearchFor<SageAssignment>(x=>!string.IsNullOrEmpty(x.Color)).ToList();
             var mappedAssignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(assignments);
             var workorders = _repository.GetAll<SageWorkOrder>();
             var workOrdersForLastMonth = workorders.Where(x => x.Status == "Open" && x.DateEntered > lastMonth && !string.IsNullOrEmpty(x.AssignmentId)).ToList();
@@ -45,7 +45,7 @@
         public ActionResult CreateAssignment(AssignmentViewModel model)
         {
             var d = model.ScheduleDate.ToUniversalTime();
-            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkorderId == model.WorkOrder).Single();
+            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.Workorder == model.WorkOrder).Single();
             var edited = _sageApiProxy.EditAssignment(databaseAssignment);
             if (edited == null)
                 return Error();
@@ -53,7 +53,7 @@
             var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
             databaseAssignment.Employee = employee?.Name ?? "";
             databaseAssignment.ScheduleDate = model.ScheduleDate.ToSageDate();
-            databaseAssignment.WorkorderId = model.WorkOrder;
+            databaseAssignment.Workorder = model.WorkOrder;
             databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
             databaseAssignment.StartTime = model.ScheduleDate.ToSageTime();
             databaseAssignment.Enddate = model.EndDate.ToSageDate();
@@ -78,7 +78,7 @@
         [Route("Schedule/Assignments/Delete")]
         public ActionResult DeleteAssignment(AssignmentViewModel model)
         {
-            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkorderId == model.Id).Single();
+            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.Workorder == model.Id).Single();
             var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).Single();
             var result = _sageApiProxy.UnassignWorkOrders(model.WorkOrder);
             if (!result.IsSucceed)

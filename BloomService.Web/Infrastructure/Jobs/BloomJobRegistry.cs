@@ -115,6 +115,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     try
                     {
                         var assignments = _proxy.GetAssignments();
+                        var testList = assignments.Entities.Where(x => !string.IsNullOrEmpty(x.Workorder));
                         foreach (var assigment in assignments.Entities)
                         {
                             var mongoEntity = _repository.SearchFor<SageAssignment>(x => x.Assignment == assigment.Assignment).SingleOrDefault();
@@ -132,12 +133,11 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 }
                                 else
                                 {
-                                    var workorder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == assigment.WorkorderId).SingleOrDefault();
+                                    var workorder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == assigment.Workorder).SingleOrDefault();
                                     if (workorder != null)
                                     {
                                         assigment.Customer = workorder.ARCustomer;
                                         assigment.Location = workorder.Location;
-                                        assigment.WorkorderId = workorder.WorkOrder;
                                         workorder.AssignmentId = assigment.Id;
                                         _repository.Update(workorder);
                                     } 

@@ -52,7 +52,7 @@ namespace BloomService.Web.Controllers
             var chartData = new List<List<object>>
             {
                 new List<object> {"Open", listWO.Count()},
-                new List<object> {"Assigned", listWO.Count(x => assignments.Any(a => a.WorkorderId == x.WorkOrder))},
+                new List<object> {"Assigned", listWO.Count(x => assignments.Any(a => a.Workorder == x.WorkOrder))},
                 new List<object> {"Roof leak", listWO.Count(x => x.Problem == "Roof leak")},
                 new List<object> {"Closed today", listWO.Count(x => x.DateClosed == DateTime.Now.ToSageDate())},
             };
