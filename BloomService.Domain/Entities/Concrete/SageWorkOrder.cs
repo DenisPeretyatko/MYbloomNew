@@ -99,7 +99,7 @@
         [XmlAttribute]
         public string Comments { get; set; }
 
-        [XmlAttribute]
+        [XmlIgnore]
         public byte CompletedBy { get; set; }
 
         [XmlIgnore]

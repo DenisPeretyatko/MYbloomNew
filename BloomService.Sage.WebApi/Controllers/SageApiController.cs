@@ -11,6 +11,9 @@
     using System.Collections.Generic;
     using System.Web.Http;
     using BloomService.Domain.Entities.Concrete.MessageResponse;
+    using BloomService.Domain.Models.Requests;
+    using BloomService.Domain.Models.Responses;
+    using WebGrease.Css.Extensions;
     [System.Web.Mvc.Authorize]
     public class SageApiController : ApiController
     {
@@ -18,11 +21,22 @@
 
         private readonly IServiceOdbc serviceOdbc;
 
-        public SageApiController(IServiceManagement serviceManager, IServiceOdbc serviceOdbc)
+        private readonly IServiceAuthorization serviceAuthorization;
+
+        public SageApiController(IServiceManagement serviceManager, IServiceOdbc serviceOdbc, IServiceAuthorization serviceAuthorization)
         {
             this.serviceManager = serviceManager;
             this.serviceOdbc = serviceOdbc;
+            this.serviceAuthorization = serviceAuthorization;
         }
+
+        [HttpPost, Route("api/v2/Authorization/Authorization")]
+        public AuthorizationResponse Authorization(AuthorizationRequest model)
+        {
+            var response = serviceAuthorization.Authorization(model);
+            return response;
+        }
+
 
         [HttpGet, Route("api/v2/ar/customers")]
         public SageResponse<SageCustomer> Customers()
@@ -62,7 +76,33 @@
             try
             {
                 var properties = SagePropertyConverter.ConvertToProperties(workOrder);
-                var resultWorkOrder = serviceManager.WorkOrders(properties).SingleOrDefault();
+                var requestProperties = new Dictionary<string, string>();
+                var resultProperties = new Dictionary<string, string>();
+
+                requestProperties.Add("ARCustomer", properties.ContainsKey("ARCustomer") ? properties["ARCustomer"] : string.Empty);
+                requestProperties.Add("Location", properties.ContainsKey("Location") ? properties["Location"] : string.Empty);
+                requestProperties.Add("CallType", properties.ContainsKey("CallType") ? properties["CallType"] : string.Empty);
+                requestProperties.Add("CallDate", properties.ContainsKey("CallDate") ? properties["CallDate"] : string.Empty);
+                requestProperties.Add("Problem", properties.ContainsKey("Problem") ? properties["Problem"] : string.Empty);
+                requestProperties.Add("RateSheet", properties.ContainsKey("RateSheet") ? properties["RateSheet"] : string.Empty);
+                requestProperties.Add("Employee", properties.ContainsKey("Employee") ? properties["Employee"] : string.Empty);
+                requestProperties.Add("Equipment", properties.ContainsKey("Equipment") ? properties["Equipment"] : string.Empty);
+                requestProperties.Add("EstimatedRepairHours", properties.ContainsKey("EstimatedRepairHours") ? properties["EstimatedRepairHours"] : string.Empty);
+                requestProperties.Add("NottoExceed", properties.ContainsKey("NottoExceed") ? properties["NottoExceed"] : string.Empty);
+                requestProperties.Add("Comments", properties.ContainsKey("Comments") ? properties["Comments"] : string.Empty);
+                requestProperties.Add("CustomerPO", properties.ContainsKey("CustomerPO") ? properties["CustomerPO"] : string.Empty);
+                requestProperties.Add("PermissionCode", properties.ContainsKey("PermissionCode") ? properties["PermissionCode"] : string.Empty);
+                requestProperties.Add("PayMethod", properties.ContainsKey("PayMethod") ? properties["PayMethod"] : string.Empty);
+
+                requestProperties.ForEach(x =>
+                {
+                    if (x.Value != string.Empty)
+                    {
+                        resultProperties.Add(x.Key, x.Value);
+                    }
+                });
+
+                var resultWorkOrder = serviceManager.WorkOrders(resultProperties).SingleOrDefault();
 
                 var result = new SageResponse<SageWorkOrder> { IsSucceed = true, Entity = resultWorkOrder };
                 return result;

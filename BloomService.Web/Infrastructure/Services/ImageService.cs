@@ -20,11 +20,11 @@ namespace BloomService.Web.Services.Concrete
 {
     public class ImageService : IImageService
     {
-        private static readonly Dictionary<Guid, string> _knownImageFormats = new Dictionary<Guid, string>()
+        private static readonly Dictionary<ImageFormat, string> _knownImageFormats = new Dictionary<ImageFormat, string>()
         {
-            { ImageFormat.Bmp.Guid, "bmp"},
-            { ImageFormat.Jpeg.Guid, "jpeg"},
-            { ImageFormat.Png.Guid, "png"}
+            { ImageFormat.Bmp, "bmp"},
+            { ImageFormat.Jpeg, "jpg"},
+            { ImageFormat.Png, "png"}
         };
 
         private readonly IHttpContextProvider httpContextProvider;
@@ -36,7 +36,7 @@ namespace BloomService.Web.Services.Concrete
         private readonly string urlToFolderWorkOrder = "/Public/workorder/";
         private readonly string urlToFolderPhotoWorkOrders = "/Public/images/";
         private readonly Color colorTechnicianIcon = Color.FromArgb(0, 13, 255);
-        private readonly Color colorWorkOrderIcon = Color.FromArgb(0, 13, 255);
+        private readonly Color colorWorkOrderIcon = Color.FromArgb(255, 0, 4);
         private readonly BloomServiceConfiguration settings;
 
         public ImageService(IHttpContextProvider httpContextProvider, IRepository repository)
@@ -74,7 +74,7 @@ namespace BloomService.Web.Services.Concrete
             var nameBig = countImage.ToString();
             var nameSmall = "small" + countImage;
             var fileName = SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, settings.SizeBigPhoto);
-            SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, settings.SizeSmallPhoto);
+            SavePhotoForWorkOrder(model.Image, pathToImage, nameSmall, settings.SizeSmallPhoto);
 
             var image = new ImageLocation { Image = fileName, Latitude = model.Latitude, Longitude = model.Longitude };
             imagesDb.Images.Add(image);
@@ -107,26 +107,21 @@ namespace BloomService.Web.Services.Concrete
                 return string.Empty;
 
             byte[] imgData = Convert.FromBase64String(file);
-
-            MemoryStream ms = new MemoryStream(imgData, 0,
-              imgData.Length);
+            MemoryStream ms = new MemoryStream(imgData, 0, imgData.Length);
             ms.Write(imgData, 0, imgData.Length);
             Image image = Image.FromStream(ms, true);
             if (!ValidateImage(image))
                 return string.Empty;
-
             string name;
             string ext = "jpg";
-            if (_knownImageFormats.TryGetValue(image.RawFormat.Guid, out name))
+            if (_knownImageFormats.TryGetValue(image.RawFormat, out name))
                 ext = name.ToLower();
-
+            image = ResizeImage(image, new Size(MaxSize, MaxSize));
             var di = new DirectoryInfo(path);
             if (!di.Exists)
                 di.Create();
-
-
             var newPath = userId + "." + ext;
-            File.WriteAllBytes(path + newPath, imgData);
+            image.Save(path + newPath);
             return newPath;
         }
 
@@ -149,11 +144,10 @@ namespace BloomService.Web.Services.Concrete
                                                   image.Width, image.Height), 0, 0, image.Width,
                                                   image.Height, GraphicsUnit.Pixel, imageAttr);
                     image.Save(resultIconPath, ImageFormat.Png);
-
                 }
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
                 return false;
             }
@@ -162,11 +156,11 @@ namespace BloomService.Web.Services.Concrete
         public bool BuildTechnicianIcons(TechnicianModel technician)
         {
             var pathToTechnicianIcon = httpContextProvider.MapPath(urlToTechnicianIcon);
-            var pathToResultIconTechnician = string.Format("{0}/{1}/technician.png",
+            var pathToResultIconTechnician = string.Format("{0}{1}.png",
                 httpContextProvider.MapPath(urlToFolderTecnician), technician.Id);
 
             var pathToWorkOrderIcon = httpContextProvider.MapPath(urlToWorkOrderIcon);
-            var pathToResultIconWorkOrder = string.Format("{0}/{1}/workOrder.png",
+            var pathToResultIconWorkOrder = string.Format("{0}{1}.png",
                 httpContextProvider.MapPath(urlToFolderWorkOrder),
                 technician.Id
                 );

@@ -26,7 +26,7 @@ namespace BloomService.Web.Controllers
         {
             var date = model.DateWorkOrder.NowIfMin();
 
-            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.Employee != "");                    
+            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.Employee != "").ToList();
             var locations = _repository.GetAll<SageLocation>().ToArray();
             foreach (var item in workOrders)
             {
@@ -44,7 +44,7 @@ namespace BloomService.Web.Controllers
         [Route("Location/Trucks")]
         public ActionResult GetTrucks()
         {
-            var employees = _repository.GetAll<SageEmployee>();
+            var employees = _repository.GetAll<SageEmployee>().ToList();
             var techLocations = _repository.GetAll<SageTechnicianLocation>();
 
             foreach (var employee in employees)

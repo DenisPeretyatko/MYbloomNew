@@ -42,6 +42,7 @@
         public ActionResult SaveTechnician(TechnicianModel model)
         {
             var employee = repository.Get<SageEmployee>(model.Id);
+            model.Id = employee.Employee;
             var technician = Mapper.Map<SageEmployee, EmployeeModel>(employee);
             technician.AvailableDays = model.AvailableDays;
             technician.IsAvailable = model.IsAvailable;

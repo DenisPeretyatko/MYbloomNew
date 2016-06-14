@@ -14,6 +14,14 @@
 *.user
 *.sln.docstates
 *.sln.dotsettings
+BloomService.Web/Public/technician/*
+BloomService.Web/Public/workorder/*
+BloomService.Web/Public/images/*
+!logo.png
+!user.png
+!workorder.png
+!technician.png
+
 
 # Build results
 [Dd]ebug/
