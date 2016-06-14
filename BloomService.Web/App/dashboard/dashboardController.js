@@ -53,7 +53,7 @@
                 lat: parseFloat(truck.Latitude),
                 lng: parseFloat(truck.Longitude)
             }
-            var icon = truck.Color == null ? "/Images/Technicians/technician4.png" : "/public/technician/" + truck.Employee + ".png";
+            var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png";
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
