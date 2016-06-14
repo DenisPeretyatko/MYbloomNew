@@ -111,7 +111,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             Color: $scope.color
         };
         commonDataService.editTechnician(technician).then(function (response) {
-            if (response.data == 'success')
+            if (response.statusText == 'OK')
                 $state.go('manager.technician.list');
         });
     };

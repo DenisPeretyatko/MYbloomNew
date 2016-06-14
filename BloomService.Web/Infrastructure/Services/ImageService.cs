@@ -36,7 +36,7 @@ namespace BloomService.Web.Services.Concrete
         private readonly string urlToFolderWorkOrder = "/Public/workorder/";
         private readonly string urlToFolderPhotoWorkOrders = "/Public/images/";
         private readonly Color colorTechnicianIcon = Color.FromArgb(0, 13, 255);
-        private readonly Color colorWorkOrderIcon = Color.FromArgb(0, 13, 255);
+        private readonly Color colorWorkOrderIcon = Color.FromArgb(255, 0, 4);
         private readonly BloomServiceConfiguration settings;
 
         public ImageService(IHttpContextProvider httpContextProvider, IRepository repository)
@@ -144,11 +144,10 @@ namespace BloomService.Web.Services.Concrete
                                                   image.Width, image.Height), 0, 0, image.Width,
                                                   image.Height, GraphicsUnit.Pixel, imageAttr);
                     image.Save(resultIconPath, ImageFormat.Png);
-
                 }
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
                 return false;
             }
@@ -157,11 +156,11 @@ namespace BloomService.Web.Services.Concrete
         public bool BuildTechnicianIcons(TechnicianModel technician)
         {
             var pathToTechnicianIcon = httpContextProvider.MapPath(urlToTechnicianIcon);
-            var pathToResultIconTechnician = string.Format("{0}/{1}/technician.png",
+            var pathToResultIconTechnician = string.Format("{0}{1}.png",
                 httpContextProvider.MapPath(urlToFolderTecnician), technician.Id);
 
             var pathToWorkOrderIcon = httpContextProvider.MapPath(urlToWorkOrderIcon);
-            var pathToResultIconWorkOrder = string.Format("{0}/{1}/workOrder.png",
+            var pathToResultIconWorkOrder = string.Format("{0}{1}.png",
                 httpContextProvider.MapPath(urlToFolderWorkOrder),
                 technician.Id
                 );

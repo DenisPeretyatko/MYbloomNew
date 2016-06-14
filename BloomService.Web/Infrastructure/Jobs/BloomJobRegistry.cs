@@ -151,36 +151,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         _log.ErrorFormat("Can`t sync SageEquipment {0}", ex);
                     }
 
-                    try
-                    {
-                        var locations = _proxy.GetLocations();
-                        foreach (var entity in locations.Entities)
-                        {
-                            var mongoEntity = _repository.SearchFor<SageLocation>(x => x.Location == entity.Location).SingleOrDefault();
-                            
-                            if (mongoEntity == null)
-                            {
-                                _locationService.ResolveLocation(entity);
-                                _repository.Add(entity);
-                            } 
-                            else
-                            {
-                                entity.Id = mongoEntity.Id;
-                                if (mongoEntity.Longitude == 0 || mongoEntity.Latitude == 0)
-                                    _locationService.ResolveLocation(entity);
-                                else
-                                {
-                                    entity.Latitude = mongoEntity.Latitude;
-                                    entity.Longitude = mongoEntity.Longitude;
-                                }
-                                _repository.Update(entity);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _log.ErrorFormat("Can`t sync SageLocation {0}", ex);
-                    }
+
 
                     try
                     {
@@ -240,6 +211,34 @@ namespace BloomService.Web.Infrastructure.Jobs
                     catch (Exception ex)
                     {
                         _log.ErrorFormat("Can`t sync SageWorkOrder {0}", ex);
+                    }
+
+                    try
+                    {
+                        var locations = _proxy.GetLocations();
+                        foreach (var entity in locations.Entities)
+                        {
+                            var mongoEntity = _repository.SearchFor<SageLocation>(x => x.Location == entity.Location).SingleOrDefault();
+
+                            if (mongoEntity == null)
+                            {
+                                var hasOpenWorkOrder = _repository.SearchFor<SageWorkOrder>(x => x.Location == entity.Name && x.Status == "Open").Any();
+                                if(hasOpenWorkOrder)
+                                    _locationService.ResolveLocation(entity);
+                                _repository.Add(entity);
+                            }
+                            else
+                            {
+                                entity.Id = mongoEntity.Id;
+                                entity.Latitude = mongoEntity.Latitude;
+                                entity.Longitude = mongoEntity.Longitude;
+                                _repository.Update(entity);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.ErrorFormat("Can`t sync SageLocation {0}", ex);
                     }
 
                     try
