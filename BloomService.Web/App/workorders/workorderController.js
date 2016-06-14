@@ -10,7 +10,6 @@ var workorderController = function ($scope, $timeout, commonDataService) {
             $(".footable").trigger("footable_redraw");
         }, 100);
     });
-
     $scope.Parse = function (value) {
         return new Date(parseInt(value.substr(6)));
     };
@@ -24,9 +23,9 @@ var workorderController = function ($scope, $timeout, commonDataService) {
     //    }
     //}
 
-    $scope.Parse = function (value) {
-        return new Date(parseInt(value.substr(6)));
-    };
+    //$scope.Parse = function (value) {
+    //    return new Date(parseInt(value.substr(6)));
+    //};
 
 };
 workorderController.$inject = ["$scope", "$timeout", "commonDataService"];

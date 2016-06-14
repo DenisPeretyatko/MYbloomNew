@@ -30,7 +30,7 @@
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
-                icon: "/public/images/workorder1.png",
+                icon: "/public/images/workorder.png",
                 title: workorder.WorkOrder
             });
 
