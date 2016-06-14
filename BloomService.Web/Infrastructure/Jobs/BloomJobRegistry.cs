@@ -173,6 +173,11 @@ namespace BloomService.Web.Infrastructure.Jobs
                             else
                             {
                                 entity.Id = mongoEntity.Id;
+                                entity.Color = mongoEntity.Color;
+                                entity.Picture = mongoEntity.Picture;
+                                entity.AvailableDays = mongoEntity.AvailableDays;
+                                entity.IsAvailable = mongoEntity.IsAvailable;
+                                entity.IosDeviceToken = mongoEntity.IosDeviceToken;
                                 _repository.Update(entity);
                             }
                         }
