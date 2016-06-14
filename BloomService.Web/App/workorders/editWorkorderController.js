@@ -22,8 +22,17 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     $scope.lookups = state.lookups;
 
     $scope.$watch(function () { return state.lookups; }, function () {
-        $scope.lookups = state.lookups;
-        var workorder = $scope.editableWorkOrder;
+       $scope.lookups = state.lookups;
+
+       if (state.lookups.Equipment !== undefined) {
+           var equipment = {
+               equip: $scope.lookups.Equipment,
+               empl: $scope.lookups.Employes,
+               date: $scope.obj.data
+           }
+           $scope.equipment.push(equipment);
+       }
+       var workorder = $scope.editableWorkOrder;
         $scope.lookups.Customers.selected = $scope.lookups.Customers.find(function (element) {
             return element.Name === workorder.ARCustomer;
         });
@@ -91,16 +100,19 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
 	    return $scope.pictures = response.data;
 	});
 
-    $scope.addRow = function() {
-        var html = $(".hiddenrow").clone();
-        html.addClass("gradeX");
-        html.removeClass("hiddenrow");
-        $(".equip tbody").append(html);
+	$scope.addRow = function () {
+	    var equipment = {
+	        equip: $scope.lookups.Equipment,
+	        empl: $scope.lookups.Employes,
+	        date: $scope.obj.data
+	    }
+	    $scope.equipment.push(equipment);
     }
 
-    $scope.deleteRow = function ($event) {
+    $scope.deleteRow = function ($event, item) {
         var el = angular.element($event.target);
         el.parent().parent().remove();
+        $scope.equipment.splice($scope.equipment.indexOf(item), 1);
     }
     //$scope.locations = ["1",  "2", "3", "4"];
 

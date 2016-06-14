@@ -151,85 +151,31 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr class="gradeX" ng-if="equipment.length > 0" ng-repeat="equip in equipment">
+                                <tr class="gradeX"  ng-repeat="equipm in equipment track by $index">
                                     <td>
-                                        <ui-select ng-model="lookups.Equipment.selected" theme="bootstrap">
+                                        <ui-select ng-model="equipm.equip.selected" theme="bootstrap">
                                             <ui-select-match placeholder="Equipment to Service">{{$select.selected.EquipmentType}}</ui-select-match>
-                                            <ui-select-choices repeat="item in lookups.Equipment | filter: $select.search">
+                                            <ui-select-choices repeat="item in equipm.equip | filter: $select.search">
                                                 <div ng-bind-html="item.EquipmentType | highlight: $select.search">{{item.EquipmentType}}</div>
                                             </ui-select-choices>
                                         </ui-select>
                                     </td>
                                     <td>
-                                        <ui-select ng-model="lookups.Employes.selected" theme="bootstrap">
+                                        <ui-select ng-model="equipm.empl.selected" theme="bootstrap">
                                             <ui-select-match placeholder="Employee">{{$select.selected.Name}}</ui-select-match>
-                                            <ui-select-choices repeat="item in lookups.Employes | filter: $select.search">
+                                            <ui-select-choices repeat="item in equipm.empl | filter: $select.search">
                                                 <div ng-bind-html="item.Name | highlight: $select.search">{{item.Name}}</div>
                                             </ui-select-choices>
                                         </ui-select>
                                     </td>
                                     <td>
                                         <div class="input-group date">
-                                            <input type="datetime" class="form-control" date-time ng-model="obj.calldate" view="date" auto-close="true" min-view="date" format="YYYY-MM-DD">
+                                            <input type="datetime" class="form-control" date-time ng-model="equipm.date" view="date" auto-close="true" min-view="date" format="YYYY-MM-DD">
                                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                         </div>
                                     </td>
                                     <td class="center">
-                                        <a ui-sref="" class="btn btn-danger btn-xs" ng-click="deleteRow($event)">Remove</a>
-                                    </td>
-                                </tr>
-                                    <tr class="gradeX" ng-if="equipment.length == 0" >
-                                        <td>
-                                            <ui-select ng-model="lookups.Equipment.selected" theme="bootstrap">
-                                                <ui-select-match placeholder="Equipment to Service">{{$select.selected.EquipmentType}}</ui-select-match>
-                                                <ui-select-choices repeat="item in lookups.Equipment | filter: $select.search">
-                                                    <div ng-bind-html="item.EquipmentType | highlight: $select.search">{{item.EquipmentType}}</div>
-                                                </ui-select-choices>
-                                            </ui-select>
-                                        </td>
-                                        <td>
-                                            <ui-select ng-model="lookups.Employes.selected" theme="bootstrap">
-                                                <ui-select-match placeholder="Employee">{{$select.selected.Name}}</ui-select-match>
-                                                <ui-select-choices repeat="item in lookups.Employes | filter: $select.search">
-                                                    <div ng-bind-html="item.Name | highlight: $select.search">{{item.Name}}</div>
-                                                </ui-select-choices>
-                                            </ui-select>
-                                        </td>
-                                        <td>
-                                            <div class="input-group date">
-                                                <input type="datetime" class="form-control" date-time ng-model="obj.calldate" view="date" auto-close="true" min-view="date" format="YYYY-MM-DD">
-                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                            </div>
-                                        </td>
-                                        <td class="center">
-                                            <a ui-sref="" class="btn btn-danger btn-xs" ng-click="deleteRow($event)">Remove</a>
-                                        </td>
-                                    </tr>
-                                <tr class="hiddenrow">
-                                    <td>
-                                        <ui-select ng-model="lookups.Equipment.selected" theme="bootstrap">
-                                            <ui-select-match placeholder="Equipment to Service">{{$select.selected.EquipmentType}}</ui-select-match>
-                                            <ui-select-choices repeat="item in lookups.Equipment | filter: $select.search">
-                                                <div ng-bind-html="item.EquipmentType | highlight: $select.search">{{item.EquipmentType}}</div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </td>
-                                    <td>
-                                        <ui-select ng-model="lookups.Employes.selected" theme="bootstrap">
-                                            <ui-select-match placeholder="Employee">{{$select.selected.Name}}</ui-select-match>
-                                            <ui-select-choices repeat="item in lookups.Employes | filter: $select.search">
-                                                <div ng-bind-html="item.Name | highlight: $select.search">{{item.Name}}</div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </td>
-                                    <td>
-                                        <div class="input-group date">
-                                            <input type="datetime" class="form-control" date-time ng-model="obj.calldate" view="date" auto-close="true" min-view="date" format="YYYY-MM-DD">
-                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                        </div>
-                                    </td>
-                                    <td class="center">
-                                        <a ui-sref="" class="btn btn-danger btn-xs" ng-click="deleteRow($event)">Remove</a>
+                                        <a  class="btn btn-danger btn-xs" ng-click="deleteRow($event, equipm)">Remove</a>
                                     </td>
                                 </tr>
                                 </tbody>
