@@ -2,7 +2,7 @@
 {
     using System.Xml.Serialization;
 
-    using BloomService.Domain.Attributes;
+    using Attributes;
 
     [XmlType(AnonymousType = true)]
     [CollectionName("AssignmentCollection")]
@@ -108,6 +108,19 @@
         public string TimeEntered { get; set; }
 
         [XmlAttribute]
-        public string WorkOrder { get; set; }
+        public string WorkorderId { get; set; }
+
+        [XmlIgnore]
+        public string Start { get; set; }
+        [XmlIgnore]
+        public string End { get; set; }
+        [XmlIgnore]
+        public string Location { get; set; }
+        [XmlIgnore]
+        public string Customer { get; set; }
+        [XmlIgnore]
+        public string Color { get; set; }
+        [XmlIgnore]
+        public string EmployeeId { get; set; }
     }
 }

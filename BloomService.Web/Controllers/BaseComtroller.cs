@@ -12,7 +12,7 @@ namespace BloomService.Web.Controllers
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
-        protected ActionResult Error(string message)
+        protected ActionResult Error(string message = "")
         {
             return Json(new { success = false, message }, JsonRequestBehavior.AllowGet);
         }

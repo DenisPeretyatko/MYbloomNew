@@ -16,7 +16,6 @@
 
     public class ScheduleController : BaseController
     {
-
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
 
@@ -30,40 +29,14 @@
         [Route("Schedule")]
         public ActionResult GetSchedules()
         {
+            var lastMonth = DateTime.Now.AddMonths(-1);
             var model = new ScheduleViewModel();
-            var sageAssignments = _repository.GetAll<SageAssignment>().ToList();
-            var assignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(sageAssignments);
-            var assignedAs = assignments.Where(x => x.Employee != "");
-            var employees = _repository.GetAll<SageEmployee>().ToArray();
-            foreach (var item in assignedAs)
-            {
-                var employee = employees.FirstOrDefault(e => e.Name == item.Employee);
-                item.EmployeeId = employee != null ? employee.Employee : null;
-                var startDate = DateTime.ParseExact(
-                    item.ScheduleDate + " " + item.StartTime,
-                    "yyyy-MM-dd HH:mm:ss",
-                    CultureInfo.InvariantCulture);
-                item.Start = startDate.ToString();
-                item.End = startDate.AddHours(Convert.ToDouble(item.EstimatedRepairHours)).ToString();
-                //item.Color = employee.Color ?? "";
-                item.Color = employee != null ? employee.Color ?? "" : "";
-            }
-
-            var workorders = _repository.GetAll<SageWorkOrder>().ToArray();
-            foreach (var item in assignedAs)
-            {
-                var workorder = workorders.SingleOrDefault(w => w.WorkOrder == item.WorkOrder);
-                if (workorder != null)
-                {
-                    item.Customer = workorder.ARCustomer;
-                    item.Location = workorder.Location;
-                }
-            }
-            var unassignedAs = assignments.Where(x => x.Employee == "");
-            var unassignedWorkorders = workorders.Where(x => x.Status == "Open" && unassignedAs.Any(a => a.WorkOrder == x.WorkOrder)).ToList();
-            model.Assigments = assignments;
-
-            model.UnassignedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(unassignedWorkorders);
+            var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.WorkorderId)).ToList();
+            var mappedAssignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(assignments);
+            var workorders = _repository.GetAll<SageWorkOrder>();
+            var workOrdersForLastMonth = workorders.Where(x => x.Status == "Open" && x.DateEntered > lastMonth && !string.IsNullOrEmpty(x.AssignmentId)).ToList();
+            model.Assigments = mappedAssignments.OrderByDescending(x => x.Id);
+            model.UnassignedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(workOrdersForLastMonth);
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
@@ -72,25 +45,31 @@
         public ActionResult CreateAssignment(AssignmentViewModel model)
         {
             var d = model.ScheduleDate.ToUniversalTime();
-            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
+            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkorderId == model.WorkOrder).Single();
             var edited = _sageApiProxy.EditAssignment(databaseAssignment);
-            if (edited != null)
-            {
-                var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
-                if (employee != null)
-                {
-                    var empl = employee.Name;
-                    databaseAssignment.Employee = empl;
-                }
-                databaseAssignment.ScheduleDate = model.ScheduleDate.ToSageDate();
-                databaseAssignment.WorkOrder = model.WorkOrder;
-                databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
-                databaseAssignment.StartTime = model.ScheduleDate.ToSageTime();
-                databaseAssignment.Enddate = model.EndDate.ToSageDate();
-                databaseAssignment.Endtime = model.EndDate.ToSageTime();
+            if (edited == null)
+                return Error();
 
-                _repository.Add(databaseAssignment);
-            }
+            var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
+            databaseAssignment.Employee = employee?.Name ?? "";
+            databaseAssignment.ScheduleDate = model.ScheduleDate.ToSageDate();
+            databaseAssignment.WorkorderId = model.WorkOrder;
+            databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
+            databaseAssignment.StartTime = model.ScheduleDate.ToSageTime();
+            databaseAssignment.Enddate = model.EndDate.ToSageDate();
+            databaseAssignment.Endtime = model.EndDate.ToSageTime();
+
+            databaseAssignment.EmployeeId = employee != null ? employee.Employee : null;
+            databaseAssignment.Start = model.ScheduleDate.ToString();
+            databaseAssignment.End = model.ScheduleDate.AddHours(databaseAssignment.EstimatedRepairHours.AsDouble()).ToString();
+            databaseAssignment.Color = employee?.Color ?? "";
+
+            var workorder = _repository.SearchFor<SageWorkOrder>(w => w.WorkOrder == model.WorkOrder).SingleOrDefault();
+
+            databaseAssignment.Customer = workorder.ARCustomer;
+            databaseAssignment.Location = workorder.Location;
+
+            _repository.Add(databaseAssignment);
 
             return Success();
         }
@@ -99,23 +78,15 @@
         [Route("Schedule/Assignments/Delete")]
         public ActionResult DeleteAssignment(AssignmentViewModel model)
         {
-            //TODO 
-            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.Id).Single();
-
-            //if (edited != null)
-            //{
-            //    databaseAssignment.Employee = "";
-            //    databaseAssignment.WorkOrder = model.WorkOrder;
-            //    databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
-            //    databaseAssignment.StartTime = model.ScheduleDate.ToSageTime();
-            //    databaseAssignment.Enddate = model.EndDate.ToSageDate();
-            //    databaseAssignment.Endtime = model.EndDate.ToSageTime();
-
-            //    _repository.Add(databaseAssignment);
-            //}
-            
+            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkorderId == model.Id).Single();
             var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).Single();
-            _repository.Delete(workOrder);
+            var result = _sageApiProxy.UnassignWorkOrders(model.WorkOrder);
+            if (!result.IsSucceed)
+                return Error();
+
+            _repository.Delete(databaseAssignment);
+            workOrder.Employee = "0";
+            _repository.Update(workOrder);
             return Success();
         }
     }
