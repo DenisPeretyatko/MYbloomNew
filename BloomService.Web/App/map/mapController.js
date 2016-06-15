@@ -68,11 +68,18 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
         });
     });
 
-    commonDataService.getTrucks().then(function(response) {
+    commonDataService.getTrucks().then(function (response) {
         $scope.trucks = response.data;
     });
 
-    $scope.$watch($scope.mapDate, function () {
+    $scope.updateWorkOrders = function (dateTime) {
+        var model = { DateWorkOrder: new Date(dateTime) };
+        commonDataService.getLocations(model).then(function (response) {
+            $scope.workorders = response.data;
+        });
+    };
+    
+    $scope.$watch('mapDate', function () {
         var model = { DateWorkOrder: new Date($scope.mapDate) };
         commonDataService.getLocations(model).then(function (response) {
             $scope.workorders = response.data;
