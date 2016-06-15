@@ -10,7 +10,7 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
     $scope.workorders = [];
     $scope.truckMarkers = [];
     $scope.obj = {};
-    $scope.obj.mapDate = new Date();
+    $scope.mapDate = new Date();
 
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
@@ -72,10 +72,8 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
         $scope.trucks = response.data;
     });
 
-    $scope.$watch(function () { return $scope.obj.mapDate; }, function () {
-        var model = {
-            DateWorkOrder: new Date($scope.obj.mapDate)
-        }
+    $scope.$watch($scope.mapDate, function () {
+        var model = { DateWorkOrder: new Date($scope.mapDate) };
         commonDataService.getLocations(model).then(function (response) {
             $scope.workorders = response.data;
         });

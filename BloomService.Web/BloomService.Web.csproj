@@ -270,6 +270,7 @@
     <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\ModelBinderConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
@@ -302,6 +303,7 @@
     <Compile Include="Infrastructure\Constants\EstimateRepairHours.cs" />
     <Compile Include="Infrastructure\Constants\RateSheets.cs" />
     <Compile Include="Infrastructure\Jobs\BloomJobRegistry.cs" />
+    <Compile Include="Infrastructure\ModelBinders\JsonNetModelBinder.cs" />
     <Compile Include="Infrastructure\Queries\AssignmentQueries.cs" />
     <Compile Include="Infrastructure\Queries\WorkorderQueries.cs" />
     <Compile Include="Infrastructure\Services\AuthorizationService.cs" />

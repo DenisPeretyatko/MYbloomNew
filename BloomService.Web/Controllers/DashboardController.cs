@@ -39,28 +39,28 @@ namespace BloomService.Web.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("Dashboard")]
-        public ActionResult GetDashboard()
+        public ActionResult GetDashboard(MapViewModel model)
         {
             var dashboard = new DashboardViewModel();
-            var listWO = _repository.SearchFor<SageWorkOrder>().Open().ToArray();
+            var workorders = _repository.SearchFor<SageWorkOrder>().Open().ForDate(model.DateWorkOrder);
             var assignments = _repository.SearchFor<SageAssignment>(x => x.Employee == "").ToArray();
             var chart = new List<ChartModel>();
             var chartModel = new ChartModel();
             
             var chartData = new List<List<object>>
             {
-                new List<object> {"Open", listWO.Count()},
-                new List<object> {"Assigned", listWO.Count(x => assignments.Any(a => a.WorkOrder == x.WorkOrder))},
-                new List<object> {"Roof leak", listWO.Count(x => x.Problem == "Roof leak")},
-                new List<object> {"Closed today", listWO.Count(x => x.DateClosed == DateTime.Now.ToSageDate())},
+                new List<object> {"Open", workorders.Count()},
+                new List<object> {"Assigned", workorders.Count(x => assignments.Any(a => a.WorkOrder == x.WorkOrder))},
+                new List<object> {"Roof leak", workorders.Count(x => x.Problem == "Roof leak")},
+                new List<object> {"Closed today", workorders.Count(x => x.DateClosed == DateTime.Now.ToSageDate())},
             };
             chartModel.data= chartData;
             chart.Add(chartModel);
             
             dashboard.Chart = chart;
-            dashboard.WorkOrders = listWO;
+            dashboard.WorkOrders = workorders;
             return Json(dashboard, JsonRequestBehavior.AllowGet);
         }
 

@@ -118,7 +118,7 @@
         public string DateComplete { get; set; }
 
         [XmlAttribute(DataType = "date")]
-        public DateTime DateEntered { get; set; }
+        public DateTime? DateEntered { get; set; }
 
         [XmlIgnore]
         public bool DateEnteredSpecified { get; set; }

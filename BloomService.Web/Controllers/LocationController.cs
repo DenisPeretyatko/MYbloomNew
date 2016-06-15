@@ -8,7 +8,7 @@ namespace BloomService.Web.Controllers
     using Domain.Repositories.Abstract;
     using Domain.Entities.Concrete;
     using Infrastructure.Extensions;
-
+    using Infrastructure.Queries;
     public class LocationController : BaseController
     {
         private readonly ILocationService _locationService;
@@ -26,7 +26,7 @@ namespace BloomService.Web.Controllers
         {
             var date = model.DateWorkOrder.NowIfMin();
 
-            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.Employee != "").ToList();
+            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ForDate(model.DateWorkOrder);
             var locations = _repository.GetAll<SageLocation>().ToArray();
             foreach (var item in workOrders)
             {
