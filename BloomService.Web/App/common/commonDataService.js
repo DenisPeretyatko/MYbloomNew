@@ -75,8 +75,8 @@ var commonDataService = function($http, $window) {
 	    });
 	}
 
-	this.getDashboard = function() {
-	    return $http.get("/Dashboard", { headers: {
+	this.getDashboard = function(map) {
+	    return $http.post("/Dashboard", map, { headers: {
 	        'Authorization': 'bearer ' + window.localStorage.getItem('Token')}
 });
 	}

@@ -133,7 +133,7 @@
 
         public SageResponse<SageWorkOrder> UnassignWorkOrders(string id)
         {
-            return Get<SageWorkOrder>(id, EndPoints.UnassignWorkOrders);
+            return Delete<SageWorkOrder>(id, EndPoints.UnassignWorkOrders);
         }
 
         private SageResponse<TEntity> Add<TEntity>(TEntity entity, string endPoint) where TEntity : IEntity
