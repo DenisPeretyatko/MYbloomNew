@@ -83,6 +83,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                             else
                             {
                                 entity.Id = mongoEntity.Id;
+                                entity.Status = mongoEntity.Status;
                                 _repository.Update(entity);
                             }
                         }

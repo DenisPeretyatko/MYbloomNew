@@ -84,7 +84,7 @@ namespace BloomService.Web.Services.Concrete
 
         public List<ImageLocation> GetPhotoForWorkOrder(string idWorkOrder, bool big, string prefixUrl = null)
         {
-            var pathToImage = string.Format("{1}/{2}/", urlToFolderPhotoWorkOrders, idWorkOrder);
+            var pathToImage = string.Format("{0}/{1}/", urlToFolderPhotoWorkOrders, idWorkOrder);
             if (prefixUrl != null)
                 pathToImage = prefixUrl + pathToImage;
 
@@ -97,8 +97,9 @@ namespace BloomService.Web.Services.Concrete
                         image.Image = pathToImage + "small" + image.Image;
                     image.Image = pathToImage + image.Image;
                 }
+                return images.Images;
             }
-            return images.Images;
+            return null;
         }
 
         private string SavePhotoForWorkOrder(string file, string path, string userId, int MaxSize)
