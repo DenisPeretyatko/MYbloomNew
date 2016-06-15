@@ -9,6 +9,7 @@
     $scope.trucks = [];
     $scope.workorders = [];
     $scope.truckMarkers = [];
+    $scope.obj.mapDate = new Date();
 
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
@@ -30,7 +31,7 @@
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
-                icon: "/public/images/workorder1.png",
+                icon: "/public/images/workorder.png",
                 title: workorder.WorkOrder
             });
 
@@ -74,14 +75,14 @@
         $scope.trucks = response.data;
     });
     var model = {
-        DateWorkOrder: new Date()
+        DateWorkOrder: new Date($scope.obj.mapDate)
     }
     commonDataService.getLocations(model).then(function (response) {
         $scope.workorders = response.data;
     });
 
 
-    commonDataService.getDashboard().then(function(response) {
+    commonDataService.getDashboard(model).then(function (response) {
         var dashboard = response.data;
         $scope.listworkorders = dashboard.WorkOrders;
         $scope.chartData = dashboard.Chart;

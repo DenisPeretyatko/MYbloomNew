@@ -2,28 +2,37 @@
  * editWorkorderController - controller
  */
 
-var editWorkorderController = function ($scope, $stateParams, $state, commonDataService, state) {
+var editWorkorderController = function ($scope, $stateParams, $state, $compile, commonDataService, state) {
 
     $scope.obj = {}
-    $scope.customer = '';
-    $scope.location = '';
-    $scope.calltype = '';
-    $scope.obj.calldate = '';
-    $scope.problem = '';
-    $scope.ratesheet = '';
-    $scope.emploee = '';
-    $scope.equipment = '';
-    $scope.estimatehours = '';
-    $scope.obj.nottoexceed = '';
-    $scope.obj.locationcomments = '';
-    $scope.obj.customerpo = '';
-    $scope.obj.permissiocode = '';
-    $scope.paymentmethods = '';
+    $scope.customer = "";
+    $scope.location = "";
+    $scope.calltype = "";
+    $scope.obj.calldate = "";
+    $scope.problem = "";
+    $scope.ratesheet = "";
+    $scope.emploee = "";
+    $scope.equipment = [];
+    $scope.estimatehours = "";
+    $scope.obj.nottoexceed = "";
+    $scope.obj.locationcomments = "";
+    $scope.obj.customerpo = "";
+    $scope.obj.permissiocode = "";
+    $scope.paymentmethods = "";
     $scope.lookups = state.lookups;
 
     $scope.$watch(function () { return state.lookups; }, function () {
-        $scope.lookups = state.lookups;
-        var workorder = $scope.editableWorkOrder;
+       $scope.lookups = state.lookups;
+
+       if (state.lookups.Equipment !== undefined) {
+           var equipment = {
+               equip: $scope.lookups.Equipment,
+               empl: $scope.lookups.Employes,
+               date: $scope.obj.data
+           }
+           $scope.equipment.push(equipment);
+       }
+       var workorder = $scope.editableWorkOrder;
         $scope.lookups.Customers.selected = $scope.lookups.Customers.find(function (element) {
             return element.Name === workorder.ARCustomer;
         });
@@ -78,8 +87,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, commonData
 	    };
 
 	    commonDataService.saveWorkorder(workorder).then(function (response) {
-	        if (response.data == 'success')
-	            $state.go('manager.workorder.list');
+	        if (response.data == "success")
+	            $state.go("manager.workorder.list");
 	    });
     };
 
@@ -90,8 +99,22 @@ var editWorkorderController = function ($scope, $stateParams, $state, commonData
 	commonDataService.getWorkorderPictures($stateParams.id).then(function (response) {
 	    return $scope.pictures = response.data;
 	});
-    
+
+	$scope.addRow = function () {
+	    var equipment = {
+	        equip: $scope.lookups.Equipment,
+	        empl: $scope.lookups.Employes,
+	        date: $scope.obj.data
+	    }
+	    $scope.equipment.push(equipment);
+    }
+
+    $scope.deleteRow = function ($event, item) {
+        var el = angular.element($event.target);
+        el.parent().parent().remove();
+        $scope.equipment.splice($scope.equipment.indexOf(item), 1);
+    }
     //$scope.locations = ["1",  "2", "3", "4"];
 
 };
-editWorkorderController.$inject = ["$scope", "$stateParams", "$state", "commonDataService", "state"];
+editWorkorderController.$inject = ["$scope", "$stateParams", "$state", "$compile", "commonDataService", "state"];

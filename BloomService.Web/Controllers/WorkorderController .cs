@@ -9,7 +9,8 @@ namespace BloomService.Web.Controllers
     using Domain.Repositories.Abstract;
     using System;
     using Infrastructure.Services.Abstract;
-
+    using System.Collections.Generic;
+    using AutoMapper;
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
@@ -28,27 +29,27 @@ namespace BloomService.Web.Controllers
         {
             var workorder = new SageWorkOrder()
             {
-                ARCustomer = model.Customer,
+                //ARCustomer = model.Customer,
                 Location = model.Location,
-                CallType = model.Calltype,
+                //CallType = model.Calltype,
                 CallDate = model.Calldate.Date,
                 Problem = model.Problem,
-                RateSheet = model.Ratesheet,
+                //RateSheet = model.Ratesheet,
                 Employee = model.Emploee,
-                Equipment = Convert.ToUInt16(model.Equipment),
+                //Equipment = Convert.ToUInt16(model.Equipment),
                 EstimatedRepairHours = Convert.ToDecimal(model.Estimatehours),
                 NottoExceed = model.Nottoexceed,
                 Comments = model.Locationcomments,
-                CustomerPO = model.Customerpo,
-                PermissionCode = model.Permissiocode,
-                PayMethod = model.Paymentmethods
+                //CustomerPO = model.Customerpo,
+                //PermissionCode = model.Permissiocode,
+                //PayMethod = model.Paymentmethods
             };
 
             var result = _sageApiProxy.AddWorkOrder(workorder);
             if (!result.IsSucceed)
                 return Error("Was not able to save workorder to sage");
 
-             _repository.Add(workorder);
+            _repository.Add(workorder);
             return Success();
         }
 
@@ -72,8 +73,10 @@ namespace BloomService.Web.Controllers
         [Route("Workorder")]
         public ActionResult GetWorkorders()
         {
-            var list = _repository.GetAll<SageWorkOrder>();
-            return Json(list, JsonRequestBehavior.AllowGet);
+            var minDate = DateTime.Now.AddYears(-1);
+            var list = _repository.SearchFor<SageWorkOrder>().OrderByDescending(x=>x.DateEntered).Take(500).ToList();
+            var result = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(list);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

@@ -20,7 +20,15 @@
         <div class="col-lg-8">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h5>Map</h5>
+                    <h5>Workorders for today</h5>
+                </div>
+                <div class="col-lg-3 pull-right">
+                    <div class="form-group map_date">
+                        <div class="input-group date">
+                            <input type="datetime" class="form-control" date-time ng-model="obj.mapDate" view="date" auto-close="true" min-view="date" format="YYYY-MM-DD">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="ibox-content">
                     <section id="map">

@@ -14,7 +14,7 @@
                 </div>
                 <div class="ibox-content">
                     <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
-                    <table class="footable table table-stripped" data-page-size="12" data-filter=#filter>
+                    <table class="footable table table-stripped" data-page-size="100" data-filter=#filter>
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -28,7 +28,7 @@
                         <tbody>
                             <tr ng-repeat="workorder in workorders">
                                 <td>{{workorder.WorkOrder}}</td>
-                                <td>{{Parse(workorder.DateEntered)|date:mediumTime}}</td>
+                                <td>{{workorder.DateEntered|date:mediumTime}}</td>
                                 <td>{{workorder.ARCustomer}}</td>
                                 <td>{{workorder.Location}}</td>
                                 <td>
