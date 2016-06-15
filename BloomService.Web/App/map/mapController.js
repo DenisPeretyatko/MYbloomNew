@@ -72,7 +72,7 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
         $scope.trucks = response.data;
     });
 
-    $scope.$watch($scope.mapDate, function () {
+    $scope.$watch(function () { return $scope.mapDate; }, function () {
         var model = { DateWorkOrder: new Date($scope.mapDate) };
         commonDataService.getLocations(model).then(function (response) {
             $scope.workorders = response.data;
