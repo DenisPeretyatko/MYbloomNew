@@ -102,8 +102,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
 
 	$scope.addRow = function () {
 	    var equipment = {
-	        equip: $scope.lookups.Equipment,
-	        empl: $scope.lookups.Employes,
+	        equip: angular.copy($scope.lookups.Equipment),
+	        empl: angular.copy($scope.lookups.Employes),
 	        date: $scope.obj.data
 	    }
 	    $scope.equipment.push(equipment);
