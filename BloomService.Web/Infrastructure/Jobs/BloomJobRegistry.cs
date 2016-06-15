@@ -81,6 +81,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                             else
                             {
                                 entity.Id = mongoEntity.Id;
+                                entity.Status = mongoEntity.Status;
                                 _repository.Update(entity);
                             }
                         }
@@ -144,7 +145,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                             var workorder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == assigment.WorkOrder).SingleOrDefault();
                             if (mongoEntity == null)
                             {
-                                if(assigment.Employee != "")
+                                if (assigment.Employee != "")
                                 {
                                     var employee = _repository.SearchFor<SageEmployee>(e => e.Name == assigment.Employee).SingleOrDefault();
                                     assigment.EmployeeId = employee != null ? employee.Employee : null;
@@ -153,7 +154,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     assigment.Start = assignmentDate.ToString();
                                     assigment.End = assignmentDate.AddHours(assigment.EstimatedRepairHours.AsDouble()).ToString();
                                     assigment.Color = employee?.Color ?? "";
-                                    if(workorder != null)
+                                    if (workorder != null)
                                     {
                                         workorder.AssignmentId = assigment.Assignment;
                                         assigment.Customer = workorder.ARCustomer;
@@ -168,10 +169,10 @@ namespace BloomService.Web.Infrastructure.Jobs
                                         assigment.Location = workorder.Location;
                                         workorder.AssignmentId = assigment.Assignment;
                                         _repository.Update(workorder);
-                                    } 
+                                    }
                                 }
                                 _repository.Add(assigment);
-                            }   
+                            }
                             else
                             {
                                 assigment.Id = mongoEntity.Id;
@@ -190,7 +191,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         _log.ErrorFormat("Can`t sync SageAssignment {0}", ex);
                     }
 
-                    
+
 
                     try
                     {
