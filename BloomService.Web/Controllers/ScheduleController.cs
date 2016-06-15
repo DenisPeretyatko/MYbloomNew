@@ -31,7 +31,7 @@
         {
             var lastMonth = DateTime.Now.AddMonths(-1);
             var model = new ScheduleViewModel();
-            var assignments = _repository.SearchFor<SageAssignment>(x=>!string.IsNullOrEmpty(x.Color)).ToList();
+            var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.WorkOrder)).OrderByDescending(x => x.DateEntered).Skip(1400).Take(65).ToList();
             var mappedAssignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(assignments);
             var workorders = _repository.GetAll<SageWorkOrder>();
             var workOrdersForLastMonth = workorders.Where(x => x.Status == "Open" && x.DateEntered > lastMonth && !string.IsNullOrEmpty(x.AssignmentId)).ToList();
@@ -78,7 +78,7 @@
         [Route("Schedule/Assignments/Delete")]
         public ActionResult DeleteAssignment(AssignmentViewModel model)
         {
-            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.Id).Single();
+            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
             var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).Single();
             var result = _sageApiProxy.UnassignWorkOrders(model.WorkOrder);
             if (!result.IsSucceed)
