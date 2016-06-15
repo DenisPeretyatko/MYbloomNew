@@ -71,6 +71,7 @@
                     CustomerPO = properties.ContainsKey("CUSTOMERPO") ? properties["CUSTOMERPO"].ToString() : string.Empty,
                     PermissionCode = properties.ContainsKey("PERMISSIONCODE") ? properties["PERMISSIONCODE"].ToString() : string.Empty,
                     PayMethod = properties.ContainsKey("PAYMETHOD") ? properties["PAYMETHOD"].ToString() : string.Empty,
+                    Status = properties.ContainsKey("Status") ? properties["Status"].ToString() : string.Empty,
 
                 };
 

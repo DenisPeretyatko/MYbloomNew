@@ -9,13 +9,15 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
     $scope.trucks = [];
     $scope.workorders = [];
     $scope.truckMarkers = [];
+    $scope.workorderMarkers = [];
     $scope.obj = {};
-    $scope.mapDate = new Date();
+    $scope.obj.mapDate = new Date();
 
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
 
     $scope.$watch(function () { return $scope.workorders; }, function () {
+        angular.forEach($scope.workorderMarkers, function (marker) { marker.setMap(null); });
         angular.forEach($scope.workorders, function (workorder) {
            
           var content = tooltipWO(workorder);
@@ -31,7 +33,7 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
             icon: "/public/images/workorder.png",
             title:  workorder.WorkOrder
           });
-
+          $scope.workorderMarkers.push(marker);
           marker.addListener('click', function() {
             var infowindow = new google.maps.InfoWindow({
                content: content
@@ -68,12 +70,12 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
         });
     });
 
-    commonDataService.getTrucks().then(function(response) {
+    commonDataService.getTrucks().then(function (response) {
         $scope.trucks = response.data;
     });
 
-    $scope.$watch(function () { return $scope.mapDate; }, function () {
-        var model = { DateWorkOrder: new Date($scope.mapDate) };
+    $scope.$watch(function () { return $scope.obj.mapDate; }, function () {
+        var model = { DateWorkOrder: new Date($scope.obj.mapDate) };
         commonDataService.getLocations(model).then(function (response) {
             $scope.workorders = response.data;
         });

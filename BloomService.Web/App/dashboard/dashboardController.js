@@ -9,7 +9,7 @@
     $scope.trucks = [];
     $scope.workorders = [];
     $scope.truckMarkers = [];
-    $scope.obj.mapDate = new Date();
+    $scope.mapDate = new Date();
 
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
@@ -75,7 +75,7 @@
         $scope.trucks = response.data;
     });
     var model = {
-        DateWorkOrder: new Date($scope.obj.mapDate)
+        DateWorkOrder: new Date($scope.mapDate)
     }
     commonDataService.getLocations(model).then(function (response) {
         $scope.workorders = response.data;
