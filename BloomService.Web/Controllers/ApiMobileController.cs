@@ -74,13 +74,11 @@
 
         [HttpGet]
         [Route("Apimobile/Workorder/{id}")]
+        [AllowAnonymous]
         public ActionResult GetWorkOrder(string id)
         {
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"public\mock\getWorkorder.json");
-            var sr = new StreamReader(path);
-            var json = sr.ReadToEnd();
-            var workorder = new JavaScriptSerializer().Deserialize<SageWorkOrder>(json);
-            return Json(workorder, JsonRequestBehavior.AllowGet);
+            var workOrder = repository.SearchFor<SageWorkOrder>(x=>x.WorkOrder == id);
+            return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -140,12 +138,6 @@
             return Success();
         }
 
-        [HttpPost]
-        [Route("Apimobile/Workorder/{id}")]
-        public ActionResult PostWorkOrder(string id)
-        {
-            return Success();
-        }
 
         [HttpPost]
         [Route("Apimobile/Token")]

@@ -1,12 +1,13 @@
-﻿namespace BloomService.Domain.Entities.Concrete
-{
-    using System.Xml.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Serialization;
 
-    using BloomService.Domain.Attributes;
-    using System;
-    [XmlType(AnonymousType = true)]
-    [CollectionName("PartCollection")]
-    public class SagePart : SageEntity
+namespace BloomService.Domain.Entities.Concrete.ReturnParamModels
+{
+    public class PartReturnParam
     {
         [XmlAttribute]
         public string AgreementPrice { get; set; }
@@ -47,17 +48,17 @@
         [XmlAttribute]
         public string InStock { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? LastActivityDate { get; set; }
+        [XmlAttribute]
+        public string LastActivityDate { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? LastOrderDate { get; set; }
+        [XmlAttribute]
+        public string LastOrderDate { get; set; }
 
         [XmlAttribute]
         public string LastPrice { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? LastReceivedDate { get; set; }
+        [XmlAttribute]
+        public string LastReceivedDate { get; set; }
 
         [XmlAttribute]
         public string Level1Price { get; set; }
@@ -83,8 +84,8 @@
         [XmlAttribute]
         public string Model { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public TimeSpan? OrderLeadTime { get; set; }
+        [XmlAttribute]
+        public string OrderLeadTime { get; set; }
 
         [XmlAttribute]
         public string Part { get; set; }

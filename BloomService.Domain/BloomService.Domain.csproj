@@ -71,8 +71,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Concrete\Auxiliary\SageResponse.cs" />
-    <Compile Include="Entities\Concrete\MessageResponse\GoogleLocation.cs" />
     <Compile Include="Entities\Concrete\Auxiliary\ChangeType.cs" />
+    <Compile Include="Entities\Concrete\ReturnParamModels\AssignmentReturnParam.cs" />
+    <Compile Include="Entities\Concrete\ReturnParamModels\CustomerReturnParam.cs" />
+    <Compile Include="Entities\Concrete\ReturnParamModels\EmployeeReturnParam.cs" />
+    <Compile Include="Entities\Concrete\ReturnParamModels\EquipmentReturnParam.cs" />
+    <Compile Include="Entities\Concrete\ReturnParamModels\LocationReturnParam.cs" />
+    <Compile Include="Entities\Concrete\ReturnParamModels\PartReturnParam.cs" />
+    <Compile Include="Entities\Concrete\ReturnParamModels\WorkOrderReturnParam.cs" />
     <Compile Include="Entities\Concrete\SageChange.cs" />
     <Compile Include="Entities\Concrete\SageTechnicianLocation.cs" />
     <Compile Include="Entities\Concrete\Auxiliary\StatusType.cs" />
@@ -90,18 +96,14 @@
     <Compile Include="Entities\Concrete\SageEquipment.cs" />
     <Compile Include="Entities\Concrete\SageImageWorkOrder.cs" />
     <Compile Include="Entities\Concrete\SageLocations.cs" />
-    <Compile Include="Entities\Concrete\MessageResponse\MessageResponses.cs" />
-    <Compile Include="Entities\Concrete\MessageResponse\Response.cs" />
-    <Compile Include="Entities\Concrete\MessageResponse\ResponseError.cs" />
-    <Compile Include="Entities\Concrete\MessageResponse\ResponseReturnParams.cs" />
-    <Compile Include="Entities\Concrete\MessageResponse\ResponseReturnParamsReturnParam.cs" />
     <Compile Include="Entities\Concrete\SageParts.cs" />
     <Compile Include="Entities\Concrete\SageProblem.cs" />
-    <Compile Include="Entities\Concrete\SagePropertyDictionary.cs" />
     <Compile Include="Entities\Concrete\SageRepair.cs" />
     <Compile Include="Entities\Concrete\SageEntity.cs" />
     <Compile Include="Entities\Concrete\SageWorkOrder.cs" />
-    <Compile Include="Exceptions\ResponseException.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

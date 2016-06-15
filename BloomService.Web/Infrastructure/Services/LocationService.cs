@@ -5,12 +5,11 @@
     using Domain.Entities.Concrete;
     using Abstract;
     using System.Linq;
-    using Domain.Entities.Concrete.MessageResponse;
     using System.Text;
     using System.Xml.Serialization;
     using System.IO;
     using System.Threading;
-
+    using Sage.WebApi.Infratructure.MessageResponse;
     public class LocationService : ILocationService
     {
         private static readonly string url = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false";

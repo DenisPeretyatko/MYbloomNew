@@ -42,6 +42,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BS\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
@@ -285,9 +289,6 @@
     <Compile Include="Infrastructure\Dependecy\Ninject\NinjectControllerFactory.cs" />
     <Compile Include="Infrastructure\Dependecy\Ninject\NinjectResolver.cs" />
     <Compile Include="Infrastructure\Dependecy\Ninject\NinjectScope.cs" />
-    <Compile Include="Infrastructure\Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
-    <Compile Include="Infrastructure\Extensions\TypeExtensions.cs" />
     <Compile Include="Controllers\ApiMobileController.cs" />
     <Compile Include="Controllers\BaseComtroller.cs" />
     <Compile Include="Controllers\AuthorizationController.cs" />
@@ -770,6 +771,10 @@
     <ProjectReference Include="..\BloomService.Domain\BloomService.Domain.csproj">
       <Project>{c864fa21-c500-4d98-9009-9a6f88709f8c}</Project>
       <Name>BloomService.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BloomService.Sage.WebApi\Sage.WebApi.csproj">
+      <Project>{507FF982-C1D8-451D-9DE4-AA71D83BE70C}</Project>
+      <Name>Sage.WebApi</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

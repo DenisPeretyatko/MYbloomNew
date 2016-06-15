@@ -1,18 +1,19 @@
-﻿namespace BloomService.Domain.Entities.Concrete
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Serialization;
+
+namespace BloomService.Domain.Entities.Concrete.ReturnParamModels
 {
-    using System.Xml.Serialization;
-
-    using BloomService.Domain.Attributes;
-    using System;
-    [XmlType(AnonymousType = true)]
-    [CollectionName("EquipmentCollection")]
-    public class SageEquipment : SageEntity
+    public class EquipmentReturnParam
     {
-        [XmlAttribute(DataType = "date")]
-        public DateTime? DateRemoved { get; set; }
+        [XmlAttribute]
+        public string DateRemoved { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? DateReplaced { get; set; }
+        [XmlAttribute]
+        public string DateReplaced { get; set; }
 
         [XmlAttribute]
         public string Employee { get; set; }
@@ -26,8 +27,8 @@
         [XmlAttribute]
         public string Inactive { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? InstallDate { get; set; }
+        [XmlAttribute]
+        public string InstallDate { get; set; }
 
         [XmlAttribute]
         public string InstallLocation { get; set; }

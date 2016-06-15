@@ -1,8 +1,6 @@
-﻿namespace BloomService.Domain.Exceptions
+﻿namespace Sage.WebApi.Infratructure.MessageResponse
 {
     using System;
-
-    using BloomService.Domain.Entities.Concrete.MessageResponse;
 
     public class ResponseException : Exception
     {

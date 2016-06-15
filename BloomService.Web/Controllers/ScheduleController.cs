@@ -12,8 +12,7 @@
     using Models;
     using Domain.Repositories.Abstract;
     using Infrastructure.Services.Abstract;
-    using Infrastructure.Extensions;
-
+    using Domain.Extensions;
     public class ScheduleController : BaseController
     {
         private readonly IRepository _repository;
@@ -52,12 +51,12 @@
 
             var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
             databaseAssignment.Employee = employee?.Name ?? "";
-            databaseAssignment.ScheduleDate = model.ScheduleDate.ToSageDate();
+            databaseAssignment.ScheduleDate = model.ScheduleDate.ToUniversalTime();
             databaseAssignment.WorkOrder = model.WorkOrder;
             databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
-            databaseAssignment.StartTime = model.ScheduleDate.ToSageTime();
-            databaseAssignment.Enddate = model.EndDate.ToSageDate();
-            databaseAssignment.Endtime = model.EndDate.ToSageTime();
+            databaseAssignment.StartTime = model.ScheduleDate.ToUniversalTime().TimeOfDay;
+            databaseAssignment.Enddate = model.EndDate.ToUniversalTime();
+            databaseAssignment.Endtime = model.EndDate.ToUniversalTime().TimeOfDay;
 
             databaseAssignment.EmployeeId = employee != null ? employee.Employee : null;
             databaseAssignment.Start = model.ScheduleDate.ToString();
