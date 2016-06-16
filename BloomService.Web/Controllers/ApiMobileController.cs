@@ -19,7 +19,8 @@
     using BloomService.Web.Models;
     using BloomService.Web.Models.Request;
     using BloomService.Web.Services.Abstract;
-
+    using System.Security.Claims;
+    using System.Threading;
     public class ApiMobileController : BaseController
     {
         private readonly IImageService imageService;
@@ -28,66 +29,68 @@
 
         private readonly ISageApiProxy sageApiProxy;
 
+        private readonly IAuthorizationService authorizationService;
+
         private readonly BloomServiceConfiguration settings;
 
         public ApiMobileController(
-            ISageApiProxy sageApiProxy, 
-            IImageService imageService, 
-            IRepository repository, 
+            ISageApiProxy sageApiProxy,
+            IImageService imageService,
+            IRepository repository,
+            IAuthorizationService authorizationService,
             BloomServiceConfiguration settings)
         {
             this.sageApiProxy = sageApiProxy;
             this.imageService = imageService;
             this.repository = repository;
             this.settings = settings;
+            this.authorizationService = authorizationService;
         }
 
         [HttpPost]
         [Route("Apimobile/Workorder/{id}/Equipment")]
         public ActionResult AddEquipmentToWorkOrder()
         {
-
             return Success();
         }
 
         [HttpGet]
         [AllowAnonymous]
         [Route("Apimobile/Authorization")]
-        public ActionResult Get(string name, string password)
+        public ActionResult Get(string name, string password, string deviceToken)
         {
             var token = GetToken(name, password);
             if (token == null)
             {
                 return HttpNotFound();
             }
-
+            var employee = repository.SearchFor<SageEmployee>(x => x.Employee == token.Id).FirstOrDefault();
+            if (employee != null && !string.IsNullOrEmpty(deviceToken))
+                employee.IosDeviceToken = deviceToken;
+            repository.Update(employee);
             return Json(token);
         }
 
-        [Route("Apimobile/Equipment")]
-        public ActionResult GetEquipment()
+        [Route("Apimobile/Equipment/{part}")]
+        public ActionResult GetEquipment(string part)
         {
-            var userId = "Rinta, Chriss";
-            var result = repository.SearchFor<SageEquipment>(x => x.Employee == userId);
+            var result = repository.SearchFor<SageEquipment>(x => x.Part == part);
             return Json(result);
         }
 
-        [HttpGet]
-        [Route("Apimobile/Workorder/{id}")]
-        public ActionResult GetWorkOrder(string id)
+        [Route("Apimobile/Part")]
+        public ActionResult GetPart()
         {
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"public\mock\getWorkorder.json");
-            var sr = new StreamReader(path);
-            var json = sr.ReadToEnd();
-            var workorder = new JavaScriptSerializer().Deserialize<SageWorkOrder>(json);
-            return Json(workorder, JsonRequestBehavior.AllowGet);
+            var result = repository.GetAll<SagePart>();
+            return Json(result);
         }
 
         [HttpGet]
         [Route("Apimobile/Workorder")]
         public ActionResult GetWorkOrders()
         {
-            var userId = "Rinta, Chriss";
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+            var userId = authorizationService.GetUser(identity).Name;
 
             var workOrders = repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
             var result = workOrders.Where(x => x.Employee == userId);
@@ -130,25 +133,34 @@
         public ActionResult PostLocation(string technicianId, decimal lat, decimal lng)
         {
             var techLocation = new SageTechnicianLocation
-                                   {
-                                       Employee = technicianId, 
-                                       Latitude = lat, 
-                                       Longitude = lng, 
-                                       Date = DateTime.Now
-                                   };
+            {
+                Employee = technicianId,
+                Latitude = lat,
+                Longitude = lng,
+                Date = DateTime.Now
+            };
             repository.Add(techLocation);
             return Success();
         }
 
         [HttpPost]
-        [Route("Apimobile/Workorder/{id}")]
-        public ActionResult PostWorkOrder(string id)
+        [Route("Apimobile/ChangeWorkorderStatus")]
+        public ActionResult ChangeWorkorderStatus(string id, string status)
         {
+            var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
+            if (workorder == null)
+                return Error("Workorder not found");
+            workorder.Status = status;
+
+            //var result = sageApiProxy.EditWorkOrder(workorder);
+            //if (!result.IsSucceed)
+            //    return Error("Was not able to save workorder to sage");
+
+            repository.Update(workorder);
+            var workorder2 = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
             return Success();
         }
 
-        [HttpPost]
-        [Route("Apimobile/Token")]
         private LoginResponseModel GetToken(string mail, string password)
         {
             ASCIIEncoding encoding = new ASCIIEncoding();
