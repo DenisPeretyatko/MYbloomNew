@@ -700,6 +700,8 @@
     <Content Include="Public\mock\getLookups.json" />
     <Content Include="App_Data\PushNotification\aps_dev.p12" />
     <Content Include="App_Data\PushNotification\aps_prod.p12" />
+    <Content Include="App_Data\PushNotification\BS_prod_apns.p12" />
+    <Content Include="App_Data\PushNotification\Dev_apns.p12" />
     <None Include="Properties\PublishProfiles\b.pubxml" />
     <None Include="Properties\PublishProfiles\bloom.pubxml" />
     <Content Include="Public\mock\getEmployees.json" />
