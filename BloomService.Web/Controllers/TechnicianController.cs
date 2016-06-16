@@ -1,4 +1,7 @@
-﻿namespace BloomService.Web.Controllers
+﻿using BloomService.Web.Infrastructure.Jobs;
+using Common.Logging;
+
+namespace BloomService.Web.Controllers
 {
     using System.Linq;
     using System.Web.Mvc;
@@ -14,6 +17,8 @@
         private readonly IImageService imageService;
 
         private readonly IRepository repository;
+        private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
+
 
         public TechnicianController(IImageService imageService, IRepository repository)
         {
@@ -41,6 +46,7 @@
         [Route("Technician/Save")]
         public ActionResult SaveTechnician(TechnicianModel model)
         {
+            _log.InfoFormat("Method: SaveTechnician. Model ID: {0}", model.Id);
             var employee = repository.Get<SageEmployee>(model.Id);
             model.Id = employee.Employee;
             var technician = Mapper.Map<SageEmployee, EmployeeModel>(employee);
@@ -54,6 +60,7 @@
             }
             var updatedTechnician = Mapper.Map<EmployeeModel, SageEmployee>(technician);
             repository.Update(updatedTechnician);
+            _log.InfoFormat("Repository update technician. Name {0}, ID {1}", updatedTechnician.Name, updatedTechnician.Id);
 
             return Success();
         }
