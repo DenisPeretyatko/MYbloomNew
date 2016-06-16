@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using BloomService.Web.Infrastructure.Jobs;
+using Common.Logging;
 
 namespace BloomService.Web.Controllers
 {
@@ -16,6 +18,7 @@ namespace BloomService.Web.Controllers
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
         private const int _itemsOnPage = 12;
+        private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
 
         public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy)
         {
@@ -27,6 +30,7 @@ namespace BloomService.Web.Controllers
         [Route("Workorder/Create")]
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
+            _log.InfoFormat("Method: CreateWorkOrder. Model ID {0}", model.Id);
             var workorder = new SageWorkOrder()
             {
                 //ARCustomer = model.Customer,
@@ -47,9 +51,13 @@ namespace BloomService.Web.Controllers
 
             var result = _sageApiProxy.AddWorkOrder(workorder);
             if (!result.IsSucceed)
+            {
+                _log.ErrorFormat("Was not able to save workorder to sage. !result.IsSucceed");
                 return Error("Was not able to save workorder to sage");
+            }
 
             _repository.Add(workorder);
+            _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
             return Success();
         }
 
@@ -102,6 +110,7 @@ namespace BloomService.Web.Controllers
         [Route("Workorder/Save")]
         public ActionResult SaveWorkOrder(WorkOrderModel model)
         {
+            _log.InfoFormat("Method: SaveWorkOrder. Model ID {0}", model.Id);
             //var workorder = new SagePropertyDictionary
             //{
             //                        { "ARCustomer", model.Customer }, 
@@ -124,6 +133,7 @@ namespace BloomService.Web.Controllers
 
             var workorder = _repository.Get<SageWorkOrder>(model.Id);
             _repository.Update(workorder);
+            _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
             return Success();
         }
     }
