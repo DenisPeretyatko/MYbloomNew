@@ -90,9 +90,10 @@ namespace BloomService.Web.Controllers
 
         [HttpGet]
         [Route("WorkorderPageCount")]
-        public ActionResult GetWorkorderPageCount()
+        public ActionResult GetWorkorderPageCount(int year, string search)
         {
-            var entitiesCount = _repository.GetAll<SageWorkOrder>().Count();
+            var date = new DateTime(year, 0, 0);
+            var entitiesCount = _repository.SearchFor<SageWorkOrder>(x=>x.CustomerPO.Contains(search) || x.Location.Contains(search)).Count();
             var countPage = entitiesCount % _itemsOnPage == 0 ? entitiesCount / _itemsOnPage : entitiesCount / _itemsOnPage + 1;
             return Json(countPage, JsonRequestBehavior.AllowGet);
         }
