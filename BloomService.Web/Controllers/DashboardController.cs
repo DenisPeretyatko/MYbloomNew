@@ -16,7 +16,6 @@ namespace BloomService.Web.Controllers
     using Services.Abstract;
     using Domain.Repositories.Abstract;
     using Infrastructure.Queries;
-    using Infrastructure.Extensions;
 
     public class DashboardController : BaseController
     {
@@ -54,7 +53,7 @@ namespace BloomService.Web.Controllers
                 new List<object> {"Open", workorders.Count()},
                 new List<object> {"Assigned", workorders.Count(x => assignments.Any(a => a.WorkOrder == x.WorkOrder))},
                 new List<object> {"Roof leak", workorders.Count(x => x.Problem == "Roof leak")},
-                new List<object> {"Closed today", workorders.Count(x => x.DateClosed == DateTime.Now.ToSageDate())},
+                new List<object> {"Closed today", workorders.Count(x => x.DateClosed == DateTime.Now)},
             };
             chartModel.data= chartData;
             chart.Add(chartModel);

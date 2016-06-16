@@ -7,8 +7,8 @@ namespace BloomService.Web.Controllers
     using System.Web.Mvc;
     using Domain.Repositories.Abstract;
     using Domain.Entities.Concrete;
-    using Infrastructure.Extensions;
     using Infrastructure.Queries;
+    using Domain.Extensions;
     public class LocationController : BaseController
     {
         private readonly ILocationService _locationService;

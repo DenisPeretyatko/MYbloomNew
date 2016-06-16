@@ -2,8 +2,6 @@
 using BloomService.Domain.Extensions;
 using BloomService.Domain.Repositories.Abstract;
 using BloomService.Web.Infrastructure.Dependecy;
-using BloomService.Web.Infrastructure.Extensions;
-using BloomService.Web.Infrastructure.Services;
 using BloomService.Web.Infrastructure.Services.Abstract;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using BloomService.Web.Notifications;

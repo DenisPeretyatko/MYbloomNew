@@ -1,15 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Xml.Serialization;
 
-namespace BloomService.Domain.Entities.Concrete
+namespace BloomService.Domain.Entities.Concrete.ReturnParamModels
 {
-    using System.Collections.Generic;
-    using System.Xml.Serialization;
-
-    using BloomService.Domain.Attributes;
-    using System;
-    [XmlType(AnonymousType = true)]
-    [CollectionName("EmployeeCollection")]
-    public class SageEmployee : SageEntity
+    public class EmployeeReturnParam
     {
         public decimal Latitude { get; set; }
 
@@ -26,8 +21,8 @@ namespace BloomService.Domain.Entities.Concrete
         [XmlAttribute]
         public string Alias { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? Birthdate { get; set; }
+        [XmlAttribute]
+        public string Birthdate { get; set; }
 
         [XmlAttribute]
         public string Center { get; set; }
@@ -41,8 +36,8 @@ namespace BloomService.Domain.Entities.Concrete
         [XmlAttribute]
         public string DefaultRepair { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public TimeSpan? DefaultStartTime { get; set; }
+        [XmlAttribute]
+        public string DefaultStartTime { get; set; }
 
         [XmlAttribute]
         public string Department { get; set; }
@@ -71,8 +66,8 @@ namespace BloomService.Domain.Entities.Concrete
         [XmlAttribute]
         public string Name { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public TimeSpan? NormalEndTime { get; set; }
+        [XmlAttribute]
+        public string NormalEndTime { get; set; }
 
         [XmlAttribute]
         public string Pager { get; set; }
@@ -104,15 +99,16 @@ namespace BloomService.Domain.Entities.Concrete
         [XmlAttribute]
         public string ZIP { get; set; }
 
-
         [XmlIgnore]
         public List<SageAvailableDay> AvailableDays { get; set; }
         [XmlIgnore]
         [DefaultValue(true)]
-        public bool IsAvailable {
+        public bool IsAvailable
+        {
             get { return _available; }
             set { _available = value; }
         }
+
         [XmlIgnore]
         public string Picture { get; set; }
         [XmlIgnore]

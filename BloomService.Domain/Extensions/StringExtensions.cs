@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BloomService.Web.Infrastructure.Extensions
+namespace BloomService.Domain.Extensions
 {
     public static class StringExtensions
     {

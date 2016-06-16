@@ -1,14 +1,9 @@
-﻿namespace BloomService.Domain.Entities.Concrete
+﻿using System;
+using System.Xml.Serialization;
+
+namespace BloomService.Domain.Entities.Concrete.ReturnParamModels
 {
-    using System;
-    using System.Xml.Serialization;
-
-    using BloomService.Domain.Attributes;
-    using BloomService.Domain.Entities.Concrete.Auxiliary;
-
-    [XmlType(AnonymousType = true)]
-    [CollectionName("CustomerCollection")]
-    public class SageCustomer : SageEntity
+    public class CustomerReturnParam
     {
         [XmlAttribute]
         public string ABCompanyID { get; set; }
@@ -67,62 +62,62 @@
         [XmlAttribute]
         public string BillingZIPCode { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? Checklist1Date { get; set; }
+        [XmlAttribute]
+        public string Checklist1Date { get; set; }
 
         [XmlAttribute]
         public bool Checklist10 { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? Checklist10Date { get; set; }
+        [XmlAttribute]
+        public string Checklist10Date { get; set; }
 
         [XmlAttribute]
         public bool Checklist2 { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? Checklist2Date { get; set; }
+        [XmlAttribute]
+        public string Checklist2Date { get; set; }
 
         [XmlAttribute]
         public bool Checklist3 { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? Checklist3Date { get; set; }
+        [XmlAttribute]
+        public string Checklist3Date { get; set; }
 
         [XmlAttribute]
         public bool Checklist4 { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? Checklist4Date { get; set; }
+        [XmlAttribute]
+        public string Checklist4Date { get; set; }
 
         [XmlAttribute]
         public bool Checklist5 { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? Checklist5Date { get; set; }
+        [XmlAttribute]
+        public string Checklist5Date { get; set; }
 
         [XmlAttribute]
         public bool Checklist6 { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? Checklist6Date { get; set; }
+        [XmlAttribute]
+        public string Checklist6Date { get; set; }
 
         [XmlAttribute]
         public bool Checklist7 { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? Checklist7Date { get; set; }
+        [XmlAttribute]
+        public string Checklist7Date { get; set; }
 
         [XmlAttribute]
         public bool Checklist8 { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? Checklist8Date { get; set; }
+        [XmlAttribute]
+        public string Checklist8Date { get; set; }
 
         [XmlAttribute]
         public bool Checklist9 { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? Checklist9Date { get; set; }
+        [XmlAttribute]
+        public string Checklist9Date { get; set; }
 
         [XmlAttribute]
         public string City { get; set; }
@@ -172,11 +167,11 @@
         [XmlAttribute]
         public string CustomerType { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? DateEstablished { get; set; }
+        [XmlAttribute]
+        public string DateEstablished { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? DateStamp { get; set; }
+        [XmlAttribute]
+        public string DateStamp { get; set; }
 
         [XmlAttribute]
         public int DaysBeforeDue { get; set; }
@@ -308,7 +303,7 @@
         public object Text6 { get; set; }
 
         [XmlAttribute]
-        public TimeSpan? TimeStamp { get; set; }
+        public string TimeStamp { get; set; }
 
         [XmlAttribute]
         public string TotalBilledExemptStatus { get; set; }

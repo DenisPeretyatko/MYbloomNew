@@ -4,16 +4,15 @@
 
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.Entities.Concrete.Auxiliary;
-    using BloomService.Domain.Exceptions;
 
     using Infratructure.Service;
     using Utils;
     using System.Collections.Generic;
     using System.Web.Http;
-    using BloomService.Domain.Entities.Concrete.MessageResponse;
     using BloomService.Domain.Models.Requests;
     using BloomService.Domain.Models.Responses;
     using WebGrease.Css.Extensions;
+    using Infratructure.MessageResponse;
     [System.Web.Mvc.Authorize]
     public class SageApiController : ApiController
     {
