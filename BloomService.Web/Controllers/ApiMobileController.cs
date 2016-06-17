@@ -67,12 +67,14 @@ namespace BloomService.Web.Controllers
             var token = GetToken(name, password);
             if (token == null)
             {
-                return HttpNotFound();
+                return Error("Invalid login or password");
             }
             var employee = repository.SearchFor<SageEmployee>(x => x.Employee == token.Id).FirstOrDefault();
             if (employee != null && !string.IsNullOrEmpty(deviceToken))
+            {
                 employee.IosDeviceToken = deviceToken;
-            repository.Update(employee);
+                repository.Update(employee);
+            }
             return Json(token);
         }
 
@@ -114,6 +116,7 @@ namespace BloomService.Web.Controllers
                 order.Equipments = new List<SageEquipment>();
 
                 order.Images = imageService.GetPhotoForWorkOrder(order.WorkOrder, false, settings.SiteUrl);
+
                 var location = locations.FirstOrDefault(x => x.Name == order.Location);
                 if (location == null)
                 {
@@ -143,6 +146,19 @@ namespace BloomService.Web.Controllers
             }
             else
                 return Error("Add image faild");
+        }
+
+        [HttpPost]
+        [Route("Apimobile/CommentImage")]
+        public ActionResult ComentImage(CommentImageModel model)
+        {
+            if (imageService.SaveDescriptionsForPhoto(model))
+            {
+                _log.InfoFormat("Add image for workorder success");
+                return Success();
+            }
+            else
+                return Error("Add descriptions image faild");
         }
 
         [HttpPost]
@@ -191,7 +207,7 @@ namespace BloomService.Web.Controllers
             postData += "&grant_type=" + "password";
             byte[] data = encoding.GetBytes(postData);
 
-            var url = ConfigurationManager.AppSettings["BSurl"] + "/apimobile/Token";
+            var url = ConfigurationManager.AppSettings["SiteUrl"] + "/apimobile/Token";
             var request = WebRequest.Create(url);
             request.Headers.Add(HttpRequestHeader.Authorization, "usernamepassword");
             request.ContentType = "application/x-www-form-urlencoded";

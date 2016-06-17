@@ -66,7 +66,7 @@ namespace BloomService.Web.Services.Concrete
                 {
                     Images = new List<ImageLocation>(),
                     WorkOrder = model.IdWorkOrder,
-                    WorkOrderBsonId = workOrder.Id
+                    WorkOrderBsonId = workOrder.Id,
                 };
             }
 
@@ -75,11 +75,29 @@ namespace BloomService.Web.Services.Concrete
             var nameSmall = "small" + countImage;
             var fileName = SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, settings.SizeBigPhoto);
             SavePhotoForWorkOrder(model.Image, pathToImage, nameSmall, settings.SizeSmallPhoto);
-
-            var image = new ImageLocation { Image = fileName, Latitude = model.Latitude, Longitude = model.Longitude };
+            var maxId = imagesDb.Images.Any() ? imagesDb.Images.Max(x => x.Id) : 0;
+            var image = new ImageLocation { Image = fileName, Latitude = model.Latitude, Longitude = model.Longitude, Id = maxId + 1 };
             imagesDb.Images.Add(image);
             repository.Add(imagesDb);
             return true;
+        }
+
+        public bool SaveDescriptionsForPhoto(CommentImageModel model)
+        {
+            var imagesDb = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.IdWorkorder).SingleOrDefault();
+            if (imagesDb != null && imagesDb.Images != null)
+            {
+                var image = imagesDb.Images.FirstOrDefault(x => x.Id == model.IdImage);
+                if (image != null)
+                {
+                    imagesDb.Images.Remove(image);
+                    image.Description = model.Description;
+                    imagesDb.Images.Add(image);
+                    repository.Update(imagesDb);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public List<ImageLocation> GetPhotoForWorkOrder(string idWorkOrder, bool big, string prefixUrl = null)
@@ -95,7 +113,8 @@ namespace BloomService.Web.Services.Concrete
                 {
                     if (!big)
                         image.Image = pathToImage + "small" + image.Image;
-                    image.Image = pathToImage + image.Image;
+                    else
+                        image.Image = pathToImage + image.Image;
                 }
                 return images.Images;
             }
@@ -148,7 +167,7 @@ namespace BloomService.Web.Services.Concrete
                 }
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
