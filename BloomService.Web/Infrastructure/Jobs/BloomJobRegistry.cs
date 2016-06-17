@@ -2,8 +2,6 @@
 using BloomService.Domain.Extensions;
 using BloomService.Domain.Repositories.Abstract;
 using BloomService.Web.Infrastructure.Dependecy;
-using BloomService.Web.Infrastructure.Extensions;
-using BloomService.Web.Infrastructure.Services;
 using BloomService.Web.Infrastructure.Services.Abstract;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using BloomService.Web.Notifications;
@@ -174,7 +172,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     var employee = _repository.SearchFor<SageEmployee>(e => e.Name == assigment.Employee).SingleOrDefault();
                                     assigment.EmployeeId = employee != null ? employee.Employee : null;
                                     var assignmentDateString = assigment.ScheduleDate + " " + assigment.StartTime;
-                                    var assignmentDate = DateTime.ParseExact(assignmentDateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                    var assignmentDate = assignmentDateString.TryAsDateTime() ?? DateTime.MinValue;
                                     assigment.Start = assignmentDate.ToString();
                                     assigment.End = assignmentDate.AddHours(assigment.EstimatedRepairHours.AsDouble()).ToString();
                                     assigment.Color = employee?.Color ?? "";

@@ -1,4 +1,4 @@
-﻿namespace BloomService.Domain.Entities.Concrete.MessageResponse
+﻿namespace Sage.WebApi.Infratructure.MessageResponse
 {
     using System.Xml.Serialization;
 

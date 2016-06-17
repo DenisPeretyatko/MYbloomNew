@@ -149,7 +149,7 @@
         private SageResponse<TEntity> Delete<TEntity>(string id, string endPoint) where TEntity : IEntity
         {
             var request = new RestRequest(endPoint, Method.DELETE) { RequestFormat = DataFormat.Json };
-            request.AddParameter("id", id);
+            request.AddUrlSegment("id", id);
             request.AddHeader("Authorization", token);
             var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var results = response.Data;
@@ -168,7 +168,7 @@
 
         private SageResponse<TEntity> Get<TEntity>(string id, string endPoint) where TEntity : IEntity
         {
-            var request = new RestRequest(endPoint, Method.GET) { RequestFormat = DataFormat.Json };
+            var request = new RestRequest(endPoint + "/{id}", Method.GET) { RequestFormat = DataFormat.Json };
             request.AddUrlSegment("id", id);
             request.AddHeader("Authorization", token);
             var response = _restClient.Execute<SageResponse<TEntity>>(request);

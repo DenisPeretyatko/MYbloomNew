@@ -1,4 +1,7 @@
-﻿namespace BloomService.Web.Controllers
+﻿using BloomService.Web.Infrastructure.Jobs;
+using Common.Logging;
+
+namespace BloomService.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -24,6 +27,7 @@
     public class ApiMobileController : BaseController
     {
         private readonly IImageService imageService;
+        private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
 
         private readonly IRepository repository;
 
@@ -51,6 +55,7 @@
         [Route("Apimobile/Workorder/{id}/Equipment")]
         public ActionResult AddEquipmentToWorkOrder()
         {
+            _log.Info("Method: AddEquipmentToWorkOrder");
             return Success();
         }
 
@@ -78,6 +83,15 @@
             return Json(result);
         }
 
+        [HttpGet]
+        [Route("Apimobile/Workorder/{id}")]
+        public ActionResult GetWorkOrder(string id)
+        {
+            var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id);
+            return Json(workOrder, JsonRequestBehavior.AllowGet);
+        }
+        
+            
         [Route("Apimobile/Part")]
         public ActionResult GetPart()
         {
@@ -105,7 +119,6 @@
                 {
                     continue;
                 }
-
                 order.Latitude = location.Latitude;
                 order.Longitude = location.Longitude;
                 if (order.Equipment != 0)
@@ -122,8 +135,12 @@
         [Route("Apimobile/Image")]
         public ActionResult PostImage(ImageModel model)
         {
+            _log.InfoFormat("Method: PostImage. Workorder Id: {0}", model.IdWorkOrder);
             if (imageService.SavePhotoForWorkOrder(model))
+            {
+                _log.InfoFormat("Add image for workorder success");
                 return Success();
+            }
             else
                 return Error("Add image faild");
         }
@@ -132,6 +149,7 @@
         [Route("Apimobile/Location")]
         public ActionResult PostLocation(string technicianId, decimal lat, decimal lng)
         {
+            _log.InfoFormat("Method: PostLocation. technicianId: {0}, lat: {1}, lng {2}", technicianId, lat, lng);
             var techLocation = new SageTechnicianLocation
             {
                 Employee = technicianId,
@@ -140,6 +158,7 @@
                 Date = DateTime.Now
             };
             repository.Add(techLocation);
+            _log.InfoFormat("TechLocation added. TechnicianId: {0}", technicianId);
             return Success();
         }
 
@@ -147,23 +166,26 @@
         [Route("Apimobile/ChangeWorkorderStatus")]
         public ActionResult ChangeWorkorderStatus(string id, string status)
         {
-            var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
+            _log.InfoFormat("Method: ChangeWorkorderStatus. Id: {0}, Status {1}", id, status);
+           var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
             if (workorder == null)
                 return Error("Workorder not found");
             workorder.Status = status;
-
+            
             //var result = sageApiProxy.EditWorkOrder(workorder);
             //if (!result.IsSucceed)
             //    return Error("Was not able to save workorder to sage");
 
             repository.Update(workorder);
+            _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, status);
             var workorder2 = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
             return Success();
         }
 
         private LoginResponseModel GetToken(string mail, string password)
         {
-            ASCIIEncoding encoding = new ASCIIEncoding();
+            _log.InfoFormat("Method: GetToken. Mail {0}, password {1}", mail, password);
+           ASCIIEncoding encoding = new ASCIIEncoding();
             string postData = "username=" + mail;
             postData += "&password=" + password;
             postData += "&grant_type=" + "password";
@@ -184,10 +206,12 @@
 
                 DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(LoginResponseModel));
                 var model = (LoginResponseModel)ser.ReadObject(dataStream);
+                _log.InfoFormat("Success. Returned LoginResponseModel (ID: {0})", model.Id);
                 return model;
             }
             catch
             {
+                _log.ErrorFormat("Method: GetToken. Error. Returned null");
                 return null;
             }
         }

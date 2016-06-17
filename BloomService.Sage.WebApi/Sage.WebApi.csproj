@@ -100,7 +100,7 @@
     <Reference Include="MongoDB.Bson, Version=1.8.3.9, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BS\packages\MongoDB.Bson.2.2.3\lib\net45\MongoDB.Bson.dll</HintPath>
-      <HintPath>..\..\..\..\Documents\BS\packages\MongoDB.Bson.2.2.3\lib\net45\MongoDB.Bson.dll</HintPath>
+      <HintPath>..\..\BS\packages\MongoDB.Bson.2.2.3\lib\net45\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver, Version=1.8.3.9, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <HintPath>..\packages\mongocsharpdriver.1.8.3\lib\net35\MongoDB.Driver.dll</HintPath>
@@ -330,6 +330,13 @@
     <Compile Include="Infratructure\Constants\Messages.cs" />
     <Compile Include="Infratructure\Constants\Queries.cs" />
     <Compile Include="Infratructure\ClaimsAgent.cs" />
+    <Compile Include="Infratructure\MessageResponse\GoogleLocation.cs" />
+    <Compile Include="Infratructure\MessageResponse\MessageResponses.cs" />
+    <Compile Include="Infratructure\MessageResponse\Response.cs" />
+    <Compile Include="Infratructure\MessageResponse\ResponseError.cs" />
+    <Compile Include="Infratructure\MessageResponse\ResponseException.cs" />
+    <Compile Include="Infratructure\MessageResponse\ResponseReturnParams.cs" />
+    <Compile Include="Infratructure\MessageResponse\ResponseReturnParamsReturnParam.cs" />
     <Compile Include="Infratructure\SageWebConfig.cs" />
     <Compile Include="Infratructure\Service\Implementation\ServiceAuthorization.cs" />
     <Compile Include="Infratructure\Service\IServiceAuthorization.cs" />

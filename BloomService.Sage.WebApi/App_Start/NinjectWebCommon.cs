@@ -14,7 +14,6 @@ namespace Sage.WebApi.App_Start
     using Infratructure.Service.Implementation;
     using Infratructure.Service;
     using Infratructure;
-
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();

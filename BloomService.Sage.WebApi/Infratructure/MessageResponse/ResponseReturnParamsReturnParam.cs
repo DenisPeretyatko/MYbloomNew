@@ -1,14 +1,16 @@
-﻿namespace BloomService.Domain.Entities.Concrete.MessageResponse
+﻿namespace Sage.WebApi.Infratructure.MessageResponse
 {
     using System.Xml.Serialization;
 
     using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Entities.Concrete.ReturnParamModels;
 
     [XmlType(AnonymousType = true)]
     public class ResponseReturnParamsReturnParam
     {
         [XmlArrayItem("Assignment", IsNullable = false)]
-        public SageAssignment[] Assignments { get; set; }
+        public AssignmentReturnParam[] Assignments { get; set; }
+        //public SageAssignment[] Assignments { get; set; }
 
         [XmlArrayItem("CallType", IsNullable = false)]
         public SageCallType[] CallTypes { get; set; }
@@ -17,19 +19,23 @@
         public SageDepartment[] Departments { get; set; }
 
         [XmlArrayItem("Employee", IsNullable = false)]
-        public SageEmployee[] Employees { get; set; }
+        public EmployeeReturnParam[] Employees { get; set; }
+        //public SageEmployee[] Employees { get; set; }
 
         [XmlArrayItem("Equipment", IsNullable = false)]
-        public SageEquipment[] Equipments { get; set; }
+        public EquipmentReturnParam[] Equipments { get; set; }
+        //public SageEquipment[] Equipments { get; set; }
 
         [XmlArrayItem("Location", IsNullable = false)]
-        public SageLocation[] Locations { get; set; }
+        public LocationReturnParam[] Locations { get; set; }
+        //public SageLocation[] Locations { get; set; }
 
         [XmlAttribute]
         public string Name { get; set; }
 
         [XmlArrayItem("Part", IsNullable = false)]
-        public SagePart[] Parts { get; set; }
+        public PartReturnParam[] Parts { get; set; }
+        //public SagePart[] Parts { get; set; }
 
         [XmlArrayItem("Problem", IsNullable = false)]
         public SageProblem[] Problems { get; set; }
@@ -44,6 +50,7 @@
         public string Type { get; set; }
 
         [XmlArrayItem("WorkOrder", IsNullable = false)]
-        public SageWorkOrder[] WorkOrders { get; set; }
+        public WorkOrderReturnParam[] WorkOrders { get; set; }
+        //public SageWorkOrder[] WorkOrders { get; set; }
     }
 }

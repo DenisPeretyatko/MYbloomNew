@@ -1,12 +1,13 @@
-﻿namespace BloomService.Domain.Entities.Concrete
-{
-    using System.Xml.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Serialization;
 
-    using BloomService.Domain.Attributes;
-    using System;
-    [XmlType(AnonymousType = true)]
-    [CollectionName("LocationCollection")]
-    public class SageLocation : SageEntity
+namespace BloomService.Domain.Entities.Concrete.ReturnParamModels
+{
+    public class LocationReturnParam
     {
         public decimal Latitude { get; set; }
 
@@ -15,8 +16,8 @@
         [XmlAttribute]
         public string ABN { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? AccountOpenDate { get; set; }
+        [XmlAttribute]
+        public string AccountOpenDate { get; set; }
 
         [XmlAttribute]
         public string Address { get; set; }

@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using BloomService.Domain.Entities.Concrete;
+using BloomService.Domain.Entities.Concrete.ReturnParamModels;
+using BloomService.Domain.Extensions;
 using Sage.WebApi.Models.DbModels;
+using System;
 
 namespace Sage.WebApi.Mapping
 {
@@ -63,6 +66,89 @@ namespace Sage.WebApi.Mapping
                 .ForMember(dest => dest.TotalCost, opts => opts.MapFrom(src => src.TOTALCOST))
                 .ForMember(dest => dest.WorkOrderType, opts => opts.MapFrom(src => src.WOTYPE))
                 .ForMember(dest => dest.WorkOrder, opts => opts.MapFrom(src => src.WRKORDNBR));
+
+            CreateMap<AssignmentReturnParam, SageAssignment>()
+                .ForMember(dest => dest.ElapsedTime, opts => opts.MapFrom(src => src.ElapsedTime.AsDoubleSafe()))
+                .ForMember(dest => dest.CreateTimeEntry, opts => opts.MapFrom(src => ConvertToTime(src.CreateTimeEntry)))
+                .ForMember(dest => dest.AlarmDate, opts => opts.MapFrom(src => ConvertToDate(src.AlarmDate)))
+                .ForMember(dest => dest.DateEntered, opts => opts.MapFrom(src => ConvertToDate(src.DateEntered)))
+                .ForMember(dest => dest.Enddate, opts => opts.MapFrom(src => ConvertToDate(src.Enddate)))
+                .ForMember(dest => dest.Endtime, opts => opts.MapFrom(src => ConvertToTime(src.Endtime)))
+                .ForMember(dest => dest.ETAdate, opts => opts.MapFrom(src => ConvertToDate(src.ETAdate)))
+                .ForMember(dest => dest.ETAtime, opts => opts.MapFrom(src => ConvertToTime(src.ETAtime)))
+                .ForMember(dest => dest.LastTime, opts => opts.MapFrom(src => ConvertToTime(src.LastTime)))
+                .ForMember(dest => dest.LastDate, opts => opts.MapFrom(src => ConvertToDate(src.LastDate)))
+                .ForMember(dest => dest.PostedTime, opts => opts.MapFrom(src => ConvertToTime(src.PostedTime)))
+                .ForMember(dest => dest.ScheduleDate, opts => opts.MapFrom(src => ConvertToDate(src.ScheduleDate)))
+                .ForMember(dest => dest.StartTime, opts => opts.MapFrom(src => ConvertToTime(src.StartTime)))
+                .ForMember(dest => dest.TimeEntered, opts => opts.MapFrom(src => ConvertToTime(src.TimeEntered)));
+
+            CreateMap<LocationReturnParam, SageLocation>()
+                .ForMember(dest => dest.AccountOpenDate, opts => opts.MapFrom(src => ConvertToDate(src.AccountOpenDate)));
+
+            CreateMap<EquipmentReturnParam, SageEquipment>()
+                .ForMember(dest => dest.DateRemoved, opts => opts.MapFrom(src => ConvertToDate(src.DateRemoved)))
+                .ForMember(dest => dest.DateReplaced, opts => opts.MapFrom(src => ConvertToDate(src.DateReplaced)))
+                .ForMember(dest => dest.InstallDate, opts => opts.MapFrom(src => ConvertToDate(src.InstallDate)));
+
+            CreateMap<EmployeeReturnParam, SageEmployee>()
+               .ForMember(dest => dest.Birthdate, opts => opts.MapFrom(src => ConvertToDate(src.Birthdate)))
+               .ForMember(dest => dest.DefaultStartTime, opts => opts.MapFrom(src => ConvertToTime(src.DefaultStartTime)))
+               .ForMember(dest => dest.NormalEndTime, opts => opts.MapFrom(src => ConvertToTime(src.NormalEndTime)));
+
+            CreateMap<CustomerReturnParam, SageCustomer>()
+               .ForMember(dest => dest.Checklist1Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist1Date)))
+               .ForMember(dest => dest.Checklist10Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist10Date)))
+               .ForMember(dest => dest.Checklist2Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist2Date)))
+               .ForMember(dest => dest.Checklist3Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist3Date)))
+               .ForMember(dest => dest.Checklist4Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist4Date)))
+               .ForMember(dest => dest.Checklist5Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist5Date)))
+               .ForMember(dest => dest.Checklist6Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist6Date)))
+               .ForMember(dest => dest.Checklist7Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist7Date)))
+               .ForMember(dest => dest.Checklist8Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist8Date)))
+               .ForMember(dest => dest.Checklist9Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist9Date)))
+               .ForMember(dest => dest.Checklist9Date, opts => opts.MapFrom(src => ConvertToDate(src.DateEstablished)))
+               .ForMember(dest => dest.Checklist9Date, opts => opts.MapFrom(src => ConvertToDate(src.DateStamp)));
+
+            CreateMap<PartReturnParam, SagePart>()
+              .ForMember(dest => dest.LastActivityDate, opts => opts.MapFrom(src => ConvertToDate(src.LastActivityDate)))
+              .ForMember(dest => dest.LastOrderDate, opts => opts.MapFrom(src => ConvertToDate(src.LastOrderDate)))
+              .ForMember(dest => dest.LastReceivedDate, opts => opts.MapFrom(src => ConvertToDate(src.LastReceivedDate)))
+              .ForMember(dest => dest.OrderLeadTime, opts => opts.MapFrom(src => ConvertToTime(src.OrderLeadTime)));
+
+            CreateMap<WorkOrderReturnParam, SageWorkOrder>()
+             .ForMember(dest => dest.CallTime, opts => opts.MapFrom(src => ConvertToTime(src.CallTime)))
+             .ForMember(dest => dest.CallDate, opts => opts.MapFrom(src => ConvertToDate(src.CallDate)))
+             .ForMember(dest => dest.DateClosed, opts => opts.MapFrom(src => ConvertToDate(src.DateClosed)))
+             .ForMember(dest => dest.DateComplete, opts => opts.MapFrom(src => ConvertToDate(src.DateComplete)))
+             .ForMember(dest => dest.DateEntered, opts => opts.MapFrom(src => ConvertToDate(src.DateEntered)))
+             .ForMember(dest => dest.DateRun, opts => opts.MapFrom(src => ConvertToDate(src.DateRun)))
+             .ForMember(dest => dest.InvoiceDate, opts => opts.MapFrom(src => ConvertToDate(src.InvoiceDate)))
+             .ForMember(dest => dest.QuoteExpirationDate, opts => opts.MapFrom(src => ConvertToDate(src.QuoteExpirationDate)))
+             .ForMember(dest => dest.TimeComplete, opts => opts.MapFrom(src => ConvertToTime(src.TimeComplete)))
+             .ForMember(dest => dest.TimeEntered, opts => opts.MapFrom(src => ConvertToTime(src.TimeEntered)));
+        }
+
+        private static DateTime ConvertToDate(string dateString)
+        {
+            DateTime result;
+
+            if (DateTime.TryParse(dateString, out result))
+            {
+                return result.ToUniversalTime().Date;
+            }
+            return new DateTime(2000, 1, 1);
+        }
+
+        private static TimeSpan ConvertToTime(string timeString)
+        {
+            DateTime result;
+
+            if (DateTime.TryParse(timeString, out result))
+            {
+                return result.ToUniversalTime().TimeOfDay;
+            }
+            return new TimeSpan();
         }
     }
 }
