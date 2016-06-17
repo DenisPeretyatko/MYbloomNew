@@ -299,7 +299,6 @@
     <Compile Include="Infrastructure\Dependecy\Ninject\NinjectScope.cs" />
     <Compile Include="Controllers\ApiMobileController.cs" />
     <Compile Include="Controllers\BaseComtroller.cs" />
-    <Compile Include="Controllers\AuthorizationController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\TechnicianController.cs" />
     <Compile Include="Controllers\WorkorderController .cs" />
@@ -329,6 +328,7 @@
     <Compile Include="Models\CallTypeModel.cs" />
     <Compile Include="Models\AssignmentModel.cs" />
     <Compile Include="Models\ChartModel.cs" />
+    <Compile Include="Models\CommentImageModel.cs" />
     <Compile Include="Models\DashboardViewModel.cs" />
     <Compile Include="Models\EntityModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
