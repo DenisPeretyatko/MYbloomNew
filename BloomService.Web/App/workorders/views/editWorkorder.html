@@ -135,7 +135,7 @@
                 </div>
             </div>
         </tab>
-        <tab heading="Labor and Parts">
+        <tab heading="Parts and Labor">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
@@ -223,6 +223,7 @@
                                     <th>#</th>
                                     <th>Piture</th>
                                     <th>Description</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -233,6 +234,9 @@
                                         </td>
                                         <td>
                                             <label>{{picture.Description}}</label>
+                                        </td>
+                                        <td ng-if="equipm.isEditing == false">
+                                            <a class="btn btn-danger btn-xs" ng-click="">Display location</a>
                                         </td>
                                     </tr>
                                 </tbody>
