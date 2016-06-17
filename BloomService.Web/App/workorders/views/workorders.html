@@ -13,43 +13,66 @@
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
+                    <input type="text" class="form-control input-sm m-b-xs" placeholder="Search in table" data-ng-model="searchStr" ng-model-options="{debounce: 1000}">
                     <table class="footable table table-stripped" data-page-size="100" data-filter=#filter>
                         <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Date</th>
-                                <th data-hide="phone,tablet">Customer</th>
-                                <th data-hide="phone,tablet">Location</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
+                        <tr>
+                            <th ng-init="data = ''" ng-click="data='num'; changeSorting(data)">#</th>
+                            <th ng-click="data = 'date'; changeSorting(data)">Date</th>
+                            <th ng-click="data = 'customer'; changeSorting(data)" data-hide="phone,tablet">Customer</th>
+                            <th ng-click="data = 'location'; changeSorting(data)" data-hide="phone,tablet">Location</th>
+                            <th ng-click="data = 'status'; changeSorting(data)">Status</th>
+                            <th ng-click="data = 'action'; changeSorting(data)">Action</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="workorder in workorders">
-                                <td>{{workorder.WorkOrder}}</td>
-                                <td>{{workorder.DateEntered|date:mediumTime}}</td>
-                                <td>{{workorder.ARCustomer}}</td>
-                                <td>{{workorder.Location}}</td>
-                                <td>
-                                    <span class="label" ng-class="workorder.status == 'closed' ? 'label-danger' : 'label-primary' ">
+                        <tr ng-repeat="workorder in workorders">
+                            <td>{{workorder.WorkOrder}}</td>
+                            <td>{{workorder.DateEntered|date:mediumTime}}</td>
+                            <td>{{workorder.ARCustomer}}</td>
+                            <td>{{workorder.Location}}</td>
+                            <td>
+                                <span class="label" ng-class="workorder.status == 'closed' ? 'label-danger' : 'label-primary' ">
                                         {{workorder.Status == 'closed' ? "Closed" : "Open" }}
                                     </span>
-                                </td>
-                                <td class="center">
-                                    <a ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})" class="btn btn-primary btn-xs">Edit...</a>
-                                </td>
-                            </tr>
+                            </td>
+                            <td class="center">
+                                <a ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})" class="btn btn-primary btn-xs">Edit...</a>
+                            </td>
+                        </tr>
                         </tbody>
                         <tfoot class="hide-if-no-paging">
-                            <tr>
-                                <td colspan="6" class="text-center">
-                                    <ul class="pagination"></ul>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                <ul class="pagination"></ul>
+                            </td>
+                        </tr>
                         </tfoot>
 
                     </table>
+                    <div class="nav-pager center-block">
+                        <!--<dir-pagination-controls max-size="8"
+                                                 direction-links="true"
+                                                 boundary-links="true"
+                                                 on-page-change="data.getData(newPageNumber)">
+                        </dir-pagination-controls>-->
+                        <nav style="text-align: center">
+                            <ul class="pagination">
+                                
+                                <li ng-click="PrevPage() ">
+                                    <a aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li ng-repeat="i in getPaginationList" ng-click="ShowPage(i.link)" ng-class="{'active':CurrentPageNum()==i.link, 'disabled':pagesCount==i.link }"><a ng-bind-html="i.link">{{i.name}} <span class="sr-only">(current)</span></a></li>
+                                <li ng-click="NextPage()">
+                                    <a aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </div>
