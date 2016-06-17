@@ -28,7 +28,7 @@ namespace BloomService.Domain.Extensions
                     CustomerEndPoint = nameValueCollection["CustomerEndPoint"],
                     SyncDb = nameValueCollection["SyncDb"],
                     SageApiHost = nameValueCollection["SageApiHost"],
-                    BSUrl = nameValueCollection["BSUrl"],
+                    SiteUrl = nameValueCollection["SiteUrl"],
                     SertificateUrl = nameValueCollection["SertificateUrl"],
                     SizeBigPhoto = int.Parse(nameValueCollection["SizeBigPhoto"]),
                     SizeSmallPhoto = int.Parse(nameValueCollection["SizeSmallPhoto"])
@@ -58,7 +58,7 @@ namespace BloomService.Domain.Extensions
         public string CustomerEndPoint { get; set; }
         public string SyncDb { get; set; }
         public string SageApiHost { get; set; }
-        public string BSUrl { get; set; }
+        public string SiteUrl { get; set; }
         public string SertificateUrl { get; set; }
         public int SizeBigPhoto { get; set; }
         public int SizeSmallPhoto { get; set; }

@@ -75,7 +75,7 @@ namespace BloomService.Web.Services.Concrete
             var nameSmall = "small" + countImage;
             var fileName = SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, settings.SizeBigPhoto);
             SavePhotoForWorkOrder(model.Image, pathToImage, nameSmall, settings.SizeSmallPhoto);
-            var maxId = imagesDb.Images.Max(x => x.Id);
+            var maxId = imagesDb.Images.Any() ? imagesDb.Images.Max(x => x.Id) : 0;
             var image = new ImageLocation { Image = fileName, Latitude = model.Latitude, Longitude = model.Longitude, Id = maxId + 1 };
             imagesDb.Images.Add(image);
             repository.Add(imagesDb);
@@ -113,7 +113,8 @@ namespace BloomService.Web.Services.Concrete
                 {
                     if (!big)
                         image.Image = pathToImage + "small" + image.Image;
-                    image.Image = pathToImage + image.Image;
+                    else
+                        image.Image = pathToImage + image.Image;
                 }
                 return images.Images;
             }

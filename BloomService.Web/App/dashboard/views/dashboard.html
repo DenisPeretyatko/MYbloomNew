@@ -2,6 +2,14 @@
     <div class="col-lg-9">
         <h2>Dashboard</h2>
     </div>
+    <div class="col-lg-3 pull-right">
+        <div class="form-group map_date">
+            <div class="input-group date">
+                <input type="datetime" class="form-control" date-time ng-model="obj.mapDate" view="date" auto-close="true" min-view="date" format="YYYY-MM-DD">
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
@@ -22,14 +30,7 @@
                 <div class="ibox-title">
                     <h5>Workorders for today</h5>
                 </div>
-                <div class="col-lg-3 pull-right">
-                    <div class="form-group map_date">
-                        <div class="input-group date">
-                            <input type="datetime" class="form-control" date-time ng-model="obj.mapDate" view="date" auto-close="true" min-view="date" format="YYYY-MM-DD">
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="ibox-content">
                     <section id="map">
                         <div ui-map="locationMap" ui-options="mapOptions" class="google-map" style="height: 360px;"></div>

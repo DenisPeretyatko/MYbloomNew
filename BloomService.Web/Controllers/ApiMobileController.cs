@@ -114,7 +114,9 @@ namespace BloomService.Web.Controllers
             foreach (var order in result)
             {
                 order.Equipments = new List<SageEquipment>();
-                order.Images = imageService.GetPhotoForWorkOrder(order.WorkOrder, false, settings.BSUrl);
+
+                order.Images = imageService.GetPhotoForWorkOrder(order.WorkOrder, false, settings.SiteUrl);
+
                 var location = locations.FirstOrDefault(x => x.Name == order.Location);
                 if (location == null)
                 {
@@ -205,7 +207,7 @@ namespace BloomService.Web.Controllers
             postData += "&grant_type=" + "password";
             byte[] data = encoding.GetBytes(postData);
 
-            var url = ConfigurationManager.AppSettings["BSurl"] + "/apimobile/Token";
+            var url = ConfigurationManager.AppSettings["SiteUrl"] + "/apimobile/Token";
             var request = WebRequest.Create(url);
             request.Headers.Add(HttpRequestHeader.Authorization, "usernamepassword");
             request.ContentType = "application/x-www-form-urlencoded";
