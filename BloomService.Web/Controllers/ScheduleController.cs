@@ -33,7 +33,6 @@ namespace BloomService.Web.Controllers
         [Route("Schedule")]
         public ActionResult GetSchedules()
         {
-            _log.InfoFormat("GetSchedules Test");
             var lastMonth = DateTime.Now.AddMonths(-1);
             var model = new ScheduleViewModel();
             var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.WorkOrder)).OrderByDescending(x => x.DateEntered).Skip(1400).Take(65).ToList();
