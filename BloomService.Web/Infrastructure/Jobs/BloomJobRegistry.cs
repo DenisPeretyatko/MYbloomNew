@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 
 namespace BloomService.Web.Infrastructure.Jobs
 {
@@ -27,6 +28,7 @@ namespace BloomService.Web.Infrastructure.Jobs
         private readonly object _syncSageLock = new object();
         private readonly IHttpContextProvider _httpContextProvider;
         private readonly ILocationService _locationService;
+        private readonly object _keepAlive = new object();
 
 
         public BloomJobRegistry()
@@ -36,6 +38,8 @@ namespace BloomService.Web.Infrastructure.Jobs
             _repository = ComponentContainer.Current.Get<IRepository>();
             _httpContextProvider = ComponentContainer.Current.Get<IHttpContextProvider>();
             _locationService = ComponentContainer.Current.Get<ILocationService>();
+
+            
 
             //Send silent push notifications to iOS
             Schedule(() =>
@@ -66,6 +70,24 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
                 }
             }).ToRunNow().AndEvery(15).Minutes();
+
+            //Send request
+            Schedule(() =>
+            {
+                lock (_keepAlive)
+                {
+                    try
+                    {
+                        WebRequest req = WebRequest.Create(_settings.SiteUrl);
+                        WebResponse result = req.GetResponse();
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.ErrorFormat("Keep alive job failed {0}", ex);
+                    }
+
+                }
+            }).ToRunNow().AndEvery(10).Minutes();
 
             //Sync sage and mongoDb
             Schedule(() =>
