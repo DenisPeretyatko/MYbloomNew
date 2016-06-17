@@ -32,6 +32,10 @@ var dashboardModuleConfig = function($stateProvider) {
                             serie: true,
                             name: 'angular-flot',
                             files: [ 'public/js/plugins/flot/jquery.flot.js', 'public/js/plugins/flot/jquery.flot.time.js', 'public/js/plugins/flot/jquery.flot.tooltip.min.js', 'public/js/plugins/flot/jquery.flot.spline.js', 'public/js/plugins/flot/jquery.flot.resize.js', 'public/js/plugins/flot/jquery.flot.pie.js', 'public/js/plugins/flot/curvedLines.js', 'public/js/plugins/flot/angular-flot.js', 'public/js/plugins/flot/jquery.flot.categories.js' ]
+                        },
+                        {
+                            name: 'datePicker',
+                            files: ['public/css/plugins/datapicker/angular-datapicker.css', 'public/js/plugins/datapicker/angular-datepicker.js']
                         }
                     ]);
                 }

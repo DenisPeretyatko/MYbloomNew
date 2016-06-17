@@ -23,6 +23,9 @@ var flotChartOptions =
         tickLength: 0,
         tickDecimals: 0
     },
+    yaxis: {
+        min: 0
+    },
     colors: ["#df4242"],
     grid: {
         color: "#999999",

@@ -2,8 +2,6 @@
 using BloomService.Domain.Extensions;
 using BloomService.Domain.Repositories.Abstract;
 using BloomService.Web.Infrastructure.Dependecy;
-using BloomService.Web.Infrastructure.Extensions;
-using BloomService.Web.Infrastructure.Services;
 using BloomService.Web.Infrastructure.Services.Abstract;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using BloomService.Web.Notifications;
@@ -14,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 
 namespace BloomService.Web.Infrastructure.Jobs
 {
@@ -27,6 +26,7 @@ namespace BloomService.Web.Infrastructure.Jobs
         private readonly object _syncSageLock = new object();
         private readonly IHttpContextProvider _httpContextProvider;
         private readonly ILocationService _locationService;
+        private readonly object _keepAlive = new object();
 
 
         public BloomJobRegistry()
@@ -36,6 +36,8 @@ namespace BloomService.Web.Infrastructure.Jobs
             _repository = ComponentContainer.Current.Get<IRepository>();
             _httpContextProvider = ComponentContainer.Current.Get<IHttpContextProvider>();
             _locationService = ComponentContainer.Current.Get<ILocationService>();
+
+            
 
             //Send silent push notifications to iOS
             Schedule(() =>
@@ -66,6 +68,24 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
                 }
             }).ToRunNow().AndEvery(15).Minutes();
+
+            //Send request
+            Schedule(() =>
+            {
+                lock (_keepAlive)
+                {
+                    try
+                    {
+                        WebRequest req = WebRequest.Create(_settings.SiteUrl);
+                        WebResponse result = req.GetResponse();
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.ErrorFormat("Keep alive job failed {0}", ex);
+                    }
+
+                }
+            }).ToRunNow().AndEvery(10).Minutes();
 
             //Sync sage and mongoDb
             Schedule(() =>
@@ -152,7 +172,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     var employee = _repository.SearchFor<SageEmployee>(e => e.Name == assigment.Employee).SingleOrDefault();
                                     assigment.EmployeeId = employee != null ? employee.Employee : null;
                                     var assignmentDateString = assigment.ScheduleDate + " " + assigment.StartTime;
-                                    var assignmentDate = DateTime.ParseExact(assignmentDateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                    var assignmentDate = assignmentDateString.TryAsDateTime() ?? DateTime.MinValue;
                                     assigment.Start = assignmentDate.ToString();
                                     assigment.End = assignmentDate.AddHours(assigment.EstimatedRepairHours.AsDouble()).ToString();
                                     assigment.Color = employee?.Color ?? "";

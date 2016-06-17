@@ -1,0 +1,10 @@
+2016-06-17 17:19:43,257 [47] ERROR BloomService.Web.Infrastructure.Jobs.BloomJobRegistry - <log4net.Error>Exception rendering object type [Common.Logging.Factory.AbstractLogger+StringFormatFormattedMessage]<stackTrace>System.FormatException: Index (zero based) must be greater than or equal to zero and less than the size of the argument list.
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(IFormatProvider provider, String format, Object[] args)
+   at Common.Logging.Factory.AbstractLogger.StringFormatFormattedMessage.ToString() in c:\_oss\common-logging\src\Common.Logging.Portable\Logging\Factory\AbstractLogger.cs:line 125
+   at log4net.ObjectRenderer.DefaultRenderer.RenderObject(RendererMap rendererMap, Object obj, TextWriter writer)
+   at log4net.ObjectRenderer.RendererMap.FindAndRender(Object obj, TextWriter writer)</stackTrace></log4net.Error>
+System.Net.WebException: The remote server returned an error: (500) Internal Server Error.
+   at System.Net.HttpWebRequest.GetResponse()
+   at BloomService.Web.Infrastructure.Jobs.BloomJobRegistry.<.ctor>b__9_1() in C:\Nester\BloomService\BloomService.Web\Infrastructure\Jobs\BloomJobRegistry.cs:line 80

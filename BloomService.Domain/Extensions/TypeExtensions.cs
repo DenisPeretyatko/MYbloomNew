@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BloomService.Web.Infrastructure.Extensions
+namespace BloomService.Domain.Extensions
 {
     public static class TypeExtensions
     {

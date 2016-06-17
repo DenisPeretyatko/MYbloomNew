@@ -20,15 +20,19 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     $scope.obj.permissiocode = "";
     $scope.paymentmethods = "";
     $scope.lookups = state.lookups;
-
+    $scope.EquipType = ["Labor", "Parts"];
+    $scope.equipmentList = [];
+    
     $scope.$watch(function () { return state.lookups; }, function () {
        $scope.lookups = state.lookups;
 
        if (state.lookups.Equipment !== undefined) {
            var equipment = {
                equip: $scope.lookups.Equipment,
+               equipType: $scope.EquipType,
                empl: $scope.lookups.Employes,
-               date: $scope.obj.data
+               date: $scope.obj.data,
+               isEditing: true
            }
            $scope.equipment.push(equipment);
        }
@@ -100,13 +104,55 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
 	    return $scope.pictures = response.data;
 	});
 
-	$scope.addRow = function () {
-	    var equipment = {
-	        equip: angular.copy($scope.lookups.Equipment),
-	        empl: angular.copy($scope.lookups.Employes),
-	        date: $scope.obj.data
+	//$scope.addRow = function () {
+	//    var equipment = {
+	//        equip: angular.copy($scope.lookups.Equipment),
+	//        empl: angular.copy($scope.lookups.Employes),
+	//        date: $scope.obj.data
+	//    }
+	//    $scope.equipment.push(equipment);
+    //}
+
+	$scope.editRow = function (item, index) {
+	    item.isEditing = true;
+
+	    var searchingEquip = item.equip;
+	    item.equip = $scope.lookups.Equipment;
+	    item.equip.selected = $scope.lookups.Equipment.find(function (element) {
+	        return element.EquipmentType === searchingEquip;
+	    });
+
+	    var searchingEquipType = item.equipType;
+	    item.equipType = $scope.EquipType;
+	    item.equipType.selected = searchingEquipType;
+
+	    var searchingEmpl = item.empl;
+	    item.empl = $scope.lookups.Employes;
+	    item.empl.selected = $scope.lookups.Employes.find(function (element) {
+	        return element.Name === searchingEmpl;
+	    });
+	    item.date = new Date(item.date);;
+	}
+ 
+	$scope.saveRow = function (item, index) {
+	    if (item.equip.selected != undefined && item.equipType.selected != undefined && item.empl.selected != undefined && item.date != undefined) {
+	        item.equip = item.equip.selected.EquipmentType;
+	        item.equipType = item.equipType.selected;
+	        item.empl = item.empl.selected.Name;
+	        var date = new Date(item.date);	        
+	        item.date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+	        item.isEditing = false;
+	        if (index == ($scope.equipment.length - 1)) {
+	            var equipment = {
+	                equip: angular.copy($scope.lookups.Equipment),
+	                equipType: angular.copy($scope.EquipType),
+	                empl: angular.copy($scope.lookups.Employes),
+	                date: $scope.obj.data,
+	                isEditing: true
+	            }
+	            $scope.equipment.push(equipment);
+	        }
 	    }
-	    $scope.equipment.push(equipment);
     }
 
     $scope.deleteRow = function ($event, item) {

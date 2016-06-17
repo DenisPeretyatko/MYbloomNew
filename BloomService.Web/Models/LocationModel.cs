@@ -73,7 +73,7 @@ namespace BloomService.Web.Models
         [JsonProperty("Employee")]
         public string Employee { get; set; }
         [JsonProperty("AccountOpenDate")]
-        public string AccountOpenDate { get; set; }
+        public System.DateTime AccountOpenDate { get; set; }
         [JsonProperty("MapLocation")]
         public string MapLocation { get; set; }
         [JsonProperty("BilloutAuthorization")]

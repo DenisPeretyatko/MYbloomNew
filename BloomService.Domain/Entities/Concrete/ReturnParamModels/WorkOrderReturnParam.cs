@@ -1,13 +1,10 @@
-﻿namespace BloomService.Domain.Entities.Concrete
-{
-    using System;
-    using System.Xml.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 
-    using BloomService.Domain.Attributes;
-    using System.Collections.Generic;
-    [CollectionName("WorkOrderCollection")]
-    [XmlType(AnonymousType = true)]
-    public class SageWorkOrder : SageEntity
+namespace BloomService.Domain.Entities.Concrete.ReturnParamModels
+{
+    public class WorkOrderReturnParam
     {
         [XmlIgnore]
         public List<SageEquipment> Equipments { get; set; }
@@ -75,14 +72,14 @@
         [XmlAttribute]
         public string Area { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? CallDate { get; set; }
+        [XmlAttribute]
+        public string CallDate { get; set; }
 
         [XmlIgnore]
         public bool CallDateSpecified { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public TimeSpan? CallTime { get; set; }
+        [XmlAttribute]
+        public string CallTime { get; set; }
 
         [XmlIgnore]
         public bool CallTimeSpecified { get; set; }
@@ -111,20 +108,20 @@
         [XmlAttribute]
         public string CustomerPO { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? DateClosed { get; set; }
+        [XmlAttribute]
+        public string DateClosed { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? DateComplete { get; set; }
+        [XmlAttribute]
+        public string DateComplete { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? DateEntered { get; set; }
+        [XmlAttribute]
+        public string DateEntered { get; set; }
 
         [XmlIgnore]
         public bool DateEnteredSpecified { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? DateRun { get; set; }
+        [XmlAttribute]
+        public string DateRun { get; set; }
 
         [XmlAttribute]
         public string Department { get; set; }
@@ -162,8 +159,8 @@
         [XmlAttribute]
         public decimal EstimatedRepairHours { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? InvoiceDate { get; set; }
+        [XmlAttribute]
+        public string InvoiceDate { get; set; }
 
         [XmlAttribute]
         public string JCExtra { get; set; }
@@ -213,8 +210,8 @@
         [XmlAttribute]
         public string Problem { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? QuoteExpirationDate { get; set; }
+        [XmlAttribute]
+        public string QuoteExpirationDate { get; set; }
 
         [XmlAttribute]
         public string RateSheet { get; set; }
@@ -237,14 +234,14 @@
         [XmlAttribute]
         public string TaxatCenter { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public TimeSpan? TimeComplete { get; set; }
+        [XmlAttribute]
+        public string TimeComplete { get; set; }
 
         [XmlIgnore]
         public bool TimeCompleteSpecified { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public TimeSpan? TimeEntered { get; set; }
+        [XmlAttribute]
+        public string TimeEntered { get; set; }
 
         [XmlIgnore]
         public bool TimeEnteredSpecified { get; set; }

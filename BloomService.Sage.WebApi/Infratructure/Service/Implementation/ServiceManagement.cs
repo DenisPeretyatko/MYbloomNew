@@ -6,12 +6,10 @@
     using System.Xml.Serialization;
 
     using BloomService.Domain.Entities.Concrete;
-    using BloomService.Domain.Entities.Concrete.MessageResponse;
-    using BloomService.Domain.Exceptions;
 
     using Sage.Messaging;
     using Sage.WebApi.Infratructure.Constants;
-
+    using MessageResponse;
     public class ServiceManagement : IServiceManagement
     {
         private readonly ClaimsAgent claimsAgent;
@@ -43,8 +41,10 @@
             }
 
             var message = string.Format(Messages.AddAssignment, propertiesStr);
-            var result = SendMessage(message);
-            return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
+            var response = SendMessage(message);
+            var assignments = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
+            var result = AutoMapper.Mapper.Map<SageAssignment[]>(assignments);
+            return result;
         }
        
         public object Agreements()
@@ -55,15 +55,19 @@
 
         public SageAssignment[] Assignments()
         {
-            var result = SendMessage(Messages.Assignments);
-            return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
+            var response = SendMessage(Messages.Assignments);
+            var assignments = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
+            var result = AutoMapper.Mapper.Map<SageAssignment[]>(assignments);
+            return result;
         }
 
         public SageAssignment[] Assignments(string number)
         {
             var messages = string.Format(Messages.AssignmentsValue, number);
-            var result = SendMessage(messages);
-            return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
+            var response = SendMessage(messages);
+            var assignments = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
+            var result = AutoMapper.Mapper.Map<SageAssignment[]>(assignments);
+            return result;
         }
 
         public SageCallType[] Calltypes()
@@ -99,8 +103,10 @@
             }
 
             var messages = string.Format(Messages.EditAssignment, propertiesStr);
-            var result = SendMessage(messages);
-            return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
+            var response = SendMessage(messages);
+            var assignments = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
+            var result = AutoMapper.Mapper.Map<SageAssignment[]>(assignments);
+            return result;
         }
 
         public bool AddWorkOrderItem(Dictionary<string, string> properties)
@@ -118,26 +124,34 @@
 
         public SageEmployee[] Employees()
         {
-            var result = SendMessage(Messages.Employees);
-            return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Employees;
+            var response = SendMessage(Messages.Employees);
+            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Employees;
+            var result = AutoMapper.Mapper.Map<SageEmployee[]>(entities);
+            return result;
         }
 
         public SageEquipment[] Equipments()
         {
-            var result = SendMessage(Messages.Equipments);
-            return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Equipments;
+            var response = SendMessage(Messages.Equipments);
+            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Equipments;
+            var result = AutoMapper.Mapper.Map<SageEquipment[]>(entities);
+            return result;
         }
 
         public SageLocation[] Locations()
         {
-            var result = SendMessage(Messages.Locations);
-            return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Locations;
+            var response = SendMessage(Messages.Locations);
+            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Locations;
+            var result = AutoMapper.Mapper.Map<SageLocation[]>(entities);
+            return result;
         }
 
         public SagePart[] Parts()
         {
-            var result = SendMessage(Messages.Parts);
-            return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Parts;
+            var response = SendMessage(Messages.Parts);
+            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Parts;
+            var result = AutoMapper.Mapper.Map<SagePart[]>(entities);
+            return result;
         }
 
         public IEnumerable<string> PermissionCode()
@@ -240,15 +254,19 @@
 
         public SageWorkOrder[] WorkOrders()
         {
-            var result = SendMessage(Messages.WorkOrders);
-            return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
+            var response = SendMessage(Messages.WorkOrders);
+            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
+            var result = AutoMapper.Mapper.Map<SageWorkOrder[]>(entities);
+            return result;
         }
 
         public SageWorkOrder[] WorkOrders(string number)
         {
             var messages = string.Format(Messages.WorkOrdersValue, number);
-            var result = SendMessage(messages);
-            return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
+            var response = SendMessage(messages);
+            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
+            var result = AutoMapper.Mapper.Map<SageWorkOrder[]>(entities);
+            return result;
         }
 
         public SageWorkOrder[] WorkOrders(Dictionary<string, string> properties)
@@ -260,8 +278,10 @@
             }
 
             var messages = string.Format(Messages.CreateWorkOrder, propertiesStr);
-            var result = SendMessage(messages);
-            return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
+            var response = SendMessage(messages);
+            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
+            var result = AutoMapper.Mapper.Map<SageWorkOrder[]>(entities);
+            return result;
         }
     }
 }

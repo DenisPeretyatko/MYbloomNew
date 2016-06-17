@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BloomService.Web.Infrastructure.Dependecy.Ninject;
-using BloomService.Web.Infrastructure.Extensions;
+using BloomService.Domain.Extensions;
 
 namespace BloomService.Web.Infrastructure.Dependecy
 {

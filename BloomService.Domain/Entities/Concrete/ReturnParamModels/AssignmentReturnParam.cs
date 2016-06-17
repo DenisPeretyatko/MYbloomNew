@@ -1,18 +1,14 @@
-﻿namespace BloomService.Domain.Entities.Concrete
-{
-    using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
-    using Attributes;
-    using System;
-    [XmlType(AnonymousType = true)]
-    [CollectionName("AssignmentCollection")]
-    public class SageAssignment : SageEntity
+namespace BloomService.Domain.Entities.Concrete.ReturnParamModels
+{
+    public class AssignmentReturnParam
     {
         [XmlAttribute]
         public string Alarm { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? AlarmDate { get; set; }
+        [XmlAttribute]
+        public string AlarmDate { get; set; }
 
         [XmlAttribute]
         public string AlarmStatus { get; set; }
@@ -35,11 +31,11 @@
         [XmlAttribute]
         public string Comments { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public TimeSpan? CreateTimeEntry { get; set; }
+        [XmlAttribute]
+        public string CreateTimeEntry { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? DateEntered { get; set; }
+        [XmlAttribute]
+        public string DateEntered { get; set; }
 
         [XmlAttribute]
         public string Department { get; set; }
@@ -48,16 +44,16 @@
         public string Description { get; set; }
 
         [XmlAttribute]
-        public double ElapsedTime { get; set; }
+        public string ElapsedTime { get; set; }
 
         [XmlAttribute]
         public string Employee { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? Enddate { get; set; }
+        [XmlAttribute]
+        public string Enddate { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public TimeSpan? Endtime { get; set; }
+        [XmlAttribute]
+        public string Endtime { get; set; }
 
         [XmlAttribute]
         public string EnteredBy { get; set; }
@@ -65,23 +61,23 @@
         [XmlAttribute]
         public string EstimatedRepairHours { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? ETAdate { get; set; }
+        [XmlAttribute]
+        public string ETAdate { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public TimeSpan? ETAtime { get; set; }
+        [XmlAttribute]
+        public string ETAtime { get; set; }
 
         [XmlAttribute]
         public string Inactive { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? LastDate { get; set; }
+        [XmlAttribute]
+        public string LastDate { get; set; }
 
         [XmlAttribute]
         public string LastStatus { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public TimeSpan? LastTime { get; set; }
+        [XmlAttribute]
+        public string LastTime { get; set; }
 
         [XmlAttribute]
         public string NextECardNumber { get; set; }
@@ -89,8 +85,8 @@
         [XmlAttribute]
         public string PaidLunchBreak { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public TimeSpan? PostedTime { get; set; }
+        [XmlAttribute]
+        public string PostedTime { get; set; }
 
         [XmlAttribute]
         public string Priority { get; set; }
@@ -98,28 +94,33 @@
         [XmlAttribute]
         public string Problem { get; set; }
 
-        [XmlAttribute(DataType = "date")]
-        public DateTime? ScheduleDate { get; set; }
+        [XmlAttribute]
+        public string ScheduleDate { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public TimeSpan? StartTime { get; set; }
+        [XmlAttribute]
+        public string StartTime { get; set; }
 
-        [XmlAttribute(DataType = "time")]
-        public TimeSpan? TimeEntered { get; set; }
+        [XmlAttribute]
+        public string TimeEntered { get; set; }
 
         [XmlAttribute]
         public string WorkOrder { get; set; }
 
         [XmlIgnore]
         public string Start { get; set; }
+
         [XmlIgnore]
         public string End { get; set; }
+
         [XmlIgnore]
         public string Location { get; set; }
+
         [XmlIgnore]
         public string Customer { get; set; }
+
         [XmlIgnore]
         public string Color { get; set; }
+
         [XmlIgnore]
         public string EmployeeId { get; set; }
     }

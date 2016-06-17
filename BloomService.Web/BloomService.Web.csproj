@@ -42,6 +42,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BS\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
@@ -293,9 +297,6 @@
     <Compile Include="Infrastructure\Dependecy\Ninject\NinjectControllerFactory.cs" />
     <Compile Include="Infrastructure\Dependecy\Ninject\NinjectResolver.cs" />
     <Compile Include="Infrastructure\Dependecy\Ninject\NinjectScope.cs" />
-    <Compile Include="Infrastructure\Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
-    <Compile Include="Infrastructure\Extensions\TypeExtensions.cs" />
     <Compile Include="Controllers\ApiMobileController.cs" />
     <Compile Include="Controllers\BaseComtroller.cs" />
     <Compile Include="Controllers\AuthorizationController.cs" />
@@ -331,6 +332,7 @@
     <Compile Include="Models\DashboardViewModel.cs" />
     <Compile Include="Models\EntityModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
+    <Compile Include="Models\GoogleLocation.cs" />
     <Compile Include="Models\LocationModel.cs" />
     <Compile Include="Models\LoginResponseModel.cs" />
     <Compile Include="Models\MapViewModel.cs" />
