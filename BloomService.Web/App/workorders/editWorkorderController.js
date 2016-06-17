@@ -116,21 +116,14 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
 	$scope.editRow = function (item, index) {
 	    item.isEditing = true;
 
-	    var searchingEquip = item.equip;
-	    item.equip = $scope.lookups.Equipment;
-	    item.equip.selected = $scope.lookups.Equipment.find(function (element) {
-	        return element.EquipmentType === searchingEquip;
-	    });
+	    item.equip = angular.copy($scope.lookups.Equipment);
+	    item.equip.selected = $scope.lookups.Equipment.selected;
+        	    
+	    item.equipType = angular.copy($scope.EquipType);
+	    item.equipType.selected = $scope.EquipType.selected;
 
-	    var searchingEquipType = item.equipType;
-	    item.equipType = $scope.EquipType;
-	    item.equipType.selected = searchingEquipType;
-
-	    var searchingEmpl = item.empl;
-	    item.empl = $scope.lookups.Employes;
-	    item.empl.selected = $scope.lookups.Employes.find(function (element) {
-	        return element.Name === searchingEmpl;
-	    });
+	    item.empl = angular.copy($scope.lookups.Employes);
+	    item.empl.selected = $scope.lookups.Employes.selected;
 	    item.date = new Date(item.date);;
 	}
  
