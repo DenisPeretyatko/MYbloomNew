@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using BloomService.Web.Infrastructure.Jobs;
 using Common.Logging;
 
@@ -82,26 +83,82 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkorders()
         {
             var minDate = DateTime.Now.AddYears(-1);
-            var list = _repository.SearchFor<SageWorkOrder>().OrderByDescending(x=>x.DateEntered).Take(500).ToList();
+            var list = _repository.SearchFor<SageWorkOrder>().OrderByDescending(x => x.DateEntered).Take(500).ToList();
             var result = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(list);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        [Route("WorkorderPage/{index}")]
-        public ActionResult GetWorkorderPage(int index)
+        [HttpPost]
+        [Route("WorkorderPage")]
+        public ActionResult GetWorkorderPage(WorkorderSortModel model)
         {
-            var entitiesCount = _repository.GetAll<SageWorkOrder>().Count();
-            var list = _repository.GetAll<SageWorkOrder>().Skip((index - 1) * _itemsOnPage).Take(_itemsOnPage);
-            return Json(list, JsonRequestBehavior.AllowGet);
+            var workorders = _repository.GetAll<SageWorkOrder>();
+
+            if (!string.IsNullOrEmpty(model.Search))
+            {
+                workorders = _repository.GetAll<SageWorkOrder>()
+                        .Where(x => x.ARCustomer.ToLower().Contains(model.Search.ToLower()) ||
+                                    x.Location.ToLower().Contains(model.Search.ToLower()) ||
+                                    x.Status.ToLower().Contains(model.Search.ToLower()) ||
+                                    x.WorkOrder.Contains(model.Search)
+                        );               
+            }
+            var entitiesCount = workorders.Count();
+
+            switch (model.Column) //sort
+            {
+                case "num":
+                    workorders = model.Direction ? workorders.OrderBy(x => int.Parse(x.WorkOrder)) : workorders.OrderByDescending(x => int.Parse(x.WorkOrder));
+                    break;
+                case "date":
+                    {
+                        workorders = model.Direction ? workorders.OrderBy(x => x.CallDate) : workorders.OrderByDescending(x => x.CallDate);
+                        break;
+                    }
+                case "customer":
+                    {
+                        workorders = model.Direction ? workorders.OrderBy(x => x.ARCustomer) : workorders.OrderByDescending(x => x.ARCustomer);
+                        break;
+                    }
+                case "location":
+                    {
+                        workorders = model.Direction ? workorders.OrderBy(x => x.Location) : workorders.OrderByDescending(x => x.Location);
+                        break;
+                    }
+                case "status":
+                    {
+                        workorders = model.Direction ? workorders.OrderBy(x => x.Status) : workorders.OrderByDescending(x => x.Status);
+                        break;
+                    }
+                case "action":
+                    {
+                        break;
+                    }
+            }
+
+            if(entitiesCount > _itemsOnPage)
+                workorders = workorders.Skip(model.Index * _itemsOnPage).Take(_itemsOnPage);
+
+            var workorderList = workorders.ToList();
+            foreach (var obj in workorderList)
+            {
+                obj.CallDate = obj.DateEntered?.Date.Add(obj.TimeEntered.TimeOfDay) ?? DateTime.MinValue;
+            }
+
+            var result = new WorkorderSortViewModel()
+            {
+                CountPage = entitiesCount % _itemsOnPage == 0 ? entitiesCount / _itemsOnPage : entitiesCount / _itemsOnPage + 1,
+                WorkordersList = workorderList
+            };
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
         [Route("WorkorderPageCount")]
-        public ActionResult GetWorkorderPageCount(int year, string search)
+        public ActionResult GetWorkorderPageCount()
         {
-            var date = new DateTime(year, 0, 0);
-            var entitiesCount = _repository.SearchFor<SageWorkOrder>(x=>x.CustomerPO.Contains(search) || x.Location.Contains(search)).Count();
+            //var date = new DateTime(year, 0, 0);
+            var entitiesCount = _repository.GetAll<SageWorkOrder>().Count();
             var countPage = entitiesCount % _itemsOnPage == 0 ? entitiesCount / _itemsOnPage : entitiesCount / _itemsOnPage + 1;
             return Json(countPage, JsonRequestBehavior.AllowGet);
         }
