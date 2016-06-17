@@ -113,7 +113,7 @@ namespace BloomService.Web.Controllers
             {
                 order.Equipments = new List<SageEquipment>();
 
-                order.Images = imageService.GetPhotoForWorkOrder(order.WorkOrder, false, settings.BSUrl);
+                order.Images = imageService.GetPhotoForWorkOrder(order.WorkOrder, false, settings.SiteUrl);
                 var location = locations.FirstOrDefault(x => x.Name == order.Location);
                 if (location == null)
                 {
