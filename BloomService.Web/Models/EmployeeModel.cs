@@ -58,9 +58,9 @@ namespace BloomService.Web.Models
         [JsonProperty("PREmployee")]
         public string PrEmployee { get; set; }
         [JsonProperty("DefaultStartTime")]
-        public DateTime DefaultStartTime { get; set; }
+        public TimeSpan DefaultStartTime { get; set; }
         [JsonProperty("NormalEndTime")]
-        public DateTime NormalEndTime { get; set; }
+        public TimeSpan NormalEndTime { get; set; }
         [JsonProperty("WorkSaturday")]
         public string WorkSaturday { get; set; }
         [JsonProperty("WorkSunday")]

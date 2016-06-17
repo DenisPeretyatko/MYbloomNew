@@ -96,3 +96,6 @@
 .hiddenrow {
     display: none;
 }
+.equip label {
+    font-weight: 400;
+}
