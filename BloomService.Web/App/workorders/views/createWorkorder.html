@@ -17,7 +17,7 @@
                                 <ui-select ng-model="lookups.Customers.selected" theme="bootstrap">
                                     <ui-select-match placeholder="Customer">{{$select.selected.Name}}</ui-select-match>
                                     <ui-select-choices repeat="item in lookups.Customers | filter: $select.search">
-                                        <div ng-bind-html="item.Name | highlight: $select.search">{{item.Name}}</div>
+                                        <div ng-bind-html="highlight: $select.search">{{item.Name}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
@@ -26,7 +26,7 @@
                                 <ui-select ng-model="lookups.Locations.selected" theme="bootstrap">
                                     <ui-select-match placeholder="Location">{{$select.selected.Name}}</ui-select-match>
                                     <ui-select-choices repeat="item in lookups.Locations | filter: $select.search">
-                                        <div ng-bind-html="item.Name | highlight: $select.search">{{item.Name}}</div>
+                                        <div ng-bind-html=" highlight: $select.search">{{item.Name}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
@@ -35,7 +35,7 @@
                                 <ui-select ng-model="lookups.Calltypes.selected" theme="bootstrap">
                                     <ui-select-match placeholder="Call Type">{{$select.selected.Description}}</ui-select-match>
                                     <ui-select-choices repeat="item in lookups.Calltypes | filter: $select.search">
-                                        <div ng-bind-html="item.Description | highlight: $select.search">{{item.Description}}</div>
+                                        <div ng-bind-html=" highlight: $select.search">{{item.Description}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
@@ -51,7 +51,7 @@
                                 <ui-select ng-model="lookups.Problems.selected" theme="bootstrap">
                                     <ui-select-match placeholder="Problem">{{$select.selected.Description}}</ui-select-match>
                                     <ui-select-choices repeat="item in lookups.Problems | filter: $select.search">
-                                        <div ng-bind-html="item.Description | highlight: $select.search">{{item.Description}}</div>
+                                        <div ng-bind-html=" highlight: $select.search">{{item.Description}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
@@ -60,7 +60,7 @@
                                 <ui-select ng-model="lookups.RateSheets.selected" theme="bootstrap">
                                     <ui-select-match placeholder="Rate Sheet">{{$select.selected}}</ui-select-match>
                                     <ui-select-choices repeat="item in lookups.RateSheets | filter: $select.search">
-                                        <div ng-bind-html="item | highlight: $select.search">{{item}}</div>
+                                        <div ng-bind-html="highlight: $select.search">{{item}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
@@ -69,7 +69,7 @@
                                 <ui-select ng-model="lookups.Employes.selected" theme="bootstrap">
                                     <ui-select-match placeholder="Employee">{{$select.selected.Name}}</ui-select-match>
                                     <ui-select-choices repeat="item in lookups.Employes | filter: $select.search">
-                                        <div ng-bind-html="item.Name | highlight: $select.search">{{item.Name}}</div>
+                                        <div ng-bind-html="highlight: $select.search">{{item.Name}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
@@ -87,7 +87,7 @@
                                 <ui-select ng-model="lookups.Hours.selected" theme="bootstrap">
                                     <ui-select-match placeholder="Estimated Repair Hours">{{$select.selected.Description}}</ui-select-match>
                                     <ui-select-choices repeat="item in lookups.Hours | filter: $select.search">
-                                        <div ng-bind-html="item.Description | highlight: $select.search">{{item.Description}}</div>
+                                        <div ng-bind-html="highlight: $select.search">{{item.Description}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
@@ -124,7 +124,7 @@
                                 <ui-select ng-model="lookups.PaymentMethods.selected" theme="bootstrap">
                                     <ui-select-match placeholder="Payment method">{{$select.selected}}</ui-select-match>
                                     <ui-select-choices repeat="item in lookups.PaymentMethods | filter: $select.search">
-                                        <div ng-bind-html="item | highlight: $select.search">{{item}}</div>
+                                        <div ng-bind-html="highlight: $select.search">{{item}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>

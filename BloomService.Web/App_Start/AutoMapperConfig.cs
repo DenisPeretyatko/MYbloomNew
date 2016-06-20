@@ -22,6 +22,7 @@
             Mapper.CreateMap<AvailableDay, SageAvailableDay>().ReverseMap();
 
             Mapper.CreateMap<AssignmentViewModel, SageAssignment>().ReverseMap();
+            Mapper.CreateMap<SagePart, PartModel>().ReverseMap();
         }
     }
 }

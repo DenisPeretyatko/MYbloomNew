@@ -17,7 +17,7 @@
                                     <ui-select ng-model="lookups.Customers.selected" theme="bootstrap">
                                         <ui-select-match placeholder="Customer">{{$select.selected.Name}}</ui-select-match>
                                         <ui-select-choices repeat="item in lookups.Customers | filter: $select.search">
-                                            <div ng-bind-html="item.Name | highlight: $select.search">{{item.Name}}</div>
+                                            <div ng-bind-html="highlight: $select.search">{{item.Name}}</div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -26,7 +26,7 @@
                                     <ui-select ng-model="lookups.Locations.selected" theme="bootstrap">
                                         <ui-select-match placeholder="Location">{{$select.selected.Name}}</ui-select-match>
                                         <ui-select-choices repeat="item in lookups.Locations | filter: $select.search">
-                                            <div ng-bind-html="item.Name | highlight: $select.search">{{item.Name}}</div>
+                                            <div ng-bind-html="highlight: $select.search">{{item.Name}}</div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -35,7 +35,7 @@
                                     <ui-select ng-model="lookups.Calltypes.selected" theme="bootstrap">
                                         <ui-select-match placeholder="Call Type">{{$select.selected.Description}}</ui-select-match>
                                         <ui-select-choices repeat="item in lookups.Calltypes | filter: $select.search">
-                                            <div ng-bind-html="item.Description | highlight: $select.search">{{item.Description}}</div>
+                                            <div ng-bind-html="highlight: $select.search">{{item.Description}}</div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -51,7 +51,7 @@
                                     <ui-select ng-model="lookups.Problems.selected" theme="bootstrap">
                                         <ui-select-match placeholder="Problem">{{$select.selected.Description}}</ui-select-match>
                                         <ui-select-choices repeat="item in lookups.Problems | filter: $select.search">
-                                            <div ng-bind-html="item.Description | highlight: $select.search">{{item.Description}}</div>
+                                            <div ng-bind-html="highlight: $select.search">{{item.Description}}</div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -60,7 +60,7 @@
                                     <ui-select ng-model="lookups.RateSheets.selected" theme="bootstrap">
                                         <ui-select-match placeholder="Rate Sheet">{{$select.selected}}</ui-select-match>
                                         <ui-select-choices repeat="item in lookups.RateSheets | filter: $select.search">
-                                            <div ng-bind-html="item | highlight: $select.search">{{item}}</div>
+                                            <div ng-bind-html="highlight: $select.search">{{item}}</div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -69,7 +69,7 @@
                                     <ui-select ng-model="lookups.Employes.selected" theme="bootstrap">
                                         <ui-select-match placeholder="Employee">{{$select.selected.Name}}</ui-select-match>
                                         <ui-select-choices repeat="item in lookups.Employes | filter: $select.search">
-                                            <div ng-bind-html="item.Name | highlight: $select.search">{{item.Name}}</div>
+                                            <div ng-bind-html="highlight: $select.search">{{item.Name}}</div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -87,7 +87,7 @@
                                     <ui-select ng-model="lookups.Hours.selected" theme="bootstrap">
                                         <ui-select-match placeholder="Estimated Repair Hours">{{$select.selected.Description}}</ui-select-match>
                                         <ui-select-choices repeat="item in lookups.Hours | filter: $select.search">
-                                            <div ng-bind-html="item.Description | highlight: $select.search">{{item.Description}}</div>
+                                            <div ng-bind-html="highlight: $select.search">{{item.Description}}</div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -124,7 +124,7 @@
                                     <ui-select ng-model="lookups.PaymentMethods.selected" theme="bootstrap">
                                         <ui-select-match placeholder="Payment method">{{$select.selected}}</ui-select-match>
                                         <ui-select-choices repeat="item in lookups.PaymentMethods | filter: $select.search">
-                                            <div ng-bind-html="item | highlight: $select.search">{{item}}</div>
+                                            <div ng-bind-html="highlight: $select.search">{{item}}</div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -143,20 +143,33 @@
                             <table class="footable table table-stripped equip">
                                 <thead>
                                 <tr>
+                                    <th>Work Date</th>
                                     <th>Type</th>
                                     <th>Equipment</th>
-                                    <th data-hide="phone,tablet">Employee</th>
-                                    <th>Work Date</th>
+                                    <th>Description</th>
+                                    <th>Employee</th>
+                                    <th>Cost Qty</th>
+                                    <th>Biled Qty or S/N</th>
+                                    <th>Rate</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr class="gradeX"  ng-repeat="equipm in equipment track by $index">
                                     <td ng-if="equipm.isEditing == true">
+                                        <div class="input-group date">
+                                            <input type="datetime" class="form-control" date-time ng-model="equipm.date" view="date" auto-close="true" min-view="date" format="YYYY-MM-DD">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                    </td>
+                                    <td ng-if="equipm.isEditing == false">
+                                        <label>{{equipm.date}}</label>
+                                    </td>
+                                    <td ng-if="equipm.isEditing == true">
                                         <ui-select ng-model="equipm.equipType.selected" theme="bootstrap">
                                             <ui-select-match placeholder="Type">{{$select.selected}}</ui-select-match>
                                             <ui-select-choices repeat="item in equipm.equipType | filter: $select.search">
-                                                <div ng-bind-html="item | highlight: $select.search">{{item}}</div>
+                                                <div ng-bind-html="highlight: $select.search">{{item}}</div>
                                             </ui-select-choices>
                                         </ui-select>
                                     </td>
@@ -167,7 +180,7 @@
                                         <ui-select ng-model="equipm.equip.selected" theme="bootstrap">
                                             <ui-select-match placeholder="Equipment to Service">{{$select.selected.EquipmentType}}</ui-select-match>
                                             <ui-select-choices repeat="item in equipm.equip | filter: $select.search">
-                                                <div ng-bind-html="item.EquipmentType | highlight: $select.search">{{item.EquipmentType}}</div>
+                                                <div ng-bind-html=" highlight: $select.search">{{item.EquipmentType}}</div>
                                             </ui-select-choices>
                                         </ui-select>
                                     </td>
@@ -175,10 +188,27 @@
                                         <label>{{equipm.equip}}</label>
                                     </td>
                                     <td ng-if="equipm.isEditing == true">
+                                        <ui-select ng-model="equipm.labor.selected" ng-if="equipm.equipType.selected == 'Labor'" theme="bootstrap">
+                                            <ui-select-match placeholder="Description">{{$select.selected.Description}}</ui-select-match>
+                                            <ui-select-choices repeat="item in equipm.labor | filter: $select.search">
+                                                <div ng-bind-html="highlight: $select.search">{{item.Description}}</div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <ui-select ng-model="equipm.parts.selected" ng-if="equipm.equipType.selected == 'Parts' || !equipm.equipType.selected" theme="bootstrap">
+                                            <ui-select-match placeholder="Description">{{$select.selected.Description}}</ui-select-match>
+                                            <ui-select-choices repeat="item in equipm.parts | filter: $select.search">
+                                                <div ng-bind-html="highlight: $select.search">{{item.Description}}</div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </td>
+                                    <td ng-if="equipm.isEditing == false">
+                                        <label>{{equipm.description}}</label>
+                                    </td>
+                                    <td ng-if="equipm.isEditing == true">
                                         <ui-select ng-model="equipm.empl.selected" theme="bootstrap">
                                             <ui-select-match placeholder="Employee">{{$select.selected.Name}}</ui-select-match>
                                             <ui-select-choices repeat="item in equipm.empl | filter: $select.search">
-                                                <div ng-bind-html="item.Name | highlight: $select.search">{{item.Name}}</div>
+                                                <div ng-bind-html="highlight: $select.search">{{item.Name}}</div>
                                             </ui-select-choices>
                                         </ui-select>
                                     </td>
@@ -186,14 +216,34 @@
                                         <label>{{equipm.empl}}</label>
                                     </td>
                                     <td ng-if="equipm.isEditing == true">
-                                        <div class="input-group date">
-                                            <input type="datetime" class="form-control" date-time ng-model="equipm.date" view="date" auto-close="true" min-view="date" format="YYYY-MM-DD">
-                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <div class="input-group" ng-if="equipm.equipType.selected == 'Labor'">
+                                            <input type="number" class="form-control" ng-model="equipm.cost" step="0.01" min="0.00" value="0.00">
+                                        </div>
+                                        <div class="input-group" ng-if="equipm.equipType.selected == 'Parts'  || !equipm.equipType.selected">
+                                            <input type="number" class="form-control" ng-model="equipm.cost" disabled="disabled" step="0.01" min="0.00" value="0.00">
                                         </div>
                                     </td>
                                     <td ng-if="equipm.isEditing == false">
-                                        <label>{{equipm.date}}</label>
+                                        <label>{{equipm.cost}}</label>
                                     </td>
+                                    <td ng-if="equipm.isEditing == true">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" ng-model="equipm.biled" step="0.01" min="0.00" value="0.00">
+                                        </div>
+                                    </td>
+                                    <td ng-if="equipm.isEditing == false">
+                                        <label>{{equipm.biled}}</label>
+                                    </td>
+                                    <td ng-if="equipm.isEditing == true">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" ng-model="equipm.rate" step="0.0001" min="0.0000" value="0.0000">
+                                        </div>
+                                    </td>
+                                    <td ng-if="equipm.isEditing == false">
+                                        <label>{{equipm.rate}}</label>
+                                    </td>
+
+                                 
                                     <td class="center" ng-if="equipm.isEditing == true">
                                         <a class="btn btn-danger btn-xs" ng-click="saveRow(equipm, $index)">Save</a>
                                     </td>
@@ -204,9 +254,6 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <!--<div class="form-group">
-                                <button class="btn btn-sm btn-primary" type="submit" ng-click="addRow()"><strong>Add Equipment</strong></button>
-                            </div>-->
                         </div>
                     </div>
                 </div>

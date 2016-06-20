@@ -75,6 +75,7 @@ namespace BloomService.Web.Controllers
             var equipment = _repository.GetAll<SageEquipment>();
             var customer = _repository.GetAll<SageCustomer>();
             var repairs = _repository.GetAll<SageRepair>();
+            var parts = _repository.GetAll<SagePart>();
 
             lookups.Locations = Mapper.Map<List<SageLocation>, List<LocationModel>>(locations.ToList());
             lookups.Calltypes = Mapper.Map<List<SageCallType>, List<CallTypeModel>>(calltypes.ToList());
@@ -85,6 +86,7 @@ namespace BloomService.Web.Controllers
             lookups.Hours = Mapper.Map<List<SageRepair>, List<RepairModel>>(repairs.ToList());
             lookups.RateSheets = RateSheets.RateSheetsList;
             lookups.PaymentMethods = PaymentMethod.PaymentMethodList;
+            lookups.Parts = Mapper.Map<List<SagePart>, List<PartModel>>(parts.ToList());
 
             return Json(lookups, JsonRequestBehavior.AllowGet);
         }
