@@ -1,4 +1,4 @@
-var commonDataService = function ($http, $window, $sce) {
+var commonDataService = function ($http, $window, $q, $sce) {
     var vm = this;
     this.Token = '';
     this.UserName = '';
@@ -166,25 +166,16 @@ var commonDataService = function ($http, $window, $sce) {
 
     var currentPage = 0;
 
-    this.getFirstTimePageItems = function (model) {
+    this.getWorkordesPaged = function (model) {
+        //var deferred = $q.defer();
+        //deferred.resolve("");
+        //return deferred.promise;
         return $http.post("/WorkorderPage", model, {
             headers: {
                 'Authorization': 'bearer ' + window.localStorage.getItem('Token')
             }
         });
-    }
-
-    this.getPageItems = function (number) {
-        var index = angular.isUndefined(number) ? 0 : number;
-        return $http.get("/WorkorderPage/" + index, {
-            headers: {
-                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
-            }
-        }).then(function (r) {
-            vm.workorders = r.data;
-            notifyObservers();
-        });
-    }
+    };
 
     this.countPagePagination = function () {
         return $http.get("/WorkorderPageCount/", {
@@ -207,31 +198,31 @@ var commonDataService = function ($http, $window, $sce) {
             for (var i = currentPage; i < currentPage + 5; i++) {
                 var name = i + 1;
                 paginationList.push({
-                    name: String(name),
+                    name: $sce.trustAsHtml(String(name)),
                     link: i
                 });
             }
             paginationList.push({
-                name: '...',
+                name: $sce.trustAsHtml('...'),
                 link: pagesNum
             });
             paginationList.push({
-                name: String(pagesNum),
+                name: $sce.trustAsHtml(String(pagesNum)),
                 link: pagesNum - 1
             });
         } else {
             paginationList.push({
-                name: '1',
+                name: $sce.trustAsHtml('1'),
                 link: 0
             });
             paginationList.push({
-                name: '...',
+                name: $sce.trustAsHtml('...'),
                 link: pagesNum
             });
             for (var i = pagesNum-6; i < pagesNum; i++) {
                 var name = i + 1;
                 paginationList.push({
-                    name: String(name),
+                    name: $sce.trustAsHtml(String(name)),
                     link: i
                 });
             }
@@ -261,7 +252,6 @@ var commonDataService = function ($http, $window, $sce) {
     }
     this.getSelectedPage = function (num) {
         currentPage = num;
-        //return this.getPageItems(currentPage);
     }
 
     this.getNextPage = function (num) {
@@ -276,4 +266,4 @@ var commonDataService = function ($http, $window, $sce) {
 
 
 }
-commonDataService.$inject = ['$http'];
+commonDataService.$inject = ['$http', '$window', '$q', '$sce'];

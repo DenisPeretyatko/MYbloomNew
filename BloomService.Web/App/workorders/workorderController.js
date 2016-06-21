@@ -14,13 +14,10 @@ var workorderController = function ($scope, $timeout, commonDataService) {
     $scope.increase = true;
     $scope.Search = "";
 
-    commonDataService.getFirstTimePageItems(model).then(function (response) {
+    commonDataService.getWorkordesPaged(model).then(function (response) {
         $scope.workorders = response.data.WorkordersList;
         $scope.pagesCount = response.data.CountPage;
         $scope.getPaginationList = commonDataService.getPaginationList(response.data.CountPage);
-        $timeout(function () {
-            $(".footable").trigger("footable_redraw");
-        }, 100);
     });
     
 
@@ -35,13 +32,10 @@ var workorderController = function ($scope, $timeout, commonDataService) {
         model.Direction = $scope.increase;
         model.Search = $scope.Search;
         commonDataService.getSelectedPage(page);
-        commonDataService.getFirstTimePageItems(model).then(function (response) {
+        commonDataService.getWorkordesPaged(model).then(function (response) {
             $scope.workorders = response.data.WorkordersList;
             $scope.pagesCount = response.data.CountPage;
             $scope.getPaginationList = commonDataService.getPaginationList(response.data.CountPage);
-            $timeout(function () {
-                $(".footable").trigger("footable_redraw");
-            }, 100);
         });
     }
 
@@ -53,14 +47,14 @@ var workorderController = function ($scope, $timeout, commonDataService) {
     }
 
     $scope.NextPage = function () {
-       
         $scope.ShowPage(commonDataService.getNextPage($scope.pagesCount));
     }
 
-    var updateData = function () {
-        $scope.workorders = commonDataService.workorders;
-    }
-    commonDataService.registrationCallback(updateData);
+    //var updateData = function () {
+    //    $scope.workorders = commonDataService.workorders;
+    //}
+
+    //commonDataService.registrationCallback(updateData);
 
    
     $scope.changeSorting = function (data) {
@@ -71,9 +65,7 @@ var workorderController = function ($scope, $timeout, commonDataService) {
             $scope.increase = !$scope.increase;
         }
         $scope.ShowPage(commonDataService.getCurrentPageNum());
-         $timeout(function () {
-            $(".footable").trigger("footable_redraw");
-        }, 100);
+       
     }
   
     // Instantiate these variables outside the watch
