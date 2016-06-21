@@ -320,6 +320,8 @@
     <Compile Include="Infrastructure\Services\Interfaces\IHttpContextProvider.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\ISageApiProxy.cs" />
     <Compile Include="Infrastructure\Services\SageApiProxy.cs" />
+    <Compile Include="Infrastructure\SignalR\IBloomServiceHub.cs" />
+    <Compile Include="Infrastructure\SignalR\Implementation\BloomServiceHub.cs" />
     <Compile Include="Infrastructure\Utils\JsonHelper.cs" />
     <Compile Include="Infrastructure\Mongo\IRepository.cs" />
     <Compile Include="Infrastructure\Mongo\MongoRepository.cs" />
@@ -358,8 +360,6 @@
     <Compile Include="Infrastructure\Services\Interfaces\IApiMobileService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IImageService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IUserService.cs" />
-    <Compile Include="Infrastructure\Hubs\NotificationsHub.cs" />
-    <Compile Include="Infrastructure\Hubs\LocationHub.cs" />
     <Compile Include="Infrastructure\Services\ImageService.cs" />
     <Compile Include="Infrastructure\Services\UserService.cs" />
     <Compile Include="Models\NotificationModel.cs" />
