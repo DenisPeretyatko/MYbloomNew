@@ -37,26 +37,26 @@
     function changeNotifications() {
         var notification = $.connection.notificationsHub;
 
-        notification.client.updateNotifications = function (notif) {
-            _this.notifications = notif;
-        };
+        //notification.client.updateNotifications = function (notif) {
+        //    _this.notifications = notif;
+        //};
 
-        $.connection.hub.start().done(function () {
-            notification.server.getNotifications(_this.notifications);
-        });
+        //$.connection.hub.start().done(function () {
+        //    notification.server.getNotifications(_this.notifications);
+        //});
     }
     //------------- Test SignalR for locations -------------------
     setInterval(changeLocations, 1000);
     function changeLocations() {
         var location = $.connection.locationHub;
 
-        location.client.updateLocations = function (locations) {
-            _this.locations = locations;
-        };
+        //location.client.updateLocations = function (locations) {
+        //    _this.locations = locations;
+        //};
 
-        $.connection.hub.start().done(function () {
-            location.server.getLocations();
-        });
+        //$.connection.hub.start().done(function () {
+        //    location.server.getLocations();
+        //});
     }
 
 
