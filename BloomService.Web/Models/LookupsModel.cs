@@ -12,6 +12,7 @@ namespace BloomService.Web.Models
         public IEnumerable<EquipmentModel> Equipment { get; set; }
         public IEnumerable<RepairModel> Hours { get; set; }
 
+        
         public IEnumerable<RateSheetModel> RateSheets { get; set; }
         public IEnumerable<PermissionCodeModel> PermissionCodes { get; set; }
         //public IEnumerable<string> PaymentMethods { get; set; }
