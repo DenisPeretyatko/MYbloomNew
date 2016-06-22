@@ -486,6 +486,8 @@
     <Content Include="Public\js\jquery\jquery-ui-1.10.4.min.js" />
     <Content Include="Public\js\jquery\jquery-ui.custom.min.js" />
     <Content Include="Public\js\jquery\moment.min.js" />
+    <Content Include="Public\js\plugins\angucomplete\angucomplete-alt.css" />
+    <Content Include="Public\js\plugins\angucomplete\angucomplete-alt.min.js" />
     <Content Include="Public\js\plugins\colorpicker\css\bootstrap-colorpicker.css" />
     <Content Include="Public\js\plugins\colorpicker\css\bootstrap-colorpicker.min.css" />
     <Content Include="Public\js\plugins\colorpicker\img\bootstrap-colorpicker\alpha-horizontal.png" />

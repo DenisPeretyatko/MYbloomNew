@@ -26,8 +26,8 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
 
     $scope.createWorkOrder = function () {
         var workorder = {
-            Customer: $scope.lookups.Customers.selected == null ? "" : $scope.lookups.Customers.selected.Customer,
-            Location: $scope.lookups.Locations.selected == null ? "" : $scope.lookups.Locations.selected.Location,
+            Customer: $scope.lookups.Customers.selected == null ? "" : $scope.lookups.Customers.selected.description.Customer,
+            Location: $scope.lookups.Locations.selected == null ? "" : $scope.lookups.Locations.selected.description.Location,
             Calltype: $scope.lookups.Calltypes.selected == null ? "" : $scope.lookups.Calltypes.selected.CallType,
             Calldate: $scope.obj.calldate,
             Problem: $scope.lookups.Problems.selected == null ? "" : $scope.lookups.Problems.selected.Problem,

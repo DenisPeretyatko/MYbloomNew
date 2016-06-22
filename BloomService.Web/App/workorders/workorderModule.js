@@ -47,7 +47,11 @@
                         {
                             serie: true,
                             files: ['public/js/plugins/moment/moment.min.js']
-                        }
+                        },
+                         {
+                             name: 'angucomplete-alt',
+                             files: ['public/js/plugins/angucomplete/angucomplete-alt.css', 'public/js/plugins/angucomplete/angucomplete-alt.min.js']
+                         },
                     ]);
                 }
             }
@@ -71,7 +75,11 @@
                         {
                             serie: true,
                             files: ['public/js/plugins/moment/moment.min.js']
-                        }
+                        },
+                         {
+                            name: 'angucomplete-alt',
+                            files: ['public/js/plugins/angucomplete/angucomplete-alt.css', 'public/js/plugins/angucomplete/angucomplete-alt.min.js']
+                        },
                     ]);
                 }
             }

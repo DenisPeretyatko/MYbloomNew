@@ -79,8 +79,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         var workorder = {
             WorkOrder: $scope.editableWorkOrder.WorkOrder,
             Id: $stateParams.id,
-            Customer: $scope.lookups.Customers.selected == null ? "" : $scope.lookups.Customers.selected.Customer,
-            Location: $scope.lookups.Locations.selected == null ? "" : $scope.lookups.Locations.selected.Location,
+            Customer: $scope.lookups.Customers.selected == null ? "" : $scope.lookups.Customers.selected.description.Customer,
+            Location: $scope.lookups.Locations.selected == null ? "" : $scope.lookups.Locations.selected.description.Location,
             Calltype: $scope.lookups.Calltypes.selected == null ? "" : $scope.lookups.Calltypes.selected.CallType,
 	        Calldate: $scope.obj.calldate,
 	        Problem: $scope.lookups.Problems.selected == null ? "" : $scope.lookups.Problems.selected.Problem,
@@ -125,17 +125,17 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
 
 	    if (item.description != '' && selectedDesc != undefined) {
 	        item.description = angular.copy($scope.lookups.Parts);
-	        item.description.selected = $scope.lookups.Parts.selected;
+	        item.description.selected = $scope.lookups.Parts.selected.description;
 
 	        item.parts = angular.copy($scope.lookups.Parts);
-	        item.parts.selected = $scope.lookups.Parts.selected;
+	        item.parts.selected = $scope.lookups.Parts.selected.description;
 	    }
 	    else {
 	        item.description = angular.copy($scope.lookups.Hours);
-	        item.description.selected = $scope.lookups.Hours.selected;
+	        item.description.selected = $scope.lookups.Hours.selected.description;
 
 	        item.labor = angular.copy($scope.lookups.Hours);
-	        item.labor.selected = $scope.lookups.Hours.selected;
+	        item.labor.selected = $scope.lookups.Hours.selected.description;
 	    }
 
 	    item.empl = angular.copy($scope.lookups.Employes);
@@ -152,10 +152,10 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
 	        item.equip = item.equip.selected.EquipmentType;
 	        item.equipType = item.equipType.selected;
 	        if (item.equipType == 'Labor') {
-	            item.description = item.labor.selected.Description;
+	            item.description = item.labor.selected.description.Description;
 	        }
 	        else {
-	            item.description = item.parts.selected.Description;
+	            item.description = item.parts.selected.description.Description;
 	        }
 
 	        item.empl = item.empl.selected.Name;
