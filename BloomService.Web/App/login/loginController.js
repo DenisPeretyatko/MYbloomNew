@@ -11,7 +11,7 @@ var loginController = function ($scope, $state, commonDataService, $window) {
     $scope.obj.message = '';
     $scope.login = (function () {
         commonDataService.getToken($scope.obj.username, $scope.obj.password).success(function (response) {
-            if (response.Type == 2) {
+            if (response.access_token != null && response.access_token != "" && response.access_token != undefined  ) {
                 window.localStorage.setItem('Token', response.access_token);
                 $state.go('manager.dashboard');
             }

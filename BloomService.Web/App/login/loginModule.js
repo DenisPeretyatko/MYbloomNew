@@ -9,12 +9,7 @@ var loginModuleConfig = function ($stateProvider) {
             templateUrl: "/app/login/views/login.html",
             controller: "loginController",
             data: { pageTitle: 'Example view' }
-        })
-        //.state('bloom', {
-        //    abstract: true,
-        //    url: "/index",
-        //    templateUrl: "/app/login/views/login.html",
-        //});
+        });
 }
 dashboardModuleConfig.$inject = ["$stateProvider"];
 

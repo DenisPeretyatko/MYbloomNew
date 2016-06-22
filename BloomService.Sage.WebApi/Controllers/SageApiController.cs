@@ -1,4 +1,7 @@
-﻿namespace Sage.WebApi.Areas.Api.Controllers
+﻿using System.Web.Configuration;
+using Sage.WebApi.Infratructure.Atributes;
+
+namespace Sage.WebApi.Areas.Api.Controllers
 {
     using System.Linq;
 
@@ -13,7 +16,8 @@
     using BloomService.Domain.Models.Responses;
     using WebGrease.Css.Extensions;
     using Infratructure.MessageResponse;
-    [System.Web.Mvc.Authorize]
+
+    [BasicAuthentication]
     public class SageApiController : ApiController
     {
         private readonly IServiceManagement serviceManager;
