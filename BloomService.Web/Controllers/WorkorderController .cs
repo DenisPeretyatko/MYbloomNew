@@ -33,20 +33,20 @@ namespace BloomService.Web.Controllers
             _log.InfoFormat("Method: CreateWorkOrder. Model ID {0}", model.Id);
             var workorder = new SageWorkOrder()
             {
-                //ARCustomer = model.Customer,
+                ARCustomer = model.Customer,
                 Location = model.Location,
-                //CallType = model.Calltype,
+                CallType = model.Calltype,
                 CallDate = model.Calldate.Date,
                 Problem = model.Problem,
-                //RateSheet = model.Ratesheet,
+                RateSheet = model.Ratesheet,
                 Employee = model.Emploee,
-                //Equipment = Convert.ToUInt16(model.Equipment),
+                Equipment = Convert.ToUInt16(model.Equipment),
                 EstimatedRepairHours = Convert.ToDecimal(model.Estimatehours),
                 NottoExceed = model.Nottoexceed,
                 Comments = model.Locationcomments,
-                //CustomerPO = model.Customerpo,
-                //PermissionCode = model.Permissiocode,
-                //PayMethod = model.Paymentmethods
+                CustomerPO = model.Customerpo,
+                PermissionCode = model.Permissiocode,
+                PayMethod = model.Paymentmethods
             };
 
             var result = _sageApiProxy.AddWorkOrder(workorder);
@@ -56,8 +56,8 @@ namespace BloomService.Web.Controllers
                 return Error("Was not able to save workorder to sage");
             }
 
-            _repository.Add(workorder);
-            _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
+            _repository.Add(result.Entity);
+            _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", result.Entity.Id, result.Entity.Name);
             return Success();
         }
 
@@ -111,30 +111,37 @@ namespace BloomService.Web.Controllers
         public ActionResult SaveWorkOrder(WorkOrderModel model)
         {
             _log.InfoFormat("Method: SaveWorkOrder. Model ID {0}", model.Id);
-            //var workorder = new SagePropertyDictionary
-            //{
-            //                        { "ARCustomer", model.Customer }, 
-            //                        { "Location", model.Location }, 
-            //                        { "CallType", model.Calltype }, 
-            //                        { "CallDate", model.Calldate.ToShortDateString() }, 
-            //                        { "CallTime", model.Calldate.ToShortTimeString() }, 
-            //                        { "Problem", model.Problem }, 
-            //                        { "RateSheet", model.Ratesheet }, 
-            //                        { "Employee", model.Emploee }, 
-            //                        { "Equipment", model.Equipment }, 
-            //                        { "EstimatedRepairHours", model.Estimatehours }, 
-            //                        { "NottoExceed", model.Nottoexceed }, 
-            //                        { "Comments", model.Locationcomments }, 
-            //                        { "CustomerPO", model.Customerpo }, 
-            //                        { "PermissionCode", model.Permissiocode }, 
-            //                        { "PayMethod", model.Paymentmethods },
-            //                        { "WorkOrder", model.WorkOrder }
-            //};
+            var workorder = new SageWorkOrder()
+            {
+                ARCustomer = model.Customer,
+                Location = model.Location,
+                CallType = model.Calltype,
+                CallDate = model.Calldate.Date,
+                Problem = model.Problem,
+                RateSheet = model.Ratesheet,
+                Employee = model.Emploee,
+                Equipment = Convert.ToUInt16(model.Equipment),
+                EstimatedRepairHours = Convert.ToDecimal(model.Estimatehours),
+                NottoExceed = model.Nottoexceed,
+                Comments = model.Locationcomments,
+                CustomerPO = model.Customerpo,
+                PermissionCode = model.Permissiocode,
+                PayMethod = model.Paymentmethods
+            };
 
-            var workorder = _repository.Get<SageWorkOrder>(model.Id);
+            var result = _sageApiProxy.EditWorkOrder(workorder);
+            if (!result.IsSucceed)
+            {
+                _log.ErrorFormat("Was not able to update workorder to sage. !result.IsSucceed");
+                return Error("Was not able to update workorder to sage");
+            }
+
             _repository.Update(workorder);
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
             return Success();
+            
+
+            
         }
     }
 }

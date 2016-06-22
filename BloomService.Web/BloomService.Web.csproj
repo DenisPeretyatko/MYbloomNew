@@ -336,6 +336,8 @@
     <Compile Include="Models\LocationModel.cs" />
     <Compile Include="Models\LoginResponseModel.cs" />
     <Compile Include="Models\MapViewModel.cs" />
+    <Compile Include="Models\PermissionCodeModel.cs" />
+    <Compile Include="Models\RateSheetModel.cs" />
     <Compile Include="Models\ScheduleViewModel.cs" />
     <Compile Include="Models\LookupsModel.cs" />
     <Compile Include="Models\EquipmentModel.cs" />

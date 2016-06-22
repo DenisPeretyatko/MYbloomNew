@@ -10,6 +10,8 @@
     using Sage.Messaging;
     using Sage.WebApi.Infratructure.Constants;
     using MessageResponse;
+    using Common.Logging;
+
     public class ServiceManagement : IServiceManagement
     {
         private readonly ClaimsAgent claimsAgent;
@@ -23,6 +25,8 @@
         private string name;
 
         private string password;
+
+        private readonly ILog _log = LogManager.GetLogger(typeof(ServiceManagement));
 
         public ServiceManagement(ClaimsAgent claimsAgent, SageWebConfig configConstants)
         {
@@ -56,8 +60,8 @@
         public SageAssignment[] Assignments()
         {
             var response = SendMessage(Messages.Assignments);
-            var assignments = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
-            var result = AutoMapper.Mapper.Map<SageAssignment[]>(assignments);
+            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
+            var result = AutoMapper.Mapper.Map<SageAssignment[]>(entities);
             return result;
         }
 
@@ -65,8 +69,8 @@
         {
             var messages = string.Format(Messages.AssignmentsValue, number);
             var response = SendMessage(messages);
-            var assignments = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
-            var result = AutoMapper.Mapper.Map<SageAssignment[]>(assignments);
+            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
+            var result = AutoMapper.Mapper.Map<SageAssignment[]>(entities);
             return result;
         }
 
@@ -74,6 +78,15 @@
         {
             var result = SendMessage(Messages.Calltypes);
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.CallTypes;
+        }
+
+        public SageEquipment[] GetEquipmentsByWorkOrderId(string id)
+        {
+            var message = string.Format(Messages.GetEquipmentsByWorkOrderId, id);
+            var response = SendMessage(message);
+            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrderItems;
+            var result = AutoMapper.Mapper.Map<SageEquipment[]>(entities);
+            return result;
         }
 
         public void Create(string name, string password)
@@ -202,7 +215,7 @@
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Repairs;
         }
 
-        public object SendMessage(string message)
+        public string SendMessageXml(string message)
         {
             if (!isCreated)
             {
@@ -210,7 +223,19 @@
             }
 
             var response = messageBoard.SendMessage(messageTypeDescriptor.Xml, message);
+            return response;
+        }
 
+        public object SendMessage(string message)
+        {
+            _log.InfoFormat("Send message: {0}", message);
+            if (!isCreated)
+            {
+                Create("kris", "sageDEV!!");
+            }
+
+            var response = messageBoard.SendMessage(messageTypeDescriptor.Xml, message);
+            _log.InfoFormat("Response {0}", response);
             var serializer = new XmlSerializer(typeof(MessageResponses));
             object result;
             using (TextReader reader = new StringReader(response))
@@ -282,6 +307,28 @@
             var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
             var result = AutoMapper.Mapper.Map<SageWorkOrder[]>(entities);
             return result;
+        }
+
+
+        public SageWorkOrder[] EditWorkOrder(Dictionary<string, string> properties)
+        {
+            var propertiesStr = string.Empty;
+            foreach (var property in properties)
+            {
+                propertiesStr += string.Format(Messages.Property, property.Key, property.Value);
+            }
+
+            var messages = string.Format(Messages.EditWorkOrder, propertiesStr);
+            var response = SendMessage(messages);
+            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
+            var result = AutoMapper.Mapper.Map<SageWorkOrder[]>(entities);
+            return result;
+        }
+
+        public void UnassignWorkOrder(string id)
+        {
+            var messages = string.Format(Messages.UnAssignWorkOrder, id);
+            var response = SendMessage(messages);
         }
     }
 }

@@ -24,7 +24,9 @@
 
         [XmlArrayItem("Equipment", IsNullable = false)]
         public EquipmentReturnParam[] Equipments { get; set; }
-        //public SageEquipment[] Equipments { get; set; }
+
+        [XmlArrayItem("WorkOrderItem", IsNullable = false)]
+        public SageWorkOrderItem[] WorkOrderItems { get; set; }
 
         [XmlArrayItem("Location", IsNullable = false)]
         public LocationReturnParam[] Locations { get; set; }
