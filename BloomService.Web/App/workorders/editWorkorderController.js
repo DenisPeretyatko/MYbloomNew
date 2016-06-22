@@ -56,7 +56,11 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         $scope.lookups.Problems.selected = $scope.lookups.Problems.find(function (element) {
             return element.Description === workorder.Problem;
         });
-        $scope.lookups.RateSheets.selected = $scope.editableWorkOrder.RateSheet;
+        //$scope.lookups.RateSheets.selected = $scope.editableWorkOrder.RateSheet;
+         $scope.lookups.RateSheets.selected = $scope.lookups.RateSheets.find(function (element) {
+             return element.RATESHEETNBR === workorder.RateSheet;
+        });
+
         $scope.lookups.Employes.selected = $scope.lookups.Employes.find(function (element) {
             return element.Name === workorder.Employee;
         });
@@ -69,7 +73,10 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         $scope.obj.nottoexceed = workorder.NottoExceed;
         $scope.obj.locationcomments = workorder.Area;
         $scope.obj.customerpo = workorder.CustomerPO;
-        $scope.obj.permissiocode = workorder.PermissionCode;
+        //$scope.obj.permissiocode = workorder.PermissionCode;
+        $scope.obj.permissiocode = $scope.lookups.PermissionCodes.find(function (element) {
+            return element.DESCRIPTION === workorder.PermissionCode;
+        });
         $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PayMethod;
     });
 

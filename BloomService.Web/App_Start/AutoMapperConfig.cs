@@ -19,6 +19,10 @@
             Mapper.CreateMap<SageAssignment, AssignmentModel>().ReverseMap();
             Mapper.CreateMap<SageWorkOrder, WorkorderViewModel>().ReverseMap();
             Mapper.CreateMap<SageWorkOrder, WorkOrderModel>().ReverseMap();
+
+            Mapper.CreateMap<SageRateSheet, RateSheetModel>().ReverseMap();
+            Mapper.CreateMap<SagePermissionCode, PermissionCodeModel>().ReverseMap();
+
             Mapper.CreateMap<AvailableDay, SageAvailableDay>().ReverseMap();
 
             Mapper.CreateMap<AssignmentViewModel, SageAssignment>().ReverseMap();

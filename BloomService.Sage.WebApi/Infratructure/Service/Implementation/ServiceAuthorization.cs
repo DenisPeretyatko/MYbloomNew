@@ -1,5 +1,6 @@
 ﻿using BloomService.Domain.Models.Requests;
 using BloomService.Domain.Models.Responses;
+using Common.Logging;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.Protocols;
@@ -12,12 +13,16 @@ namespace Sage.WebApi.Infratructure.Service.Implementation
     public class ServiceAuthorization : IServiceAuthorization
     {
         IServiceManagement _serviceManagement;
+
+        private readonly ILog _log = LogManager.GetLogger(typeof(ServiceAuthorization));
+
         public ServiceAuthorization(IServiceManagement serviceManagement)
         {
             _serviceManagement = serviceManagement;
         }
         public AuthorizationResponse Authorization(AuthorizationRequest model)
         {
+            _log.InfoFormat("Authorization: Name = {0} Password: {1}", model.Name, model.Password);
             var response = new AuthorizationResponse();
             try
             {
@@ -30,7 +35,10 @@ namespace Sage.WebApi.Infratructure.Service.Implementation
                 var technician = CheckGroup(ldapConnection, "Technicians", model.Name);
                 var manager = CheckGroup(ldapConnection, "ServiceDept", model.Name);
                 if (technician == null && manager == null)
+                {
+                    _log.InfoFormat("Failed authorization");
                     return null;
+                }
                 SearchResponse searchResponse;
                 if (technician != null)
                 {
@@ -59,10 +67,12 @@ namespace Sage.WebApi.Infratructure.Service.Implementation
                     response.Mail = mail;
                     response.Id = GetId(mail);
                 }
+                _log.InfoFormat("Authorization success: Mail: {0}, Type: {1}, Id: {2}", response.Mail, response.Type, response.Id);
                 return response;
             }
-            catch
+            catch(Exception ex)
             {
+                _log.InfoFormat("Error authorization: {0}", ex.Message);
                 return null;
             }
 

@@ -9,6 +9,8 @@ namespace Sage.WebApi.Infratructure.Constants
         public static readonly string SelectTrucks = "SELECT * FROM JCM_MASTER__JOB WHERE Job LIKE '%T-%'";
         public static readonly string SelectAssignment = "UPDATE ASSIGNS SET EMPLOYEENBR = 0 WHERE WRKORDNBR = %ID%";
         public static readonly string SelectWorkOrders = "SELECT * FROM WRKORDER";
+        public static readonly string SelectPermissionCodes = "SELECT * FROM PERMISSIONCODE";
+        public static readonly string SelectRateSheets = "SELECT * FROM RATESHEET";
 
         public static string BuildEditWorkOrderQuery(SageWorkOrder workOrder)
         {
@@ -30,7 +32,6 @@ namespace Sage.WebApi.Infratructure.Constants
             parameters.Add("CUSTOMERPO", workOrder.CustomerPO);
             parameters.Add("PERMISSIONCODE", workOrder.PermissionCode);
             parameters.Add("PAYMETHOD", workOrder.PayMethod);
-
 
             foreach (var parameter in parameters)
             {

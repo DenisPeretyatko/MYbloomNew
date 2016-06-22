@@ -58,9 +58,9 @@
                             <div class="form-group">
                                 <label>Rate Sheet</label>
                                 <ui-select ng-model="lookups.RateSheets.selected" theme="bootstrap">
-                                    <ui-select-match placeholder="Rate Sheet">{{$select.selected}}</ui-select-match>
+                                    <ui-select-match placeholder="Rate Sheet">{{$select.selected.DESCRIPTION}}</ui-select-match>
                                     <ui-select-choices repeat="item in lookups.RateSheets | filter: $select.search">
-                                        <div ng-bind-html="highlight: $select.search">{{item}}</div>
+                                        <div ng-bind-html="item.DESCRIPTION | highlight: $select.search">{{item.DESCRIPTION}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
@@ -112,13 +112,23 @@
                                     <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                 </div>
                             </div>
+
                             <div class="form-group">
+                                <label>Persmission Code</label>
+                                <ui-select ng-model="lookups.PermissionCodes.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Persmission Code">{{$select.selected.DESCRIPTION}}</ui-select-match>
+                                    <ui-select-choices repeat="item in lookups.PermissionCodes | filter: $select.search">
+                                        <div ng-bind-html="item.DESCRIPTION | highlight: $select.search">{{item.DESCRIPTION}}</div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <!--<div class="form-group">
                                 <label>Persmission Code</label>
                                 <input type="text" placeholder="Permission Code" class="form-control" name="permissionCode" ng-model="obj.permissiocode" required>
                                 <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                     <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="form-group">
                                 <label>Payment method</label>
                                 <ui-select ng-model="lookups.PaymentMethods.selected" theme="bootstrap">
