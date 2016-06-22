@@ -101,48 +101,36 @@ namespace BloomService.Web.Controllers
                                     x.Location.ToLower().Contains(model.Search.ToLower()) ||
                                     x.Status.ToLower().Contains(model.Search.ToLower()) ||
                                     x.WorkOrder.Contains(model.Search)
-                        );               
+                        );
             }
             var entitiesCount = workorders.Count();
 
             switch (model.Column) //sort
             {
                 case "num":
-                    workorders = model.Direction ? workorders.OrderBy(x => int.Parse(x.WorkOrder)) : workorders.OrderByDescending(x => int.Parse(x.WorkOrder));
+                    workorders = model.Direction ? workorders.OrderBy(x => x.WorkOrder) : workorders.OrderByDescending(x => x.WorkOrder);
                     break;
                 case "date":
-                    {
-                        workorders = model.Direction ? workorders.OrderBy(x => x.CallDate) : workorders.OrderByDescending(x => x.CallDate);
-                        break;
-                    }
+                    workorders = model.Direction ? workorders.OrderBy(x => x.CallDate) : workorders.OrderByDescending(x => x.CallDate);
+                    break;
                 case "customer":
-                    {
-                        workorders = model.Direction ? workorders.OrderBy(x => x.ARCustomer) : workorders.OrderByDescending(x => x.ARCustomer);
-                        break;
-                    }
+                    workorders = model.Direction ? workorders.OrderBy(x => x.ARCustomer) : workorders.OrderByDescending(x => x.ARCustomer);
+                    break;
                 case "location":
-                    {
-                        workorders = model.Direction ? workorders.OrderBy(x => x.Location) : workorders.OrderByDescending(x => x.Location);
-                        break;
-                    }
+                    workorders = model.Direction ? workorders.OrderBy(x => x.Location) : workorders.OrderByDescending(x => x.Location);
+                    break;
                 case "status":
-                    {
-                        workorders = model.Direction ? workorders.OrderBy(x => x.Status) : workorders.OrderByDescending(x => x.Status);
-                        break;
-                    }
-                case "action":
-                    {
-                        break;
-                    }
+                    workorders = model.Direction ? workorders.OrderBy(x => x.Status) : workorders.OrderByDescending(x => x.Status);
+                    break;
             }
 
-            if(entitiesCount > _itemsOnPage)
+            if (entitiesCount > _itemsOnPage)
                 workorders = workorders.Skip(model.Index * _itemsOnPage).Take(_itemsOnPage);
 
             var workorderList = workorders.ToList();
             foreach (var obj in workorderList)
             {
-                if(obj.TimeEntered == null) continue;
+                if (obj.TimeEntered == null) continue;
                 obj.CallDate = obj.DateEntered?.Date.Add((TimeSpan)obj.TimeEntered) ?? DateTime.MinValue;
             }
 
@@ -153,6 +141,7 @@ namespace BloomService.Web.Controllers
             };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
 
         [HttpGet]
         [Route("WorkorderPageCount")]

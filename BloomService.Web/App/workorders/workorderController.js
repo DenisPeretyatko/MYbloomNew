@@ -1,7 +1,3 @@
-/**
- * techniciansController - controller
- */
-
 var workorderController = function ($scope, $timeout, commonDataService) {
 
     var model = {
@@ -50,11 +46,6 @@ var workorderController = function ($scope, $timeout, commonDataService) {
         $scope.ShowPage(commonDataService.getNextPage($scope.pagesCount));
     }
 
-    //var updateData = function () {
-    //    $scope.workorders = commonDataService.workorders;
-    //}
-
-    //commonDataService.registrationCallback(updateData);
 
    
     $scope.changeSorting = function (data) {
@@ -68,7 +59,6 @@ var workorderController = function ($scope, $timeout, commonDataService) {
        
     }
   
-    // Instantiate these variables outside the watch
     $scope.$watch('searchStr', function (tmpStr) {
             $scope.Search = tmpStr;
             $scope.ShowPage();

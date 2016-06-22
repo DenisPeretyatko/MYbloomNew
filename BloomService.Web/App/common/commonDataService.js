@@ -1,4 +1,4 @@
-var commonDataService = function ($http, $window, $q, $sce) {
+var commonDataService = function ($http, $window, $sce) {
     var vm = this;
     this.Token = '';
     this.UserName = '';
@@ -167,9 +167,6 @@ var commonDataService = function ($http, $window, $q, $sce) {
     var currentPage = 0;
 
     this.getWorkordesPaged = function (model) {
-        //var deferred = $q.defer();
-        //deferred.resolve("");
-        //return deferred.promise;
         return $http.post("/WorkorderPage", model, {
             headers: {
                 'Authorization': 'bearer ' + window.localStorage.getItem('Token')
@@ -266,4 +263,4 @@ var commonDataService = function ($http, $window, $q, $sce) {
 
 
 }
-commonDataService.$inject = ['$http', '$window', '$q', '$sce'];
+commonDataService.$inject = ['$http', '$window', '$sce'];
