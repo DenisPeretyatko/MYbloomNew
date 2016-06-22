@@ -295,6 +295,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Infratructure\Atributes\BasicAuthenticationAttribute .cs" />
     <Compile Include="Controllers\SageApiController.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
@@ -348,7 +349,6 @@
     <Compile Include="Models\WorkOrderDbModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infratructure\ModelBinders\ProportiesModelBinder .cs" />
-    <Compile Include="Infratructure\Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Infratructure\Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Infratructure\Utils\ObjectExtensions.cs" />
@@ -400,6 +400,9 @@
       <Project>{c864fa21-c500-4d98-9009-9a6f88709f8c}</Project>
       <Name>BloomService.Domain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infratructure\Providers\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

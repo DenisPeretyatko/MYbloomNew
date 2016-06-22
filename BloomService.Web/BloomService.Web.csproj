@@ -62,16 +62,20 @@
       <HintPath>..\packages\Common.Logging.Log4Net1211.3.3.1\lib\net40\Common.Logging.Log4Net1211.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="FluentScheduler, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b76503528a14ebd1, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentScheduler.4.1.1\lib\net40\FluentScheduler.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Glimpse.AspNet, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.AspNet.1.8.0\lib\net45\Glimpse.AspNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Glimpse.Core, Version=1.8.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.1.8.2\lib\net45\Glimpse.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Glimpse.Mvc5, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.Mvc5.1.5.3\lib\net45\Glimpse.Mvc5.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -244,9 +248,6 @@
     <Reference Include="Microsoft.AspNet.Identity.Owin">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
@@ -285,8 +286,8 @@
     <Compile Include="App_Start\ModelBinderConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="App_Start\OwinConfig.cs" />
+    <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Infrastructure\Dependecy\ComponentContainer.cs" />
     <Compile Include="Infrastructure\Dependecy\ComponentRegistrator.cs" />
     <Compile Include="Infrastructure\Dependecy\Get.cs" />
@@ -320,6 +321,8 @@
     <Compile Include="Infrastructure\Services\Interfaces\IHttpContextProvider.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\ISageApiProxy.cs" />
     <Compile Include="Infrastructure\Services\SageApiProxy.cs" />
+    <Compile Include="Infrastructure\SignalR\IBloomServiceHub.cs" />
+    <Compile Include="Infrastructure\SignalR\Implementation\BloomServiceHub.cs" />
     <Compile Include="Infrastructure\Utils\JsonHelper.cs" />
     <Compile Include="Infrastructure\Mongo\IRepository.cs" />
     <Compile Include="Infrastructure\Mongo\MongoRepository.cs" />
@@ -358,8 +361,6 @@
     <Compile Include="Infrastructure\Services\Interfaces\IApiMobileService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IImageService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IUserService.cs" />
-    <Compile Include="Infrastructure\Hubs\NotificationsHub.cs" />
-    <Compile Include="Infrastructure\Hubs\LocationHub.cs" />
     <Compile Include="Infrastructure\Services\ImageService.cs" />
     <Compile Include="Infrastructure\Services\UserService.cs" />
     <Compile Include="Models\NotificationModel.cs" />
@@ -369,7 +370,6 @@
     <Compile Include="Models\WorkorderSortViewModel.cs" />
     <Compile Include="Models\WorkorderViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Startup.cs" />
     <Compile Include="Infrastructure\Utils\DynamicJsonDeserializer.cs" />
     <Compile Include="Infrastructure\Utils\JsonNetResult.cs" />
   </ItemGroup>
@@ -767,6 +767,9 @@
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
@@ -777,7 +780,9 @@
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
     <Content Include="Views\Dashboard\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Test\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
@@ -801,7 +806,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>15291</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

@@ -1,4 +1,7 @@
-﻿namespace BloomService.Web.Infrastructure.Services
+﻿using System;
+using BloomService.Web.Services.Abstract;
+
+namespace BloomService.Web.Infrastructure.Services
 {
     using System.Collections.Generic;
 
@@ -14,13 +17,14 @@
     public class SageApiProxy : ISageApiProxy
     {
         private readonly IRestClient _restClient;
+        private readonly IAuthorizationService _authorization;
+        private readonly Lazy<string> _token;
 
-        private readonly string token;
-
-        public SageApiProxy(IRestClient restClient)
+        public SageApiProxy(IRestClient restClient, IAuthorizationService authorization)
         {
             _restClient = restClient;
-            token = AuthorizationService.GetAuthToken();
+            _authorization = authorization;
+            _token = new Lazy<string>(() => _authorization.GetAuthToken());
         }
 
         public SageResponse<SageAssignment> AddAssignment(SageAssignment assignment)
@@ -35,7 +39,7 @@
                                   RequestFormat = DataFormat.Json
                               };
             request.AddBody(properties);
-            request.AddHeader("Authorization", token);
+            request.AddHeader("Authorization", _token.Value);
             var response = _restClient.Execute<SageResponse<SageWorkOrder>>(request);
             var results = response.Data;
             return results;
@@ -140,7 +144,7 @@
         {
             var request = new RestRequest(endPoint, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(entity);
-            request.AddHeader("Authorization", token);
+            request.AddHeader("Authorization", _token.Value);
             var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var results = response.Data;
             return results;
@@ -150,7 +154,7 @@
         {
             var request = new RestRequest(endPoint, Method.DELETE) { RequestFormat = DataFormat.Json };
             request.AddUrlSegment("id", id);
-            request.AddHeader("Authorization", token);
+            request.AddHeader("Authorization", _token.Value);
             var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var results = response.Data;
             return results;
@@ -160,7 +164,7 @@
         {
             var request = new RestRequest(endPoint, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(entity);
-            request.AddHeader("Authorization", token);
+            request.AddHeader("Authorization", _token.Value);
             var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var result = response.Data;
             return result;
@@ -170,7 +174,7 @@
         {
             var request = new RestRequest(endPoint + "/{id}", Method.GET) { RequestFormat = DataFormat.Json };
             request.AddUrlSegment("id", id);
-            request.AddHeader("Authorization", token);
+            request.AddHeader("Authorization", _token.Value);
             var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var result = response.Data;
             return result;
@@ -179,7 +183,7 @@
         private SageResponse<TEntity> GetAll<TEntity>(string endPoint) where TEntity : IEntity
         {
             var request = new RestRequest(endPoint, Method.GET) { RequestFormat = DataFormat.Json };
-            request.AddHeader("Authorization", token);
+            request.AddHeader("Authorization", _token.Value);
             var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var results = response.Data;
             return results;

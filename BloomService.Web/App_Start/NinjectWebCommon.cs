@@ -24,6 +24,10 @@ namespace BloomService.Web
     using Infrastructure.Services;
     using Infrastructure.Dependecy;
     using Infrastructure.Dependecy.Ninject;
+    using Infrastructure.SignalR;
+    using Microsoft.AspNet.SignalR.Hubs;
+    using Microsoft.AspNet.SignalR;
+
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
@@ -89,6 +93,8 @@ namespace BloomService.Web
             ComponentContainer.Current = new NinjectComponentContainer(kernel, new[] {
                     typeof(MongoRepository).Assembly
             });
+
+            kernel.Bind<IHubConnectionContext<dynamic>>().ToMethod(ctx => GlobalHost.ConnectionManager.GetHubContext<BloomServiceHub>().Clients);
         }
     }
 }

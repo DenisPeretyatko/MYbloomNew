@@ -26,7 +26,7 @@ namespace BloomService.Web.Controllers
     using System.Threading;
     public class ApiMobileController : BaseController
     {
-        private readonly IImageService imageService;
+        private readonly IImageService _imageService;
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
 
         private readonly IRepository repository;
@@ -45,7 +45,7 @@ namespace BloomService.Web.Controllers
             BloomServiceConfiguration settings)
         {
             this.sageApiProxy = sageApiProxy;
-            this.imageService = imageService;
+            this._imageService = imageService;
             this.repository = repository;
             this.settings = settings;
             this.authorizationService = authorizationService;
@@ -115,7 +115,7 @@ namespace BloomService.Web.Controllers
             {
                 order.Equipments = new List<SageEquipment>();
 
-                order.Images = imageService.GetPhotoForWorkOrder(order.WorkOrder, false, settings.SiteUrl);
+                order.Images = _imageService.GetPhotoForWorkOrder(order.WorkOrder, false, settings.SiteUrl);
 
                 var location = locations.FirstOrDefault(x => x.Name == order.Location);
                 if (location == null)
@@ -139,7 +139,7 @@ namespace BloomService.Web.Controllers
         public ActionResult PostImage(ImageModel model)
         {
             _log.InfoFormat("Method: PostImage. Workorder Id: {0}", model.IdWorkOrder);
-            if (imageService.SavePhotoForWorkOrder(model))
+            if (_imageService.SavePhotoForWorkOrder(model))
             {
                 _log.InfoFormat("Add image for workorder success");
                 return Success();
@@ -152,7 +152,7 @@ namespace BloomService.Web.Controllers
         [Route("Apimobile/CommentImage")]
         public ActionResult ComentImage(CommentImageModel model)
         {
-            if (imageService.SaveDescriptionsForPhoto(model))
+            if (_imageService.SaveDescriptionsForPhoto(model))
             {
                 _log.InfoFormat("Add image for workorder success");
                 return Success();

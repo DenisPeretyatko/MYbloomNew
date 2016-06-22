@@ -1,8 +1,4 @@
-/**
- * techniciansController - controller
- */
-
-var workorderController = function ($scope, $timeout, commonDataService) {
+var workorderController = function ($scope, $timeout, $sce, commonDataService) {
 
     var model = {
         Index: 0,
@@ -10,17 +6,15 @@ var workorderController = function ($scope, $timeout, commonDataService) {
         Column: '',
         Direction: true
     };
+     var currentPage = 0;
     $scope.sorting = "";
     $scope.increase = true;
     $scope.Search = "";
 
-    commonDataService.getFirstTimePageItems(model).then(function (response) {
+    commonDataService.getWorkordesPaged(model).then(function (response) {
         $scope.workorders = response.data.WorkordersList;
         $scope.pagesCount = response.data.CountPage;
-        $scope.getPaginationList = commonDataService.getPaginationList(response.data.CountPage);
-        $timeout(function () {
-            $(".footable").trigger("footable_redraw");
-        }, 100);
+        $scope.getPaginationList = $scope.getPaginationList(response.data.CountPage);
     });
     
 
@@ -34,33 +28,25 @@ var workorderController = function ($scope, $timeout, commonDataService) {
         model.Column = $scope.sorting;
         model.Direction = $scope.increase;
         model.Search = $scope.Search;
-        commonDataService.getSelectedPage(page);
-        commonDataService.getFirstTimePageItems(model).then(function (response) {
+        $scope.getSelectedPage(page);
+        commonDataService.getWorkordesPaged(model).then(function (response) {
             $scope.workorders = response.data.WorkordersList;
             $scope.pagesCount = response.data.CountPage;
-            $scope.getPaginationList = commonDataService.getPaginationList(response.data.CountPage);
-            $timeout(function () {
-                $(".footable").trigger("footable_redraw");
-            }, 100);
+            $scope.getPaginationList = $scope.getPaginationList(response.data.CountPage);
         });
     }
 
     $scope.CurrentPageNum = function () {
-        return commonDataService.getCurrentPageNum();
+        return $scope.getCurrentPageNum();
     }
     $scope.PrevPage = function () {
-        $scope.ShowPage(commonDataService.getPrevPage());
+        $scope.ShowPage($scope.getPrevPage());
     }
 
     $scope.NextPage = function () {
-       
-        $scope.ShowPage(commonDataService.getNextPage($scope.pagesCount));
+        $scope.ShowPage($scope.getNextPage($scope.pagesCount));
     }
 
-    var updateData = function () {
-        $scope.workorders = commonDataService.workorders;
-    }
-    commonDataService.registrationCallback(updateData);
 
    
     $scope.changeSorting = function (data) {
@@ -70,17 +56,94 @@ var workorderController = function ($scope, $timeout, commonDataService) {
         } else {
             $scope.increase = !$scope.increase;
         }
-        $scope.ShowPage(commonDataService.getCurrentPageNum());
-         $timeout(function () {
-            $(".footable").trigger("footable_redraw");
-        }, 100);
+        $scope.ShowPage($scope.getCurrentPageNum());
+       
     }
   
-    // Instantiate these variables outside the watch
     $scope.$watch('searchStr', function (tmpStr) {
             $scope.Search = tmpStr;
             $scope.ShowPage();
         
     });
+
+    $scope.getPaginationList = function (num) {
+
+        var pagesNum = num;
+        var paginationList = [];
+        if (currentPage == undefined) {
+            currentPage = 0;
+        }
+      
+        if (currentPage + 6 < pagesNum) {
+            for (var i = currentPage; i < currentPage + 5; i++) {
+                var name = i + 1;
+                paginationList.push({
+                    name: $sce.trustAsHtml(String(name)),
+                    link: i
+                });
+            }
+            paginationList.push({
+                name: $sce.trustAsHtml('...'),
+                link: pagesNum
+            });
+            paginationList.push({
+                name: $sce.trustAsHtml(String(pagesNum)),
+                link: pagesNum - 1
+            });
+        } else {
+            paginationList.push({
+                name: $sce.trustAsHtml('1'),
+                link: 0
+            });
+            paginationList.push({
+                name: $sce.trustAsHtml('...'),
+                link: pagesNum
+            });
+            for (var i = pagesNum-6; i < pagesNum; i++) {
+                var name = i + 1;
+                paginationList.push({
+                    name: $sce.trustAsHtml(String(name)),
+                    link: i
+                });
+            }
+        }
+
+        if (pagesNum > 2) {
+            return paginationList;
+        } else {
+            return false;
+        }
+    }
+
+    $scope.getCurrentPageNum = function () {
+            if (currentPage == undefined) {
+                currentPage = 0;
+            }
+            return currentPage;
+    },
+
+    $scope.getPrevPage = function () {
+        if (currentPage > 0)
+            currentPage--;
+        else {
+            return false;
+        }
+        return currentPage;
+    }
+    $scope.getSelectedPage = function (num) {
+        currentPage = num;
+    }
+
+    $scope.getNextPage = function (num) {
+        if (currentPage < num)
+            currentPage++;
+        else {
+            return false;
+        }
+        return currentPage;
+    }
+
+
+
 };
-workorderController.$inject = ["$scope", "$timeout", "commonDataService"];
+workorderController.$inject = ["$scope", "$timeout", '$sce', "commonDataService"];
