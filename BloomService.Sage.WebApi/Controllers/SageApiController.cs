@@ -1,4 +1,7 @@
-﻿namespace Sage.WebApi.Areas.Api.Controllers
+﻿using System.Web.Configuration;
+using Sage.WebApi.Infratructure.Atributes;
+
+namespace Sage.WebApi.Areas.Api.Controllers
 {
     using System.Linq;
 
@@ -14,7 +17,7 @@
     using WebGrease.Css.Extensions;
     using Infratructure.MessageResponse;
     using Models;
-    [System.Web.Mvc.Authorize]
+    [BasicAuthentication]
     public class SageApiController : ApiController
     {
         private readonly IServiceManagement serviceManager;

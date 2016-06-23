@@ -1,4 +1,4 @@
-var commonDataService = function ($http, $window, $sce) {
+var commonDataService = function ($http, $window) {
     var vm = this;
     this.Token = '';
     this.UserName = '';
@@ -161,10 +161,10 @@ var commonDataService = function ($http, $window, $sce) {
         var data = "grant_type=password&username=" + user + "&password=" + pass;
         angular.element($window).on;
         window.localStorage.setItem('UserName', user);
-        return $http.post('apimobile/Token', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+        return $http.post('token', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
     }
 
-    var currentPage = 0;
+   
 
     this.getWorkordesPaged = function (model) {
         return $http.post("/WorkorderPage", model, {
@@ -181,86 +181,5 @@ var commonDataService = function ($http, $window, $sce) {
             }
         });
     }
-
-
-    this.getPaginationList = function (num) {
-
-        var pagesNum = num;
-        var paginationList = [];
-        if (currentPage == undefined) {
-            currentPage = 0;
-        }
-      
-        if (currentPage + 6 < pagesNum) {
-            for (var i = currentPage; i < currentPage + 5; i++) {
-                var name = i + 1;
-                paginationList.push({
-                    name: $sce.trustAsHtml(String(name)),
-                    link: i
-                });
-            }
-            paginationList.push({
-                name: $sce.trustAsHtml('...'),
-                link: pagesNum
-            });
-            paginationList.push({
-                name: $sce.trustAsHtml(String(pagesNum)),
-                link: pagesNum - 1
-            });
-        } else {
-            paginationList.push({
-                name: $sce.trustAsHtml('1'),
-                link: 0
-            });
-            paginationList.push({
-                name: $sce.trustAsHtml('...'),
-                link: pagesNum
-            });
-            for (var i = pagesNum-6; i < pagesNum; i++) {
-                var name = i + 1;
-                paginationList.push({
-                    name: $sce.trustAsHtml(String(name)),
-                    link: i
-                });
-            }
-        }
-
-        if (pagesNum > 2) {
-            return paginationList;
-        } else {
-            return false;
-        }
-    }
-
-    this.getCurrentPageNum = function () {
-            if (currentPage == undefined) {
-                currentPage = 0;
-            }
-            return currentPage;
-    },
-
-    this.getPrevPage = function () {
-        if (currentPage > 0)
-            currentPage--;
-        else {
-            return false;
-        }
-        return currentPage;
-    }
-    this.getSelectedPage = function (num) {
-        currentPage = num;
-    }
-
-    this.getNextPage = function (num) {
-        if (currentPage < num)
-            currentPage++;
-        else {
-            return false;
-        }
-        return currentPage;
-    }
-
-
-
 }
-commonDataService.$inject = ['$http', '$window', '$sce'];
+commonDataService.$inject = ['$http', '$window'];

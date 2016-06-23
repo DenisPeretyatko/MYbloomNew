@@ -19,28 +19,30 @@ namespace BloomService.Web.Services.Concrete
 {
     public class AuthorizationService : IAuthorizationService
     {
+        private readonly IRepository _repository;
+        private readonly BloomServiceConfiguration _configuration;
 
-        IRepository _repository;
-
-        public AuthorizationService(IRepository repository)
+        public AuthorizationService(IRepository repository, BloomServiceConfiguration configuration)
         {
             _repository = repository;
+            _configuration = configuration;
         }
 
         public UserModel GetUser(ClaimsPrincipal claimsPrincipal)
         {
-            var userModel = new UserModel();
-
-            userModel.Login = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Name)
-                               .Select(c => c.Value).SingleOrDefault();
-            userModel.Password = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Surname)
-                               .Select(c => c.Value).SingleOrDefault();
-            userModel.Id = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)
-                               .Select(c => c.Value).SingleOrDefault();
-            userModel.Type = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Role)
-                               .Select(c => c.Value).SingleOrDefault();
-            userModel.Mail = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Email)
-                               .Select(c => c.Value).SingleOrDefault();
+            var userModel = new UserModel
+            {
+                Login = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Name)
+                    .Select(c => c.Value).SingleOrDefault(),
+                Password = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Surname)
+                    .Select(c => c.Value).SingleOrDefault(),
+                Id = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)
+                    .Select(c => c.Value).SingleOrDefault(),
+                Type = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Role)
+                    .Select(c => c.Value).SingleOrDefault(),
+                Mail = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Email)
+                    .Select(c => c.Value).SingleOrDefault()
+            };
 
             var user = _repository.SearchFor<SageEmployee>(x => x.Employee == userModel.Id).FirstOrDefault();
             if (user != null)
@@ -48,47 +50,24 @@ namespace BloomService.Web.Services.Concrete
             return userModel;
         }
 
-        public IEnumerable<Claim> SetClaims(string name, string pass, string id, string type, string mail)
-        {
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, name));
-            claims.Add(new Claim(ClaimTypes.Surname, pass));
-            claims.Add(new Claim(ClaimTypes.Role, type));
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, id));
-            claims.Add(new Claim(ClaimTypes.Email, mail));
-            return claims;
-        }
-
-        public Claim CreateClaim(string type, string value)
-        {
-            return new Claim(type, value, ClaimValueTypes.String);
-        }
-
         public AuthorizationResponse CheckUser(string name, string password)
         {
             var token = GetAuthToken();
-            var settings = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
             var request = new RestRequest(EndPoints.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
-            var requestBody = new AuthorizationRequest()
-            {
-                Name = name,
-                Password = password
-            };
+            var requestBody = new AuthorizationRequest() { Name = name, Password = password };
             request.AddBody(requestBody);
             request.AddHeader("Authorization", token);
-            var restClient = new RestClient(settings.SageApiHost);
+            var restClient = new RestClient(_configuration.SageApiHost);
             var response = restClient.Execute<AuthorizationResponse>(request);
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                return null;
-            var results = new JavaScriptSerializer().Deserialize<AuthorizationResponse>(response.Content);
-            return results;
+            return response.StatusCode != System.Net.HttpStatusCode.OK ? null 
+                : new JavaScriptSerializer().Deserialize<AuthorizationResponse>(response.Content);
         }
 
-        public static string GetAuthToken()
+        public string GetAuthToken()
         {
-            var username = ConfigurationManager.AppSettings["SageUsername"];
-            var password = ConfigurationManager.AppSettings["SagePassword"];
-            var sageApiHost = ConfigurationManager.AppSettings["SageApiHost"];
+            var username = _configuration.SageUsername;
+            var password = _configuration.SagePassword;
+            var sageApiHost = _configuration.SageApiHost; 
             var restClient = new RestClient(sageApiHost);
             var request = new RestRequest("oauth/token", Method.POST);
             request.AddParameter("username", username);

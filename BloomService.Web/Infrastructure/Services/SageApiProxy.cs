@@ -1,4 +1,5 @@
 ﻿using System;
+using BloomService.Web.Services.Abstract;
 
 namespace BloomService.Web.Infrastructure.Services
 {
@@ -16,12 +17,14 @@ namespace BloomService.Web.Infrastructure.Services
     public class SageApiProxy : ISageApiProxy
     {
         private readonly IRestClient _restClient;
-        private Lazy<string> _token = new Lazy<string>(() => AuthorizationService.GetAuthToken());
-         
+        private readonly IAuthorizationService _authorization;
+        private readonly Lazy<string> _token;
 
-        public SageApiProxy(IRestClient restClient)
+        public SageApiProxy(IRestClient restClient, IAuthorizationService authorization)
         {
-            _restClient = restClient;                     
+            _restClient = restClient;
+            _authorization = authorization;
+            _token = new Lazy<string>(() => _authorization.GetAuthToken());
         }
 
         public SageResponse<SageAssignment> AddAssignment(SageAssignment assignment)
