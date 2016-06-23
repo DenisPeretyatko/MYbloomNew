@@ -75,7 +75,7 @@ namespace BloomService.Web.Controllers
                 employee.IosDeviceToken = deviceToken;
                 repository.Update(employee);
             }
-            return Json(new { access_token = token }, JsonRequestBehavior.AllowGet);
+            return Json(new { access_token = token.Token }, JsonRequestBehavior.AllowGet);
         }
 
         [Route("Apimobile/Equipment/{part}")]
