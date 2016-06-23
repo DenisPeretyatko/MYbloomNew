@@ -86,10 +86,10 @@ namespace Sage.WebApi.Mapping
             CreateMap<LocationReturnParam, SageLocation>()
                 .ForMember(dest => dest.AccountOpenDate, opts => opts.MapFrom(src => ConvertToDate(src.AccountOpenDate)));
 
-            CreateMap<EquipmentReturnParam, SageEquipment>()
-                .ForMember(dest => dest.DateRemoved, opts => opts.MapFrom(src => ConvertToDate(src.DateRemoved)))
-                .ForMember(dest => dest.DateReplaced, opts => opts.MapFrom(src => ConvertToDate(src.DateReplaced)))
-                .ForMember(dest => dest.InstallDate, opts => opts.MapFrom(src => ConvertToDate(src.InstallDate)));
+            CreateMap<BloomService.Domain.Entities.Concrete.ReturnParamModels.EquipmentReturnParam, SageEquipment>()
+                .ForMember(dest => dest.DateRemoved, (IMemberConfigurationExpression<BloomService.Domain.Entities.Concrete.ReturnParamModels.EquipmentReturnParam> opts) => opts.MapFrom(src => ConvertToDate(src.DateRemoved)))
+                .ForMember(dest => dest.DateReplaced, (IMemberConfigurationExpression<BloomService.Domain.Entities.Concrete.ReturnParamModels.EquipmentReturnParam> opts) => opts.MapFrom(src => ConvertToDate(src.DateReplaced)))
+                .ForMember(dest => dest.InstallDate, (IMemberConfigurationExpression<BloomService.Domain.Entities.Concrete.ReturnParamModels.EquipmentReturnParam> opts) => opts.MapFrom(src => ConvertToDate(src.InstallDate)));
 
             CreateMap<EmployeeReturnParam, SageEmployee>()
                .ForMember(dest => dest.Birthdate, opts => opts.MapFrom(src => ConvertToDate(src.Birthdate)))
@@ -137,7 +137,7 @@ namespace Sage.WebApi.Mapping
             {
                 return result.ToUniversalTime().Date;
             }
-            return new DateTime(2000, 1, 1);
+            return new DateTime(2000, 1, 1).ToUniversalTime().Date;
         }
 
         private static TimeSpan ConvertToTime(string timeString)

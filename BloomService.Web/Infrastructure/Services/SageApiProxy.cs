@@ -92,9 +92,9 @@ namespace BloomService.Web.Infrastructure.Services
             return GetAll<SagePart>(EndPoints.GetParts);
         }
 
-        public SageResponse<SageEntity> GetPermissionCodes()
+        public SageResponse<SagePermissionCode> GetPermissionCodes()
         {
-            return GetAll<SageEntity>(EndPoints.GetPermissionCodes);
+            return GetAll<SagePermissionCode>(EndPoints.GetPermissionCodes);
         }
 
         public SageResponse<SageProblem> GetProblems()
@@ -102,9 +102,9 @@ namespace BloomService.Web.Infrastructure.Services
             return GetAll<SageProblem>(EndPoints.GetProblems);
         }
 
-        public SageResponse<SageEntity> GetRateSheets()
+        public SageResponse<SageRateSheet> GetRateSheets()
         {
-            return GetAll<SageEntity>(EndPoints.GetRateSheets);
+            return GetAll<SageRateSheet>(EndPoints.GetRateSheets);
         }
 
         public SageResponse<SageRepair> GetRepairs()

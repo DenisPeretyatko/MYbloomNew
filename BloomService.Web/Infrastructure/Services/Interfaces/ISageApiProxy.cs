@@ -1,10 +1,6 @@
 ﻿using BloomService.Domain.Entities.Concrete;
 using BloomService.Domain.Entities.Concrete.Auxiliary;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BloomService.Web.Infrastructure.Services.Abstract
 {
@@ -23,9 +19,9 @@ namespace BloomService.Web.Infrastructure.Services.Abstract
         SageResponse<SageEquipment> GetEquipment();
         SageResponse<SageLocation> GetLocations();
         SageResponse<SagePart> GetParts();
-        SageResponse<SageEntity> GetPermissionCodes();
+        SageResponse<SagePermissionCode> GetPermissionCodes();
         SageResponse<SageProblem> GetProblems();
-        SageResponse<SageEntity> GetRateSheets();
+        SageResponse<SageRateSheet> GetRateSheets();
         SageResponse<SageRepair> GetRepairs();
         SageResponse<SageWorkOrder> UnassignWorkOrders(string id);
         SageResponse<SageWorkOrder> GetWorkorder(string id);

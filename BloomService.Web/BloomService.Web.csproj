@@ -340,6 +340,8 @@
     <Compile Include="Models\LoginResponseModel.cs" />
     <Compile Include="Models\MapViewModel.cs" />
     <Compile Include="Models\PartModel.cs" />
+    <Compile Include="Models\PermissionCodeModel.cs" />
+    <Compile Include="Models\RateSheetModel.cs" />
     <Compile Include="Models\ScheduleViewModel.cs" />
     <Compile Include="Models\LookupsModel.cs" />
     <Compile Include="Models\EquipmentModel.cs" />
@@ -713,10 +715,8 @@
     <Content Include="Public\mock\getWorkorder.json" />
     <Content Include="Public\mock\getWorkorders.json" />
     <Content Include="Public\mock\getLookups.json" />
-    <Content Include="App_Data\PushNotification\aps_dev.p12" />
-    <Content Include="App_Data\PushNotification\aps_prod.p12" />
-    <Content Include="App_Data\PushNotification\BS_prod_apns.p12" />
-    <Content Include="App_Data\PushNotification\Dev_apns.p12" />
+    <Content Include="App_Data\PushNotification\BloomService_prod.p12" />
+    <Content Include="App_Data\PushNotification\BloomService_dev.p12" />
     <None Include="Properties\PublishProfiles\b.pubxml" />
     <None Include="Properties\PublishProfiles\bloom.pubxml" />
     <Content Include="Public\mock\getEmployees.json" />

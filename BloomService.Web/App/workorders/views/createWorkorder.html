@@ -14,13 +14,13 @@
                         <form role="form" name="workorder_form" novalidate ng-submit="createWorkOrder()">
                             <div class="form-group">
                                 <label>Customer</label>
-                                <div angucomplete-alt id="ex1" placeholder="Customer" maxlength="50" local-data="lookups.Customers" selected-object="lookups.Customers.selected"
+                                <div angucomplete-alt placeholder="Customer" maxlength="50" local-data="lookups.Customers" selected-object="lookups.Customers.selected"
                                      search-fields="Name" title-field="Name" minlength="1" input-class="form-control form-control-small" match-class="highlight">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Location</label>
-                                <div angucomplete-alt id="ex1" placeholder="Location" maxlength="50" local-data="lookups.Locations" selected-object="lookups.Locations.selected"
+                                <div angucomplete-alt placeholder="Location" maxlength="50" local-data="lookups.Locations" selected-object="lookups.Locations.selected"
                                      search-fields="Name" title-field="Name" minlength="1" input-class="form-control form-control-small" match-class="highlight">
                                 </div>
                             </div>
@@ -52,9 +52,9 @@
                             <div class="form-group">
                                 <label>Rate Sheet</label>
                                 <ui-select ng-model="lookups.RateSheets.selected" theme="bootstrap">
-                                    <ui-select-match placeholder="Rate Sheet">{{$select.selected}}</ui-select-match>
+                                    <ui-select-match placeholder="Rate Sheet">{{$select.selected.DESCRIPTION}}</ui-select-match>
                                     <ui-select-choices repeat="item in lookups.RateSheets | filter: $select.search">
-                                        <div >{{item}}</div>
+                                        <div >{{item.DESCRIPTION}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
@@ -106,13 +106,23 @@
                                     <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                 </div>
                             </div>
+
                             <div class="form-group">
+                                <label>Persmission Code</label>
+                                <ui-select ng-model="lookups.PermissionCodes.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Persmission Code">{{$select.selected.DESCRIPTION}}</ui-select-match>
+                                    <ui-select-choices repeat="item in lookups.PermissionCodes | filter: $select.search">
+                                        <div >{{item.DESCRIPTION}}</div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <!--<div class="form-group">
                                 <label>Persmission Code</label>
                                 <input type="text" placeholder="Permission Code" class="form-control" name="permissionCode" ng-model="obj.permissiocode" required>
                                 <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                     <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="form-group">
                                 <label>Payment method</label>
                                 <ui-select ng-model="lookups.PaymentMethods.selected" theme="bootstrap">

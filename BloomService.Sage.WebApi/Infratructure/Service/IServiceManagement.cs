@@ -6,6 +6,8 @@
 
     public interface IServiceManagement
     {
+        string SendMessageXml(string message);
+
         string CatalogPath { get; set; }
 
         SageAssignment[] AddAssignments(Dictionary<string, string> properties);
@@ -49,5 +51,11 @@
         SageWorkOrder[] WorkOrders(Dictionary<string, string> properties);
 
         bool AddWorkOrderItem(Dictionary<string, string> properties);
+
+        SageEquipment[] GetEquipmentsByWorkOrderId(string id);
+
+        SageWorkOrder[] EditWorkOrder(Dictionary<string, string> properties);
+
+        void UnassignWorkOrder(string id);
     }
 }

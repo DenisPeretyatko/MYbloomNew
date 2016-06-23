@@ -16,7 +16,7 @@ namespace Sage.WebApi.Areas.Api.Controllers
     using BloomService.Domain.Models.Responses;
     using WebGrease.Css.Extensions;
     using Infratructure.MessageResponse;
-
+    using Models;
     [BasicAuthentication]
     public class SageApiController : ApiController
     {
@@ -31,6 +31,13 @@ namespace Sage.WebApi.Areas.Api.Controllers
             this.serviceManager = serviceManager;
             this.serviceOdbc = serviceOdbc;
             this.serviceAuthorization = serviceAuthorization;
+        }
+
+        [HttpPost, Route("api/v2/Xml/Test")]
+        public string Test(TestXmlModel model)
+        {
+            var response = serviceManager.SendMessageXml(model.Model);
+            return response;
         }
 
         [HttpPost, Route("api/v2/Authorization/Authorization")]
@@ -69,6 +76,34 @@ namespace Sage.WebApi.Areas.Api.Controllers
             catch (ResponseException exception)
             {
                 var result = new SageResponse<SageAssignment> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
+
+        [HttpGet, Route("api/v2/sm/workorder/{id}/equipments")]
+        public SageResponse<SageEquipment> GetEquipmentsByWorkOrderId(string id)
+        {
+            try
+            {
+                if (id == string.Empty || id == null)
+                {
+                    return new SageResponse<SageEquipment>
+                    {
+                        IsSucceed = false,
+                        ErrorMassage = "WorkOrder Id is null or empty."
+                    };
+                }
+
+                var result = new SageResponse<SageEquipment>
+                {
+                    IsSucceed = true,
+                    Entities = serviceManager.GetEquipmentsByWorkOrderId(id).ToList()
+                };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageEquipment> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -116,7 +151,7 @@ namespace Sage.WebApi.Areas.Api.Controllers
                 return result;
             }
         }
-       
+
         [HttpGet, Route("api/v2/sm/assignments/get/")]
         public SageResponse<SageAssignment> GetAssignments()
         {
@@ -208,11 +243,13 @@ namespace Sage.WebApi.Areas.Api.Controllers
         {
             try
             {
+                var properties = SagePropertyConverter.ConvertToProperties(workOrder);
                 var result = new SageResponse<SageWorkOrder>
                 {
+
                     IsSucceed = true,
-                    Entity = serviceOdbc.EditWorkOrder(workOrder)
-            };
+                    Entities = serviceManager.EditWorkOrder(properties).ToList()
+                };
                 return result;
             }
             catch (ResponseException exception)
@@ -282,17 +319,32 @@ namespace Sage.WebApi.Areas.Api.Controllers
             }
         }
 
+        //[HttpGet, Route("api/v2/sm/permissioncodes/get")]
+        //public SageResponse<SageEntity> GetPermissionCodes()
+        //{
+        //    try
+        //    {
+        //        var result = new SageResponse<SageEntity> { IsSucceed = true, Strings = serviceManager.PermissionCode().ToList() };
+        //        return result;
+        //    }
+        //    catch (ResponseException exception)
+        //    {
+        //        var result = new SageResponse<SageEntity> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+        //        return result;
+        //    }
+        //}
+
         [HttpGet, Route("api/v2/sm/permissioncodes/get")]
-        public SageResponse<SageEntity> GetPermissionCodes()
+        public SageResponse<SagePermissionCode> GetPermissionCodes()
         {
             try
             {
-                var result = new SageResponse<SageEntity> { IsSucceed = true, Strings = serviceManager.PermissionCode().ToList() };
+                var result = new SageResponse<SagePermissionCode> { IsSucceed = true, Entities = serviceOdbc.PermissionCodes() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageEntity> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                var result = new SageResponse<SagePermissionCode> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -312,17 +364,32 @@ namespace Sage.WebApi.Areas.Api.Controllers
             }
         }
 
+        //[HttpGet, Route("api/v2/sm/ratesheets/get")]
+        //public SageResponse<SageEntity> GetRateSheets()
+        //{
+        //    try
+        //    {
+        //        var result = new SageResponse<SageEntity> { IsSucceed = true, Strings = serviceManager.RateSheet().ToList() };
+        //        return result;
+        //    }
+        //    catch (ResponseException exception)
+        //    {
+        //        var result = new SageResponse<SageEntity> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+        //        return result;
+        //    }
+        //}
+
         [HttpGet, Route("api/v2/sm/ratesheets/get")]
-        public SageResponse<SageEntity> GetRateSheets()
+        public SageResponse<SageRateSheet> GetRateSheets()
         {
             try
             {
-                var result = new SageResponse<SageEntity> { IsSucceed = true, Strings = serviceManager.RateSheet().ToList() };
+                var result = new SageResponse<SageRateSheet> { IsSucceed = true, Entities = serviceOdbc.RateSheets() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageEntity> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                var result = new SageResponse<SageRateSheet> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -347,9 +414,9 @@ namespace Sage.WebApi.Areas.Api.Controllers
         {
             try
             {
-                if(id == string.Empty)
+                if (id == string.Empty)
                 {
-                    throw new ResponseException(new ResponseError() { Message = "WorkOrder id is empty"});
+                    throw new ResponseException(new ResponseError() { Message = "WorkOrder id is empty" });
                 }
                 serviceOdbc.UnassignWorkOrder(id);
                 var result = new SageResponse<SageWorkOrder> { IsSucceed = true };
