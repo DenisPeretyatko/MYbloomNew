@@ -12,8 +12,11 @@
     using AutoMapper;
     using Models.DbModels;
     using System;
+    using Common.Logging;
     public class ServiceOdbc : IServiceOdbc
     {
+        private readonly ILog _log = LogManager.GetLogger(typeof(ServiceOdbc));
+
         private readonly string timberlineDataConnectionString;
 
         private readonly string timberlineServiceManagementConnectionString;
@@ -44,43 +47,59 @@
             return result;
         }
 
+        public List<SageRateSheet> RateSheets()
+        {
+            var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, Queries.SelectRateSheets);
+            var result = new List<SageRateSheet>();
+            response.ForEach(x => result.Add(x.ToObject<SageRateSheet>()));
+            return result;
+        }
+
+        public List<SagePermissionCode> PermissionCodes()
+        {
+            var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, Queries.SelectPermissionCodes);
+            var result = new List<SagePermissionCode>();
+            response.ForEach(x => result.Add(x.ToObject<SagePermissionCode>()));
+            return result;
+        }
+
         public void UnassignWorkOrder(string id)
         {
             var query = Queries.SelectAssignment.Replace("%ID%", id);
             ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
 
-        public SageWorkOrder EditWorkOrder(SageWorkOrder workOrder)
-        {
-            var query = Queries.BuildEditWorkOrderQuery(workOrder);
-            var properties = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query).SingleOrDefault();
-            if (properties != null)
-            {
-                var result = new SageWorkOrder()
-                {
-                    ARCustomer = properties.ContainsKey("ARCUST") ? properties["ARCUST"].ToString() : string.Empty,
-                    Location = properties.ContainsKey("SERVSITENBR") ? properties["SERVSITENBR"].ToString() : string.Empty,
-                    CallType = properties.ContainsKey("CALLTYPECODE") ? properties["CALLTYPECODE"].ToString() : string.Empty,
-                    CallDate = properties.ContainsKey("CALLDATE") ? Convert.ToDateTime(properties["CALLDATE"]) : DateTime.MinValue,
-                    Problem = properties.ContainsKey("PROBLEMCODE") ? properties["PROBLEMCODE"].ToString() : string.Empty,
-                    RateSheet = properties.ContainsKey("RATESHEETNBR") ? properties["RATESHEETNBR"].ToString() : string.Empty,
-                    Employee = properties.ContainsKey("TECHNICIAN") ? properties["TECHNICIAN"].ToString() : string.Empty,
-                    EstimatedRepairHours = properties.ContainsKey("ESTREPAIRHRS") ? Convert.ToDecimal(properties["ESTREPAIRHRS"]) : Decimal.MinusOne,
-                    NottoExceed = properties.ContainsKey("NOTTOEXCEED") ? properties["NOTTOEXCEED"].ToString() : string.Empty,
-                    Comments = properties.ContainsKey("COMMENTS") ? properties["COMMENTS"].ToString() : string.Empty,
-                    CustomerPO = properties.ContainsKey("CUSTOMERPO") ? properties["CUSTOMERPO"].ToString() : string.Empty,
-                    PermissionCode = properties.ContainsKey("PERMISSIONCODE") ? properties["PERMISSIONCODE"].ToString() : string.Empty,
-                    PayMethod = properties.ContainsKey("PAYMETHOD") ? properties["PAYMETHOD"].ToString() : string.Empty,
-                    Status = properties.ContainsKey("Status") ? properties["Status"].ToString() : string.Empty,
+        //public SageWorkOrder EditWorkOrder(SageWorkOrder workOrder)
+        //{
+        //    var query = Queries.BuildEditWorkOrderQuery(workOrder);
+        //    var properties = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query).SingleOrDefault();
+        //    if (properties != null)
+        //    {
+        //        var result = new SageWorkOrder()
+        //        {
+        //            ARCustomer = properties.ContainsKey("ARCUST") ? properties["ARCUST"].ToString() : string.Empty,
+        //            Location = properties.ContainsKey("SERVSITENBR") ? properties["SERVSITENBR"].ToString() : string.Empty,
+        //            CallType = properties.ContainsKey("CALLTYPECODE") ? properties["CALLTYPECODE"].ToString() : string.Empty,
+        //            CallDate = properties.ContainsKey("CALLDATE") ? Convert.ToDateTime(properties["CALLDATE"]) : DateTime.MinValue,
+        //            Problem = properties.ContainsKey("PROBLEMCODE") ? properties["PROBLEMCODE"].ToString() : string.Empty,
+        //            RateSheet = properties.ContainsKey("RATESHEETNBR") ? properties["RATESHEETNBR"].ToString() : string.Empty,
+        //            Employee = properties.ContainsKey("TECHNICIAN") ? properties["TECHNICIAN"].ToString() : string.Empty,
+        //            EstimatedRepairHours = properties.ContainsKey("ESTREPAIRHRS") ? Convert.ToDecimal(properties["ESTREPAIRHRS"]) : Decimal.MinusOne,
+        //            NottoExceed = properties.ContainsKey("NOTTOEXCEED") ? properties["NOTTOEXCEED"].ToString() : string.Empty,
+        //            Comments = properties.ContainsKey("COMMENTS") ? properties["COMMENTS"].ToString() : string.Empty,
+        //            CustomerPO = properties.ContainsKey("CUSTOMERPO") ? properties["CUSTOMERPO"].ToString() : string.Empty,
+        //            PermissionCode = properties.ContainsKey("PERMISSIONCODE") ? properties["PERMISSIONCODE"].ToString() : string.Empty,
+        //            PayMethod = properties.ContainsKey("PAYMETHOD") ? properties["PAYMETHOD"].ToString() : string.Empty,
+        //            Status = properties.ContainsKey("Status") ? properties["Status"].ToString() : string.Empty,
 
-                };
+        //        };
 
-                return result;
-            }
+        //        return result;
+        //    }
 
-            return null;
+        //    return null;
 
-        }
+        //}
         public List<SageWorkOrder> WorkOrders()
         {
             var query = Queries.SelectWorkOrders;
@@ -105,14 +124,13 @@
         public DataSet ExecuteQuery(string connectionString, string query)
         {
             var dataSet = new DataSet();
-
+            _log.InfoFormat("Execute query: {0} connectionString: {1}", query, connectionString);
             using (OdbcConnection connection = new OdbcConnection(connectionString))
             using (OdbcCommand command = new OdbcCommand(query, connection))
             using (OdbcDataAdapter adapter = new OdbcDataAdapter(command))
             {
                 adapter.Fill(dataSet);
             }
-
             return dataSet;
         }
 
