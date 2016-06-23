@@ -16,17 +16,20 @@ namespace BloomService.Web.Controllers
     using Domain.Repositories.Abstract;
     using Infrastructure.Services.Abstract;
     using Domain.Extensions;
+    using Infrastructure.SignalR;
+
     public class ScheduleController : BaseController
     {
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
+        private readonly IBloomServiceHub _hub;
 
-
-        public ScheduleController(IRepository repository, ISageApiProxy sageApiProxy)
+        public ScheduleController(IRepository repository, ISageApiProxy sageApiProxy, IBloomServiceHub hub)
         {
             _repository = repository;
             _sageApiProxy = sageApiProxy;
+            _hub = hub;
         }
 
         [HttpGet]
@@ -78,6 +81,7 @@ namespace BloomService.Web.Controllers
             databaseAssignment.Location = workorder.Location;
 
             _repository.Add(databaseAssignment);
+            _hub.CreateAssignment(databaseAssignment);
             _log.InfoFormat("DatabaseAssignment added to repository. Employee {0}, Employee ID {1}", databaseAssignment.Employee, databaseAssignment.EmployeeId);
             return Success();
         }

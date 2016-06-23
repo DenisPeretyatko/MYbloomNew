@@ -1,11 +1,20 @@
 ﻿using Microsoft.AspNet.SignalR;
 using System;
 using BloomService.Web.Models;
+using Microsoft.AspNet.SignalR.Hubs;
+using BloomService.Domain.Entities.Concrete;
 
 namespace BloomService.Web.Infrastructure.SignalR
 {
     public class BloomServiceHub : Hub, IBloomServiceHub
     {
+        IHubConnectionContext<dynamic> _clients;
+
+        public BloomServiceHub(IHubConnectionContext<dynamic> clients)
+        {
+            _clients = clients;
+        }
+
         public void AddEquipment(EquipmentModel model)
         {
             throw new NotImplementedException();
@@ -21,14 +30,14 @@ namespace BloomService.Web.Infrastructure.SignalR
             throw new NotImplementedException();
         }
 
-        public void CreateAssignment(AssignmentModel model)
+        public void CreateAssignment(SageAssignment model)
         {
-            throw new NotImplementedException();
+            _clients.All.createAssignment(model);
         }
 
-        public void CreateWorkOrder(WorkOrderModel model)
+        public void CreateWorkOrder(SageWorkOrder model)
         {
-            throw new NotImplementedException();
+            _clients.All.createWorkorder(model);
         }
 
         public void DeleteAssigment(int id)

@@ -14,17 +14,21 @@ namespace BloomService.Web.Controllers
     using Infrastructure.Services.Abstract;
     using System.Collections.Generic;
     using AutoMapper;
+    using Infrastructure.SignalR;
+
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
         private const int _itemsOnPage = 12;
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
+        private readonly IBloomServiceHub _hub;
 
-        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy)
+        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy, IBloomServiceHub hub)
         {
             _repository = repository;
             _sageApiProxy = sageApiProxy;
+            _hub = hub;
         }
 
         [HttpPost]
@@ -50,15 +54,16 @@ namespace BloomService.Web.Controllers
                 PayMethod = model.Paymentmethods
             };
 
-            var result = _sageApiProxy.AddWorkOrder(workorder);
-            if (!result.IsSucceed)
-            {
-                _log.ErrorFormat("Was not able to save workorder to sage. !result.IsSucceed");
-                return Error("Was not able to save workorder to sage");
-            }
+            //var result = _sageApiProxy.AddWorkOrder(workorder);
+            //if (!result.IsSucceed)
+            //{
+            //    _log.ErrorFormat("Was not able to save workorder to sage. !result.IsSucceed");
+            //    return Error("Was not able to save workorder to sage");
+            //}
 
-            _repository.Add(result.Entity);
-            _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", result.Entity.Id, result.Entity.Name);
+            _repository.Add(workorder);
+            _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
+            _hub.CreateWorkOrder(workorder);
             return Success();
         }
 

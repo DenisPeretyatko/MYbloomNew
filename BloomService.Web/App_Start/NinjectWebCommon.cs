@@ -93,6 +93,7 @@ namespace BloomService.Web
             ComponentContainer.Current = new NinjectComponentContainer(kernel, new[] {
                     typeof(MongoRepository).Assembly
             });
+            kernel.Bind<IBloomServiceHub>().To<BloomServiceHub>();
 
             kernel.Bind<IHubConnectionContext<dynamic>>().ToMethod(ctx => GlobalHost.ConnectionManager.GetHubContext<BloomServiceHub>().Clients);
         }

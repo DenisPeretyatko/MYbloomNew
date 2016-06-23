@@ -1,4 +1,5 @@
-﻿using BloomService.Web.Models;
+﻿using BloomService.Domain.Entities.Concrete;
+using BloomService.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace BloomService.Web.Infrastructure.SignalR
     {
         void Disconnect();
         void SendNotification(string message);
-        void CreateAssignment(AssignmentModel model);
+        void CreateAssignment(SageAssignment model);
         void DeleteAssigment(int id);
-        void CreateWorkOrder(WorkOrderModel model);
+        void CreateWorkOrder(SageWorkOrder model);
         void UpdateWorkOrder(WorkOrderModel model);
         void UpdateTechnician(TechnicianModel model);
         void AddEquipment(EquipmentModel model);
