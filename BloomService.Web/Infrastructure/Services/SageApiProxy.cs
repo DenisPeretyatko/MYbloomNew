@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Web.Configuration;
+using BloomService.Domain.Extensions;
 using BloomService.Web.Services.Abstract;
 
 namespace BloomService.Web.Infrastructure.Services
@@ -17,32 +19,17 @@ namespace BloomService.Web.Infrastructure.Services
     public class SageApiProxy : ISageApiProxy
     {
         private readonly IRestClient _restClient;
-        private readonly IAuthorizationService _authorization;
-        private readonly Lazy<string> _token;
+        private readonly BloomServiceConfiguration _configuration;
 
-        public SageApiProxy(IRestClient restClient, IAuthorizationService authorization)
+        public SageApiProxy(IRestClient restClient, BloomServiceConfiguration configuration)
         {
             _restClient = restClient;
-            _authorization = authorization;
-            _token = new Lazy<string>(() => _authorization.GetAuthToken());
+            _configuration = configuration;
         }
 
         public SageResponse<SageAssignment> AddAssignment(SageAssignment assignment)
         {
             return Add(assignment, EndPoints.AddAssignment);
-        }
-
-        public SageResponse<SageWorkOrder> AddEquipment(Dictionary<string, string> properties)
-        {
-            var request = new RestRequest(EndPoints.AddEquipmentToWorkOrder, Method.PUT)
-                              {
-                                  RequestFormat = DataFormat.Json
-                              };
-            request.AddBody(properties);
-            request.AddHeader("Authorization", _token.Value);
-            var response = _restClient.Execute<SageResponse<SageWorkOrder>>(request);
-            var results = response.Data;
-            return results;
         }
 
         public SageResponse<SageWorkOrder> AddWorkOrder(SageWorkOrder workOrder)
@@ -140,11 +127,26 @@ namespace BloomService.Web.Infrastructure.Services
             return Delete<SageWorkOrder>(id, EndPoints.UnassignWorkOrders);
         }
 
+        public SageResponse<SageWorkOrder> AddEquipment(Dictionary<string, string> properties)
+        {
+            return Update<SageWorkOrder>(properties, EndPoints.AddEquipmentToWorkOrder);
+        }
+
+        private SageResponse<TEntity> Update<TEntity>(Dictionary<string, string> entity, string endPoint) where TEntity : IEntity
+        {
+            var request = new RestRequest(endPoint, Method.PUT) {RequestFormat = DataFormat.Json };
+            request.AddBody(entity);
+            BuildAuthenticationHeader(request);
+            var response = _restClient.Execute<SageResponse<TEntity>>(request);
+            var results = response.Data;
+            return results;
+        }
+
         private SageResponse<TEntity> Add<TEntity>(TEntity entity, string endPoint) where TEntity : IEntity
         {
             var request = new RestRequest(endPoint, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(entity);
-            request.AddHeader("Authorization", _token.Value);
+            BuildAuthenticationHeader(request);
             var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var results = response.Data;
             return results;
@@ -154,7 +156,7 @@ namespace BloomService.Web.Infrastructure.Services
         {
             var request = new RestRequest(endPoint, Method.DELETE) { RequestFormat = DataFormat.Json };
             request.AddUrlSegment("id", id);
-            request.AddHeader("Authorization", _token.Value);
+            BuildAuthenticationHeader(request);
             var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var results = response.Data;
             return results;
@@ -164,7 +166,7 @@ namespace BloomService.Web.Infrastructure.Services
         {
             var request = new RestRequest(endPoint, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(entity);
-            request.AddHeader("Authorization", _token.Value);
+            BuildAuthenticationHeader(request);
             var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var result = response.Data;
             return result;
@@ -174,7 +176,7 @@ namespace BloomService.Web.Infrastructure.Services
         {
             var request = new RestRequest(endPoint + "/{id}", Method.GET) { RequestFormat = DataFormat.Json };
             request.AddUrlSegment("id", id);
-            request.AddHeader("Authorization", _token.Value);
+            BuildAuthenticationHeader(request);
             var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var result = response.Data;
             return result;
@@ -183,10 +185,16 @@ namespace BloomService.Web.Infrastructure.Services
         private SageResponse<TEntity> GetAll<TEntity>(string endPoint) where TEntity : IEntity
         {
             var request = new RestRequest(endPoint, Method.GET) { RequestFormat = DataFormat.Json };
-            request.AddHeader("Authorization", _token.Value);
-            var response = _restClient.Execute<SageResponse<TEntity>>(request);
+            BuildAuthenticationHeader(request);
+             var response = _restClient.Execute<SageResponse<TEntity>>(request);
             var results = response.Data;
             return results;
+        }
+
+        private RestRequest BuildAuthenticationHeader(RestRequest request)
+        {
+            request.AddHeader("Authorization", string.Format("Basic {0}:{1}", _configuration.SageUsername, _configuration.SagePassword));
+            return request;
         }
     }
 }

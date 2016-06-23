@@ -12,8 +12,8 @@ namespace Sage.WebApi.Infratructure.Atributes
             var auth = req.Headers["Authorization"];
             if (!String.IsNullOrEmpty(auth))
             {
-                var userName = WebConfigurationManager.AppSettings["emailService:Account"];
-                var password = WebConfigurationManager.AppSettings["emailService:Account"];
+                var userName = WebConfigurationManager.AppSettings["SageUsername"];
+                var password = WebConfigurationManager.AppSettings["SagePassword"];
 
                 var cred = System.Text.Encoding.ASCII.GetString(Convert.FromBase64String(auth.Substring(6))).Split(':');
                 var user = new { Name = cred[0], Pass = cred[1] };
