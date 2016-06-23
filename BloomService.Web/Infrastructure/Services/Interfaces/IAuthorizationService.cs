@@ -7,7 +7,7 @@ namespace BloomService.Web.Services.Abstract
     public interface IAuthorizationService
     {
         UserModel GetUser(ClaimsPrincipal claimsPrincipal);
-        AuthorizationResponse CheckUser(string name, string password);
-        string GetAuthToken();
+        //AuthorizationResponse CheckUser(string name, string password);
+        AuthorizationResponse Authorization(string login, string password);
     }
 }

@@ -1,4 +1,10 @@
-﻿using BloomService.Web.Utils;
+﻿using System;
+using System.Security.Claims;
+using System.Threading;
+using BloomService.Web.Infrastructure.Dependecy;
+using BloomService.Web.Models;
+using BloomService.Web.Services.Abstract;
+using BloomService.Web.Utils;
 
 namespace BloomService.Web.Controllers
 {
@@ -7,6 +13,14 @@ namespace BloomService.Web.Controllers
     [Authorize]
     public abstract class BaseController : Controller
     {
+        private readonly Lazy<UserModel> _userModel = new Lazy<UserModel>(
+            () => ComponentContainer.Current.Get<IAuthorizationService>().GetUser((ClaimsPrincipal)Thread.CurrentPrincipal));
+
+        public UserModel UserModel
+        {
+            get { return _userModel.Value; }
+        }       
+
         protected ActionResult Success()
         {
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);

@@ -158,10 +158,10 @@ var commonDataService = function ($http, $window) {
     }
 
     this.getToken = function (user, pass) {
-        var data = "grant_type=password&username=" + user + "&password=" + pass;
+        var data = "username=" + user + "&password=" + pass;
         angular.element($window).on;
         window.localStorage.setItem('UserName', user);
-        return $http.post('token', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+        return $http.post('Login', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
     }
 
    

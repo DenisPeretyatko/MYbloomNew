@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using BloomService.Web.Services.Concrete;
+using Newtonsoft.Json.Linq;
 
 namespace BloomService.Web.Controllers
 {
@@ -22,20 +24,36 @@ namespace BloomService.Web.Controllers
         private readonly ILocationService locationService;
 
         private readonly IRepository _repository;
+        private readonly IAuthorizationService _autorization;
 
         public DashboardController( 
             ILocationService locationService,
-            IRepository repository)
+            IRepository repository,
+            IAuthorizationService autorization)
         {
             this.locationService = locationService;
             _repository = repository;
+            _autorization = autorization;
         }
+
         [AllowAnonymous]
         [HttpGet]
         [Route("")]
         public ActionResult Index()
         {
             return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("Login")]
+        public ActionResult Login(string username, string password)
+        {
+            var token = _autorization.Authorization(username, password);
+            if (token == null)
+                return Error("Invalid user or password");
+            
+            return Json( new { access_token = token.Token }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

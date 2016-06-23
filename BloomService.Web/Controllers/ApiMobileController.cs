@@ -59,12 +59,12 @@ namespace BloomService.Web.Controllers
             return Success();
         }
 
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
         [Route("Apimobile/Authorization")]
         public ActionResult Get(string name, string password, string deviceToken)
         {
-            var token = GetToken(name, password);
+            var token = authorizationService.Authorization(name, password);
             if (token == null)
             {
                 return Error("Invalid login or password");
@@ -75,7 +75,7 @@ namespace BloomService.Web.Controllers
                 employee.IosDeviceToken = deviceToken;
                 repository.Update(employee);
             }
-            return Json(token);
+            return Json(new { access_token = token }, JsonRequestBehavior.AllowGet);
         }
 
         [Route("Apimobile/Equipment/{part}")]
@@ -105,9 +105,7 @@ namespace BloomService.Web.Controllers
         [Route("Apimobile/Workorder")]
         public ActionResult GetWorkOrders()
         {
-            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
-            var userId = authorizationService.GetUser(identity).Name;
-
+            var userId = UserModel.Name;
             var workOrders = repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
             var result = workOrders.Where(x => x.Employee == userId);
             var locations = repository.GetAll<SageLocation>();
@@ -198,38 +196,38 @@ namespace BloomService.Web.Controllers
             return Success();
         }
 
-        private LoginResponseModel GetToken(string mail, string password)
-        {
-            _log.InfoFormat("Method: GetToken. Mail {0}, password {1}", mail, password);
-           ASCIIEncoding encoding = new ASCIIEncoding();
-            string postData = "username=" + mail;
-            postData += "&password=" + password;
-            postData += "&grant_type=" + "password";
-            byte[] data = encoding.GetBytes(postData);
+        //private LoginResponseModel GetToken(string mail, string password)
+        //{
+        //    _log.InfoFormat("Method: GetToken. Mail {0}, password {1}", mail, password);
+        //   ASCIIEncoding encoding = new ASCIIEncoding();
+        //    string postData = "username=" + mail;
+        //    postData += "&password=" + password;
+        //    postData += "&grant_type=" + "password";
+        //    byte[] data = encoding.GetBytes(postData);
 
-            var url = ConfigurationManager.AppSettings["SiteUrl"] + "/apimobile/Token";
-            var request = WebRequest.Create(url);
-            request.Headers.Add(HttpRequestHeader.Authorization, "usernamepassword");
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.Method = "POST";
-            var newStream = request.GetRequestStream();
-            newStream.Write(data, 0, data.Length);
-            newStream.Close();
-            try
-            {
-                var response = (HttpWebResponse)request.GetResponse();
-                var dataStream = response.GetResponseStream();
+        //    var url = ConfigurationManager.AppSettings["SiteUrl"] + "/apimobile/Token";
+        //    var request = WebRequest.Create(url);
+        //    request.Headers.Add(HttpRequestHeader.Authorization, "usernamepassword");
+        //    request.ContentType = "application/x-www-form-urlencoded";
+        //    request.Method = "POST";
+        //    var newStream = request.GetRequestStream();
+        //    newStream.Write(data, 0, data.Length);
+        //    newStream.Close();
+        //    try
+        //    {
+        //        var response = (HttpWebResponse)request.GetResponse();
+        //        var dataStream = response.GetResponseStream();
 
-                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(LoginResponseModel));
-                var model = (LoginResponseModel)ser.ReadObject(dataStream);
-                _log.InfoFormat("Success. Returned LoginResponseModel (ID: {0})", model.Id);
-                return model;
-            }
-            catch
-            {
-                _log.ErrorFormat("Method: GetToken. Error. Returned null");
-                return null;
-            }
-        }
+        //        DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(LoginResponseModel));
+        //        var model = (LoginResponseModel)ser.ReadObject(dataStream);
+        //        _log.InfoFormat("Success. Returned LoginResponseModel (ID: {0})", model.Id);
+        //        return model;
+        //    }
+        //    catch
+        //    {
+        //        _log.ErrorFormat("Method: GetToken. Error. Returned null");
+        //        return null;
+        //    }
+        //}
     }
 }

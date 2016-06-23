@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Web.Http;
-
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
-
 using Owin;
-
-using Sage.WebApi.Providers;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.AspNet.Identity;
 
@@ -32,9 +28,9 @@ namespace Sage.WebApi
             {
                 // For Dev enviroment only (on production should be AllowInsecureHttp = false)
                 AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("/oauth/token"),
+               // TokenEndpointPath = new PathString("/oauth/token"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
-                Provider = new ApplicationOAuthProvider()
+               // Provider = new ApplicationOAuthProvider()
             };
 
             // OAuth 2.0 Bearer Access Token Generation

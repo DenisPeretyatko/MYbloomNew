@@ -350,7 +350,6 @@
     <Compile Include="Infrastructure\Notifications\NotificationPayload.cs" />
     <Compile Include="Infrastructure\Notifications\PushNotification.cs" />
     <Compile Include="Models\UserModel.cs" />
-    <Compile Include="Infrastructure\Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\ILocationService.cs" />
     <Compile Include="Infrastructure\Services\LocationService.cs" />
     <Compile Include="Models\RepairModel.cs" />

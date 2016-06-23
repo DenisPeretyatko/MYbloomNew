@@ -1,7 +1,4 @@
-﻿using BloomService.Web.Providers;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin;
-using Microsoft.Owin.Security.Cookies;
+﻿using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 using System;
@@ -14,6 +11,8 @@ namespace BloomService.Web
 {
     public class OwinConfig
     {
+        public static OAuthAuthorizationServerOptions OAuthOptions;
+
         public void Configuration(IAppBuilder app)
         {
             app.MapSignalR();
@@ -22,16 +21,13 @@ namespace BloomService.Web
 
         public void OAuth(IAppBuilder app)
         {
-            app.UseCookieAuthentication(new CookieAuthenticationOptions());
-            app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
-            
-            app.UseOAuthBearerTokens(new OAuthAuthorizationServerOptions
+            OAuthOptions = new OAuthAuthorizationServerOptions
             {
                 AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("/token"),
-                Provider = new ApplicationOAuthProvider(),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14)
-            });
+            };
+
+            app.UseOAuthBearerTokens(OAuthOptions);
         }
     }
 }

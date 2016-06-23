@@ -11,6 +11,7 @@ namespace BloomService.Domain.Models.Responses
         public string Id;
         public AuthorizationType Type;
         public string Mail;
+        public string Token;
     }
 
     public enum AuthorizationType

@@ -1,19 +1,17 @@
-﻿using System.Linq;
-
-using BloomService.Web.Services.Abstract;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
-using System.Configuration;
-using RestSharp;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using BloomService.Domain.Models.Responses;
+using System.Web.Script.Serialization;
+using BloomService.Domain.Entities.Concrete;
 using BloomService.Domain.Extensions;
 using BloomService.Domain.Models.Requests;
-using System.Web.Script.Serialization;
+using BloomService.Domain.Models.Responses;
 using BloomService.Domain.Repositories.Abstract;
-using BloomService.Web.Models;
-using BloomService.Domain.Entities.Concrete;
 using BloomService.Web.Managers;
+using BloomService.Web.Models;
+using BloomService.Web.Services.Abstract;
+using Microsoft.Owin.Security;
+using RestSharp;
 
 namespace BloomService.Web.Services.Concrete
 {
@@ -50,33 +48,46 @@ namespace BloomService.Web.Services.Concrete
             return userModel;
         }
 
-        public AuthorizationResponse CheckUser(string name, string password)
+        private AuthorizationResponse CheckUser(string name, string password)
         {
-            var token = GetAuthToken();
             var request = new RestRequest(EndPoints.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
             var requestBody = new AuthorizationRequest() { Name = name, Password = password };
             request.AddBody(requestBody);
-            request.AddHeader("Authorization", token);
+            request.AddHeader("Authorization", string.Format("Basic {0}:{1}", _configuration.SageUsername, _configuration.SagePassword));
             var restClient = new RestClient(_configuration.SageApiHost);
             var response = restClient.Execute<AuthorizationResponse>(request);
-            return response.StatusCode != System.Net.HttpStatusCode.OK ? null 
+
+            return response.StatusCode != System.Net.HttpStatusCode.OK ? null
                 : new JavaScriptSerializer().Deserialize<AuthorizationResponse>(response.Content);
         }
 
-        public string GetAuthToken()
+        public AuthorizationResponse Authorization(string login, string password)
         {
-            var username = _configuration.SageUsername;
-            var password = _configuration.SagePassword;
-            var sageApiHost = _configuration.SageApiHost; 
-            var restClient = new RestClient(sageApiHost);
-            var request = new RestRequest("oauth/token", Method.POST);
-            request.AddParameter("username", username);
-            request.AddParameter("password", password);
-            request.AddParameter("grant_type", "password");
-            var response = restClient.Execute(request);
-            var json = JObject.Parse(response.Content);
-            var result = string.Format("Bearer {0}", json.First.First);
+            var user = CheckUser(login, password);
+            if (user == null)
+                return null;
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Mail ?? string.Empty),
+                new Claim(ClaimTypes.Role, user.Type.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id ?? string.Empty),
+                new Claim(ClaimTypes.Email, user.Mail ?? string.Empty)
+            };
+
+            var identity = new ClaimsIdentity(claims, OwinConfig.OAuthOptions.AuthenticationType);
+
+            var ticket = new AuthenticationTicket(identity, new AuthenticationProperties());
+            var result = new AuthorizationResponse
+            {
+                Id = user.Id ?? string.Empty,
+                Type = user.Type,
+                Mail = user.Mail ?? string.Empty,
+                Token = OwinConfig.OAuthOptions.AccessTokenFormat.Protect(ticket)
+            };
+
             return result;
         }
+
     }
 }
