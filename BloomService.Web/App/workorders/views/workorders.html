@@ -59,7 +59,7 @@
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
-                            <li ng-repeat="i in getPaginationList" ng-click="ShowPage(i.link)" ng-class="{'active':CurrentPageNum()==i.link, 'disabled':pagesCount==i.link }"><a ng-bind-html="i.name"> <span class="sr-only">(current)</span></a></li>
+                            <li ng-repeat="i in paginationList" ng-click="ShowPage(i.link)" ng-class="{'active':CurrentPageNum()==i.link, 'disabled':pagesCount==i.link }"><a ng-bind-html="i.name"> <span class="sr-only">(current)</span></a></li>
                                 <li ng-click="NextPage()">
                                     <a aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>

@@ -14,7 +14,7 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService) {
     commonDataService.getWorkordesPaged(model).then(function (response) {
         $scope.workorders = response.data.WorkordersList;
         $scope.pagesCount = response.data.CountPage;
-        $scope.getPaginationList = $scope.getPaginationList(response.data.CountPage);
+        $scope.paginationList = $scope.getPaginationList(response.data.CountPage);
     });
     
 
@@ -32,7 +32,7 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService) {
         commonDataService.getWorkordesPaged(model).then(function (response) {
             $scope.workorders = response.data.WorkordersList;
             $scope.pagesCount = response.data.CountPage;
-            $scope.getPaginationList = $scope.getPaginationList(response.data.CountPage);
+            $scope.paginationList = $scope.getPaginationList(response.data.CountPage);
         });
     }
 
