@@ -9,6 +9,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
     $scope.color = '';
     $scope.obj = {};
 
+    $.connection.hub.start().done(function () { });;
     var date = new Date();
 
     commonDataService.getTechnician($stateParams.id).then(function (response) {
@@ -110,12 +111,15 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             Picture: $scope.file,
             Color: $scope.color
         };
-        commonDataService.editTechnician(technician).then(function (response) {
-            if (response.statusText == 'OK')
-                $state.go('manager.technician.list');
-        });
-    };
 
+
+        commonDataService.editTechnician(technician).then(function (response) {
+            if (response.statusText == 'OK') {
+                $state.go('manager.technician.list');
+            }
+        });
+       
+    };
 
     $scope.uploadFile = function (files) {
         if (files && files[0]) {

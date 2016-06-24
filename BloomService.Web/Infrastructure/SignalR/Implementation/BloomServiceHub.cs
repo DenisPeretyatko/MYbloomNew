@@ -6,6 +6,7 @@ using BloomService.Domain.Entities.Concrete;
 
 namespace BloomService.Web.Infrastructure.SignalR
 {
+    [HubName("bloomServiceHub")]
     public class BloomServiceHub : Hub, IBloomServiceHub
     {
         IHubConnectionContext<dynamic> _clients;
@@ -62,7 +63,7 @@ namespace BloomService.Web.Infrastructure.SignalR
 
         public void UpdateTechnician(TechnicianModel model)
         {
-            throw new NotImplementedException();
+            _clients.All.updateTechnician(model);
         }
 
         public void UpdateTechnicianLocation(string technicianId)

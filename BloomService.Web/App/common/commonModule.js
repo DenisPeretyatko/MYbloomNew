@@ -28,5 +28,6 @@ angular
     .service('commonDataService', commonDataService)
     .service('notify', commonNotificationService)
     .service('state', commonStateManager)
+    .service('commonHub', commonHub)
     .config(commonModuleConfig);
     
