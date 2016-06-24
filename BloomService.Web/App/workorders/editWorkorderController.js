@@ -43,40 +43,22 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
            $scope.equipment.push(equipment);
        }
        var workorder = $scope.editableWorkOrder;
-        $scope.lookups.Customers.selected = $scope.lookups.Customers.find(function (element) {
-            return element.Name === workorder.ARCustomer;
-        });
-        $scope.lookups.Locations.selected = $scope.lookups.Locations.find(function (element) {
-            return element.Name === workorder.Location;
-        });
-        $scope.lookups.Calltypes.selected = $scope.lookups.Calltypes.find(function (element) {
-            return element.Description === workorder.CallType;
-        });
+       $scope.lookups.Customers.selected = {};
+       $scope.lookups.Customers.selected = workorder.CustomerObj;
+       $scope.lookups.Locations.selected = {};
+       $scope.lookups.Locations.selected = workorder.LocationObj;
+       $scope.lookups.Calltypes.selected = workorder.CalltypeObj;
         $scope.obj.calldate = workorder.CallDate;
-        $scope.lookups.Problems.selected = $scope.lookups.Problems.find(function (element) {
-            return element.Description === workorder.Problem;
-        });
+        $scope.lookups.Problems.selected = workorder.ProblemObj;
         //$scope.lookups.RateSheets.selected = $scope.editableWorkOrder.RateSheet;
-         $scope.lookups.RateSheets.selected = $scope.lookups.RateSheets.find(function (element) {
-             return element.RATESHEETNBR === workorder.RateSheet;
-        });
-
-        $scope.lookups.Employes.selected = $scope.lookups.Employes.find(function (element) {
-            return element.Name === workorder.Employee;
-        });
-        $scope.lookups.Equipment.selected = $scope.lookups.Equipment.find(function (element) {
-            return element.Equipment === workorder.Equipment;
-        });
-        $scope.lookups.Hours.selected = $scope.lookups.Hours.find(function (element) {
-            return element.Description === workorder.EstimatedRepairHours;
-        });
+        $scope.lookups.RateSheets.selected = workorder.RateSheetObj;
+        $scope.lookups.Employes.selected = workorder.EmployeeObj;
+        $scope.lookups.Hours.selected = workorder.HourObj;
         $scope.obj.nottoexceed = workorder.NottoExceed;
-        $scope.obj.locationcomments = workorder.Area;
+        $scope.obj.locationcomments = workorder.Comments;
         $scope.obj.customerpo = workorder.CustomerPO;
         //$scope.obj.permissiocode = workorder.PermissionCode;
-        $scope.obj.permissiocode = $scope.lookups.PermissionCodes.find(function (element) {
-            return element.DESCRIPTION === workorder.PermissionCode;
-        });
+        $scope.lookups.PermissionCodes.selected = workorder.PermissionCodeObj;
         $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PayMethod;
     });
 

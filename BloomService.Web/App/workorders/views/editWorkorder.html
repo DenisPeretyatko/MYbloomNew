@@ -164,7 +164,7 @@
                                         <ui-select ng-model="equipm.equipType.selected" theme="bootstrap">
                                             <ui-select-match placeholder="Type">{{$select.selected}}</ui-select-match>
                                             <ui-select-choices repeat="item in equipm.equipType | filter: $select.search">
-                                                <div ng-bind-html="highlight: $select.search">{{item}}</div>
+                                                <div >{{item}}</div>
                                             </ui-select-choices>
                                         </ui-select>
                                     </td>
@@ -187,7 +187,7 @@
                                         <ui-select ng-model="equipm.empl.selected" theme="bootstrap">
                                             <ui-select-match placeholder="Employee">{{$select.selected.Name}}</ui-select-match>
                                             <ui-select-choices repeat="item in equipm.empl | filter: $select.search">
-                                                <div ng-bind-html="highlight: $select.search">{{item.Name}}</div>
+                                                <div >{{item.Name}}</div>
                                             </ui-select-choices>
                                         </ui-select>
                                     </td>

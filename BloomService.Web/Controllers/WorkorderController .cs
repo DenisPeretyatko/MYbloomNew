@@ -14,17 +14,20 @@ namespace BloomService.Web.Controllers
     using Infrastructure.Services.Abstract;
     using System.Collections.Generic;
     using AutoMapper;
+    using Infrastructure.Services.Interfaces;
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
         private const int _itemsOnPage = 12;
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
+        private readonly IDashboardService _dashboardService;
 
-        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy)
+        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy, IDashboardService dashboardService)
         {
             _repository = repository;
             _sageApiProxy = sageApiProxy;
+            _dashboardService = dashboardService;
         }
 
         [HttpPost]
@@ -67,6 +70,17 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkorder(string id)
         {
             var workOrder = _repository.Get<SageWorkOrder>(id);
+
+            var lookups = _dashboardService.GetLookups();
+            workOrder.CustomerObj = Mapper.Map<CustomerModel, SageCustomer>(lookups.Customers.FirstOrDefault(x => x.Name == workOrder.ARCustomer));
+            workOrder.LocationObj = Mapper.Map<LocationModel, SageLocation>(lookups.Locations.FirstOrDefault(x => x.Name == workOrder.Location));
+            workOrder.CalltypeObj = Mapper.Map<CallTypeModel, SageCallType>(lookups.Calltypes.FirstOrDefault(x => x.Description == workOrder.CallType));
+            workOrder.ProblemObj = Mapper.Map<ProblemModel, SageProblem>(lookups.Problems.FirstOrDefault(x => x.Description == workOrder.Problem));
+            workOrder.RateSheetObj = Mapper.Map<RateSheetModel, SageRateSheet>(lookups.RateSheets.FirstOrDefault(x => x.DESCRIPTION.Trim() == workOrder.RateSheet));
+            workOrder.EmployeeObj = Mapper.Map<EmployeeModel, SageEmployee>(lookups.Employes.FirstOrDefault(x => x.Name == workOrder.Employee));
+            workOrder.HourObj = Mapper.Map<RepairModel, SageRepair>(lookups.Hours.FirstOrDefault(x => x.Repair == workOrder.EstimatedRepairHours));
+            workOrder.PermissionCodeObj = Mapper.Map<PermissionCodeModel, SagePermissionCode>(lookups.PermissionCodes.FirstOrDefault(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode));
+
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
