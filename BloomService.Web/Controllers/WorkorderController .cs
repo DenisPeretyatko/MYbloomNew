@@ -190,6 +190,7 @@ namespace BloomService.Web.Controllers
 
             _repository.Update(workorder);
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
+            _hub.UpdateWorkOrder(model);
             return Success();
             
 

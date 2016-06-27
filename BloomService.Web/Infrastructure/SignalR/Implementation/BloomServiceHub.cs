@@ -73,7 +73,7 @@ namespace BloomService.Web.Infrastructure.SignalR
 
         public void UpdateWorkOrder(WorkOrderModel model)
         {
-            throw new NotImplementedException();
+            _clients.All.UpdateWorkOrder(model);
         }
     }
 }

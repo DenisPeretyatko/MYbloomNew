@@ -1,5 +1,4 @@
-var workorderController = function ($scope, $timeout, $sce, commonDataService) {
-
+var workorderController = function ($scope, $timeout, $sce, commonDataService, state) {
     var model = {
         Index: 0,
         Search: '',
@@ -14,8 +13,9 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService) {
     commonDataService.getWorkordesPaged(model).then(function (response) {
         $scope.workorders = response.data.WorkordersList;
         $scope.pagesCount = response.data.CountPage;
-        $scope.getPaginationList = $scope.getPaginationList(response.data.CountPage);
+        $scope.getPaginationList = $scope.getPagList(response.data.CountPage);
     });
+   
     
 
     $scope.Parse = function (value) {
@@ -24,16 +24,18 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService) {
 
     $scope.ShowPage = function (page) {
         if (page == $scope.pagesCount) return true;
+        
         model.Index = page;
         model.Column = $scope.sorting;
         model.Direction = $scope.increase;
         model.Search = $scope.Search;
         $scope.getSelectedPage(page);
-        commonDataService.getWorkordesPaged(model).then(function (response) {
-            $scope.workorders = response.data.WorkordersList;
-            $scope.pagesCount = response.data.CountPage;
-            $scope.getPaginationList = $scope.getPaginationList(response.data.CountPage);
+        state.UpdateWorkordersList(model).then(function() {
+            $scope.workorders = state.getWorkordersList().WorkordersList;
+            $scope.pagesCount = state.getWorkordersList().CountPage;
+            $scope.getPaginationList = $scope.getPagList(state.getWorkordersList().CountPage);
         });
+
     }
 
     $scope.CurrentPageNum = function () {
@@ -66,7 +68,7 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService) {
         
     });
 
-    $scope.getPaginationList = function (num) {
+    $scope.getPagList = function (num) {
 
         var pagesNum = num;
         var paginationList = [];
@@ -144,6 +146,9 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService) {
     }
 
 
+    $scope.workorders = state.getWorkordersList().WorkordersList;
+    $scope.pagesCount = state.getWorkordersList().CountPage;
+    $scope.getPaginationList = $scope.getPagList(state.getWorkordersList().CountPage);
 
 };
-workorderController.$inject = ["$scope", "$timeout", '$sce', "commonDataService"];
+workorderController.$inject = ["$scope", "$timeout", '$sce', "commonDataService", "state"];

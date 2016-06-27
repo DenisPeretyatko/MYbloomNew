@@ -9,7 +9,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
     $scope.color = '';
     $scope.obj = {};
 
-    $.connection.hub.start().done(function () { });;
+    //$.connection.hub.start().done(function () { });
     var date = new Date();
 
     commonDataService.getTechnician($stateParams.id).then(function (response) {
