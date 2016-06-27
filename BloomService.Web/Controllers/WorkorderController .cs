@@ -72,7 +72,7 @@ namespace BloomService.Web.Controllers
             var workOrder = _repository.Get<SageWorkOrder>(id);
 
             var lookups = _dashboardService.GetLookups();
-            workOrder.CustomerObj = Mapper.Map<CustomerModel, SageCustomer>(lookups.Customers.FirstOrDefault(x => x.Name == workOrder.ARCustomer));
+            workOrder.CustomerObj = Mapper.Map<CustomerModel, SageCustomer>(lookups.Customers.FirstOrDefault(x => x.Customer == workOrder.ARCustomer));
             workOrder.LocationObj = Mapper.Map<LocationModel, SageLocation>(lookups.Locations.FirstOrDefault(x => x.Name == workOrder.Location));
             workOrder.CalltypeObj = Mapper.Map<CallTypeModel, SageCallType>(lookups.Calltypes.FirstOrDefault(x => x.Description == workOrder.CallType));
             workOrder.ProblemObj = Mapper.Map<ProblemModel, SageProblem>(lookups.Problems.FirstOrDefault(x => x.Description == workOrder.Problem));

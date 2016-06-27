@@ -196,7 +196,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     title: value.WorkOrder,
                     start: new Date(value.Start +' UTC'),
                     end: new Date(value.End +' UTC'),
-                    assigmentId: value.Assigments,
+                    assigmentId: value.Assigment,
                     workorderId: value.WorkOrder,
                     description: value.Customer + spliter + value.Location,
                     dateFoo: value.DateEntered,
