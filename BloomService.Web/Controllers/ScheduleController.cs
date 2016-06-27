@@ -35,11 +35,11 @@ namespace BloomService.Web.Controllers
         {
             var lastMonth = DateTime.Now.AddMonths(-1);
             var model = new ScheduleViewModel();
-            var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.WorkOrder)).OrderByDescending(x => x.DateEntered).Skip(1400).Take(65).ToList();
+            var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.WorkOrder)).OrderByDescending(x => x.DateEntered).Take(65).ToList();
             var mappedAssignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(assignments);
             var workorders = _repository.GetAll<SageWorkOrder>();
             var workOrdersForLastMonth = workorders.Where(x => x.Status == "Open" && x.DateEntered > lastMonth && !string.IsNullOrEmpty(x.AssignmentId)).ToList();
-            model.Assigments = mappedAssignments.OrderByDescending(x => x.Id);
+            model.Assigments = mappedAssignments.OrderByDescending(x => x.Id).ToList();
             model.UnassignedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(workOrdersForLastMonth);
             return Json(model, JsonRequestBehavior.AllowGet);
         }
@@ -49,10 +49,9 @@ namespace BloomService.Web.Controllers
         public ActionResult CreateAssignment(AssignmentViewModel model)
         {
             _log.InfoFormat("Method: CreateAssignment. Model ID {0}", model.Id);
-            var d = model.ScheduleDate.ToUniversalTime();
             var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
             var edited = _sageApiProxy.EditAssignment(databaseAssignment);
-            if (edited == null)
+            if (edited.IsSucceed == false)
             {
                 _log.ErrorFormat("edited == null. Error.");
                 return Error();
