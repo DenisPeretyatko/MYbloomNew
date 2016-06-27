@@ -167,7 +167,7 @@ namespace BloomService.Web.Controllers
             return Json(countPage, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("Workorder/Save")]
         public ActionResult SaveWorkOrder(WorkOrderModel model)
         {

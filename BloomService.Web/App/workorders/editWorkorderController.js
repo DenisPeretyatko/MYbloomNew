@@ -43,23 +43,23 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
            $scope.equipment.push(equipment);
        }
        var workorder = $scope.editableWorkOrder;
-       $scope.lookups.Customers.selected = {};
-       $scope.lookups.Customers.selected = workorder.CustomerObj;
-       $scope.lookups.Locations.selected = {};
-       $scope.lookups.Locations.selected = workorder.LocationObj;
-       $scope.lookups.Calltypes.selected = workorder.CalltypeObj;
-        $scope.obj.calldate = workorder.CallDate;
-        $scope.lookups.Problems.selected = workorder.ProblemObj;
-        //$scope.lookups.RateSheets.selected = $scope.editableWorkOrder.RateSheet;
-        $scope.lookups.RateSheets.selected = workorder.RateSheetObj;
-        $scope.lookups.Employes.selected = workorder.EmployeeObj;
-        $scope.lookups.Hours.selected = workorder.HourObj;
-        $scope.obj.nottoexceed = workorder.NottoExceed;
-        $scope.obj.locationcomments = workorder.Comments;
-        $scope.obj.customerpo = workorder.CustomerPO;
-        //$scope.obj.permissiocode = workorder.PermissionCode;
-        $scope.lookups.PermissionCodes.selected = workorder.PermissionCodeObj;
-        $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PayMethod;
+       if (workorder !== undefined) {
+           $scope.lookups.Customers.selected = workorder.CustomerObj;
+           $scope.lookups.Locations.selected = workorder.LocationObj;
+           $scope.lookups.Calltypes.selected = workorder.CalltypeObj;
+           $scope.obj.calldate = workorder.CallDate;
+           $scope.lookups.Problems.selected = workorder.ProblemObj;
+           //$scope.lookups.RateSheets.selected = $scope.editableWorkOrder.RateSheet;
+           $scope.lookups.RateSheets.selected = workorder.RateSheetObj;
+           $scope.lookups.Employes.selected = workorder.EmployeeObj;
+           $scope.lookups.Hours.selected = workorder.HourObj;
+           $scope.obj.nottoexceed = workorder.NottoExceed;
+           $scope.obj.locationcomments = workorder.Comments;
+           $scope.obj.customerpo = workorder.CustomerPO;
+           //$scope.obj.permissiocode = workorder.PermissionCode;
+           $scope.lookups.PermissionCodes.selected = workorder.PermissionCodeObj;
+           $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PayMethod;
+       }
     });
 
     
@@ -73,14 +73,14 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             Calltype: $scope.lookups.Calltypes.selected == null ? "" : $scope.lookups.Calltypes.selected.CallType,
 	        Calldate: $scope.obj.calldate,
 	        Problem: $scope.lookups.Problems.selected == null ? "" : $scope.lookups.Problems.selected.Problem,
-	        Ratesheet: $scope.lookups.RateSheets.selected == null ? "" : $scope.lookups.RateSheets.selected,
+	        Ratesheet: $scope.lookups.RateSheets.selected == null ? "" : $scope.lookups.RateSheets.selected.RATESHEETNBR,
 	        Emploee: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.Employee,
 	        Equipment: $scope.lookups.Equipment.selected == null ? "" : $scope.lookups.Equipment.selected.Equipment,
 	        Estimatehours: $scope.lookups.Hours.selected == null ? "0" : $scope.lookups.Hours.selected.Repair,
 	        Nottoexceed: $scope.obj.nottoexceed,
 	        Locationcomments: $scope.obj.locationcomments,
 	        Customerpo: $scope.obj.customerpo,
-	        Permissiocode: $scope.obj.permissiocode,
+	        Permissiocode: $scope.lookups.PermissionCodes.selected == null ? "" : $scope.lookups.PermissionCodes.selected.DESCRIPTION,
 	        Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected,
             WorkOrder: $scope.editableWorkOrder.WorkOrder
 	    };

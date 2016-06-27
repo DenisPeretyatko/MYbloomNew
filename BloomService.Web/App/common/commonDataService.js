@@ -63,7 +63,7 @@ var commonDataService = function ($http, $window) {
     }
 
     this.saveWorkorder = function (workorder) {
-        return $http.post("/workorder/Save", workorder, {
+        return $http.put("/workorder/Save", workorder, {
             headers: {
                 'Authorization': 'bearer ' + window.localStorage.getItem('Token')
             }
