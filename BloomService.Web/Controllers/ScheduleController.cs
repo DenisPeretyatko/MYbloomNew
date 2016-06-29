@@ -61,12 +61,6 @@ namespace BloomService.Web.Controllers
         {
             _log.InfoFormat("Method: CreateAssignment. Model ID {0}", model.Id);
             var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
-            var edited = _sageApiProxy.EditAssignment(databaseAssignment);
-            if (edited.IsSucceed == false)
-            {
-                _log.ErrorFormat("edited == null. Error.");
-                return Error();
-            }
 
             var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
             databaseAssignment.Employee = employee?.Name ?? "";
@@ -87,6 +81,13 @@ namespace BloomService.Web.Controllers
             databaseAssignment.Customer = workorder.ARCustomer;
             databaseAssignment.Location = workorder.Location;
 
+            var edited = _sageApiProxy.EditAssignment(databaseAssignment);
+            if (edited.IsSucceed == false)
+            {
+                _log.ErrorFormat("edited == null. Error.");
+                return Error();
+            }
+
             _repository.Add(databaseAssignment);
             _hub.CreateAssignment(databaseAssignment);
             _log.InfoFormat("DatabaseAssignment added to repository. Employee {0}, Employee ID {1}", databaseAssignment.Employee, databaseAssignment.EmployeeId);
@@ -106,9 +107,10 @@ namespace BloomService.Web.Controllers
                 _log.ErrorFormat("!result.IsSucceed. Error");
                 return Error();
             }
-            _repository.Delete(databaseAssignment);
+            databaseAssignment.Employee = "";
+            _repository.Update(databaseAssignment);
             _log.InfoFormat("Deleted from repository: databaseAssignment ID {0}", databaseAssignment.Id);
-            workOrder.Employee = "0";
+            workOrder.Employee = "";
             _repository.Update(workOrder);
             _log.InfoFormat("Repository update workorder. Name: {0}, Id: {1}", workOrder.Name, workOrder.Id);
             return Success();
