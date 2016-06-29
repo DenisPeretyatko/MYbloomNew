@@ -1,4 +1,4 @@
-﻿var commonStateManager = function (commonDataService, commonHub) {
+﻿var commonStateManager = function ($rootScope, commonDataService, commonHub) {
         this.profile = {};
         this.statistic = [];
         this.notifications = [];
@@ -48,6 +48,11 @@
         return _this.technicians = response.data;
     });
 
+    commonDataService.getTrucks().then(function (response) {
+        $rootScope.trucks = response.data;
+        return _this.trucks = response.data;
+    });
+
     this.UpdateWorkordersList = function (model) {
         return commonDataService.getWorkordesPaged(model).then(function (response) {
             return _this.workorders = response.data;
@@ -60,6 +65,7 @@
     this.getWorkordersList = function () {
         return _this.workorders;
     }
+    
 
     connection.client.UpdateWorkOrder = function (workorder) { 
         alert("WorkOrder SignalR");
@@ -82,8 +88,19 @@
                 });
             }
         });
-    };
+      };
+      
+      connection.client.updateTechnicianLocation = function (technician) {
+          angular.forEach($rootScope.trucks, function (value, key) {
+              if (value.Employee === technician.Employee) {
+                  delete $rootScope.trucks[key];
+                  $rootScope.trucks[key] = technician;
+              }
+          });
+      };
+
+
       $.connection.hub.start().done(function () { });
 
 }
-commonStateManager.$inject = ["commonDataService", "commonHub"];
+commonStateManager.$inject = ["$rootScope","commonDataService", "commonHub"];

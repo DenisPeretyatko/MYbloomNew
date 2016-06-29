@@ -66,9 +66,9 @@ namespace BloomService.Web.Infrastructure.SignalR
             _clients.All.updateTechnician(model);
         }
 
-        public void UpdateTechnicianLocation(string technicianId)
+        public void UpdateTechnicianLocation(SageEmployee model)
         {
-            throw new NotImplementedException();
+            _clients.All.updateTechnicianLocation(model);
         }
 
         public void UpdateWorkOrder(WorkOrderModel model)

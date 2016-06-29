@@ -19,7 +19,7 @@ namespace BloomService.Web.Infrastructure.SignalR
         void UpdateTechnician(TechnicianModel model);
         void AddEquipment(EquipmentModel model);
         void UpdateEquipment(EquipmentModel model);
-        void UpdateTechnicianLocation(string technicianId);
+        void UpdateTechnicianLocation(SageEmployee model);
         void ChangeWorkOrderStatus(string id, string status);
         void AddWorkOrderPicture();
     }
