@@ -3,7 +3,7 @@
  */
  "use strict";
 
- var dashboardController = function ($scope, $interpolate, commonDataService) {
+ var dashboardController = function ($rootScope, $scope, $interpolate, commonDataService) {
 
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
@@ -44,9 +44,9 @@
         });
     });
 
-    $scope.$watch(function () { return $scope.trucks; }, function () {
+    $rootScope.$watchCollection(function () { return $rootScope.trucks; }, function () {
         angular.forEach($scope.truckMarkers, function (marker) { marker.setMap(null); });
-        angular.forEach($scope.trucks, function (truck) {
+        angular.forEach($rootScope.trucks, function (truck) {
 
             var content = tooltip(truck);
 
@@ -89,4 +89,4 @@
         $scope.flotChartOptions = flotChartOptions;
     });
 };
- dashboardController.$inject = ["$scope", "$interpolate", "commonDataService"];
+ dashboardController.$inject = ["$rootScope", "$scope", "$interpolate", "commonDataService"];
