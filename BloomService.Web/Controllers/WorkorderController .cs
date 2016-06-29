@@ -14,14 +14,19 @@ namespace BloomService.Web.Controllers
     using Infrastructure.Services.Abstract;
     using System.Collections.Generic;
     using AutoMapper;
+<<<<<<< HEAD
     using Infrastructure.SignalR;
 
+=======
+    using Infrastructure.Services.Interfaces;
+>>>>>>> 5cabe94efe22fce967f9b4dd5c75de9e27c08ebb
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
         private const int _itemsOnPage = 12;
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
+<<<<<<< HEAD
         private readonly IBloomServiceHub _hub;
 
         public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy, IBloomServiceHub hub)
@@ -29,6 +34,15 @@ namespace BloomService.Web.Controllers
             _repository = repository;
             _sageApiProxy = sageApiProxy;
             _hub = hub;
+=======
+        private readonly IDashboardService _dashboardService;
+
+        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy, IDashboardService dashboardService)
+        {
+            _repository = repository;
+            _sageApiProxy = sageApiProxy;
+            _dashboardService = dashboardService;
+>>>>>>> 5cabe94efe22fce967f9b4dd5c75de9e27c08ebb
         }
 
         [HttpPost]
@@ -72,6 +86,17 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkorder(string id)
         {
             var workOrder = _repository.Get<SageWorkOrder>(id);
+
+            var lookups = _dashboardService.GetLookups();
+            workOrder.CustomerObj = Mapper.Map<CustomerModel, SageCustomer>(lookups.Customers.FirstOrDefault(x => x.Customer == workOrder.ARCustomer));
+            workOrder.LocationObj = Mapper.Map<LocationModel, SageLocation>(lookups.Locations.FirstOrDefault(x => x.Name == workOrder.Location));
+            workOrder.CalltypeObj = Mapper.Map<CallTypeModel, SageCallType>(lookups.Calltypes.FirstOrDefault(x => x.Description == workOrder.CallType));
+            workOrder.ProblemObj = Mapper.Map<ProblemModel, SageProblem>(lookups.Problems.FirstOrDefault(x => x.Description == workOrder.Problem));
+            workOrder.RateSheetObj = Mapper.Map<RateSheetModel, SageRateSheet>(lookups.RateSheets.FirstOrDefault(x => x.DESCRIPTION.Trim() == workOrder.RateSheet));
+            workOrder.EmployeeObj = Mapper.Map<EmployeeModel, SageEmployee>(lookups.Employes.FirstOrDefault(x => x.Name == workOrder.Employee));
+            workOrder.HourObj = Mapper.Map<RepairModel, SageRepair>(lookups.Hours.FirstOrDefault(x => x.Repair == workOrder.EstimatedRepairHours));
+            workOrder.PermissionCodeObj = Mapper.Map<PermissionCodeModel, SagePermissionCode>(lookups.PermissionCodes.FirstOrDefault(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode));
+
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
@@ -158,7 +183,7 @@ namespace BloomService.Web.Controllers
             return Json(countPage, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("Workorder/Save")]
         public ActionResult SaveWorkOrder(WorkOrderModel model)
         {

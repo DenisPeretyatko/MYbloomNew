@@ -164,7 +164,7 @@ namespace BloomService.Web.Infrastructure.Services
 
         private SageResponse<TEntity> Edit<TEntity>(TEntity entity, string endPoint) where TEntity : IEntity
         {
-            var request = new RestRequest(endPoint, Method.POST) { RequestFormat = DataFormat.Json };
+            var request = new RestRequest(endPoint, Method.PUT) { RequestFormat = DataFormat.Json };
             request.AddBody(entity);
             BuildAuthenticationHeader(request);
             var response = _restClient.Execute<SageResponse<TEntity>>(request);

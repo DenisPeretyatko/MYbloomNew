@@ -319,7 +319,9 @@
     <Compile Include="Infrastructure\Services\HttpContextProvider.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IAuthorizationService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IHttpContextProvider.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IDashboardService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\ISageApiProxy.cs" />
+    <Compile Include="Infrastructure\Services\DashboardService.cs" />
     <Compile Include="Infrastructure\Services\SageApiProxy.cs" />
     <Compile Include="Infrastructure\SignalR\IBloomServiceHub.cs" />
     <Compile Include="Infrastructure\SignalR\Implementation\BloomServiceHub.cs" />

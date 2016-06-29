@@ -263,5 +263,23 @@
 
         [XmlIgnore]
         public string AssignmentId { get; set; }
+
+
+        [XmlIgnore]
+        public SageCustomer CustomerObj { get; set; }
+        [XmlIgnore]
+        public SageLocation LocationObj { get; set; }
+        [XmlIgnore]
+        public SageCallType CalltypeObj { get; set; }
+        [XmlIgnore]
+        public SageProblem ProblemObj { get; set; }
+        [XmlIgnore]
+        public SageRateSheet RateSheetObj { get; set; }
+        [XmlIgnore]
+        public SageEmployee EmployeeObj { get; set; }
+        [XmlIgnore]
+        public SageRepair HourObj { get; set; }
+        [XmlIgnore]
+        public SagePermissionCode PermissionCodeObj { get; set; }
     }
 }

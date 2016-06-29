@@ -14,13 +14,13 @@
                             <form role="form" name="edit_workorder_form" novalidate ng-submit="saveWorkOrder()">
                                 <div class="form-group">
                                     <label>Customer</label>
-                                    <div angucomplete-alt placeholder="Customer" maxlength="50" local-data="lookups.Customers" selected-object="lookups.Customers.selected"
+                                    <div angucomplete-alt placeholder="Customer" maxlength="50" local-data="lookups.Customers" selected-object="lookups.Customers.selected" initial-value="lookups.Customers.selected"
                                          search-fields="Name" title-field="Name" minlength="1" input-class="form-control form-control-small" match-class="highlight">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Location</label>
-                                    <div angucomplete-alt placeholder="Location" maxlength="50" local-data="lookups.Locations" selected-object="lookups.Locations.selected"
+                                    <div angucomplete-alt placeholder="Location" maxlength="50" local-data="lookups.Locations" selected-object="lookups.Locations.selected"  initial-value="lookups.Locations.selected"
                                          search-fields="Name" title-field="Name" minlength="1" input-class="form-control form-control-small" match-class="highlight">
                                     </div>
                                 </div>
@@ -164,7 +164,7 @@
                                         <ui-select ng-model="equipm.equipType.selected" theme="bootstrap">
                                             <ui-select-match placeholder="Type">{{$select.selected}}</ui-select-match>
                                             <ui-select-choices repeat="item in equipm.equipType | filter: $select.search">
-                                                <div ng-bind-html="highlight: $select.search">{{item}}</div>
+                                                <div >{{item}}</div>
                                             </ui-select-choices>
                                         </ui-select>
                                     </td>
@@ -175,8 +175,8 @@
                                         <div ng-if="equipm.equipType.selected == 'Labor'" angucomplete-alt placeholder="Description" maxlength="50"  local-data="equipm.labor"  selected-object="equipm.labor.selected"
                                              search-fields="Description" title-field="Description" minlength="1" input-class="form-control form-control-small" match-class="highlight">
                                         </div>
-                                       <div ng-if="equipm.equipType.selected == 'Parts' || !equipm.equipType.selected" angucomplete-alt placeholder="Description" maxlength="50" 
-                                            selected-object="equipm.parts.selected" local-data="equipm.parts" search-fields="Description" title-field="Description" minlength="1" 
+                                       <div ng-if="equipm.equipType.selected == 'Parts' || !equipm.equipType.selected" angucomplete-alt placeholder="Description" maxlength="50" selected-object="equipm.parts.selected" 
+                                            local-data="equipm.parts" search-fields="Description" title-field="Description" minlength="1" 
                                             input-class="form-control form-control-small" match-class="highlight">
                                        </div>
                                     </td>
@@ -187,7 +187,7 @@
                                         <ui-select ng-model="equipm.empl.selected" theme="bootstrap">
                                             <ui-select-match placeholder="Employee">{{$select.selected.Name}}</ui-select-match>
                                             <ui-select-choices repeat="item in equipm.empl | filter: $select.search">
-                                                <div ng-bind-html="highlight: $select.search">{{item.Name}}</div>
+                                                <div >{{item.Name}}</div>
                                             </ui-select-choices>
                                         </ui-select>
                                     </td>
