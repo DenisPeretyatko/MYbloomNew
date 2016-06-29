@@ -74,9 +74,9 @@ namespace BloomService.Web.Services.Concrete
             var nameBig = countImage.ToString();
             var nameSmall = "small" + countImage;
             var fileName = SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, settings.SizeBigPhoto);
-            SavePhotoForWorkOrder(model.Image, pathToImage, nameSmall, settings.SizeSmallPhoto);
+            var fileNameSmall = SavePhotoForWorkOrder(model.Image, pathToImage, nameSmall, settings.SizeSmallPhoto);
             var maxId = imagesDb.Images.Any() ? imagesDb.Images.Max(x => x.Id) : 0;
-            var image = new ImageLocation { Image = fileName, Latitude = model.Latitude, Longitude = model.Longitude, Id = maxId + 1 };
+            var image = new ImageLocation { Image = fileNameSmall, BigImage = fileName, Latitude = model.Latitude, Longitude = model.Longitude, Id = maxId + 1 };
             imagesDb.Images.Add(image);
             repository.Add(imagesDb);
             return true;
@@ -100,9 +100,9 @@ namespace BloomService.Web.Services.Concrete
             return false;
         }
 
-        public List<ImageLocation> GetPhotoForWorkOrder(string idWorkOrder, bool big, string prefixUrl = null)
+        public List<ImageLocation> GetPhotoForWorkOrder(string idWorkOrder, string prefixUrl = null)
         {
-            var pathToImage = string.Format("{0}/{1}/", urlToFolderPhotoWorkOrders, idWorkOrder);
+            var pathToImage = string.Format("{0}{1}/", urlToFolderPhotoWorkOrders, idWorkOrder);
             if (prefixUrl != null)
                 pathToImage = prefixUrl + pathToImage;
 
@@ -111,10 +111,8 @@ namespace BloomService.Web.Services.Concrete
             {
                 foreach (var image in images.Images)
                 {
-                    if (!big)
-                        image.Image = pathToImage + "small" + image.Image;
-                    else
-                        image.Image = pathToImage + image.Image;
+                    image.Image = pathToImage + image.Image;
+                    image.BigImage = pathToImage + image.BigImage;
                 }
                 return images.Images;
             }

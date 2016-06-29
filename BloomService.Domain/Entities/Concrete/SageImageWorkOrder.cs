@@ -17,6 +17,8 @@
     {
         public string Image { get; set; }
 
+        public string BigImage { get; set; }
+
         public decimal Latitude { get; set; }
 
         public decimal Longitude { get; set; }

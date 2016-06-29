@@ -9,7 +9,7 @@ namespace BloomService.Web.Services.Abstract
     {
         bool SavePhotoForWorkOrder(ImageModel model);
         bool BuildTechnicianIcons(TechnicianModel technician);
-        List<ImageLocation> GetPhotoForWorkOrder(string idWorkOrder, bool big, string prefixUrl = null);
+        List<ImageLocation> GetPhotoForWorkOrder(string idWorkOrder, string prefixUrl = null);
         bool SaveDescriptionsForPhoto(CommentImageModel model);
     }
 }

@@ -101,6 +101,13 @@ namespace BloomService.Web.Controllers
             return Json(result);
         }
 
+        [Route("Apimobile/Repair")]
+        public ActionResult GetRepair()
+        {
+            var result = repository.GetAll<SageRepair>();
+            return Json(result);
+        }
+
         [HttpGet]
         [Route("Apimobile/Workorder")]
         public ActionResult GetWorkOrders()
@@ -113,7 +120,7 @@ namespace BloomService.Web.Controllers
             {
                 order.Equipments = new List<SageEquipment>();
 
-                order.Images = _imageService.GetPhotoForWorkOrder(order.WorkOrder, false, settings.SiteUrl);
+                order.Images = _imageService.GetPhotoForWorkOrder(order.WorkOrder, settings.SiteUrl);
 
                 var location = locations.FirstOrDefault(x => x.Name == order.Location);
                 if (location == null)
