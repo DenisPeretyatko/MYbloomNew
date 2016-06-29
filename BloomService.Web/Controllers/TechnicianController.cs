@@ -1,4 +1,5 @@
 ﻿using BloomService.Web.Infrastructure.Jobs;
+using BloomService.Web.Infrastructure.SignalR;
 using Common.Logging;
 
 namespace BloomService.Web.Controllers
@@ -15,15 +16,16 @@ namespace BloomService.Web.Controllers
     public class TechnicianController : BaseController
     {
         private readonly IImageService imageService;
-
+        private readonly IBloomServiceHub hub;
         private readonly IRepository repository;
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
 
 
-        public TechnicianController(IImageService imageService, IRepository repository)
+        public TechnicianController(IImageService imageService, IRepository repository, IBloomServiceHub hub)
         {
             this.imageService = imageService;
             this.repository = repository;
+            this.hub = hub;
         }
 
         [HttpGet]
@@ -60,6 +62,7 @@ namespace BloomService.Web.Controllers
             }
             var updatedTechnician = Mapper.Map<EmployeeModel, SageEmployee>(technician);
             repository.Update(updatedTechnician);
+            hub.UpdateTechnician(model);
             _log.InfoFormat("Repository update technician. Name {0}, ID {1}", updatedTechnician.Name, updatedTechnician.Id);
 
             return Success();

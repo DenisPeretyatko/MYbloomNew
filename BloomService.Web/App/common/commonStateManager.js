@@ -1,4 +1,4 @@
-﻿var commonStateManager = function (commonDataService) {
+﻿var commonStateManager = function ($rootScope, commonDataService, commonHub) {
         this.profile = {};
         this.statistic = [];
         this.notifications = [];
@@ -8,6 +8,13 @@
         this.technicians = [];
         this.lookups = {};
         this.locations = {};
+
+    var paginationModel = {
+        Index: 0,
+        Search: '',
+        Column: '',
+        Direction: true
+    };
 
     var _this = {
             profile: this.profile,
@@ -21,6 +28,8 @@
             locations: this.locations
         }
 
+         var connection = commonHub.GetConnection();
+        
     commonDataService.getLookups().then(function (response) {
         return _this.lookups = response.data;
     });
@@ -32,35 +41,66 @@
     commonDataService.getNotifications().then(function (response) {
         return _this.notifications = response.data;
     });
-    //------------- Test SignalR for notifications -------------------
-    setInterval(changeNotifications, 3000);
-    function changeNotifications() {
-        var notification = $.connection.notificationsHub;
+    commonDataService.getWorkordesPaged(paginationModel).then(function (response) {
+        return _this.workorders = response.data;
+    });
+    commonDataService.getTechnicians().then(function (response) {
+        return _this.technicians = response.data;
+    });
 
-        //notification.client.updateNotifications = function (notif) {
-        //    _this.notifications = notif;
-        //};
+    commonDataService.getTrucks().then(function (response) {
+        $rootScope.trucks = response.data;
+        return _this.trucks = response.data;
+    });
 
-        //$.connection.hub.start().done(function () {
-        //    notification.server.getNotifications(_this.notifications);
-        //});
-    }
-    //------------- Test SignalR for locations -------------------
-    setInterval(changeLocations, 1000);
-    function changeLocations() {
-        var location = $.connection.locationHub;
-
-        //location.client.updateLocations = function (locations) {
-        //    _this.locations = locations;
-        //};
-
-        //$.connection.hub.start().done(function () {
-        //    location.server.getLocations();
-        //});
+    this.UpdateWorkordersList = function (model) {
+        return commonDataService.getWorkordesPaged(model).then(function (response) {
+            return _this.workorders = response.data;
+        });
     }
 
+    this.getTechniciansList = function() {
+        return _this.technicians;
+    }
+    this.getWorkordersList = function () {
+        return _this.workorders;
+    }
+    
+
+    connection.client.UpdateWorkOrder = function (workorder) { 
+        alert("WorkOrder SignalR");
+        angular.forEach(_this.workorders, function (value, key) {
+            if (value.WorkOrder === workorder.WorkOrder) {
+                commonDataService.getWorkorder(value.Id).then(function (response) {
+                    delete _this.workorders[key];
+                    _this.workorders[key] = response.data;
+                });
+            }
+        });
+    };
+
+      connection.client.UpdateTechnician = function (technician) {
+        angular.forEach(_this.technicians, function (value, key) {
+            if (value.Employee === technician.Id) {
+                commonDataService.getTechnician(value.Id).then(function(response) {
+                    delete _this.technicians[key];
+                    _this.technicians[key] = response.data;
+                });
+            }
+        });
+      };
+      
+      connection.client.updateTechnicianLocation = function (technician) {
+          angular.forEach($rootScope.trucks, function (value, key) {
+              if (value.Employee === technician.Employee) {
+                  delete $rootScope.trucks[key];
+                  $rootScope.trucks[key] = technician;
+              }
+          });
+      };
 
 
-    return _this;
+      $.connection.hub.start().done(function () { });
+
 }
-commonStateManager.$inject = ["commonDataService"];
+commonStateManager.$inject = ["$rootScope","commonDataService", "commonHub"];

@@ -24,6 +24,8 @@ namespace BloomService.Web.Controllers
     using BloomService.Web.Services.Abstract;
     using System.Security.Claims;
     using System.Threading;
+    using Infrastructure.SignalR;
+
     public class ApiMobileController : BaseController
     {
         private readonly IImageService _imageService;
@@ -37,18 +39,22 @@ namespace BloomService.Web.Controllers
 
         private readonly BloomServiceConfiguration settings;
 
+        private readonly IBloomServiceHub _hub;
+
         public ApiMobileController(
             ISageApiProxy sageApiProxy,
             IImageService imageService,
             IRepository repository,
             IAuthorizationService authorizationService,
-            BloomServiceConfiguration settings)
+            BloomServiceConfiguration settings,
+            IBloomServiceHub hub)
         {
             this.sageApiProxy = sageApiProxy;
             this._imageService = imageService;
             this.repository = repository;
             this.settings = settings;
             this.authorizationService = authorizationService;
+            _hub = hub;
         }
 
         [HttpPost]
@@ -101,6 +107,13 @@ namespace BloomService.Web.Controllers
             return Json(result);
         }
 
+        [Route("Apimobile/Repair")]
+        public ActionResult GetRepair()
+        {
+            var result = repository.GetAll<SageRepair>();
+            return Json(result);
+        }
+
         [HttpGet]
         [Route("Apimobile/Workorder")]
         public ActionResult GetWorkOrders()
@@ -113,7 +126,7 @@ namespace BloomService.Web.Controllers
             {
                 order.Equipments = new List<SageEquipment>();
 
-                order.Images = _imageService.GetPhotoForWorkOrder(order.WorkOrder, false, settings.SiteUrl);
+                order.Images = _imageService.GetPhotoForWorkOrder(order.WorkOrder, settings.SiteUrl);
 
                 var location = locations.FirstOrDefault(x => x.Name == order.Location);
                 if (location == null)
@@ -173,6 +186,10 @@ namespace BloomService.Web.Controllers
             };
             repository.Add(techLocation);
             _log.InfoFormat("TechLocation added. TechnicianId: {0}", technicianId);
+            var emploee = repository.SearchFor<SageEmployee>(x => x.Employee == techLocation.Employee).Single();
+            emploee.Longitude = techLocation.Longitude;
+            emploee.Latitude = techLocation.Latitude;
+            _hub.UpdateTechnicianLocation(emploee);
             return Success();
         }
 

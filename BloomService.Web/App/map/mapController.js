@@ -3,7 +3,7 @@
  */
 "use strict";
 
-var mapController = function ($scope, $http, $compile, $interpolate, commonDataService, state) {
+var mapController = function ($rootScope, $scope, $http, $compile, $interpolate, commonDataService, state) {
 
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
@@ -19,60 +19,60 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
     $scope.$watch(function () { return $scope.workorders; }, function () {
         angular.forEach($scope.workorderMarkers, function (marker) { marker.setMap(null); });
         angular.forEach($scope.workorders, function (workorder) {
-           
-          var content = tooltipWO(workorder);
 
-          var pos = {
-              lat: parseFloat(workorder.Latitude),
-              lng: parseFloat(workorder.Longitude)
-          }
+            var content = tooltipWO(workorder);
 
-          var marker = new google.maps.Marker({
-            position: pos,
-            map: $scope.locationMap,
-            icon: "/public/images/workorder.png",
-            title:  workorder.WorkOrder
-          });
-          $scope.workorderMarkers.push(marker);
-          marker.addListener('click', function() {
-            var infowindow = new google.maps.InfoWindow({
-               content: content
+            var pos = {
+                lat: parseFloat(workorder.Latitude),
+                lng: parseFloat(workorder.Longitude)
+            }
+
+            var marker = new google.maps.Marker({
+                position: pos,
+                map: $scope.locationMap,
+                icon: "/public/images/workorder.png",
+                title: workorder.WorkOrder
             });
-            infowindow.open($scope.locationMap, marker);
-          });
+            $scope.workorderMarkers.push(marker);
+            marker.addListener('click', function () {
+                var infowindow = new google.maps.InfoWindow({
+                    content: content
+                });
+                infowindow.open($scope.locationMap, marker);
+            });
         });
     });
 
-    $scope.$watch(function () { return $scope.trucks; }, function () {
+    $rootScope.$watchCollection(function () { return $rootScope.trucks; }, function () {
         angular.forEach($scope.truckMarkers, function (marker) { marker.setMap(null); });
-        angular.forEach($scope.trucks, function (truck) {
+        angular.forEach($rootScope.trucks, function (truck) {
 
-          var content = tooltip(truck);
+            var content = tooltip(truck);
 
-          var pos = {
-              lat: parseFloat(truck.Latitude),
-              lng: parseFloat(truck.Longitude)
-          }
-          var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png";
-          var marker = new google.maps.Marker({
-            position: pos,
-            map: $scope.locationMap,
-            icon: icon,
-            title: truck.Name
-          });
-          $scope.truckMarkers.push(marker);
-          marker.addListener('click', function() {
-            var infowindow = new google.maps.InfoWindow({
-               content: content
+            var pos = {
+                lat: parseFloat(truck.Latitude),
+                lng: parseFloat(truck.Longitude)
+            }
+            var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png";
+            var marker = new google.maps.Marker({
+                position: pos,
+                map: $scope.locationMap,
+                icon: icon,
+                title: truck.Name
             });
-            infowindow.open($scope.locationMap, marker);
-          });
+            $scope.truckMarkers.push(marker);
+            marker.addListener('click', function () {
+                var infowindow = new google.maps.InfoWindow({
+                    content: content
+                });
+                infowindow.open($scope.locationMap, marker);
+            });
         });
     });
 
-    commonDataService.getTrucks().then(function (response) {
-        $scope.trucks = response.data;
-    });
+    //commonDataService.getTrucks().then(function (response) {
+    //    $rootScope.trucks = response.data;
+    //});
 
     $scope.$watch(function () { return $scope.obj.mapDate; }, function () {
         var model = { DateWorkOrder: new Date($scope.obj.mapDate) };
@@ -81,4 +81,4 @@ var mapController = function ($scope, $http, $compile, $interpolate, commonDataS
         });
     });
 };
-mapController.$inject = ["$scope", "$http", "$compile", "$interpolate", "commonDataService", "state"];
+mapController.$inject = ["$rootScope", "$scope", "$http", "$compile", "$interpolate", "commonDataService", "state"];

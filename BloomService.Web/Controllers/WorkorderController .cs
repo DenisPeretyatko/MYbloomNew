@@ -14,20 +14,24 @@ namespace BloomService.Web.Controllers
     using Infrastructure.Services.Abstract;
     using System.Collections.Generic;
     using AutoMapper;
+    using Infrastructure.SignalR;
     using Infrastructure.Services.Interfaces;
+
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
         private const int _itemsOnPage = 12;
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
-        private readonly IDashboardService _dashboardService;
+        private readonly IBloomServiceHub _hub;
+        private readonly IDashboardService _dashboardService;   
 
-        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy, IDashboardService dashboardService)
+        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy, IDashboardService dashboardService, IBloomServiceHub hub)
         {
             _repository = repository;
             _sageApiProxy = sageApiProxy;
             _dashboardService = dashboardService;
+            _hub = hub;
         }
 
         [HttpPost]
@@ -53,15 +57,16 @@ namespace BloomService.Web.Controllers
                 PayMethod = model.Paymentmethods
             };
 
-            var result = _sageApiProxy.AddWorkOrder(workorder);
-            if (!result.IsSucceed)
-            {
-                _log.ErrorFormat("Was not able to save workorder to sage. !result.IsSucceed");
-                return Error("Was not able to save workorder to sage");
-            }
+            //var result = _sageApiProxy.AddWorkOrder(workorder);
+            //if (!result.IsSucceed)
+            //{
+            //    _log.ErrorFormat("Was not able to save workorder to sage. !result.IsSucceed");
+            //    return Error("Was not able to save workorder to sage");
+            //}
 
-            _repository.Add(result.Entity);
-            _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", result.Entity.Id, result.Entity.Name);
+            _repository.Add(workorder);
+            _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
+            _hub.CreateWorkOrder(workorder);
             return Success();
         }
 
@@ -199,6 +204,7 @@ namespace BloomService.Web.Controllers
 
             _repository.Update(workorder);
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
+            _hub.UpdateWorkOrder(model);
             return Success();
             
 

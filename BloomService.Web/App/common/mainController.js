@@ -2,7 +2,7 @@
  * mainController - controller
  */
 
-var mainController = function ($scope, commonDataService, state, $window) {
+var mainController = function ($scope, commonDataService, state, $window, commonHub) {
     angular.element(window).on;
     $scope.userName = window.localStorage.getItem('UserName')
     $scope.notifications = [];
@@ -19,6 +19,7 @@ var mainController = function ($scope, commonDataService, state, $window) {
     $scope.Logout = function() {
         window.localStorage.setItem('UserName', '')
         window.localStorage.setItem('Token', '');
+        commonHub.LogoutHub();
         $state.go('login');
     }
 
@@ -31,4 +32,4 @@ var mainController = function ($scope, commonDataService, state, $window) {
     }
 };
 
-mainController.$inject = ["$scope", "commonDataService", "state"];
+mainController.$inject = ["$scope", "commonDataService", "state", "$window", "commonHub"];

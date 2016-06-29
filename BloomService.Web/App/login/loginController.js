@@ -2,7 +2,7 @@
  * loginController - controller
  */
 
-var loginController = function ($scope, $state, commonDataService, $window) {
+var loginController = function ($scope, $state, commonDataService, commonHub) {
     $scope.obj = {};
     window.localStorage.setItem('UserName', '')
     window.localStorage.setItem('Token', '');
@@ -13,6 +13,7 @@ var loginController = function ($scope, $state, commonDataService, $window) {
         commonDataService.getToken($scope.obj.username, $scope.obj.password).success(function (response) {
             if (response.access_token != null && response.access_token != "" && response.access_token != undefined  ) {
                 window.localStorage.setItem('Token', response.access_token);
+                commonHub.LoginHub();
                 $state.go('manager.dashboard');
             }
             else {
@@ -20,6 +21,5 @@ var loginController = function ($scope, $state, commonDataService, $window) {
             }
         })
     });
-
 };
-loginController.$inject = ["$scope", "$state", "commonDataService"];
+loginController.$inject = ["$scope", "$state", "commonDataService", "commonHub"];
