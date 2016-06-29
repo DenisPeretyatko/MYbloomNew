@@ -716,8 +716,8 @@
     <Content Include="Public\mock\getWorkorder.json" />
     <Content Include="Public\mock\getWorkorders.json" />
     <Content Include="Public\mock\getLookups.json" />
-    <Content Include="App_Data\PushNotification\BloomService_prod.p12" />
-    <Content Include="App_Data\PushNotification\BloomService_dev.p12" />
+    <Content Include="App_Data\PushNotification\iQueSoft_APNS_dev.p12" />
+    <Content Include="App_Data\PushNotification\iQueSoft_Prod_apns.p12" />
     <None Include="Properties\PublishProfiles\b.pubxml" />
     <None Include="Properties\PublishProfiles\bloom.pubxml" />
     <Content Include="Public\mock\getEmployees.json" />

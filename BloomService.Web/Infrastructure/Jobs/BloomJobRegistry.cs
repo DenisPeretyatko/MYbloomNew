@@ -37,7 +37,7 @@ namespace BloomService.Web.Infrastructure.Jobs
             _httpContextProvider = ComponentContainer.Current.Get<IHttpContextProvider>();
             _locationService = ComponentContainer.Current.Get<ILocationService>();
 
-            
+
 
             //Send silent push notifications to iOS
             Schedule(() =>
