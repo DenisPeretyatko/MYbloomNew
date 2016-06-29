@@ -154,7 +154,7 @@ namespace BloomService.Web.Infrastructure.Services
 
         private SageResponse<TEntity> Delete<TEntity>(string id, string endPoint) where TEntity : IEntity
         {
-            var request = new RestRequest(endPoint, Method.DELETE) { RequestFormat = DataFormat.Json };
+            var request = new RestRequest(endPoint + "/{id}", Method.DELETE) { RequestFormat = DataFormat.Json };
             request.AddUrlSegment("id", id);
             BuildAuthenticationHeader(request);
             var response = _restClient.Execute<SageResponse<TEntity>>(request);
