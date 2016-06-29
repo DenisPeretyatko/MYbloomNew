@@ -1,4 +1,5 @@
 ﻿using BloomService.Web.Infrastructure.Jobs;
+using BloomService.Web.Infrastructure.Services.Interfaces;
 using BloomService.Web.Infrastructure.SignalR;
 using Common.Logging;
 
@@ -18,14 +19,16 @@ namespace BloomService.Web.Controllers
         private readonly IImageService imageService;
         private readonly IBloomServiceHub hub;
         private readonly IRepository repository;
+        private readonly INotificationService notification;
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
 
 
-        public TechnicianController(IImageService imageService, IRepository repository, IBloomServiceHub hub)
+        public TechnicianController(IImageService imageService, IRepository repository, IBloomServiceHub hub, INotificationService notification)
         {
             this.imageService = imageService;
             this.repository = repository;
             this.hub = hub;
+            this.notification = notification;
         }
 
         [HttpGet]
@@ -55,7 +58,10 @@ namespace BloomService.Web.Controllers
             technician.AvailableDays = model.AvailableDays;
             technician.IsAvailable = model.IsAvailable;
             technician.Picture = model.Picture;
-            
+
+            if (!model.IsAvailable)
+               notification.SendNotification(string.Format("Technician {0} is available", employee.Employee));
+
             if (imageService.BuildTechnicianIcons(model))
             {
                 technician.Color = model.Color;

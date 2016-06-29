@@ -25,23 +25,38 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
     });
 
     $scope.createWorkOrder = function () {
-        var workorder = {
-            Customer: $scope.lookups.Customers.selected == null ? "" : $scope.lookups.Customers.selected.description.Customer,
-            Location: $scope.lookups.Locations.selected == null ? "" : $scope.lookups.Locations.selected.description.Location,
-            Calltype: $scope.lookups.Calltypes.selected == null ? "" : $scope.lookups.Calltypes.selected.CallType,
+        //var workorder = {
+        //    Customer: $scope.lookups.Customers.selected == null ? "" : $scope.lookups.Customers.selected.description.Customer,
+        //    Location: $scope.lookups.Locations.selected == null ? "" : $scope.lookups.Locations.selected.description.Location,
+        //    Calltype: $scope.lookups.Calltypes.selected == null ? "" : $scope.lookups.Calltypes.selected.CallType,
+        //    Calldate: $scope.obj.calldate,
+        //    Problem: $scope.lookups.Problems.selected == null ? "" : $scope.lookups.Problems.selected.Problem,
+        //    Ratesheet: $scope.lookups.RateSheets.selected == null ? "" : $scope.lookups.RateSheets.selected.RATESHEETNBR,
+        //    Emploee: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.Employee,
+        //    Equipment: $scope.lookups.Equipment.selected == null ? "0" : $scope.lookups.Equipment.selected.Equipment,
+        //    Estimatehours: $scope.lookups.Hours.selected == null ? "" : $scope.lookups.Hours.selected.Repair,
+        //    Nottoexceed: $scope.obj.nottoexceed,
+        //    Locationcomments: $scope.obj.locationcomments,
+        //    Customerpo: $scope.obj.customerpo,
+        //    Permissiocode: $scope.lookups.PermissionCodes.selected == null ? "" : $scope.lookups.PermissionCodes.selected.DESCRIPTION,
+        //    Paymentmethods: $scope.lookups.PaymentMethods.selected
+        //};
+         var workorder = {
+            Customer: "Customer",
+            Location: "Location",
+            Calltype: "Calltype",
             Calldate: $scope.obj.calldate,
-            Problem: $scope.lookups.Problems.selected == null ? "" : $scope.lookups.Problems.selected.Problem,
-            Ratesheet: $scope.lookups.RateSheets.selected == null ? "" : $scope.lookups.RateSheets.selected.RATESHEETNBR,
-            Emploee: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.Employee,
-            Equipment: $scope.lookups.Equipment.selected == null ? "0" : $scope.lookups.Equipment.selected.Equipment,
-            Estimatehours: $scope.lookups.Hours.selected == null ? "" : $scope.lookups.Hours.selected.Repair,
+            Problem: "Problem",
+            Ratesheet: "Ratesheet",
+            Emploee: "Emploee",
+            Equipment: "Equipment",
+            Estimatehours: "Estimatehours",
             Nottoexceed: $scope.obj.nottoexceed,
             Locationcomments: $scope.obj.locationcomments,
             Customerpo: $scope.obj.customerpo,
-            Permissiocode: $scope.lookups.PermissionCodes.selected == null ? "" : $scope.lookups.PermissionCodes.selected.DESCRIPTION,
-            Paymentmethods: $scope.lookups.PaymentMethods.selected
+            Permissiocode: "Permissiocode",
+            Paymentmethods: ""
         };
-        
         commonDataService.createWorkorder(workorder).then(function (response) {
             if (response.data.success == true)
                 $state.go('manager.workorder.list');

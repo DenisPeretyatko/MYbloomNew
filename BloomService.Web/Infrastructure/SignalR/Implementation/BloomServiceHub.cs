@@ -51,9 +51,9 @@ namespace BloomService.Web.Infrastructure.SignalR
             throw new NotImplementedException();
         }
 
-        public void SendNotification(string message)
+        public void SendNotification(NotificationModel model)
         {
-            throw new NotImplementedException();
+            _clients.All.sendNotification(model);
         }
 
         public void UpdateEquipment(EquipmentModel model)

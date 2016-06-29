@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
+using BloomService.Web.Infrastructure.Jobs;
+using BloomService.Web.Infrastructure.Services.Abstract;
+using BloomService.Web.Infrastructure.Services.Interfaces;
 using BloomService.Web.Services.Concrete;
+using Common.Logging;
 using Newtonsoft.Json.Linq;
 
 namespace BloomService.Web.Controllers
@@ -22,18 +27,22 @@ namespace BloomService.Web.Controllers
     public class DashboardController : BaseController
     {
         private readonly ILocationService locationService;
-
+        private readonly ISageApiProxy _sageApiProxy;
         private readonly IRepository _repository;
         private readonly IAuthorizationService _autorization;
+        private readonly INotificationService _notification;
 
-        public DashboardController( 
+        public DashboardController(
             ILocationService locationService,
             IRepository repository,
-            IAuthorizationService autorization)
+            IAuthorizationService autorization,
+            INotificationService notification
+           )
         {
             this.locationService = locationService;
             _repository = repository;
             _autorization = autorization;
+            _notification = notification;
         }
 
         [AllowAnonymous]
@@ -52,8 +61,8 @@ namespace BloomService.Web.Controllers
             var token = _autorization.Authorization(username, password);
             if (token == null)
                 return Error("Invalid user or password");
-            
-            return Json( new { access_token = token.Token }, JsonRequestBehavior.AllowGet);
+
+            return Json(new { access_token = token.Token }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -65,7 +74,7 @@ namespace BloomService.Web.Controllers
             var assignments = _repository.SearchFor<SageAssignment>(x => x.Employee == "").ToArray();
             var chart = new List<ChartModel>();
             var chartModel = new ChartModel();
-            
+
             var chartData = new List<List<object>>
             {
                 new List<object> {"Open", workorders.Count()},
@@ -73,12 +82,26 @@ namespace BloomService.Web.Controllers
                 new List<object> {"Roof leak", workorders.Count(x => x.Problem == "Roof leak")},
                 new List<object> {"Closed today", workorders.Count(x => x.DateClosed == DateTime.Now)},
             };
-            chartModel.data= chartData;
+            chartModel.data = chartData;
             chart.Add(chartModel);
-            
+
             dashboard.Chart = chart;
             dashboard.WorkOrders = workorders;
             return Json(dashboard, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        [Route("Dashboard/UpdateNotificationTime")]
+        public ActionResult UpdateNotificationTime(string str = null)
+        {
+            _repository.Add(new SageUserProfile()
+            {
+                UserId = UserModel.Id,
+                Date = DateTime.Today.Date.Date,
+                Time = DateTime.Now.TimeOfDay
+            });
+            return Success();
         }
 
         [HttpGet]
@@ -96,7 +119,13 @@ namespace BloomService.Web.Controllers
             var ratesheets = _repository.GetAll<SageRateSheet>();
             var permissionCodes = _repository.GetAll<SagePermissionCode>();
             var parts = _repository.GetAll<SagePart>();
-
+            var notificationTime = _repository.GetAll<SageUserProfile>().LastOrDefault(x => x.UserId == UserModel.Id) ?? new SageUserProfile() {
+                UserId = UserModel.Id,
+                Date = DateTime.Today.Date.Date,
+                Time = DateTime.Now.TimeOfDay
+            };
+           
+            
             lookups.Locations = Mapper.Map<List<SageLocation>, List<LocationModel>>(locations.ToList());
             lookups.Calltypes = Mapper.Map<List<SageCallType>, List<CallTypeModel>>(calltypes.ToList());
             lookups.Problems = Mapper.Map<List<SageProblem>, List<ProblemModel>>(problems.ToList());
@@ -104,7 +133,9 @@ namespace BloomService.Web.Controllers
             lookups.Equipment = Mapper.Map<List<SageEquipment>, List<EquipmentModel>>(equipment.ToList());
             lookups.Customers = Mapper.Map<List<SageCustomer>, List<CustomerModel>>(customer.ToList());
             lookups.Hours = Mapper.Map<List<SageRepair>, List<RepairModel>>(repairs.ToList());
-
+            lookups.Notifications = _notification.GetLastNotifications();
+            lookups.NotificationTime = String.Format("{0} {1}", notificationTime.Date.Date.ToString("dd-MM-yyyy"), notificationTime.Time.ToString(@"hh\:mm\:ss"));
+          
             lookups.RateSheets = Mapper.Map<List<SageRateSheet>, List<RateSheetModel>>(ratesheets.ToList());
             lookups.PermissionCodes = Mapper.Map<List<SagePermissionCode>, List<PermissionCodeModel>>(permissionCodes.ToList());
 
@@ -113,13 +144,6 @@ namespace BloomService.Web.Controllers
 
             return Json(lookups, JsonRequestBehavior.AllowGet);
         }
-
-        [HttpGet]
-        [Route("Dashboard/SendNotification")]
-        public ActionResult SendNotification()
-        {
-            var json = JsonHelper.GetObjects("getNotifications.json");
-            return Json(json, JsonRequestBehavior.AllowGet);
-        }
+        
     }
 }

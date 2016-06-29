@@ -11,7 +11,7 @@ namespace BloomService.Web.Infrastructure.SignalR
     public interface IBloomServiceHub
     {
         void Disconnect();
-        void SendNotification(string message);
+        void SendNotification(NotificationModel model);
         void CreateAssignment(SageAssignment model);
         void DeleteAssigment(int id);
         void CreateWorkOrder(SageWorkOrder model);

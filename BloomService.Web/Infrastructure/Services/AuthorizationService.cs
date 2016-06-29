@@ -50,22 +50,15 @@ namespace BloomService.Web.Services.Concrete
 
         private AuthorizationResponse CheckUser(string name, string password)
         {
-            //var request = new RestRequest(EndPoints.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
-            //var requestBody = new AuthorizationRequest() { Name = name, Password = password };
-            //request.AddBody(requestBody);
-            //request.AddHeader("Authorization", string.Format("Basic {0}:{1}", _configuration.SageUsername, _configuration.SagePassword));
-            //var restClient = new RestClient(_configuration.SageApiHost);
-            //var response = restClient.Execute<AuthorizationResponse>(request);
+            var request = new RestRequest(EndPoints.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
+            var requestBody = new AuthorizationRequest() { Name = name, Password = password };
+            request.AddBody(requestBody);
+            request.AddHeader("Authorization", string.Format("Basic {0}:{1}", _configuration.SageUsername, _configuration.SagePassword));
+            var restClient = new RestClient(_configuration.SageApiHost);
+            var response = restClient.Execute<AuthorizationResponse>(request);
 
-            //return response.StatusCode != System.Net.HttpStatusCode.OK ? null
-            //    : new JavaScriptSerializer().Deserialize<AuthorizationResponse>(response.Content);
-            var temp = new AuthorizationResponse
-            {
-                Id = "3242342342",
-                Type = AuthorizationType.Manager,
-                Mail = "ewgwegweg"
-            };
-            return temp;
+            return response.StatusCode != System.Net.HttpStatusCode.OK ? null
+                : new JavaScriptSerializer().Deserialize<AuthorizationResponse>(response.Content);
         }
 
         public AuthorizationResponse Authorization(string login, string password)

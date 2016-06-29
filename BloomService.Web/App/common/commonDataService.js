@@ -133,14 +133,6 @@ var commonDataService = function ($http, $window) {
         });
     }
 
-    this.getTechnician = function (id) {
-        return $http.get("/Technician/" + id, {
-            headers: {
-                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
-            }
-        });
-    }
-
     this.editTechnician = function (technician) {
         return $http.post("/Technician/Save", technician, {
             headers: {
@@ -181,5 +173,18 @@ var commonDataService = function ($http, $window) {
             }
         });
     }
+
+    this.updateNotificationTime = function() {
+        return $http.post("/Dashboard/UpdateNotificationTime", "", {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    };
+
+    this.doNothing = function() {
+        
+    }
+
 }
 commonDataService.$inject = ['$http', '$window'];

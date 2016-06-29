@@ -1,4 +1,5 @@
 ﻿using BloomService.Web.Infrastructure.Jobs;
+using BloomService.Web.Infrastructure.Services.Interfaces;
 using Common.Logging;
 
 namespace BloomService.Web.Controllers
@@ -35,6 +36,8 @@ namespace BloomService.Web.Controllers
 
         private readonly IAuthorizationService authorizationService;
 
+        private readonly INotificationService notification;
+
         private readonly BloomServiceConfiguration settings;
 
         public ApiMobileController(
@@ -42,6 +45,7 @@ namespace BloomService.Web.Controllers
             IImageService imageService,
             IRepository repository,
             IAuthorizationService authorizationService,
+            INotificationService notification,
             BloomServiceConfiguration settings)
         {
             this.sageApiProxy = sageApiProxy;
@@ -49,6 +53,7 @@ namespace BloomService.Web.Controllers
             this.repository = repository;
             this.settings = settings;
             this.authorizationService = authorizationService;
+            this.notification = notification;
         }
 
         [HttpPost]
@@ -193,6 +198,7 @@ namespace BloomService.Web.Controllers
             repository.Update(workorder);
             _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, status);
             var workorder2 = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
+            this.notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.WorkOrder, status));
             return Success();
         }
 
