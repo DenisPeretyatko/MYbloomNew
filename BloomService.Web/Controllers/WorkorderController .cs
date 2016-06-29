@@ -14,35 +14,24 @@ namespace BloomService.Web.Controllers
     using Infrastructure.Services.Abstract;
     using System.Collections.Generic;
     using AutoMapper;
-<<<<<<< HEAD
     using Infrastructure.SignalR;
-
-=======
     using Infrastructure.Services.Interfaces;
->>>>>>> 5cabe94efe22fce967f9b4dd5c75de9e27c08ebb
+
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
         private const int _itemsOnPage = 12;
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
-<<<<<<< HEAD
         private readonly IBloomServiceHub _hub;
+        private readonly IDashboardService _dashboardService;   
 
-        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy, IBloomServiceHub hub)
-        {
-            _repository = repository;
-            _sageApiProxy = sageApiProxy;
-            _hub = hub;
-=======
-        private readonly IDashboardService _dashboardService;
-
-        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy, IDashboardService dashboardService)
+        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy, IDashboardService dashboardService, IBloomServiceHub hub)
         {
             _repository = repository;
             _sageApiProxy = sageApiProxy;
             _dashboardService = dashboardService;
->>>>>>> 5cabe94efe22fce967f9b4dd5c75de9e27c08ebb
+            _hub = hub;
         }
 
         [HttpPost]
