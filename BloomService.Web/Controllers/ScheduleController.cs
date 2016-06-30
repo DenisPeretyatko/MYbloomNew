@@ -108,9 +108,16 @@ namespace BloomService.Web.Controllers
                 return Error();
             }
             databaseAssignment.Employee = "";
+            databaseAssignment.EmployeeId = null;
+            databaseAssignment.Start = "";
+            databaseAssignment.End = "";
+            databaseAssignment.Color = "";
+            databaseAssignment.Customer = "";
+            databaseAssignment.Location = "";
             _repository.Update(databaseAssignment);
             _log.InfoFormat("Deleted from repository: databaseAssignment ID {0}", databaseAssignment.Id);
             workOrder.Employee = "";
+            workOrder.AssignmentId = databaseAssignment.Assignment;
             _repository.Update(workOrder);
             _log.InfoFormat("Repository update workorder. Name: {0}, Id: {1}", workOrder.Name, workOrder.Id);
             return Success();

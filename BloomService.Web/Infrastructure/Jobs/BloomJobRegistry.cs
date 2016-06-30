@@ -144,6 +144,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                             {
                                 entity.Id = mongoEntity.Id;
                                 entity.Status = mongoEntity.Status;
+                                entity.AssignmentId = mongoEntity.AssignmentId;
                                 _repository.Update(entity);
                             }
                         }
@@ -217,17 +218,14 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     assigment.Color = employee?.Color ?? "";
                                     if (workorder != null)
                                     {
-                                        workorder.AssignmentId = assigment.Assignment;
                                         assigment.Customer = workorder.ARCustomer;
                                         assigment.Location = workorder.Location;
                                     }
                                 }
                                 else
                                 {
-                                    if (workorder != null)
+                                    if (assigment.Employee == "" && workorder != null)
                                     {
-                                        assigment.Customer = workorder.ARCustomer;
-                                        assigment.Location = workorder.Location;
                                         workorder.AssignmentId = assigment.Assignment;
                                         _repository.Update(workorder);
                                     }
