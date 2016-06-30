@@ -56,7 +56,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 //var endTime = avaibleDay.End.TryAsDateTime();
                                 //if (startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
                                 //{
-                                    var notificationPayload = new NotificationPayload(technician.IosDeviceToken, 1, "default", 1);
+                                    var notificationPayload = new NotificationPayload(technician.IosDeviceToken, 1);
                                     var p = new List<NotificationPayload>();
                                     p.Add(notificationPayload);
                                     PushNotification push = new PushNotification(true, path, null);
@@ -67,7 +67,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         //}
                     }
                 }
-            }).ToRunNow().AndEvery(1).Minutes();
+            }).ToRunNow().AndEvery(15).Minutes();
 
             //Send request
             Schedule(() =>
