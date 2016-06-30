@@ -50,6 +50,11 @@
         return _this.technicians = response.data;
     });
 
+    commonDataService.getTrucks().then(function (response) {
+        $rootScope.trucks = response.data;
+        return _this.trucks = response.data;
+    });
+
     this.UpdateWorkordersList = function (model) {
         return commonDataService.getWorkordesPaged(model).then(function (response) {
             return _this.workorders = response.data;
@@ -80,8 +85,7 @@
 
     }
 
-    this.setMongaNotificationTime = function(value)
-    {
+    this.setMongaNotificationTime = function (value) {
         debugger;
         _this.notificationTime = value;
     }
@@ -108,12 +112,21 @@
         });
     };
 
+    connection.client.UpdateTechnicianLocation = function (technician) {
+        angular.forEach($rootScope.trucks, function (value, key) {
+            if (value.Employee === technician.Employee) {
+                    delete $rootScope.trucks[key];
+                    $rootScope.trucks[key] = technician;
+            }
+        });
+    };
+
     connection.client.SendNotification = function (notification) {
         $rootScope.notifications.unshift(notification);
     };
 
     connection.client.DeleteAssigment = function (model) {
-        
+
     };
 
     $.connection.hub.start().done(function () { });
