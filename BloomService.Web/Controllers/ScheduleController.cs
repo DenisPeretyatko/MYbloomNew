@@ -75,6 +75,13 @@ namespace BloomService.Web.Controllers
             databaseAssignment.Enddate = model.EndDate.ToUniversalTime();
             databaseAssignment.Endtime = model.EndDate.ToUniversalTime().TimeOfDay;
 
+            var edited = _sageApiProxy.EditAssignment(databaseAssignment);
+            if (edited.IsSucceed == false)
+            {
+                _log.ErrorFormat("edited == null. Error.");
+                return Error();
+            }
+
             databaseAssignment.EmployeeId = employee != null ? employee.Employee : null;
             databaseAssignment.Start = model.ScheduleDate.ToString();
             databaseAssignment.End = model.ScheduleDate.AddHours(databaseAssignment.EstimatedRepairHours.AsDouble()).ToString();
@@ -84,13 +91,6 @@ namespace BloomService.Web.Controllers
 
             databaseAssignment.Customer = workorder.ARCustomer;
             databaseAssignment.Location = workorder.Location;
-
-            var edited = _sageApiProxy.EditAssignment(databaseAssignment);
-            if (edited.IsSucceed == false)
-            {
-                _log.ErrorFormat("edited == null. Error.");
-                return Error();
-            }
 
             _repository.Add(databaseAssignment);
             _hub.CreateAssignment(databaseAssignment);
@@ -113,9 +113,16 @@ namespace BloomService.Web.Controllers
                 return Error();
             }
             databaseAssignment.Employee = "";
+            databaseAssignment.EmployeeId = null;
+            databaseAssignment.Start = "";
+            databaseAssignment.End = "";
+            databaseAssignment.Color = "";
+            databaseAssignment.Customer = "";
+            databaseAssignment.Location = "";
             _repository.Update(databaseAssignment);
             _log.InfoFormat("Deleted from repository: databaseAssignment ID {0}", databaseAssignment.Id);
             workOrder.Employee = "";
+            workOrder.AssignmentId = databaseAssignment.Assignment;
             _repository.Update(workOrder);
             _log.InfoFormat("Repository update workorder. Name: {0}, Id: {1}", workOrder.Name, workOrder.Id);
             _notification.SendNotification(string.Format("Workorder {0} unassignment by {1}", model.WorkOrder, model.Employee));
