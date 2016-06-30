@@ -91,6 +91,10 @@
         _this.notificationTime = value;
     }
 
+    this.setLookups = function(value) {
+        this.lookups = value;
+    }
+
     connection.client.UpdateWorkOrder = function (workorder) {
         angular.forEach(_this.workorders, function (value, key) {
             if (value.WorkOrder === workorder.WorkOrder) {
