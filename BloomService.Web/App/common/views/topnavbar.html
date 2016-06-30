@@ -4,12 +4,12 @@
             <span minimaliza-sidebar></span>
         </div>
         <ul class="nav navbar-top-links navbar-right">
-    		<li class="dropdown" dropdown>
-                <a class="dropdown-toggle count-info" href dropdown-toggle>
-                    <i class="fa fa-bell"></i> <span class="label label-primary">{{notifications.length}}</span>
+            <li class="dropdown" id="dropdown" dropdown>
+                <a class="dropdown-toggle count-info" dropdown-toggle ng-click="openNotifications()">
+                    <i class="fa fa-bell"></i> <span class="label label-primary">{{notificationsCount}}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-alerts" ng-click="$event.stopPropagation()">
-                    <li class="notif_el" ng-repeat="item in notifications" ng-if="allnotifications == true || (allnotifications == false && $index < 3)" ng-model="notifications" ng-init="notifications[$index].isViewed = true">
+                    <li class="notif_el" ng-repeat="item in notificationsCopy" ng-if="allnotifications == true || (allnotifications == false && $index < 3)" ng-model="notifications" ng-init="notifications[$index].isViewed = true">
                         <a ui-sref="inbox">
                             <div title="{{item.message}}">
                                 <i class="fa fa-envelope fa-fw"></i>
@@ -24,8 +24,8 @@
                             <a ui-sref="miscellaneous.notify">
                                 <strong ng-click="showAlerts()">See All Alerts</strong>
                                 <i class="fa fa-angle-right"></i>
-                        </a>
-                            </div>
+                            </a>
+                        </div>
                     </li>
                     <li ng-if="allnotifications == true">
                         <div class="text-center link-block">
@@ -38,5 +38,6 @@
                 </ul>
             </li>
         </ul>
+        
     </nav>
 </div>

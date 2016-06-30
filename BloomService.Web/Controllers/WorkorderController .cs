@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using BloomService.Web.Infrastructure.Jobs;
+using BloomService.Web.Infrastructure.Services.Interfaces;
 using Common.Logging;
 
 namespace BloomService.Web.Controllers
@@ -24,13 +25,16 @@ namespace BloomService.Web.Controllers
         private const int _itemsOnPage = 12;
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
         private readonly IBloomServiceHub _hub;
-        private readonly IDashboardService _dashboardService;   
+        private readonly IDashboardService _dashboardService;
+        private readonly INotificationService _notification;
 
-        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy, IDashboardService dashboardService, IBloomServiceHub hub)
+        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy,
+            IDashboardService dashboardService, IBloomServiceHub hub, INotificationService notification)
         {
             _repository = repository;
             _sageApiProxy = sageApiProxy;
             _dashboardService = dashboardService;
+            _notification = notification;
             _hub = hub;
         }
 
@@ -57,16 +61,16 @@ namespace BloomService.Web.Controllers
                 PayMethod = model.Paymentmethods
             };
 
-            //var result = _sageApiProxy.AddWorkOrder(workorder);
-            //if (!result.IsSucceed)
-            //{
-            //    _log.ErrorFormat("Was not able to save workorder to sage. !result.IsSucceed");
-            //    return Error("Was not able to save workorder to sage");
-            //}
+            var result = _sageApiProxy.AddWorkOrder(workorder);
+            if (!result.IsSucceed)
+            {
+                _log.ErrorFormat("Was not able to save workorder to sage. !result.IsSucceed");
+                return Error("Was not able to save workorder to sage");
+            }
 
             _repository.Add(workorder);
             _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
-            _hub.CreateWorkOrder(workorder);
+            _notification.SendNotification(string.Format("{0} was created", model.Emploee));
             return Success();
         }
 

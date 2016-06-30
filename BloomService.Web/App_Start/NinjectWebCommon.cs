@@ -95,6 +95,7 @@ namespace BloomService.Web
                     typeof(MongoRepository).Assembly
             });
             kernel.Bind<IBloomServiceHub>().To<BloomServiceHub>();
+            kernel.Bind<INotificationService>().To<NotificationService>();
 
             kernel.Bind<IHubConnectionContext<dynamic>>().ToMethod(ctx => GlobalHost.ConnectionManager.GetHubContext<BloomServiceHub>().Clients);
         }
