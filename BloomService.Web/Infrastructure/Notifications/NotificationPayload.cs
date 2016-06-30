@@ -53,16 +53,15 @@ namespace BloomService.Web.Notifications
 
         }
 
-        public NotificationPayload(string deviceToken, string alert, int badge, string sound, int content_available)
+        public NotificationPayload(string deviceToken, int badge, string sound, int content_available)
         {
             DeviceToken = deviceToken;
-            Alert = new NotificationAlert() { Body = alert };
             Badge = badge;
             Sound = sound;
             Content_available = content_available;
             CustomItems = new Dictionary<string, object[]>();
-
         }
+
         public void AddCustom(string key, params object[] values)
         {
             if (values != null)
@@ -75,34 +74,34 @@ namespace BloomService.Web.Notifications
 
             JObject aps = new JObject();
 
-            if (!Alert.IsEmpty)
-            {
-                if (!string.IsNullOrEmpty(Alert.Body)
-                    && string.IsNullOrEmpty(Alert.LocalizedKey)
-                    && string.IsNullOrEmpty(Alert.ActionLocalizedKey)
-                    && (Alert.LocalizedArgs == null || Alert.LocalizedArgs.Count <= 0))
-                {
-                    aps["alert"] = new JValue(Alert.Body);
-                }
-                else
-                {
-                    JObject jsonAlert = new JObject();
+            //if (!Alert.IsEmpty)
+            //{
+            //    if (!string.IsNullOrEmpty(Alert.Body)
+            //        && string.IsNullOrEmpty(Alert.LocalizedKey)
+            //        && string.IsNullOrEmpty(Alert.ActionLocalizedKey)
+            //        && (Alert.LocalizedArgs == null || Alert.LocalizedArgs.Count <= 0))
+            //    {
+            //        aps["alert"] = new JValue(Alert.Body);
+            //    }
+            //    else
+            //    {
+            //        JObject jsonAlert = new JObject();
 
-                    if (!string.IsNullOrEmpty(Alert.LocalizedKey))
-                        jsonAlert["loc-key"] = new JValue(Alert.LocalizedKey);
+            //        if (!string.IsNullOrEmpty(Alert.LocalizedKey))
+            //            jsonAlert["loc-key"] = new JValue(Alert.LocalizedKey);
 
-                    if (Alert.LocalizedArgs != null && Alert.LocalizedArgs.Count > 0)
-                        jsonAlert["loc-args"] = new JArray(Alert.LocalizedArgs.ToArray());
+            //        if (Alert.LocalizedArgs != null && Alert.LocalizedArgs.Count > 0)
+            //            jsonAlert["loc-args"] = new JArray(Alert.LocalizedArgs.ToArray());
 
-                    if (!string.IsNullOrEmpty(Alert.Body))
-                        jsonAlert["body"] = new JValue(Alert.Body);
+            //        if (!string.IsNullOrEmpty(Alert.Body))
+            //            jsonAlert["body"] = new JValue(Alert.Body);
 
-                    if (!string.IsNullOrEmpty(Alert.ActionLocalizedKey))
-                        jsonAlert["action-loc-key"] = new JValue(Alert.ActionLocalizedKey);
+            //        if (!string.IsNullOrEmpty(Alert.ActionLocalizedKey))
+            //            jsonAlert["action-loc-key"] = new JValue(Alert.ActionLocalizedKey);
 
-                    aps["alert"] = jsonAlert;
-                }
-            }
+            //        aps["alert"] = jsonAlert;
+            //    }
+            //}
 
             if (Badge.HasValue)
                 aps["badge"] = new JValue(Badge.Value);
