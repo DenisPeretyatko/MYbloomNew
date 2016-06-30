@@ -117,7 +117,7 @@
         });
     };
 
-    connection.client.UpdateTechnicianLocation = function (technician) {
+    connection.client.updateTechnicianLocation = function (technician) {
         angular.forEach($rootScope.trucks, function (value, key) {
             if (value.Employee === technician.Employee) {
                     delete $rootScope.trucks[key];

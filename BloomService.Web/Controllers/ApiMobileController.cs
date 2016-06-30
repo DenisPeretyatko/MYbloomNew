@@ -25,6 +25,8 @@ namespace BloomService.Web.Controllers
     using BloomService.Web.Services.Abstract;
     using System.Security.Claims;
     using System.Threading;
+    using Infrastructure.SignalR;
+
     public class ApiMobileController : BaseController
     {
         private readonly IImageService _imageService;
@@ -40,13 +42,16 @@ namespace BloomService.Web.Controllers
 
         private readonly BloomServiceConfiguration settings;
 
+        private readonly IBloomServiceHub _hub;
+
         public ApiMobileController(
             ISageApiProxy sageApiProxy,
             IImageService imageService,
             IRepository repository,
             IAuthorizationService authorizationService,
             INotificationService notification,
-            BloomServiceConfiguration settings)
+            BloomServiceConfiguration settings,
+            IBloomServiceHub hub)
         {
             this.sageApiProxy = sageApiProxy;
             this._imageService = imageService;
@@ -54,6 +59,7 @@ namespace BloomService.Web.Controllers
             this.settings = settings;
             this.authorizationService = authorizationService;
             this.notification = notification;
+            _hub = hub;
         }
 
         [HttpPost]
@@ -184,6 +190,10 @@ namespace BloomService.Web.Controllers
                 Date = DateTime.Now
             };
             repository.Add(techLocation);
+            var emploee = repository.SearchFor<SageEmployee>(x => x.Employee == technicianId).Single();
+            emploee.Longitude = lat;
+            emploee.Latitude = lng;
+            _hub.UpdateTechnicianLocation(emploee);
             _log.InfoFormat("TechLocation added. TechnicianId: {0}", technicianId);
             return Success();
         }
