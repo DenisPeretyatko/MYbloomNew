@@ -1,4 +1,5 @@
 ﻿using BloomService.Web.Infrastructure.Jobs;
+using BloomService.Web.Infrastructure.Services.Interfaces;
 using Common.Logging;
 
 namespace BloomService.Web.Controllers
@@ -24,8 +25,6 @@ namespace BloomService.Web.Controllers
     using BloomService.Web.Services.Abstract;
     using System.Security.Claims;
     using System.Threading;
-    using Infrastructure.SignalR;
-
     public class ApiMobileController : BaseController
     {
         private readonly IImageService _imageService;
@@ -37,24 +36,24 @@ namespace BloomService.Web.Controllers
 
         private readonly IAuthorizationService authorizationService;
 
-        private readonly BloomServiceConfiguration settings;
+        private readonly INotificationService notification;
 
-        private readonly IBloomServiceHub _hub;
+        private readonly BloomServiceConfiguration settings;
 
         public ApiMobileController(
             ISageApiProxy sageApiProxy,
             IImageService imageService,
             IRepository repository,
             IAuthorizationService authorizationService,
-            BloomServiceConfiguration settings,
-            IBloomServiceHub hub)
+            INotificationService notification,
+            BloomServiceConfiguration settings)
         {
             this.sageApiProxy = sageApiProxy;
             this._imageService = imageService;
             this.repository = repository;
             this.settings = settings;
             this.authorizationService = authorizationService;
-            _hub = hub;
+            this.notification = notification;
         }
 
         [HttpPost]
@@ -186,10 +185,6 @@ namespace BloomService.Web.Controllers
             };
             repository.Add(techLocation);
             _log.InfoFormat("TechLocation added. TechnicianId: {0}", technicianId);
-            var emploee = repository.SearchFor<SageEmployee>(x => x.Employee == techLocation.Employee).Single();
-            emploee.Longitude = techLocation.Longitude;
-            emploee.Latitude = techLocation.Latitude;
-            _hub.UpdateTechnicianLocation(emploee);
             return Success();
         }
 
@@ -210,6 +205,7 @@ namespace BloomService.Web.Controllers
             repository.Update(workorder);
             _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, status);
             var workorder2 = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
+            this.notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.WorkOrder, status));
             return Success();
         }
 

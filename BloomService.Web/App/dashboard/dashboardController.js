@@ -3,7 +3,7 @@
  */
  "use strict";
 
- var dashboardController = function ($rootScope, $scope, $interpolate, commonDataService) {
+ var dashboardController = function ($rootScope, $scope, $interpolate, commonDataService, state) {
 
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
@@ -88,5 +88,10 @@
         $scope.chartData = dashboard.Chart;
         $scope.flotChartOptions = flotChartOptions;
     });
+
+    commonDataService.getLookups().then(function (response) {
+        $rootScope.notifications = response.data.Notifications;
+        state.setMongaNotificationTime(response.data.NotificationTime);
+    });
 };
- dashboardController.$inject = ["$rootScope", "$scope", "$interpolate", "commonDataService"];
+ dashboardController.$inject = ["$rootScope", "$scope", "$interpolate", "commonDataService", "state"];

@@ -9,6 +9,10 @@ namespace BloomService.Web.Controllers
     using Domain.Entities.Concrete;
     using Infrastructure.Queries;
     using Domain.Extensions;
+    using System.Collections.Generic;
+    using System;
+    using AutoMapper;
+
     public class LocationController : BaseController
     {
         private readonly ILocationService _locationService;
@@ -25,10 +29,7 @@ namespace BloomService.Web.Controllers
         public ActionResult GetLocations(MapViewModel model)
         {
             var date = model.DateWorkOrder.NowIfMin();
-            var temp = date.Date;
-            var dateForSearch = temp.AddDays(1);
-
-            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ForDate(dateForSearch);
+            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ForDate(date).ToList();
             var locations = _repository.GetAll<SageLocation>().ToArray();
             foreach (var item in workOrders)
             {

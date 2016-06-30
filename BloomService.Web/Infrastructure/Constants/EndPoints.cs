@@ -10,6 +10,7 @@
         public static string GetCalltypes = endPointBase + "calltypes/get";
         public static string GetDepartments = endPointBase + "departments/get";
         public static string EditAssignment = endPointBase + "assignments/edit";
+        public static string EditNotification = endPointBase + "notifications/edit";
         public static string EditWorkOrder = endPointBase + "workorders/edit";
         public static string GetEmployees = endPointBase + "employees/get";
         public static string GetEquipment = endPointBase + "equipment/get";

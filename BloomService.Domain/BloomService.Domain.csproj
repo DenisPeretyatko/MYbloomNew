@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="Entities\Concrete\Auxiliary\SageResponse.cs" />
     <Compile Include="Entities\Concrete\Auxiliary\ChangeType.cs" />
+    <Compile Include="Entities\Concrete\Notification.cs" />
     <Compile Include="Entities\Concrete\ReturnParamModels\AssignmentReturnParam.cs" />
     <Compile Include="Entities\Concrete\ReturnParamModels\CustomerReturnParam.cs" />
     <Compile Include="Entities\Concrete\ReturnParamModels\EmployeeReturnParam.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Entities\Concrete\SageRateSheet.cs" />
     <Compile Include="Entities\Concrete\SageTechnicianLocation.cs" />
     <Compile Include="Entities\Concrete\Auxiliary\StatusType.cs" />
+    <Compile Include="Entities\Concrete\SageUserProfile.cs" />
     <Compile Include="Entities\Concrete\SageWorkOrderItem.cs" />
     <Compile Include="Models\Requests\AuthorizationRequest.cs" />
     <Compile Include="Models\Responses\AuthorizationResponse.cs" />

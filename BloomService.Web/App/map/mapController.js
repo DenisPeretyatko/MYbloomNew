@@ -70,9 +70,9 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
         });
     });
 
-    //commonDataService.getTrucks().then(function (response) {
-    //    $rootScope.trucks = response.data;
-    //});
+    commonDataService.getLocations().then(function (response) {
+        $scope.workorders = response.data;
+    });
 
     $scope.$watch(function () { return $scope.obj.mapDate; }, function () {
         var model = { DateWorkOrder: new Date($scope.obj.mapDate) };
