@@ -99,8 +99,8 @@ namespace BloomService.Web.Controllers
             _repository.Add(new SageUserProfile()
             {
                 UserId = UserModel.Id,
-                Date = DateTime.Today.Date.Date,
-                Time = DateTime.Now.TimeOfDay
+                Date = DateTime.UtcNow.Date,
+                Time = DateTime.UtcNow.TimeOfDay
             });
             return Success();
         }
@@ -114,8 +114,8 @@ namespace BloomService.Web.Controllers
             var notificationTime = _repository.GetAll<SageUserProfile>().LastOrDefault(x => x.UserId == UserModel.Id) ?? new SageUserProfile()
             {
                 UserId = UserModel.Id,
-                Date = DateTime.Today.Date.Date,
-                Time = DateTime.Now.TimeOfDay
+                Date = DateTime.UtcNow.Date,
+                Time = DateTime.UtcNow.TimeOfDay
             };
 
             lookups.Notifications = _notification.GetLastNotifications();

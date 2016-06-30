@@ -75,7 +75,8 @@
     }
 
     this.setNotificationTime = function () {
-        d = new Date();
+        now = new Date();
+        d = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
         datetext = d.toTimeString();
         datetext = datetext.split(' ')[0]; //time
         var curr_date = d.getDate();

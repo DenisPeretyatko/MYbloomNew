@@ -8,7 +8,8 @@ var mainController = function ($scope, $rootScope, commonDataService, state, $wi
     $scope.notificationsCount = 0;
     $scope.allnotifications = false;
     $rootScope.notifications = [];
-
+    now = new Date();
+    var utcDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
         $rootScope.$watchCollection(function() {
             return $rootScope.notifications;
         }, function () {
@@ -19,7 +20,7 @@ var mainController = function ($scope, $rootScope, commonDataService, state, $wi
                 if (moment(value.time, 'dd-mm-yy hh:mm:ss') > moment(temp, 'dd-mm-yy hh:mm:ss')) {
                     $scope.notificationsCount++;
                 }
-                value.time = moment(value.time, 'dd-mm-yy hh:mm:ss').fromNow();
+                value.time = moment(value.time, 'dd-mm-yy hh:mm:ss').from(utcDate); //.fromNow();
             });
         });
 
