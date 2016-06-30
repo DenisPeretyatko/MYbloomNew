@@ -68,8 +68,26 @@ namespace Sage.WebApi.Areas.Api.Controllers
         {
             try
             {
-                var properties = SagePropertyConverter.ConvertToProperties(assignment);
-                var resultAssignment = serviceManager.AddAssignments(properties).SingleOrDefault();
+                var properties = new Dictionary<string, string>();
+                properties.Add("Assignment", assignment.Assignment != null ? assignment.Assignment.ToString() : "");
+                properties.Add("ScheduleDate", assignment.ScheduleDate != null ? assignment.ScheduleDate.ToString()  : "");
+                properties.Add("Employee", assignment.Employee != null ? assignment.Employee.ToString()  : "");
+                properties.Add("WorkOrder", assignment.WorkOrder != null ? assignment.WorkOrder.ToString()  : "");
+                properties.Add("EstimatedRepairHours", assignment.EstimatedRepairHours != null ? assignment.EstimatedRepairHours.ToString()  : "");
+                properties.Add("StartTime", assignment.StartTime != null ? assignment.StartTime.ToString()  : "");
+                properties.Add("Enddate", assignment.Enddate != null ? assignment.Enddate.ToString()  : "");
+                properties.Add("Endtime", assignment.Endtime != null ? assignment.Endtime.ToString()  : "");
+
+                var resultProperties = new Dictionary<string, string>();
+                foreach (var property in properties)
+                {
+                    if (property.Value != string.Empty && property.Value != null)
+                    {
+                        resultProperties.Add(property.Key, property.Value);
+                    }
+                }
+
+                var resultAssignment = serviceManager.AddAssignments(resultProperties).SingleOrDefault();
                 var result = new SageResponse<SageAssignment> { IsSucceed = true, Entity = resultAssignment };
                 return result;
             }
@@ -226,8 +244,26 @@ namespace Sage.WebApi.Areas.Api.Controllers
         {
             try
             {
-                var properties = SagePropertyConverter.ConvertToProperties(assignment);
-                serviceManager.EditAssignments(properties);
+                var properties = new Dictionary<string, string>();
+                properties.Add("Assignment", assignment.Assignment != null ? assignment.Assignment.ToString() : "");
+                properties.Add("ScheduleDate", assignment.ScheduleDate != null ? assignment.ScheduleDate.ToString() : "");
+                properties.Add("Employee", assignment.Employee != null ? assignment.Employee.ToString() : "");
+                properties.Add("WorkOrder", assignment.WorkOrder != null ? assignment.WorkOrder.ToString() : "");
+                properties.Add("EstimatedRepairHours", assignment.EstimatedRepairHours != null ? assignment.EstimatedRepairHours.ToString() : "");
+                properties.Add("StartTime", assignment.StartTime != null ? assignment.StartTime.ToString() : "");
+                properties.Add("Enddate", assignment.Enddate != null ? assignment.Enddate.ToString() : "");
+                properties.Add("Endtime", assignment.Endtime != null ? assignment.Endtime.ToString() : "");
+
+                var resultProperties = new Dictionary<string, string>();
+                foreach (var property in properties)
+                {
+                    if (property.Value != string.Empty && property.Value != null)
+                    {
+                        resultProperties.Add(property.Key, property.Value);
+                    }
+                }
+
+                serviceManager.EditAssignments(resultProperties);
                 var result = new SageResponse<SageAssignment> { IsSucceed = true };
                 return result;
             }
