@@ -36,7 +36,7 @@ namespace BloomService.Web.Infrastructure.Services
             {
                 IsViewed = true,
                 Message = message,
-                Time = String.Format("{0} {1}", DateTime.UtcNow.Date.ToString("dd-MM-yyyy"), DateTime.Now.ToString(@"HH\:mm\:ss"))
+                Time = String.Format("{0} {1}", DateTime.UtcNow.Date.ToString("dd-MM-yyyy"), DateTime.UtcNow.ToString(@"HH\:mm\:ss"))
             });
         }
 

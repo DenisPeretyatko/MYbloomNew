@@ -6,20 +6,21 @@
         <ul class="nav navbar-top-links navbar-right">
             <li class="dropdown" id="dropdown" dropdown>
                 <a class="dropdown-toggle count-info" dropdown-toggle ng-click="openNotifications()">
-                    <i class="fa fa-bell"></i> <span class="label label-primary">{{notificationsCount}}</span>
+                    <i class="fa fa-bell"></i> <span ng-hide="notificationsCount==0" class="label label-primary">{{notificationsCount}}</span>
                 </a>
-                <ul class="dropdown-menu dropdown-alerts" ng-click="$event.stopPropagation()">
+                <ul class="dropdown-menu dropdown-alerts notification-messages" ng-click="$event.stopPropagation()">
                     <li class="notif_el" ng-repeat="item in notificationsCopy" ng-if="allnotifications == true || (allnotifications == false && $index < 3)" ng-model="notifications" ng-init="notifications[$index].isViewed = true">
                         <a ui-sref="inbox">
                             <div title="{{item.message}}">
                                 <i class="fa fa-envelope fa-fw"></i>
                                 <span class="notif_message">{{item.message}}</span>
+                                <br/>
                                 <span class="pull-right text-muted small">{{item.time}}</span>
                             </div>
                         </a>
                     </li>
                     <li class="divider"></li>
-                    <li ng-if="allnotifications == false">
+                    <li ng-if="allnotifications == false" class="message-show">
                         <div class="text-center link-block">
                             <a ui-sref="miscellaneous.notify">
                                 <strong ng-click="showAlerts()">See All Alerts</strong>
@@ -27,7 +28,7 @@
                             </a>
                         </div>
                     </li>
-                    <li ng-if="allnotifications == true">
+                    <li ng-if="allnotifications == true" class="message-show">
                         <div class="text-center link-block">
                             <a ui-sref="miscellaneous.notify">
                                 <i class="fa fa-angle-left"></i>
