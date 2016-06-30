@@ -109,43 +109,16 @@ namespace BloomService.Web.Controllers
         [Route("Dashboard/Lookups")]
         public ActionResult GetLookups()
         {
-           // var lookups = new LookupsModel();
-
             var lookups = _dashboardService.GetLookups();
-
-            var locations = _repository.GetAll<SageLocation>();
-            var calltypes = _repository.GetAll<SageCallType>();
-            var problems = _repository.GetAll<SageProblem>();
-            var employes = _repository.GetAll<SageEmployee>();
-            var equipment = _repository.GetAll<SageEquipment>();
-            var customer = _repository.GetAll<SageCustomer>();
-            var repairs = _repository.GetAll<SageRepair>();
-            var ratesheets = _repository.GetAll<SageRateSheet>();
-            var permissionCodes = _repository.GetAll<SagePermissionCode>();
-            var parts = _repository.GetAll<SagePart>();
-            var notificationTime = _repository.GetAll<SageUserProfile>().LastOrDefault(x => x.UserId == UserModel.Id) ?? new SageUserProfile() {
+            var notificationTime = _repository.GetAll<SageUserProfile>().LastOrDefault(x => x.UserId == UserModel.Id) ?? new SageUserProfile()
+            {
                 UserId = UserModel.Id,
                 Date = DateTime.Today.Date.Date,
                 Time = DateTime.Now.TimeOfDay
             };
-           
-            
-            lookups.Locations = Mapper.Map<List<SageLocation>, List<LocationModel>>(locations.ToList());
-            lookups.Calltypes = Mapper.Map<List<SageCallType>, List<CallTypeModel>>(calltypes.ToList());
-            lookups.Problems = Mapper.Map<List<SageProblem>, List<ProblemModel>>(problems.ToList());
-            lookups.Employes = Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employes.ToList());
-            lookups.Equipment = Mapper.Map<List<SageEquipment>, List<EquipmentModel>>(equipment.ToList());
-            lookups.Customers = Mapper.Map<List<SageCustomer>, List<CustomerModel>>(customer.ToList());
-            lookups.Hours = Mapper.Map<List<SageRepair>, List<RepairModel>>(repairs.ToList());
+
             lookups.Notifications = _notification.GetLastNotifications();
             lookups.NotificationTime = String.Format("{0} {1}", notificationTime.Date.ToLocalTime().Date.ToString("dd-MM-yyyy"), notificationTime.Time.ToString(@"hh\:mm\:ss"));
-         
-            lookups.RateSheets = Mapper.Map<List<SageRateSheet>, List<RateSheetModel>>(ratesheets.ToList());
-            lookups.PermissionCodes = Mapper.Map<List<SagePermissionCode>, List<PermissionCodeModel>>(permissionCodes.ToList());
-
-            lookups.PaymentMethods = PaymentMethod.PaymentMethodList;
-            lookups.Parts = Mapper.Map<List<SagePart>, List<PartModel>>(parts.ToList());
-
             return Json(lookups, JsonRequestBehavior.AllowGet);
         }
         
