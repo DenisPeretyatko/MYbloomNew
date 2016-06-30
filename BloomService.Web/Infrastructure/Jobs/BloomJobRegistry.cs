@@ -48,23 +48,23 @@ namespace BloomService.Web.Infrastructure.Jobs
                     var technicians = _repository.SearchFor<SageEmployee>(x => x.IsAvailable && !string.IsNullOrEmpty(x.IosDeviceToken));
                     foreach (var technician in technicians)
                     {
-                        if (technician.AvailableDays != null && technician.AvailableDays.Any())
-                        {
-                            foreach (var avaibleDay in technician.AvailableDays)
-                            {
-                                var startTime = avaibleDay.Start.TryAsDateTime();
-                                var endTime = avaibleDay.End.TryAsDateTime();
-                                if (startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
-                                {
+                        //if (technician.AvailableDays != null && technician.AvailableDays.Any())
+                        //{
+                        //    foreach (var avaibleDay in technician.AvailableDays)
+                        //    {
+                                //var startTime = avaibleDay.Start.TryAsDateTime();
+                                //var endTime = avaibleDay.End.TryAsDateTime();
+                                //if (startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
+                                //{
                                     var notificationPayload = new NotificationPayload(technician.IosDeviceToken, "RequestSendLocation", 1, "default", 1);
                                     var p = new List<NotificationPayload>();
                                     p.Add(notificationPayload);
                                     PushNotification push = new PushNotification(true, path, null);
                                     push.P12File = path;
                                     push.SendToApple(p);
-                                }
-                            }
-                        }
+                            //    }
+                            //}
+                        //}
                     }
                 }
             }).ToRunNow().AndEvery(15).Minutes();
@@ -144,6 +144,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                             {
                                 entity.Id = mongoEntity.Id;
                                 entity.Status = mongoEntity.Status;
+                                entity.AssignmentId = mongoEntity.AssignmentId;
                                 _repository.Update(entity);
                             }
                         }
@@ -217,17 +218,14 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     assigment.Color = employee?.Color ?? "";
                                     if (workorder != null)
                                     {
-                                        workorder.AssignmentId = assigment.Assignment;
                                         assigment.Customer = workorder.ARCustomer;
                                         assigment.Location = workorder.Location;
                                     }
                                 }
                                 else
                                 {
-                                    if (workorder != null)
+                                    if (assigment.Employee == "" && workorder != null)
                                     {
-                                        assigment.Customer = workorder.ARCustomer;
-                                        assigment.Location = workorder.Location;
                                         workorder.AssignmentId = assigment.Assignment;
                                         _repository.Update(workorder);
                                     }

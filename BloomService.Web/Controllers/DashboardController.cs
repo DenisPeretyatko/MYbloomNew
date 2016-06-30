@@ -110,12 +110,14 @@ namespace BloomService.Web.Controllers
         public ActionResult GetLookups()
         {
             var lookups = _dashboardService.GetLookups();
-          
-            var notificationTime = _repository.GetAll<SageUserProfile>().LastOrDefault(x => x.UserId == UserModel.Id) ?? new SageUserProfile() {
+
+            var notificationTime = _repository.GetAll<SageUserProfile>().LastOrDefault(x => x.UserId == UserModel.Id) ?? new SageUserProfile()
+            {
                 UserId = UserModel.Id,
                 Date = DateTime.Today.Date.Date,
                 Time = DateTime.Now.TimeOfDay
             };
+
             lookups.Notifications = _notification.GetLastNotifications();
             lookups.NotificationTime = String.Format("{0} {1}", notificationTime.Date.ToLocalTime().Date.ToString("dd-MM-yyyy"), notificationTime.Time.ToString(@"hh\:mm\:ss"));
 
