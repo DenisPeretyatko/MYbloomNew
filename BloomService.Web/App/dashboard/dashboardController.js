@@ -92,6 +92,7 @@
     commonDataService.getLookups().then(function (response) {
         $rootScope.notifications = response.data.Notifications;
         state.setMongaNotificationTime(response.data.NotificationTime);
+        state.setLookups(response.data);
     });
 };
  dashboardController.$inject = ["$rootScope", "$scope", "$interpolate", "commonDataService", "state"];
