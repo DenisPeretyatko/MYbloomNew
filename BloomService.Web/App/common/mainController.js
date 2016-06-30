@@ -5,13 +5,9 @@
 var mainController = function ($scope, $rootScope, commonDataService, state, $window, commonHub) {
     angular.element(window).on;
     $scope.userName = window.localStorage.getItem('UserName');
-    $scope.notifications = [];
     $scope.notificationsCount = 0;
     $scope.allnotifications = false;
-    $scope.isCollapsed = false;
-   
-
-    state.updateLookups();
+    $rootScope.notifications = [];
 
         $rootScope.$watchCollection(function() {
             return $rootScope.notifications;
@@ -59,8 +55,6 @@ $scope.openNotifications = function () {
         }
     }
 }
-
-
 };
 
 mainController.$inject = ["$scope", "$rootScope", "commonDataService", "state", "$window", "commonHub"];

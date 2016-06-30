@@ -27,17 +27,17 @@ namespace BloomService.Web.Infrastructure.Services
             _repository.Add(new Notification()
             {
                 IsViewed = true,
-                Date = DateTime.Today.Date,
+                Date = DateTime.Now.Date.ToUniversalTime().Date,
                 Time = DateTime.Now.TimeOfDay,
                 Message = message
             });
-
+           
             _hub.SendNotification(new NotificationModel
             {
                 IsViewed = true,
                 Message = message,
-                Time = String.Format("{0} {1}", DateTime.Now.Date.Date.ToString("dd-MM-yyyy"), DateTime.Now.ToString(@"HH\:mm\:ss"))
-                });
+                Time = String.Format("{0} {1}", DateTime.Now.Date.ToUniversalTime().Date.ToString("dd-MM-yyyy"), DateTime.Now.ToString(@"HH\:mm\:ss"))
+            });
         }
 
         public List<NotificationModel> GetLastNotifications()
@@ -53,9 +53,10 @@ namespace BloomService.Web.Infrastructure.Services
                 result.Add(new NotificationModel()
                 {
                     Message = obj.Message,
-                    Time = String.Format("{0} {1}", obj.Date.Date.ToString("dd-MM-yyyy"), obj.Time.ToString(@"hh\:mm\:ss")),
+                    Time = String.Format("{0} {1}", obj.Date.ToLocalTime().Date.ToString("dd-MM-yyyy"), obj.Time.ToString(@"hh\:mm\:ss")),
                     IsViewed = true
                 });
+                
             }
             result.Reverse();
             return result;

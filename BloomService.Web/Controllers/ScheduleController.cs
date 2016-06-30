@@ -27,6 +27,7 @@ namespace BloomService.Web.Controllers
         private readonly IBloomServiceHub _hub;
         private readonly INotificationService _notification;
 
+
         public ScheduleController(IRepository repository, ISageApiProxy sageApiProxy, IBloomServiceHub hub, INotificationService notification)
         {
             _repository = repository;
@@ -109,6 +110,7 @@ namespace BloomService.Web.Controllers
             _repository.Update(workOrder);
             _log.InfoFormat("Repository update workorder. Name: {0}, Id: {1}", workOrder.Name, workOrder.Id);
             _notification.SendNotification(string.Format("Workorder {0} unassignment by {1}", model.WorkOrder, model.Employee));
+            _hub.DeleteAssigment(model);
             return Success();
         }
     }

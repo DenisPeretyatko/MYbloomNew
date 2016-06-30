@@ -41,9 +41,9 @@ namespace BloomService.Web.Infrastructure.SignalR
             _clients.All.createWorkorder(model);
         }
 
-        public void DeleteAssigment(int id)
+        public void DeleteAssigment(AssignmentViewModel model)
         {
-            throw new NotImplementedException();
+            _clients.All.deleteAssigment(model);
         }
 
         public void Disconnect()
@@ -66,9 +66,9 @@ namespace BloomService.Web.Infrastructure.SignalR
             _clients.All.updateTechnician(model);
         }
 
-        public void UpdateTechnicianLocation(string technicianId)
+        public void UpdateTechnicianLocation(SageEmployee model)
         {
-            throw new NotImplementedException();
+            _clients.All.updateTechnicianLocation(model);
         }
 
         public void UpdateWorkOrder(WorkOrderModel model)

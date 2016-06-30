@@ -134,8 +134,8 @@ namespace BloomService.Web.Controllers
             lookups.Customers = Mapper.Map<List<SageCustomer>, List<CustomerModel>>(customer.ToList());
             lookups.Hours = Mapper.Map<List<SageRepair>, List<RepairModel>>(repairs.ToList());
             lookups.Notifications = _notification.GetLastNotifications();
-            lookups.NotificationTime = String.Format("{0} {1}", notificationTime.Date.Date.ToString("dd-MM-yyyy"), notificationTime.Time.ToString(@"hh\:mm\:ss"));
-          
+            lookups.NotificationTime = String.Format("{0} {1}", notificationTime.Date.ToLocalTime().Date.ToString("dd-MM-yyyy"), notificationTime.Time.ToString(@"hh\:mm\:ss"));
+         
             lookups.RateSheets = Mapper.Map<List<SageRateSheet>, List<RateSheetModel>>(ratesheets.ToList());
             lookups.PermissionCodes = Mapper.Map<List<SagePermissionCode>, List<PermissionCodeModel>>(permissionCodes.ToList());
 

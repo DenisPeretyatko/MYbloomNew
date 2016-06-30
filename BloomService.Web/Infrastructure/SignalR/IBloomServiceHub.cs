@@ -13,13 +13,13 @@ namespace BloomService.Web.Infrastructure.SignalR
         void Disconnect();
         void SendNotification(NotificationModel model);
         void CreateAssignment(SageAssignment model);
-        void DeleteAssigment(int id);
+        void DeleteAssigment(AssignmentViewModel id);
         void CreateWorkOrder(SageWorkOrder model);
         void UpdateWorkOrder(WorkOrderModel model);
         void UpdateTechnician(TechnicianModel model);
         void AddEquipment(EquipmentModel model);
         void UpdateEquipment(EquipmentModel model);
-        void UpdateTechnicianLocation(string technicianId);
+        void UpdateTechnicianLocation(SageEmployee model);
         void ChangeWorkOrderStatus(string id, string status);
         void AddWorkOrderPicture();
     }

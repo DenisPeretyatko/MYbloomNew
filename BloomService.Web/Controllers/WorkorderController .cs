@@ -39,33 +39,33 @@ namespace BloomService.Web.Controllers
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
             _log.InfoFormat("Method: CreateWorkOrder. Model ID {0}", model.Id);
-            //var workorder = new SageWorkOrder()
-            //{
-            //    ARCustomer = model.Customer,
-            //    Location = model.Location,
-            //    CallType = model.Calltype,
-            //    CallDate = model.Calldate.Date,
-            //    Problem = model.Problem,
-            //    RateSheet = model.Ratesheet,
-            //    Employee = model.Emploee,
-            //    Equipment = Convert.ToUInt16(model.Equipment),
-            //    EstimatedRepairHours = Convert.ToDecimal(model.Estimatehours),
-            //    NottoExceed = model.Nottoexceed,
-            //    Comments = model.Locationcomments,
-            //    CustomerPO = model.Customerpo,
-            //    PermissionCode = model.Permissiocode,
-            //    PayMethod = model.Paymentmethods
-            //};
-            var workorder = new SageWorkOrder();
-            //var result = _sageApiProxy.AddWorkOrder(workorder);
-            //if (!result.IsSucceed)
-            //{
-            //    _log.ErrorFormat("Was not able to save workorder to sage. !result.IsSucceed");
-            //    return Error("Was not able to save workorder to sage");
-            //}
+            var workorder = new SageWorkOrder()
+            {
+                ARCustomer = model.Customer,
+                Location = model.Location,
+                CallType = model.Calltype,
+                CallDate = model.Calldate.Date,
+                Problem = model.Problem,
+                RateSheet = model.Ratesheet,
+                Employee = model.Emploee,
+                Equipment = Convert.ToUInt16(model.Equipment),
+                EstimatedRepairHours = Convert.ToDecimal(model.Estimatehours),
+                NottoExceed = model.Nottoexceed,
+                Comments = model.Locationcomments,
+                CustomerPO = model.Customerpo,
+                PermissionCode = model.Permissiocode,
+                PayMethod = model.Paymentmethods
+            };
 
-            //_repository.Add(workorder);
-            //_log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
+            var result = _sageApiProxy.AddWorkOrder(workorder);
+            if (!result.IsSucceed)
+            {
+                _log.ErrorFormat("Was not able to save workorder to sage. !result.IsSucceed");
+                return Error("Was not able to save workorder to sage");
+            }
+
+            _repository.Add(workorder);
+            _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
             _notification.SendNotification(string.Format("{0} was created", model.Emploee));
             return Success();
         }

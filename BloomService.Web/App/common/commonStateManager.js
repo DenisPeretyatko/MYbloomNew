@@ -56,14 +56,6 @@
         });
     }
 
-    this.updateLookups = function() {
-         commonDataService.getLookups().then(function (response) {
-            $rootScope.notifications = response.data.Notifications;
-            _this.notificationTime = response.data.NotificationTime;
-            return _this.lookups = response.data;
-        });
-    }
-
     this.getTechniciansList = function () {
         return _this.technicians;
     }
@@ -76,6 +68,7 @@
     this.getNotificationTime = function () {
         return _this.notificationTime;
     }
+
     this.setNotificationTime = function () {
         d = new Date();
         datetext = d.toTimeString();
@@ -85,6 +78,12 @@
         var curr_year = d.getFullYear();
         _this.notificationTime = curr_year + "-" + curr_month + "-" + curr_date + " " + datetext;
 
+    }
+
+    this.setMongaNotificationTime = function(value)
+    {
+        debugger;
+        _this.notificationTime = value;
     }
 
     connection.client.UpdateWorkOrder = function (workorder) {
@@ -108,12 +107,13 @@
             }
         });
     };
-    var test = function() {
-        
-    }
+
     connection.client.SendNotification = function (notification) {
-        commonDataService.getToken();
-        $rootScope.notifications.push(notification);
+        $rootScope.notifications.unshift(notification);
+    };
+
+    connection.client.DeleteAssigment = function (model) {
+        
     };
 
     $.connection.hub.start().done(function () { });
