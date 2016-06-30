@@ -4,20 +4,20 @@
 
 var createWorkorderController = function ($scope, $stateParams, $state, state, commonDataService) {
     $scope.obj = {}
-	$scope.customer = '';
-	$scope.location = '';
-	$scope.calltype = '';
-	$scope.obj.calldate = '';
-	$scope.problem = '';
-	$scope.ratesheet = '';
-	$scope.emploee = '';
-	$scope.equipment = '';
-	$scope.estimatehours = '';
-	$scope.obj.nottoexceed = '';
-	$scope.obj.locationcomments = '';
-	$scope.obj.customerpo = '';
-	$scope.obj.permissiocode = '';
-	$scope.paymentmethods = '';
+    $scope.customer = '';
+    $scope.location = '';
+    $scope.calltype = '';
+    $scope.obj.calldate = '';
+    $scope.problem = '';
+    $scope.ratesheet = '';
+    $scope.emploee = '';
+    $scope.equipment = '';
+    $scope.estimatehours = '';
+    $scope.obj.nottoexceed = '';
+    $scope.obj.locationcomments = '';
+    $scope.obj.customerpo = '';
+    $scope.obj.permissiocode = '';
+    $scope.paymentmethods = '';
     $scope.lookups = state.lookups;
 
     $scope.$watch(function () { return state.lookups; }, function () {
@@ -31,7 +31,7 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             Calltype: $scope.lookups.Calltypes.selected == null ? "" : $scope.lookups.Calltypes.selected.CallType,
             Calldate: $scope.obj.calldate,
             Problem: $scope.lookups.Problems.selected == null ? "" : $scope.lookups.Problems.selected.Problem,
-            Ratesheet: $scope.lookups.RateSheets.selected == null ? "" : $scope.lookups.RateSheets.selected.DESCRIPTION.trim(),
+            Ratesheet: $scope.lookups.RateSheets.selected == null ? "" : $scope.lookups.RateSheets.selected.RATESHEETNBR,
             Emploee: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.Employee,
             Equipment: $scope.lookups.Equipment.selected == null ? "0" : $scope.lookups.Equipment.selected.Equipment,
             Estimatehours: $scope.lookups.Hours.selected == null ? "" : $scope.lookups.Hours.selected.Repair,
@@ -41,7 +41,7 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             Permissiocode: $scope.lookups.PermissionCodes.selected == null ? "" : $scope.lookups.PermissionCodes.selected.DESCRIPTION,
             Paymentmethods: $scope.lookups.PaymentMethods.selected
         };
-        
+
         commonDataService.createWorkorder(workorder).then(function (response) {
             if (response.data.success == true)
                 $state.go('manager.workorder.list');

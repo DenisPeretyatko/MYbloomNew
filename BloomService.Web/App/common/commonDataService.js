@@ -125,16 +125,17 @@ var commonDataService = function ($http, $window) {
         });
     }
 
-    this.getTechnicians = function () {
-        return $http.get("/Technician", {
+    this.getTechnician = function (id) {
+        return $http.get("/Technician/" + id, {
             headers: {
                 'Authorization': 'bearer ' + window.localStorage.getItem('Token')
             }
         });
     }
 
-    this.getTechnician = function (id) {
-        return $http.get("/Technician/" + id, {
+
+    this.getTechnicians = function () {
+        return $http.get("/Technician", {
             headers: {
                 'Authorization': 'bearer ' + window.localStorage.getItem('Token')
             }
@@ -164,7 +165,7 @@ var commonDataService = function ($http, $window) {
         return $http.post('Login', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
     }
 
-   
+
 
     this.getWorkordesPaged = function (model) {
         return $http.post("/WorkorderPage", model, {
@@ -181,5 +182,18 @@ var commonDataService = function ($http, $window) {
             }
         });
     }
+
+    this.updateNotificationTime = function () {
+        return $http.post("/Dashboard/UpdateNotificationTime", "", {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    };
+
+    this.doNothing = function () {
+
+    }
+
 }
 commonDataService.$inject = ['$http', '$window'];
