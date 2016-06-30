@@ -46,7 +46,7 @@ $scope.openNotifications = function () {
     }
     if (wrappedResult.context.className != "dropdown open") {
         state.setNotificationTime();
-        $scope.notificationsCopy = angular.copy($rootScope.notifications);
+      //  $scope.notificationsCopy = angular.copy($rootScope.notifications);
         commonDataService.updateNotificationTime();
         if ($scope.notificationsCount >= 3) {
             $scope.notificationsCount = $scope.notificationsCount - 3;

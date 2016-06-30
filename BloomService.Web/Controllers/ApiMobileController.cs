@@ -205,7 +205,7 @@ namespace BloomService.Web.Controllers
             repository.Update(workorder);
             _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, status);
             var workorder2 = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
-            this.notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.WorkOrder, status));
+            this.notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, status));
             return Success();
         }
 

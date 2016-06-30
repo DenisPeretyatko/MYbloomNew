@@ -82,7 +82,6 @@
 
     this.setMongaNotificationTime = function(value)
     {
-        debugger;
         _this.notificationTime = value;
     }
 

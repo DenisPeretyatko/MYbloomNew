@@ -60,7 +60,7 @@ namespace BloomService.Web.Controllers
             technician.Picture = model.Picture;
 
             if (!model.IsAvailable)
-               notification.SendNotification(string.Format("Technician {0} is unavailable", employee.Employee));
+               notification.SendNotification(string.Format("Technician {0} is unavailable", employee.Name));
 
             if (imageService.BuildTechnicianIcons(model))
             {
