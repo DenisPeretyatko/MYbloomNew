@@ -27,8 +27,8 @@ namespace BloomService.Web.Infrastructure.Services
             _repository.Add(new Notification()
             {
                 IsViewed = true,
-                Date = DateTime.Now.Date.ToUniversalTime().Date,
-                Time = DateTime.Now.TimeOfDay,
+                Date = DateTime.UtcNow.Date,
+                Time = DateTime.UtcNow.TimeOfDay,
                 Message = message
             });
            
@@ -36,7 +36,7 @@ namespace BloomService.Web.Infrastructure.Services
             {
                 IsViewed = true,
                 Message = message,
-                Time = String.Format("{0} {1}", DateTime.Now.Date.ToUniversalTime().Date.ToString("dd-MM-yyyy"), DateTime.Now.ToString(@"HH\:mm\:ss"))
+                Time = String.Format("{0} {1}", DateTime.UtcNow.Date.ToString("dd-MM-yyyy"), DateTime.UtcNow.ToString(@"HH\:mm\:ss"))
             });
         }
 
@@ -53,7 +53,7 @@ namespace BloomService.Web.Infrastructure.Services
                 result.Add(new NotificationModel()
                 {
                     Message = obj.Message,
-                    Time = String.Format("{0} {1}", obj.Date.ToLocalTime().Date.ToString("dd-MM-yyyy"), obj.Time.ToString(@"hh\:mm\:ss")),
+                    Time = String.Format("{0} {1}", obj.Date.Date.ToString("dd-MM-yyyy"), obj.Time.ToString(@"hh\:mm\:ss")), 
                     IsViewed = true
                 });
                 
