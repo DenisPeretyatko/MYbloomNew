@@ -50,18 +50,21 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
         });
     };
 
-    //$scope.$watch(function () { return $scope.lookups.Customers.selected; }, function () {
-    //    var customer = $scope.lookups.Customers.selected;
-    //    commonDataService.customerByLocation(customer).then(function (response) {
-    //        console.log(response);
-    //    });
-    //});
+    $scope.$watch(function () { return $scope.lookups.Customers.selected; }, function () {
+        var customer = $scope.lookups.Customers.selected.title;
+        var request = "{'customer':'" + customer +"'}";
+        commonDataService.locationsByCustomer(request).then(function (response) {
+             $scope.lookups.Locations = response;
+        });
+    });
 
-    //$scope.$watch(function () { return $scope.lookups.Locations.selected; }, function () {
-    //    var location = $scope.lookups.Locations.selected;
-    //    commonDataService.locationsByCustomer(location).then(function (response) {
-    //        console.log(response);
-    //    });
-    //});
+    $scope.$watch(function () { return $scope.lookups.Locations.selected; }, function () {
+        var location = $scope.lookups.Locations.selected.title;
+        var request = "{'location':'" + location + "'}";
+        commonDataService.customerByLocation(request).then(function (response) {
+            $scope.lookups.Customers = response;
+        });
+        
+    });
 };
 createWorkorderController.$inject = ["$scope", "$stateParams", "$state", "state", "commonDataService"];

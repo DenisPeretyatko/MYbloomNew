@@ -112,30 +112,30 @@ namespace BloomService.Web.Controllers
         }
 
         [HttpPost]
-        [Route("CustomerByLocation")]
+        [Route("Workorder/CustomerByLocation")]
         public ActionResult GetCustomerByLocation(string location)
         {
-            if (location == null && location == string.Empty)
+            if (location == null || location == string.Empty)
             {
                 var customers = _repository.GetAll<SageCustomer>();
                 return Json(customers, JsonRequestBehavior.AllowGet);
             }
 
-            var customer = _repository.GetAll<SageLocation>().Single(x => x.Name == location).ARCustomer;
+            var customer = _repository.GetAll<SageLocation>().Single(x => x.Name == location).Name;
             var result = _repository.GetAll<SageCustomer>().Single(x => x.Name == customer);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        [Route("LocationsByCustomer")]
+        [Route("Workorder/LocationsByCustomer")]
         public ActionResult GetLocationsByCustomer(string customer)
         {
-            if (customer == null && customer == string.Empty)
+            if (customer == null || customer == string.Empty)
             {
                 var locations = _repository.GetAll<SageLocation>();
                 return Json(locations, JsonRequestBehavior.AllowGet);
             }
-            var result = _repository.GetAll<SageLocation>().Where(x => x.ARCustomer == customer);
+            var result = _repository.GetAll<SageLocation>().Where(x => x.Name == customer);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

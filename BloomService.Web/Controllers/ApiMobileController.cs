@@ -132,8 +132,23 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkOrders()
         {
             var userId = UserModel.Name;
-            var workOrders = repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
-            var result = workOrders.Where(x => x.Employee == userId);
+            //var workOrders = repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
+            //var result = workOrders.Where(x => x.Employee == userId);
+            var assignments = repository.SearchFor<SageAssignment>(x => x.Employee == userId).ToList();
+
+            var workorders = new List<SageWorkOrder>();
+
+            foreach(var assignment in assignments)
+            {
+                var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == assignment.WorkOrder).SingleOrDefault();
+                if(workorder != null)
+                {
+                    workorders.Add(workorder);
+                }
+            }
+
+            var result = workorders.Where(x => x.Status == "Open").ToList();
+
             var locations = repository.GetAll<SageLocation>();
             foreach (var order in result)
             {
