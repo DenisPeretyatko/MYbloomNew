@@ -183,6 +183,22 @@ var commonDataService = function ($http, $window) {
         });
     }
 
+    this.customerByLocation = function (customer) {
+        return $http.post("/LocationsByCustomer/", customer, {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    };
+
+    this.locationsByCustomer = function (location) {
+        return $http.post("/CustomerByLocation/", location, {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    };
+
     this.updateNotificationTime = function () {
         return $http.post("/Dashboard/UpdateNotificationTime", "", {
             headers: {

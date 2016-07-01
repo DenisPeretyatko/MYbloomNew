@@ -24,6 +24,8 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
         $scope.lookups = state.lookups;
     });
 
+
+
     $scope.createWorkOrder = function () {
         var workorder = {
             Customer: $scope.lookups.Customers.selected == null ? "" : $scope.lookups.Customers.selected.description.Customer,
@@ -48,5 +50,18 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
         });
     };
 
+    //$scope.$watch(function () { return $scope.lookups.Customers.selected; }, function () {
+    //    var customer = $scope.lookups.Customers.selected;
+    //    commonDataService.customerByLocation(customer).then(function (response) {
+    //        console.log(response);
+    //    });
+    //});
+
+    //$scope.$watch(function () { return $scope.lookups.Locations.selected; }, function () {
+    //    var location = $scope.lookups.Locations.selected;
+    //    commonDataService.locationsByCustomer(location).then(function (response) {
+    //        console.log(response);
+    //    });
+    //});
 };
 createWorkorderController.$inject = ["$scope", "$stateParams", "$state", "state", "commonDataService"];

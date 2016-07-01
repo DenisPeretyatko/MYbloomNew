@@ -15,6 +15,14 @@ var mainController = function ($scope, $rootScope, commonDataService, state, $wi
             var dateText = date[0];
             var timeText = date[1];
             dateText = dateText.split('-');
+            for (var i = 0; i < dateText.length; i++) {
+                if (dateText[i].length == 1) {
+                    var tempVal = dateText[i];
+                    delete dateText[i];
+                    dateText[i] = '0' + tempVal;
+                }
+            }
+            
             timeText = timeText.split(':');
             return new Date(dateText[2], parseInt(dateText[1]) - 1, dateText[0], timeText[0], timeText[1], timeText[2], 0);
         } else return true;

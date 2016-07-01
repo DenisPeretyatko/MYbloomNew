@@ -17,6 +17,7 @@ namespace Sage.WebApi.Areas.Api.Controllers
     using WebGrease.Css.Extensions;
     using Infratructure.MessageResponse;
     using Models;
+    using System;
     [BasicAuthentication]
     public class SageApiController : ApiController
     {
@@ -74,9 +75,9 @@ namespace Sage.WebApi.Areas.Api.Controllers
                 properties.Add("Employee", assignment.Employee != null ? assignment.Employee.ToString()  : "");
                 properties.Add("WorkOrder", assignment.WorkOrder != null ? assignment.WorkOrder.ToString()  : "");
                 properties.Add("EstimatedRepairHours", assignment.EstimatedRepairHours != null ? assignment.EstimatedRepairHours.ToString()  : "");
-                properties.Add("StartTime", assignment.StartTime != null ? assignment.StartTime.ToString()  : "");
-                properties.Add("Enddate", assignment.Enddate != null ? assignment.Enddate.ToString()  : "");
-                properties.Add("Endtime", assignment.Endtime != null ? assignment.Endtime.ToString()  : "");
+                properties.Add("StartTime", assignment.StartTime != null ? ((DateTime)assignment.StartTime).TimeOfDay.ToString() : "");
+                properties.Add("Enddate", assignment.Enddate != null ? assignment.Enddate.ToString() : "");
+                properties.Add("Endtime", assignment.Endtime != null ? ((DateTime)assignment.Endtime).TimeOfDay.ToString()  : "");
 
                 var resultProperties = new Dictionary<string, string>();
                 foreach (var property in properties)
@@ -250,9 +251,9 @@ namespace Sage.WebApi.Areas.Api.Controllers
                 properties.Add("Employee", assignment.Employee != null ? assignment.Employee.ToString() : "");
                 properties.Add("WorkOrder", assignment.WorkOrder != null ? assignment.WorkOrder.ToString() : "");
                 properties.Add("EstimatedRepairHours", assignment.EstimatedRepairHours != null ? assignment.EstimatedRepairHours.ToString() : "");
-                properties.Add("StartTime", assignment.StartTime != null ? assignment.StartTime.ToString() : "");
+                properties.Add("StartTime", assignment.StartTime != null ? ((DateTime)assignment.StartTime).TimeOfDay.ToString() : "");
                 properties.Add("Enddate", assignment.Enddate != null ? assignment.Enddate.ToString() : "");
-                properties.Add("Endtime", assignment.Endtime != null ? assignment.Endtime.ToString() : "");
+                properties.Add("Endtime", assignment.Endtime != null ? ((DateTime)assignment.Endtime).TimeOfDay.ToString() : "");
 
                 var resultProperties = new Dictionary<string, string>();
                 foreach (var property in properties)
