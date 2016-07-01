@@ -9,22 +9,37 @@ var mainController = function ($scope, $rootScope, commonDataService, state, $wi
     $scope.allnotifications = false;
     $rootScope.notifications = [];
     now = new Date();
+    var convertDate = function (value) {
+        if (typeof value == "string") {
+            var date = value.split(' ');
+            var dateText = date[0];
+            var timeText = date[1];
+            dateText = dateText.split('-');
+            timeText = timeText.split(':');
+            return new Date(dateText[2], parseInt(dateText[1]) - 1, dateText[0], timeText[0], timeText[1], timeText[2], 0);
+        } else return true;
+    }
+
     var utcDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
         $rootScope.$watchCollection(function() {
             return $rootScope.notifications;
         }, function () {
             var temp = state.getNotificationTime();
+            var lastDate = convertDate(temp);
             $scope.notificationsCount = 0;
             $scope.notificationsCopy = angular.copy($rootScope.notifications);
             angular.forEach($scope.notificationsCopy, function (value, key) {
-                if (moment(value.time, 'dd-mm-yy hh:mm:ss') > moment(temp, 'dd-mm-yy hh:mm:ss')) {
+                // if (moment(value.time, 'dd-mm-yy hh:mm:ss') > moment(temp, 'dd-mm-yy hh:mm:ss')) {
+                if (convertDate(value.time) > lastDate) {
                     $scope.notificationsCount++;
                 }
                 value.time = moment(value.time, 'dd-mm-yy hh:mm:ss').from(utcDate); //.fromNow();
             });
         });
 
-$scope.Logout = function() {
+     
+
+    $scope.Logout = function() {
     window.localStorage.setItem('UserName', '')
     window.localStorage.setItem('Token', '');
     commonHub.LogoutHub();
