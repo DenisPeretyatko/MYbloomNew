@@ -68,7 +68,7 @@ namespace BloomService.Web.Controllers
                 return Error("Was not able to save workorder to sage");
             }
 
-            _repository.Add(workorder);
+            _repository.Add(result.Entity);
             _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
             _notification.SendNotification(string.Format("{0} was created", workorder.Name));
             return Success();
@@ -97,7 +97,7 @@ namespace BloomService.Web.Controllers
         [Route("Workorderpictures/{id}")]
         public ActionResult GetWorkOrdersPictures(string id)
         {
-            var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrderBsonId == id).Single();
+            var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrderBsonId == id).SingleOrDefault();
             return Json(pictures, JsonRequestBehavior.AllowGet);
         }
 
@@ -240,7 +240,7 @@ namespace BloomService.Web.Controllers
                 return Error("Was not able to update workorder to sage");
             }
 
-            _repository.Update(workorder);
+            _repository.Update(result.Entity);
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
             _hub.UpdateWorkOrder(model);
             return Success();

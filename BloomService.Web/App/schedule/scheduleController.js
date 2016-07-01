@@ -93,9 +93,9 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             eventDragStop: function( event, jsEvent, ui, view ) {
                 
                 if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
-                    var innerHtml = "<td>" + event.title + "</td>" + "<td>" + event.dateFoo + "</td>" + "<td>" + event.customerFoo + "</td>" +
+                    var innerHtml = "<td>" + event.title + "</td>" + "<td>" +  formatDate(new Date(event.dateFoo)) + "</td>" + "<td>" + event.customerFoo + "</td>" +
                                     "<td>" + event.locationFoo + "</td>" + "<td>" + parseInt(event.hourFoo) + "</td>";
-                    var el = $("<tr class='drag fc-event'>").appendTo('.footable tbody').html(innerHtml);
+                    var el = $("<tr class='drag fc-event' style='z-index: 99'>").appendTo('.footable tbody').html(innerHtml);
                     el.draggable({
                         zIndex: 999,
                         revert: true, 
@@ -137,7 +137,6 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                 event = setTechnicianColor(event);
                 var date = new Date(event.start);
                 event.end._d = new Date(date.setHours(date.getHours() + parseInt(event.hourFoo)));
-                $('#calendar').fullCalendar('rerenderEvents');
                  saveEvent(event);
             },
             resourceLabelText: 'Technicians',
@@ -162,7 +161,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
 
     }
 
-    $scope.eventSources = $scope.events;
+    $scope.eventSources = [$scope.events];
     $scope.resouceSources = [$scope.resources];
 
     commonDataService.getTechnicians().then(function(response){
@@ -210,6 +209,8 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             }
         });
         $scope.events = tempEvents;
+        $("#calendar").fullCalendar('addEventSource', $scope.events);
+        $("#calendar").fullCalendar('rerenderEvents');
 
         $timeout(function () {
             $('.drag').each(function () {
