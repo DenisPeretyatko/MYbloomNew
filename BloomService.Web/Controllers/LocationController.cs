@@ -28,9 +28,10 @@ namespace BloomService.Web.Controllers
         [Route("Location")]
         public ActionResult GetLocations(MapViewModel model)
         {
-            var date = model.DateWorkOrder.NowIfMin();
-            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ForDate(date).ToList();
+            var workOrders = new List<SageWorkOrder>();
+            workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
             var locations = _repository.GetAll<SageLocation>().ToArray();
+
             foreach (var item in workOrders)
             {
                 var itemLocation = locations.FirstOrDefault(l => l.Name == item.Location);
