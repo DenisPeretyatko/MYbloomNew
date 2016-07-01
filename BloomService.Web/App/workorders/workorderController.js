@@ -3,11 +3,11 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService, s
         Index: 0,
         Search: '',
         Column: '',
-        Direction: true
+        Direction: false
     };
      var currentPage = 0;
-    $scope.sorting = "";
-    $scope.increase = true;
+     $scope.sorting = "date";
+    $scope.increase = false;
     $scope.Search = "";
 
     commonDataService.getWorkordesPaged(model).then(function (response) {
@@ -49,12 +49,12 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService, s
         $scope.ShowPage($scope.getNextPage($scope.pagesCount));
     }
 
-
+    
    
     $scope.changeSorting = function (data) {
         if ($scope.sorting != data) {
             $scope.sorting = data;
-            $scope.increase = true;
+            $scope.increase = false;
         } else {
             $scope.increase = !$scope.increase;
         }

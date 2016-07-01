@@ -8,17 +8,32 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
     $scope.workorders = [];
+    $scope.workordersView = [];
     $scope.truckMarkers = [];
     $scope.workorderMarkers = [];
     $scope.obj = {};
     $scope.obj.mapDate = new Date();
+    $scope.showAll = false;
 
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
 
-    $scope.$watch(function () { return $scope.workorders; }, function () {
+    $scope.showAllLocations = function() {
+        if ($scope.showAll == true) {
+            $scope.workordersView = $scope.workorders;
+        } else {
+            $scope.workordersView = [];
+            angular.forEach($scope.workorders, function (value, key) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+                    $scope.workordersView.push(value);
+                }
+            });
+        }
+    }
+
+    $scope.$watchCollection(function () { return $scope.workordersView; }, function () {
         angular.forEach($scope.workorderMarkers, function (marker) { marker.setMap(null); });
-        angular.forEach($scope.workorders, function (workorder) {
+        angular.forEach($scope.workordersView, function (workorder) {
 
             var content = tooltipWO(workorder);
 
@@ -72,13 +87,24 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
 
     commonDataService.getLocations().then(function (response) {
         $scope.workorders = response.data;
+        angular.forEach($scope.workorders, function (value, key) {
+            if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+                $scope.workordersView.push(value);
+            }
+        });
     });
 
-    $scope.$watch(function () { return $scope.obj.mapDate; }, function () {
-        var model = { DateWorkOrder: new Date($scope.obj.mapDate) };
-        commonDataService.getLocations(model).then(function (response) {
-            $scope.workorders = response.data;
-        });
+    $scope.$watch(function () { return $scope.obj.mapDate; }, function () { 
+        if ($scope.showAll == false) {
+            $scope.workordersView = [];
+            angular.forEach($scope.workorders, function (value, key) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+                    $scope.workordersView.push(value);
+                }
+            });
+        } else {
+            $scope.workordersView = $scope.workorders;
+        }
     });
 };
 mapController.$inject = ["$rootScope", "$scope", "$http", "$compile", "$interpolate", "commonDataService", "state"];

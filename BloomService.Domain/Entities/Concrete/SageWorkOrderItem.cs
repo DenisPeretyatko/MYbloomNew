@@ -1,9 +1,12 @@
-﻿using System;
+﻿using BloomService.Domain.Attributes;
+using System;
 using System.Xml.Serialization;
 
 namespace BloomService.Domain.Entities.Concrete
 {
-    public class SageWorkOrderItem
+    [CollectionName("WorkOrderItemCollection")]
+    [XmlType(AnonymousType = true)]
+    public class SageWorkOrderItem : SageEntity
     {
         [XmlAttribute(DataType = "date")]
         public DateTime AccountingDate { get; set; }
@@ -22,7 +25,7 @@ namespace BloomService.Domain.Entities.Concrete
         [XmlAttribute]
         public string EnteredBy { get; set; }
         [XmlAttribute]
-        public byte Equipment { get; set; }
+        public int Equipment { get; set; }
         [XmlAttribute]
         public string ExemptStatus { get; set; }
         [XmlAttribute]
@@ -52,7 +55,7 @@ namespace BloomService.Domain.Entities.Concrete
         [XmlAttribute]
         public decimal IncludedTax { get; set; }
         [XmlAttribute]
-        public byte Invoice { get; set; }
+        public int Invoice { get; set; }
         [XmlAttribute]
         public string ItemType { get; set; }
         [XmlAttribute]
@@ -70,7 +73,7 @@ namespace BloomService.Domain.Entities.Concrete
         [XmlAttribute]
         public decimal LaborSale { get; set; }
         [XmlAttribute]
-        public byte Note { get; set; }
+        public int Note { get; set; }
         [XmlAttribute]
         public decimal PartsCost { get; set; }
         [XmlAttribute]
@@ -82,9 +85,9 @@ namespace BloomService.Domain.Entities.Concrete
         [XmlAttribute]
         public decimal SalesTaxAmount { get; set; }
         [XmlAttribute]
-        public byte Status { get; set; }
+        public int Status { get; set; }
         [XmlAttribute]
-        public byte TaxGroup { get; set; }
+        public int TaxGroup { get; set; }
         [XmlAttribute(DataType = "time")]
         public DateTime TimeEntered { get; set; }
         [XmlAttribute]
@@ -102,6 +105,6 @@ namespace BloomService.Domain.Entities.Concrete
         [XmlAttribute]
         public ushort WorkOrder { get; set; }
         [XmlAttribute("WorkOrderItem")]
-        public byte WorkOrderItem1 { get; set; }
+        public int WorkOrderItem1 { get; set; }
     }
 }

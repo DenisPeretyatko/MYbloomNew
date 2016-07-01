@@ -336,6 +336,7 @@
     <Compile Include="Infrastructure\Mongo\MongoRepository.cs" />
     <Compile Include="Infrastructure\Constants\PaymentMethod.cs" />
     <Compile Include="Infrastructure\Constants\EndPoints.cs" />
+    <Compile Include="Models\AddWOItemModel.cs" />
     <Compile Include="Models\CallTypeModel.cs" />
     <Compile Include="Models\AssignmentModel.cs" />
     <Compile Include="Models\ChartModel.cs" />

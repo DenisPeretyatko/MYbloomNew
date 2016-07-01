@@ -50,17 +50,17 @@
                     <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Date</th>
-                            <th data-hide="phone,tablet">Customer</th>
-                            <th data-hide="phone,tablet">Location</th>
-                            <th>Status</th>
+                            <th  ng-click="changeSorting('WorkOrder')">#</th>
+                            <th  ng-click="changeSorting('DateEntered')" class="footable-sorted">Date</th>
+                            <th  ng-click="changeSorting('ARCustomer')" data-hide="phone,tablet">Customer</th>
+                            <th  ng-click="changeSorting('Location')" data-hide="phone,tablet">Location</th>
+                            <th  ng-click="changeSorting('Status')">Status</th>
                         </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="workorder in listworkorders">
+                            <tr ng-repeat="workorder in listworkorders | orderBy:sortType:sortDirection">
                                 <td>{{workorder.WorkOrder}}</td>
-                                <td>{{Parse(workorder.DateEntered)|date:mediumTime}}</td>
+                                <td>{{workorder.DateEntered|date:mediumTime}}</td>
                                 <td>{{workorder.ARCustomer}}</td>
                                 <td>{{workorder.Location}}</td>
                                 <td>
