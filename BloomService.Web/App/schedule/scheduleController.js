@@ -93,9 +93,9 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             eventDragStop: function( event, jsEvent, ui, view ) {
                 
                 if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
-                    var innerHtml = "<td>" + event.title + "</td>" + "<td>" + event.dateFoo + "</td>" + "<td>" + event.customerFoo + "</td>" +
+                    var innerHtml = "<td>" + event.title + "</td>" + "<td>" +  formatDate(new Date(event.dateFoo)) + "</td>" + "<td>" + event.customerFoo + "</td>" +
                                     "<td>" + event.locationFoo + "</td>" + "<td>" + parseInt(event.hourFoo) + "</td>";
-                    var el = $("<tr class='drag fc-event'>").appendTo('.footable tbody').html(innerHtml);
+                    var el = $("<tr class='drag fc-event' style='z-index: 99'>").appendTo('.footable tbody').html(innerHtml);
                     el.draggable({
                         zIndex: 999,
                         revert: true, 
