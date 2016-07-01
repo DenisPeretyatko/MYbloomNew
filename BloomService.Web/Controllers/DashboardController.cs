@@ -87,7 +87,7 @@ namespace BloomService.Web.Controllers
             chart.Add(chartModel);
 
             dashboard.Chart = chart;
-            dashboard.WorkOrders = workorders;
+            dashboard.WorkOrders = workorders.OrderByDescending(x => x.DateEntered);
             return Json(dashboard, JsonRequestBehavior.AllowGet);
         }
 

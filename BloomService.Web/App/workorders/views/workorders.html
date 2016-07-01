@@ -18,7 +18,7 @@
                         <thead>
                         <tr>
                             <th ng-init="data = ''" ng-click="data='num'; changeSorting(data)">#</th>
-                            <th ng-click="data = 'date'; changeSorting(data)">Date</th>
+                            <th class="footable-sorted" ng-click="data = 'date'; changeSorting(data)">Date</th>
                             <th ng-click="data = 'customer'; changeSorting(data)" data-hide="phone,tablet">Customer</th>
                             <th ng-click="data = 'location'; changeSorting(data)" data-hide="phone,tablet">Location</th>
                             <th ng-click="data = 'status'; changeSorting(data)">Status</th>
