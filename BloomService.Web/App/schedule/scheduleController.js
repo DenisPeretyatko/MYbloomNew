@@ -7,6 +7,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
 
     // Events
     $scope.events = [];
+    var tempEvents = [];
 
     $scope.resources = [];
 
@@ -190,7 +191,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
         angular.forEach($scope.assigments, function (value, key) {
             if (value != null) {
                 var spliter = (value.Customer == '' || value.Location == '') ? '' : '/';
-                $scope.events.push({
+                tempEvents.push({
                     id: value.Assignment,
                     resourceId: value.EmployeeId,
                     title: value.WorkOrder,
@@ -208,6 +209,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             });
             }
         });
+        $scope.events = tempEvents;
 
         $timeout(function () {
             $('.drag').each(function () {
