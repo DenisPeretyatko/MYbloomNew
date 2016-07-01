@@ -81,7 +81,7 @@ namespace BloomService.Web.Models
         public string Model { get; set; }
 
         [JsonProperty("OrderLeadTime")]
-        public TimeSpan? OrderLeadTime { get; set; }
+        public DateTime? OrderLeadTime { get; set; }
 
         [JsonProperty("Part")]
         public string Part { get; set; }

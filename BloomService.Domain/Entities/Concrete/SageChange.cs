@@ -14,7 +14,7 @@
         public ChangeType Change { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public TimeSpan? ChangeTime { get; set; }
+        public DateTime? ChangeTime { get; set; }
 
         [XmlAttribute]
         public string EntityId { get; set; }

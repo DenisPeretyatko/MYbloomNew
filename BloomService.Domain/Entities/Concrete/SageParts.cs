@@ -84,7 +84,7 @@
         public string Model { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public TimeSpan? OrderLeadTime { get; set; }
+        public DateTime? OrderLeadTime { get; set; }
 
         [XmlAttribute]
         public string Part { get; set; }

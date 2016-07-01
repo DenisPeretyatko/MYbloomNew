@@ -154,7 +154,10 @@ namespace BloomService.Web.Controllers
             foreach (var obj in workorderList)
             {
                 if (obj.TimeEntered == null) continue;
-                obj.CallDate = obj.DateEntered?.Date.Add((TimeSpan)obj.TimeEntered) ?? DateTime.MinValue;
+
+                // TODO Fix this convertation.
+                //obj.CallDate = obj.DateEntered?.Date.Add((DateTime)obj.TimeEntered) ?? DateTime.MinValue;
+                obj.CallDate = obj.DateEntered?.Date.Add(((DateTime)obj.TimeEntered).TimeOfDay) ?? DateTime.MinValue;
             }
 
             var result = new WorkorderSortViewModel()

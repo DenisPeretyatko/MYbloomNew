@@ -36,7 +36,7 @@
         public string Comments { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public TimeSpan? CreateTimeEntry { get; set; }
+        public DateTime? CreateTimeEntry { get; set; }
 
         [XmlAttribute(DataType = "date")]
         public DateTime? DateEntered { get; set; }
@@ -57,7 +57,7 @@
         public DateTime? Enddate { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public TimeSpan? Endtime { get; set; }
+        public DateTime? Endtime { get; set; }
 
         [XmlAttribute]
         public string EnteredBy { get; set; }
@@ -69,7 +69,7 @@
         public DateTime? ETAdate { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public TimeSpan? ETAtime { get; set; }
+        public DateTime? ETAtime { get; set; }
 
         [XmlAttribute]
         public string Inactive { get; set; }
@@ -81,7 +81,7 @@
         public string LastStatus { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public TimeSpan? LastTime { get; set; }
+        public DateTime? LastTime { get; set; }
 
         [XmlAttribute]
         public string NextECardNumber { get; set; }
@@ -90,7 +90,7 @@
         public string PaidLunchBreak { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public TimeSpan? PostedTime { get; set; }
+        public DateTime? PostedTime { get; set; }
 
         [XmlAttribute]
         public string Priority { get; set; }
@@ -102,10 +102,10 @@
         public DateTime? ScheduleDate { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public TimeSpan? StartTime { get; set; }
+        public DateTime? StartTime { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public TimeSpan? TimeEntered { get; set; }
+        public DateTime? TimeEntered { get; set; }
 
         [XmlAttribute]
         public string WorkOrder { get; set; }

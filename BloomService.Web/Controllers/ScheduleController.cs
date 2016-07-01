@@ -71,9 +71,9 @@ namespace BloomService.Web.Controllers
             databaseAssignment.ScheduleDate = model.ScheduleDate.ToUniversalTime();
             databaseAssignment.WorkOrder = model.WorkOrder;
             databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
-            databaseAssignment.StartTime = model.ScheduleDate.ToUniversalTime().TimeOfDay;
+            databaseAssignment.StartTime = model.ScheduleDate.ToUniversalTime();
             databaseAssignment.Enddate = model.EndDate.ToUniversalTime();
-            databaseAssignment.Endtime = model.EndDate.ToUniversalTime().TimeOfDay;
+            databaseAssignment.Endtime = model.EndDate.ToUniversalTime();
 
             var edited = _sageApiProxy.EditAssignment(databaseAssignment);
             if (edited.IsSucceed == false)

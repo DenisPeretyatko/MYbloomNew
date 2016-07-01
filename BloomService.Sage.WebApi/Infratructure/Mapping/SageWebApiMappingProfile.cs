@@ -107,8 +107,9 @@ namespace Sage.WebApi.Mapping
                .ForMember(dest => dest.Checklist7Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist7Date)))
                .ForMember(dest => dest.Checklist8Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist8Date)))
                .ForMember(dest => dest.Checklist9Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist9Date)))
-               .ForMember(dest => dest.Checklist9Date, opts => opts.MapFrom(src => ConvertToDate(src.DateEstablished)))
-               .ForMember(dest => dest.Checklist9Date, opts => opts.MapFrom(src => ConvertToDate(src.DateStamp)));
+               .ForMember(dest => dest.DateEstablished, opts => opts.MapFrom(src => ConvertToDate(src.DateEstablished)))
+               //.ForMember(dest => dest.TimeStamp, opts => opts.MapFrom(src => ConvertToTime(src.TimeStamp)))
+               .ForMember(dest => dest.DateStamp, opts => opts.MapFrom(src => ConvertToDate(src.DateStamp)));
 
             CreateMap<PartReturnParam, SagePart>()
               .ForMember(dest => dest.LastActivityDate, opts => opts.MapFrom(src => ConvertToDate(src.LastActivityDate)))
@@ -140,15 +141,15 @@ namespace Sage.WebApi.Mapping
             return new DateTime(2000, 1, 1).ToUniversalTime().Date;
         }
 
-        private static TimeSpan ConvertToTime(string timeString)
+        private static DateTime ConvertToTime(string timeString)
         {
             DateTime result;
 
             if (DateTime.TryParse(timeString, out result))
             {
-                return result.ToUniversalTime().TimeOfDay;
+                return result.ToUniversalTime();
             }
-            return new TimeSpan();
+            return new DateTime(2000, 1, 1).ToUniversalTime();
         }
     }
 }

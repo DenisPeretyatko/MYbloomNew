@@ -42,7 +42,7 @@ namespace BloomService.Domain.Entities.Concrete
         public string DefaultRepair { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public TimeSpan? DefaultStartTime { get; set; }
+        public DateTime? DefaultStartTime { get; set; }
 
         [XmlAttribute]
         public string Department { get; set; }
@@ -72,7 +72,7 @@ namespace BloomService.Domain.Entities.Concrete
         public string Name { get; set; }
 
         [XmlAttribute(DataType = "time")]
-        public TimeSpan? NormalEndTime { get; set; }
+        public DateTime? NormalEndTime { get; set; }
 
         [XmlAttribute]
         public string Pager { get; set; }

@@ -308,7 +308,7 @@
         public object Text6 { get; set; }
 
         [XmlAttribute]
-        public TimeSpan? TimeStamp { get; set; }
+        public TimeSpan TimeStamp { get; set; }
 
         [XmlAttribute]
         public string TotalBilledExemptStatus { get; set; }
