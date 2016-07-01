@@ -26,7 +26,10 @@ namespace BloomService.Web.Controllers
     using System.Security.Claims;
     using System.Threading;
     using Infrastructure.SignalR;
-
+    using RestSharp;
+    using Domain.Models.Requests;
+    using RestSharp.Serializers;
+    using System.Xml.Serialization;
     public class ApiMobileController : BaseController
     {
         private readonly IImageService _imageService;
@@ -103,8 +106,8 @@ namespace BloomService.Web.Controllers
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id);
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
-        
-            
+
+
         [Route("Apimobile/Part")]
         public ActionResult GetPart()
         {
@@ -117,6 +120,11 @@ namespace BloomService.Web.Controllers
         {
             var result = repository.GetAll<SageRepair>();
             return Json(result);
+        }
+
+        public class ModelItem
+        {
+            public string Model { get; set; }
         }
 
         [HttpGet]
@@ -145,9 +153,44 @@ namespace BloomService.Web.Controllers
                     var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment.ToString());
                     order.Equipments.AddRange(equipments);
                 }
+                order.WorkOrderItems = repository.GetAll<SageWorkOrderItem>().ToList().Where(x => x.WorkOrder.ToString() == order.WorkOrder);
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [Route("Apimobile/AddItem")]
+        public ActionResult AddWOItem(AddWOItemModel model)
+        {
+            var items = repository.GetAll<SageWorkOrderItem>().ToList().Where(x => x.WorkOrder == model.WorkOrder);
+            var item = items.SingleOrDefault(x=>x.WorkOrderItem1 == model.WorkOrderItem1);
+            if (item == null)
+            {
+                var newItem = new SageWorkOrderItem()
+                {
+                    WorkOrder = model.WorkOrder,
+                    WorkOrderItem1 = items.Max(x => x.WorkOrderItem1) + 1,
+                    WorkDate = model.WorkDate,
+                    Description = model.Description,
+                    Quantity = model.Quantity,
+                    ItemType = model.ItemType,
+                    SalesTaxAmount = model.SalesTaxAmount,
+                    FlatRateLaborTaxAmt = model.FlatRateLaborTaxAmt
+                };
+                repository.Add(newItem);
+            }
+            else
+            {
+                item.WorkDate = model.WorkDate;
+                item.Description = model.Description;
+                item.Quantity = model.Quantity;
+                item.ItemType = model.ItemType;
+                item.SalesTaxAmount = model.SalesTaxAmount;
+                item.FlatRateLaborTaxAmt = model.FlatRateLaborTaxAmt;
+                repository.Update(item);
+            }
+            return Success();
         }
 
         [HttpPost]
@@ -203,11 +246,11 @@ namespace BloomService.Web.Controllers
         public ActionResult ChangeWorkorderStatus(string id, string status)
         {
             _log.InfoFormat("Method: ChangeWorkorderStatus. Id: {0}, Status {1}", id, status);
-           var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
+            var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
             if (workorder == null)
                 return Error("Workorder not found");
             workorder.Status = status;
-            
+
             //var result = sageApiProxy.EditWorkOrder(workorder);
             //if (!result.IsSucceed)
             //    return Error("Was not able to save workorder to sage");

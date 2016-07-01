@@ -12,6 +12,9 @@
         [XmlIgnore]
         public List<SageEquipment> Equipments { get; set; }
 
+        [XmlIgnore]
+        public IEnumerable<SageWorkOrderItem> WorkOrderItems { get; set; }
+
         public List<ImageLocation> Images { get; set; }
 
         public decimal Latitude { get; set; }
