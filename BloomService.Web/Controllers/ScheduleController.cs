@@ -42,7 +42,7 @@ namespace BloomService.Web.Controllers
         {
             var lastMonth = DateTime.Now.AddMonths(-1);
             var model = new ScheduleViewModel();
-            var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.WorkOrder)).OrderByDescending(x => x.DateEntered).Take(65).ToList();
+            var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.WorkOrder) && x.DateEntered > lastMonth).OrderByDescending(x => x.DateEntered).ToList();
             var employees = _repository.GetAll<SageEmployee>().ToList();
             var mappedEmployees = Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employees);
             var mappedAssignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(assignments);
@@ -83,16 +83,18 @@ namespace BloomService.Web.Controllers
             }
 
             databaseAssignment.EmployeeId = employee != null ? employee.Employee : null;
-            databaseAssignment.Start = model.ScheduleDate.ToString();
-            databaseAssignment.End = model.ScheduleDate.AddHours(databaseAssignment.EstimatedRepairHours.AsDouble()).ToString();
+            databaseAssignment.Start = model.ScheduleDate.ToUniversalTime().ToString();
+            databaseAssignment.End = model.ScheduleDate.ToUniversalTime().AddHours(databaseAssignment.EstimatedRepairHours.AsDouble()).ToString();
             databaseAssignment.Color = employee?.Color ?? "";
 
             var workorder = _repository.SearchFor<SageWorkOrder>(w => w.WorkOrder == model.WorkOrder).SingleOrDefault();
 
             databaseAssignment.Customer = workorder.ARCustomer;
             databaseAssignment.Location = workorder.Location;
-
-            _repository.Add(databaseAssignment);
+            
+            _repository.Update(databaseAssignment);
+            workorder.AssignmentId = null;
+            _repository.Update(workorder);
             _hub.CreateAssignment(databaseAssignment);
             _notification.SendNotification(string.Format("Workorder {0} assignment to {1}", workorder.Name, employee.Name));
             _log.InfoFormat("DatabaseAssignment added to repository. Employee {0}, Employee ID {1}", databaseAssignment.Employee, databaseAssignment.EmployeeId);
