@@ -76,13 +76,7 @@
 
     this.setNotificationTime = function () {
         now = new Date();
-        d = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-        datetext = d.toTimeString();
-        datetext = datetext.split(' ')[0]; //time
-        var curr_date = d.getDate();
-        var curr_month = d.getMonth() + 1;
-        var curr_year = d.getFullYear();
-        _this.notificationTime = curr_year + "-" + curr_month + "-" + curr_date + " " + datetext;
+        _this.notificationTime = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds())
 
     }
 
