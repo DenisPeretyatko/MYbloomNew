@@ -7,8 +7,13 @@ var mainController = function ($scope, $rootScope, commonDataService, state, $wi
     $scope.userName = window.localStorage.getItem('UserName');
     $scope.notificationsCount = 0;
     $scope.allnotifications = false;
+    $scope.canReadaAll = true;
     $rootScope.notifications = [];
-    now = new Date();
+    $scope.notificationsCopy = [];
+    var canReadMessagesCount = 3;
+    var previousNotificationCount = 0;
+   
+
     var convertDate = function (value) {
         if (typeof value == "string") {
             var date = value.split(' ');
@@ -22,30 +27,48 @@ var mainController = function ($scope, $rootScope, commonDataService, state, $wi
                     dateText[i] = '0' + tempVal;
                 }
             }
-            
+            dateText[1] = parseInt(dateText[1]) - 1;
+            if (dateText[1] < 10) {
+                dateText[1] = '0' + dateText[1].toString();
+            }
+            dateText[1] = dateText[1].toString();
             timeText = timeText.split(':');
-            return new Date(dateText[2], parseInt(dateText[1]) - 1, dateText[0], timeText[0], timeText[1], timeText[2], 0);
+            var temp = (parseInt(dateText[1]) - 1).toString();
+            return new Date(dateText[2], dateText[1], dateText[0], timeText[0], timeText[1], timeText[2], 0);
+        }
+        else if (value instanceof Date) {
+            return value;
         } else return true;
     }
 
-    var utcDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+   
+
         $rootScope.$watchCollection(function() {
             return $rootScope.notifications;
         }, function () {
+            $scope.canReadaAll = false;
+             var now = new Date();
+             var utcDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
             var temp = state.getNotificationTime();
             var lastDate = convertDate(temp);
+            if ($scope.canReadaAll == false && $scope.notificationsCopy.length < $rootScope.notifications.length) {
+                $scope.canReadaAll = true;
+                if ($rootScope.notifications.length - $scope.notificationsCopy.length <=1 && $rootScope.notifications.length != 0) 
+                    if (canReadMessagesCount < 3)
+                        canReadMessagesCount++;
+                
+            }
             $scope.notificationsCount = 0;
             $scope.notificationsCopy = angular.copy($rootScope.notifications);
             angular.forEach($scope.notificationsCopy, function (value, key) {
-                // if (moment(value.time, 'dd-mm-yy hh:mm:ss') > moment(temp, 'dd-mm-yy hh:mm:ss')) {
-                if (convertDate(value.time) > lastDate) {
+                var convDate = convertDate(value.time);
+                if (convDate > convertDate(lastDate)) {
                     $scope.notificationsCount++;
                 }
-                value.time = moment(value.time, 'dd-mm-yy hh:mm:ss').from(utcDate); //.fromNow();
+                value.time = moment(value.time, 'dd-mm-yy hh:mm:ss').from(utcDate);
             });
+            $scope.notificationsCount += previousNotificationCount;
         });
-
-     
 
     $scope.Logout = function() {
     window.localStorage.setItem('UserName', '')
@@ -56,7 +79,9 @@ var mainController = function ($scope, $rootScope, commonDataService, state, $wi
 
 $scope.showAlerts = function() {
     $scope.allnotifications = true;
+    $scope.canReadaAll = true;
     $scope.notificationsCount = 0;
+    previousNotificationCount = 0;
 }
 
 $scope.hideAlerts = function () {
@@ -70,12 +95,12 @@ $scope.openNotifications = function () {
     }
     if (wrappedResult.context.className != "dropdown open") {
         state.setNotificationTime();
-      //  $scope.notificationsCopy = angular.copy($rootScope.notifications);
         commonDataService.updateNotificationTime();
-        if ($scope.notificationsCount >= 3) {
-            $scope.notificationsCount = $scope.notificationsCount - 3;
-        } else {
-            $scope.notificationsCount = 0;
+        if ($scope.canReadaAll == true) {
+            $scope.notificationsCount = $scope.notificationsCount - canReadMessagesCount;
+            previousNotificationCount = $scope.notificationsCount;
+            canReadMessagesCount = 0;
+            $scope.canReadaAll = false;
         }
     }
 }
