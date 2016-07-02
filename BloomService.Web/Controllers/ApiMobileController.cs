@@ -132,22 +132,20 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkOrders()
         {
             var userId = UserModel.Name;
-            //var workOrders = repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
-            //var result = workOrders.Where(x => x.Employee == userId);
-            var assignments = repository.SearchFor<SageAssignment>(x => x.Employee == userId).ToList();
 
-            var workorders = new List<SageWorkOrder>();
+            var assignments = repository.SearchFor<SageAssignment>(x => x.Employee == userId).ToArray();
+            var allWorkorders = repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
 
-            foreach(var assignment in assignments)
+            var result = new List<SageWorkOrder>();
+
+            foreach (var assignment in assignments)
             {
-                var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == assignment.WorkOrder).SingleOrDefault();
-                if(workorder != null)
+                var workorder = allWorkorders.Where(x => x.WorkOrder == assignment.WorkOrder).SingleOrDefault();
+                if (workorder != null)
                 {
-                    workorders.Add(workorder);
+                    result.Add(workorder);
                 }
             }
-
-            var result = workorders.Where(x => x.Status == "Open").ToList();
 
             var locations = repository.GetAll<SageLocation>();
             foreach (var order in result)
@@ -179,7 +177,7 @@ namespace BloomService.Web.Controllers
         public ActionResult AddWOItem(AddWOItemModel model)
         {
             var items = repository.GetAll<SageWorkOrderItem>().ToList().Where(x => x.WorkOrder == model.WorkOrder);
-            var item = items.SingleOrDefault(x=>x.WorkOrderItem1 == model.WorkOrderItem1);
+            var item = items.SingleOrDefault(x => x.WorkOrderItem1 == model.WorkOrderItem1);
             if (item == null)
             {
                 var newItem = new SageWorkOrderItem()
