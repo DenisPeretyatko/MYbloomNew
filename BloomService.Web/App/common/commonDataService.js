@@ -206,10 +206,5 @@ var commonDataService = function ($http, $window) {
             }
         });
     };
-
-    this.doNothing = function () {
-
-    }
-
 }
 commonDataService.$inject = ['$http', '$window'];

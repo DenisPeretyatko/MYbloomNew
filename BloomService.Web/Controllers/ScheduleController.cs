@@ -1,4 +1,5 @@
-﻿using BloomService.Web.Infrastructure.Jobs;
+﻿using System.Web.Management;
+using BloomService.Web.Infrastructure.Jobs;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using Common.Logging;
 
@@ -91,11 +92,22 @@ namespace BloomService.Web.Controllers
 
             databaseAssignment.Customer = workorder.ARCustomer;
             databaseAssignment.Location = workorder.Location;
-            
+            var locations = _repository.GetAll<SageLocation>().ToArray();
+            var itemLocation = locations.FirstOrDefault(l => l.Name == workorder.Location);
+            workorder.Latitude = itemLocation.Latitude;
+            workorder.Longitude = itemLocation.Longitude;
+
             _repository.Update(databaseAssignment);
             workorder.AssignmentId = null;
             _repository.Update(workorder);
-            _hub.CreateAssignment(databaseAssignment);
+
+          
+            _hub.CreateAssignment(new MapViewModel()
+            {
+                WorkOrder = workorder,
+                DateEntered = databaseAssignment.ScheduleDate
+            });
+
             _notification.SendNotification(string.Format("Workorder {0} assignment to {1}", workorder.Name, employee.Name));
             _log.InfoFormat("DatabaseAssignment added to repository. Employee {0}, Employee ID {1}", databaseAssignment.Employee, databaseAssignment.EmployeeId);
             return Success();

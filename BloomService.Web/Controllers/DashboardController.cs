@@ -68,7 +68,7 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Dashboard")]
-        public ActionResult GetDashboard(MapViewModel model)
+        public ActionResult GetDashboard(MapModel model)
         {
             var dashboard = new DashboardViewModel();
             var workorders = _repository.SearchFor<SageWorkOrder>().Open().ToArray();

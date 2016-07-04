@@ -10,7 +10,7 @@ namespace BloomService.Web.App_Start
         {
             var jsonModelBinder = new JsonNetModelBinder();
 
-            ModelBinders.Binders.Add(typeof(MapViewModel), jsonModelBinder);
+            ModelBinders.Binders.Add(typeof(MapModel), jsonModelBinder);
             
         }
     }

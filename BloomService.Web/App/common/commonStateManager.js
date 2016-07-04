@@ -10,6 +10,7 @@
     this.locations = {};
     this.notificationTime = {}
     $rootScope.notifications = [];
+    $rootScope.workorders = [];
 
     var paginationModel = {
         Index: 0,
@@ -125,8 +126,20 @@
         $rootScope.notifications.unshift(notification);
     };
 
-    connection.client.DeleteAssigment = function (model) {
+    
+    connection.client.CreateAssignment = function (model) {
+        $rootScope.workorders.unshift(model);
+        $rootScope.$digest();
+    };
 
+    connection.client.DeleteAssigment = function (model) {
+        angular.forEach($rootScope.workorders, function(value, key) {
+            if (value.WorkOrder.WorkOrder == model.WorkOrder) {
+                $rootScope.workorders.splice(key, 1);
+            }
+        });
+        $rootScope.$digest();
+    
     };
 
     $.connection.hub.start().done(function () { });

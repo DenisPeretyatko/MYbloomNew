@@ -7,25 +7,26 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
 
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
-    $scope.workorders = [];
+    //$rootScope.workorders = [];
     $scope.workordersView = [];
     $scope.truckMarkers = [];
     $scope.workorderMarkers = [];
     $scope.obj = {};
     $scope.obj.mapDate = new Date();
     $scope.showAll = false;
+    $rootScope.workorders = [];
 
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
 
     $scope.showAllLocations = function() {
         if ($scope.showAll == true) {
-            $scope.workordersView = $scope.workorders;
+            $scope.workordersView = $rootScope.workorders;
         } else {
             $scope.workordersView = [];
-            angular.forEach($scope.workorders, function (value, key) {
+            angular.forEach($rootScope.workorders, function (value, key) {
                 if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
-                    $scope.workordersView.push(value);
+                    $scope.workordersView.push(value.WorkOrder);
                 }
             });
         }
@@ -36,7 +37,6 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
         angular.forEach($scope.workordersView, function (workorder) {
 
             var content = tooltipWO(workorder);
-
             var pos = {
                 lat: parseFloat(workorder.Latitude),
                 lng: parseFloat(workorder.Longitude)
@@ -63,7 +63,6 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
         angular.forEach($rootScope.trucks, function (truck) {
 
             var content = tooltip(truck);
-
             var pos = {
                 lat: parseFloat(truck.Latitude),
                 lng: parseFloat(truck.Longitude)
@@ -86,10 +85,10 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
     });
 
     commonDataService.getLocations().then(function (response) {
-        $scope.workorders = response.data;
-        angular.forEach($scope.workorders, function (value, key) {
+        $rootScope.workorders = response.data;
+        angular.forEach($rootScope.workorders, function (value, key) {
             if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
-                $scope.workordersView.push(value);
+                $scope.workordersView.push(value.WorkOrder);
             }
         });
     });
@@ -97,14 +96,28 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
     $scope.$watch(function () { return $scope.obj.mapDate; }, function () { 
         if ($scope.showAll == false) {
             $scope.workordersView = [];
-            angular.forEach($scope.workorders, function (value, key) {
+            angular.forEach($rootScope.workorders, function (value, key) {
                 if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
-                    $scope.workordersView.push(value);
+                    $scope.workordersView.push(value.WorkOrder);
                 }
             });
         } else {
-            $scope.workordersView = $scope.workorders;
+            $scope.workordersView = $rootScope.workorders.WorkOrder;
         }
     });
+
+    $scope.$watchCollection(function () { return $rootScope.workorders; }, function () {
+        if ($scope.showAll == false) {
+            $scope.workordersView = [];
+            angular.forEach($rootScope.workorders, function (value, key) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+                    $scope.workordersView.push(value.WorkOrder);
+                }
+            });
+        } else {
+            $scope.workordersView = $rootScope.workorders.WorkOrder;
+        }
+    });
+
 };
 mapController.$inject = ["$rootScope", "$scope", "$http", "$compile", "$interpolate", "commonDataService", "state"];
