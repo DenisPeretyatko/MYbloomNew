@@ -26,12 +26,13 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Location")]
-        public ActionResult GetLocations(MapViewModel model)
+        public ActionResult GetLocations(MapModel model)
         {
+            var result = new List<MapViewModel>();
             var workOrders = new List<SageWorkOrder>();
             workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
+            
             var locations = _repository.GetAll<SageLocation>().ToArray();
-
             foreach (var item in workOrders)
             {
                 var itemLocation = locations.FirstOrDefault(l => l.Name == item.Location);
@@ -40,8 +41,17 @@ namespace BloomService.Web.Controllers
 
                 item.Latitude = itemLocation.Latitude;
                 item.Longitude = itemLocation.Longitude;
+                var singleOrDefault =
+                    _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder).SingleOrDefault();
+                if (singleOrDefault != null && item.AssignmentId == null)
+                    result.Add(new MapViewModel()
+                    {
+                        WorkOrder = item,
+                        DateEntered = singleOrDefault.ScheduleDate
+                    });
             }
-            return Json(workOrders, JsonRequestBehavior.AllowGet);
+            
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

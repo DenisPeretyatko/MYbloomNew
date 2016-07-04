@@ -12,7 +12,7 @@ namespace BloomService.Web.Infrastructure.SignalR
     {
         void Disconnect();
         void SendNotification(NotificationModel model);
-        void CreateAssignment(SageAssignment model);
+        void CreateAssignment(MapViewModel model);
         void DeleteAssigment(AssignmentViewModel id);
         void CreateWorkOrder(SageWorkOrder model);
         void UpdateWorkOrder(WorkOrderModel model);

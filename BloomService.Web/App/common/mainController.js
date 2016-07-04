@@ -97,10 +97,18 @@ $scope.openNotifications = function () {
         state.setNotificationTime();
         commonDataService.updateNotificationTime();
         if ($scope.canReadaAll == true) {
-            $scope.notificationsCount = $scope.notificationsCount - canReadMessagesCount;
-            previousNotificationCount = $scope.notificationsCount;
-            canReadMessagesCount = 0;
-            $scope.canReadaAll = false;
+            if ($scope.notificationsCount < 3 && previousNotificationCount == 0) {
+                $scope.notificationsCount = 0;
+                previousNotificationCount = $scope.notificationsCount;
+                canReadMessagesCount = 0;
+                $scope.canReadaAll = false;
+            } else {
+
+                $scope.notificationsCount = $scope.notificationsCount - canReadMessagesCount;
+                previousNotificationCount = $scope.notificationsCount;
+                canReadMessagesCount = 0;
+                $scope.canReadaAll = false;
+            }
         }
     }
 }

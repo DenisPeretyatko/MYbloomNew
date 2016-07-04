@@ -31,7 +31,7 @@ namespace BloomService.Web.Infrastructure.SignalR
             throw new NotImplementedException();
         }
 
-        public void CreateAssignment(SageAssignment model)
+        public void CreateAssignment(MapViewModel model)
         {
             _clients.All.createAssignment(model);
         }
