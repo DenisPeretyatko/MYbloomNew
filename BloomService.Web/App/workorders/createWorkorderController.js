@@ -21,8 +21,6 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
     $scope.lookups = state.lookups;
     $scope.initCustomer = "";
     $scope.initLocation = "";
-    $scope.selectedCustomer = "";
-    $scope.selectedLocation = "";
 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
@@ -52,21 +50,26 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
         });
     };
 
-    $scope.$watch(function () { return $scope.selectedCustomer; }, function () {
-        var customer = $scope.selectedCustomer.description == null ? $scope.selectedCustomer.originalObject : $scope.selectedCustomer.description;
-        var request = "{'customer':'" + customer +"'}";
-        commonDataService.locationsByCustomer(request).then(function (response) {
-             $scope.lookups.Locations = [response.data];
-        });
-    });
 
-    $scope.$watch(function () { return $scope.selectedLocation; }, function () {
-        var location = $scope.selectedLocation.description == null ? $scope.selectedLocation.originalObject.ARCustomer : $scope.selectedLocation.description.ARCustomer;
-        var request = "{'location':'" + location + "'}";
-        commonDataService.customerByLocation(request).then(function (response) {
-            $scope.lookups.Customers = [response.data];
-            $scope.initCustomer = response.data;
-        });
+    $scope.$watch(function () { return $scope.lookups.Customers.selected; }, function () {
+        if ($scope.lookups.Customers.selected != undefined) {
+            var customer = $scope.lookups.Customers.selected.description == null ? $scope.lookups.Customers.selected.originalObject : $scope.lookups.Customers.selected.description;
+            var request = "{'customer':'" + customer + "'}";
+            commonDataService.locationsByCustomer(request).then(function (response) {
+                $scope.lookups.Locations = response.data.length > 0 ? [response.data] : [];
+            });
+        }
+    });
+    
+    $scope.$watch(function () { return $scope.lookups.Locations.selected; }, function () {
+        if ($scope.lookups.Locations.selected != undefined) {
+            var location = $scope.lookups.Locations.selected.description == null ? $scope.lookups.Locations.selected.originalObject.ARCustomer : $scope.lookups.Locations.selected.description.ARCustomer;
+            var request = "{'location':'" + location + "'}";
+            commonDataService.customerByLocation(request).then(function (response) {
+                $scope.lookups.Customers = [response.data];
+                $scope.initCustomer = response.data;
+            });
+        }
     });
 };
 createWorkorderController.$inject = ["$scope", "$stateParams", "$state", "state", "commonDataService"];
