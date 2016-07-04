@@ -183,7 +183,7 @@ var commonDataService = function ($http, $window) {
         });
     }
 
-    this.customerByLocation = function (customer) {
+    this.locationsByCustomer  = function (customer) {
         return $http.post("Workorder/LocationsByCustomer", customer, {
             headers: {
                 'Authorization': 'bearer ' + window.localStorage.getItem('Token')
@@ -191,7 +191,7 @@ var commonDataService = function ($http, $window) {
         });
     };
 
-    this.locationsByCustomer = function (location) {
+    this.customerByLocation = function (location) {
         return $http.post("Workorder/CustomerByLocation", location, {
             headers: {
                 'Authorization': 'bearer ' + window.localStorage.getItem('Token')

@@ -14,14 +14,14 @@
                         <form role="form" name="workorder_form" novalidate ng-submit="createWorkOrder()">
                             <div class="form-group">
                                 <label>Customer</label>
-                                <div angucomplete-alt placeholder="Customer" maxlength="50" local-data="lookups.Customers" selected-object="lookups.Customers.selected"
-                                     search-fields="Name" title-field="Name" minlength="1" input-class="form-control form-control-small" match-class="highlight">
+                                <div angucomplete-alt id="customer_input" placeholder="Customer" maxlength="50" local-data="lookups.Customers" selected-object="selectedCustomer"
+                                     search-fields="Name" title-field="Name" minlength="1" initial-value="initCustomer" input-class="form-control form-control-small" match-class="highlight">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Location</label>
-                                <div angucomplete-alt placeholder="Location" maxlength="50" local-data="lookups.Locations" selected-object="lookups.Locations.selected"
-                                     search-fields="Name" title-field="Name" minlength="1" input-class="form-control form-control-small" match-class="highlight">
+                                <div angucomplete-alt id="location_input" placeholder="Location" maxlength="50" local-data="lookups.Locations" selected-object="selectedLocation"
+                                     search-fields="Name" title-field="Name" minlength="1"  initial-value="initLocation" input-class="form-control form-control-small" match-class="highlight">
                                 </div>
                             </div>
                             <div class="form-group">
