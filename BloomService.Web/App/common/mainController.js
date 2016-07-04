@@ -104,6 +104,12 @@ $scope.openNotifications = function () {
         }
     }
 }
+
+    commonDataService.getLookups().then(function (response) {
+        $rootScope.notifications = response.data.Notifications;
+        state.setMongaNotificationTime(response.data.NotificationTime);
+        state.setLookups(response.data);
+    });
 };
 
 mainController.$inject = ["$scope", "$rootScope", "commonDataService", "state", "$window", "commonHub"];
