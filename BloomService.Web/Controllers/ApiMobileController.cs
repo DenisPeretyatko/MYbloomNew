@@ -211,8 +211,6 @@ namespace BloomService.Web.Controllers
         [Route("Apimobile/Image")]
         public ActionResult PostImage(ImageModel model)
         {
-            model.Image = model.Image.Replace(' ', '+');
-
             _log.InfoFormat("Method: PostImage. Workorder Id: {0}", model.IdWorkOrder);
             if (_imageService.SavePhotoForWorkOrder(model))
             {

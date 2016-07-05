@@ -21,8 +21,14 @@ namespace Sage.WebApi.Infratructure.Constants
             parameters.Add("ARCUST", workOrder.ARCustomer);
             parameters.Add("SERVSITENBR", workOrder.Location);
             parameters.Add("CALLTYPECODE", workOrder.CallType);
-            parameters.Add("CALLDATE", workOrder.CallDate.ToString());
-            parameters.Add("CALLTIME", workOrder.CallTime.ToString());
+            if (workOrder.CallDate != null)
+            {
+                parameters.Add("CALLDATE", ((System.DateTime)workOrder.CallDate).ToString("yyyy-MM-dd"));
+            }
+            if (workOrder.CallTime != null)
+            {
+                parameters.Add("CALLTIME", workOrder.CallTime.ToString() ?? ((System.DateTime)workOrder.CallTime).ToString("yyyy-MM-dd"));
+            }
             parameters.Add("PROBLEMCODE", workOrder.Problem);
             parameters.Add("RATESHEETNBR", workOrder.RateSheet);
             parameters.Add("TECHNICIAN", workOrder.Employee);

@@ -79,8 +79,6 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         }
     });
 
-
-
     $scope.saveWorkOrder = function () {
         var workorder = {
             WorkOrder: $scope.editableWorkOrder.WorkOrder,
@@ -98,7 +96,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             Locationcomments: $scope.obj.locationcomments,
             Customerpo: $scope.obj.customerpo,
             Permissiocode: $scope.lookups.PermissionCodes.selected == null ? "" : $scope.lookups.PermissionCodes.selected.DESCRIPTION,
-            Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected,
+            Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected.Value,
             WorkOrder: $scope.editableWorkOrder.WorkOrder
         };
 

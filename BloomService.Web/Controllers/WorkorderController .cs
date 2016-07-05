@@ -114,15 +114,19 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Workorder/CustomerByLocation")]
-        public ActionResult GetCustomerByLocation(string location)
+        public ActionResult GetCustomerByLocation(string arcustomer)
         {
-            if (string.IsNullOrEmpty(location))
+            if (string.IsNullOrEmpty(arcustomer))
             {
                 var customers = _repository.GetAll<SageCustomer>();
                 return Json(customers, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _repository.GetAll<SageCustomer>().Single(x => x.Customer == location);
+            var result = _repository.GetAll<SageCustomer>().SingleOrDefault(x => x.Customer == arcustomer);
+            if (result == null)
+            {
+                return Json(new SageLocation(), JsonRequestBehavior.AllowGet);
+            }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -235,7 +239,8 @@ namespace BloomService.Web.Controllers
                 Comments = model.Locationcomments,
                 CustomerPO = model.Customerpo,
                 PermissionCode = model.Permissiocode,
-                PayMethod = model.Paymentmethods
+                PayMethod = model.Paymentmethods,
+                WorkOrder = model.WorkOrder
             };
 
             var result = _sageApiProxy.EditWorkOrder(workorder);

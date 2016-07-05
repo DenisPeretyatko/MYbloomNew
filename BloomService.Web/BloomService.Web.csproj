@@ -350,6 +350,7 @@
     <Compile Include="Models\MapModel.cs" />
     <Compile Include="Models\MapViewModel.cs" />
     <Compile Include="Models\PartModel.cs" />
+    <Compile Include="Models\PaymentMethodModel.cs" />
     <Compile Include="Models\PermissionCodeModel.cs" />
     <Compile Include="Models\RateSheetModel.cs" />
     <Compile Include="Models\ScheduleViewModel.cs" />

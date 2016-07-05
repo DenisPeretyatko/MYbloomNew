@@ -119,15 +119,12 @@ namespace BloomService.Web.Services.Concrete
             return null;
         }
 
-        private string SavePhotoForWorkOrder(string file, string path, string userId, int MaxSize)
+        private string SavePhotoForWorkOrder(HttpPostedFileBase file, string path, string userId, int MaxSize)
         {
             if (file == null)
                 return string.Empty;
 
-            byte[] imgData = Convert.FromBase64String(file);
-            MemoryStream ms = new MemoryStream(imgData, 0, imgData.Length);
-            ms.Write(imgData, 0, imgData.Length);
-            Image image = Image.FromStream(ms, true);
+            Image image = Image.FromStream(file.InputStream, true);
             if (!ValidateImage(image))
                 return string.Empty;
             string name;
