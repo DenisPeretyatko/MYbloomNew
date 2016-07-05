@@ -23,8 +23,6 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     $scope.EquipType = ["Labor", "Parts"];
     $scope.equipmentList = [];
     $scope.obj.data = new Date();
-    $scope.initCustomer = "";
-    $scope.initLocation = "";
 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
@@ -45,8 +43,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.equipment.push(equipment);
         }
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined) {
-            $scope.initCustomer = $scope.editableWorkOrder.CustomerObj;
-            $scope.initLocation = $scope.editableWorkOrder.LocationObj;
+            $scope.lookups.Customers.selected = $scope.editableWorkOrder.CustomerObj;
+            $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
             $scope.obj.calldate = $scope.editableWorkOrder.CallDate;
             $scope.lookups.Problems.selected = $scope.editableWorkOrder.ProblemObj;
@@ -63,8 +61,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
 
     $scope.$watch(function () {return $scope.editableWorkOrder}, function () {
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined) {
-            $scope.initCustomer = $scope.editableWorkOrder.CustomerObj;
-            $scope.initLocation = $scope.editableWorkOrder.LocationObj;
+            $scope.lookups.Customers.selected = $scope.editableWorkOrder.CustomerObj;
+            $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
             $scope.obj.calldate = $scope.editableWorkOrder.CallDate;
             $scope.lookups.Problems.selected = $scope.editableWorkOrder.ProblemObj;
@@ -85,8 +83,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         var workorder = {
             WorkOrder: $scope.editableWorkOrder.WorkOrder,
             Id: $stateParams.id,
-            Customer: $scope.initCustomer != null ? $scope.initCustomer.Customer : $scope.lookups.Customers.selected.description.Customer,
-            Location: $scope.initLocation != null ? $scope.initLocation.Location : $scope.lookups.Locations.selected.description.Location,
+            Customer: $scope.lookups.Customers.selected == null ? "" : $scope.lookups.Customers.selected.Customer,
+            Location: $scope.lookups.Locations.selected == null ? "" : $scope.lookups.Locations.selected.Location,
             Calltype: $scope.lookups.Calltypes.selected == null ? "" : $scope.lookups.Calltypes.selected.CallType,
             Calldate: $scope.obj.calldate,
             Problem: $scope.lookups.Problems.selected == null ? "" : $scope.lookups.Problems.selected.Problem,

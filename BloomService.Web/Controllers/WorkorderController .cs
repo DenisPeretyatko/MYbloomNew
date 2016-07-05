@@ -113,15 +113,15 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Workorder/CustomerByLocation")]
-        public ActionResult GetCustomerByLocation(string location)
+        public ActionResult GetCustomerByLocation(string arcustomer)
         {
-            if (string.IsNullOrEmpty(location))
+            if (string.IsNullOrEmpty(arcustomer))
             {
                 var customers = _repository.GetAll<SageCustomer>();
                 return Json(customers, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _repository.GetAll<SageCustomer>().Single(x => x.Customer == location);
+            var result = _repository.GetAll<SageCustomer>().Single(x => x.Customer == arcustomer);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
