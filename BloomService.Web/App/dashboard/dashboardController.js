@@ -13,7 +13,7 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
     $scope.sortType = 'DateEntered';
     $scope.sortDirection = true;
 
-     $scope.changeSorting = function (data) {
+    $scope.changeSorting = function (data) {
          if ($scope.sortType != data) {
              $scope.sortType = data;
              $scope.sortDirection = true;

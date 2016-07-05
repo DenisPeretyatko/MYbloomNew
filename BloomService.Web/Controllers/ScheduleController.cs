@@ -95,6 +95,7 @@ namespace BloomService.Web.Controllers
             databaseAssignment.Location = workorder.Location;
             var locations = _repository.GetAll<SageLocation>().ToArray();
             var itemLocation = locations.FirstOrDefault(l => l.Name == workorder.Location);
+            workorder.ScheduleDate = databaseAssignment.ScheduleDate;
             workorder.Latitude = itemLocation.Latitude;
             workorder.Longitude = itemLocation.Longitude;
 
@@ -138,6 +139,7 @@ namespace BloomService.Web.Controllers
             _repository.Update(databaseAssignment);
             _log.InfoFormat("Deleted from repository: databaseAssignment ID {0}", databaseAssignment.Id);
             workOrder.Employee = "";
+            workOrder.ScheduleDate = null;
             workOrder.AssignmentId = databaseAssignment.Assignment;
             _repository.Update(workOrder);
             _log.InfoFormat("Repository update workorder. Name: {0}, Id: {1}", workOrder.Name, workOrder.Id);

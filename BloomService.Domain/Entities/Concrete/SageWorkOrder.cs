@@ -285,6 +285,8 @@
         [XmlIgnore]
         public SagePermissionCode PermissionCodeObj { get; set; }
         [XmlIgnore]
+        public DateTime? ScheduleDate { get; set; }
+
         public SagePaymentMethod PaymentMethodObj { get; set; }
     }
 }

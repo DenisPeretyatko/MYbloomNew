@@ -145,6 +145,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 entity.Id = mongoEntity.Id;
                                 entity.Status = mongoEntity.Status;
                                 entity.AssignmentId = mongoEntity.AssignmentId;
+                                entity.ScheduleDate = mongoEntity.ScheduleDate;
                                 _repository.Update(entity);
                             }
                         }
@@ -220,6 +221,8 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     {
                                         assigment.Customer = workorder.ARCustomer;
                                         assigment.Location = workorder.Location;
+                                        workorder.ScheduleDate = assigment.ScheduleDate;
+                                        _repository.Update(workorder);
                                     }
                                 }
                                 else
