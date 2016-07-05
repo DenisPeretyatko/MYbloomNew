@@ -11,7 +11,5 @@
         public string ErrorMassage { get; set; }
 
         public bool IsSucceed { get; set; }
-
-        public List<string> Strings { get; set; }
     }
 }
