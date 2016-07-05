@@ -239,7 +239,8 @@ namespace BloomService.Web.Controllers
                 CustomerPO = model.Customerpo,
                 PermissionCode = model.Permissiocode,
                 PayMethod = model.Paymentmethods,
-                WorkOrder = model.WorkOrder
+                WorkOrder = model.WorkOrder,
+                Id = model.Id
             };
 
             var result = _sageApiProxy.EditWorkOrder(workorder);
@@ -249,13 +250,11 @@ namespace BloomService.Web.Controllers
                 return Error("Was not able to update workorder to sage");
             }
 
+            result.Entity.Id = workorder.Id;
             _repository.Update(result.Entity);
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
             _hub.UpdateWorkOrder(model);
             return Success();
-            
-
-            
         }
     }
 }

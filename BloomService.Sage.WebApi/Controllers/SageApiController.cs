@@ -48,7 +48,6 @@ namespace Sage.WebApi.Areas.Api.Controllers
             return response;
         }
 
-
         [HttpGet, Route("api/v2/ar/customers")]
         public SageResponse<SageCustomer> Customers()
         {
@@ -70,14 +69,14 @@ namespace Sage.WebApi.Areas.Api.Controllers
             try
             {
                 var properties = new Dictionary<string, string>();
-                properties.Add("Assignment", assignment.Assignment != null ? assignment.Assignment.ToString() : "");
-                properties.Add("ScheduleDate", assignment.ScheduleDate != null ? assignment.ScheduleDate.ToString()  : "");
-                properties.Add("Employee", assignment.Employee != null ? assignment.Employee.ToString()  : "");
-                properties.Add("WorkOrder", assignment.WorkOrder != null ? assignment.WorkOrder.ToString()  : "");
-                properties.Add("EstimatedRepairHours", assignment.EstimatedRepairHours != null ? assignment.EstimatedRepairHours.ToString()  : "");
-                properties.Add("StartTime", assignment.StartTime != null ? ((DateTime)assignment.StartTime).TimeOfDay.ToString() : "");
-                properties.Add("Enddate", assignment.Enddate != null ? assignment.Enddate.ToString() : "");
-                properties.Add("Endtime", assignment.Endtime != null ? ((DateTime)assignment.Endtime).TimeOfDay.ToString()  : "");
+                properties.Add("Assignment", assignment.Assignment.ToString() ?? string.Empty);
+                properties.Add("ScheduleDate", assignment.ScheduleDate.ToString() ?? string.Empty);
+                properties.Add("Employee", assignment.Employee.ToString() ?? string.Empty);
+                properties.Add("WorkOrder", assignment.WorkOrder.ToString() ?? string.Empty);
+                properties.Add("EstimatedRepairHours", assignment.EstimatedRepairHours.ToString() ?? string.Empty);
+                properties.Add("StartTime", ((DateTime)assignment.StartTime).TimeOfDay.ToString() ?? string.Empty);
+                properties.Add("Enddate", assignment.Enddate.ToString() ?? string.Empty);
+                properties.Add("Endtime", ((DateTime)assignment.Endtime).TimeOfDay.ToString() ?? string.Empty);
 
                 var resultProperties = new Dictionary<string, string>();
                 foreach (var property in properties)
@@ -152,7 +151,7 @@ namespace Sage.WebApi.Areas.Api.Controllers
                 var resultProperties = new Dictionary<string, string>();
                 foreach (var property in properties)
                 {
-                    if (string.IsNullOrEmpty(property.Value))
+                    if (!string.IsNullOrEmpty(property.Value))
                     {
                         resultProperties.Add(property.Key, property.Value);
                     }
@@ -257,7 +256,7 @@ namespace Sage.WebApi.Areas.Api.Controllers
                 var resultProperties = new Dictionary<string, string>();
                 foreach (var property in properties)
                 {
-                    if (string.IsNullOrEmpty(property.Value))
+                    if (!string.IsNullOrEmpty(property.Value))
                     {
                         resultProperties.Add(property.Key, property.Value);
                     }
@@ -353,21 +352,6 @@ namespace Sage.WebApi.Areas.Api.Controllers
             }
         }
 
-        //[HttpGet, Route("api/v2/sm/permissioncodes/get")]
-        //public SageResponse<SageEntity> GetPermissionCodes()
-        //{
-        //    try
-        //    {
-        //        var result = new SageResponse<SageEntity> { IsSucceed = true, Strings = serviceManager.PermissionCode().ToList() };
-        //        return result;
-        //    }
-        //    catch (ResponseException exception)
-        //    {
-        //        var result = new SageResponse<SageEntity> { IsSucceed = false, ErrorMassage = exception.Error.Message };
-        //        return result;
-        //    }
-        //}
-
         [HttpGet, Route("api/v2/sm/permissioncodes/get")]
         public SageResponse<SagePermissionCode> GetPermissionCodes()
         {
@@ -397,21 +381,6 @@ namespace Sage.WebApi.Areas.Api.Controllers
                 return result;
             }
         }
-
-        //[HttpGet, Route("api/v2/sm/ratesheets/get")]
-        //public SageResponse<SageEntity> GetRateSheets()
-        //{
-        //    try
-        //    {
-        //        var result = new SageResponse<SageEntity> { IsSucceed = true, Strings = serviceManager.RateSheet().ToList() };
-        //        return result;
-        //    }
-        //    catch (ResponseException exception)
-        //    {
-        //        var result = new SageResponse<SageEntity> { IsSucceed = false, ErrorMassage = exception.Error.Message };
-        //        return result;
-        //    }
-        //}
 
         [HttpGet, Route("api/v2/sm/ratesheets/get")]
         public SageResponse<SageRateSheet> GetRateSheets()
