@@ -1,17 +1,16 @@
 ﻿namespace BloomService.Web.Infrastructure.Constants
 {
+    using Domain.Entities.Concrete;
+    using Models;
     using System.Collections.Generic;
 
     public static class PaymentMethod
     {
-        public static readonly string BillOut = "Bill Out";
-
-        public static readonly string Cash = "Cash";
-
-        public static readonly string Check = "Check";
-
-        public static readonly string CreditCard = "Credit Card";
-
-        public static List<string> PaymentMethodList = new List<string> { Check, BillOut, CreditCard, Cash };
+        public static List<SagePaymentMethod> PaymentMethods = new List<SagePaymentMethod> {
+            new SagePaymentMethod() { Method = "Check", Value= 0 },
+            new SagePaymentMethod() { Method = "Cash", Value= 1 },
+            new SagePaymentMethod() { Method = "Credit card", Value = 2 },
+            new SagePaymentMethod() { Method = "Bill out", Value = 3 },
+        };
     }
 }

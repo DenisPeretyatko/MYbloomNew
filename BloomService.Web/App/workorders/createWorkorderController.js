@@ -39,7 +39,7 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             Locationcomments: $scope.obj.locationcomments,
             Customerpo: $scope.obj.customerpo,
             Permissiocode: $scope.lookups.PermissionCodes.selected == null ? "" : $scope.lookups.PermissionCodes.selected.DESCRIPTION,
-            Paymentmethods: $scope.lookups.PaymentMethods.selected
+            Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected.Method
         };
 
         commonDataService.createWorkorder(workorder).then(function (response) {
@@ -49,30 +49,35 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
     };
 
     var customerChanged = false;
-    $scope.$watch(function () {
-        return $scope.lookups.Customers != undefined ? $scope.lookups.Customers.selected != undefined ? $scope.lookups.Customers.selected : "" : "";
-    }, function () {
-        if ($scope.lookups.Customers != undefined && $scope.lookups.Customers.selected != undefined && !customerChanged) {
-            var customer = $scope.lookups.Customers.selected.Customer;
-            var request = "{'customer':'" + customer + "'}";
-            commonDataService.locationsByCustomer(request).then(function (response) {
-                $scope.lookups.Locations = response.data.length > 0 ? response.data : [];
-            });
-        }
-    });
-
-    $scope.$watch(function () {
-        return $scope.lookups.Locations != undefined ? $scope.lookups.Locations.selected != undefined ? $scope.lookups.Locations.selected : "" : ""
-    }, function () {
-        if ($scope.lookups.Locations != undefined && $scope.lookups.Locations.selected != undefined && $scope.lookups.Customers.selected == undefined ) {
-            var arCustomer = $scope.lookups.Locations.selected.ARCustomer;
-            var request = "{'arcustomer':'" + arCustomer + "'}";
-            commonDataService.customerByLocation(request).then(function (response) {
-                customerChanged = true;
-                $scope.lookups.Customers.selected = response.data;                
-            });
-            customerChanged = false;
-        }
-    });
+        $scope.$watch(function () {
+              return $scope.lookups.Customers != undefined ? $scope.lookups.Customers.selected != undefined ? $scope.lookups.Customers.selected : "" : "";
+          }, function () {
+              if ($scope.lookups.Customers != undefined && $scope.lookups.Customers.selected != undefined && !customerChanged) {
+                  var customer = $scope.lookups.Customers.selected.Customer;
+                  var request = "{'customer':'" + customer + "'}";
+                         commonDataService.locationsByCustomer(request).then(function (response) {
+                                 var selLocation = {};
+                                 if ($scope.lookups.Locations.selected != undefined && $scope.lookups.Locations.selected.ARCustomer == $scope.lookups.Customers.selected.Customer) {
+                                      selLocation = $scope.lookups.Locations.selected;
+                                  }
+                                 $scope.lookups.Locations = response.data.length > 0 ? response.data : [];
+                                  $scope.lookups.Locations.selected = selLocation;
+                              });
+                      }
+              });
+     
+         $scope.$watch(function () {
+                 return $scope.lookups.Locations != undefined ? $scope.lookups.Locations.selected != undefined ? $scope.lookups.Locations.selected : "" : ""
+             }, function () {
+                     if ($scope.lookups.Locations != undefined && $scope.lookups.Locations.selected != undefined && $scope.lookups.Customers.selected == undefined) {
+                             var arCustomer = $scope.lookups.Locations.selected.ARCustomer;
+                             var request = "{'arcustomer':'" + arCustomer + "'}";                       
+                             customerChanged = true;
+                             commonDataService.customerByLocation(request).then(function (response) {
+                                     $scope.lookups.Customers.selected = response.data;
+                                 });
+                         }
+                             customerChanged = false;
+                 });
 };
 createWorkorderController.$inject = ["$scope", "$stateParams", "$state", "state", "commonDataService"];

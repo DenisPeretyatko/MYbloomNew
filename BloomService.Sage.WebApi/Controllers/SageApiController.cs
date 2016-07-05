@@ -132,32 +132,31 @@ namespace Sage.WebApi.Areas.Api.Controllers
         {
             try
             {
-                var properties = SagePropertyConverter.ConvertToProperties(workOrder);
-                var requestProperties = new Dictionary<string, string>();
+                var properties = new Dictionary<string, string>();
+
+                properties.Add("ARCustomer", workOrder.ARCustomer ?? string.Empty);
+                properties.Add("Location", workOrder.Location ?? string.Empty);
+                properties.Add("CallType", workOrder.CallType ?? string.Empty);
+                properties.Add("CallDate", workOrder.CallDate.ToString() ?? string.Empty);
+                properties.Add("Problem", workOrder.Problem ?? string.Empty);
+                properties.Add("RateSheet", workOrder.RateSheet ?? string.Empty);
+                properties.Add("Employee", workOrder.Employee ?? string.Empty);
+                properties.Add("Equipment", workOrder.Equipment.ToString() ?? string.Empty);
+                properties.Add("EstimatedRepairHours", workOrder.EstimatedRepairHours.ToString() ?? string.Empty);
+                properties.Add("NottoExceed", workOrder.NottoExceed ?? string.Empty);
+                properties.Add("Comments", workOrder.Comments ?? string.Empty);
+                properties.Add("CustomerPO", workOrder.CustomerPO ?? string.Empty);
+                properties.Add("PermissionCode", workOrder.PermissionCode ?? string.Empty);
+                properties.Add("PayMethod", workOrder.PayMethod ?? string.Empty);
+
                 var resultProperties = new Dictionary<string, string>();
-
-                requestProperties.Add("ARCustomer", properties.ContainsKey("ARCustomer") ? properties["ARCustomer"] : string.Empty);
-                requestProperties.Add("Location", properties.ContainsKey("Location") ? properties["Location"] : string.Empty);
-                requestProperties.Add("CallType", properties.ContainsKey("CallType") ? properties["CallType"] : string.Empty);
-                requestProperties.Add("CallDate", properties.ContainsKey("CallDate") ? properties["CallDate"] : string.Empty);
-                requestProperties.Add("Problem", properties.ContainsKey("Problem") ? properties["Problem"] : string.Empty);
-                requestProperties.Add("RateSheet", properties.ContainsKey("RateSheet") ? properties["RateSheet"] : string.Empty);
-                requestProperties.Add("Employee", properties.ContainsKey("Employee") ? properties["Employee"] : string.Empty);
-                requestProperties.Add("Equipment", properties.ContainsKey("Equipment") ? properties["Equipment"] : string.Empty);
-                requestProperties.Add("EstimatedRepairHours", properties.ContainsKey("EstimatedRepairHours") ? properties["EstimatedRepairHours"] : string.Empty);
-                requestProperties.Add("NottoExceed", properties.ContainsKey("NottoExceed") ? properties["NottoExceed"] : string.Empty);
-                requestProperties.Add("Comments", properties.ContainsKey("Comments") ? properties["Comments"] : string.Empty);
-                requestProperties.Add("CustomerPO", properties.ContainsKey("CustomerPO") ? properties["CustomerPO"] : string.Empty);
-                requestProperties.Add("PermissionCode", properties.ContainsKey("PermissionCode") ? properties["PermissionCode"] : string.Empty);
-                requestProperties.Add("PayMethod", properties.ContainsKey("PayMethod") ? properties["PayMethod"] : string.Empty);
-
-                requestProperties.ForEach(x =>
+                foreach (var property in properties)
                 {
-                    if (x.Value != string.Empty)
+                    if (string.IsNullOrEmpty(property.Value))
                     {
-                        resultProperties.Add(x.Key, x.Value);
+                        resultProperties.Add(property.Key, property.Value);
                     }
-                });
+                }
 
                 var resultWorkOrder = serviceManager.WorkOrders(resultProperties).SingleOrDefault();
 
@@ -246,19 +245,19 @@ namespace Sage.WebApi.Areas.Api.Controllers
             try
             {
                 var properties = new Dictionary<string, string>();
-                properties.Add("Assignment", assignment.Assignment != null ? assignment.Assignment.ToString() : "");
-                properties.Add("ScheduleDate", assignment.ScheduleDate != null ? assignment.ScheduleDate.ToString() : "");
-                properties.Add("Employee", assignment.Employee != null ? assignment.Employee.ToString() : "");
-                properties.Add("WorkOrder", assignment.WorkOrder != null ? assignment.WorkOrder.ToString() : "");
-                properties.Add("EstimatedRepairHours", assignment.EstimatedRepairHours != null ? assignment.EstimatedRepairHours.ToString() : "");
-                properties.Add("StartTime", assignment.StartTime != null ? ((DateTime)assignment.StartTime).TimeOfDay.ToString() : "");
-                properties.Add("Enddate", assignment.Enddate != null ? assignment.Enddate.ToString() : "");
-                properties.Add("Endtime", assignment.Endtime != null ? ((DateTime)assignment.Endtime).TimeOfDay.ToString() : "");
+                properties.Add("Assignment", assignment.Assignment.ToString() ?? string.Empty);
+                properties.Add("ScheduleDate", assignment.ScheduleDate.ToString() ?? string.Empty);
+                properties.Add("Employee",  assignment.Employee.ToString() ?? string.Empty);
+                properties.Add("WorkOrder",  assignment.WorkOrder.ToString() ?? string.Empty);
+                properties.Add("EstimatedRepairHours",  assignment.EstimatedRepairHours.ToString() ?? string.Empty);
+                properties.Add("StartTime",((DateTime)assignment.StartTime).TimeOfDay.ToString() ?? string.Empty);
+                properties.Add("Enddate",  assignment.Enddate.ToString() ?? string.Empty);
+                properties.Add("Endtime",  ((DateTime)assignment.Endtime).TimeOfDay.ToString() ?? string.Empty);
 
                 var resultProperties = new Dictionary<string, string>();
                 foreach (var property in properties)
                 {
-                    if (property.Value != string.Empty && property.Value != null)
+                    if (string.IsNullOrEmpty(property.Value))
                     {
                         resultProperties.Add(property.Key, property.Value);
                     }
@@ -280,12 +279,10 @@ namespace Sage.WebApi.Areas.Api.Controllers
         {
             try
             {
-                var properties = SagePropertyConverter.ConvertToProperties(workOrder);
                 var result = new SageResponse<SageWorkOrder>
                 {
-
                     IsSucceed = true,
-                    Entities = serviceManager.EditWorkOrder(properties).ToList()
+                    Entity = serviceOdbc.EditWorkOrder(workOrder)
                 };
                 return result;
             }

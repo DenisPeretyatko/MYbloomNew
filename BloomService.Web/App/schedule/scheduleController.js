@@ -2,12 +2,13 @@
  * scheduleController - controller
  */
 
-var scheduleController = function($scope, $interpolate, $timeout, commonDataService) {
+var scheduleController = function($rootScope, $scope, $interpolate, $timeout, commonDataService) {
     var date = new Date();
 
     // Events
     $scope.events = [];
     var tempEvents = [];
+    $rootScope.unavailableTechniciansIds = [];
 
     $scope.resources = [];
 
@@ -168,13 +169,17 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
     commonDataService.getTechnicians().then(function(response){
         $scope.activeTechnicians = response.data;
         angular.forEach($scope.activeTechnicians, function(value, key) {
-            if (value != null) {
+            if (value != null) {//&& value.IsAvailable == true
                 this.push({
                     id : value.Employee,
                     title : value.Name,
                     avatarUrl: value.Picture != null ? value.Picture : "public/images/user.png",
                     color: value.Color == "" ? "" : value.Color
                 });
+                //if (value.IsAvailable == false) {
+   
+                //    $rootScope.unavailableTechniciansIds.unshift(value);
+                //}
             }
         }, $scope.resources);
     });
@@ -188,15 +193,15 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
             };
         });
         $scope.assigments = schedule.Assigments;
-        angular.forEach($scope.assigments, function (value, key) {
+        angular.forEach($scope.assigments, function(value, key) {
             if (value != null) {
                 var spliter = (value.Customer == '' || value.Location == '') ? '' : '/';
                 tempEvents.push({
                     id: value.Assignment,
                     resourceId: value.EmployeeId,
                     title: value.WorkOrder,
-                    start: new Date(value.Start +' UTC'),
-                    end: new Date(value.End +' UTC'),
+                    start: new Date(value.Start + ' UTC'),
+                    end: new Date(value.End + ' UTC'),
                     assigmentId: value.Assigment,
                     workorderId: value.WorkOrder,
                     description: value.Customer + spliter + value.Location,
@@ -206,17 +211,17 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     hourFoo: value.EstimatedRepairHours,
                     color: value.Color == "" ? "" : value.Color,
                     durationEditable: false
-            });
+                });
             }
         });
         $scope.events = tempEvents;
         $("#calendar").fullCalendar('addEventSource', $scope.events);
 
-        $timeout(function () {
-            $('.drag').each(function () {
+        $timeout(function() {
+            $('.drag').each(function() {
                 var descr = '';
                 var fooElements = [];
-                $(this).find('td').each(function (i, e) {
+                $(this).find('td').each(function(i, e) {
                     if (i == 2) {
                         var spliter = (e.innerText == '' || e[i + 1] == '') ? '' : '/';
                         descr += e.innerText + spliter;
@@ -242,7 +247,7 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                     locationFoo: fooElements[3],
                     hourFoo: fooElements[4],
                     durationEditable: false
-            });
+                });
 
                 $(this).draggable({
                     zIndex: 999,
@@ -251,6 +256,18 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                 });
             });
         }, 100);
+
+        angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) { //value.Employee
+            //var row = $("tr[data-resource-id=" + value.Employee + ']');
+            //row[0].style.backgroundColor = "aliceblue";
+            //row[0].onmouseup = function () {
+            //    alert(1);
+            //};;
+            //row[1].style.backgroundColor = "aliceblue";
+            //row[1].onmouseup = function () {
+            //    alert(1);
+           // };
+        });
     });
 
     function formatDate(inputdate) {
@@ -258,4 +275,4 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
     }
 
 };
-scheduleController.$inject = ["$scope", "$interpolate", "$timeout", "commonDataService"];
+scheduleController.$inject = ["$rootScope", "$scope", "$interpolate", "$timeout", "commonDataService"];

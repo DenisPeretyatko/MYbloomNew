@@ -76,8 +76,11 @@
     }
 
     this.setNotificationTime = function () {
-        now = new Date();
-        _this.notificationTime = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds())
+       return commonDataService.updateNotificationTime().then(function (response) {
+            return _this.notificationTime = response.data;
+        });
+        //now = new Date();
+        //_this.notificationTime = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds())
 
     }
 

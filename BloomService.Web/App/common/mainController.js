@@ -51,13 +51,13 @@ var mainController = function ($scope, $rootScope, commonDataService, state, $wi
              var utcDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
             var temp = state.getNotificationTime();
             var lastDate = convertDate(temp);
-            if ($scope.canReadaAll == false && $scope.notificationsCopy.length < $rootScope.notifications.length) {
+            if ($scope.canReadaAll == false && $scope.notificationsCopy.length < $rootScope.notifications.length) { 
                 $scope.canReadaAll = true;
-                if ($rootScope.notifications.length - $scope.notificationsCopy.length <=1 && $rootScope.notifications.length != 0) 
+                if ($rootScope.notifications.length - $scope.notificationsCopy.length <= 1 && $rootScope.notifications.length != 0)
                     if (canReadMessagesCount < 3)
                         canReadMessagesCount++;
-                
-            }
+
+            } 
             $scope.notificationsCount = 0;
             $scope.notificationsCopy = angular.copy($rootScope.notifications);
             angular.forEach($scope.notificationsCopy, function (value, key) {
@@ -65,7 +65,7 @@ var mainController = function ($scope, $rootScope, commonDataService, state, $wi
                 if (convDate > convertDate(lastDate)) {
                     $scope.notificationsCount++;
                 }
-                value.time = moment(value.time, 'dd-mm-yy hh:mm:ss').from(utcDate);
+                value.time = moment(value.time, 'dd-mm-yy hh:mm:ss').from(now);
             });
             $scope.notificationsCount += previousNotificationCount;
         });
@@ -95,7 +95,6 @@ $scope.openNotifications = function () {
     }
     if (wrappedResult.context.className != "dropdown open") {
         state.setNotificationTime();
-        commonDataService.updateNotificationTime();
         if ($scope.canReadaAll == true) {
             if ($scope.notificationsCount < 3 && previousNotificationCount == 0) {
                 $scope.notificationsCount = 0;

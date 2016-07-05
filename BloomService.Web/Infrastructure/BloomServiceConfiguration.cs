@@ -31,7 +31,8 @@ namespace BloomService.Domain.Extensions
                     SiteUrl = nameValueCollection["SiteUrl"],
                     SertificateUrl = nameValueCollection["SertificateUrl"],
                     SizeBigPhoto = int.Parse(nameValueCollection["SizeBigPhoto"]),
-                    SizeSmallPhoto = int.Parse(nameValueCollection["SizeSmallPhoto"])
+                    SizeSmallPhoto = int.Parse(nameValueCollection["SizeSmallPhoto"]),
+                    CurrentTimezone = nameValueCollection["CurrentTimezone"]
                 };
 
                 return configuration;
@@ -62,5 +63,6 @@ namespace BloomService.Domain.Extensions
         public string SertificateUrl { get; set; }
         public int SizeBigPhoto { get; set; }
         public int SizeSmallPhoto { get; set; }
+        public string CurrentTimezone { get; set; }
     }
 }

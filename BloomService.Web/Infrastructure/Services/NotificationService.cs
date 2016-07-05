@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using BloomService.Domain.Entities.Concrete;
+using BloomService.Domain.Extensions;
 using BloomService.Domain.Repositories.Abstract;
+using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using BloomService.Web.Infrastructure.SignalR;
 using BloomService.Web.Models;
@@ -23,12 +26,12 @@ namespace BloomService.Web.Infrastructure.Services
         
         public void SendNotification(string message)
         {
-           
+            var curDate = DateTime.Now.GetLocalDate();
             _repository.Add(new Notification()
             {
                 IsViewed = true,
-                Date = DateTime.UtcNow.Date,
-                Time = DateTime.UtcNow.TimeOfDay,
+                Date = curDate,
+                Time = curDate.TimeOfDay,
                 Message = message
             });
            
@@ -36,7 +39,7 @@ namespace BloomService.Web.Infrastructure.Services
             {
                 IsViewed = true,
                 Message = message,
-                Time = String.Format("{0} {1}", DateTime.UtcNow.Date.ToString("dd-MM-yyyy"), DateTime.UtcNow.ToString(@"HH\:mm\:ss"))
+                Time = String.Format("{0} {1}", curDate.Date.ToString("dd-MM-yyyy"), curDate.ToString(@"HH\:mm\:ss"))
             });
         }
 

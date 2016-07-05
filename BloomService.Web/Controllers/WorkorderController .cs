@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Jobs;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using Common.Logging;
@@ -17,7 +18,7 @@ namespace BloomService.Web.Controllers
     using AutoMapper;
     using Infrastructure.SignalR;
     using Infrastructure.Services.Interfaces;
-
+    using Infrastructure.Constants;
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
@@ -48,7 +49,7 @@ namespace BloomService.Web.Controllers
                 ARCustomer = model.Customer,
                 Location = model.Location,
                 CallType = model.Calltype,
-                CallDate = model.Calldate.Date,
+                CallDate = model.Calldate.GetLocalDate(),
                 Problem = model.Problem,
                 RateSheet = model.Ratesheet,
                 Employee = model.Emploee,
@@ -89,6 +90,7 @@ namespace BloomService.Web.Controllers
             workOrder.EmployeeObj = Mapper.Map<EmployeeModel, SageEmployee>(lookups.Employes.FirstOrDefault(x => x.Name == workOrder.Employee));
             workOrder.HourObj = Mapper.Map<RepairModel, SageRepair>(lookups.Hours.FirstOrDefault(x => x.Repair == workOrder.EstimatedRepairHours));
             workOrder.PermissionCodeObj = Mapper.Map<PermissionCodeModel, SagePermissionCode>(lookups.PermissionCodes.FirstOrDefault(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode));
+            workOrder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workOrder.PayMethod.Trim());
 
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
@@ -105,7 +107,7 @@ namespace BloomService.Web.Controllers
         [Route("Workorder")]
         public ActionResult GetWorkorders()
         {
-            var minDate = DateTime.Now.AddYears(-1);
+            //var minDate = DateTime.Now.AddYears(-1);
             var list = _repository.SearchFor<SageWorkOrder>().OrderByDescending(x => x.DateEntered).Take(500).ToList();
             var result = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(list);
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -121,7 +123,11 @@ namespace BloomService.Web.Controllers
                 return Json(customers, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _repository.GetAll<SageCustomer>().Single(x => x.Customer == arcustomer);
+            var result = _repository.GetAll<SageCustomer>().SingleOrDefault(x => x.Customer == arcustomer);
+            if (result == null)
+            {
+                return Json(new SageLocation(), JsonRequestBehavior.AllowGet);
+            }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -224,7 +230,7 @@ namespace BloomService.Web.Controllers
                 ARCustomer = model.Customer,
                 Location = model.Location,
                 CallType = model.Calltype,
-                CallDate = model.Calldate.Date,
+                CallDate = model.Calldate.GetLocalDate(),
                 Problem = model.Problem,
                 RateSheet = model.Ratesheet,
                 Employee = model.Emploee,
@@ -234,7 +240,8 @@ namespace BloomService.Web.Controllers
                 Comments = model.Locationcomments,
                 CustomerPO = model.Customerpo,
                 PermissionCode = model.Permissiocode,
-                PayMethod = model.Paymentmethods
+                PayMethod = model.Paymentmethods,
+                WorkOrder = model.WorkOrder
             };
 
             var result = _sageApiProxy.EditWorkOrder(workorder);

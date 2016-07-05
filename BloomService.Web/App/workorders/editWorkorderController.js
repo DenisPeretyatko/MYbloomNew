@@ -22,8 +22,9 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     $scope.lookups = state.lookups;
     $scope.EquipType = ["Labor", "Parts"];
     $scope.equipmentList = [];
-    $scope.obj.data = new Date();    
+    $scope.obj.data = new Date();
     var customerChanged = false;
+
 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
@@ -31,15 +32,15 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         if (state.lookups.Equipment !== undefined) {
             var equipment = {
                 equipType: angular.copy($scope.EquipType),
-                empl: angular.copy($scope.lookups.Employes),
-                description: angular.copy($scope.lookups.Parts),
-                date: $scope.obj.data,
-                isEditing: true,
-                cost: 0.00,
-                biled: 0.00,
-                rate: 0.0000,
-                labor: angular.copy($scope.lookups.Hours),
-                parts: angular.copy($scope.lookups.Parts)
+                    empl: angular.copy($scope.lookups.Employes),
+                    description: angular.copy($scope.lookups.Parts),
+                    date: $scope.obj.data,
+                    isEditing: true,
+                    cost: 0.00,
+                    biled: 0.00,
+                    rate: 0.0000,
+                    labor: angular.copy($scope.lookups.Hours),
+                    parts: angular.copy($scope.lookups.Parts)
             }
             $scope.equipment.push(equipment);
         }
@@ -56,7 +57,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.obj.locationcomments = $scope.editableWorkOrder.Comments;
             $scope.obj.customerpo = $scope.editableWorkOrder.CustomerPO;
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
-            $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PayMethod;
+            $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
         }
     });
 
@@ -74,11 +75,9 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.obj.locationcomments = $scope.editableWorkOrder.Comments;
             $scope.obj.customerpo = $scope.editableWorkOrder.CustomerPO;
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
-            $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PayMethod;
+            $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
         }
     });
-
-
 
     $scope.saveWorkOrder = function () {
         var workorder = {
@@ -97,7 +96,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             Locationcomments: $scope.obj.locationcomments,
             Customerpo: $scope.obj.customerpo,
             Permissiocode: $scope.lookups.PermissionCodes.selected == null ? "" : $scope.lookups.PermissionCodes.selected.DESCRIPTION,
-            Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected,
+            Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected.Value,
             WorkOrder: $scope.editableWorkOrder.WorkOrder
         };
 
@@ -197,36 +196,69 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         $scope.equipment.splice($scope.equipment.indexOf(item), 1);
     }
     
-    $scope.$watch(function () {
-        return $scope.lookups.Customers != undefined ? $scope.lookups.Customers.selected != undefined ? $scope.lookups.Customers.selected : "" : "";
-    }, function () {
-        if ($scope.lookups.Customers != undefined && $scope.lookups.Customers.selected != undefined && !customerChanged) {
-            var customer = $scope.lookups.Customers.selected.Customer;
-            var request = "{'customer':'" + customer + "'}";
-            commonDataService.locationsByCustomer(request).then(function (response) {
-                var selLocation = {};
-                if ($scope.lookups.Locations.selected != undefined && $scope.lookups.Locations.selected.ARCustomer == $scope.lookups.Customers.selected.Customer) {
-                    selLocation = $scope.lookups.Locations.selected;
-                }
-                $scope.lookups.Locations = response.data.length > 0 ? response.data : [];
-                $scope.lookups.Locations.selected = selLocation;
-            });
-        }
-    });
+    
+     //$scope.$watch(function () {
+     //         return $scope.lookups.Customers != undefined ? $scope.lookups.Customers.selected != undefined ? $scope.lookups.Customers.selected : "" : "";
+     //     }, function () {
+     //         if ($scope.lookups.Customers != undefined && $scope.lookups.Customers.selected != undefined && !customerChanged) {
+     //             var customer = $scope.lookups.Customers.selected.Customer;
+     //             var request = "{'customer':'" + customer + "'}";
+     //                    commonDataService.locationsByCustomer(request).then(function (response) {
+     //                            var selLocation = {};
+     //                            if ($scope.lookups.Locations.selected != undefined && $scope.lookups.Locations.selected.ARCustomer == $scope.lookups.Customers.selected.Customer) {
+     //                                 selLocation = $scope.lookups.Locations.selected;
+     //                             }
+     //                            $scope.lookups.Locations = response.data.length > 0 ? response.data : [];
+     //                             $scope.lookups.Locations.selected = selLocation;
+     //                         });
+     //                 }
+     //         });
+     
+     //    $scope.$watch(function () {
+     //            return $scope.lookups.Locations != undefined ? $scope.lookups.Locations.selected != undefined ? $scope.lookups.Locations.selected : "" : ""
+     //        }, function () {
+     //                if ($scope.lookups.Locations != undefined && $scope.lookups.Locations.selected != undefined && $scope.lookups.Customers.selected == undefined) {
+     //                        var arCustomer = $scope.lookups.Locations.selected.ARCustomer;
+     //                        var request = "{'arcustomer':'" + arCustomer + "'}";
+     //                        commonDataService.customerByLocation(request).then(function (response) {
+     //                                customerChanged = true;
+     //                                $scope.lookups.Customers.selected = response.data;
+     //                            });
+     //                        customerChanged = false;
+     //                    }
+     //        });
 
-    $scope.$watch(function () {
-        return $scope.lookups.Locations != undefined ? $scope.lookups.Locations.selected != undefined ? $scope.lookups.Locations.selected : "" : ""
-    }, function () {
-        if ($scope.lookups.Locations != undefined && $scope.lookups.Locations.selected != undefined && $scope.lookups.Customers.selected == undefined) {
-            var arCustomer = $scope.lookups.Locations.selected.ARCustomer;
-            var request = "{'arcustomer':'" + arCustomer + "'}";
-            commonDataService.customerByLocation(request).then(function (response) {
-                customerChanged = true;
-                $scope.lookups.Customers.selected = response.data;
-            });
-            customerChanged = false;
-        }
-    });
+         $scope.$watch(function () {
+             return $scope.lookups.Customers != undefined ? $scope.lookups.Customers.selected != undefined ? $scope.lookups.Customers.selected : "" : "";
+         }, function () {
+             if ($scope.lookups.Customers != undefined && $scope.lookups.Customers.selected != undefined && !customerChanged) {
+                 var customer = $scope.lookups.Customers.selected.Customer;
+                 var request = "{'customer':'" + customer + "'}";
+                 commonDataService.locationsByCustomer(request).then(function (response) {
+                     var selLocation = {};
+                     if ($scope.lookups.Locations.selected != undefined && $scope.lookups.Locations.selected.ARCustomer == $scope.lookups.Customers.selected.Customer) {
+                         selLocation = $scope.lookups.Locations.selected;
+                     }
+                     $scope.lookups.Locations = response.data.length > 0 ? response.data : [];
+                     $scope.lookups.Locations.selected = selLocation;
+                 });
+             }
+         });
+
+         $scope.$watch(function () {
+             return $scope.lookups.Locations != undefined ? $scope.lookups.Locations.selected != undefined ? $scope.lookups.Locations.selected : "" : ""
+         }, function () {
+             if ($scope.lookups.Locations != undefined && $scope.lookups.Locations.selected != undefined && $scope.lookups.Customers.selected == undefined) {
+                 var arCustomer = $scope.lookups.Locations.selected.ARCustomer;
+                 var request = "{'arcustomer':'" + arCustomer + "'}";
+                 customerChanged = true;
+                 commonDataService.customerByLocation(request).then(function (response) {
+                     $scope.lookups.Customers.selected = response.data;
+                 });
+             }
+             customerChanged = false;
+         });
+
 
 };
 editWorkorderController.$inject = ["$scope", "$stateParams", "$state", "$compile", "commonDataService", "state"];

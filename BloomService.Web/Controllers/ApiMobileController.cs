@@ -1,4 +1,5 @@
-﻿using BloomService.Web.Infrastructure.Jobs;
+﻿using BloomService.Web.Infrastructure.Dependecy;
+using BloomService.Web.Infrastructure.Jobs;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using Common.Logging;
 
@@ -243,7 +244,7 @@ namespace BloomService.Web.Controllers
                 Employee = technicianId,
                 Latitude = lat,
                 Longitude = lng,
-                Date = DateTime.Now
+                Date = DateTime.Now.GetLocalDate()
             };
             repository.Add(techLocation);
             var emploee = repository.SearchFor<SageEmployee>(x => x.Employee == technicianId).Single();

@@ -1,4 +1,5 @@
 ﻿using System.Web.Management;
+using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Jobs;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using Common.Logging;
@@ -41,7 +42,7 @@ namespace BloomService.Web.Controllers
         [Route("Schedule")]
         public ActionResult GetSchedules()
         {
-            var lastMonth = DateTime.Now.AddMonths(-1);
+            var lastMonth = DateTime.Now.GetLocalDate().AddMonths(-1);
             var model = new ScheduleViewModel();
             var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.WorkOrder) && x.DateEntered > lastMonth).OrderByDescending(x => x.DateEntered).ToList();
             var employees = _repository.GetAll<SageEmployee>().ToList();
@@ -69,12 +70,12 @@ namespace BloomService.Web.Controllers
 
             var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
             databaseAssignment.Employee = employee?.Name ?? "";
-            databaseAssignment.ScheduleDate = model.ScheduleDate.ToUniversalTime();
+            databaseAssignment.ScheduleDate = model.ScheduleDate.GetLocalDate();
             databaseAssignment.WorkOrder = model.WorkOrder;
             databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
-            databaseAssignment.StartTime = model.ScheduleDate.ToUniversalTime();
-            databaseAssignment.Enddate = model.EndDate.ToUniversalTime();
-            databaseAssignment.Endtime = model.EndDate.ToUniversalTime();
+            databaseAssignment.StartTime = model.ScheduleDate.GetLocalDate();
+            databaseAssignment.Enddate = model.EndDate.GetLocalDate();
+            databaseAssignment.Endtime = model.EndDate.GetLocalDate();
 
             var edited = _sageApiProxy.EditAssignment(databaseAssignment);
             if (edited.IsSucceed == false)
@@ -84,8 +85,8 @@ namespace BloomService.Web.Controllers
             }
 
             databaseAssignment.EmployeeId = employee != null ? employee.Employee : null;
-            databaseAssignment.Start = model.ScheduleDate.ToUniversalTime().ToString();
-            databaseAssignment.End = model.ScheduleDate.ToUniversalTime().AddHours(databaseAssignment.EstimatedRepairHours.AsDouble()).ToString();
+            databaseAssignment.Start = model.ScheduleDate.GetLocalDate().ToString();
+            databaseAssignment.End = model.ScheduleDate.GetLocalDate().AddHours(databaseAssignment.EstimatedRepairHours.AsDouble()).ToString();
             databaseAssignment.Color = employee?.Color ?? "";
 
             var workorder = _repository.SearchFor<SageWorkOrder>(w => w.WorkOrder == model.WorkOrder).SingleOrDefault();
