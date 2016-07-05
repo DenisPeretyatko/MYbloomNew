@@ -17,7 +17,7 @@ namespace BloomService.Web.Models
 
         public IEnumerable<RateSheetModel> RateSheets { get; set; }
         public IEnumerable<PermissionCodeModel> PermissionCodes { get; set; }
-        public IEnumerable<PaymentMethodModel> PaymentMethods { get; set; }
+        public IEnumerable<SagePaymentMethod> PaymentMethods { get; set; }
         public IEnumerable<PartModel> Parts { get; set; }
     }
 }

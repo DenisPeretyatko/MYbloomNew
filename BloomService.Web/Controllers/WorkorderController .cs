@@ -18,7 +18,7 @@ namespace BloomService.Web.Controllers
     using AutoMapper;
     using Infrastructure.SignalR;
     using Infrastructure.Services.Interfaces;
-
+    using Infrastructure.Constants;
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
@@ -90,6 +90,7 @@ namespace BloomService.Web.Controllers
             workOrder.EmployeeObj = Mapper.Map<EmployeeModel, SageEmployee>(lookups.Employes.FirstOrDefault(x => x.Name == workOrder.Employee));
             workOrder.HourObj = Mapper.Map<RepairModel, SageRepair>(lookups.Hours.FirstOrDefault(x => x.Repair == workOrder.EstimatedRepairHours));
             workOrder.PermissionCodeObj = Mapper.Map<PermissionCodeModel, SagePermissionCode>(lookups.PermissionCodes.FirstOrDefault(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode));
+            workOrder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workOrder.PayMethod.Trim());
 
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
