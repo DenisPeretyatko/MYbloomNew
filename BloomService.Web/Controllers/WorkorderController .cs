@@ -113,16 +113,15 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Workorder/CustomerByLocation")]
-        public ActionResult GetCustomerByLocation(string location)
+        public ActionResult GetCustomerByLocation(string arcustomer)
         {
-            if (location == null || location == string.Empty)
+            if (string.IsNullOrEmpty(arcustomer))
             {
                 var customers = _repository.GetAll<SageCustomer>();
                 return Json(customers, JsonRequestBehavior.AllowGet);
             }
 
-            var customer = _repository.GetAll<SageLocation>().Single(x => x.Name == location).Name;
-            var result = _repository.GetAll<SageCustomer>().Single(x => x.Name == customer);
+            var result = _repository.GetAll<SageCustomer>().Single(x => x.Customer == arcustomer);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -130,12 +129,17 @@ namespace BloomService.Web.Controllers
         [Route("Workorder/LocationsByCustomer")]
         public ActionResult GetLocationsByCustomer(string customer)
         {
-            if (customer == null || customer == string.Empty)
+            if (string.IsNullOrEmpty(customer))
             {
                 var locations = _repository.GetAll<SageLocation>();
                 return Json(locations, JsonRequestBehavior.AllowGet);
             }
-            var result = _repository.GetAll<SageLocation>().Where(x => x.Name == customer);
+            var result = _repository.GetAll<SageLocation>().Where(x => x.ARCustomer == customer).ToList();
+            if(!result.Any())
+            {
+                result = new List<SageLocation>();
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

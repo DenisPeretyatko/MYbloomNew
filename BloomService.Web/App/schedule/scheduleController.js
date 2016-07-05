@@ -137,7 +137,8 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
                 event = setTechnicianColor(event);
                 var date = new Date(event.start);
                 event.end._d = new Date(date.setHours(date.getHours() + parseInt(event.hourFoo)));
-                 saveEvent(event);
+                $('#calendar').fullCalendar('rerenderEvents');
+                saveEvent(event);
             },
             resourceLabelText: 'Technicians',
             timezone: 'local',
@@ -210,7 +211,6 @@ var scheduleController = function($scope, $interpolate, $timeout, commonDataServ
         });
         $scope.events = tempEvents;
         $("#calendar").fullCalendar('addEventSource', $scope.events);
-        $("#calendar").fullCalendar('rerenderEvents');
 
         $timeout(function () {
             $('.drag').each(function () {
