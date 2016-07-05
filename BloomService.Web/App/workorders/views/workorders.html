@@ -18,7 +18,7 @@
                         <thead>
                         <tr>
                             <th ng-init="data = ''" ng-click="data='num'; changeSorting(data)">#</th>
-                            <th class="footable-sorted" ng-click="data = 'date'; changeSorting(data)">Date</th>
+                            <th class="footable-sorted" ng-click="data = 'date'; changeSorting(data)">Schedule Date</th>
                             <th ng-click="data = 'customer'; changeSorting(data)" data-hide="phone,tablet">Customer</th>
                             <th ng-click="data = 'location'; changeSorting(data)" data-hide="phone,tablet">Location</th>
                             <th ng-click="data = 'status'; changeSorting(data)">Status</th>
@@ -28,7 +28,7 @@
                         <tbody>
                         <tr ng-repeat="workorder in workorders">
                             <td>{{workorder.WorkOrder}}</td>
-                            <td>{{workorder.DateEntered|date:mediumTime}}</td>
+                            <td>{{workorder.ScheduleDate|date:mediumTime}}</td>
                             <td>{{workorder.ARCustomer}}</td>
                             <td>{{workorder.Location}}</td>
                             <td>

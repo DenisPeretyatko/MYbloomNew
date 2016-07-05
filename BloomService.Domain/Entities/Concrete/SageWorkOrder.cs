@@ -284,5 +284,7 @@
         public SageRepair HourObj { get; set; }
         [XmlIgnore]
         public SagePermissionCode PermissionCodeObj { get; set; }
+        [XmlIgnore]
+        public DateTime? ScheduleDate { get; set; }
     }
 }
