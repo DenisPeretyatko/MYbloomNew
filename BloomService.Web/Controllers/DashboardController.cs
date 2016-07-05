@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
+using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Jobs;
 using BloomService.Web.Infrastructure.Services.Abstract;
 using BloomService.Web.Infrastructure.Services.Interfaces;
@@ -96,13 +97,23 @@ namespace BloomService.Web.Controllers
         [Route("Dashboard/UpdateNotificationTime")]
         public ActionResult UpdateNotificationTime(string str = null)
         {
+            var currentDate = DateTime.Now.GetLocalDate();
             _repository.Add(new SageUserProfile()
             {
                 UserId = UserModel.Id,
-                Date = DateTime.UtcNow.Date,
-                Time = DateTime.UtcNow.TimeOfDay
+                Date = currentDate,
+                Time = currentDate.TimeOfDay
             });
-            return Success();
+            var notificationTime = _repository.GetAll<SageUserProfile>().LastOrDefault(x => x.UserId == UserModel.Id) ?? new SageUserProfile()
+            {
+                UserId = UserModel.Id,
+                Date = DateTime.Now.GetLocalDate(),
+                Time = DateTime.UtcNow.GetLocalDate().TimeOfDay
+            };
+
+            var stringDate = String.Format("{0} {1}", notificationTime.Date.Date.ToString("dd-MM-yyyy"), notificationTime.Time.ToString(@"hh\:mm\:ss"));
+            
+            return Json(stringDate, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -114,12 +125,12 @@ namespace BloomService.Web.Controllers
             var notificationTime = _repository.GetAll<SageUserProfile>().LastOrDefault(x => x.UserId == UserModel.Id) ?? new SageUserProfile()
             {
                 UserId = UserModel.Id,
-                Date = DateTime.UtcNow.Date,
-                Time = DateTime.UtcNow.TimeOfDay
+                Date = DateTime.Now.GetLocalDate(),
+                Time = DateTime.UtcNow.GetLocalDate().TimeOfDay
             };
 
             lookups.Notifications = _notification.GetLastNotifications();
-            lookups.NotificationTime = String.Format("{0} {1}", notificationTime.Date.ToLocalTime().Date.ToString("dd-MM-yyyy"), notificationTime.Time.ToString(@"hh\:mm\:ss"));
+            lookups.NotificationTime = String.Format("{0} {1}", notificationTime.Date.Date.ToString("dd-MM-yyyy"), notificationTime.Time.ToString(@"hh\:mm\:ss"));
 
             return Json(lookups, JsonRequestBehavior.AllowGet);
         }

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Jobs;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using Common.Logging;
@@ -48,7 +49,7 @@ namespace BloomService.Web.Controllers
                 ARCustomer = model.Customer,
                 Location = model.Location,
                 CallType = model.Calltype,
-                CallDate = model.Calldate.Date,
+                CallDate = model.Calldate.GetLocalDate(),
                 Problem = model.Problem,
                 RateSheet = model.Ratesheet,
                 Employee = model.Emploee,
@@ -105,7 +106,7 @@ namespace BloomService.Web.Controllers
         [Route("Workorder")]
         public ActionResult GetWorkorders()
         {
-            var minDate = DateTime.Now.AddYears(-1);
+            //var minDate = DateTime.Now.AddYears(-1);
             var list = _repository.SearchFor<SageWorkOrder>().OrderByDescending(x => x.DateEntered).Take(500).ToList();
             var result = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(list);
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -224,7 +225,7 @@ namespace BloomService.Web.Controllers
                 ARCustomer = model.Customer,
                 Location = model.Location,
                 CallType = model.Calltype,
-                CallDate = model.Calldate.Date,
+                CallDate = model.Calldate.GetLocalDate(),
                 Problem = model.Problem,
                 RateSheet = model.Ratesheet,
                 Employee = model.Emploee,
