@@ -22,23 +22,24 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     $scope.lookups = state.lookups;
     $scope.EquipType = ["Labor", "Parts"];
     $scope.equipmentList = [];
-    $scope.obj.data = new Date();
+    $scope.obj.data = new Date();    
+    var customerChanged = false;
 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
 
         if (state.lookups.Equipment !== undefined) {
             var equipment = {
-                equipType: $scope.EquipType,
-                description: $scope.lookups.Parts,
-                empl: $scope.lookups.Employes,
+                equipType: angular.copy($scope.EquipType),
+                empl: angular.copy($scope.lookups.Employes),
+                description: angular.copy($scope.lookups.Parts),
                 date: $scope.obj.data,
+                isEditing: true,
                 cost: 0.00,
                 biled: 0.00,
                 rate: 0.0000,
-                isEditing: true,
-                labor: $scope.lookups.Hours,
-                parts: $scope.lookups.Parts
+                labor: angular.copy($scope.lookups.Hours),
+                parts: angular.copy($scope.lookups.Parts)
             }
             $scope.equipment.push(equipment);
         }
@@ -122,7 +123,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         item.equipType.selected = type;
 
         if (item.equipType.selected == 'Labor') {
-            var selectedDesc = $scope.lookups.Parts.find(function (element) {
+            var selectedDesc = $scope.lookups.Hours.find(function (element) {
                 return element.Description === item.description;
             });
             item.description = angular.copy($scope.lookups.Hours);
@@ -158,10 +159,10 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         if (item.equipType.selected != undefined && item.empl.selected != undefined && item.date != undefined && item.description != undefined) {
             item.equipType = item.equipType.selected;
             if (item.equipType == 'Labor') {
-                item.description = item.labor.selected.description.Description;
+                item.description = item.labor.selected.Description;
             }
             else {
-                item.description = item.parts.selected.description.Description;
+                item.description = item.parts.selected.Description;
             }
 
             item.empl = item.empl.selected.Name;
@@ -195,7 +196,37 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         el.parent().parent().remove();
         $scope.equipment.splice($scope.equipment.indexOf(item), 1);
     }
-    //$scope.locations = ["1",  "2", "3", "4"];
+    
+    $scope.$watch(function () {
+        return $scope.lookups.Customers != undefined ? $scope.lookups.Customers.selected != undefined ? $scope.lookups.Customers.selected : "" : "";
+    }, function () {
+        if ($scope.lookups.Customers != undefined && $scope.lookups.Customers.selected != undefined && !customerChanged) {
+            var customer = $scope.lookups.Customers.selected.Customer;
+            var request = "{'customer':'" + customer + "'}";
+            commonDataService.locationsByCustomer(request).then(function (response) {
+                var selLocation = {};
+                if ($scope.lookups.Locations.selected != undefined && $scope.lookups.Locations.selected.ARCustomer == $scope.lookups.Customers.selected.Customer) {
+                    selLocation = $scope.lookups.Locations.selected;
+                }
+                $scope.lookups.Locations = response.data.length > 0 ? response.data : [];
+                $scope.lookups.Locations.selected = selLocation;
+            });
+        }
+    });
+
+    $scope.$watch(function () {
+        return $scope.lookups.Locations != undefined ? $scope.lookups.Locations.selected != undefined ? $scope.lookups.Locations.selected : "" : ""
+    }, function () {
+        if ($scope.lookups.Locations != undefined && $scope.lookups.Locations.selected != undefined && $scope.lookups.Customers.selected == undefined) {
+            var arCustomer = $scope.lookups.Locations.selected.ARCustomer;
+            var request = "{'arcustomer':'" + arCustomer + "'}";
+            commonDataService.customerByLocation(request).then(function (response) {
+                customerChanged = true;
+                $scope.lookups.Customers.selected = response.data;
+            });
+            customerChanged = false;
+        }
+    });
 
 };
 editWorkorderController.$inject = ["$scope", "$stateParams", "$state", "$compile", "commonDataService", "state"];

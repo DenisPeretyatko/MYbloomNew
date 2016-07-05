@@ -169,13 +169,18 @@
                                         <label>{{equipm.equipType}}</label>
                                     </td>
                                     <td ng-if="equipm.isEditing == true">
-                                        <div ng-if="equipm.equipType.selected == 'Labor'" angucomplete-alt placeholder="Description" maxlength="50"  local-data="equipm.labor"  selected-object="equipm.labor.selected"
-                                             search-fields="Description" title-field="Description" minlength="1" input-class="form-control form-control-small" match-class="highlight">
-                                        </div>
-                                       <div ng-if="equipm.equipType.selected == 'Parts' || !equipm.equipType.selected" angucomplete-alt placeholder="Description" maxlength="50" selected-object="equipm.parts.selected" 
-                                            local-data="equipm.parts" search-fields="Description" title-field="Description" minlength="1" 
-                                            input-class="form-control form-control-small" match-class="highlight">
-                                       </div>
+                                        <ui-select ng-if="equipm.equipType.selected == 'Labor'" ng-model="equipm.labor.selected" theme="bootstrap">
+                                            <ui-select-match placeholder="Description">{{$select.selected.Description}}</ui-select-match>
+                                            <ui-select-choices repeat="item in equipm.labor | filter: $select.search | limitTo:100">
+                                                <div>{{item.Description}}</div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <ui-select ng-if="equipm.equipType.selected == 'Parts' || !equipm.equipType.selected" ng-model="equipm.parts.selected" theme="bootstrap">
+                                            <ui-select-match placeholder="Description">{{$select.selected.Description}}</ui-select-match>
+                                            <ui-select-choices repeat="item in equipm.parts | filter: $select.search | limitTo:100">
+                                                <div>{{item.Description}}</div>
+                                            </ui-select-choices>
+                                        </ui-select>
                                     </td>
                                     <td ng-if="equipm.isEditing == false">
                                         <label>{{equipm.description}}</label>
