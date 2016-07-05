@@ -123,9 +123,9 @@
                             <div class="form-group">
                                 <label>Payment method</label>
                                 <ui-select ng-model="lookups.PaymentMethods.selected" theme="bootstrap">
-                                    <ui-select-match placeholder="Payment method">{{$select.selected}}</ui-select-match>
+                                    <ui-select-match placeholder="Payment method">{{$select.selected.Method}}</ui-select-match>
                                     <ui-select-choices repeat="item in lookups.PaymentMethods | filter: $select.search">
-                                        <div >{{item}}</div>
+                                        <div>{{item.Method}}</div>
                                     </ui-select-choices>
                                 </ui-select>
                             </div>

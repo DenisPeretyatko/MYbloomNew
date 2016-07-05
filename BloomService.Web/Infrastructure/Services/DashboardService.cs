@@ -43,7 +43,7 @@ namespace BloomService.Web.Services.Concrete
             lookups.RateSheets = Mapper.Map<List<SageRateSheet>, List<RateSheetModel>>(ratesheets.ToList());
             lookups.PermissionCodes = Mapper.Map<List<SagePermissionCode>, List<PermissionCodeModel>>(permissionCodes.ToList());
 
-            lookups.PaymentMethods = PaymentMethod.PaymentMethodList;
+            lookups.PaymentMethods = PaymentMethod.PaymentMethods;
             lookups.Parts = Mapper.Map<List<SagePart>, List<PartModel>>(parts.ToList());
 
             return lookups;
