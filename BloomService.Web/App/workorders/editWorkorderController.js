@@ -23,30 +23,30 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     $scope.EquipType = ["Labor", "Parts"];
     $scope.equipmentList = [];
     $scope.obj.data = new Date();
-    $scope.initCustomer = "";
-    $scope.initLocation = "";
+    var customerChanged = false;
+
 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
 
         if (state.lookups.Equipment !== undefined) {
             var equipment = {
-                equipType: $scope.EquipType,
-                description: $scope.lookups.Parts,
-                empl: $scope.lookups.Employes,
-                date: $scope.obj.data,
-                cost: 0.00,
-                biled: 0.00,
-                rate: 0.0000,
-                isEditing: true,
-                labor: $scope.lookups.Hours,
-                parts: $scope.lookups.Parts
+                equipType: angular.copy($scope.EquipType),
+                    empl: angular.copy($scope.lookups.Employes),
+                    description: angular.copy($scope.lookups.Parts),
+                    date: $scope.obj.data,
+                    isEditing: true,
+                    cost: 0.00,
+                    biled: 0.00,
+                    rate: 0.0000,
+                    labor: angular.copy($scope.lookups.Hours),
+                    parts: angular.copy($scope.lookups.Parts)
             }
             $scope.equipment.push(equipment);
         }
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined) {
-            $scope.initCustomer = $scope.editableWorkOrder.CustomerObj;
-            $scope.initLocation = $scope.editableWorkOrder.LocationObj;
+            $scope.lookups.Customers.selected = $scope.editableWorkOrder.CustomerObj;
+            $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
             $scope.obj.calldate = $scope.editableWorkOrder.CallDate;
             $scope.lookups.Problems.selected = $scope.editableWorkOrder.ProblemObj;
@@ -57,14 +57,14 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.obj.locationcomments = $scope.editableWorkOrder.Comments;
             $scope.obj.customerpo = $scope.editableWorkOrder.CustomerPO;
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
-            $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PayMethod;
+            $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
         }
     });
 
     $scope.$watch(function () {return $scope.editableWorkOrder}, function () {
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined) {
-            $scope.initCustomer = $scope.editableWorkOrder.CustomerObj;
-            $scope.initLocation = $scope.editableWorkOrder.LocationObj;
+            $scope.lookups.Customers.selected = $scope.editableWorkOrder.CustomerObj;
+            $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
             $scope.obj.calldate = $scope.editableWorkOrder.CallDate;
             $scope.lookups.Problems.selected = $scope.editableWorkOrder.ProblemObj;
@@ -75,7 +75,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.obj.locationcomments = $scope.editableWorkOrder.Comments;
             $scope.obj.customerpo = $scope.editableWorkOrder.CustomerPO;
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
-            $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PayMethod;
+            $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
         }
     });
 
@@ -83,8 +83,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         var workorder = {
             WorkOrder: $scope.editableWorkOrder.WorkOrder,
             Id: $stateParams.id,
-            Customer: $scope.initCustomer != null ? $scope.initCustomer.Customer : $scope.lookups.Customers.selected.description.Customer,
-            Location: $scope.initLocation != null ? $scope.initLocation.Location : $scope.lookups.Locations.selected.description.Location,
+            Customer: $scope.lookups.Customers.selected == null ? "" : $scope.lookups.Customers.selected.Customer,
+            Location: $scope.lookups.Locations.selected == null ? "" : $scope.lookups.Locations.selected.Location,
             Calltype: $scope.lookups.Calltypes.selected == null ? "" : $scope.lookups.Calltypes.selected.CallType,
             Calldate: $scope.obj.calldate,
             Problem: $scope.lookups.Problems.selected == null ? "" : $scope.lookups.Problems.selected.Problem,
@@ -122,7 +122,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         item.equipType.selected = type;
 
         if (item.equipType.selected == 'Labor') {
-            var selectedDesc = $scope.lookups.Parts.find(function (element) {
+            var selectedDesc = $scope.lookups.Hours.find(function (element) {
                 return element.Description === item.description;
             });
             item.description = angular.copy($scope.lookups.Hours);
@@ -158,10 +158,10 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         if (item.equipType.selected != undefined && item.empl.selected != undefined && item.date != undefined && item.description != undefined) {
             item.equipType = item.equipType.selected;
             if (item.equipType == 'Labor') {
-                item.description = item.labor.selected.description.Description;
+                item.description = item.labor.selected.Description;
             }
             else {
-                item.description = item.parts.selected.description.Description;
+                item.description = item.parts.selected.Description;
             }
 
             item.empl = item.empl.selected.Name;
@@ -195,7 +195,70 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         el.parent().parent().remove();
         $scope.equipment.splice($scope.equipment.indexOf(item), 1);
     }
-    //$scope.locations = ["1",  "2", "3", "4"];
+    
+    
+     //$scope.$watch(function () {
+     //         return $scope.lookups.Customers != undefined ? $scope.lookups.Customers.selected != undefined ? $scope.lookups.Customers.selected : "" : "";
+     //     }, function () {
+     //         if ($scope.lookups.Customers != undefined && $scope.lookups.Customers.selected != undefined && !customerChanged) {
+     //             var customer = $scope.lookups.Customers.selected.Customer;
+     //             var request = "{'customer':'" + customer + "'}";
+     //                    commonDataService.locationsByCustomer(request).then(function (response) {
+     //                            var selLocation = {};
+     //                            if ($scope.lookups.Locations.selected != undefined && $scope.lookups.Locations.selected.ARCustomer == $scope.lookups.Customers.selected.Customer) {
+     //                                 selLocation = $scope.lookups.Locations.selected;
+     //                             }
+     //                            $scope.lookups.Locations = response.data.length > 0 ? response.data : [];
+     //                             $scope.lookups.Locations.selected = selLocation;
+     //                         });
+     //                 }
+     //         });
+     
+     //    $scope.$watch(function () {
+     //            return $scope.lookups.Locations != undefined ? $scope.lookups.Locations.selected != undefined ? $scope.lookups.Locations.selected : "" : ""
+     //        }, function () {
+     //                if ($scope.lookups.Locations != undefined && $scope.lookups.Locations.selected != undefined && $scope.lookups.Customers.selected == undefined) {
+     //                        var arCustomer = $scope.lookups.Locations.selected.ARCustomer;
+     //                        var request = "{'arcustomer':'" + arCustomer + "'}";
+     //                        commonDataService.customerByLocation(request).then(function (response) {
+     //                                customerChanged = true;
+     //                                $scope.lookups.Customers.selected = response.data;
+     //                            });
+     //                        customerChanged = false;
+     //                    }
+     //        });
+
+         $scope.$watch(function () {
+             return $scope.lookups.Customers != undefined ? $scope.lookups.Customers.selected != undefined ? $scope.lookups.Customers.selected : "" : "";
+         }, function () {
+             if ($scope.lookups.Customers != undefined && $scope.lookups.Customers.selected != undefined && !customerChanged) {
+                 var customer = $scope.lookups.Customers.selected.Customer;
+                 var request = "{'customer':'" + customer + "'}";
+                 commonDataService.locationsByCustomer(request).then(function (response) {
+                     var selLocation = {};
+                     if ($scope.lookups.Locations.selected != undefined && $scope.lookups.Locations.selected.ARCustomer == $scope.lookups.Customers.selected.Customer) {
+                         selLocation = $scope.lookups.Locations.selected;
+                     }
+                     $scope.lookups.Locations = response.data.length > 0 ? response.data : [];
+                     $scope.lookups.Locations.selected = selLocation;
+                 });
+             }
+         });
+
+         $scope.$watch(function () {
+             return $scope.lookups.Locations != undefined ? $scope.lookups.Locations.selected != undefined ? $scope.lookups.Locations.selected : "" : ""
+         }, function () {
+             if ($scope.lookups.Locations != undefined && $scope.lookups.Locations.selected != undefined && $scope.lookups.Customers.selected == undefined) {
+                 var arCustomer = $scope.lookups.Locations.selected.ARCustomer;
+                 var request = "{'arcustomer':'" + arCustomer + "'}";
+                 customerChanged = true;
+                 commonDataService.customerByLocation(request).then(function (response) {
+                     $scope.lookups.Customers.selected = response.data;
+                 });
+             }
+             customerChanged = false;
+         });
+
 
 };
 editWorkorderController.$inject = ["$scope", "$stateParams", "$state", "$compile", "commonDataService", "state"];
