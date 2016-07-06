@@ -18,7 +18,7 @@ namespace BloomService.Web.Controllers
     using AutoMapper;
     using Infrastructure.SignalR;
     using Infrastructure.Services.Interfaces;
-
+    using Infrastructure.Constants;
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
@@ -90,6 +90,7 @@ namespace BloomService.Web.Controllers
             workOrder.EmployeeObj = Mapper.Map<EmployeeModel, SageEmployee>(lookups.Employes.FirstOrDefault(x => x.Name == workOrder.Employee));
             workOrder.HourObj = Mapper.Map<RepairModel, SageRepair>(lookups.Hours.FirstOrDefault(x => x.Repair == workOrder.EstimatedRepairHours));
             workOrder.PermissionCodeObj = Mapper.Map<PermissionCodeModel, SagePermissionCode>(lookups.PermissionCodes.FirstOrDefault(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode));
+            workOrder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workOrder.PayMethod.Trim());
 
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
@@ -171,7 +172,7 @@ namespace BloomService.Web.Controllers
                     workorders = model.Direction ? workorders.OrderBy(x => x.WorkOrder) : workorders.OrderByDescending(x => x.WorkOrder);
                     break;
                 case "date":
-                    workorders = model.Direction ? workorders.OrderBy(x => x.DateEntered) : workorders.OrderByDescending(x => x.DateEntered);
+                    workorders = model.Direction ? workorders.OrderBy(x => x.ScheduleDate) : workorders.OrderByDescending(x => x.ScheduleDate);
                     break;
                 case "customer":
                     workorders = model.Direction ? workorders.OrderBy(x => x.ARCustomer) : workorders.OrderByDescending(x => x.ARCustomer);
@@ -183,7 +184,7 @@ namespace BloomService.Web.Controllers
                     workorders = model.Direction ? workorders.OrderBy(x => x.Status) : workorders.OrderByDescending(x => x.Status);
                     break;
                 case null:
-                    workorders = workorders.OrderByDescending(x => x.DateEntered);
+                    workorders = workorders.OrderByDescending(x => x.ScheduleDate);
                     break;
             }
 
@@ -240,7 +241,8 @@ namespace BloomService.Web.Controllers
                 CustomerPO = model.Customerpo,
                 PermissionCode = model.Permissiocode,
                 PayMethod = model.Paymentmethods,
-                WorkOrder = model.WorkOrder
+                WorkOrder = model.WorkOrder,
+                Id = model.Id
             };
 
             var result = _sageApiProxy.EditWorkOrder(workorder);
@@ -250,13 +252,11 @@ namespace BloomService.Web.Controllers
                 return Error("Was not able to update workorder to sage");
             }
 
+            result.Entity.Id = workorder.Id;
             _repository.Update(result.Entity);
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
             _hub.UpdateWorkOrder(model);
             return Success();
-            
-
-            
         }
     }
 }
