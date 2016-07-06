@@ -103,3 +103,6 @@
     font-weight: 400;
 }
 
+.fc-rows  tr {
+    height: 34px !important;
+}

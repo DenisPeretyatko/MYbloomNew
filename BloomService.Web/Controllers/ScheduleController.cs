@@ -110,7 +110,7 @@ namespace BloomService.Web.Controllers
                 DateEntered = databaseAssignment.ScheduleDate
             });
 
-            _notification.SendNotification(string.Format("Workorder {0} assignment to {1}", workorder.Name, employee.Name));
+            _notification.SendNotification(string.Format("Workorder {0} assigned to {1}", workorder.Name, employee.Name));
             _log.InfoFormat("DatabaseAssignment added to repository. Employee {0}, Employee ID {1}", databaseAssignment.Employee, databaseAssignment.EmployeeId);
             return Success();
         }
@@ -143,7 +143,7 @@ namespace BloomService.Web.Controllers
             workOrder.AssignmentId = databaseAssignment.Assignment;
             _repository.Update(workOrder);
             _log.InfoFormat("Repository update workorder. Name: {0}, Id: {1}", workOrder.Name, workOrder.Id);
-            _notification.SendNotification(string.Format("Workorder {0} unassignment from {1}", workOrder.Name, employee.Name));
+            _notification.SendNotification(string.Format("Workorder {0} unassigned from {1}", workOrder.Name, employee.Name));
             _hub.DeleteAssigment(model);
             return Success();
         }

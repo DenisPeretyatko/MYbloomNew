@@ -19,9 +19,9 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
     /* message on Drop */
     $scope.alertOnDrop = function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view){
         $scope.alertMessage = (event.title + ': Droped to make dayDelta ' + dayDelta);
-        event = setTechnicianColor(event);
-        $('#calendar').fullCalendar('rerenderEvents');
-        saveEvent(event);
+            event = setTechnicianColor(event);
+            $('#calendar').fullCalendar('rerenderEvents');
+            saveEvent(event);
     };
     /* message on Resize */
     $scope.alertOnResize = function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ){
@@ -67,9 +67,9 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
             editable: true,
             events: $scope.events,
             eventRender: function (event, element) {
-                element.qtip({
-                    content: event.description
-                });
+                    element.qtip({
+                        content: event.description
+                    });
             },
             droppable: true, // this allows things to be dropped onto the calendar
             dragRevertDuration: 0,
@@ -135,11 +135,15 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
                 }
             },
             eventReceive: function (event) {
-                event = setTechnicianColor(event);
-                var date = new Date(event.start);
-                event.end._d = new Date(date.setHours(date.getHours() + parseInt(event.hourFoo)));
-                $('#calendar').fullCalendar('rerenderEvents');
-                saveEvent(event);
+                if (!$rootScope.unavailableTechniciansIds.includes(event.resourceId)) {
+                    event = setTechnicianColor(event);
+                    var date = new Date(event.start);
+                    event.end._d = new Date(date.setHours(date.getHours() + parseInt(event.hourFoo)));
+                    $('#calendar').fullCalendar('rerenderEvents');
+                    saveEvent(event);
+                } else {
+                    $('#calendar').fullCalendar('removeEvents', event._id);
+                }
             },
             resourceLabelText: 'Technicians',
             timezone: 'local',
@@ -160,8 +164,9 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
             && x <= offset.right
             && y + scroll <= offset.bottom) { return true; }
         return false;
-
     }
+
+
 
     $scope.eventSources = [$scope.events];
     $scope.resouceSources = [$scope.resources];
@@ -176,10 +181,9 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
                     avatarUrl: value.Picture != null ? value.Picture : "public/images/user.png",
                     color: value.Color == "" ? "" : value.Color
                 });
-                //if (value.IsAvailable == false) {
-   
-                //    $rootScope.unavailableTechniciansIds.unshift(value);
-                //}
+                if (value.IsAvailable == false) {
+                    $rootScope.unavailableTechniciansIds.unshift(value.Employee);
+                }
             }
         }, $scope.resources);
     });
@@ -257,17 +261,19 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
             });
         }, 100);
 
-        angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) { //value.Employee
-            //var row = $("tr[data-resource-id=" + value.Employee + ']');
-            //row[0].style.backgroundColor = "aliceblue";
-            //row[0].onmouseup = function () {
-            //    alert(1);
-            //};;
-            //row[1].style.backgroundColor = "aliceblue";
-            //row[1].onmouseup = function () {
-            //    alert(1);
-           // };
+
+       
+        angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) { 
+            var row = $("tr[data-resource-id=" + value + ']');
+            row[0].style.backgroundColor = "aliceblue";
+            row[1].style.backgroundColor = "aliceblue";
         });
+        
+        //var table = $(".fc-rows")[0].children[0].children[0].children;
+        //jQuery.each(table, function (i, val) {
+        //    val.style.height = "34px";
+        //    console.log(table);
+        //});
     });
 
     function formatDate(inputdate) {

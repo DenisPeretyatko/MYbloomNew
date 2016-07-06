@@ -28,7 +28,7 @@ namespace BloomService.Web.Services.Concrete
             var equipment = _repository.GetAll<SageEquipment>();
             var customer = _repository.GetAll<SageCustomer>();
             var repairs = _repository.GetAll<SageRepair>();
-            var ratesheets = _repository.GetAll<SageRateSheet>();
+            var ratesheets = _repository.GetAll<SageRateSheet>().Where(x => x.QINACTIVE == "N");
             var permissionCodes = _repository.GetAll<SagePermissionCode>();
             var parts = _repository.GetAll<SagePart>();
 
