@@ -262,13 +262,20 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
         }, 100);
 
 
-       
+     
         angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) { 
-            var row = $("tr[data-resource-id=" + value + ']');
-            row[0].style.backgroundColor = "aliceblue";
-            row[1].style.backgroundColor = "aliceblue";
+            $("tr[data-resource-id=" + value + ']').css("background-color", "aliceblue");
         });
         
+        $rootScope.$watchCollection(function () {
+            return $rootScope.unavailableTechniciansIds;
+        }, function () {
+            $("tr[data-resource-id]").css("background-color", "");
+            angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) {
+                $("tr[data-resource-id=" + value + ']').css("background-color", "aliceblue");
+            });
+        });
+
         //var table = $(".fc-rows")[0].children[0].children[0].children;
         //jQuery.each(table, function (i, val) {
         //    val.style.height = "34px";
