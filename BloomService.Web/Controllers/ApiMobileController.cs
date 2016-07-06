@@ -187,7 +187,7 @@ namespace BloomService.Web.Controllers
                 var newItem = new SageWorkOrderItem()
                 {
                     WorkOrder = model.WorkOrder,
-                    WorkOrderItem1 = items.Max(x => x.WorkOrderItem1) + 1,
+                    WorkOrderItem1 = items.Any()? items.Max(x => x.WorkOrderItem1) + 1:1,
                     WorkDate = model.WorkDate,
                     Description = model.Description,
                     Quantity = model.Quantity,
@@ -275,7 +275,7 @@ namespace BloomService.Web.Controllers
             repository.Update(workorder);
             _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, status);
             var workorder2 = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
-            this.notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, status));
+            notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, status));
             return Success();
         }
 
