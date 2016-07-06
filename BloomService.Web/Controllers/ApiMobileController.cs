@@ -93,6 +93,7 @@ namespace BloomService.Web.Controllers
             return Json(new { access_token = token.Token }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
         [Route("Apimobile/Equipment/{part}")]
         public ActionResult GetEquipment(string part)
         {
@@ -109,6 +110,7 @@ namespace BloomService.Web.Controllers
         }
 
 
+        [HttpGet]
         [Route("Apimobile/Part")]
         public ActionResult GetPart()
         {
@@ -116,6 +118,7 @@ namespace BloomService.Web.Controllers
             return Json(result);
         }
 
+        [HttpGet]
         [Route("Apimobile/Repair")]
         public ActionResult GetRepair()
         {
