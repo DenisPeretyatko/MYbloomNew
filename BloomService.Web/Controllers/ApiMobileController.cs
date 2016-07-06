@@ -170,7 +170,7 @@ namespace BloomService.Web.Controllers
                     var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment.ToString());
                     order.Equipments.AddRange(equipments);
                 }
-                order.WorkOrderItems = repository.SearchFor<SageWorkOrderItem>(x => x.WorkOrder.ToString() == order.WorkOrder).ToList();//repository.GetAll<SageWorkOrderItem>().ToList().Where(x => x.WorkOrder.ToString() == order.WorkOrder);
+                order.WorkOrderItems = repository.SearchFor<SageWorkOrderItem>().ToList().Where(x => x.WorkOrder.ToString() == order.WorkOrder);
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
