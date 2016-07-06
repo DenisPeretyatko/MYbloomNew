@@ -55,10 +55,10 @@ namespace BloomService.Web.Services.Concrete
             }
 
             var imagesDb = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.IdWorkOrder).SingleOrDefault();
-            var countImage = 0;
+            var countImage = 1;
             if (imagesDb != null && imagesDb.Images != null)
             {
-                countImage = imagesDb.Images.Count();
+                countImage = imagesDb.Images.Count() + 1;
             }
             else
             {

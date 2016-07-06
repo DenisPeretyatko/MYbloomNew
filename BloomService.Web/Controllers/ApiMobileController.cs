@@ -93,6 +93,7 @@ namespace BloomService.Web.Controllers
             return Json(new { access_token = token.Token }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
         [Route("Apimobile/Equipment/{part}")]
         public ActionResult GetEquipment(string part)
         {
@@ -109,6 +110,7 @@ namespace BloomService.Web.Controllers
         }
 
 
+        [HttpGet]
         [Route("Apimobile/Part")]
         public ActionResult GetPart()
         {
@@ -116,6 +118,7 @@ namespace BloomService.Web.Controllers
             return Json(result);
         }
 
+        [HttpGet]
         [Route("Apimobile/Repair")]
         public ActionResult GetRepair()
         {
@@ -167,7 +170,7 @@ namespace BloomService.Web.Controllers
                     var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment.ToString());
                     order.Equipments.AddRange(equipments);
                 }
-                order.WorkOrderItems = repository.GetAll<SageWorkOrderItem>().ToList().Where(x => x.WorkOrder.ToString() == order.WorkOrder);
+                order.WorkOrderItems = repository.SearchFor<SageWorkOrderItem>().ToList().Where(x => x.WorkOrder.ToString() == order.WorkOrder);
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -184,7 +187,7 @@ namespace BloomService.Web.Controllers
                 var newItem = new SageWorkOrderItem()
                 {
                     WorkOrder = model.WorkOrder,
-                    WorkOrderItem1 = items.Max(x => x.WorkOrderItem1) + 1,
+                    WorkOrderItem1 = items.Any()? items.Max(x => x.WorkOrderItem1) + 1:1,
                     WorkDate = model.WorkDate,
                     Description = model.Description,
                     Quantity = model.Quantity,
@@ -193,6 +196,7 @@ namespace BloomService.Web.Controllers
                     FlatRateLaborTaxAmt = model.FlatRateLaborTaxAmt
                 };
                 repository.Add(newItem);
+                return Json(newItem, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -204,7 +208,7 @@ namespace BloomService.Web.Controllers
                 item.FlatRateLaborTaxAmt = model.FlatRateLaborTaxAmt;
                 repository.Update(item);
             }
-            return Success();
+            return Json(item, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -272,7 +276,7 @@ namespace BloomService.Web.Controllers
             repository.Update(workorder);
             _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, status);
             var workorder2 = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
-            this.notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, status));
+            notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, status));
             return Success();
         }
 

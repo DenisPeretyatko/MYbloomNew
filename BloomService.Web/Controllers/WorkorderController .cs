@@ -71,7 +71,7 @@ namespace BloomService.Web.Controllers
 
             _repository.Add(result.Entity);
             _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
-            _notification.SendNotification(string.Format("{0} was created", workorder.Name));
+            _notification.SendNotification(string.Format("{0} was created", workorder.WorkOrder));
             return Success();
         }
 
