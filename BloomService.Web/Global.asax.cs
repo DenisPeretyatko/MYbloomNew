@@ -16,7 +16,7 @@
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles); 
             AutoMapperConfig.RegisterMappings();
-           // JobManager.Initialize(new BloomJobRegistry());
+            JobManager.Initialize(new BloomJobRegistry());
         }
     }
 }
