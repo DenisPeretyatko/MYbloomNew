@@ -11,6 +11,7 @@
     this.notificationTime = {}
     $rootScope.notifications = [];
     $rootScope.workorders = [];
+    $rootScope.unavailableTechniciansIds = [];
 
     var paginationModel = {
         Index: 0,
@@ -108,12 +109,19 @@
     connection.client.UpdateTechnician = function (technician) {
         angular.forEach(_this.technicians, function (value, key) {
             if (value.Employee === technician.Id) {
-                commonDataService.getTechnician(value.Id).then(function (response) {
+                commonDataService.getTechnician(value.Id).then(function(response) {
                     delete _this.technicians[key];
                     _this.technicians[key] = response.data;
                 });
-            }
+            } 
         });
+        if ($rootScope.unavailableTechniciansIds.includes(technician.Id) && technician.IsAvailable) {
+            $rootScope.unavailableTechniciansIds.splice($rootScope.unavailableTechniciansIds.indexOf(technician.Id), 1);
+        }
+        else if ($rootScope.unavailableTechniciansIds.includes(technician.Id) === false && technician.IsAvailable === false) {
+            $rootScope.unavailableTechniciansIds.unshift(technician.Id);
+        }
+
     };
 
     connection.client.updateTechnicianLocation = function (technician) {
