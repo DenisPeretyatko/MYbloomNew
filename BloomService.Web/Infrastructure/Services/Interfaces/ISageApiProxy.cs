@@ -1,9 +1,10 @@
-﻿using BloomService.Domain.Entities.Concrete;
-using BloomService.Domain.Entities.Concrete.Auxiliary;
-using System.Collections.Generic;
-
-namespace BloomService.Web.Infrastructure.Services.Abstract
+﻿namespace BloomService.Web.Infrastructure.Services.Interfaces
 {
+    using System.Collections.Generic;
+
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Entities.Concrete.Auxiliary;
+
     public interface ISageApiProxy
     {
         SageResponse<SageCustomer> GetCustomers();

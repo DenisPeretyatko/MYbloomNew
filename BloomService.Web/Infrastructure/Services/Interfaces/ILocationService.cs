@@ -1,4 +1,4 @@
-﻿namespace BloomService.Web.Services.Abstract
+﻿namespace BloomService.Web.Infrastructure.Services.Interfaces
 {
     using BloomService.Domain.Entities.Concrete;
 

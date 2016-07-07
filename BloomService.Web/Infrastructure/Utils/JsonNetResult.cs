@@ -1,4 +1,4 @@
-﻿namespace BloomService.Web.Utils
+﻿namespace BloomService.Web.Infrastructure.Utils
 {
     using System;
     using System.IO;
@@ -11,7 +11,7 @@
     {
         public JsonNetResult()
         {
-            Settings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            this.Settings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
         }
 
         public JsonSerializerSettings Settings { get; private set; }
@@ -24,23 +24,23 @@
             }
 
             HttpResponseBase response = context.HttpContext.Response;
-            response.ContentType = string.IsNullOrEmpty(ContentType) ? "application/json" : ContentType;
+            response.ContentType = string.IsNullOrEmpty(this.ContentType) ? "application/json" : this.ContentType;
 
-            if (ContentEncoding != null)
+            if (this.ContentEncoding != null)
             {
-                response.ContentEncoding = ContentEncoding;
+                response.ContentEncoding = this.ContentEncoding;
             }
 
-            if (Data == null)
+            if (this.Data == null)
             {
                 return;
             }
 
-            var scriptSerializer = JsonSerializer.Create(Settings);
+            var scriptSerializer = JsonSerializer.Create(this.Settings);
 
             using (var sw = new StringWriter())
             {
-                scriptSerializer.Serialize(sw, Data);
+                scriptSerializer.Serialize(sw, this.Data);
                 response.Write(sw.ToString());
             }
         }

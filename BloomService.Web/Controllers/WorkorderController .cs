@@ -11,11 +11,12 @@ namespace BloomService.Web.Controllers
     using Domain.Entities.Concrete;
     using Models;
     using System.Linq;
-    using Domain.Repositories.Abstract;
     using System;
-    using Infrastructure.Services.Abstract;
     using System.Collections.Generic;
     using AutoMapper;
+
+    using BloomService.Web.Infrastructure.Mongo;
+
     using Infrastructure.SignalR;
     using Infrastructure.Services.Interfaces;
     using Infrastructure.Constants;

@@ -1,4 +1,4 @@
-﻿namespace BloomService.Web.Utils
+﻿namespace BloomService.Web.Infrastructure.Utils
 {
     using Newtonsoft.Json;
 

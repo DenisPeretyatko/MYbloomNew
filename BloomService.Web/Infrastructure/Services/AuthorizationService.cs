@@ -1,20 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Web.Script.Serialization;
-using BloomService.Domain.Entities.Concrete;
-using BloomService.Domain.Extensions;
-using BloomService.Domain.Models.Requests;
-using BloomService.Domain.Models.Responses;
-using BloomService.Domain.Repositories.Abstract;
-using BloomService.Web.Managers;
-using BloomService.Web.Models;
-using BloomService.Web.Services.Abstract;
-using Microsoft.Owin.Security;
-using RestSharp;
-
-namespace BloomService.Web.Services.Concrete
+﻿namespace BloomService.Web.Infrastructure.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Claims;
+
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Models.Responses;
+    using BloomService.Web.Infrastructure.Mongo;
+    using BloomService.Web.Infrastructure.Services.Interfaces;
+    using BloomService.Web.Models;
+
+    using Microsoft.Owin.Security;
+
     public class AuthorizationService : IAuthorizationService
     {
         private readonly IRepository _repository;
@@ -22,8 +19,8 @@ namespace BloomService.Web.Services.Concrete
 
         public AuthorizationService(IRepository repository, BloomServiceConfiguration configuration)
         {
-            _repository = repository;
-            _configuration = configuration;
+            this._repository = repository;
+            this._configuration = configuration;
         }
 
         public UserModel GetUser(ClaimsPrincipal claimsPrincipal)
@@ -42,7 +39,7 @@ namespace BloomService.Web.Services.Concrete
                     .Select(c => c.Value).SingleOrDefault()
             };
 
-            var user = _repository.SearchFor<SageEmployee>(x => x.Employee == userModel.Id).FirstOrDefault();
+            var user = this._repository.SearchFor<SageEmployee>(x => x.Employee == userModel.Id).FirstOrDefault();
             if (user != null)
                 userModel.Name = user.Name;
             return userModel;
@@ -63,7 +60,7 @@ namespace BloomService.Web.Services.Concrete
 
         public AuthorizationResponse Authorization(string login, string password)
         {
-            var user = CheckUser(login, password);
+            var user = this.CheckUser(login, password);
             if (user == null)
                 return null;
 

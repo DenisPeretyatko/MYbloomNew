@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web.Configuration;
 using BloomService.Domain.Extensions;
-using BloomService.Web.Services.Abstract;
 
 namespace BloomService.Web.Infrastructure.Services
 {
@@ -10,9 +9,7 @@ namespace BloomService.Web.Infrastructure.Services
     using BloomService.Domain.Entities.Abstract;
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.Entities.Concrete.Auxiliary;
-    using BloomService.Web.Infrastructure.Services.Abstract;
-    using BloomService.Web.Managers;
-    using BloomService.Web.Services.Concrete;
+    using BloomService.Web.Infrastructure.Services.Interfaces;
 
     using RestSharp;
 

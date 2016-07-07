@@ -1,9 +1,11 @@
-﻿using AutoMapper.Attributes;
-using BloomService.Domain.Entities.Concrete;
-using System;
-
-namespace Sage.WebApi.Models.DbModels
+﻿namespace Sage.WebApi.Models
 {
+    using System;
+
+    using AutoMapper.Attributes;
+
+    using BloomService.Domain.Entities.Concrete;
+
     [MapsTo(typeof(SageWorkOrder))]
     public class WorkOrderDbModel
     {

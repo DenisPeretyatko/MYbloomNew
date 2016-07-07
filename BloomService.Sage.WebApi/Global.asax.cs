@@ -2,12 +2,13 @@
 using System.Web.Mvc;
 using AutoMapper;
 using System.Collections.Generic;
-using Sage.WebApi.Mapping;
 using System.Web.Routing;
-using Sage.WebApi.App_Start;
 
 namespace Sage.WebApi
 {
+    using Sage.WebApi.Infratructure.Mapping;
+    using Sage.WebApi.Infratructure.ModelBinders;
+
     public class WebApiApplication : System.Web.HttpApplication
     {
         protected void Application_Start()

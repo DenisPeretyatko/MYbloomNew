@@ -1,36 +1,38 @@
-﻿using BloomService.Web.Infrastructure.Services.Interfaces;
-using BloomService.Web.Models;
-using BloomService.Domain.Entities.Concrete;
-using AutoMapper;
-using System.Collections.Generic;
-using BloomService.Domain.Repositories.Abstract;
-using System.Linq;
-using BloomService.Web.Infrastructure.Constants;
-
-namespace BloomService.Web.Services.Concrete
+﻿namespace BloomService.Web.Infrastructure.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using AutoMapper;
+
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Web.Infrastructure.Constants;
+    using BloomService.Web.Infrastructure.Mongo;
+    using BloomService.Web.Infrastructure.Services.Interfaces;
+    using BloomService.Web.Models;
+
     public class DashboardService : IDashboardService
     {
         private readonly IRepository _repository;
 
         public DashboardService(IRepository repository)
         {
-            _repository = repository;
+            this._repository = repository;
         }
 
         public LookupsModel GetLookups()
         {
             var lookups = new LookupsModel();
-            var locations = _repository.GetAll<SageLocation>();
-            var calltypes = _repository.GetAll<SageCallType>();
-            var problems = _repository.GetAll<SageProblem>();
-            var employes = _repository.GetAll<SageEmployee>();
-            var equipment = _repository.GetAll<SageEquipment>();
-            var customer = _repository.GetAll<SageCustomer>();
-            var repairs = _repository.GetAll<SageRepair>();
-            var ratesheets = _repository.GetAll<SageRateSheet>().Where(x => x.QINACTIVE == "N");
-            var permissionCodes = _repository.GetAll<SagePermissionCode>();
-            var parts = _repository.GetAll<SagePart>();
+            var locations = this._repository.GetAll<SageLocation>();
+            var calltypes = this._repository.GetAll<SageCallType>();
+            var problems = this._repository.GetAll<SageProblem>();
+            var employes = this._repository.GetAll<SageEmployee>();
+            var equipment = this._repository.GetAll<SageEquipment>();
+            var customer = this._repository.GetAll<SageCustomer>();
+            var repairs = this._repository.GetAll<SageRepair>();
+            var ratesheets = this._repository.GetAll<SageRateSheet>().Where(x => x.QINACTIVE == "N");
+            var permissionCodes = this._repository.GetAll<SagePermissionCode>();
+            var parts = this._repository.GetAll<SagePart>();
 
             lookups.Locations = Mapper.Map<List<SageLocation>, List<LocationModel>>(locations.ToList());
             lookups.Calltypes = Mapper.Map<List<SageCallType>, List<CallTypeModel>>(calltypes.ToList());

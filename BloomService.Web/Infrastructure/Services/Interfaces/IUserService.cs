@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace BloomService.Web.Services.Abstract
+﻿namespace BloomService.Web.Infrastructure.Services.Interfaces
 {
     public interface IUserService
     {

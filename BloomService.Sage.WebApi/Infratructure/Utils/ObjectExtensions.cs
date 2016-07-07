@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-namespace Sage.WebApi.Utils
+﻿namespace Sage.WebApi.Infratructure.Utils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+
     public static class ObjectExtensions
     {
         public static T ToObject<T>(this IDictionary<string, object> source)

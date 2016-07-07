@@ -1,11 +1,8 @@
 ﻿using BloomService.Domain.Entities.Concrete;
 using BloomService.Domain.Extensions;
-using BloomService.Domain.Repositories.Abstract;
 using BloomService.Web.Infrastructure.Dependecy;
-using BloomService.Web.Infrastructure.Services.Abstract;
 using BloomService.Web.Infrastructure.Services.Interfaces;
-using BloomService.Web.Notifications;
-using BloomService.Web.Services.Abstract;
+
 using Common.Logging;
 using FluentScheduler;
 using System;
@@ -16,6 +13,9 @@ using System.Net;
 
 namespace BloomService.Web.Infrastructure.Jobs
 {
+    using BloomService.Web.Infrastructure.Mongo;
+    using BloomService.Web.Infrastructure.Notifications;
+
     public class BloomJobRegistry : Registry
     {
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));

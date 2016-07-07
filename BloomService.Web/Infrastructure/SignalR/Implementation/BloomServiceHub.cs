@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNet.SignalR;
-using System;
-using BloomService.Web.Models;
-using Microsoft.AspNet.SignalR.Hubs;
-using BloomService.Domain.Entities.Concrete;
-
-namespace BloomService.Web.Infrastructure.SignalR
+﻿namespace BloomService.Web.Infrastructure.SignalR.Implementation
 {
+    using System;
+
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Web.Models;
+
+    using Microsoft.AspNet.SignalR;
+    using Microsoft.AspNet.SignalR.Hubs;
+
     [HubName("bloomServiceHub")]
     public class BloomServiceHub : Hub, IBloomServiceHub
     {
@@ -13,7 +15,7 @@ namespace BloomService.Web.Infrastructure.SignalR
 
         public BloomServiceHub(IHubConnectionContext<dynamic> clients)
         {
-            _clients = clients;
+            this._clients = clients;
         }
 
         public void AddEquipment(EquipmentModel model)
@@ -33,17 +35,17 @@ namespace BloomService.Web.Infrastructure.SignalR
 
         public void CreateAssignment(MapViewModel model)
         {
-            _clients.All.createAssignment(model);
+            this._clients.All.createAssignment(model);
         }
 
         public void CreateWorkOrder(SageWorkOrder model)
         {
-            _clients.All.createWorkorder(model);
+            this._clients.All.createWorkorder(model);
         }
 
         public void DeleteAssigment(AssignmentViewModel model)
         {
-            _clients.All.deleteAssigment(model);
+            this._clients.All.deleteAssigment(model);
         }
 
         public void Disconnect()
@@ -53,7 +55,7 @@ namespace BloomService.Web.Infrastructure.SignalR
 
         public void SendNotification(NotificationModel model)
         {
-            _clients.All.sendNotification(model);
+            this._clients.All.sendNotification(model);
         }
 
         public void UpdateEquipment(EquipmentModel model)
@@ -63,17 +65,17 @@ namespace BloomService.Web.Infrastructure.SignalR
 
         public void UpdateTechnician(TechnicianModel model)
         {
-            _clients.All.updateTechnician(model);
+            this._clients.All.updateTechnician(model);
         }
 
         public void UpdateTechnicianLocation(SageEmployee model)
         {
-            _clients.All.updateTechnicianLocation(model);
+            this._clients.All.updateTechnicianLocation(model);
         }
 
         public void UpdateWorkOrder(WorkOrderModel model)
         {
-            _clients.All.UpdateWorkOrder(model);
+            this._clients.All.UpdateWorkOrder(model);
         }
     }
 }

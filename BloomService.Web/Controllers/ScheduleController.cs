@@ -14,10 +14,11 @@ namespace BloomService.Web.Controllers
 
     using AutoMapper;
 
+    using BloomService.Web.Infrastructure.Mongo;
+
     using Domain.Entities.Concrete;
     using Models;
-    using Domain.Repositories.Abstract;
-    using Infrastructure.Services.Abstract;
+
     using Domain.Extensions;
     using Infrastructure.SignalR;
 
