@@ -1,4 +1,4 @@
-﻿namespace BloomService.Web.Managers
+﻿namespace BloomService.Web.Infrastructure.Constants
 {
     public static class EndPoints
     {

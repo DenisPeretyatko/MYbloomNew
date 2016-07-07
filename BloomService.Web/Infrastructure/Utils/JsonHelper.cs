@@ -1,4 +1,4 @@
-﻿namespace BloomService.Web.Infrastructure.Hubs
+﻿namespace BloomService.Web.Infrastructure.Utils
 {
     using System;
     using System.IO;

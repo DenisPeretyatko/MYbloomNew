@@ -1,17 +1,20 @@
-﻿using AutoMapper;
-using BloomService.Domain.Entities.Concrete;
-using BloomService.Domain.Entities.Concrete.ReturnParamModels;
-using BloomService.Domain.Extensions;
-using Sage.WebApi.Models.DbModels;
-using System;
-
-namespace Sage.WebApi.Mapping
+﻿namespace Sage.WebApi.Infratructure.Mapping
 {
+    using System;
+
+    using AutoMapper;
+
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Entities.Concrete.ReturnParamModels;
+    using BloomService.Domain.Extensions;
+
+    using Sage.WebApi.Models;
+
     public class SageWebApiMappingProfile : Profile
     {
         protected override void Configure()
         {
-            CreateMap<WorkOrderDbModel, SageWorkOrder>()
+            this.CreateMap<WorkOrderDbModel, SageWorkOrder>()
                 .ForMember(dest => dest.ActualLaborHours, opts => opts.MapFrom(src => src.ACTLABORHOURS))
                 .ForMember(dest => dest.ActualMiscCost, opts => opts.MapFrom(src => src.ACTMISCCOST))
                 .ForMember(dest => dest.ActualPartsCost, opts => opts.MapFrom(src => src.ACTPARTSCOST))
@@ -67,7 +70,7 @@ namespace Sage.WebApi.Mapping
                 .ForMember(dest => dest.WorkOrderType, opts => opts.MapFrom(src => src.WOTYPE))
                 .ForMember(dest => dest.WorkOrder, opts => opts.MapFrom(src => src.WRKORDNBR));
 
-            CreateMap<AssignmentReturnParam, SageAssignment>()
+            this.CreateMap<AssignmentReturnParam, SageAssignment>()
                 .ForMember(dest => dest.ElapsedTime, opts => opts.MapFrom(src => src.ElapsedTime.AsDoubleSafe()))
                 .ForMember(dest => dest.CreateTimeEntry, opts => opts.MapFrom(src => ConvertToTime(src.CreateTimeEntry)))
                 .ForMember(dest => dest.AlarmDate, opts => opts.MapFrom(src => ConvertToDate(src.AlarmDate)))
@@ -83,20 +86,20 @@ namespace Sage.WebApi.Mapping
                 .ForMember(dest => dest.StartTime, opts => opts.MapFrom(src => ConvertToTime(src.StartTime)))
                 .ForMember(dest => dest.TimeEntered, opts => opts.MapFrom(src => ConvertToTime(src.TimeEntered)));
 
-            CreateMap<LocationReturnParam, SageLocation>()
+            this.CreateMap<LocationReturnParam, SageLocation>()
                 .ForMember(dest => dest.AccountOpenDate, opts => opts.MapFrom(src => ConvertToDate(src.AccountOpenDate)));
 
-            CreateMap<BloomService.Domain.Entities.Concrete.ReturnParamModels.EquipmentReturnParam, SageEquipment>()
+            this.CreateMap<BloomService.Domain.Entities.Concrete.ReturnParamModels.EquipmentReturnParam, SageEquipment>()
                 .ForMember(dest => dest.DateRemoved, (IMemberConfigurationExpression<BloomService.Domain.Entities.Concrete.ReturnParamModels.EquipmentReturnParam> opts) => opts.MapFrom(src => ConvertToDate(src.DateRemoved)))
                 .ForMember(dest => dest.DateReplaced, (IMemberConfigurationExpression<BloomService.Domain.Entities.Concrete.ReturnParamModels.EquipmentReturnParam> opts) => opts.MapFrom(src => ConvertToDate(src.DateReplaced)))
                 .ForMember(dest => dest.InstallDate, (IMemberConfigurationExpression<BloomService.Domain.Entities.Concrete.ReturnParamModels.EquipmentReturnParam> opts) => opts.MapFrom(src => ConvertToDate(src.InstallDate)));
 
-            CreateMap<EmployeeReturnParam, SageEmployee>()
+            this.CreateMap<EmployeeReturnParam, SageEmployee>()
                .ForMember(dest => dest.Birthdate, opts => opts.MapFrom(src => ConvertToDate(src.Birthdate)))
                .ForMember(dest => dest.DefaultStartTime, opts => opts.MapFrom(src => ConvertToTime(src.DefaultStartTime)))
                .ForMember(dest => dest.NormalEndTime, opts => opts.MapFrom(src => ConvertToTime(src.NormalEndTime)));
 
-            CreateMap<CustomerReturnParam, SageCustomer>()
+            this.CreateMap<CustomerReturnParam, SageCustomer>()
                .ForMember(dest => dest.Checklist1Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist1Date)))
                .ForMember(dest => dest.Checklist10Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist10Date)))
                .ForMember(dest => dest.Checklist2Date, opts => opts.MapFrom(src => ConvertToDate(src.Checklist2Date)))
@@ -111,13 +114,13 @@ namespace Sage.WebApi.Mapping
                //.ForMember(dest => dest.TimeStamp, opts => opts.MapFrom(src => ConvertToTime(src.TimeStamp)))
                .ForMember(dest => dest.DateStamp, opts => opts.MapFrom(src => ConvertToDate(src.DateStamp)));
 
-            CreateMap<PartReturnParam, SagePart>()
+            this.CreateMap<PartReturnParam, SagePart>()
               .ForMember(dest => dest.LastActivityDate, opts => opts.MapFrom(src => ConvertToDate(src.LastActivityDate)))
               .ForMember(dest => dest.LastOrderDate, opts => opts.MapFrom(src => ConvertToDate(src.LastOrderDate)))
               .ForMember(dest => dest.LastReceivedDate, opts => opts.MapFrom(src => ConvertToDate(src.LastReceivedDate)))
               .ForMember(dest => dest.OrderLeadTime, opts => opts.MapFrom(src => ConvertToTime(src.OrderLeadTime)));
 
-            CreateMap<WorkOrderReturnParam, SageWorkOrder>()
+            this.CreateMap<WorkOrderReturnParam, SageWorkOrder>()
              .ForMember(dest => dest.CallTime, opts => opts.MapFrom(src => ConvertToTime(src.CallTime)))
              .ForMember(dest => dest.CallDate, opts => opts.MapFrom(src => ConvertToDate(src.CallDate)))
              .ForMember(dest => dest.DateClosed, opts => opts.MapFrom(src => ConvertToDate(src.DateClosed)))

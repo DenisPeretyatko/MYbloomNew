@@ -1,19 +1,23 @@
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Sage.WebApi.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(Sage.WebApi.App_Start.NinjectWebCommon), "Stop")]
+using Sage.WebApi;
 
-namespace Sage.WebApi.App_Start
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
+
+namespace Sage.WebApi
 {
     using System;
+    using System.Configuration;
     using System.Web;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;
     using Ninject.Web.Common;
-    using System.Configuration;
-    using Infratructure.Service.Implementation;
-    using Infratructure.Service;
-    using Infratructure;
+
+    using Sage.WebApi.Infratructure;
+    using Sage.WebApi.Infratructure.Service;
+    using Sage.WebApi.Infratructure.Service.Implementation;
+
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();

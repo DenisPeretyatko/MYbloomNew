@@ -10,10 +10,11 @@ namespace BloomService.Web.Controllers
 
     using AutoMapper;
 
+    using BloomService.Web.Infrastructure.Mongo;
+
     using Domain.Entities.Concrete;
     using Models;
-    using Services.Abstract;
-    using Domain.Repositories.Abstract;
+
     public class TechnicianController : BaseController
     {
         private readonly IImageService imageService;

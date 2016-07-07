@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Specialized;
-
-namespace BloomService.Domain.Extensions
+﻿namespace BloomService.Web.Infrastructure
 {
+    using System;
+    using System.Collections.Specialized;
+
     public class BloomServiceConfiguration
     {
         public static BloomServiceConfiguration FromWebConfig(NameValueCollection nameValueCollection)

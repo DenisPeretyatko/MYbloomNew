@@ -1,9 +1,9 @@
-﻿namespace BloomService.Web.Services.Abstract
+﻿namespace BloomService.Web.Infrastructure.Services.Interfaces
 {
     using System.Collections.Generic;
 
     using BloomService.Domain.Entities.Concrete;
-    using Models.Request;
+    using BloomService.Web.Models;
 
     public interface IApiMobileService
     {

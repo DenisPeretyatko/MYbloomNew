@@ -228,10 +228,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         customerChanged = false;
     });
 
-
-    google.maps.event.trigger(map, 'resize');
     $scope.displayLocation = function (lat, lng, picture, woNumber) {
-        google.maps.event.trigger(map, 'resize');
         var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Id}}. {{Image}}</h1><div>{{Description}}</div></div>");
         var content = tooltip(picture);
         var pos = {
@@ -250,8 +247,12 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                 content: content
             });
             infowindow.open($scope.locationMap, marker);
-        });
+        });       
     };
+
+    $('#myModal').on('shown.bs.modal', function () {
+        google.maps.event.trigger($scope.locationMap, 'resize');
+    })
 
 };
 editWorkorderController.$inject = ["$scope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state"];

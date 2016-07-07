@@ -10,16 +10,17 @@ namespace BloomService.Web
     using System;
     using System.Configuration;
     using System.Web;
-    using Services.Abstract;
-    using Services.Concrete;
+
+    using BloomService.Web.Infrastructure;
+    using BloomService.Web.Infrastructure.Mongo;
+    using BloomService.Web.Infrastructure.SignalR.Implementation;
+
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
     using Ninject;
     using Ninject.Web.Common;
     using RestSharp;
     using Domain.Extensions;
-    using Domain.Repositories.Abstract;
-    using Domain.Repositories.Concrete;
-    using Infrastructure.Services.Abstract;
+
     using Infrastructure.Services.Interfaces;
     using Infrastructure.Services;
     using Infrastructure.Dependecy;

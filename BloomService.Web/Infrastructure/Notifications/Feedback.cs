@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace BloomService.Web.Notifications
+﻿namespace BloomService.Web.Infrastructure.Notifications
 {
+    using System;
+
     public class Feedback
     {
         public Feedback()
         {
-            DeviceToken = string.Empty;
-            Timestamp = DateTime.MinValue;
+            this.DeviceToken = string.Empty;
+            this.Timestamp = DateTime.MinValue;
         }
 
         public string DeviceToken { get; set; }

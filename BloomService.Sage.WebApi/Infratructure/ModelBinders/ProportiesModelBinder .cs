@@ -1,4 +1,4 @@
-﻿namespace Sage.WebApi
+﻿namespace Sage.WebApi.Infratructure.ModelBinders
 {
     using System.Collections.Generic;
     using System.IO;

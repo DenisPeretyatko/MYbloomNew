@@ -1,17 +1,19 @@
 ﻿using System.Linq;
 using BloomService.Web.Models;
-using BloomService.Web.Services.Abstract;
 
 namespace BloomService.Web.Controllers
 {
     using System.Web.Mvc;
-    using Domain.Repositories.Abstract;
+
     using Domain.Entities.Concrete;
     using Infrastructure.Queries;
     using Domain.Extensions;
     using System.Collections.Generic;
     using System;
     using AutoMapper;
+
+    using BloomService.Web.Infrastructure.Mongo;
+    using BloomService.Web.Infrastructure.Services.Interfaces;
 
     public class LocationController : BaseController
     {

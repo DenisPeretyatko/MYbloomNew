@@ -8,11 +8,15 @@
     using BloomService.Domain.Entities.Concrete;
 
     using Sage.WebApi.Infratructure.Constants;
-    using Utils;
+
     using AutoMapper;
-    using Models.DbModels;
+
     using System;
     using Common.Logging;
+
+    using Sage.WebApi.Infratructure.Utils;
+    using Sage.WebApi.Models;
+
     public class ServiceOdbc : IServiceOdbc
     {
         private readonly ILog _log = LogManager.GetLogger(typeof(ServiceOdbc));

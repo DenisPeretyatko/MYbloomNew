@@ -3,9 +3,8 @@ using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
 using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Jobs;
-using BloomService.Web.Infrastructure.Services.Abstract;
 using BloomService.Web.Infrastructure.Services.Interfaces;
-using BloomService.Web.Services.Concrete;
+
 using Common.Logging;
 using Newtonsoft.Json.Linq;
 
@@ -17,12 +16,13 @@ namespace BloomService.Web.Controllers
 
     using AutoMapper;
 
+    using BloomService.Web.Infrastructure.Mongo;
+
     using Domain.Entities.Concrete;
     using Infrastructure.Constants;
-    using Infrastructure.Hubs;
+
     using Models;
-    using Services.Abstract;
-    using Domain.Repositories.Abstract;
+
     using Infrastructure.Queries;
     using Infrastructure.Services.Interfaces;
 

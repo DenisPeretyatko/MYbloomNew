@@ -1,15 +1,16 @@
-﻿namespace BloomService.Web.Services.Concrete
+﻿namespace BloomService.Web.Infrastructure.Services
 {
-    using System.Net;
-
-    using Domain.Entities.Concrete;
-    using Abstract;
-    using System.Linq;
-    using System.Text;
-    using System.Xml.Serialization;
     using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Text;
     using System.Threading;
-    using Models;
+    using System.Xml.Serialization;
+
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Web.Infrastructure.Services.Interfaces;
+    using BloomService.Web.Models;
+
     public class LocationService : ILocationService
     {
         private static readonly string url = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false";
@@ -18,7 +19,7 @@
         {
             Thread.Sleep(1000);
             var parametersSearch = sageLocation.Address + " " + sageLocation.City + " " + sageLocation.ZIP + " " + sageLocation.State;
-            var location = GetLocation(parametersSearch);
+            var location = this.GetLocation(parametersSearch);
             if (location != null && location.result != null && location.result.Any())
             {
                 var geometry = location.result.FirstOrDefault().geometry;

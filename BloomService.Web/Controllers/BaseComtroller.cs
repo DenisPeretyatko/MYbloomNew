@@ -3,12 +3,13 @@ using System.Security.Claims;
 using System.Threading;
 using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Models;
-using BloomService.Web.Services.Abstract;
-using BloomService.Web.Utils;
 
 namespace BloomService.Web.Controllers
 {
     using System.Web.Mvc;
+
+    using BloomService.Web.Infrastructure.Services.Interfaces;
+    using BloomService.Web.Infrastructure.Utils;
 
     [Authorize]
     public abstract class BaseController : Controller

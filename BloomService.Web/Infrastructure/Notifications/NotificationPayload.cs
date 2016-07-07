@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BloomService.Web.Notifications
+﻿namespace BloomService.Web.Infrastructure.Notifications
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using Newtonsoft.Json.Linq;
+
     public class NotificationPayload
     {
         public NotificationAlert Alert { get; set; }
@@ -22,34 +23,34 @@ namespace BloomService.Web.Notifications
 
         public NotificationPayload(string deviceToken)
         {
-            DeviceToken = deviceToken;
-            Alert = new NotificationAlert();
-            CustomItems = new Dictionary<string, object[]>();
+            this.DeviceToken = deviceToken;
+            this.Alert = new NotificationAlert();
+            this.CustomItems = new Dictionary<string, object[]>();
         }
 
         public NotificationPayload(string deviceToken, string alert)
         {
-            DeviceToken = deviceToken;
-            Alert = new NotificationAlert() { Body = alert };
-            CustomItems = new Dictionary<string, object[]>();
+            this.DeviceToken = deviceToken;
+            this.Alert = new NotificationAlert() { Body = alert };
+            this.CustomItems = new Dictionary<string, object[]>();
         }
 
         public NotificationPayload(string deviceToken, string alert, int badge)
         {
-            DeviceToken = deviceToken;
-            Alert = new NotificationAlert() { Body = alert };
-            Badge = badge;
-            CustomItems = new Dictionary<string, object[]>();
+            this.DeviceToken = deviceToken;
+            this.Alert = new NotificationAlert() { Body = alert };
+            this.Badge = badge;
+            this.CustomItems = new Dictionary<string, object[]>();
         }
 
         public NotificationPayload(string deviceToken, string alert, int badge, string sound)
         {
-            DeviceToken = deviceToken;
-            Alert = new NotificationAlert() { Body = alert };
-            Badge = badge;
-            Sound = sound;
+            this.DeviceToken = deviceToken;
+            this.Alert = new NotificationAlert() { Body = alert };
+            this.Badge = badge;
+            this.Sound = sound;
 
-            CustomItems = new Dictionary<string, object[]>();
+            this.CustomItems = new Dictionary<string, object[]>();
 
         }
 
@@ -64,7 +65,7 @@ namespace BloomService.Web.Notifications
         public void AddCustom(string key, params object[] values)
         {
             if (values != null)
-                CustomItems.Add(key, values);
+                this.CustomItems.Add(key, values);
         }
 
         public string ToJson()
@@ -73,17 +74,17 @@ namespace BloomService.Web.Notifications
 
             JObject aps = new JObject();
 
-            if (Content_available == 1)
-                aps["content-available"] = new JValue(Content_available);
+            if (this.Content_available == 1)
+                aps["content-available"] = new JValue(this.Content_available);
 
             json["aps"] = aps;
 
-            foreach (string key in CustomItems.Keys)
+            foreach (string key in this.CustomItems.Keys)
             {
-                if (CustomItems[key].Length == 1)
-                    json[key] = new JValue(CustomItems[key][0]);
-                else if (CustomItems[key].Length > 1)
-                    json[key] = new JArray(CustomItems[key]);
+                if (this.CustomItems[key].Length == 1)
+                    json[key] = new JValue(this.CustomItems[key][0]);
+                else if (this.CustomItems[key].Length > 1)
+                    json[key] = new JArray(this.CustomItems[key]);
             }
             if (!string.IsNullOrEmpty(Sound))
                 aps["sound"] = new JValue(Sound);
@@ -103,7 +104,7 @@ namespace BloomService.Web.Notifications
 
         public override string ToString()
         {
-            return ToJson();
+            return this.ToJson();
         }
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace Sage.WebApi.Utils
+﻿namespace Sage.WebApi.Infratructure.Utils
 {
     using System.Collections.Generic;
-    using System.Linq;
 
     using BloomService.Domain.Entities.Concrete;
 

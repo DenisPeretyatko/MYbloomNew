@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
-
-namespace BloomService.Web.Notifications
+﻿namespace BloomService.Web.Infrastructure.Notifications
 {
+    using System.Collections.Generic;
+
     public class NotificationAlert
     {
         public NotificationAlert()
         {
-            Body = null;
-            ActionLocalizedKey = null;
-            LocalizedKey = null;
-            LocalizedArgs = new List<object>();
+            this.Body = null;
+            this.ActionLocalizedKey = null;
+            this.LocalizedKey = null;
+            this.LocalizedArgs = new List<object>();
         }
 
         public string Body { get; set; }
@@ -19,17 +19,17 @@ namespace BloomService.Web.Notifications
 
         public void AddLocalizedArgs(params object[] values)
         {
-            LocalizedArgs.AddRange(values);
+            this.LocalizedArgs.AddRange(values);
         }
 
         public bool IsEmpty
         {
             get
             {
-                if (!string.IsNullOrEmpty(Body)
-                    || !string.IsNullOrEmpty(ActionLocalizedKey)
-                    || !string.IsNullOrEmpty(LocalizedKey)
-                    || (LocalizedArgs != null && LocalizedArgs.Count > 0))
+                if (!string.IsNullOrEmpty(this.Body)
+                    || !string.IsNullOrEmpty(this.ActionLocalizedKey)
+                    || !string.IsNullOrEmpty(this.LocalizedKey)
+                    || (this.LocalizedArgs != null && this.LocalizedArgs.Count > 0))
                     return false;
                 else
                     return true;

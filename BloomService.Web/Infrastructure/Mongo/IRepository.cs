@@ -1,4 +1,4 @@
-﻿namespace BloomService.Domain.Repositories.Abstract
+﻿namespace BloomService.Web.Infrastructure.Mongo
 {
     using System;
     using System.Linq;

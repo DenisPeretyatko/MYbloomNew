@@ -19,11 +19,8 @@ namespace BloomService.Web.Controllers
 
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.Extensions;
-    using BloomService.Domain.Repositories.Abstract;
-    using BloomService.Web.Infrastructure.Services.Abstract;
     using BloomService.Web.Models;
-    using BloomService.Web.Models.Request;
-    using BloomService.Web.Services.Abstract;
+
     using System.Security.Claims;
     using System.Threading;
     using Infrastructure.SignalR;
@@ -31,6 +28,10 @@ namespace BloomService.Web.Controllers
     using Domain.Models.Requests;
     using RestSharp.Serializers;
     using System.Xml.Serialization;
+
+    using BloomService.Web.Infrastructure;
+    using BloomService.Web.Infrastructure.Mongo;
+
     public class ApiMobileController : BaseController
     {
         private readonly IImageService _imageService;

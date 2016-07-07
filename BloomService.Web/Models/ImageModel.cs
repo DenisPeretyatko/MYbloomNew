@@ -1,7 +1,7 @@
-﻿using System.Web;
-
-namespace BloomService.Web.Models.Request
+﻿namespace BloomService.Web.Models
 {
+    using System.Web;
+
     public class ImageModel
     {
         public HttpPostedFileBase Image { get; set; }

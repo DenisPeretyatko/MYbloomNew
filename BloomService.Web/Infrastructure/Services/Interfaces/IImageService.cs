@@ -1,10 +1,10 @@
-﻿using BloomService.Domain.Entities.Concrete;
-using BloomService.Web.Models;
-using BloomService.Web.Models.Request;
-using System.Collections.Generic;
-
-namespace BloomService.Web.Services.Abstract
+﻿namespace BloomService.Web.Infrastructure.Services.Interfaces
 {
+    using System.Collections.Generic;
+
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Web.Models;
+
     public interface IImageService
     {
         bool SavePhotoForWorkOrder(ImageModel model);

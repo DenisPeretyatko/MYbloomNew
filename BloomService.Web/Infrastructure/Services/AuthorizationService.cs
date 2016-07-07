@@ -1,20 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Web.Script.Serialization;
-using BloomService.Domain.Entities.Concrete;
-using BloomService.Domain.Extensions;
-using BloomService.Domain.Models.Requests;
-using BloomService.Domain.Models.Responses;
-using BloomService.Domain.Repositories.Abstract;
-using BloomService.Web.Managers;
-using BloomService.Web.Models;
-using BloomService.Web.Services.Abstract;
-using Microsoft.Owin.Security;
-using RestSharp;
-
-namespace BloomService.Web.Services.Concrete
+﻿namespace BloomService.Web.Infrastructure.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Web.Script.Serialization;
+
+    using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Models.Requests;
+    using BloomService.Domain.Models.Responses;
+    using BloomService.Web.Infrastructure.Constants;
+    using BloomService.Web.Infrastructure.Mongo;
+    using BloomService.Web.Infrastructure.Services.Interfaces;
+    using BloomService.Web.Models;
+
+    using Microsoft.Owin.Security;
+
+    using RestSharp;
+
     public class AuthorizationService : IAuthorizationService
     {
         private readonly IRepository _repository;
@@ -22,8 +24,8 @@ namespace BloomService.Web.Services.Concrete
 
         public AuthorizationService(IRepository repository, BloomServiceConfiguration configuration)
         {
-            _repository = repository;
-            _configuration = configuration;
+            this._repository = repository;
+            this._configuration = configuration;
         }
 
         public UserModel GetUser(ClaimsPrincipal claimsPrincipal)
@@ -42,7 +44,7 @@ namespace BloomService.Web.Services.Concrete
                     .Select(c => c.Value).SingleOrDefault()
             };
 
-            var user = _repository.SearchFor<SageEmployee>(x => x.Employee == userModel.Id).FirstOrDefault();
+            var user = this._repository.SearchFor<SageEmployee>(x => x.Employee == userModel.Id).FirstOrDefault();
             if (user != null)
                 userModel.Name = user.Name;
             return userModel;
@@ -50,20 +52,19 @@ namespace BloomService.Web.Services.Concrete
 
         private AuthorizationResponse CheckUser(string name, string password)
         {
-            //var request = new RestRequest(EndPoints.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
-            //var requestBody = new AuthorizationRequest() { Name = name, Password = password };
-            //request.AddBody(requestBody);
-            //request.AddHeader("Authorization", string.Format("Basic {0}:{1}", _configuration.SageUsername, _configuration.SagePassword));
-            //var restClient = new RestClient(_configuration.SageApiHost);
-            //var response = restClient.Execute<AuthorizationResponse>(request);
-            //return response.StatusCode != System.Net.HttpStatusCode.OK ? null
-            //    : new JavaScriptSerializer().Deserialize<AuthorizationResponse>(response.Content);
-            return new AuthorizationResponse() { Id = "23", Mail = "", Token = "" };
-            }
+            var request = new RestRequest(EndPoints.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
+            var requestBody = new AuthorizationRequest() { Name = name, Password = password };
+            request.AddBody(requestBody);
+            request.AddHeader("Authorization", string.Format("Basic {0}:{1}", _configuration.SageUsername, _configuration.SagePassword));
+            var restClient = new RestClient(_configuration.SageApiHost);
+            var response = restClient.Execute<AuthorizationResponse>(request);
+            return response.StatusCode != System.Net.HttpStatusCode.OK ? null
+                : new JavaScriptSerializer().Deserialize<AuthorizationResponse>(response.Content);
+        }
 
         public AuthorizationResponse Authorization(string login, string password)
         {
-            var user = CheckUser(login, password);
+            var user = this.CheckUser(login, password);
             if (user == null)
                 return null;
 

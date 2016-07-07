@@ -1,4 +1,4 @@
-﻿namespace Sage.WebApi.Results
+﻿namespace Sage.WebApi.Infratructure.Results
 {
     using System.Net;
     using System.Net.Http;
@@ -10,8 +10,8 @@
     {
         public ChallengeResult(string loginProvider, ApiController controller)
         {
-            LoginProvider = loginProvider;
-            Request = controller.Request;
+            this.LoginProvider = loginProvider;
+            this.Request = controller.Request;
         }
 
         public string LoginProvider { get; set; }
@@ -20,7 +20,7 @@
 
         public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
         {
-            Request.GetOwinContext().Authentication.Challenge(LoginProvider);
+            this.Request.GetOwinContext().Authentication.Challenge(this.LoginProvider);
 
             var response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = this.Request };
             return Task.FromResult(response);

@@ -1,8 +1,8 @@
-﻿using System.Web.Mvc;
-using System.Web.Routing;
-
-namespace Sage.WebApi.App_Start
+﻿namespace Sage.WebApi
 {
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
     public class RouteConfig
     {
         public static void RegisterRoutes(RouteCollection routes)

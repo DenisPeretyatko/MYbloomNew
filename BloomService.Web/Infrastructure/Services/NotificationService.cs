@@ -5,7 +5,6 @@ using System.Linq;
 using System.Web;
 using BloomService.Domain.Entities.Concrete;
 using BloomService.Domain.Extensions;
-using BloomService.Domain.Repositories.Abstract;
 using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using BloomService.Web.Infrastructure.SignalR;
@@ -13,6 +12,8 @@ using BloomService.Web.Models;
 
 namespace BloomService.Web.Infrastructure.Services
 {
+    using BloomService.Web.Infrastructure.Mongo;
+
     public class NotificationService : INotificationService
     {
         private readonly IRepository _repository;
