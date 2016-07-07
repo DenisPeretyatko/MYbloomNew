@@ -275,10 +275,11 @@
         {
             try
             {
+                serviceOdbc.EditWorkOrder(workOrder);
                 var result = new SageResponse<SageWorkOrder>
                 {
                     IsSucceed = true,
-                    Entity = this.serviceOdbc.EditWorkOrder(workOrder)
+                    Entity = serviceManager.WorkOrders(workOrder.WorkOrder).SingleOrDefault()
                 };
                 return result;
             }
