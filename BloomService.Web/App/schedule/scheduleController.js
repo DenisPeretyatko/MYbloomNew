@@ -146,6 +146,29 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
                     saveEvent(event);
                 } else {
                     $('#calendar').fullCalendar('removeEvents', event._id);
+                    ///
+                    var innerHtml = "<div class=\"col-lg-1 col-md-1 table-row\">" + event.title + "</div>" + "<div  class=\"table-row col-lg-2 col-md-2\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-3 col-md-3\">" + event.customerFoo + "</div>" +
+                                 "<div  data-hide=\"phone,tablet\" class=\"table-row col-lg-4 col-md-4\">" + event.locationFoo + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-2 col-md-2\">" + parseInt(event.hourFoo) + "</div>";
+
+                    var el = $("<div class=\"drag fc-event table row table-row dragdemo\" style=\"z-index: 999; display: block\" draggable=\"true\">").appendTo('#new-row').html(innerHtml);
+                    el.draggable({
+                        zIndex: 999,
+                        revert: true,
+                        revertDuration: 0
+                    });
+                    el.data('event', {
+                        title: event.title,
+                        id: event.id,
+                        start: event.start,
+                        end: event.end,
+                        workorderId: event.workorderId,
+                        description: event.description,
+                        dateFoo: event.dateFoo,
+                        customerFoo: event.customerFoo,
+                        locationFoo: event.locationFoo,
+                        hourFoo: parseInt(event.hourFoo),
+                        durationEditable: false
+                    });
                 }
             },
             resourceLabelText: 'Technicians',

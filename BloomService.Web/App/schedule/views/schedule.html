@@ -28,9 +28,7 @@
                             <div data-hide="phone,tablet" class="col-lg-4 col-md-4"><h4>Location</h4></div>
                             <div data-hide="phone,tablet" class="col-lg-2 col-md-2"><h4>Hours</h4></div>
                         </div>
-                    <div id="new-row">
-                        
-                    </div>
+                        <div id="new-row"></div>
                     <div ng-repeat="workorder in unassignedWorkorders" class="drag fc-event table row table-row dragdemo" style="z-index: 999; display: block" draggable="true">
                         <div class="table-row col-lg-1 col-md-1">{{workorder.WorkOrder}}</div>
                         <div class="table-row col-lg-2 col-md-2">{{workorder.DateEntered}}</div>
