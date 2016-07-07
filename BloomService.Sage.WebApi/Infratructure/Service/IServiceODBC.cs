@@ -11,7 +11,7 @@
 
         void UnassignWorkOrder(string id);
 
-        SageWorkOrder EditWorkOrder(SageWorkOrder workOrder);
+        void EditWorkOrder(SageWorkOrder workOrder);
 
         List<SageWorkOrder> WorkOrders();
 

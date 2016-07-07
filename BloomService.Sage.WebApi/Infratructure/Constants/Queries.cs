@@ -49,7 +49,7 @@ namespace Sage.WebApi.Infratructure.Constants
 
             query += string.Format("WHERE WRKORDNBR = '{0}';", workOrder.WorkOrder);
             query = query.Replace(", WHERE", " WHERE");
-            query += string.Format(" SELECT * FROM WRKORDER WHERE WRKORDNBR= '{0}';", workOrder.WorkOrder);
+
             return query;
         }
     }
