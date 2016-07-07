@@ -1,4 +1,4 @@
-/**
+﻿/**
  * scheduleController - controller
  */
 
@@ -9,8 +9,8 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
     $scope.events = [];
     var tempEvents = [];
     $rootScope.unavailableTechniciansIds = [];
-
     $scope.resources = [];
+    var prevDivState = {};
 
     /* message on eventClick */
     $scope.alertOnEventClick = function( event, allDay, jsEvent, view ){
@@ -94,9 +94,12 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
             eventDragStop: function( event, jsEvent, ui, view ) {
                 
                 if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
-                    var innerHtml = "<td>" + event.title + "</td>" + "<td>" +  formatDate(new Date(event.dateFoo)) + "</td>" + "<td>" + event.customerFoo + "</td>" +
-                                    "<td>" + event.locationFoo + "</td>" + "<td>" + parseInt(event.hourFoo) + "</td>";
-                    var el = $("<tr class='drag fc-event' style='z-index: 99'>").appendTo('.footable tbody').html(innerHtml);
+                    //var innerHtml = "<td>" + event.title + "</td>" + "<td>" +  formatDate(new Date(event.dateFoo)) + "</td>" + "<td>" + event.customerFoo + "</td>" +
+                    //                "<td>" + event.locationFoo + "</td>" + "<td>" + parseInt(event.hourFoo) + "</td>";
+                    var innerHtml = "<div class=\"col-lg-1 col-md-1 table-row\">" + event.title + "</div>" + "<div  class=\"table-row col-lg-2 col-md-2\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-3 col-md-3\">" + event.customerFoo + "</div>" +
+                                  "<div  data-hide=\"phone,tablet\" class=\"table-row col-lg-4 col-md-4\">" + event.locationFoo + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-2 col-md-2\">" + parseInt(event.hourFoo) + "</div>";
+
+                    var el = $("<div class=\"drag fc-event table row table-row dragdemo\" style=\"z-index: 999; display: block\" draggable=\"true\">").appendTo('#new-row').html(innerHtml);
                     el.draggable({
                         zIndex: 999,
                         revert: true, 
@@ -222,10 +225,11 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
         $("#calendar").fullCalendar('addEventSource', $scope.events);
 
         $timeout(function() {
-            $('.drag').each(function() {
+            $('.drag').each(function () {
                 var descr = '';
                 var fooElements = [];
-                $(this).find('td').each(function(i, e) {
+                var a = $(this).find('.table-row');
+                $(this).find('.table-row').each(function(i, e) {
                     if (i == 2) {
                         var spliter = (e.innerText == '' || e[i + 1] == '') ? '' : '/';
                         descr += e.innerText + spliter;
@@ -238,10 +242,10 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
                 var startDate = new Date();
                 var endDate = new Date(startDate);
 
-                var rows = $(this).find('td');
+                var rows = $(this).find('.table-row');
 
                 $(this).data('event', {
-                    title: parseInt($(this).find('td').first().text()), //textTitle,
+                    title: parseInt($(this).find('.table-row').first().text()), //textTitle,
                     start: startDate,
                     end: endDate.setHours(startDate.getHours() + parseInt(rows.last().text())),
                     workorderId: rows.first().text(),
@@ -260,8 +264,46 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
                 });
             });
         }, 100);
-
-
+        
+        $('.ibox-content').on('dragstart', '.dragdemo', function (e) {
+            var x = e.pageX;
+            var y = e.pageY;
+            var innerText = [];
+            angular.forEach(this.children, function(value, key) {
+                innerText[key] = value.outerText;
+            });
+            var element = this;
+            prevDivState = this.cloneNode(true);;
+            this.innerText = innerText[0] + " " + innerText[2] + " " + innerText[3];
+            this.style.width = "200px";
+            this.style.height = "28px";
+            this.style.backgroundColor = "#e77070";
+            this.style.borderColor = "#e77070";
+            this.style.alignItems = "center";
+            this.style.textAlign = "center";
+            this.style.color = "#fff";
+            this.style.fontSize = ".85em";
+            this.style.opacity = ".85";
+            this.style.borderRadius = "0";
+           
+            this.clientWidth = 20;
+            this.offsetWidth = 20;
+            this.scrollWidth = 20;
+             this.style.marginLeft = (x - 275) + "px";
+            this.style.marginTop = -5 + "px";
+            document.getElementById("schedule").addEventListener("mouseup", function (event) {
+                var innerHtml = "<div class=\"col-lg-1 col-md-1 table-row\">" + innerText[0] + "</div>" + "<div  class=\"table-row col-lg-2 col-md-2\">" + innerText[1] + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-3 col-md-3\">" + innerText[2] + "</div>" +
+                                   "<div  data-hide=\"phone,tablet\" class=\"table-row col-lg-4 col-md-4\">" + innerText[3] + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-2 col-md-2\">" + innerText[4] + "</div>";
+                element.innerHTML = innerHtml;
+                element.style = prevDivState.style;
+                element.clientWidth = prevDivState.clientWidth;
+                element.offsetWidth = prevDivState.offsetWidth;
+                element.scrollWidth = prevDivState.scrollWidth;
+                $('#schedule').unbind();
+            });
+           
+        });
+        
      
         angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) { 
             $("tr[data-resource-id=" + value + ']').css("background-color", "aliceblue");
@@ -275,12 +317,6 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
                 $("tr[data-resource-id=" + value + ']').css("background-color", "aliceblue");
             });
         });
-
-        //var table = $(".fc-rows")[0].children[0].children[0].children;
-        //jQuery.each(table, function (i, val) {
-        //    val.style.height = "34px";
-        //    console.log(table);
-        //});
     });
 
     function formatDate(inputdate) {
