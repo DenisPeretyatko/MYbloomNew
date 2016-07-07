@@ -53,10 +53,11 @@ namespace BloomService.Web.Notifications
 
         }
 
-        public NotificationPayload(string deviceToken, int content_available)
+        public NotificationPayload(string deviceToken, int content_available, string sound)
         {
             DeviceToken = deviceToken;
             Content_available = content_available;
+            Sound = sound;
             CustomItems = new Dictionary<string, object[]>();
         }
 
@@ -84,6 +85,8 @@ namespace BloomService.Web.Notifications
                 else if (CustomItems[key].Length > 1)
                     json[key] = new JArray(CustomItems[key]);
             }
+            if (!string.IsNullOrEmpty(Sound))
+                aps["sound"] = new JValue(Sound);
 
             string rawString = json.ToString(Newtonsoft.Json.Formatting.None, null);
 

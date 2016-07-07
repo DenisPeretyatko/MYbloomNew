@@ -147,6 +147,7 @@ namespace BloomService.Web.Controllers
                 var workorder = allWorkorders.Where(x => x.WorkOrder == assignment.WorkOrder).SingleOrDefault();
                 if (workorder != null)
                 {
+                    workorder.Images = workorder.Images.OrderBy(x => x.Id).ToList();
                     result.Add(workorder);
                 }
             }
