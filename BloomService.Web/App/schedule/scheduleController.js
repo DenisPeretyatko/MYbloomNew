@@ -226,12 +226,12 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
         angular.forEach($scope.assigments, function(value, key) {
             if (value != null) {
                 var spliter = (value.Customer == '' || value.Location == '') ? '' : '/';
-                tempEvents.push({
+                    tempEvents.push({
                     id: value.Assignment,
                     resourceId: value.EmployeeId,
                     title: value.WorkOrder,
-                    start: new Date(value.Start + ' UTC'),
-                    end: new Date(value.End + ' UTC'),
+                    start: new Date(value.Start),
+                    end: new Date(value.End),
                     assigmentId: value.Assigment,
                     workorderId: value.WorkOrder,
                     description: value.Customer + spliter + value.Location,
