@@ -54,11 +54,12 @@
 
         }
 
-        public NotificationPayload(string deviceToken, int content_available)
+        public NotificationPayload(string deviceToken, int content_available, string sound)
         {
-            this.DeviceToken = deviceToken;
-            this.Content_available = content_available;
-            this.CustomItems = new Dictionary<string, object[]>();
+            DeviceToken = deviceToken;
+            Content_available = content_available;
+            Sound = sound;
+            CustomItems = new Dictionary<string, object[]>();
         }
 
         public void AddCustom(string key, params object[] values)
@@ -85,6 +86,8 @@
                 else if (this.CustomItems[key].Length > 1)
                     json[key] = new JArray(this.CustomItems[key]);
             }
+            if (!string.IsNullOrEmpty(Sound))
+                aps["sound"] = new JValue(Sound);
 
             string rawString = json.ToString(Newtonsoft.Json.Formatting.None, null);
 
