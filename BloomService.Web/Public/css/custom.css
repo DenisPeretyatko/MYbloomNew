@@ -106,3 +106,14 @@
 .fc-rows  tr {
     height: 34px !important;
 }
+.wogalary img {
+    margin: 5px;
+}
+.wogalary div{
+    /*float: left;*/
+    display : inline-block;
+}
+.wogalary label{
+    display:block;
+    text-align: center;
+}

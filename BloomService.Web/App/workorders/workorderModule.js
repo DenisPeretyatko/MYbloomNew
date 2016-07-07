@@ -1,7 +1,7 @@
 /**
  * workorder - module
  */
-
+ "use strict";
  var workorderModuleConfig = function($stateProvider) {
     $stateProvider
         .state('manager.workorder', {
@@ -48,10 +48,6 @@
                             serie: true,
                             files: ['public/js/plugins/moment/moment.min.js']
                         },
-                         {
-                             name: 'angucomplete-alt',
-                             files: ['public/js/plugins/angucomplete/angucomplete-alt.css', 'public/js/plugins/angucomplete/angucomplete-alt.min.js']
-                         },
                     ]);
                 }
             }
@@ -67,6 +63,14 @@
                         {
                             name: 'datePicker',
                             files: ['public/css/plugins/datapicker/angular-datapicker.css','public/js/plugins/datapicker/angular-datepicker.js']
+                        },                        
+                         {
+                             name: 'ui.event',
+                             files: ['public/js/plugins/uievents/event.js']
+                         },
+                        {
+                            name: 'ui.map',
+                            files: ['public/js/plugins/uimaps/ui-map.js']
                         },
                         {
                             name: 'ui.select',
@@ -75,10 +79,6 @@
                         {
                             serie: true,
                             files: ['public/js/plugins/moment/moment.min.js']
-                        },
-                         {
-                            name: 'angucomplete-alt',
-                            files: ['public/js/plugins/angucomplete/angucomplete-alt.css', 'public/js/plugins/angucomplete/angucomplete-alt.min.js']
                         },
                     ]);
                 }

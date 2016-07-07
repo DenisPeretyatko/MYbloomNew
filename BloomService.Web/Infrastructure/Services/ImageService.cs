@@ -1,16 +1,16 @@
 ﻿namespace BloomService.Web.Infrastructure.Services
 {
-    using System;
-    using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
     using System.Configuration;
-    using System.Drawing;
+using System.Drawing;
     using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Web;
 
-    using BloomService.Domain.Entities.Concrete;
+using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Infrastructure.Mongo;
     using BloomService.Web.Infrastructure.Services.Interfaces;
     using BloomService.Web.Models;
@@ -51,11 +51,11 @@
                 return false;
             }
 
-            var imagesDb = this.repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.IdWorkOrder).SingleOrDefault();
-            var countImage = 0;
+            var imagesDb = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.IdWorkOrder).SingleOrDefault();
+            var countImage = 1;
             if (imagesDb != null && imagesDb.Images != null)
             {
-                countImage = imagesDb.Images.Count();
+                countImage = imagesDb.Images.Count() + 1;
             }
             else
             {
