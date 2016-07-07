@@ -67,7 +67,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         //}
                     }
                 }
-            }).ToRunNow().AndEvery(15).Minutes();
+            }).ToRunNow().AndEvery(1).Minutes();
 
             //Send request
             Schedule(() =>
