@@ -101,7 +101,10 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkOrdersPictures(string id)
         {
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrderBsonId == id).SingleOrDefault();
-            pictures.Images = pictures.Images.OrderBy(x => x.Id).ToList();
+            if(pictures != null)
+            {
+                pictures.Images = pictures.Images.OrderBy(x => x.Id).ToList();
+            }
             return Json(pictures, JsonRequestBehavior.AllowGet);
         }
 
