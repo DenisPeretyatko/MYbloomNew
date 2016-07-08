@@ -33,7 +33,7 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
 
 
     var saveEvent = function(event) {
-        var workorder = event.title;
+        var workorder = event.workorderId;
 
         var start = new Date(event.start);
         var end = new Date(event.end);
@@ -84,6 +84,9 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
             eventClick: $scope.alertOnEventClick,
             eventDrop: $scope.alertOnDrop,
             eventResize: $scope.alertOnResize,
+            eventOverlap: function(stillEvent, movingEvent) {
+                return false;
+            },
             resourceRender: function(resource, labelTds, bodyTds) {
                 var cell = '<div style="height: 34px;">' +
                     '<span class="client-avatar"><img alt="image" src="{{avatarUrl}}" style="height: 28px; margin: 3px;">&nbsp;</span>' +
@@ -96,7 +99,7 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
                 if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
                     //var innerHtml = "<td>" + event.title + "</td>" + "<td>" +  formatDate(new Date(event.dateFoo)) + "</td>" + "<td>" + event.customerFoo + "</td>" +
                     //                "<td>" + event.locationFoo + "</td>" + "<td>" + parseInt(event.hourFoo) + "</td>";
-                    var innerHtml = "<div class=\"col-lg-1 col-md-1 table-row\">" + event.title + "</div>" + "<div  class=\"table-row col-lg-2 col-md-2\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-3 col-md-3\">" + event.customerFoo + "</div>" +
+                    var innerHtml = "<div class=\"col-lg-1 col-md-1 table-row\">" + event.workorderId + "</div>" + "<div  class=\"table-row col-lg-2 col-md-2\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-3 col-md-3\">" + event.customerFoo + "</div>" +
                                   "<div  data-hide=\"phone,tablet\" class=\"table-row col-lg-4 col-md-4\">" + event.locationFoo + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-2 col-md-2\">" + parseInt(event.hourFoo) + "</div>";
 
                     var el = $("<div class=\"drag fc-event table row table-row dragdemo\" style=\"z-index: 999; display: block\" draggable=\"true\">").appendTo('#new-row').html(innerHtml);
@@ -121,7 +124,7 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
 
                     $('#calendar').fullCalendar('removeEvents', event._id);
 
-                    var workorder = event.title;
+                    var workorder = event.workorderId;
 
                     var start = new Date(event.start);
                     var end = new Date(event.end);
@@ -132,7 +135,7 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
                         Employee: event.resourceId,
                         WorkOrder: workorder,
                         EstimatedRepairHours: estimate,
-                        EndDate: end,
+                        EndDate: end
                     };
                     commonDataService.unAssignWorkorder(assignment);
                 }
@@ -140,6 +143,7 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
             eventReceive: function (event) {
                 if (!$rootScope.unavailableTechniciansIds.includes(event.resourceId)) {
                     event = setTechnicianColor(event);
+                    event.title = event.workorderId+" "+event.customerFoo+" "+event.locationFoo;
                     var date = new Date(event.start);
                     event.end._d = new Date(date.setHours(date.getHours() + parseInt(event.hourFoo)));
                     $('#calendar').fullCalendar('rerenderEvents');
@@ -147,7 +151,7 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
                 } else {
                     $('#calendar').fullCalendar('removeEvents', event._id);
                     ///
-                    var innerHtml = "<div class=\"col-lg-1 col-md-1 table-row\">" + event.title + "</div>" + "<div  class=\"table-row col-lg-2 col-md-2\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-3 col-md-3\">" + event.customerFoo + "</div>" +
+                    var innerHtml = "<div class=\"col-lg-1 col-md-1 table-row\">" + event.workorderId + "</div>" + "<div  class=\"table-row col-lg-2 col-md-2\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-3 col-md-3\">" + event.customerFoo + "</div>" +
                                  "<div  data-hide=\"phone,tablet\" class=\"table-row col-lg-4 col-md-4\">" + event.locationFoo + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-2 col-md-2\">" + parseInt(event.hourFoo) + "</div>";
 
                     var el = $("<div class=\"drag fc-event table row table-row dragdemo\" style=\"z-index: 999; display: block\" draggable=\"true\">").appendTo('#new-row').html(innerHtml);
@@ -229,7 +233,7 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, co
                     tempEvents.push({
                     id: value.Assignment,
                     resourceId: value.EmployeeId,
-                    title: value.WorkOrder,
+                    title: value.title = value.WorkOrder + " " + value.Customer + " " + value.Location,
                     start: new Date(value.Start),
                     end: new Date(value.End),
                     assigmentId: value.Assigment,
