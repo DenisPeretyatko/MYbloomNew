@@ -239,7 +239,7 @@ namespace BloomService.Web.Controllers
                 Problem = model.Problem,
                 RateSheet = model.Ratesheet,
                 Employee = model.Emploee,
-                Equipment = Convert.ToUInt16(model.Equipment),
+                Equipment = 0,
                 EstimatedRepairHours = Convert.ToDecimal(model.Estimatehours),
                 NottoExceed = model.Nottoexceed,
                 Comments = model.Locationcomments,
