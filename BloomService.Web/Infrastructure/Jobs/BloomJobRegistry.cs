@@ -59,7 +59,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     var notificationPayload = new NotificationPayload(technician.IosDeviceToken, 1, "default");
                                     var p = new List<NotificationPayload>();
                                     p.Add(notificationPayload);
-                                    PushNotification push = new PushNotification(true, path, null);
+                                    PushNotification push = new PushNotification(false, path, null);
                                     push.P12File = path;
                                     push.SendToApple(p);
                             //    }
@@ -67,7 +67,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         //}
                     }
                 }
-            }).ToRunNow().AndEvery(1).Minutes();
+            }).ToRunNow().AndEvery(_settings.NotificationDelay).Minutes();
 
             //Send request
             Schedule(() =>
