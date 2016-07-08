@@ -242,22 +242,24 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Apimobile/Location")]
-        public ActionResult PostLocation(string technicianId, decimal lat, decimal lng)
+        public ActionResult PostLocation(decimal lat, decimal lng)
         {
-            _log.InfoFormat("Method: PostLocation. technicianId: {0}, lat: {1}, lng {2}", technicianId, lat, lng);
+            var userId = UserModel.Id;
+            _log.InfoFormat("Method: PostLocation. technicianId: {0}, lat: {1}, lng {2}", userId, lat, lng);
+            
             var techLocation = new SageTechnicianLocation
             {
-                Employee = technicianId,
+                Employee = userId,
                 Latitude = lat,
                 Longitude = lng,
                 Date = DateTime.Now.GetLocalDate()
             };
             repository.Add(techLocation);
-            var emploee = repository.SearchFor<SageEmployee>(x => x.Employee == technicianId).Single();
+            var emploee = repository.SearchFor<SageEmployee>(x => x.Employee == userId).Single();
             emploee.Longitude = lat;
             emploee.Latitude = lng;
             _hub.UpdateTechnicianLocation(emploee);
-            _log.InfoFormat("TechLocation added. TechnicianId: {0}", technicianId);
+            _log.InfoFormat("TechLocation added. TechnicianId: {0}", userId);
             return Success();
         }
 

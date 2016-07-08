@@ -16,13 +16,11 @@
     {
         private readonly MongoDatabase database;
 
-        public MongoRepository(string connectionString)
+        public MongoRepository(string connectionString, string dbName)
         {
-            // var mongoDbConnection = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString;
-            // var mongoDbName = ConfigurationManager.AppSettings["MongoDbName"];
             var client = new MongoClient(connectionString);
             var server = client.GetServer();
-            database = server.GetDatabase("local");
+            database = server.GetDatabase(dbName);
         }
 
         public virtual bool Add<TEntity>(TEntity entity) where TEntity : IEntity

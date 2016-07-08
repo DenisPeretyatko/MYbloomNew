@@ -78,9 +78,10 @@ namespace BloomService.Web
         {
             var setting = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
             var connectionString = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString;
+            var dbName = ConfigurationManager.AppSettings["MainDb"];
             var sageApiHost = setting.SageApiHost;
 
-            kernel.Bind<IRepository>().To<MongoRepository>().WithConstructorArgument(connectionString);
+            kernel.Bind<IRepository>().To<MongoRepository>().WithConstructorArgument("connectionString",connectionString).WithConstructorArgument("dbName", dbName);
             kernel.Bind<BloomServiceConfiguration>().ToConstant(setting);
 
             kernel.Bind<IHttpContextProvider>().To<HttpContextProvider>();
