@@ -135,6 +135,8 @@
 
     connection.client.SendNotification = function (notification) {
         $rootScope.notifications.unshift(notification);
+        $rootScope.notifications = $rootScope.notifications.slice(0, 9);
+
     };
 
     

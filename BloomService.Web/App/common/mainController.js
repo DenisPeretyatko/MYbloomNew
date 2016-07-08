@@ -56,8 +56,11 @@ var mainController = function ($scope, $rootScope, commonDataService, state, $wi
                 if ($rootScope.notifications.length - $scope.notificationsCopy.length <= 1 && $rootScope.notifications.length != 0)
                     if (canReadMessagesCount < 3)
                         canReadMessagesCount++;
-
-            } 
+            }
+            if ($scope.canReadaAll == false && $scope.notificationsCopy.length == 9 && $rootScope.notifications.length == 9) {
+                $scope.canReadaAll = true;
+                canReadMessagesCount = 3;
+            }
             $scope.notificationsCount = 0;
             $scope.notificationsCopy = angular.copy($rootScope.notifications);
             angular.forEach($scope.notificationsCopy, function (value, key) {
@@ -77,7 +80,7 @@ var mainController = function ($scope, $rootScope, commonDataService, state, $wi
     $state.go('login');
 }
 
-$scope.showAlerts = function() {
+    $scope.showAlerts = function () {
     $scope.allnotifications = true;
     $scope.canReadaAll = true;
     $scope.notificationsCount = 0;
@@ -114,6 +117,7 @@ $scope.openNotifications = function () {
 
     commonDataService.getLookups().then(function (response) {
         $rootScope.notifications = response.data.Notifications;
+        $rootScope.notifications = $rootScope.notifications.splice(0, 9);
         state.setMongaNotificationTime(response.data.NotificationTime);
         state.setLookups(response.data);
     });
