@@ -3,7 +3,7 @@
         <h2>Schedule</h2>
     </div>
 </div>
-<div class="wrapper wrapper-content">
+<div id="schedule" class="wrapper wrapper-content">
     <div class="row animated fadeInDown">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
@@ -13,34 +13,29 @@
             </div>
         </div>
     </div>
-    <div class="row">    
+    <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins dragdpor_section">
                 <div class="ibox-title">
                     <h5>Unassigned Workorders</h5>
                 </div>
                 <div class="ibox-content">
-                    <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
-                    <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Date</th>
-                            <th data-hide="phone,tablet">Customer</th>
-                            <th data-hide="phone,tablet">Location</th>
-                            <th data-hide="phone,tablet">Hours</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="workorder in unassignedWorkorders" class="drag fc-event" style="z-index: 999">
-                                <td>{{workorder.WorkOrder}}</td>
-                                <td>{{workorder.DateEntered}}</td>
-                                <td>{{workorder.ARCustomer}}</td>
-                                <td>{{workorder.Location}}</td>
-                                <td>{{workorder.EstimatedRepairHours}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="footable table table-stripped" data-page-size="8" data-filter=#filter>
+                        <div class="table row " style="display: block">
+                            <div class="col-lg-1 col-md-1"><h4>#</h4></div>
+                            <div class="col-lg-2 col-md-2"><h4>Date</h4></div>
+                            <div data-hide="phone,tablet" class="col-lg-3 col-md-3"><h4>Customer</h4></div>
+                            <div data-hide="phone,tablet" class="col-lg-4 col-md-4"><h4>Location</h4></div>
+                            <div data-hide="phone,tablet" class="col-lg-2 col-md-2"><h4>Hours</h4></div>
+                        </div>
+                        <div id="new-row"></div>
+                    <div ng-repeat="workorder in unassignedWorkorders" class="drag fc-event table row table-row dragdemo" style="z-index: 999; display: block" draggable="true">
+                        <div class="table-row col-lg-1 col-md-1">{{workorder.WorkOrder}}</div>
+                        <div class="table-row col-lg-2 col-md-2">{{workorder.DateEntered}}</div>
+                        <div data-hide="phone,tablet" class="table-row col-lg-3 col-md-3">{{workorder.ARCustomer}}</div>
+                        <div data-hide="phone,tablet" class="table-row col-lg-4 col-md-4">{{workorder.Location}}</div>
+                        <div data-hide="phone,tablet" class="table-row col-lg-2 col-md-2">{{workorder.EstimatedRepairHours}}</div>
+                    </div>
                 </div>
             </div>
         </div>

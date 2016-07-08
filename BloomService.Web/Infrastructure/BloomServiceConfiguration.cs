@@ -32,7 +32,8 @@
                     SertificateUrl = nameValueCollection["SertificateUrl"],
                     SizeBigPhoto = int.Parse(nameValueCollection["SizeBigPhoto"]),
                     SizeSmallPhoto = int.Parse(nameValueCollection["SizeSmallPhoto"]),
-                    CurrentTimezone = nameValueCollection["CurrentTimezone"]
+                    CurrentTimezone = nameValueCollection["CurrentTimezone"],
+                    NotificationDelay = int.Parse(nameValueCollection["NotificationDelay"])
                 };
 
                 return configuration;
@@ -64,5 +65,6 @@
         public int SizeBigPhoto { get; set; }
         public int SizeSmallPhoto { get; set; }
         public string CurrentTimezone { get; set; }
+        public int NotificationDelay { get; set; }
     }
 }

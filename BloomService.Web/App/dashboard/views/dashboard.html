@@ -28,8 +28,14 @@
         <div class="col-lg-8">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h5>Workorders for today</h5>
+                    <div class="col-lg-6 col-md-6">
+                        <h5>Workorders for today</h5>
+                    </div>
+                    <div class="col-lg-2 col-lg-offset-4 col-md-2 col-md-offset-4">
+                        <label class="pull-right"><input type="checkbox" class="dashboard-checkbox" ng-change="showAllLocations()" ng-model="showAll" value="">Show all</label>
+                    </div>
                 </div>
+               
                 
                 <div class="ibox-content">
                     <section id="map">

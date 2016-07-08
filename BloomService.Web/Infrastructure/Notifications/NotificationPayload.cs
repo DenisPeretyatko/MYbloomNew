@@ -77,7 +77,11 @@
             if (this.Content_available == 1)
                 aps["content-available"] = new JValue(this.Content_available);
 
+            if (!string.IsNullOrEmpty(Sound))
+                aps["sound"] = new JValue(Sound);
+
             json["aps"] = aps;
+
 
             foreach (string key in this.CustomItems.Keys)
             {
@@ -86,8 +90,7 @@
                 else if (this.CustomItems[key].Length > 1)
                     json[key] = new JArray(this.CustomItems[key]);
             }
-            if (!string.IsNullOrEmpty(Sound))
-                aps["sound"] = new JValue(Sound);
+            
 
             string rawString = json.ToString(Newtonsoft.Json.Formatting.None, null);
 
