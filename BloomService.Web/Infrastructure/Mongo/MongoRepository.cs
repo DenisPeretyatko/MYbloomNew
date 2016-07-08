@@ -16,22 +16,11 @@
     {
         private readonly MongoDatabase database;
 
-        public MongoRepository(string connectionString)
+        public MongoRepository(string connectionString, string dbName)
         {
-            // var mongoDbConnection = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString;
-            // var mongoDbName = ConfigurationManager.AppSettings["MongoDbName"];
-            //var client = new MongoClient(connectionString);
-            var client = new MongoClient(
-                   new MongoClientSettings
-                   {
-                       Credentials = new[]
-                    {
-                       MongoCredential.CreateCredential("bloomservicemdb","bloom", "sageDEV!!")
-                    },
-                       Server = new MongoServerAddress("ds040089.mlab.com", 40089)
-                   });
+            var client = new MongoClient(connectionString);
             var server = client.GetServer();
-            database = server.GetDatabase("local");
+            database = server.GetDatabase(dbName);
         }
 
         public virtual bool Add<TEntity>(TEntity entity) where TEntity : IEntity
