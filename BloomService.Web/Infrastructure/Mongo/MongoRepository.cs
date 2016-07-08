@@ -20,7 +20,16 @@
         {
             // var mongoDbConnection = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString;
             // var mongoDbName = ConfigurationManager.AppSettings["MongoDbName"];
-            var client = new MongoClient(connectionString);
+            //var client = new MongoClient(connectionString);
+            var client = new MongoClient(
+                   new MongoClientSettings
+                   {
+                       Credentials = new[]
+                    {
+                       MongoCredential.CreateCredential("bloomservicemdb","bloom", "sageDEV!!")
+                    },
+                       Server = new MongoServerAddress("ds040089.mlab.com", 40089)
+                   });
             var server = client.GetServer();
             database = server.GetDatabase("local");
         }
