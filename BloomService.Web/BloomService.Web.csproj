@@ -345,6 +345,7 @@
     <Compile Include="Models\EntityModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\GoogleLocation.cs" />
+    <Compile Include="Models\LaborPartsModel.cs" />
     <Compile Include="Models\LocationModel.cs" />
     <Compile Include="Models\LoginResponseModel.cs" />
     <Compile Include="Models\MapModel.cs" />

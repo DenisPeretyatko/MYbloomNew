@@ -25,6 +25,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     $scope.equipmentList = [];
     $scope.obj.data = new Date();
     var customerChanged = false;
+    $scope.Rate = 0;
 
 
     $scope.$watch(function () { return state.lookups; }, function () {
@@ -81,6 +82,21 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     });
 
     $scope.saveWorkOrder = function () {
+        $scope.equipment.pop();
+        var equipment = [];
+        angular.forEach($scope.equipment, function (value, key) {
+            if (value != null) {
+                equipment.push({
+                    WorkDate: value.date,
+                    Type: value.equipType,
+                    Description: value.description,
+                    Employee: value.empl,
+                    CostQty: value.cost,
+                    BiledQty: value.biled,
+                    Rate: value.rate
+                });
+            }
+        });
         var workorder = {
             WorkOrder: $scope.editableWorkOrder.WorkOrder,
             Id: $stateParams.id,
@@ -91,14 +107,14 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             Problem: $scope.lookups.Problems.selected == null ? "" : $scope.lookups.Problems.selected.Problem,
             Ratesheet: $scope.lookups.RateSheets.selected == null ? "" : $scope.lookups.RateSheets.selected.RATESHEETNBR,
             Emploee: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.Employee,
-            Equipment: $scope.lookups.Equipment.selected == null ? "" : $scope.lookups.Equipment.selected.Equipment,
             Estimatehours: $scope.lookups.Hours.selected == null ? "0" : $scope.lookups.Hours.selected.Repair,
             Nottoexceed: $scope.obj.nottoexceed,
             Locationcomments: $scope.obj.locationcomments,
             Customerpo: $scope.obj.customerpo,
             Permissiocode: $scope.lookups.PermissionCodes.selected == null ? "" : $scope.lookups.PermissionCodes.selected.DESCRIPTION,
             Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected.Value,
-            WorkOrder: $scope.editableWorkOrder.WorkOrder
+            WorkOrder: $scope.editableWorkOrder.WorkOrder,
+            Equipment: equipment,
         };
 
         commonDataService.saveWorkorder(workorder).then(function (response) {
@@ -114,6 +130,16 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     commonDataService.getWorkorderPictures($stateParams.id).then(function (response) {
         return $scope.pictures = response.data;
     });
+
+    $scope.setRate = function (selected,item) {
+        if (item.equipType.selected == 'Parts' || item.equipType.selected == undefined) {
+            item.rate = parseFloat(selected.$select.selected.Level1Price);
+        }
+        else {
+            item.rate = 85.0000;
+        }
+    };
+
 
     $scope.editRow = function (item, index) {
         item.isEditing = true;

@@ -1,7 +1,7 @@
 ﻿namespace BloomService.Web.Models
 {
     using System;
-
+    using System.Collections.Generic;
     public class WorkOrderModel
     {
         public DateTime Calldate { get; set; }
@@ -14,7 +14,7 @@
 
         public string Emploee { get; set; }
 
-        public string Equipment { get; set; }
+        public List<LaborPartsModel> Equipment { get; set; }
 
         public string Estimatehours { get; set; }
 
