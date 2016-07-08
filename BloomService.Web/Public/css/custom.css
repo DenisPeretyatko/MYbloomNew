@@ -1,9 +1,10 @@
 
 .fill {
-    width:100%;
-    height:100%;
-    min-height:100%;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
 }
+
 .drag.fc-event {
     padding: 0;
     background: none;
@@ -11,10 +12,12 @@
     color: inherit;
     cursor: move;
 }
-.drag.fc-event:hover {
-    color: inherit;
-}
-.drag.fc-event{
+
+    .drag.fc-event:hover {
+        color: inherit;
+    }
+
+.drag.fc-event {
     position: relative;
     /*display: table-row;*/
     font-size: 13px;
@@ -23,15 +26,18 @@
     background: none;
     font-weight: normal;
 }
+
 .notif_message {
     overflow: hidden;
     -moz-text-overflow: ellipsis;
     text-overflow: ellipsis;
     width: 150px;
 }
+
 .notif_el a {
     line-height: normal;
 }
+
 .divider {
     margin-top: 25px !important;
 }
@@ -42,80 +48,92 @@
     border: solid 1px;
     margin-right: 8px;
 }
+
 .avatarImg {
     -ms-opacity: 0.0;
     opacity: 0.0;
     width: 60px;
     height: 0;
 }
+
 .upload_avatar input[type="file"]::-webkit-file-upload-button {
     cursor: pointer;
     margin: -10px -10px;
     padding-top: 5px;
-    padding-bottom: 5px; 
+    padding-bottom: 5px;
 }
+
 .upload_avatar {
     margin-bottom: 20px;
 }
+
 .edit_technician .fc-event {
     background-color: #ed5565;
     border-color: #ed5565;
 }
 
- #colorId .input-group-addon, #colorId {
+#colorId .input-group-addon, #colorId {
     width: 50px;
     height: 50px;
     -ms-border-radius: 50%;
     border-radius: 50%;
-     padding: 0;
+    padding: 0;
 }
-#colorId .input-group-addon i {
-    width: 50px;
-    height: 50px;
-    -ms-border-radius: 50%;
-    border-radius: 50%;
-    background-color: #ed5565;
-     padding: 0;
-}
+
+    #colorId .input-group-addon i {
+        width: 50px;
+        height: 50px;
+        -ms-border-radius: 50%;
+        border-radius: 50%;
+        background-color: #ed5565;
+        padding: 0;
+    }
 
 #external-events-listing .fc-event {
     cursor: pointer;
     margin: 10px 0;
 }
+
 .map_date {
     margin-top: 20px;
     margin-bottom: 0;
 }
-.m-t input
-{
+
+.m-t input {
     max-width: 100%;
 }
+
 .form-control {
     max-width: 800px;
 }
+
 .equip .input-group {
     max-width: 150px;
 }
+
 .hiddenrow {
     display: none;
 }
+
 .equip label {
     font-weight: 400;
 }
 
-.fc-rows  tr {
+.fc-rows tr {
     height: 34px !important;
 }
 
 .wogalary img {
     margin: 5px;
 }
-.wogalary div{
+
+.wogalary div {
     /*float: left;*/
-    display : inline-block;
+    display: inline-block;
 }
-.wogalary label{
-    display:block;
+
+.wogalary label {
+    display: block;
     text-align: center;
 }
 
@@ -134,3 +152,15 @@
     z-index: 2;
 }
 
+.dashboard-checkbox {
+    margin-right: 5px !important;
+}
+
+.fc-content {
+   
+    text-overflow: ellipsis;
+}
+
+.fc-title {   
+    font-size: .90em;
+}

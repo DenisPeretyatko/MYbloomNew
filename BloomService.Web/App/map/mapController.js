@@ -21,7 +21,10 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
 
     $scope.showAllLocations = function() {
         if ($scope.showAll == true) {
-            $scope.workordersView = $rootScope.workorders;
+            $scope.workordersView = [];
+            angular.forEach($rootScope.workorders, function (value, key) {
+                    $scope.workordersView.push(value.WorkOrder);
+            });
         } else {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {

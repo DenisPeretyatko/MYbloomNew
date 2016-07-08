@@ -12,15 +12,18 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
     $scope.mapDate = new Date();
     $scope.sortType = 'DateEntered';
     $scope.sortDirection = true;
+    $scope.showAll = false;
+    $scope.workordersView = [];
+    $scope.workorderMarkers = [];
 
     $scope.changeSorting = function (data) {
-         if ($scope.sortType != data) {
-             $scope.sortType = data;
-             $scope.sortDirection = true;
+        if ($scope.sortType != data) {
+            $scope.sortType = data;
+            $scope.sortDirection = true;
         } else {
-             $scope.sortDirection = !$scope.sortDirection;
-         }
-     }
+            $scope.sortDirection = !$scope.sortDirection;
+        }
+    }
 
 
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
@@ -30,11 +33,27 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
         return new Date(parseInt(value.substr(6)));
     };
 
-    $scope.$watch(function () { return $scope.workorders; }, function () {
-        angular.forEach($scope.workorders, function (workorder) {
+    $scope.showAllLocations = function () {
+       if ($scope.showAll == true) {
+            $scope.workordersView = [];
+            angular.forEach($rootScope.workorders, function (value, key) {
+                    $scope.workordersView.push(value.WorkOrder);
+            });
+        } else {
+            $scope.workordersView = [];
+            angular.forEach($rootScope.workorders, function (value, key) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
+                    $scope.workordersView.push(value.WorkOrder);
+                }
+            });
+        }
+    }
+
+    $scope.$watchCollection(function () { return $scope.workordersView; }, function () {
+        angular.forEach($scope.workorderMarkers, function (marker) { marker.setMap(null); });
+        angular.forEach($scope.workordersView, function (workorder) {
 
             var content = tooltipWO(workorder);
-
             var pos = {
                 lat: parseFloat(workorder.Latitude),
                 lng: parseFloat(workorder.Longitude)
@@ -46,7 +65,7 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
                 icon: "/public/images/workorder.png",
                 title: workorder.WorkOrder
             });
-
+            $scope.workorderMarkers.push(marker);
             marker.addListener('click', function () {
                 var infowindow = new google.maps.InfoWindow({
                     content: content
@@ -54,6 +73,21 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
                 infowindow.open($scope.locationMap, marker);
             });
         });
+    });
+
+    $scope.$watchCollection(function () { return $rootScope.workorders; }, function () {
+        $scope.workordersView = [];
+        if ($scope.showAll == false) {          
+            angular.forEach($rootScope.workorders, function (value, key) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
+                    $scope.workordersView.push(value.WorkOrder);
+                }
+            });
+        } else {
+            angular.forEach($rootScope.workorders, function (value, key) {
+                $scope.workordersView.push(value.WorkOrder);
+            });
+        }
     });
 
     $rootScope.$watchCollection(function () { return $rootScope.trucks; }, function () {
@@ -89,8 +123,14 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
     var model = {
         DateWorkOrder: new Date($scope.mapDate)
     }
-    commonDataService.getLocations(model).then(function (response) {
-        $scope.workorders = response.data;
+    commonDataService.getLocations().then(function (response) {
+        $scope.workordersView = [];
+        $rootScope.workorders = response.data;
+        angular.forEach($rootScope.workorders, function (value, key) {
+            if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
+                $scope.workordersView.push(value.WorkOrder);
+            }
+        });
     });
 
 
