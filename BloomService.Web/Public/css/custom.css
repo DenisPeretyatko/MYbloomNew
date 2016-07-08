@@ -133,4 +133,6 @@
     right: 0;
     z-index: 2;
 }
-
+.dashboard-checkbox {
+    margin-right: 5px !important;
+}
