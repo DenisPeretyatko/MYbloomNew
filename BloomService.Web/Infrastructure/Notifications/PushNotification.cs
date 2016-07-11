@@ -142,7 +142,7 @@
             try
             {
                 var info = ar.AsyncState as MyAsyncInfo;
-                info.MyStream.ReadTimeout = 100;
+                //info.MyStream.ReadTimeout = 100;
                 if (this._apnsStream.CanRead)
                 {
                     var command = Convert.ToInt16(info.ByteArray[0]);
