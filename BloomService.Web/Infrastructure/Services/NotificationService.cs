@@ -46,7 +46,7 @@ namespace BloomService.Web.Infrastructure.Services
 
         public List<NotificationModel> GetLastNotifications()
         {
-            var itemsOnPage = 50;
+            const int itemsOnPage = 9;
             var notifications = _repository.GetAll<Notification>();
             var entitiesCount = notifications.Count();
             if (entitiesCount > itemsOnPage)
