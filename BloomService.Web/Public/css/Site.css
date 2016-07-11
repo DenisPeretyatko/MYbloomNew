@@ -39,9 +39,7 @@ textarea {
     color:red;
 }
 
-.nav-logo {
-    background-image: url('../images/logo.png');
-    width: 215px;
-    height: 107px;
+.nav-logo {width: 155px;
+    height: 80px;
   background-size: cover; 
 }
