@@ -243,7 +243,7 @@
                 var properties = new Dictionary<string, string>();
                 properties.Add("Assignment", assignment.Assignment.ToString() ?? string.Empty);
                 properties.Add("ScheduleDate", assignment.ScheduleDate.ToString() ?? string.Empty);
-                properties.Add("Employee",  assignment.Employee.ToString() ?? string.Empty);
+                properties.Add("Employee",  assignment.Employee.Replace("'", "&apos;") ?? string.Empty);
                 properties.Add("WorkOrder",  assignment.WorkOrder.ToString() ?? string.Empty);
                 properties.Add("EstimatedRepairHours",  assignment.EstimatedRepairHours.ToString() ?? string.Empty);
                 properties.Add("StartTime",((DateTime)assignment.StartTime).TimeOfDay.ToString() ?? string.Empty);
