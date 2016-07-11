@@ -68,7 +68,8 @@ var mainController = function ($scope, $rootScope, commonDataService, state, $wi
                 if (convDate > convertDate(lastDate)) {
                     $scope.notificationsCount++;
                 }
-                value.time = moment(value.time, 'dd-mm-yy hh:mm:ss').from(now);
+
+                value.time = moment(convDate).fromNow();
             });
             $scope.notificationsCount += previousNotificationCount;
         });
@@ -117,7 +118,6 @@ $scope.openNotifications = function () {
 
     commonDataService.getLookups().then(function (response) {
         $rootScope.notifications = response.data.Notifications;
-        $rootScope.notifications = $rootScope.notifications.splice(0, 9);
         state.setMongaNotificationTime(response.data.NotificationTime);
         state.setLookups(response.data);
     });
