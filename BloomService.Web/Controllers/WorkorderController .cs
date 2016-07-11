@@ -179,6 +179,9 @@ namespace BloomService.Web.Controllers
                 case "date":
                     workorders = model.Direction ? workorders.OrderBy(x => x.ScheduleDate) : workorders.OrderByDescending(x => x.ScheduleDate);
                     break;
+                case "entered date":
+                    workorders = model.Direction ? workorders.OrderBy(x => x.DateEntered) : workorders.OrderByDescending(x => x.DateEntered);
+                    break;
                 case "customer":
                     workorders = model.Direction ? workorders.OrderBy(x => x.ARCustomer) : workorders.OrderByDescending(x => x.ARCustomer);
                     break;
