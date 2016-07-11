@@ -22,29 +22,29 @@
                 <div class="ibox-content">
                     <div class="footable table table-stripped" data-page-size="8" data-filter=#filter>
                         <div class="table row " style="display: block">
-                            <div class="col-lg-1 col-md-1">
+                            <div class="col-lg-1 col-md-1 col-sm-6 col-xs-6">
                                 <h4>#</h4>
                             </div>
-                            <div class="col-lg-2 col-md-2">
+                            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6">
                                 <h4>Date</h4>
                             </div>
-                            <div data-hide="phone,tablet" class="col-lg-3 col-md-3">
+                            <div class="col-lg-3 col-md-3 hidden-sm hidden-xs">
                                 <h4>Customer</h4>
                             </div>
-                            <div data-hide="phone,tablet" class="col-lg-4 col-md-4">
+                            <div class="col-lg-4 col-md-4 hidden-sm hidden-xs ">
                                 <h4>Location</h4>
                             </div>
-                            <div data-hide="phone,tablet" class="col-lg-2 col-md-2">
+                            <div class="col-lg-2 col-md-2 hidden-sm hidden-xs">
                                 <h4>Hours</h4>
                             </div>
                         </div>
                         <div id="new-row"></div>
                         <div ng-repeat="workorder in unassignedWorkorders" class="drag fc-event table row table-row dragdemo" style="z-index: 999; display: block" draggable="true">
-                            <div class="table-row col-lg-1 col-md-1">{{workorder.WorkOrder}}</div>
-                            <div class="table-row col-lg-2 col-md-2">{{workorder.DateEntered}}</div>
-                            <div data-hide="phone,tablet" class="table-row col-lg-3 col-md-3">{{workorder.ARCustomer}}</div>
-                            <div data-hide="phone,tablet" class="table-row col-lg-4 col-md-4">{{workorder.Location}}</div>
-                            <div data-hide="phone,tablet" class="table-row col-lg-2 col-md-2">{{workorder.EstimatedRepairHours}}</div>
+                            <div class="table-row col-lg-1 col-md-1 col-sm-6 col-xs-6">{{workorder.WorkOrder}}</div>
+                            <div class="table-row col-lg-2 col-md-2 col-sm-6 col-xs-6">{{workorder.DateEntered}}</div>
+                            <div class="table-row col-lg-3 col-md-3 hidden-sm hidden-xs">{{workorder.ARCustomer}}</div>
+                            <div class="table-row col-lg-4 col-md-4 hidden-sm hidden-xs">{{workorder.Location}}</div>
+                            <div class="table-row col-lg-2 col-md-2 hidden-sm hidden-xs">{{workorder.EstimatedRepairHours}}</div>
                         </div>
                     </div>
                 </div>
