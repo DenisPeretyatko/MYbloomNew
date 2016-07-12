@@ -35,11 +35,11 @@
 
     var connection = commonHub.GetConnection();
 
-    commonDataService.getLookups().then(function (response) {
-        $rootScope.notifications = response.data.Notifications;
-        _this.notificationTime = response.data.NotificationTime;
-        return _this.lookups = response.data;
-    });
+    //commonDataService.getLookups().then(function (response) {
+    //    $rootScope.notifications = response.data.Notifications;
+    //    _this.notificationTime = response.data.NotificationTime;
+    //    return _this.lookups = response.data;
+    //});
 
     commonDataService.getLocations().then(function (response) {
         return _this.locations = response.data;

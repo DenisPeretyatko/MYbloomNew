@@ -98,8 +98,8 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, c
             },
             eventDragStop: function (event, jsEvent, ui, view) {
                 if (isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
-                    var innerHtml = "<div class=\"col-lg-1 col-md-1 table-row\">" + event.workorderId + "</div>" + "<div  class=\"table-row col-lg-2 col-md-2\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-3 col-md-3\">" + event.customerFoo + "</div>" +
-                                  "<div  data-hide=\"phone,tablet\" class=\"table-row col-lg-4 col-md-4\">" + event.locationFoo + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-2 col-md-2\">" + parseInt(event.hourFoo) + "</div>";
+                    var innerHtml = "<div class=\"table-row col-lg-1 col-md-1 col-sm-6 col-xs-6 ng-binding\">" + event.workorderId + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 col-sm-6 col-xs-6 ng-binding\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div class=\"table-row col-lg-3 col-md-3 hidden-sm hidden-xs ng-binding\">" + event.customerFoo + "</div>" +
+                                  "<div class=\"table-row col-lg-4 col-md-4 hidden-sm hidden-xs ng-binding\">" + event.locationFoo + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 hidden-sm hidden-xs ng-binding\">" + parseInt(event.hourFoo) + "</div>";
 
                     var el = $("<div class=\"drag fc-event table row table-row dragdemo\" style=\"z-index: 999; display: block\" draggable=\"true\">").appendTo('#new-row').html(innerHtml);
                     el.draggable({
@@ -150,8 +150,8 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, c
                 } else {
                     $('#calendar').fullCalendar('removeEvents', event._id);
                     ///
-                    var innerHtml = "<div class=\"col-lg-1 col-md-1 table-row\">" + event.workorderId + "</div>" + "<div  class=\"table-row col-lg-2 col-md-2\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-3 col-md-3\">" + event.customerFoo + "</div>" +
-                                 "<div  data-hide=\"phone,tablet\" class=\"table-row col-lg-4 col-md-4\">" + event.locationFoo + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-2 col-md-2\">" + parseInt(event.hourFoo) + "</div>";
+                    var innerHtml = "<div class=\"table-row col-lg-1 col-md-1 col-sm-6 col-xs-6 ng-binding\">" + event.workorderId + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 col-sm-6 col-xs-6 ng-binding\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div class=\"table-row col-lg-3 col-md-3 hidden-sm hidden-xs ng-binding\">" + event.customerFoo + "</div>" +
+                                 "<div class=\"table-row col-lg-4 col-md-4 hidden-sm hidden-xs ng-binding\">" + event.locationFoo + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 hidden-sm hidden-xs ng-binding\">" + parseInt(event.hourFoo) + "</div>";
 
                     var el = $("<div class=\"drag fc-event table row table-row dragdemo\" style=\"z-index: 999; display: block\" draggable=\"true\">").appendTo('#new-row').html(innerHtml);
                     el.draggable({
@@ -318,8 +318,9 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, c
             this.style.marginLeft = (x - 275) + "px";
             this.style.marginTop = -5 + "px";
             document.getElementById("schedule").addEventListener("mouseup", function (event) {
-                var innerHtml = "<div class=\"col-lg-1 col-md-1 table-row\">" + innerText[0] + "</div>" + "<div  class=\"table-row col-lg-2 col-md-2\">" + innerText[1] + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-3 col-md-3\">" + innerText[2] + "</div>" +
-                                   "<div  data-hide=\"phone,tablet\" class=\"table-row col-lg-4 col-md-4\">" + innerText[3] + "</div>" + "<div data-hide=\"phone,tablet\" class=\"table-row col-lg-2 col-md-2\">" + innerText[4] + "</div>";
+                var innerHtml = "<div class=\"table-row col-lg-1 col-md-1 col-sm-6 col-xs-6 ng-binding\">" +innerText[0] + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 col-sm-6 col-xs-6 ng-binding\">" + innerText[1] + "</div>" + "<div class=\"table-row col-lg-3 col-md-3 hidden-sm hidden-xs ng-binding\">" + innerText[2] + "</div>" +
+                              "<div class=\"table-row col-lg-4 col-md-4 hidden-sm hidden-xs ng-binding\">" + innerText[3] + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 hidden-sm hidden-xs ng-binding\">" + innerText[4] + "</div>";
+
                 element.innerHTML = innerHtml;
                 element.style = prevDivState.style;
                 element.clientWidth = prevDivState.clientWidth;

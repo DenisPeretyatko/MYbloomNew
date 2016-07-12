@@ -81,16 +81,15 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkorder(string id)
         {
             var workOrder = _repository.Get<SageWorkOrder>(id);
-
-            var lookups = _dashboardService.GetLookups();
-            workOrder.CustomerObj = Mapper.Map<CustomerModel, SageCustomer>(lookups.Customers.FirstOrDefault(x => x.Customer == workOrder.ARCustomer));
-            workOrder.LocationObj = Mapper.Map<LocationModel, SageLocation>(lookups.Locations.FirstOrDefault(x => x.Name == workOrder.Location));
-            workOrder.CalltypeObj = Mapper.Map<CallTypeModel, SageCallType>(lookups.Calltypes.FirstOrDefault(x => x.Description == workOrder.CallType));
-            workOrder.ProblemObj = Mapper.Map<ProblemModel, SageProblem>(lookups.Problems.FirstOrDefault(x => x.Description == workOrder.Problem));
-            workOrder.RateSheetObj = Mapper.Map<RateSheetModel, SageRateSheet>(lookups.RateSheets.FirstOrDefault(x => x.DESCRIPTION.Trim() == workOrder.RateSheet));
-            workOrder.EmployeeObj = Mapper.Map<EmployeeModel, SageEmployee>(lookups.Employes.FirstOrDefault(x => x.Name == workOrder.Employee));
-            workOrder.HourObj = Mapper.Map<RepairModel, SageRepair>(lookups.Hours.FirstOrDefault(x => x.Repair == workOrder.EstimatedRepairHours));
-            workOrder.PermissionCodeObj = Mapper.Map<PermissionCodeModel, SagePermissionCode>(lookups.PermissionCodes.FirstOrDefault(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode));
+            
+            workOrder.CustomerObj = _repository.SearchFor<SageCustomer>(x => x.Customer == workOrder.ARCustomer).SingleOrDefault();
+            workOrder.LocationObj = _repository.SearchFor<SageLocation>(x => x.Name == workOrder.Location).SingleOrDefault();
+            workOrder.CalltypeObj = _repository.SearchFor<SageCallType>(x => x.Description == workOrder.CallType).SingleOrDefault();
+            workOrder.ProblemObj = _repository.SearchFor<SageProblem>(x => x.Description == workOrder.Problem).SingleOrDefault();
+            workOrder.RateSheetObj = _repository.SearchFor<SageRateSheet>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.RateSheet).SingleOrDefault();
+            workOrder.EmployeeObj = _repository.SearchFor<SageEmployee>(x => x.Name == workOrder.Employee).SingleOrDefault();
+            workOrder.HourObj = _repository.SearchFor<SageRepair>(x => x.Repair == workOrder.EstimatedRepairHours.ToString()).SingleOrDefault();
+            workOrder.PermissionCodeObj = _repository.SearchFor<SagePermissionCode>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode).SingleOrDefault(); 
             workOrder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workOrder.PayMethod.Trim());
 
             return Json(workOrder, JsonRequestBehavior.AllowGet);
@@ -178,6 +177,9 @@ namespace BloomService.Web.Controllers
                     break;
                 case "date":
                     workorders = model.Direction ? workorders.OrderBy(x => x.ScheduleDate) : workorders.OrderByDescending(x => x.ScheduleDate);
+                    break;
+                case "entered date":
+                    workorders = model.Direction ? workorders.OrderBy(x => x.DateEntered) : workorders.OrderByDescending(x => x.DateEntered);
                     break;
                 case "customer":
                     workorders = model.Direction ? workorders.OrderBy(x => x.ARCustomer) : workorders.OrderByDescending(x => x.ARCustomer);

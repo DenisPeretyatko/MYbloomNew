@@ -1,8 +1,11 @@
 <nav class="navbar-default navbar-static-side" role="navigation">
     <div class="sidebar-collapse">
         <ul side-navigation class="nav metismenu" id="side-menu">
-            <li class="nav-header">
+            <li class="nav-header" style="padding-top: 0px">
                 <div class="dropdown profile-element" dropdown>
+                    <span>
+                        <img class="nav-logo" alt="image" src="../public/images/logo.png">
+                    </span>
                     <a class="dropdown-toggle" dropdown-toggle href>
                         <span class="clear">
                             <span class="block m-t-xs">
@@ -22,7 +25,7 @@
                 <a ui-sref="manager.dashboard"><i class="fa fa-tachometer"></i> <span class="nav-label">Dashboard</span></a>
             </li>
             <li ng-class="{active: $state.includes('manager.workorder')}">
-                <a ui-sref="manager.workorder.list"><i class="fa fa-tasks"></i> <span class="nav-label">Workorders</span></a>
+                <a ui-sref="manager.workorder.list"><i class="fa fa-tasks"></i> <span class="nav-label">Work Orders</span></a>
             </li>
             <li ng-class="{active: $state.includes('manager.map')}">
                 <a ui-sref="manager.map"><i class="fa fa-location-arrow"></i> <span class="nav-label">Map</span></a>
