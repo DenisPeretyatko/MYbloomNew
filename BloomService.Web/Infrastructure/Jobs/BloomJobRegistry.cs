@@ -62,8 +62,9 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     PushNotification push = new PushNotification(false, path, null);
                                     push.P12File = path;
                                     push.SendToApple(p);
-                            //    }
-                            //}
+                                    _log.InfoFormat("push notification send to {0} at {1}", technician.IosDeviceToken, DateTime.Now.ToString());
+                        //    }
+                        //}
                         //}
                     }
                 }
