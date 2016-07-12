@@ -30,12 +30,11 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService, s
         model.Direction = $scope.increase;
         model.Search = $scope.Search;
         $scope.getSelectedPage(page);
-        state.UpdateWorkordersList(model).then(function() {
-            $scope.workorders = state.getWorkordersList().WorkordersList;
-            $scope.pagesCount = state.getWorkordersList().CountPage;
-            $scope.paginationList = $scope.getPagList(state.getWorkordersList().CountPage);
+        commonDataService.getWorkordesPaged(model).then(function (response) {
+            $scope.workorders = response.data.WorkordersList;
+            $scope.pagesCount = response.data.CountPage;
+            $scope.paginationList = $scope.getPagList(response.data.CountPage);
         });
-
     }
 
     $scope.CurrentPageNum = function () {
@@ -145,10 +144,13 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService, s
         return currentPage;
     }
 
-
-    $scope.workorders = state.getWorkordersList().WorkordersList;
-    $scope.pagesCount = state.getWorkordersList().CountPage;
-    $scope.getPaginationList = $scope.getPagList(state.getWorkordersList().CountPage);
+    $scope.$watch(function () { return state.workorders; }, function () {
+        if ($scope.workorders != undefined && $scope.workorders.length != 0) {
+            $scope.workorders = state.workorders.WorkordersList;
+            $scope.pagesCount = state.workorders.CountPage;
+            $scope.getPaginationList = $scope.getPagList(state.workorders.CountPage);
+        }
+    });
 
 };
 workorderController.$inject = ["$scope", "$timeout", '$sce', "commonDataService", "state"];

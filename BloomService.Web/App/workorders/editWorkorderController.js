@@ -24,14 +24,13 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     $scope.EquipType = ["Labor", "Parts"];
     $scope.equipmentList = [];
     $scope.obj.data = new Date();
-    var customerChanged = false;
     $scope.Rate = 0;
 
 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
 
-        if (state.lookups.Equipment !== undefined) {
+        if ($scope.editableWorkOrder !== undefined &&  $scope.editableWorkOrder.WorkOrderItems !== undefined && $scope.lookups !== undefined) {
             var equipment = {
                 equipType: angular.copy($scope.EquipType),
                 empl: angular.copy($scope.lookups.Employes),
@@ -64,7 +63,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     });
 
     $scope.$watch(function () { return $scope.editableWorkOrder }, function () {
-        if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined) {
+        if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined && $scope.lookups.Customers != undefined) {
             $scope.lookups.Customers.selected = $scope.editableWorkOrder.CustomerObj;
             $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
@@ -223,36 +222,28 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         $scope.equipment.splice($scope.equipment.indexOf(item), 1);
     }
 
-    $scope.$watch(function () {
-        return $scope.lookups.Customers != undefined ? $scope.lookups.Customers.selected != undefined ? $scope.lookups.Customers.selected : "" : "";
-    }, function () {
-        if ($scope.lookups.Customers != undefined && $scope.lookups.Customers.selected != undefined && !customerChanged) {
-            var customer = $scope.lookups.Customers.selected.Customer;
-            var request = "{'customer':'" + customer + "'}";
-            commonDataService.locationsByCustomer(request).then(function (response) {
-                var selLocation = {};
-                if ($scope.lookups.Locations.selected != undefined && $scope.lookups.Locations.selected.ARCustomer == $scope.lookups.Customers.selected.Customer) {
-                    selLocation = $scope.lookups.Locations.selected;
-                }
-                $scope.lookups.Locations = response.data.length > 0 ? response.data : [];
-                $scope.lookups.Locations.selected = selLocation;
-            });
-        }
-    });
+    $scope.setCustomer = function (selected) {
+        var customer = selected.$select.selected.Customer;
+        var request = "{'customer':'" + customer + "'}";
+        commonDataService.locationsByCustomer(request).then(function (response) {
+            var selLocation = {};
+            if ($scope.lookups.Locations.selected != undefined && $scope.lookups.Locations.selected.ARCustomer == $scope.lookups.Customers.selected.Customer) {
+                selLocation = $scope.lookups.Locations.selected;
+            }
+            $scope.lookups.Locations = response.data.length > 0 ? response.data : [];
+            $scope.lookups.Locations.selected = selLocation;
+        });
+    };
 
-    $scope.$watch(function () {
-        return $scope.lookups.Locations != undefined ? $scope.lookups.Locations.selected != undefined ? $scope.lookups.Locations.selected : "" : ""
-    }, function () {
-        if ($scope.lookups.Locations != undefined && $scope.lookups.Locations.selected != undefined && $scope.lookups.Customers.selected == undefined) {
-            var arCustomer = $scope.lookups.Locations.selected.ARCustomer;
-            var request = "{'arcustomer':'" + arCustomer + "'}";
-            customerChanged = true;
-            commonDataService.customerByLocation(request).then(function (response) {
-                $scope.lookups.Customers.selected = response.data;
-            });
-        }
-        customerChanged = false;
-    });
+    $scope.setLocation = function (selected) {
+        var arCustomer = selected.$select.selected.ARCustomer;
+        var request = "{'arcustomer':'" + arCustomer + "'}";
+        customerChanged = true;
+        commonDataService.customerByLocation(request).then(function (response) {
+            $scope.lookups.Customers.selected = response.data;
+        });
+    };
+
 
     $scope.displayLocation = function (lat, lng, picture, woNumber) {
         var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Id}}. {{Image}}</h1><div>{{Description}}</div></div>");

@@ -3,7 +3,7 @@
  */
 
 var technicianController = function ($scope, state) {
-    $scope.technicians = state.getTechniciansList();
+    $scope.technicians = state.technicians;
     $scope.sortType = '';
     $scope.sortDirection = true;
       $scope.changeSorting = function (data) {

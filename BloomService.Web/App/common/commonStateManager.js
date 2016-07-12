@@ -1,25 +1,4 @@
 ﻿var commonStateManager = function ($rootScope, commonDataService, commonHub) {
-    this.profile = {};
-    this.statistic = [];
-    this.notifications = [];
-    this.workorders = [];
-    this.trucks = [];
-    this.assigments = [];
-    this.technicians = [];
-    this.lookups = {};
-    this.locations = {};
-    this.notificationTime = {}
-    $rootScope.notifications = [];
-    $rootScope.workorders = [];
-    $rootScope.unavailableTechniciansIds = [];
-
-    var paginationModel = {
-        Index: 0,
-        Search: '',
-        Column: '',
-        Direction: true
-    };
-
     var _this = {
         profile: this.profile,
         statistic: this.statistic,
@@ -33,13 +12,37 @@
         notificationTime: this.notificationTime
     }
 
+    this.profile = _this.profile;
+    this.statistic = _this.statistic;
+    this.notifications = _this.notifications;
+    this.workorders = _this.workorders;
+    this.trucks = _this.trucks;
+    this.assigments = _this.assigments;
+    this.technicians = _this.technicians;
+    this.lookups = _this.lookups;
+    this.locations = _this.locations;
+    this.notificationTime = _this.notificationTime;
+
+
+    $rootScope.notifications = [];
+    $rootScope.workorders = [];
+    $rootScope.unavailableTechniciansIds = [];
+
+    var paginationModel = {
+        Index: 0,
+        Search: '',
+        Column: '',
+        Direction: true
+    };
+
+
     var connection = commonHub.GetConnection();
 
-    //commonDataService.getLookups().then(function (response) {
-    //    $rootScope.notifications = response.data.Notifications;
-    //    _this.notificationTime = response.data.NotificationTime;
-    //    return _this.lookups = response.data;
-    //});
+    commonDataService.getLookups().then(function (response) {
+        $rootScope.notifications = response.data.Notifications;
+        _this.notificationTime = response.data.NotificationTime;
+        return _this.lookups = response.data;
+    });
 
     commonDataService.getLocations().then(function (response) {
         return _this.locations = response.data;
@@ -57,43 +60,6 @@
         return _this.trucks = response.data;
     });
 
-    this.UpdateWorkordersList = function (model) {
-        return commonDataService.getWorkordesPaged(model).then(function (response) {
-            return _this.workorders = response.data;
-        });
-    }
-
-    this.getTechniciansList = function () {
-        return _this.technicians;
-    }
-    this.getWorkordersList = function () {
-        return _this.workorders;
-    }
-    this.getNotificationsList = function () {
-        return _this.notifications;
-    }
-    this.getNotificationTime = function () {
-        return _this.notificationTime;
-    }
-
-    this.setNotificationTime = function () {
-       return commonDataService.updateNotificationTime().then(function (response) {
-            return _this.notificationTime = response.data;
-        });
-        //now = new Date();
-        //_this.notificationTime = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds())
-
-    }
-
-
-    this.setMongaNotificationTime = function(value)
-    {
-        _this.notificationTime = value;
-    }
-
-    this.setLookups = function(value) {
-        this.lookups = value;
-    }
 
     connection.client.UpdateWorkOrder = function (workorder) {
         angular.forEach(_this.workorders, function (value, key) {
@@ -156,6 +122,6 @@
     };
 
     $.connection.hub.start().done(function () { });
-
+    return _this;
 }
 commonStateManager.$inject = ["$rootScope", "commonDataService", "commonHub"];

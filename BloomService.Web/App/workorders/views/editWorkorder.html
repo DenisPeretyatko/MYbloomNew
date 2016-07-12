@@ -15,7 +15,7 @@
                             <div class="ibox-content">
                                 <div class="form-group">
                                     <label>Customer</label>
-                                    <ui-select ng-model="lookups.Customers.selected" theme="bootstrap">
+                                    <ui-select ng-model="lookups.Customers.selected" theme="bootstrap"  on-select="setCustomer(this)">
                                         <ui-select-match placeholder="Customer">{{$select.selected.Name}}</ui-select-match>
                                         <ui-select-choices repeat="item in lookups.Customers | filter: $select.search | limitTo:100">
                                             <div>{{item.Name}}</div>
@@ -25,7 +25,7 @@
 
                                 <div class="form-group">
                                     <label>Location</label>
-                                    <ui-select ng-model="lookups.Locations.selected" theme="bootstrap">
+                                    <ui-select ng-model="lookups.Locations.selected" theme="bootstrap"  on-select="setLocation(this)">
                                         <ui-select-match placeholder="Location">{{$select.selected.Name}}</ui-select-match>
                                         <ui-select-choices repeat="item in lookups.Locations | filter: $select.search | limitTo:100">
                                             <div>{{item.Name}}</div>
