@@ -222,7 +222,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     {
                                         assigment.Customer = workorder.ARCustomer;
                                         assigment.Location = workorder.Location;
-                                        workorder.ScheduleDate = assigment.ScheduleDate;
+                                        workorder.ScheduleDate = assignmentDate;
                                         _repository.Update(workorder);
                                     }
                                 }

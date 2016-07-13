@@ -143,8 +143,9 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, c
                 if (!$rootScope.unavailableTechniciansIds.includes(event.resourceId)) {
                     event = setTechnicianColor(event);
                     event.title = event.workorderId + " " + event.customerFoo + " " + event.locationFoo;
+                    var estimate = parseInt(event.hourFoo);
                     var date = new Date(event.start);
-                    event.end._d = new Date(date.setHours(date.getHours() + parseInt(event.hourFoo)));
+                    event.end._d = new Date(date.setHours(date.getHours() + (estimate == 0? 2: estimate > 8? 8 : estimate)));
                     $('#calendar').fullCalendar('rerenderEvents');
                     saveEvent(event);
                 } else {
