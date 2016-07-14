@@ -2,12 +2,12 @@
  * scheduleController - controller
  */
 
-var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, commonDataService) {
+var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $q, commonDataService) {
     var date = new Date();
 
     // Events
     $scope.events = [];
-    var tempEvents = [];
+    //var tempEvents = [];
     $rootScope.unavailableTechniciansIds = [];
     $scope.resources = [];
     var prevDivState = {};
@@ -198,11 +198,12 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, c
 
 
 
-    $scope.eventSources = [$scope.events];
+    $scope.eventSources = $scope.events;
     $scope.resouceSources = [$scope.resources];
 
-    commonDataService.getTechnicians().then(function (response) {
-        $scope.activeTechnicians = response.data;
+
+    $q.all([commonDataService.getTechnicians(), commonDataService.getSchedule()]).then(function(values) {        
+        $scope.activeTechnicians = values[0].data;
         angular.forEach($scope.activeTechnicians, function (value, key) {
             if (value != null) {
                 this.push({
@@ -216,10 +217,8 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, c
                 }
             }
         }, $scope.resources);
-    });
 
-    commonDataService.getSchedule().then(function (response) {
-        var schedule = response.data;
+        var schedule = values[1].data;
         $scope.unassignedWorkorders = schedule.UnassignedWorkorders;
         angular.forEach($scope.unassignedWorkorders, function (value, key) {
             if (value != null) {
@@ -230,7 +229,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, c
         angular.forEach($scope.assigments, function (value, key) {
             if (value != null) {
                 var spliter = (value.Customer == '' || value.Location == '') ? '' : '/';
-                tempEvents.push({
+                $scope.events.push({
                     id: value.Assignment,
                     resourceId: value.EmployeeId,
                     title: value.title = value.WorkOrder + " " + value.Customer + " " + value.Location,
@@ -248,9 +247,9 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, c
                 });
             }
         });
-        $scope.events = tempEvents;
-        $("#calendar").fullCalendar('addEventSource', $scope.events);
-
+        //$scope.events = tempEvents;
+        //$("#calendar").fullCalendar('addEventSource', $scope.events);
+        //$('#calendar').fullCalendar('rerenderEvents');
         $timeout(function () {
             $('.drag').each(function () {
                 var descr = '';
@@ -319,7 +318,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, c
             this.style.marginLeft = (x - 275) + "px";
             this.style.marginTop = -5 + "px";
             document.getElementById("schedule").addEventListener("mouseup", function (event) {
-                var innerHtml = "<div class=\"table-row col-lg-1 col-md-1 col-sm-6 col-xs-6 ng-binding\">" +innerText[0] + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 col-sm-6 col-xs-6 ng-binding\">" + innerText[1] + "</div>" + "<div class=\"table-row col-lg-3 col-md-3 hidden-sm hidden-xs ng-binding\">" + innerText[2] + "</div>" +
+                var innerHtml = "<div class=\"table-row col-lg-1 col-md-1 col-sm-6 col-xs-6 ng-binding\">" + innerText[0] + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 col-sm-6 col-xs-6 ng-binding\">" + innerText[1] + "</div>" + "<div class=\"table-row col-lg-3 col-md-3 hidden-sm hidden-xs ng-binding\">" + innerText[2] + "</div>" +
                               "<div class=\"table-row col-lg-4 col-md-4 hidden-sm hidden-xs ng-binding\">" + innerText[3] + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 hidden-sm hidden-xs ng-binding\">" + innerText[4] + "</div>";
 
                 element.innerHTML = innerHtml;
@@ -351,4 +350,4 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, c
     }
 
 };
-scheduleController.$inject = ["$rootScope", "$scope", "$interpolate", "$timeout", "commonDataService"];
+scheduleController.$inject = ["$rootScope", "$scope", "$interpolate", "$timeout", "$q", "commonDataService"];
