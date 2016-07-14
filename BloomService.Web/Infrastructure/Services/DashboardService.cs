@@ -32,7 +32,7 @@
             var repairs = this._repository.GetAll<SageRepair>();
             var ratesheets = this._repository.GetAll<SageRateSheet>().Where(x => x.QINACTIVE == "N");
             var permissionCodes = this._repository.GetAll<SagePermissionCode>();
-            var parts = this._repository.GetAll<SagePart>();
+            var parts = this._repository.GetAll<SagePart>().Where(x => x.PartNumber.StartsWith("R-") && x.Inactive == "No");
 
             lookups.Locations = Mapper.Map<List<SageLocation>, List<LocationModel>>(locations.ToList());
             lookups.Calltypes = Mapper.Map<List<SageCallType>, List<CallTypeModel>>(calltypes.ToList());

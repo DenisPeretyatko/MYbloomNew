@@ -117,6 +117,7 @@ namespace BloomService.Web.Controllers
             return Json(stringDate, JsonRequestBehavior.AllowGet);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("Dashboard/Lookups")]
         public ActionResult GetLookups()

@@ -49,7 +49,7 @@ var mainController = function ($scope, $rootScope, commonDataService, state, $wi
             $scope.canReadaAll = false;
              var now = new Date();
              var utcDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-            var temp = state.getNotificationTime();
+             var temp = state.notificationTime;
             var lastDate = convertDate(temp);
             if ($scope.canReadaAll == false && $scope.notificationsCopy.length < $rootScope.notifications.length) { 
                 $scope.canReadaAll = true;
@@ -98,7 +98,7 @@ $scope.openNotifications = function () {
         $scope.notificationsCount = 0;
     }
     if (wrappedResult.context.className != "dropdown open") {
-        state.setNotificationTime();
+        state.notificationTime;
         if ($scope.canReadaAll == true) {
             if ($scope.notificationsCount < 3 && previousNotificationCount == 0) {
                 $scope.notificationsCount = 0;
@@ -115,12 +115,12 @@ $scope.openNotifications = function () {
         }
     }
 }
-
-    commonDataService.getLookups().then(function (response) {
-        $rootScope.notifications = response.data.Notifications;
-        state.setMongaNotificationTime(response.data.NotificationTime);
-        state.setLookups(response.data);
-    });
+    //state.getLookups();
+    //commonDataService.getLookups().then(function (response) {
+    //    $rootScope.notifications = response.data.Notifications;
+    //    state.setMongaNotificationTime(response.data.NotificationTime);
+    //    state.setLookups(response.data);
+    //});
 };
 
 mainController.$inject = ["$scope", "$rootScope", "commonDataService", "state", "$window", "commonHub"];

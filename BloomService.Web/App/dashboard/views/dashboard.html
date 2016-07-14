@@ -57,7 +57,8 @@
                         <thead>
                         <tr>
                             <th  ng-click="changeSorting('WorkOrder')">#</th>
-                            <th  ng-click="changeSorting('ScheduleDate')" class="footable-sorted">Schedule Date</th>
+                            <th ng-click="changeSorting('ScheduleDate')" class="footable-sorted">Schedule Date</th>
+                            <th ng-click="changeSorting('DateEntered')" class="footable-sorted">Entered Date</th>
                             <th  ng-click="changeSorting('ARCustomer')" data-hide="phone,tablet">Customer</th>
                             <th  ng-click="changeSorting('Location')" data-hide="phone,tablet">Location</th>
                             <th  ng-click="changeSorting('Status')">Status</th>
@@ -67,6 +68,7 @@
                             <tr ng-repeat="workorder in listworkorders | orderBy:sortType:sortDirection">
                                 <td>{{workorder.WorkOrder}}</td>
                                 <td>{{workorder.ScheduleDate|date:mediumTime}}</td>
+                                <td>{{workorder.DateEntered|date:mediumTime}}</td>
                                 <td>{{workorder.ARCustomer}}</td>
                                 <td>{{workorder.Location}}</td>
                                 <td>
