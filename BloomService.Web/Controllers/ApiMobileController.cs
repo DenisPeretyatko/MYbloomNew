@@ -115,7 +115,7 @@ namespace BloomService.Web.Controllers
         [Route("Apimobile/Part")]
         public ActionResult GetPart()
         {
-            var result = repository.GetAll<SagePart>();
+            var result = repository.GetAll<SagePart>().Where(x => x.PartNumber.StartsWith("R-") && x.Inactive == "No");
             return Json(result);
         }
 
@@ -149,6 +149,7 @@ namespace BloomService.Web.Controllers
                 if (workorder != null)
                 {
                     workorder.Images = workorder.Images.OrderBy(x => x.Id).ToList();
+                    workorder.ScheduleDate = assignment.Start.TryAsDateTime();
                     result.Add(workorder);
                 }
             }
@@ -167,6 +168,7 @@ namespace BloomService.Web.Controllers
                 }
                 order.Latitude = location.Latitude;
                 order.Longitude = location.Longitude;
+                order.Address = location.Address;
                 if (order.Equipment != 0)
                 {
                     var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment.ToString());
@@ -218,10 +220,11 @@ namespace BloomService.Web.Controllers
         public ActionResult PostImage(ImageModel model)
         {
             _log.InfoFormat("Method: PostImage. Workorder Id: {0}", model.IdWorkOrder);
-            if (_imageService.SavePhotoForWorkOrder(model))
+            var result = _imageService.SavePhotoForWorkOrder(model);
+            if (result != null)
             {
                 _log.InfoFormat("Add image for workorder success");
-                return Success();
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
             else
                 return Error("Add image faild");

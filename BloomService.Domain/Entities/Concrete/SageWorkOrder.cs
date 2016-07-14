@@ -266,7 +266,8 @@
 
         [XmlIgnore]
         public string AssignmentId { get; set; }
-
+        [XmlIgnore]
+        public string Address { get; set; }
 
         [XmlIgnore]
         public SageCustomer CustomerObj { get; set; }

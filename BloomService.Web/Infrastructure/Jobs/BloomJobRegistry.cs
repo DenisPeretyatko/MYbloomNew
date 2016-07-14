@@ -214,7 +214,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 {
                                     var employee = _repository.SearchFor<SageEmployee>(e => e.Name == assigment.Employee).SingleOrDefault();
                                     assigment.EmployeeId = employee != null ? employee.Employee : null;
-                                    var assignmentDate = assigment.ScheduleDate.Value.Date.Add(((DateTime)assigment.StartTime).TimeOfDay);
+                                    var assignmentDate = assigment.ScheduleDate.Value.Add(((DateTime)assigment.StartTime).TimeOfDay);
                                     assigment.Start = assignmentDate.ToString();
                                     assigment.End = assignmentDate.AddHours(assigment.EstimatedRepairHours.AsDouble()).ToString();
                                     assigment.Color = employee?.Color ?? "";

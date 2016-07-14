@@ -43,12 +43,12 @@ using BloomService.Domain.Entities.Concrete;
             this.settings = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
         }
 
-        public bool SavePhotoForWorkOrder(ImageModel model)
+        public ImageLocation SavePhotoForWorkOrder(ImageModel model)
         {
             var workOrder = this.repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.IdWorkOrder).SingleOrDefault();
             if (workOrder == null)
             {
-                return false;
+                return null;
             }
 
             var imagesDb = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.IdWorkOrder).SingleOrDefault();
@@ -73,10 +73,10 @@ using BloomService.Domain.Entities.Concrete;
             var fileName = this.SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, this.settings.SizeBigPhoto);
             var fileNameSmall = this.SavePhotoForWorkOrder(model.Image, pathToImage, nameSmall, this.settings.SizeSmallPhoto);
             var maxId = imagesDb.Images.Any() ? imagesDb.Images.Max(x => x.Id) : 0;
-            var image = new ImageLocation { Image = fileNameSmall, BigImage = fileName, Latitude = model.Latitude, Longitude = model.Longitude, Id = maxId + 1 };
+            var image = new ImageLocation { Image = fileNameSmall, BigImage = fileName, Latitude = model.Latitude, Longitude = model.Longitude, Id = maxId + 1, Description = model.Description };
             imagesDb.Images.Add(image);
             this.repository.Add(imagesDb);
-            return true;
+            return image;
         }
 
         public bool SaveDescriptionsForPhoto(CommentImageModel model)
