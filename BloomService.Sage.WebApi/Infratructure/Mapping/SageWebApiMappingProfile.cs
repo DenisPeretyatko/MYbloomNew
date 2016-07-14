@@ -139,9 +139,9 @@
 
             if (DateTime.TryParse(dateString, out result))
             {
-                return result.ToUniversalTime().Date;
+                return result.Date;
             }
-            return new DateTime(2000, 1, 1).ToUniversalTime().Date;
+            return new DateTime(2000, 1, 1).Date;
         }
 
         private static DateTime ConvertToTime(string timeString)
@@ -150,9 +150,9 @@
 
             if (DateTime.TryParse(timeString, out result))
             {
-                return result.ToUniversalTime();
+                return result;
             }
-            return new DateTime(2000, 1, 1).ToUniversalTime();
+            return new DateTime(2000, 1, 1);
         }
     }
 }
