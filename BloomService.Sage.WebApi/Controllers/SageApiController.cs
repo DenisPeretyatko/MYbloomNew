@@ -96,29 +96,29 @@
         }
 
         [HttpGet, Route("api/v2/sm/workorder/{id}/equipments")]
-        public SageResponse<SageEquipment> GetEquipmentsByWorkOrderId(string id)
+        public SageResponse<SageWorkOrderItem> GetEquipmentsByWorkOrderId(string id)
         {
             try
             {
                 if (id == string.Empty || id == null)
                 {
-                    return new SageResponse<SageEquipment>
+                    return new SageResponse<SageWorkOrderItem>
                     {
                         IsSucceed = false,
                         ErrorMassage = "WorkOrder Id is null or empty."
                     };
                 }
 
-                var result = new SageResponse<SageEquipment>
+                var result = new SageResponse<SageWorkOrderItem>
                 {
                     IsSucceed = true,
-                    Entities = this.serviceManager.GetEquipmentsByWorkOrderId(id).ToList()
+                    Entities = serviceManager.GetEquipmentsByWorkOrderId(id)?.ToList()
                 };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageEquipment> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -154,7 +154,7 @@
                     }
                 }
 
-                var resultWorkOrder = this.serviceManager.WorkOrders(resultProperties).SingleOrDefault();
+                var resultWorkOrder = serviceManager.WorkOrders(resultProperties).SingleOrDefault();
 
                 var result = new SageResponse<SageWorkOrder> { IsSucceed = true, Entity = resultWorkOrder };
                 return result;
@@ -259,7 +259,7 @@
                     }
                 }
 
-                this.serviceManager.EditAssignments(resultProperties);
+                serviceManager.EditAssignments(resultProperties);
                 var result = new SageResponse<SageAssignment> { IsSucceed = true };
                 return result;
             }
@@ -468,17 +468,32 @@
             }
         }
 
-        [HttpPut, Route("api/v2/sm/workorders/equipment/add")]
-        public SageResponse<SageWorkOrder> AddEquipment(Dictionary<string, string> properties)
+        [HttpPost, Route("api/v2/sm/workorders/equipment/add")]
+        public SageResponse<SageWorkOrderItem> AddEquipment(SageWorkOrderItem workOrderItem)
         {
             try
             {
-                var result = new SageResponse<SageWorkOrder> { IsSucceed = this.serviceManager.AddWorkOrderItem(properties) };
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = true, Entity = serviceManager.AddWorkOrderItem(workOrderItem).Single() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
+
+        [HttpPut, Route("api/v2/sm/workorders/equipment/edit")]
+        public SageResponse<SageWorkOrderItem> EditEquipment(SageWorkOrderItem workOrderItem)
+        {
+            try
+            {
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = true, Entity = serviceManager.EditWorkOrderItem(workOrderItem).Single() };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }

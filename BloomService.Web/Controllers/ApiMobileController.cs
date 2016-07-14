@@ -183,13 +183,13 @@ namespace BloomService.Web.Controllers
         public ActionResult AddWOItem(AddWOItemModel model)
         {
             var items = repository.GetAll<SageWorkOrderItem>().ToList().Where(x => x.WorkOrder == model.WorkOrder);
-            var item = items.SingleOrDefault(x => x.WorkOrderItem1 == model.WorkOrderItem1);
+            var item = items.SingleOrDefault(x => x.WorkOrderItem == model.WorkOrderItem);
             if (item == null)
             {
                 var newItem = new SageWorkOrderItem()
                 {
                     WorkOrder = model.WorkOrder,
-                    WorkOrderItem1 = items.Any()? items.Max(x => x.WorkOrderItem1) + 1:1,
+                    WorkOrderItem = items.Any()? items.Max(x => x.WorkOrderItem) + 1:1,
                     WorkDate = model.WorkDate,
                     Description = model.Description,
                     Quantity = model.Quantity,

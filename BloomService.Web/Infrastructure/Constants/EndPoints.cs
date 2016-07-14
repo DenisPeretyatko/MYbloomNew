@@ -23,7 +23,8 @@
         public static string UnassignWorkOrders = endPointBase + "workorders/unassign";
         public static string GetWorkorder = endPointBase + "workorders/get";
         public static string GetCustomer = "api/v2/ar/customers";
-        public static string AddEquipmentToWorkOrder = "api/v2/sm/workorders/equipment/add";
+        public static string AddWorkOrderEquipment = "api/v2/sm/workorders/equipment/add";
+        public static string EditWorkOrderEquipment = "api/v2/sm/workorders/equipment/edit";
         public static string AuthorizationEndPoint = "api/v2/Authorization/Authorization";
     }
 }

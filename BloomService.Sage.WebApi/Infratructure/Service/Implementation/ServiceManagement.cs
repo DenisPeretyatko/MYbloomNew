@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Xml.Serialization;
 
     using BloomService.Domain.Entities.Concrete;
@@ -11,7 +10,6 @@
     using Sage.WebApi.Infratructure.Constants;
     using MessageResponse;
     using Common.Logging;
-
     public class ServiceManagement : IServiceManagement
     {
         private readonly ClaimsAgent claimsAgent;
@@ -40,7 +38,7 @@
         {
             var propertiesStr = string.Empty;
             foreach (var property in properties)
-            {
+            {       
                 propertiesStr += string.Format(Messages.Property, property.Key, property.Value);
             }
 
@@ -50,7 +48,7 @@
             var result = AutoMapper.Mapper.Map<SageAssignment[]>(assignments);
             return result;
         }
-       
+
         public object Agreements()
         {
             var result = SendMessage(Messages.Agreements);
@@ -80,12 +78,11 @@
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.CallTypes;
         }
 
-        public SageEquipment[] GetEquipmentsByWorkOrderId(string id)
+        public SageWorkOrderItem[] GetEquipmentsByWorkOrderId(string id)
         {
             var message = string.Format(Messages.GetEquipmentsByWorkOrderId, id);
             var response = SendMessage(message);
-            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrderItems;
-            var result = AutoMapper.Mapper.Map<SageEquipment[]>(entities);
+            var result = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrderItems;
             return result;
         }
 
@@ -122,8 +119,34 @@
             return result;
         }
 
-        public bool AddWorkOrderItem(Dictionary<string, string> properties)
+        public SageWorkOrderItem[] AddWorkOrderItem(SageWorkOrderItem workOrderItem)
         {
+            var properties = new Dictionary<string, string>();
+            properties.Add("ItemType", workOrderItem.ItemType ?? string.Empty);
+            properties.Add("Employee", workOrderItem.Employee ?? string.Empty);
+            properties.Add("Quantity", workOrderItem.Quantity.ToString() ?? string.Empty);
+            properties.Add("WorkDate", workOrderItem.WorkDate.ToString() ?? string.Empty);
+            properties.Add("UnitSale", workOrderItem.UnitSale.ToString() ?? string.Empty);
+            properties.Add("WorkOrder", workOrderItem.WorkOrder.ToString() ?? string.Empty);
+
+            if (workOrderItem.ItemType == "Labor")
+            {
+                properties.Add("CostQuantity", workOrderItem.CostQuantity.ToString() ?? string.Empty);
+            }
+            if (workOrderItem.ItemType == "Parts")
+            {
+                properties.Add("Part", workOrderItem.Part.ToString() ?? string.Empty);
+            }
+
+            var resultProperties = new Dictionary<string, string>();
+            foreach (var property in properties)
+            {
+                if (!string.IsNullOrEmpty(property.Value))
+                {
+                    resultProperties.Add(property.Key, property.Value.Replace("'", "&apos;"));
+                }
+            }
+
             var propertiesStr = string.Empty;
             foreach (var property in properties)
             {
@@ -131,8 +154,49 @@
             }
 
             var messages = string.Format(Messages.AddWorkOrderItem, propertiesStr);
-            var result = SendMessage(messages);
-            return true;
+            var response = SendMessage(messages);
+            var workOrderItems = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrderItems;
+            return workOrderItems;
+        }
+
+        public SageWorkOrderItem[] EditWorkOrderItem(SageWorkOrderItem workOrderItem)
+        {
+            var properties = new Dictionary<string, string>();
+            properties.Add("ItemType", workOrderItem.ItemType ?? string.Empty);
+            properties.Add("Employee", workOrderItem.Employee ?? string.Empty);
+            properties.Add("Quantity", workOrderItem.Quantity.ToString() ?? string.Empty);
+            properties.Add("WorkDate", workOrderItem.WorkDate.ToString() ?? string.Empty);
+            properties.Add("UnitSale", workOrderItem.UnitSale.ToString() ?? string.Empty);
+            properties.Add("WorkOrder", workOrderItem.WorkOrder.ToString() ?? string.Empty);
+
+            if (workOrderItem.ItemType == "Labor")
+            {
+                properties.Add("CostQuantity", workOrderItem.CostQuantity.ToString() ?? string.Empty);
+            }
+            if (workOrderItem.ItemType == "Parts")
+            {
+                properties.Add("Part", workOrderItem.Part.ToString() ?? string.Empty);
+            }
+
+            var resultProperties = new Dictionary<string, string>();
+            foreach (var property in properties)
+            {
+                if (!string.IsNullOrEmpty(property.Value))
+                {
+                    resultProperties.Add(property.Key, property.Value.Replace("'", "&apos;"));
+                }
+            }
+
+            var propertiesStr = string.Empty;
+            foreach (var property in properties)
+            {
+                propertiesStr += string.Format(Messages.Property, property.Key, property.Value);
+            }
+
+            var messages = string.Format(Messages.EditWorkOrderItem, propertiesStr);
+            var response = SendMessage(messages);
+            var workOrderItems = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrderItems;
+            return workOrderItems;
         }
 
         public SageEmployee[] Employees()
@@ -167,46 +231,10 @@
             return result;
         }
 
-        public IEnumerable<string> PermissionCode()
-        {
-            var result = SendMessage(Messages.WorkOrders);
-            var noDublicate = new HashSet<string>();
-            var allRateSheet =
-                (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders.Select(
-                    x => x.PermissionCode);
-            foreach (var rateSheet in allRateSheet)
-            {
-                if (noDublicate.All(x => x != rateSheet) && rateSheet != string.Empty)
-                {
-                    noDublicate.Add(rateSheet);
-                }
-            }
-
-            return noDublicate;
-        }
-
         public SageProblem[] Problems()
         {
             var result = SendMessage(Messages.Problems);
             return (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Problems;
-        }
-
-        public IEnumerable<string> RateSheet()
-        {
-            var result = SendMessage(Messages.WorkOrders);
-            var noDublicate = new HashSet<string>();
-            var allRateSheet =
-                (result as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders.Select(
-                    x => x.RateSheet);
-            foreach (var rateSheet in allRateSheet)
-            {
-                if (noDublicate.All(x => x != rateSheet) && rateSheet != string.Empty)
-                {
-                    noDublicate.Add(rateSheet);
-                }
-            }
-
-            return noDublicate;
         }
 
         public SageRepair[] Repairs()
@@ -252,31 +280,6 @@
             return result;
         }
 
-        public object SendMessage2(string message)
-        {
-            if (!isCreated)
-            {
-                Create(claimsAgent.Name, claimsAgent.Password);
-            }
-
-            var response = messageBoard.SendMessage(messageTypeDescriptor.Xml, message);
-
-            var serializer = new XmlSerializer(typeof(MessageResponses));
-            object result;
-            using (TextReader reader = new StringReader(response))
-            {
-                result = serializer.Deserialize(reader);
-            }
-
-            var messageResponses = result as MessageResponses;
-            if (messageResponses != null && messageResponses.MessageResponse.Error != null)
-            {
-                throw new ResponseException(messageResponses.MessageResponse.Error);
-            }
-
-            return result;
-        }
-
         public SageWorkOrder[] WorkOrders()
         {
             var response = SendMessage(Messages.WorkOrders);
@@ -303,22 +306,6 @@
             }
 
             var messages = string.Format(Messages.CreateWorkOrder, propertiesStr);
-            var response = SendMessage(messages);
-            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
-            var result = AutoMapper.Mapper.Map<SageWorkOrder[]>(entities);
-            return result;
-        }
-
-
-        public SageWorkOrder[] EditWorkOrder(Dictionary<string, string> properties)
-        {
-            var propertiesStr = string.Empty;
-            foreach (var property in properties)
-            {
-                propertiesStr += string.Format(Messages.Property, property.Key, property.Value);
-            }
-
-            var messages = string.Format(Messages.EditWorkOrder, propertiesStr);
             var response = SendMessage(messages);
             var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
             var result = AutoMapper.Mapper.Map<SageWorkOrder[]>(entities);

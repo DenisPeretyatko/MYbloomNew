@@ -42,7 +42,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                 biled: 0.00,
                 rate: 0.0000,
                 labor: angular.copy($scope.lookups.Hours),
-                parts: angular.copy($scope.lookups.Parts)
+                parts: angular.copy($scope.lookups.Parts),
+                part: ""
             }
             $scope.equipment.push(equipment);
         }
@@ -93,7 +94,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                     Employee: value.empl,
                     CostQty: value.cost,
                     BiledQty: value.biled,
-                    Rate: value.rate
+                    Rate: value.rate,
+                    Part: parseInt(value.part)
                 });
             }
         });
@@ -167,6 +169,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
 
             item.parts = angular.copy($scope.lookups.Parts);
             item.parts.selected = selectedDesc;
+            item.part = selectedDesc.Part;
         }
 
         var selectedEmpl = $scope.lookups.Employes.find(function (element) {
@@ -189,6 +192,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             }
             else {
                 item.description = item.parts.selected.Description;
+                item.part = item.parts.selected.Part;
             }
 
             item.empl = item.empl.selected.Name;
@@ -210,7 +214,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                     biled: 0.00,
                     rate: 0.0000,
                     labor: angular.copy($scope.lookups.Hours),
-                    parts: angular.copy($scope.lookups.Parts)
+                    parts: angular.copy($scope.lookups.Parts),
+                    part: ""
                 }
                 $scope.equipment.push(equipment);
             }

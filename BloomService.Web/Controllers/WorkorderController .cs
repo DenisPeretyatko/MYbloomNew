@@ -20,6 +20,7 @@ namespace BloomService.Web.Controllers
     using Infrastructure.SignalR;
     using Infrastructure.Services.Interfaces;
     using Infrastructure.Constants;
+    using Domain.Entities.Concrete.Auxiliary;
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
@@ -250,15 +251,33 @@ namespace BloomService.Web.Controllers
                 Id = model.Id
             };
 
-            var result = _sageApiProxy.EditWorkOrder(workorder);
-            if (!result.IsSucceed)
+            var workOrderResult = _sageApiProxy.EditWorkOrder(workorder);
+
+            var workOrderItems = Mapper.Map<IEnumerable<SageWorkOrderItem>>(model.Equipment);
+            var workOrderItemsResult = new List<SageResponse<SageWorkOrderItem>>();
+            foreach (var workOrderItem in workOrderItems)
+            {
+                workOrderItem.WorkOrder = Convert.ToInt32(model.WorkOrder);
+                workOrderItem.TotalSale = workOrderItem.Quantity * workOrderItem.UnitSale;
+                if(workOrderItem.ItemType == "Parts")
+                {
+                    workOrderItem.PartsSale = workOrderItem.UnitSale;
+                }
+                else
+                {
+                    workOrderItem.LaborSale = workOrderItem.UnitSale;
+                }
+                workOrderItemsResult.Add(_sageApiProxy.AddOrEditWorkOrderEquipment(workOrderItem));
+            }
+
+            if (!workOrderResult.IsSucceed)
             {
                 _log.ErrorFormat("Was not able to update workorder to sage. !result.IsSucceed");
                 return Error("Was not able to update workorder to sage");
             }
 
-            result.Entity.Id = workorder.Id;
-            _repository.Update(result.Entity);
+            workOrderResult.Entity.Id = workorder.Id;
+            _repository.Update(workOrderResult.Entity);
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
             _hub.UpdateWorkOrder(model);
             return Success();
