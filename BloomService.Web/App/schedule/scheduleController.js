@@ -7,7 +7,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
 
     // Events
     $scope.events = [];
-    //var tempEvents = [];
+    var tempEvents = [];
     $rootScope.unavailableTechniciansIds = [];
     $scope.resources = [];
     var prevDivState = {};
@@ -67,7 +67,8 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             editable: true,
             events: $scope.events,
             eventRender: function (event, element) {
-            var qtip = $('div.qtip:visible');
+                var qtip = $('div.qtip:visible');
+             
                 qtip.remove();
                 element.qtip({
                     content: event.description
@@ -229,7 +230,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         angular.forEach($scope.assigments, function (value, key) {
             if (value != null) {
                 var spliter = (value.Customer == '' || value.Location == '') ? '' : '/';
-                $scope.events.push({
+                tempEvents.push({
                     id: value.Assignment,
                     resourceId: value.EmployeeId,
                     title: value.title = value.WorkOrder + " " + value.Customer + " " + value.Location,
@@ -247,10 +248,13 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                 });
             }
         });
-        //$scope.events = tempEvents;
-        //$("#calendar").fullCalendar('addEventSource', $scope.events);
-        //$('#calendar').fullCalendar('rerenderEvents');
+      
+        $scope.events = tempEvents;
+
         $timeout(function () {
+            $('#calendar').fullCalendar('removeEvents');
+            $("#calendar").fullCalendar('addEventSource', $scope.events);
+            $('#calendar').fullCalendar('rerenderEvents');
             $('.drag').each(function () {
                 var descr = '';
                 var fooElements = [];
