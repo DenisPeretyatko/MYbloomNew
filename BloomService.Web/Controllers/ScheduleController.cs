@@ -47,7 +47,7 @@ namespace BloomService.Web.Controllers
             var model = new ScheduleViewModel();
             var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.WorkOrder) && x.DateEntered > lastMonth).OrderByDescending(x => x.DateEntered).ToList();
             var employees = _repository.GetAll<SageEmployee>().ToList();
-            var mappedEmployees = Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employees);
+            //var mappedEmployees = Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employees);
             var mappedAssignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(assignments);
             foreach (var item in mappedAssignments) {
                 if (!string.IsNullOrEmpty(item.Employee))
@@ -108,7 +108,9 @@ namespace BloomService.Web.Controllers
             _hub.CreateAssignment(new MapViewModel()
             {
                 WorkOrder = workorder,
-                DateEntered = databaseAssignment.ScheduleDate
+                DateEntered = databaseAssignment.ScheduleDate,
+                Employee = employee?.Employee ?? "",
+                Color = employee?.Color ?? ""
             });
 
             _notification.SendNotification(string.Format("Workorder {0} assigned to {1}", workorder.Name, employee.Name));

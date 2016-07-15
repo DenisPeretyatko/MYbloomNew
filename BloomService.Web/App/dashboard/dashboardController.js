@@ -37,13 +37,13 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
        if ($scope.showAll == true) {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                    $scope.workordersView.push(value.WorkOrder);
+                    $scope.workordersView.push(value);
             });
         } else {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
-                    $scope.workordersView.push(value.WorkOrder);
+                if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
+                    $scope.workordersView.push(value);
                 }
             });
         }
@@ -51,19 +51,19 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
 
     $scope.$watchCollection(function () { return $scope.workordersView; }, function () {
         angular.forEach($scope.workorderMarkers, function (marker) { marker.setMap(null); });
-        angular.forEach($scope.workordersView, function (workorder) {
+        angular.forEach($scope.workordersView, function (value) {
 
-            var content = tooltipWO(workorder);
+            var content = tooltipWO(value.WorkOrder);
             var pos = {
-                lat: parseFloat(workorder.Latitude),
-                lng: parseFloat(workorder.Longitude)
+                lat: parseFloat(value.WorkOrder.Latitude),
+                lng: parseFloat(value.WorkOrder.Longitude)
             }
-
+            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png";
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
-                icon: "/public/images/workorder.png",
-                title: workorder.WorkOrder
+                icon: icon,
+                title: value.WorkOrder.WorkOrder
             });
             $scope.workorderMarkers.push(marker);
             marker.addListener('click', function () {
@@ -79,13 +79,13 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
         $scope.workordersView = [];
         if ($scope.showAll == false) {          
             angular.forEach($rootScope.workorders, function (value, key) {
-                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
-                    $scope.workordersView.push(value.WorkOrder);
+                if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
+                    $scope.workordersView.push(value);
                 }
             });
         } else {
             angular.forEach($rootScope.workorders, function (value, key) {
-                $scope.workordersView.push(value.WorkOrder);
+                $scope.workordersView.push(value);
             });
         }
     });
@@ -127,8 +127,8 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
         $scope.workordersView = [];
         $rootScope.workorders = response.data;
         angular.forEach($rootScope.workorders, function (value, key) {
-            if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
-                $scope.workordersView.push(value.WorkOrder);
+            if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
+                $scope.workordersView.push(value);
             }
         });
     });

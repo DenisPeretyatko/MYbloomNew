@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Drawing;
+using System.Linq;
 using BloomService.Web.Models;
 
 namespace BloomService.Web.Controllers
@@ -32,25 +33,30 @@ namespace BloomService.Web.Controllers
         {
             var result = new List<MapViewModel>();
             var workOrders = new List<SageWorkOrder>();
-            workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
-            
+            workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open"  ).ToList();
+            var employees = _repository.GetAll<SageEmployee>().ToList();
             var locations = _repository.GetAll<SageLocation>().ToArray();
             foreach (var item in workOrders)
             {
                 var itemLocation = locations.FirstOrDefault(l => l.Name == item.Location);
                 if (itemLocation == null)
                     continue;
-
                 item.Latitude = itemLocation.Latitude;
                 item.Longitude = itemLocation.Longitude;
-                var singleOrDefault =
-                    _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder).SingleOrDefault();
-                if (singleOrDefault != null && item.AssignmentId == null)
-                    result.Add(new MapViewModel()
-                    {
-                        WorkOrder = item,
-                        DateEntered = singleOrDefault.ScheduleDate
-                    });
+               
+                var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder).SingleOrDefault();
+
+                if (string.IsNullOrEmpty(assignment?.Employee) || item.AssignmentId != null) continue;
+                var tempEmployee = employees.FirstOrDefault(e => e.Name == assignment.Employee);
+                var color = tempEmployee?.Color;
+                var employee = tempEmployee?.Employee;
+                result.Add(new MapViewModel()
+                {
+                    WorkOrder = item,
+                    DateEntered = assignment.ScheduleDate,
+                    Color = color,
+                    Employee = employee
+                });
             }
             
             return Json(result, JsonRequestBehavior.AllowGet);
