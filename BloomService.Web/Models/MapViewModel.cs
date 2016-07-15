@@ -10,6 +10,8 @@ namespace BloomService.Web.Models
     {
         public SageWorkOrder WorkOrder { get; set; }
         public DateTime? DateEntered { get; set; }
+        public string Color { get; set; }
+        public string Employee { get; set; }
 
     }
 }
