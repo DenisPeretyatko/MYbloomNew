@@ -28,7 +28,7 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
         } else {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+                if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
                     $scope.workordersView.push(value.WorkOrder);
                 }
             });
@@ -90,7 +90,7 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
     commonDataService.getLocations().then(function (response) {
         $rootScope.workorders = response.data;
         angular.forEach($rootScope.workorders, function (value, key) {
-            if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+            if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
                 $scope.workordersView.push(value.WorkOrder);
             }
         });
@@ -100,7 +100,7 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
         if ($scope.showAll == false) {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+                if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
                     $scope.workordersView.push(value.WorkOrder);
                 }
             });
@@ -113,7 +113,7 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
         if ($scope.showAll == false) {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+                if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
                     $scope.workordersView.push(value.WorkOrder);
                 }
             });
