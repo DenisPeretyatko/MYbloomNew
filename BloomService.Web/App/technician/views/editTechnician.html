@@ -41,11 +41,11 @@
                             <br />
                             <br />
                             <br />
-                            <div class="upload_avatar btn btn-sm btn-primary pull-right">
-                                <input id="loaded_img" type="file" ngf-accept="'image/*'" accept="image/*" class="avatarImg"
-                                       onchange="angular.element(this).scope().uploadFile(this.files)" />
-                                <strong>Select Picture</strong>
+                            <div class="file_upload">
+                                <button type="button" class="btn btn-raised btn-primary btn-w-sm ui-wave btn-upload">Select Picture</button>
+                                <input type="file" ngf-accept="'image/*'" accept="image/*"  onchange="angular.element(this).scope().uploadFile(this.files)">
                             </div>
+                           
                         </div>
                         <div class="form-group ui-calendar">
                             <label>Weekly Schedule</label>
