@@ -23,42 +23,40 @@
     this.locations = _this.locations;
     this.notificationTime = _this.notificationTime;
 
-
     $rootScope.notifications = [];
     $rootScope.workorders = [];
     $rootScope.unavailableTechniciansIds = [];
 
-    var paginationModel = {
-        Index: 0,
-        Search: '',
-        Column: '',
-        Direction: true
-    };
-
+    //var paginationModel = {
+    //    Index: 0,
+    //    Search: '',
+    //    Column: '',
+    //    Direction: true
+    //};
 
     var connection = commonHub.GetConnection();
 
-    commonDataService.getLookups().then(function (response) {
-        $rootScope.notifications = response.data.Notifications;
-        _this.notificationTime = response.data.NotificationTime;
-        return _this.lookups = response.data;
-    });
+    //commonDataService.getLookups().then(function (response) {
+    //    $rootScope.notifications = response.data.Notifications;
+    //    _this.notificationTime = response.data.NotificationTime;
+    //    return _this.lookups = response.data;
+    //});
 
-    commonDataService.getLocations().then(function (response) {
-        return _this.locations = response.data;
-    });
+    //commonDataService.getLocations().then(function (response) {
+    //    return _this.locations = response.data;
+    //});
 
-    commonDataService.getWorkordesPaged(paginationModel).then(function (response) {
-        return _this.workorders = response.data;
-    });
-    commonDataService.getTechnicians().then(function (response) {
-        return _this.technicians = response.data;
-    });
+    //commonDataService.getWorkordesPaged(paginationModel).then(function (response) {
+    //    return _this.workorders = response.data;
+    //});
+    //commonDataService.getTechnicians().then(function (response) {
+    //    return _this.technicians = response.data;
+    //});
 
-    commonDataService.getTrucks().then(function (response) {
-        $rootScope.trucks = response.data;
-        return _this.trucks = response.data;
-    });
+    //commonDataService.getTrucks().then(function (response) {
+    //    $rootScope.trucks = response.data;
+    //    return _this.trucks = response.data;
+    //});
 
 
     connection.client.UpdateWorkOrder = function (workorder) {

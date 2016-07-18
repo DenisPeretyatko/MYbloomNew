@@ -2,7 +2,7 @@
  * mainController - controller
  */
 
-var mainController = function ($scope, $rootScope, commonDataService, state, $window, commonHub) {
+var mainController = function ($scope, $rootScope, $state, commonDataService, state, $window, commonHub) {
     angular.element(window).on;
     $scope.userName = window.localStorage.getItem('UserName');
     $scope.notificationsCount = 0;
@@ -123,4 +123,4 @@ $scope.openNotifications = function () {
     //});
 };
 
-mainController.$inject = ["$scope", "$rootScope", "commonDataService", "state", "$window", "commonHub"];
+mainController.$inject = ["$scope", "$rootScope", "$state", "commonDataService", "state", "$window", "commonHub"];
