@@ -14,37 +14,44 @@ var loginController = function($scope, $rootScope, $state, commonDataService, co
             if (response.access_token != null && response.access_token != "" && response.access_token != undefined) {
                 window.localStorage.setItem('Token', response.access_token);
                 commonHub.LoginHub();
+                
+             
+                if (state.notificationTime == undefined || state.lookups == undefined || state.notifications == undefined) {
+                    commonDataService.getLookups().then(function(response) {
+                        $rootScope.notifications = response.data.Notifications;
+                        state.notifications = response.data.Notifications;
+                        state.notificationTime = response.data.NotificationTime;
+                        state.lookups = response.data;
+                    });
+                }
 
-                commonDataService.getTechnicians().then(function (response) {
-                    state.technicians = response.data;
-                });
-
-                commonDataService.getLookups().then(function (response) {
-                    $rootScope.notifications = response.data.Notifications;
-                    state.notificationTime = response.data.NotificationTime;
-                    state.lookups = response.data;
-                });
-
-                commonDataService.getLocations().then(function (response) {
-                    state.locations = response.data;
-                });
+                if (state.locations == undefined) {
+                    commonDataService.getLocations().then(function(response) {
+                        state.locations = response.data;
+                    });
+                }
                 var paginationModel = {
                     Index: 0,
                     Search: '',
                     Column: '',
                     Direction: true
                 };
-                commonDataService.getWorkordesPaged(paginationModel).then(function (response) {
-                    state.workorders = response.data;
-                });
-                commonDataService.getTechnicians().then(function (response) {
-                    state.technicians = response.data;
-                });
-
-                commonDataService.getTrucks().then(function (response) {
-                    $rootScope.trucks = response.data;
-                    state.trucks = response.data;
-                });
+                if (state.workorders == undefined) {
+                    commonDataService.getWorkordesPaged(paginationModel).then(function(response) {
+                        state.workorders = response.data;
+                    });
+                }
+                if (state.technicians == undefined) {
+                    commonDataService.getTechnicians().then(function(response) {
+                        state.technicians = response.data;
+                    });
+                }
+                if (state.trucks == undefined) {
+                    commonDataService.getTrucks().then(function(response) {
+                        $rootScope.trucks = response.data;
+                        state.trucks = response.data;
+                    });
+                }
 
                 $state.go('manager.dashboard');
             }
