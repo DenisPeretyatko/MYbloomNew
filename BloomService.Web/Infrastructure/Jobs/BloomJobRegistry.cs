@@ -158,6 +158,28 @@ namespace BloomService.Web.Infrastructure.Jobs
 
                     try
                     {
+                        var workOrderItemsArray = _proxy.GetPermissionCodes();
+                        foreach (var entity in workOrderItemsArray.Entities)
+                        {
+                            var mongoEntity = _repository.SearchFor<SagePermissionCode>(x => x.PERMISSIONCODE == entity.PERMISSIONCODE).SingleOrDefault();
+                            if (mongoEntity == null)
+                                _repository.Add(entity);
+                            else
+                            {
+                                entity.Id = mongoEntity.Id;
+                                _repository.Update(entity);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.ErrorFormat("Can`t sync SagePermissionCode {0}", ex);
+                    }
+
+
+
+                    try
+                    {
                         var callTypeArray = _proxy.GetCalltypes();
                         foreach (var entity in callTypeArray.Entities)
                         {

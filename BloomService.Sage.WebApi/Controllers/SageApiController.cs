@@ -66,11 +66,11 @@
             try
             {
                 var properties = new Dictionary<string, string>();
-                properties.Add("Assignment", assignment.Assignment.ToString() ?? string.Empty);
-                properties.Add("ScheduleDate", assignment.ScheduleDate.ToString() ?? string.Empty);
-                properties.Add("Employee", assignment.Employee.ToString() ?? string.Empty);
-                properties.Add("WorkOrder", assignment.WorkOrder.ToString() ?? string.Empty);
-                properties.Add("EstimatedRepairHours", assignment.EstimatedRepairHours.ToString() ?? string.Empty);
+                properties.Add("Assignment", assignment.Assignment ?? string.Empty);
+                properties.Add("ScheduleDate", ((DateTime)assignment.ScheduleDate).ToString() ?? string.Empty);
+                properties.Add("Employee", assignment.Employee ?? string.Empty);
+                properties.Add("WorkOrder", assignment.WorkOrder ?? string.Empty);
+                properties.Add("EstimatedRepairHours", assignment.EstimatedRepairHours ?? string.Empty);
                 properties.Add("StartTime", ((DateTime)assignment.StartTime).TimeOfDay.ToString() ?? string.Empty);
                 properties.Add("Enddate", assignment.Enddate.ToString() ?? string.Empty);
                 properties.Add("Endtime", ((DateTime)assignment.Endtime).TimeOfDay.ToString() ?? string.Empty);

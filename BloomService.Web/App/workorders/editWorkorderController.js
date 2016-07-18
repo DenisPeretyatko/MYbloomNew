@@ -31,7 +31,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         $scope.lookups = state.lookups;
 
         if ($scope.editableWorkOrder !== undefined && $scope.editableWorkOrder.WorkOrderItems !== undefined && $scope.lookups !== undefined) {
-            //$scope.equipment = $scope.editableWorkOrder.WorkOrderItems;
+            $scope.equipment = $scope.editableWorkOrder.WorkOrderItems;
             var equipment = {
                 equipType: angular.copy($scope.EquipType),
                 empl: angular.copy($scope.lookups.Employes),

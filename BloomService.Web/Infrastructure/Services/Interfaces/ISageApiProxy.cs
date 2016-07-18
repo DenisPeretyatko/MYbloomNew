@@ -26,6 +26,7 @@
         SageResponse<SageWorkOrder> GetWorkorder(string id);
         SageResponse<SageWorkOrder> GetWorkorders();
 
-        SageResponse<SageWorkOrderItem> AddOrEditWorkOrderEquipment(SageWorkOrderItem workOrderItem);
+        SageResponse<SageWorkOrderItem> AddWorkOrderItem(SageWorkOrderItem workOrderItem);
+        SageResponse<SageWorkOrderItem> EditWorkOrderItem(SageWorkOrderItem workOrderItem);
     }
 }

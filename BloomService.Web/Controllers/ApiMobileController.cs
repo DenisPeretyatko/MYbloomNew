@@ -35,6 +35,7 @@ namespace BloomService.Web.Controllers
     public class ApiMobileController : BaseController
     {
         private readonly IImageService _imageService;
+
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
 
         private readonly IRepository repository;
@@ -110,7 +111,6 @@ namespace BloomService.Web.Controllers
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
-
         [HttpGet]
         [Route("Apimobile/Part")]
         public ActionResult GetPart()
@@ -138,7 +138,7 @@ namespace BloomService.Web.Controllers
         {
             var userId = UserModel.Name;
 
-            var assignments = repository.SearchFor<SageAssignment>(x => x.Employee == userId).ToArray();
+            var assignments = repository.SearchFor<SageAssignment>(x => x.Employee == userId).ToList();
             var allWorkorders = repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
 
             var result = new List<SageWorkOrder>();
@@ -174,7 +174,6 @@ namespace BloomService.Web.Controllers
                 }
                 order.WorkOrderItems = repository.SearchFor<SageWorkOrderItem>().ToList().Where(x => x.WorkOrder.ToString() == order.WorkOrder);
             }
-
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

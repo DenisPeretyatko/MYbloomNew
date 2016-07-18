@@ -84,7 +84,7 @@ namespace BloomService.Web.Controllers
             var workOrder = _repository.Get<SageWorkOrder>(id);
             
             workOrder.CustomerObj = _repository.SearchFor<SageCustomer>(x => x.Customer == workOrder.ARCustomer).SingleOrDefault();
-            workOrder.LocationObj = _repository.SearchFor<SageLocation>(x => x.Name == workOrder.Location).SingleOrDefault();
+            workOrder.LocationObj = _repository.SearchFor<SageLocation>(x => x.Name == workOrder.Location && x.ARCustomer == workOrder.ARCustomer).SingleOrDefault();
             workOrder.CalltypeObj = _repository.SearchFor<SageCallType>(x => x.Description == workOrder.CallType).SingleOrDefault();
             workOrder.ProblemObj = _repository.SearchFor<SageProblem>(x => x.Description == workOrder.Problem).SingleOrDefault();
             workOrder.RateSheetObj = _repository.SearchFor<SageRateSheet>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.RateSheet).SingleOrDefault();
@@ -92,7 +92,7 @@ namespace BloomService.Web.Controllers
             workOrder.HourObj = _repository.SearchFor<SageRepair>(x => x.Repair == workOrder.EstimatedRepairHours.ToString()).SingleOrDefault();
             workOrder.PermissionCodeObj = _repository.SearchFor<SagePermissionCode>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode).SingleOrDefault(); 
             workOrder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workOrder.PayMethod.Trim());
-
+            workOrder.WorkOrderItems = _repository.SearchFor<SageWorkOrderItem>(x => x.WorkOrder == Int32.Parse(workOrder.WorkOrder));
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
@@ -256,7 +256,6 @@ namespace BloomService.Web.Controllers
             var workOrderResult = _sageApiProxy.EditWorkOrder(workorder);
 
             var workOrderItems = Mapper.Map<IEnumerable<SageWorkOrderItem>>(model.Equipment);
-            var workOrderItemsResult = new List<SageResponse<SageWorkOrderItem>>();
             foreach (var workOrderItem in workOrderItems)
             {
                 workOrderItem.WorkOrder = Convert.ToInt32(model.WorkOrder);
@@ -269,7 +268,22 @@ namespace BloomService.Web.Controllers
                 {
                     workOrderItem.LaborSale = workOrderItem.UnitSale;
                 }
-                workOrderItemsResult.Add(_sageApiProxy.AddOrEditWorkOrderEquipment(workOrderItem));
+                if (workOrderItem.WorkOrderItem == 0)
+                {
+                    var result = _sageApiProxy.AddWorkOrderItem(workOrderItem);
+                    if (result.IsSucceed && result.Entity != null)
+                    {
+                        _repository.Add<SageWorkOrderItem>(result.Entity);
+                    }
+                }
+                else
+                {
+                    var result = _sageApiProxy.AddWorkOrderItem(workOrderItem);
+                    if (result.IsSucceed && result.Entity != null)
+                    {
+                        _repository.Add<SageWorkOrderItem>(result.Entity);
+                    }
+                }
             }
 
             if (!workOrderResult.IsSucceed)
