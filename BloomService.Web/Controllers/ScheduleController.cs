@@ -71,12 +71,12 @@ namespace BloomService.Web.Controllers
 
             var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
             databaseAssignment.Employee = employee?.Name ?? "";
-            databaseAssignment.ScheduleDate = model.ScheduleDate;
+            databaseAssignment.ScheduleDate = model.ScheduleDate.ToUniversalTime();
             databaseAssignment.WorkOrder = model.WorkOrder;
             databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
-            databaseAssignment.StartTime = model.ScheduleDate;
-            databaseAssignment.Enddate = model.EndDate;
-            databaseAssignment.Endtime = model.EndDate;
+            databaseAssignment.StartTime = model.ScheduleDate.ToUniversalTime();
+            databaseAssignment.Enddate = model.EndDate.ToUniversalTime();
+            databaseAssignment.Endtime = model.EndDate.ToUniversalTime();
 
             var edited = _sageApiProxy.EditAssignment(databaseAssignment);
             if (edited.IsSucceed == false)
@@ -87,7 +87,7 @@ namespace BloomService.Web.Controllers
 
             databaseAssignment.EmployeeId = employee != null ? employee.Employee : null;
             databaseAssignment.Start = model.ScheduleDate.ToString();
-            databaseAssignment.End = model.ScheduleDate.AddHours(databaseAssignment.EstimatedRepairHours.AsDouble()).ToString();
+            databaseAssignment.End = model.ScheduleDate.ToUniversalTime().AddHours(databaseAssignment.EstimatedRepairHours.AsDouble()).ToString();
             databaseAssignment.Color = employee?.Color ?? "";
 
             var workorder = _repository.SearchFor<SageWorkOrder>(w => w.WorkOrder == model.WorkOrder).SingleOrDefault();
