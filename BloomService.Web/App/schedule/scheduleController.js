@@ -4,6 +4,12 @@
 
 var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $q, commonDataService) {
     var date = new Date();
+    var GetEndDate = function (st, hours) {
+        var val = new Date(st);
+        var rez = new Date(val.setHours(val.getHours() + parseInt(hours)));
+        return rez;
+    }
+  
 
     // Events
     $scope.events = [];
@@ -65,6 +71,8 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             height: 400,
             resourceAreaWidth: '15%',
             editable: true,
+            ignoreTimezone: true,
+            timezone: "UTC -05:00",
             events: $scope.events,
             eventRender: function (event, element) {
                 var qtip = $('div.qtip:visible');
@@ -177,7 +185,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                 }
             },
             resourceLabelText: 'Technicians',
-            timezone: 'local',
+            //timezone: 'local',
             resources: $scope.resources,
             forceEventDuration: true,
         }
@@ -234,8 +242,8 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     id: value.Assignment,
                     resourceId: value.EmployeeId,
                     title: value.title = value.WorkOrder + " " + value.Customer + " " + value.Location,
-                    start: new Date(value.Start),
-                    end: new Date(value.End),
+                    start: new Date(value.ScheduleDate),
+                    end: GetEndDate(value.ScheduleDate, value.EstimatedRepairHours),
                     assigmentId: value.Assigment,
                     workorderId: value.WorkOrder,
                     description: value.Customer + spliter + value.Location,
