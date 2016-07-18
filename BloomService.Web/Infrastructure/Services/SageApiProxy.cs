@@ -158,7 +158,7 @@
         private SageResponse<TEntity> Edit<TEntity>(TEntity entity, string endPoint) where TEntity : IEntity
         {
             var request = new RestRequest(endPoint, Method.PUT) { RequestFormat = DataFormat.Json };
-            request.AddBody(entity);
+            request.AddObject(entity);
             BuildAuthenticationHeader(request);
             var response = restClient.Execute<SageResponse<TEntity>>(request);
             var result = response.Data;
