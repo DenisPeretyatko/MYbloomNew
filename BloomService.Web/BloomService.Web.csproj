@@ -322,11 +322,13 @@
     <Compile Include="Infrastructure\Services\AuthorizationService.cs" />
     <Compile Include="Infrastructure\Services\HttpContextProvider.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IAuthorizationService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IScheduleService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IHttpContextProvider.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IDashboardService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\ISageApiProxy.cs" />
     <Compile Include="Infrastructure\Services\DashboardService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\INotificationService.cs" />
+    <Compile Include="Infrastructure\Services\ScheduleService.cs" />
     <Compile Include="Infrastructure\Services\NotificationService.cs" />
     <Compile Include="Infrastructure\Services\SageApiProxy.cs" />
     <Compile Include="Infrastructure\SignalR\IBloomServiceHub.cs" />
