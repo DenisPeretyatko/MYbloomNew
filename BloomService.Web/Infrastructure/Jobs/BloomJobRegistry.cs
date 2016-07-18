@@ -387,7 +387,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         _log.ErrorFormat("Can`t sync SagePart {0}", ex);
                     }
                 }
-            }).ToRunNow().AndEvery(1).Hours();
+            }).ToRunNow().AndEvery(_settings.SynchronizationDelay).Minutes();
         }
     }
 }

@@ -33,7 +33,8 @@
                     SizeBigPhoto = int.Parse(nameValueCollection["SizeBigPhoto"]),
                     SizeSmallPhoto = int.Parse(nameValueCollection["SizeSmallPhoto"]),
                     CurrentTimezone = nameValueCollection["CurrentTimezone"],
-                    NotificationDelay = int.Parse(nameValueCollection["NotificationDelay"])
+                    NotificationDelay = int.Parse(nameValueCollection["NotificationDelay"]),
+                    SynchronizationDelay = int.Parse(nameValueCollection["SynchronizationDelay"])
                 };
 
                 return configuration;
@@ -66,5 +67,6 @@
         public int SizeSmallPhoto { get; set; }
         public string CurrentTimezone { get; set; }
         public int NotificationDelay { get; set; }
+        public int SynchronizationDelay { get; set; }
     }
 }
