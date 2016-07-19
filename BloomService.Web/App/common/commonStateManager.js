@@ -27,37 +27,47 @@
     $rootScope.workorders = [];
     $rootScope.unavailableTechniciansIds = [];
 
-    //var paginationModel = {
-    //    Index: 0,
-    //    Search: '',
-    //    Column: '',
-    //    Direction: true
-    //};
+  
 
     var connection = commonHub.GetConnection();
 
-    //commonDataService.getLookups().then(function (response) {
-    //    $rootScope.notifications = response.data.Notifications;
-    //    _this.notificationTime = response.data.NotificationTime;
-    //    return _this.lookups = response.data;
-    //});
-
-    //commonDataService.getLocations().then(function (response) {
-    //    return _this.locations = response.data;
-    //});
-
-    //commonDataService.getWorkordesPaged(paginationModel).then(function (response) {
-    //    return _this.workorders = response.data;
-    //});
-    //commonDataService.getTechnicians().then(function (response) {
-    //    return _this.technicians = response.data;
-    //});
-
-    //commonDataService.getTrucks().then(function (response) {
-    //    $rootScope.trucks = response.data;
-    //    return _this.trucks = response.data;
-    //});
-
+    if (window.localStorage.getItem('Token') != null && window.localStorage.getItem('Token') != "") {
+        var paginationModel = {
+            Index: 0,
+            Search: '',
+            Column: '',
+            Direction: true
+        };
+        if (_this.notificationTime == undefined || _this.lookups == undefined || _this.notifications == undefined) {
+            commonDataService.getLookups().then(function(response) {
+                $rootScope.notifications = response.data.Notifications;
+                _this.notifications = response.data.Notifications;
+                _this.notificationTime = response.data.NotificationTime;
+                return _this.lookups = response.data;
+            });
+        }
+        if (_this.locations == undefined) {
+            commonDataService.getLocations().then(function(response) {
+                return _this.locations = response.data;
+            });
+        }
+        if (_this.workorders == undefined) {
+            commonDataService.getWorkordesPaged(paginationModel).then(function(response) {
+                return _this.workorders = response.data;
+            });
+        }
+        if (_this.technicians == undefined) {
+            commonDataService.getTechnicians().then(function(response) {
+                return _this.technicians = response.data;
+            });
+        }
+        if (_this.trucks == undefined) {
+            commonDataService.getTrucks().then(function(response) {
+                $rootScope.trucks = response.data;
+                return _this.trucks = response.data;
+            });
+        }
+    }
 
     connection.client.UpdateWorkOrder = function (workorder) {
         angular.forEach(_this.workorders, function (value, key) {
