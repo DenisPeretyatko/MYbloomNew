@@ -54,8 +54,8 @@
 
         SageEquipment[] GetEquipmentsByWorkOrderId(string id);
 
-        SageWorkOrder[] EditWorkOrder(Dictionary<string, string> properties);
-
         void UnassignWorkOrder(string id);
+
+        SageAssignment[] GetAssignmentByWorkOrderId(string number);
     }
 }

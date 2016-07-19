@@ -150,13 +150,23 @@
                 {
                     if (!string.IsNullOrEmpty(property.Value))
                     {
-                        resultProperties.Add(property.Key, property.Value);
+                        resultProperties.Add(
+                           property.Key, property.Value
+                           .Replace("'", "&apos;")
+                           .Replace("\"", "&quot;")
+                           .Replace("<", "&lt;")
+                           .Replace(">", "&gt;"));
                     }
                 }
 
                 var resultWorkOrder = this.serviceManager.WorkOrders(resultProperties).SingleOrDefault();
+                var resultAssignment = new SageAssignment();
+                if (resultWorkOrder != null)
+                {
+                   resultAssignment = this.serviceManager.GetAssignmentByWorkOrderId(resultWorkOrder.WorkOrder).SingleOrDefault();
+                }
 
-                var result = new SageResponse<SageWorkOrder> { IsSucceed = true, Entity = resultWorkOrder };
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = true, Entity = resultWorkOrder, RelatedAssignment = resultAssignment };
                 return result;
             }
             catch (ResponseException exception)
@@ -255,7 +265,12 @@
                 {
                     if (!string.IsNullOrEmpty(property.Value))
                     {
-                        resultProperties.Add(property.Key, property.Value);
+                        resultProperties.Add(
+                           property.Key, property.Value
+                           .Replace("'", "&apos;")
+                           .Replace("\"", "&quot;")
+                           .Replace("<", "&lt;")
+                           .Replace(">", "&gt;"));
                     }
                 }
 

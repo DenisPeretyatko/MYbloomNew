@@ -74,6 +74,15 @@
             return result;
         }
 
+        public SageAssignment[] GetAssignmentByWorkOrderId(string number)
+        {
+            var messages = string.Format(Messages.GetAssignmentByWorkOrderId, number);
+            var response = SendMessage(messages);
+            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.Assignments;
+            var result = AutoMapper.Mapper.Map<SageAssignment[]>(entities);
+            return result;
+        }
+
         public SageCallType[] Calltypes()
         {
             var result = SendMessage(Messages.Calltypes);
@@ -88,6 +97,8 @@
             var result = AutoMapper.Mapper.Map<SageEquipment[]>(entities);
             return result;
         }
+
+
 
         public void Create(string name, string password)
         {
@@ -303,22 +314,6 @@
             }
 
             var messages = string.Format(Messages.CreateWorkOrder, propertiesStr);
-            var response = SendMessage(messages);
-            var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
-            var result = AutoMapper.Mapper.Map<SageWorkOrder[]>(entities);
-            return result;
-        }
-
-
-        public SageWorkOrder[] EditWorkOrder(Dictionary<string, string> properties)
-        {
-            var propertiesStr = string.Empty;
-            foreach (var property in properties)
-            {
-                propertiesStr += string.Format(Messages.Property, property.Key, property.Value);
-            }
-
-            var messages = string.Format(Messages.EditWorkOrder, propertiesStr);
             var response = SendMessage(messages);
             var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
             var result = AutoMapper.Mapper.Map<SageWorkOrder[]>(entities);
