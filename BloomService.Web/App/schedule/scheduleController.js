@@ -263,6 +263,10 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             $('#calendar').fullCalendar('removeEvents');
             $("#calendar").fullCalendar('addEventSource', $scope.events);
             $('#calendar').fullCalendar('rerenderEvents');
+            angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) {
+            $("tr[data-resource-id=" + value + ']').css("background-color", "aliceblue");
+            });
+
             $('.drag').each(function () {
                 var descr = '';
                 var fooElements = [];
@@ -343,9 +347,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
 
         });
 
-        angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) {
-            $("tr[data-resource-id=" + value + ']').css("background-color", "aliceblue");
-        });
+        
 
         $rootScope.$watchCollection(function () {
             return $rootScope.unavailableTechniciansIds;
