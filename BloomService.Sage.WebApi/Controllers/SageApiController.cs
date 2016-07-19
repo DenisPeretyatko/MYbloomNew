@@ -274,8 +274,8 @@
                     }
                 }
 
-                this.serviceManager.EditAssignments(resultProperties);
-                var result = new SageResponse<SageAssignment> { IsSucceed = true };
+                var resultAssignment = serviceManager.EditAssignments(resultProperties).SingleOrDefault();
+                var result = new SageResponse<SageAssignment> { IsSucceed = true, Entity = resultAssignment };
                 return result;
             }
             catch (ResponseException exception)
