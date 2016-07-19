@@ -50,8 +50,8 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
             }
 
             databaseAssignment.EmployeeId = employee != null ? employee.Employee : null;
-            databaseAssignment.Start = model.ScheduleDate.ToString();
-            databaseAssignment.End = model.ScheduleDate.ToUniversalTime().AddHours(databaseAssignment.EstimatedRepairHours.AsDouble()).ToString();
+            databaseAssignment.Start = ((DateTime)edited.Entity.ScheduleDate).Add(((DateTime)edited.Entity.StartTime).TimeOfDay).ToString();
+            databaseAssignment.End = ((DateTime)edited.Entity.ScheduleDate).Add(((DateTime)edited.Entity.StartTime).TimeOfDay).AddHours(edited.Entity.EstimatedRepairHours.AsDouble()).ToString();
             databaseAssignment.Color = employee?.Color ?? "";
 
             var workorder = _repository.SearchFor<SageWorkOrder>(w => w.WorkOrder == model.WorkOrder).SingleOrDefault();
@@ -79,6 +79,38 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
 
             _notification.SendNotification(string.Format("Workorder {0} assigned to {1}", workorder.Name, employee.Name));
             _log.InfoFormat("DatabaseAssignment added to repository. Employee {0}, Employee ID {1}", databaseAssignment.Employee, databaseAssignment.EmployeeId);
+
+            return true;
+        }
+
+        public bool DeleteAssignment(AssignmentViewModel model)
+        {
+            _log.InfoFormat("Method: DeleteAssignment. Model ID {0}", model.Id);
+            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
+            var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).Single();
+            var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
+            var result = _sageApiProxy.UnassignWorkOrders(model.WorkOrder);
+            if (!result.IsSucceed)
+            {
+                _log.ErrorFormat("!result.IsSucceed. Error");
+                return false;
+            }
+            databaseAssignment.Employee = "";
+            databaseAssignment.EmployeeId = null;
+            databaseAssignment.Start = "";
+            databaseAssignment.End = "";
+            databaseAssignment.Color = "";
+            databaseAssignment.Customer = "";
+            databaseAssignment.Location = "";
+            _repository.Update(databaseAssignment);
+            _log.InfoFormat("Deleted from repository: databaseAssignment ID {0}", databaseAssignment.Id);
+            workOrder.Employee = "";
+            workOrder.ScheduleDate = null;
+            workOrder.AssignmentId = databaseAssignment.Assignment;
+            _repository.Update(workOrder);
+            _log.InfoFormat("Repository update workorder. Name: {0}, Id: {1}", workOrder.Name, workOrder.Id);
+            _notification.SendNotification(string.Format("Workorder {0} unassigned from {1}", workOrder.Name, employee.Name));
+            _hub.DeleteAssigment(model);
 
             return true;
         }

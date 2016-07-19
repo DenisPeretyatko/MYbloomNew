@@ -20,6 +20,7 @@ namespace BloomService.Web.Controllers
     using Infrastructure.SignalR;
     using Infrastructure.Services.Interfaces;
     using Infrastructure.Constants;
+    using Domain.Extensions;
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
@@ -72,21 +73,28 @@ namespace BloomService.Web.Controllers
                 return Error("Was not able to save workorder to sage");
             }
 
-            var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == result.Entity.WorkOrder).SingleOrDefault();
+            var assignment = result.RelatedAssignment;
             if (string.IsNullOrEmpty(model.Emploee))
             {
                 result.Entity.AssignmentId = assignment.Assignment;
+                _repository.Add(assignment);
             }
             else {
-                var editedAssignment = new AssignmentViewModel();
-                editedAssignment.Employee = assignment.Employee;
-                editedAssignment.EndDate = (DateTime)assignment.Enddate;
-                editedAssignment.EstimatedRepairHours = assignment.EstimatedRepairHours;
-                editedAssignment.Id = assignment.Id;
-                editedAssignment.ScheduleDate = (DateTime)assignment.ScheduleDate;
-                editedAssignment.WorkOrder = assignment.WorkOrder;
+                var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Emploee).SingleOrDefault();
+                assignment.EmployeeId = employee != null ? employee.Employee : null;
+                assignment.Start = ((DateTime)assignment.ScheduleDate).Add(((DateTime)assignment.StartTime).TimeOfDay).ToString();
+                assignment.End = ((DateTime)assignment.ScheduleDate).Add(((DateTime)assignment.StartTime).TimeOfDay).AddHours(assignment.EstimatedRepairHours.AsDouble() == 0? 1: assignment.EstimatedRepairHours.AsDouble()).ToString();
+                assignment.Color = employee?.Color ?? "";
+                assignment.Customer = result.Entity.ARCustomer;
+                assignment.Location = result.Entity.Location;
 
-                _scheduleService.CerateAssignment(editedAssignment);
+                var locations = _repository.GetAll<SageLocation>().ToArray();
+                var itemLocation = locations.FirstOrDefault(l => l.Name == result.Entity.Location);
+                result.Entity.ScheduleDate = assignment.ScheduleDate;
+                result.Entity.Latitude = itemLocation.Latitude;
+                result.Entity.Longitude = itemLocation.Longitude;
+
+                _repository.Add(assignment);
             }
             _repository.Add(result.Entity);
             _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
@@ -275,10 +283,30 @@ namespace BloomService.Web.Controllers
             {
                 _log.ErrorFormat("Was not able to update workorder to sage. !result.IsSucceed");
                 return Error("Was not able to update workorder to sage");
+            }            
+
+            if (!string.IsNullOrEmpty(model.Emploee))           
+            {
+                var assignmentDb = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
+                var editedAssignment = new AssignmentViewModel();
+                editedAssignment.Employee = model.Emploee;
+                editedAssignment.EndDate = (DateTime)assignmentDb.Enddate;
+                editedAssignment.EstimatedRepairHours = assignmentDb.EstimatedRepairHours.AsDouble() == 0 ? "1.00" : assignmentDb.EstimatedRepairHours; 
+                editedAssignment.Id = assignmentDb.Id;
+                editedAssignment.ScheduleDate = (DateTime)assignmentDb.StartTime;
+                editedAssignment.WorkOrder = assignmentDb.WorkOrder;
+                _scheduleService.CerateAssignment(editedAssignment);
+
+                var locations = _repository.GetAll<SageLocation>().ToArray();
+                var itemLocation = locations.FirstOrDefault(l => l.Name == result.Entity.Location);
+                result.Entity.ScheduleDate = (DateTime)assignmentDb.StartTime;
+                result.Entity.Latitude = itemLocation.Latitude;
+                result.Entity.Longitude = itemLocation.Longitude;
             }
 
             result.Entity.Id = workorder.Id;
             _repository.Update(result.Entity);
+
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
             _hub.UpdateWorkOrder(model);
             return Success();

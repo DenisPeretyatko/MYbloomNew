@@ -78,33 +78,10 @@ namespace BloomService.Web.Controllers
         [Route("Schedule/Assignments/Delete")]
         public ActionResult DeleteAssignment(AssignmentViewModel model)
         {
-            _log.InfoFormat("Method: DeleteAssignment. Model ID {0}", model.Id);
-            var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
-            var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).Single();
-            var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
-            var result = _sageApiProxy.UnassignWorkOrders(model.WorkOrder);
-            if (!result.IsSucceed)
-            {
-                _log.ErrorFormat("!result.IsSucceed. Error");
+            var result = _scheduleService.DeleteAssignment(model);
+            if (result != true)
                 return Error();
-            }
-            databaseAssignment.Employee = "";
-            databaseAssignment.EmployeeId = null;
-            databaseAssignment.Start = "";
-            databaseAssignment.End = "";
-            databaseAssignment.Color = "";
-            databaseAssignment.Customer = "";
-            databaseAssignment.Location = "";
-            _repository.Update(databaseAssignment);
-            _log.InfoFormat("Deleted from repository: databaseAssignment ID {0}", databaseAssignment.Id);
-            workOrder.Employee = "";
-            workOrder.ScheduleDate = null;
-            workOrder.AssignmentId = databaseAssignment.Assignment;
-            _repository.Update(workOrder);
-            _log.InfoFormat("Repository update workorder. Name: {0}, Id: {1}", workOrder.Name, workOrder.Id);
-            _notification.SendNotification(string.Format("Workorder {0} unassigned from {1}", workOrder.Name, employee.Name));
-            _hub.DeleteAssigment(model);
-            return Success();
+            return Success();      
         }
     }
 }

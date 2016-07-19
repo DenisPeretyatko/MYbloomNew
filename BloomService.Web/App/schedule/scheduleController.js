@@ -3,13 +3,7 @@
  */
 
 var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $q, commonDataService) {
-    var date = new Date();
-    var GetEndDate = function (st, hours) {
-        var val = new Date(st);
-        var rez = new Date(val.setHours(val.getHours() + parseInt(hours)));
-        return rez;
-    }
-  
+    var date = new Date();  
 
     // Events
     $scope.events = [];
@@ -154,7 +148,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     event.title = event.workorderId + " " + event.customerFoo + " " + event.locationFoo;
                     var estimate = parseInt(event.hourFoo);
                     var date = new Date(event.start);
-                    event.end._d = new Date(date.setHours(date.getHours() + (estimate == 0? 2: estimate > 8? 8 : estimate)));
+                    event.end._d = new Date(date.setHours(date.getHours() + (estimate == 0? 1: estimate > 8? 8 : estimate)));
                     $('#calendar').fullCalendar('rerenderEvents');
                     saveEvent(event);
                 } else {
@@ -242,8 +236,8 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     id: value.Assignment,
                     resourceId: value.EmployeeId,
                     title: value.title = value.WorkOrder + " " + value.Customer + " " + value.Location,
-                    start: new Date(value.ScheduleDate),
-                    end: GetEndDate(value.ScheduleDate, value.EstimatedRepairHours),
+                    start: new Date(value.Start),
+                    end: new Date(value.End),
                     assigmentId: value.Assigment,
                     workorderId: value.WorkOrder,
                     description: value.Customer + spliter + value.Location,
