@@ -29,15 +29,17 @@ namespace BloomService.Web.Controllers
         private readonly IBloomServiceHub _hub;
         private readonly IDashboardService _dashboardService;
         private readonly INotificationService _notification;
+        private readonly IScheduleService _scheduleService;
 
         public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy,
-            IDashboardService dashboardService, IBloomServiceHub hub, INotificationService notification)
+            IDashboardService dashboardService, IBloomServiceHub hub, INotificationService notification, IScheduleService scheduleService)
         {
             _repository = repository;
             _sageApiProxy = sageApiProxy;
             _dashboardService = dashboardService;
             _notification = notification;
             _hub = hub;
+            _scheduleService = scheduleService;
         }
 
         [HttpPost]
@@ -70,6 +72,22 @@ namespace BloomService.Web.Controllers
                 return Error("Was not able to save workorder to sage");
             }
 
+            var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == result.Entity.WorkOrder).SingleOrDefault();
+            if (string.IsNullOrEmpty(model.Emploee))
+            {
+                result.Entity.AssignmentId = assignment.Assignment;
+            }
+            else {
+                var editedAssignment = new AssignmentViewModel();
+                editedAssignment.Employee = assignment.Employee;
+                editedAssignment.EndDate = (DateTime)assignment.Enddate;
+                editedAssignment.EstimatedRepairHours = assignment.EstimatedRepairHours;
+                editedAssignment.Id = assignment.Id;
+                editedAssignment.ScheduleDate = (DateTime)assignment.ScheduleDate;
+                editedAssignment.WorkOrder = assignment.WorkOrder;
+
+                _scheduleService.CerateAssignment(editedAssignment);
+            }
             _repository.Add(result.Entity);
             _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
             _notification.SendNotification(string.Format("{0} was created", workorder.WorkOrder));
