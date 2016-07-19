@@ -4,12 +4,13 @@
 
 var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $q, commonDataService) {
     var date = new Date();
+  
     var GetEndDate = function (st, hours) {
         var val = new Date(st);
         var rez = new Date(val.setHours(val.getHours() + parseInt(hours)));
         return rez;
     }
-  
+    var eventBeforeDrag = [];
 
     // Events
     $scope.events = [];
@@ -23,11 +24,18 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         $scope.alertMessage = (event.title + ': Clicked ');
     };
     /* message on Drop */
-    $scope.alertOnDrop = function (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
-        $scope.alertMessage = (event.title + ': Droped to make dayDelta ' + dayDelta);
-        event = setTechnicianColor(event);
-        $('#calendar').fullCalendar('rerenderEvents');
-        saveEvent(event);
+    $scope.alertOnDrop = function (event, delta, revertFunc, jsEvent, ui, view, dayDelta, minuteDelta, allDay) {
+        var now = new Date();
+        var eventDate = new Date(event._start._d.getTime() + (now.getTimezoneOffset() * 60000));
+        if (!$rootScope.unavailableTechniciansIds.includes(event.resourceId) && now <= eventDate) {
+            $scope.alertMessage = (event.title + ': Droped to make dayDelta ' + dayDelta);
+            event = setTechnicianColor(event);
+            $('#calendar').fullCalendar('rerenderEvents');
+            saveEvent(event);
+        }
+        else {
+            revertFunc();
+        }
     };
     /* message on Resize */
     $scope.alertOnResize = function (event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
@@ -52,6 +60,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             EstimatedRepairHours: estimate,
             EndDate: end,
         };
+   
         commonDataService.assignWorkorder(assignment);
     };
     var setTechnicianColor = function (event) {
@@ -74,15 +83,23 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             ignoreTimezone: true,
             timezone: "UTC -05:00",
             events: $scope.events,
+            eventDragStart:
+                function (event, element) {
+                    eventBeforeDrag = event;
+                },
             eventRender: function (event, element) {
                 var qtip = $('div.qtip:visible');
-             
+
                 qtip.remove();
                 element.qtip({
                     content: event.description
                 });
             },
-            droppable: true, 
+            eventConstraint: {
+                start: moment().format('YYYY-MM-DD HH:mm'),
+                end: '2999-01-01' // hard coded goodness unfortunately
+            },
+            droppable: true,
             dragRevertDuration: 0,
             header: {
                 left: 'prev,next',
@@ -145,16 +162,23 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                         EstimatedRepairHours: estimate,
                         EndDate: end
                     };
+                    angular.forEach($scope.events, function (value, key) {
+                        if (value.workorderId == event.workorderId) {
+                            $scope.events.splice(key, 1);
+                        };
+                    });
                     commonDataService.unAssignWorkorder(assignment);
                 }
             },
             eventReceive: function (event) {
-                if (!$rootScope.unavailableTechniciansIds.includes(event.resourceId)) {
+                var now = new Date();
+                var eventDate = new Date(event._start._d.getTime() + (now.getTimezoneOffset() * 60000));
+                if (!$rootScope.unavailableTechniciansIds.includes(event.resourceId) && eventDate >= now) {
                     event = setTechnicianColor(event);
                     event.title = event.workorderId + " " + event.customerFoo + " " + event.locationFoo;
                     var estimate = parseInt(event.hourFoo);
                     var date = new Date(event.start);
-                    event.end._d = new Date(date.setHours(date.getHours() + (estimate == 0? 2: estimate > 8? 8 : estimate)));
+                    event.end._d = new Date(date.setHours(date.getHours() + (estimate == 0 ? 2 : estimate > 8 ? 8 : estimate)));
                     $('#calendar').fullCalendar('rerenderEvents');
                     saveEvent(event);
                 } else {
@@ -185,9 +209,8 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                 }
             },
             resourceLabelText: 'Technicians',
-            //timezone: 'local',
             resources: $scope.resources,
-            forceEventDuration: true,
+            forceEventDuration: true
         }
     };
 
@@ -211,7 +234,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
     $scope.resouceSources = [$scope.resources];
 
 
-    $q.all([commonDataService.getTechnicians(), commonDataService.getSchedule()]).then(function(values) {        
+    $q.all([commonDataService.getTechnicians(), commonDataService.getSchedule()]).then(function (values) {
         $scope.activeTechnicians = values[0].data;
         angular.forEach($scope.activeTechnicians, function (value, key) {
             if (value != null) {
@@ -256,15 +279,20 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                 });
             }
         });
-      
+
         $scope.events = tempEvents;
 
         $timeout(function () {
             $('#calendar').fullCalendar('removeEvents');
             $("#calendar").fullCalendar('addEventSource', $scope.events);
             $('#calendar').fullCalendar('rerenderEvents');
-            angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) {
-            $("tr[data-resource-id=" + value + ']').css("background-color", "aliceblue");
+            repaintUnavailables();
+         
+            $(".fc-timelineWeek-button").click(function () {
+                repaintUnavailables();
+            });
+            $(".fc-timelineDay-button").click(function () {
+                repaintUnavailables();
             });
 
             $('.drag').each(function () {
@@ -347,7 +375,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
 
         });
 
-        
+
 
         $rootScope.$watchCollection(function () {
             return $rootScope.unavailableTechniciansIds;
@@ -362,6 +390,13 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
     function formatDate(inputdate) {
         return inputdate.getMonth() + 1 + "-" + inputdate.getDate() + "-" + inputdate.getFullYear();
     }
+
+    var repaintUnavailables = function() {
+        angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) {
+            $("tr[data-resource-id=" + value + ']').css("background-color", "aliceblue");
+        });
+    }
+
 
 };
 scheduleController.$inject = ["$rootScope", "$scope", "$interpolate", "$timeout", "$q", "commonDataService"];
