@@ -21,6 +21,8 @@ namespace BloomService.Web.Controllers
     using Infrastructure.Services.Interfaces;
     using Infrastructure.Constants;
     using Domain.Extensions;
+    using Infrastructure.Constants;
+    using Domain.Entities.Concrete.Auxiliary;
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
@@ -109,7 +111,7 @@ namespace BloomService.Web.Controllers
             var workOrder = _repository.Get<SageWorkOrder>(id);
             
             workOrder.CustomerObj = _repository.SearchFor<SageCustomer>(x => x.Customer == workOrder.ARCustomer).SingleOrDefault();
-            workOrder.LocationObj = _repository.SearchFor<SageLocation>(x => x.Name == workOrder.Location).SingleOrDefault();
+            workOrder.LocationObj = _repository.SearchFor<SageLocation>(x => x.Name == workOrder.Location && x.ARCustomer == workOrder.ARCustomer).SingleOrDefault();
             workOrder.CalltypeObj = _repository.SearchFor<SageCallType>(x => x.Description == workOrder.CallType).SingleOrDefault();
             workOrder.ProblemObj = _repository.SearchFor<SageProblem>(x => x.Description == workOrder.Problem).SingleOrDefault();
             workOrder.RateSheetObj = _repository.SearchFor<SageRateSheet>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.RateSheet).SingleOrDefault();
@@ -117,7 +119,7 @@ namespace BloomService.Web.Controllers
             workOrder.HourObj = _repository.SearchFor<SageRepair>(x => x.Repair == workOrder.EstimatedRepairHours.ToString()).SingleOrDefault();
             workOrder.PermissionCodeObj = _repository.SearchFor<SagePermissionCode>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode).SingleOrDefault(); 
             workOrder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workOrder.PayMethod.Trim());
-
+            workOrder.WorkOrderItems = _repository.SearchFor<SageWorkOrderItem>(x => x.WorkOrder == Int32.Parse(workOrder.WorkOrder));
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
@@ -278,13 +280,14 @@ namespace BloomService.Web.Controllers
                 Id = model.Id
             };
 
-            var result = _sageApiProxy.EditWorkOrder(workorder);
-            if (!result.IsSucceed)
+            var workOrderResult = _sageApiProxy.EditWorkOrder(workorder);
+                     
+            if (!workOrderResult.IsSucceed)
             {
                 _log.ErrorFormat("Was not able to update workorder to sage. !result.IsSucceed");
                 return Error("Was not able to update workorder to sage");
             }            
-
+                       
             if (!string.IsNullOrEmpty(model.Emploee))           
             {
                 var assignmentDb = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
@@ -298,14 +301,49 @@ namespace BloomService.Web.Controllers
                 _scheduleService.CerateAssignment(editedAssignment);
 
                 var locations = _repository.GetAll<SageLocation>().ToArray();
-                var itemLocation = locations.FirstOrDefault(l => l.Name == result.Entity.Location);
-                result.Entity.ScheduleDate = (DateTime)assignmentDb.StartTime;
-                result.Entity.Latitude = itemLocation.Latitude;
-                result.Entity.Longitude = itemLocation.Longitude;
+                var itemLocation = locations.FirstOrDefault(l => l.Name == workOrderResult.Entity.Location);
+                workOrderResult.Entity.ScheduleDate = (DateTime)assignmentDb.StartTime;
+                workOrderResult.Entity.Latitude = itemLocation.Latitude;
+                workOrderResult.Entity.Longitude = itemLocation.Longitude;
             }
 
-            result.Entity.Id = workorder.Id;
-            _repository.Update(result.Entity);
+            var workOrderItems = Mapper.Map<IEnumerable<SageWorkOrderItem>>(model.Equipment);
+
+            if (workOrderItems != null)
+            {
+                foreach (var workOrderItem in workOrderItems)
+                {
+                    workOrderItem.WorkOrder = Convert.ToInt32(model.WorkOrder);
+                    workOrderItem.TotalSale = workOrderItem.Quantity * workOrderItem.UnitSale;
+                    if (workOrderItem.ItemType == "Parts")
+                    {
+                        workOrderItem.PartsSale = workOrderItem.UnitSale;
+                    }
+                    else
+                    {
+                        workOrderItem.LaborSale = workOrderItem.UnitSale;
+                    }
+                    if (workOrderItem.WorkOrderItem == 0)
+                    {
+                        var result = _sageApiProxy.AddWorkOrderItem(workOrderItem);
+                        if (result.IsSucceed && result.Entity != null)
+                        {
+                            _repository.Add<SageWorkOrderItem>(result.Entity);
+                        }
+                    }
+                    else
+                    {
+                        var result = _sageApiProxy.AddWorkOrderItem(workOrderItem);
+                        if (result.IsSucceed && result.Entity != null)
+                        {
+                            _repository.Add<SageWorkOrderItem>(result.Entity);
+                        }
+                    }
+                }
+            }
+
+            workOrderResult.Entity.Id = workorder.Id;
+            _repository.Update(workOrderResult.Entity);
 
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
             _hub.UpdateWorkOrder(model);

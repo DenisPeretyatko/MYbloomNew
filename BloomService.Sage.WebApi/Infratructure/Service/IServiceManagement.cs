@@ -26,6 +26,8 @@
 
         SageAssignment[] EditAssignments(Dictionary<string, string> properties);
 
+        SageWorkOrderItem[] AddWorkOrderItem(SageWorkOrderItem workOrderItem);
+
         SageEmployee[] Employees();
 
         SageEquipment[] Equipments();
@@ -34,11 +36,7 @@
 
         SagePart[] Parts();
 
-        IEnumerable<string> PermissionCode();
-
         SageProblem[] Problems();
-
-        IEnumerable<string> RateSheet();
 
         SageRepair[] Repairs();
 
@@ -50,11 +48,10 @@
 
         SageWorkOrder[] WorkOrders(Dictionary<string, string> properties);
 
-        bool AddWorkOrderItem(Dictionary<string, string> properties);
-
-        SageEquipment[] GetEquipmentsByWorkOrderId(string id);
+        SageWorkOrderItem[] EditWorkOrderItem(SageWorkOrderItem workOrderItem);
 
         void UnassignWorkOrder(string id);
+        SageWorkOrderItem[] GetEquipmentsByWorkOrderId(string id);
 
         SageAssignment[] GetAssignmentByWorkOrderId(string number);
     }

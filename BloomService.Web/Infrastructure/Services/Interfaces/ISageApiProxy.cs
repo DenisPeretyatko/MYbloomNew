@@ -1,7 +1,5 @@
 ﻿namespace BloomService.Web.Infrastructure.Services.Interfaces
 {
-    using System.Collections.Generic;
-
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.Entities.Concrete.Auxiliary;
 
@@ -27,6 +25,8 @@
         SageResponse<SageWorkOrder> UnassignWorkOrders(string id);
         SageResponse<SageWorkOrder> GetWorkorder(string id);
         SageResponse<SageWorkOrder> GetWorkorders();
-        SageResponse<SageWorkOrder> AddEquipment(Dictionary<string, string> properties);
+
+        SageResponse<SageWorkOrderItem> AddWorkOrderItem(SageWorkOrderItem workOrderItem);
+        SageResponse<SageWorkOrderItem> EditWorkOrderItem(SageWorkOrderItem workOrderItem);
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Linq;
+﻿using System.Linq;
 using BloomService.Web.Models;
 
 namespace BloomService.Web.Controllers
@@ -7,11 +6,7 @@ namespace BloomService.Web.Controllers
     using System.Web.Mvc;
 
     using Domain.Entities.Concrete;
-    using Infrastructure.Queries;
-    using Domain.Extensions;
     using System.Collections.Generic;
-    using System;
-    using AutoMapper;
 
     using BloomService.Web.Infrastructure.Mongo;
     using BloomService.Web.Infrastructure.Services.Interfaces;
@@ -33,7 +28,7 @@ namespace BloomService.Web.Controllers
         {
             var result = new List<MapViewModel>();
             var workOrders = new List<SageWorkOrder>();
-            workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open"  ).ToList();
+            workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
             var employees = _repository.GetAll<SageEmployee>().ToList();
             var locations = _repository.GetAll<SageLocation>().ToArray();
             foreach (var item in workOrders)

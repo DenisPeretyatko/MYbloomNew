@@ -43,7 +43,7 @@ namespace Sage.WebApi.Infratructure.Constants
             {
                 if (parameter.Value != string.Empty && parameter.Value != null)
                 {
-                    query += string.Format("{0} = '{1}', ", parameter.Key, parameter.Value);
+                    query += string.Format("{0} = '{1}', ", parameter.Key, parameter.Value.Replace("'", "&apos;"));
                 }
             }
 

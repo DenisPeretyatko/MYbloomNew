@@ -77,6 +77,8 @@ namespace BloomService.Domain.Entities.Concrete
         [XmlAttribute]
         public decimal PartsCost { get; set; }
         [XmlAttribute]
+        public int Part { get; set; }
+        [XmlAttribute]
         public string PartsProduct { get; set; }
         [XmlAttribute]
         public decimal PartsSale { get; set; }
@@ -103,8 +105,8 @@ namespace BloomService.Domain.Entities.Concrete
         [XmlAttribute(DataType = "date")]
         public DateTime WorkDate { get; set; }
         [XmlAttribute]
-        public ushort WorkOrder { get; set; }
+        public int WorkOrder { get; set; }
         [XmlAttribute("WorkOrderItem")]
-        public int WorkOrderItem1 { get; set; }
+        public int WorkOrderItem { get; set; }
     }
 }

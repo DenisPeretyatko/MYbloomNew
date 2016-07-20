@@ -139,7 +139,7 @@
 
             if (DateTime.TryParse(dateString, out result))
             {
-                return   result.Date;
+                return result.Date;
             }
             return new DateTime(2000, 1, 1).Date;
         }
