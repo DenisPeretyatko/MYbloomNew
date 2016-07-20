@@ -56,34 +56,34 @@
                     <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
                         <thead>
                         <tr>
-                            <th  ng-click="changeSorting('WorkOrder')">#</th>
+                            <th ng-click="changeSorting('WorkOrder')">#</th>
                             <th ng-click="changeSorting('ScheduleDate')" class="footable-sorted">Schedule Date</th>
-                            <th ng-click="changeSorting('DateEntered')" class="footable-sorted">Entered Date</th>
-                            <th  ng-click="changeSorting('ARCustomer')" data-hide="phone,tablet">Customer</th>
-                            <th  ng-click="changeSorting('Location')" data-hide="phone,tablet">Location</th>
-                            <th  ng-click="changeSorting('Status')">Status</th>
+                            <th ng-click="changeSorting('DateEntered')">Entered Date</th>
+                            <th ng-click="changeSorting('ARCustomer')" data-hide="phone,tablet">Customer</th>
+                            <th ng-click="changeSorting('Location')" data-hide="phone,tablet">Location</th>
+                            <th ng-click="changeSorting('Status')">Status</th>
                         </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="workorder in listworkorders | orderBy:sortType:sortDirection">
-                                <td>{{workorder.WorkOrder}}</td>
-                                <td>{{workorder.ScheduleDate|date:mediumTime}}</td>
-                                <td>{{workorder.DateEntered|date:mediumTime}}</td>
-                                <td>{{workorder.ARCustomer}}</td>
-                                <td>{{workorder.Location}}</td>
-                                <td>
-                                    <span class="label" ng-class="workorder.status == 'closed' ? 'label-danger' : 'label-primary' ">
+                        <tr ng-repeat="workorder in listworkorders | orderBy:sortType:sortDirection">
+                            <td>{{workorder.WorkOrder}}</td>
+                            <td data-sort-initial="true">{{workorder.ScheduleDate|date:mediumTime}}</td>
+                            <td>{{workorder.DateEntered|date:mediumTime}}</td>
+                            <td>{{workorder.ARCustomer}}</td>
+                            <td>{{workorder.Location}}</td>
+                            <td>
+                                <span class="label" ng-class="workorder.status == 'closed' ? 'label-danger' : 'label-primary' ">
                                         {{workorder.Status == 'closed' ? "Closed" : "Open" }}
                                     </span>
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
                         </tbody>
-                        <tfoot class="hide-if-no-paging">
-                            <tr>
-                                <td colspan="6" class="text-center">
-                                    <ul class="pagination"></ul>
-                                </td>
-                            </tr>
+                        <tfoot>
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                <ul class="pagination"></ul>
+                            </td>
+                        </tr>
                         </tfoot>
                     </table>
                 </div>

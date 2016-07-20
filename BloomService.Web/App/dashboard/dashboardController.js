@@ -3,19 +3,19 @@
  */
 "use strict";
 
-var dashboardController = function ($rootScope, $scope, $interpolate, commonDataService, state) {
+var dashboardController = function ($rootScope, $scope, $interpolate, commonDataService) {
 
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
     $scope.workorders = [];
     $scope.truckMarkers = [];
     $scope.mapDate = new Date();
-    $scope.sortType = 'DateEntered';
+    $scope.sortType = 'ScheduleDate';
     $scope.sortDirection = true;
     $scope.showAll = false;
     $scope.workordersView = [];
     $scope.workorderMarkers = [];
-
+  
     $scope.changeSorting = function (data) {
         if ($scope.sortType != data) {
             $scope.sortType = data;
@@ -24,7 +24,6 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
             $scope.sortDirection = !$scope.sortDirection;
         }
     }
-
 
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
@@ -133,7 +132,6 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
         });
     });
 
-
     commonDataService.getDashboard(model).then(function (response) {
         var dashboard = response.data;
         $scope.listworkorders = dashboard.WorkOrders;
@@ -142,4 +140,4 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
     });
 
 };
-dashboardController.$inject = ["$rootScope", "$scope", "$interpolate", "commonDataService", "state"];
+dashboardController.$inject = ["$rootScope", "$scope", "$interpolate", "commonDataService"];
