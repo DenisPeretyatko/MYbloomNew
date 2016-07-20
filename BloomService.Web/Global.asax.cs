@@ -1,5 +1,10 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using System.Net;
+using System.Net.Mail;
 using System.Threading;
+using Elmah;
+using MailMessage = System.Net.Mail.MailMessage;
 
 namespace BloomService.Web
 {
@@ -17,9 +22,15 @@ namespace BloomService.Web
             ModelBinderConfig.RegisterAllBinders();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles); 
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
             AutoMapperConfig.RegisterMappings();
             JobManager.Initialize(new BloomJobRegistry());
         }
+        void ErrorMail_Mailing(object sender, Elmah.ErrorMailEventArgs e)
+        {
+            e.Mail.Subject = "BloomService error: " + e.Error.Exception.Message;
+        }
+
+
     }
 }

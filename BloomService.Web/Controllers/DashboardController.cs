@@ -63,7 +63,6 @@ namespace BloomService.Web.Controllers
             var token = _autorization.Authorization(username, password);
             if (token == null)
                 return Error("Invalid user or password");
-
             return Json(new { access_token = token.Token }, JsonRequestBehavior.AllowGet);
         }
 
@@ -76,7 +75,6 @@ namespace BloomService.Web.Controllers
             var assignments = _repository.SearchFor<SageAssignment>(x => x.Employee == "").ToArray();
             var chart = new List<ChartModel>();
             var chartModel = new ChartModel();
-          
 
             var chartData = new List<List<object>>
             {
@@ -136,6 +134,14 @@ namespace BloomService.Web.Controllers
 
             return Json(lookups, JsonRequestBehavior.AllowGet);
         }
-        
+
+        [AllowAnonymous]
+        [Route("Exception")]
+        public ActionResult Exception()
+        {
+            throw new Exception("Exception");
+        }
+
+
     }
 }
