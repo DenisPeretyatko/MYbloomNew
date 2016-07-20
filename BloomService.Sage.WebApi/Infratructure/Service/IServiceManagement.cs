@@ -50,8 +50,9 @@
 
         SageWorkOrderItem[] EditWorkOrderItem(SageWorkOrderItem workOrderItem);
 
-        void UnassignWorkOrder(string id);
         SageWorkOrderItem[] GetEquipmentsByWorkOrderId(string id);
+        
+        void UnassignWorkOrder(string id);
 
         SageAssignment[] GetAssignmentByWorkOrderId(string number);
     }
