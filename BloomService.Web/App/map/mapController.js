@@ -14,7 +14,7 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
     $scope.obj = {};
     $scope.obj.mapDate = new Date();
     $scope.showAll = false;
-    $rootScope.workorders = [];
+    //$rootScope.workorders = [];
 
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
@@ -44,7 +44,7 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
                 lat: parseFloat(value.WorkOrder.Latitude),
                 lng: parseFloat(value.WorkOrder.Longitude)
             }
-            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png";
+            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + Math.random();
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
@@ -70,7 +70,7 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
                 lat: parseFloat(truck.Latitude),
                 lng: parseFloat(truck.Longitude)
             }
-            var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png";
+            var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + Math.random();
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
@@ -87,14 +87,14 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
         });
     });
 
-    commonDataService.getLocations().then(function (response) {
-        $rootScope.workorders = response.data;
+    //commonDataService.getLocations().then(function (response) {
+    //    $rootScope.workorders = response.data;
         angular.forEach($rootScope.workorders, function (value, key) {
             if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
                 $scope.workordersView.push(value);
             }
         });
-    });
+    //});
 
     $scope.$watch(function () { return $scope.obj.mapDate; }, function () { 
         if ($scope.showAll == false) {

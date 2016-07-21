@@ -4,7 +4,14 @@
 
 var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $q, commonDataService) {
     var date = new Date();  
-
+    var remainsFullHours = function(start, end) {
+        var dateDifference = end.getTime() - start.getTime();
+        var remainsDate = new Date(dateDifference);
+        var remainsSec = (parseInt(remainsDate / 1000));
+        var remainsFullDays = (parseInt(remainsSec / (24 * 60 * 60)));
+        var secInLastDay = remainsSec - remainsFullDays * 24 * 3600;
+        return  parseInt(secInLastDay / 3600);
+    }
     // Events
     $scope.events = [];
     var tempEvents = [];
@@ -44,7 +51,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
 
         var start = new Date(event.start);
         var end = new Date(event.end);
-        var estimate = end.getHours() - start.getHours();
+        var estimate = remainsFullHours(start, end);
 
         var assignment = {
             ScheduleDate: start,
@@ -146,7 +153,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
 
                     var start = new Date(event.start);
                     var end = new Date(event.end);
-                    var estimate = end.getHours() - start.getHours();
+                    var estimate = remainsFullHours(start, end);
 
                     var assignment = {
                         ScheduleDate: start,

@@ -36,12 +36,6 @@
 
     if (window.localStorage.getItem('Token') != null && window.localStorage.getItem('Token') != "") {
         $state.go('manager.dashboard');
-        var paginationModel = {
-            Index: 0,
-            Search: '',
-            Column: '',
-            Direction: true
-        };
         if (_this.notificationTime == undefined || _this.lookups == undefined || _this.notifications == undefined) {
             _this.alreadyLoaded = true;
             commonDataService.getLookups().then(function(response) {
@@ -51,16 +45,13 @@
                 return _this.lookups = response.data;
             });
         }
-        //if (_this.locations == undefined) {
-        //    commonDataService.getLocations().then(function(response) {
-        //        return _this.locations = response.data;
-        //    });
-        //}
-        if (_this.workorders == undefined) {
-            commonDataService.getWorkordesPaged(paginationModel).then(function(response) {
-                return _this.workorders = response.data;
+        if (_this.locations == undefined) {
+            commonDataService.getLocations().then(function(response) {
+                $rootScope.workorders = response.data;
+                return _this.locations = response.data;
             });
         }
+    
         if (_this.technicians == undefined) {
             commonDataService.getTechnicians().then(function(response) {
                 return _this.technicians = response.data;
@@ -115,7 +106,10 @@
         else if ($rootScope.unavailableTechniciansIds.includes(technician.Id) === false && technician.IsAvailable === false) {
             $rootScope.unavailableTechniciansIds.unshift(technician.Id);
         }
-
+        commonDataService.getLocations().then(function (response) {
+            $rootScope.workorders = response.data;
+            return _this.locations = response.data;
+        });
     };
 
     connection.client.updateTechnicianLocation = function (technician) {
@@ -136,10 +130,18 @@
     
     connection.client.CreateAssignment = function (model) {
         $rootScope.workorders.unshift(model);
+        commonDataService.getLocations().then(function (response) {
+            $rootScope.workorders = response.data;
+            return _this.locations = response.data;
+        });
         $rootScope.$digest();
     };
 
     connection.client.DeleteAssigment = function (model) {
+      commonDataService.getLocations().then(function (response) {
+            $rootScope.workorders = response.data;
+            return _this.locations = response.data;
+        });
         angular.forEach($rootScope.workorders, function(value, key) {
             if (value.WorkOrder.WorkOrder == model.WorkOrder) {
                 $rootScope.workorders.splice(key, 1);
