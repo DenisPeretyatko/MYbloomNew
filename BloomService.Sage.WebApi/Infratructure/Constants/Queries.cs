@@ -38,6 +38,14 @@ namespace Sage.WebApi.Infratructure.Constants
             parameters.Add("CUSTOMERPO", workOrder.CustomerPO);
             parameters.Add("PERMISSIONCODE", workOrder.PermissionCode);
             parameters.Add("PAYMETHOD", workOrder.PayMethod);
+            if (workOrder.Status == "Open")
+            {
+                parameters.Add("STATUS", "0");
+            }
+            if (workOrder.Status == "Closed")
+            {
+                parameters.Add("STATUS", "3");
+            }
 
             foreach (var parameter in parameters)
             {
