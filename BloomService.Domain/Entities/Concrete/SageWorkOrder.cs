@@ -289,5 +289,7 @@
         public DateTime? ScheduleDate { get; set; }
 
         public SagePaymentMethod PaymentMethodObj { get; set; }
+        [XmlIgnore]
+        public SageWorkOrderStatus StatusObj { get; set; }
     }
 }

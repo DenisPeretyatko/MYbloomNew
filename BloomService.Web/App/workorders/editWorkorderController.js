@@ -31,7 +31,28 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         $scope.lookups = state.lookups;
 
         if ($scope.editableWorkOrder !== undefined && $scope.editableWorkOrder.WorkOrderItems !== undefined && $scope.lookups !== undefined) {
-            $scope.equipment = $scope.editableWorkOrder.WorkOrderItems;
+            if($scope.editableWorkOrder.WorkOrderItems != null)
+             {
+                 var dBWOItem = [];
+                 angular.forEach($scope.editableWorkOrder.WorkOrderItems, function (value, key) {
+                     if (value != null) {
+                         dBWOItem.push({
+                             equipType: value.ItemType,
+                             empl: value.Employee,
+                             description: value.Description,
+                             date: new Date(value.WorkDate),
+                             isEditing: true,
+                             cost: value.CostQuantity,
+                             biled: value.Quantity,
+                             rate: value.UnitSale,
+                             labor: angular.copy($scope.lookups.Hours),
+                             parts: angular.copy($scope.lookups.Parts),
+                             part: ""
+                         });
+                     }
+                 });
+            }
+
             var equipment = {
                 equipType: angular.copy($scope.EquipType),
                 empl: angular.copy($scope.lookups.Employes),
@@ -77,6 +98,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.obj.customerpo = $scope.editableWorkOrder.CustomerPO;
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
             $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
+            $scope.lookups.Status.selected = $scope.editableWorkOrder.StatusObj;
         }
     });
 
@@ -95,6 +117,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.obj.customerpo = $scope.editableWorkOrder.CustomerPO;
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
             $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
+            $scope.lookups.Status.selected = $scope.editableWorkOrder.StatusObj;
         }
     });
 
@@ -133,6 +156,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected.Value,
             WorkOrder: $scope.editableWorkOrder.WorkOrder,
             Equipment: equipment,
+            Status: $scope.lookups.Status.selected == null ? "" : $scope.lookups.Status.selected.Value,
         };
 
         commonDataService.saveWorkorder(workorder).then(function (response) {

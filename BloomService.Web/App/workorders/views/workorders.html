@@ -34,9 +34,18 @@
                             <td>{{workorder.ARCustomer}}</td>
                             <td>{{workorder.Location}}</td>
                             <td>
-                                <span class="label" ng-class="workorder.status == 'closed' ? 'label-danger' : 'label-primary' ">
-                                        {{workorder.Status == 'closed' ? "Closed" : "Open" }}
+                                <span class="label open" ng-if="workorder.Status == 'Open'">
+                                        {{workorder.Status}}
                                     </span>
+                                <span class="label return" ng-if="workorder.Status == 'Return Required'" >
+                                    {{workorder.Status}}
+                                </span>
+                                <span class="label work" ng-if="workorder.Status == 'Work Complete'">
+                                    {{workorder.Status}}
+                                </span>
+                                <span class="label closed" ng-if="workorder.Status == 'Closed'" >
+                                    {{workorder.Status}}
+                                </span>
                             </td>
                             <td class="center">
                                 <a ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})" class="btn btn-primary btn-xs">Edit...</a>

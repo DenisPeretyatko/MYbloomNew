@@ -308,6 +308,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\OwinConfig.cs" />
     <Compile Include="GlimpseSecurityPolicy.cs" />
+    <Compile Include="Infrastructure\Constants\WorkOrderStatus.cs" />
     <Compile Include="Infrastructure\Dependecy\ComponentContainer.cs" />
     <Compile Include="Infrastructure\Dependecy\ComponentRegistrator.cs" />
     <Compile Include="Infrastructure\Dependecy\Get.cs" />

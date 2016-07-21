@@ -119,7 +119,8 @@ namespace BloomService.Web.Controllers
             workOrder.HourObj = _repository.SearchFor<SageRepair>(x => x.Repair == workOrder.EstimatedRepairHours.ToString()).SingleOrDefault();
             workOrder.PermissionCodeObj = _repository.SearchFor<SagePermissionCode>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode).SingleOrDefault(); 
             workOrder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workOrder.PayMethod.Trim());
-            workOrder.WorkOrderItems = _repository.SearchFor<SageWorkOrderItem>(x => x.WorkOrder == Int32.Parse(workOrder.WorkOrder));
+            workOrder.StatusObj = WorkOrderStatus.Status.FirstOrDefault(x => x.Status == workOrder.Status);
+            
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
@@ -277,7 +278,8 @@ namespace BloomService.Web.Controllers
                 PermissionCode = model.Permissiocode,
                 PayMethod = model.Paymentmethods,
                 WorkOrder = model.WorkOrder,
-                Id = model.Id
+                Id = model.Id,
+                Status = model.Status == 3 ? WorkOrderStatus.Status.FirstOrDefault(x => x.Value == model.Status).Status : WorkOrderStatus.Status.FirstOrDefault(x => x.Value == 0).Status
             };
 
             var workOrderResult = _sageApiProxy.EditWorkOrder(workorder);
@@ -342,6 +344,7 @@ namespace BloomService.Web.Controllers
                 }
             }
 
+            workOrderResult.Entity.Status = WorkOrderStatus.Status.FirstOrDefault(x => x.Value == model.Status).Status;
             workOrderResult.Entity.Id = workorder.Id;
             _repository.Update(workOrderResult.Entity);
 

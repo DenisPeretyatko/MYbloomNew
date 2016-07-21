@@ -85,6 +85,7 @@
     <Compile Include="Entities\Concrete\Auxiliary\SageResponse.cs" />
     <Compile Include="Entities\Concrete\Auxiliary\ChangeType.cs" />
     <Compile Include="Entities\Concrete\Notification.cs" />
+    <Compile Include="Entities\Concrete\SageWorkOrderStatus.cs" />
     <Compile Include="Entities\Concrete\SagePaymentMethod.cs" />
     <Compile Include="Entities\Concrete\ReturnParamModels\AssignmentReturnParam.cs" />
     <Compile Include="Entities\Concrete\ReturnParamModels\CustomerReturnParam.cs" />

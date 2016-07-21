@@ -35,5 +35,7 @@
         public string Ratesheet { get; set; }
 
         public string WorkOrder { get; set; }
+
+        public int Status { get; set; }
     }
 }
