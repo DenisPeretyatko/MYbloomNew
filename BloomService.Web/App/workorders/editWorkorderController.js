@@ -30,7 +30,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
 
-        $scope.getWOItems();
+        //$scope.getWOItems();
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined) {
             $scope.lookups.Customers.selected = $scope.editableWorkOrder.CustomerObj;
             $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
@@ -50,7 +50,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     });
 
     $scope.$watch(function () { return $scope.editableWorkOrder }, function () {
-        $scope.getWOItems();
+        //$scope.getWOItems();
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined && $scope.lookups.Customers != undefined) {
             $scope.lookups.Customers.selected = $scope.editableWorkOrder.CustomerObj;
             $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
