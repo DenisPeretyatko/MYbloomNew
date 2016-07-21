@@ -27,33 +27,26 @@ namespace BloomService.Web.Controllers
         public ActionResult GetLocations(MapModel model)
         {
             var result = new List<MapViewModel>();
-            var workOrders = new List<SageWorkOrder>();
-            workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
-            var employees = _repository.GetAll<SageEmployee>().ToList();
-            var locations = _repository.GetAll<SageLocation>().ToArray();
+            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open");
             foreach (var item in workOrders)
             {
-                var itemLocation = locations.FirstOrDefault(l => l.Name == item.Location);
-                if (itemLocation == null)
-                    continue;
+                var itemLocation = _repository.SearchFor<SageLocation>(l => l.Name == item.Location).FirstOrDefault();
+                if (itemLocation == null) continue;
                 item.Latitude = itemLocation.Latitude;
                 item.Longitude = itemLocation.Longitude;
-               
-                var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder).SingleOrDefault();
+
+                var assignment =
+                    _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder).SingleOrDefault();
 
                 if (string.IsNullOrEmpty(assignment?.Employee) || item.AssignmentId != null) continue;
-                var tempEmployee = employees.FirstOrDefault(e => e.Name == assignment.Employee);
-                var color = tempEmployee?.Color;
-                var employee = tempEmployee?.Employee;
                 result.Add(new MapViewModel()
                 {
                     WorkOrder = item,
                     DateEntered = assignment.ScheduleDate,
-                    Color = color,
-                    Employee = employee
-                });
+                    Color = assignment?.Color,
+                    Employee = assignment?.EmployeeId
+            });
             }
-            
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

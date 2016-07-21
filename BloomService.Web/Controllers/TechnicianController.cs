@@ -54,6 +54,7 @@ namespace BloomService.Web.Controllers
         {
             _log.InfoFormat("Method: SaveTechnician. Model ID: {0}", model.Id);
             var employee = repository.Get<SageEmployee>(model.Id);
+            var assignment = repository.SearchFor<SageAssignment>(e => e.EmployeeId == employee.Employee).FirstOrDefault();
             model.Id = employee.Employee;
             var technician = Mapper.Map<SageEmployee, EmployeeModel>(employee);
             technician.AvailableDays = model.AvailableDays;
@@ -66,9 +67,11 @@ namespace BloomService.Web.Controllers
             if (imageService.BuildTechnicianIcons(model))
             {
                 technician.Color = model.Color;
+                if (assignment != null) assignment.Color = model.Color;
             }
             var updatedTechnician = Mapper.Map<EmployeeModel, SageEmployee>(technician);
             repository.Update(updatedTechnician);
+            repository.Update(assignment);
             hub.UpdateTechnician(model);
             _log.InfoFormat("Repository update technician. Name {0}, ID {1}", updatedTechnician.Name, updatedTechnician.Id);
 

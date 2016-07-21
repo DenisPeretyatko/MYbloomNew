@@ -1,4 +1,4 @@
-﻿var commonStateManager = function ($rootScope, commonDataService, commonHub) {
+﻿var commonStateManager = function ($rootScope, commonDataService, commonHub, $q, $state) {
     var _this = {
         profile: this.profile,
         statistic: this.statistic,
@@ -9,7 +9,8 @@
         technicians: this.technicians,
         lookups: this.lookups,
         locations: this.locations,
-        notificationTime: this.notificationTime
+        notificationTime: this.notificationTime,
+        alreadyLoaded: this.alreadyLoaded
     }
 
     this.profile = _this.profile;
@@ -22,6 +23,8 @@
     this.lookups = _this.lookups;
     this.locations = _this.locations;
     this.notificationTime = _this.notificationTime;
+    this.alreadyLoaded = _this.alreadyLoaded;
+    _this.alreadyLoaded = false;
 
     $rootScope.notifications = [];
     $rootScope.workorders = [];
@@ -32,6 +35,7 @@
     var connection = commonHub.GetConnection();
 
     if (window.localStorage.getItem('Token') != null && window.localStorage.getItem('Token') != "") {
+        $state.go('manager.dashboard');
         var paginationModel = {
             Index: 0,
             Search: '',
@@ -39,6 +43,7 @@
             Direction: true
         };
         if (_this.notificationTime == undefined || _this.lookups == undefined || _this.notifications == undefined) {
+            _this.alreadyLoaded = true;
             commonDataService.getLookups().then(function(response) {
                 $rootScope.notifications = response.data.Notifications;
                 _this.notifications = response.data.Notifications;
@@ -46,11 +51,11 @@
                 return _this.lookups = response.data;
             });
         }
-        if (_this.locations == undefined) {
-            commonDataService.getLocations().then(function(response) {
-                return _this.locations = response.data;
-            });
-        }
+        //if (_this.locations == undefined) {
+        //    commonDataService.getLocations().then(function(response) {
+        //        return _this.locations = response.data;
+        //    });
+        //}
         if (_this.workorders == undefined) {
             commonDataService.getWorkordesPaged(paginationModel).then(function(response) {
                 return _this.workorders = response.data;
@@ -67,6 +72,21 @@
                 return _this.trucks = response.data;
             });
         }
+        //if (_this.notificationTime == undefined || _this.lookups == undefined || _this.notifications == undefined) {
+        //    _this.alreadyLoaded = true;
+        //    $q.all([commonDataService.getLookups(), commonDataService.getLocations(), commonDataService.getWorkordesPaged(paginationModel), commonDataService.getTechnicians(), commonDataService.getTrucks()]).then(function (values) {
+
+        //        $rootScope.notifications = values[0].data.Notifications;
+        //        _this.notifications = values[0].data.Notifications;
+        //        _this.notificationTime = values[0].data.NotificationTime;
+        //        _this.lookups = values[0].data;
+        //        _this.locations = values[1].data;
+        //        _this.workorders = values[2].data;
+        //        _this.technicians = values[3].data;
+        //        $rootScope.trucks = values[4].data;
+        //        _this.trucks = values[4].data;
+        //    });
+        //}
     }
 
     connection.client.UpdateWorkOrder = function (workorder) {
@@ -132,4 +152,4 @@
     $.connection.hub.start().done(function () { });
     return _this;
 }
-commonStateManager.$inject = ["$rootScope", "commonDataService", "commonHub"];
+commonStateManager.$inject = ["$rootScope", "commonDataService", "commonHub", "$q", "$state"];
