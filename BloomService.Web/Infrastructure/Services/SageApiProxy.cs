@@ -27,11 +27,6 @@
             return Add(assignment, EndPoints.AddAssignment);
         }
 
-        public SageResponse<SageWorkOrder> AddEquipment(Dictionary<string, string> properties)
-        {
-            return Update<SageWorkOrder>(properties, EndPoints.AddEquipmentToWorkOrder);
-        }
-
         public SageResponse<SageWorkOrder> AddWorkOrder(SageWorkOrder workOrder)
         {
             return Add(workOrder, EndPoints.AddWorkOrder);
@@ -45,6 +40,29 @@
         public SageResponse<SageWorkOrder> EditWorkOrder(SageWorkOrder workOrder)
         {
             return Edit(workOrder, EndPoints.EditWorkOrder);
+        }
+
+        public SageResponse<SageWorkOrderItem> AddWorkOrderItem(SageWorkOrderItem workOrderItem)
+        {
+            return Add(workOrderItem, EndPoints.AddWorkOrderItem);
+        }
+
+
+        public SageResponse<SageWorkOrderItem> EditWorkOrderItem(SageWorkOrderItem workOrderItem)
+        {
+            return Edit(workOrderItem, EndPoints.EditWorkOrderItem);
+        }
+
+        public SageResponse<SageWorkOrderItem> AddOrEditWorkOrderItem(SageWorkOrderItem workOrderItem)
+        {
+            if (workOrderItem.WorkOrderItem == 0)
+            {
+                return Add(workOrderItem, EndPoints.AddWorkOrderItem);
+            }
+            else
+            {
+                return Edit(workOrderItem, EndPoints.EditWorkOrderItem);
+            }
         }
 
         public SageResponse<SageAssignment> GetAssignment(string id)
@@ -164,7 +182,7 @@
             var result = response.Data;
             return result;
         }
-
+       
         private SageResponse<TEntity> Get<TEntity>(string id, string endPoint) where TEntity : IEntity
         {
             var request = new RestRequest(endPoint + "/{id}", Method.GET) { RequestFormat = DataFormat.Json };
@@ -188,7 +206,7 @@
             where TEntity : IEntity
         {
             var request = new RestRequest(endPoint, Method.PUT) { RequestFormat = DataFormat.Json };
-            request.AddBody(entity);
+            request.AddObject(entity);
             BuildAuthenticationHeader(request);
             var response = restClient.Execute<SageResponse<TEntity>>(request);
             var results = response.Data;

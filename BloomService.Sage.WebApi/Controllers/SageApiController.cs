@@ -66,11 +66,11 @@
             try
             {
                 var properties = new Dictionary<string, string>();
-                properties.Add("Assignment", assignment.Assignment.ToString() ?? string.Empty);
-                properties.Add("ScheduleDate", assignment.ScheduleDate.ToString() ?? string.Empty);
-                properties.Add("Employee", assignment.Employee.ToString() ?? string.Empty);
-                properties.Add("WorkOrder", assignment.WorkOrder.ToString() ?? string.Empty);
-                properties.Add("EstimatedRepairHours", assignment.EstimatedRepairHours.ToString() ?? string.Empty);
+                properties.Add("Assignment", assignment.Assignment ?? string.Empty);
+                properties.Add("ScheduleDate", ((DateTime)assignment.ScheduleDate).ToString() ?? string.Empty);
+                properties.Add("Employee", assignment.Employee ?? string.Empty);
+                properties.Add("WorkOrder", assignment.WorkOrder ?? string.Empty);
+                properties.Add("EstimatedRepairHours", assignment.EstimatedRepairHours ?? string.Empty);
                 properties.Add("StartTime", ((DateTime)assignment.StartTime).TimeOfDay.ToString() ?? string.Empty);
                 properties.Add("Enddate", assignment.Enddate.ToString() ?? string.Empty);
                 properties.Add("Endtime", ((DateTime)assignment.Endtime).TimeOfDay.ToString() ?? string.Empty);
@@ -96,29 +96,29 @@
         }
 
         [HttpGet, Route("api/v2/sm/workorder/{id}/equipments")]
-        public SageResponse<SageEquipment> GetEquipmentsByWorkOrderId(string id)
+        public SageResponse<SageWorkOrderItem> GetEquipmentsByWorkOrderId(string id)
         {
             try
             {
                 if (id == string.Empty || id == null)
                 {
-                    return new SageResponse<SageEquipment>
+                    return new SageResponse<SageWorkOrderItem>
                     {
                         IsSucceed = false,
                         ErrorMassage = "WorkOrder Id is null or empty."
                     };
                 }
 
-                var result = new SageResponse<SageEquipment>
+                var result = new SageResponse<SageWorkOrderItem>
                 {
                     IsSucceed = true,
-                    Entities = this.serviceManager.GetEquipmentsByWorkOrderId(id).ToList()
+                    Entities = serviceManager.GetEquipmentsByWorkOrderId(id)?.ToList()
                 };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageEquipment> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
@@ -483,17 +483,32 @@
             }
         }
 
-        [HttpPut, Route("api/v2/sm/workorders/equipment/add")]
-        public SageResponse<SageWorkOrder> AddEquipment(Dictionary<string, string> properties)
+        [HttpPost, Route("api/v2/sm/workorders/equipment/add")]
+        public SageResponse<SageWorkOrderItem> AddEquipment(SageWorkOrderItem workOrderItem)
         {
             try
             {
-                var result = new SageResponse<SageWorkOrder> { IsSucceed = this.serviceManager.AddWorkOrderItem(properties) };
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = true, Entity = serviceManager.AddWorkOrderItem(workOrderItem).Single() };
                 return result;
             }
             catch (ResponseException exception)
             {
-                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
+
+        [HttpPut, Route("api/v2/sm/workorders/equipment/edit")]
+        public SageResponse<SageWorkOrderItem> EditEquipment(SageWorkOrderItem workOrderItem)
+        {
+            try
+            {
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = true, Entity = serviceManager.EditWorkOrderItem(workOrderItem).Single() };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }

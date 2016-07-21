@@ -14,8 +14,7 @@ using System.Net;
 namespace BloomService.Web.Infrastructure.Jobs
 {
     using BloomService.Web.Infrastructure.Mongo;
-    using BloomService.Web.Infrastructure.Notifications;
-
+    using MoonAPNS;
     public class BloomJobRegistry : Registry
     {
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
@@ -40,36 +39,36 @@ namespace BloomService.Web.Infrastructure.Jobs
 
 
             //Send silent push notifications to iOS
-            //Schedule(() =>
-            //{
-            //    lock (_iosPushNotificationLock)
-            //    {
-            //        var path = _httpContextProvider.MapPath(_settings.SertificateUrl);
-            //        var technicians = _repository.SearchFor<SageEmployee>(x => x.IsAvailable && !string.IsNullOrEmpty(x.IosDeviceToken));
-            //        foreach (var technician in technicians)
-            //        {
-            //            //if (technician.AvailableDays != null && technician.AvailableDays.Any())
-            //            //{
-            //            //    foreach (var avaibleDay in technician.AvailableDays)
-            //            //    {
-            //                    //var startTime = avaibleDay.Start.TryAsDateTime();
-            //                    //var endTime = avaibleDay.End.TryAsDateTime();
-            //                    //if (startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
-            //                    //{
-            //                        var notificationPayload = new NotificationPayload(technician.IosDeviceToken, 1, "default");
-            //                        var p = new List<NotificationPayload>();
-            //                        p.Add(notificationPayload);
-            //                        PushNotification push = new PushNotification(false, path, null);
-            //                        push.P12File = path;
-            //                        push.SendToApple(p);
-            //                        _log.InfoFormat("push notification send to {0} at {1}", technician.IosDeviceToken, DateTime.Now.ToString());
-            //            //    }
-            //            //}
-            //            //}
-            //        }
-            //    }
-            ////}).ToRunNow().AndEvery(_settings.NotificationDelay).Minutes();
-            //}).ToRunNow().AndEvery(30).Seconds();
+            Schedule(() =>
+            {
+                lock (_iosPushNotificationLock)
+                {
+                    var path = _httpContextProvider.MapPath(_settings.SertificateUrl);
+                    var technicians = _repository.SearchFor<SageEmployee>(x => x.IsAvailable && !string.IsNullOrEmpty(x.IosDeviceToken));
+                    foreach (var technician in technicians)
+                    {
+                        //if (technician.AvailableDays != null && technician.AvailableDays.Any())
+                        //{
+                        //    foreach (var avaibleDay in technician.AvailableDays)
+                        //    {
+                        //var startTime = avaibleDay.Start.TryAsDateTime();
+                        //var endTime = avaibleDay.End.TryAsDateTime();
+                        //if (startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
+                        //{
+                        var notificationPayload = new NotificationPayload(technician.IosDeviceToken, "It's facking alive!");
+                        var p = new List<NotificationPayload>();
+                        p.Add(notificationPayload);
+                        PushNotification push = new PushNotification(false, path, null);
+                        push.P12File = path;
+                        push.SendToApple(p);
+                        _log.InfoFormat("push notification send to {0} at {1}", technician.IosDeviceToken, DateTime.Now.ToString());
+                        //    }
+                        //}
+                        //}
+                    }
+                }
+                //}).ToRunNow().AndEvery(_settings.NotificationDelay).Minutes();
+            }).ToRunNow().AndEvery(20).Seconds();
 
             //Send request
             Schedule(() =>
@@ -156,6 +155,28 @@ namespace BloomService.Web.Infrastructure.Jobs
                     {
                         _log.ErrorFormat("Can`t sync SageWorkOrder {0}", ex);
                     }
+
+                    try
+                    {
+                        var workOrderItemsArray = _proxy.GetPermissionCodes();
+                        foreach (var entity in workOrderItemsArray.Entities)
+                        {
+                            var mongoEntity = _repository.SearchFor<SagePermissionCode>(x => x.PERMISSIONCODE == entity.PERMISSIONCODE).SingleOrDefault();
+                            if (mongoEntity == null)
+                                _repository.Add(entity);
+                            else
+                            {
+                                entity.Id = mongoEntity.Id;
+                                _repository.Update(entity);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.ErrorFormat("Can`t sync SagePermissionCode {0}", ex);
+                    }
+
+
 
                     try
                     {

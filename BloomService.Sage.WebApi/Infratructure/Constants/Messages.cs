@@ -24,6 +24,7 @@
         public static readonly string AddWorkOrderItem = "<Message><AddWorkOrderItem><Properties>{0}</Properties></AddWorkOrderItem></Message>";
         public static readonly string GetEquipmentsByWorkOrderId = "<Message><Get Entity='Work Order Item'><Filter><Properties><Property Name='WorkOrder' Value='{0}'/></Properties></Filter><AllProperties/></Get></Message>";
         public static readonly string GetAssignmentByWorkOrderId = "<Message><Get Entity='Assignment'><Filter><Properties><Property Name='WorkOrder' Value='{0}'/></Properties></Filter><AllProperties/></Get></Message>";
+        public static readonly string EditWorkOrderItem = "<Message><EditWorkOrderItem><Properties>{0}</Properties></EditWorkOrderItem></Message>";
         public static readonly string UnAssignWorkOrder = "<Message><EditAssignment><Properties><Property Name='Employee' Value='0' /><Property Name='WorkOrder' Value = '{0}' /></Properties></EditAssignment></Message>";
     }
 }
