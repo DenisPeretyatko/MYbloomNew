@@ -15,8 +15,6 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService, s
         $scope.pagesCount = response.data.CountPage;
         $scope.paginationList = $scope.getPagList(response.data.CountPage);
     });
-   
-    
 
     $scope.Parse = function (value) {
         return new Date(parseInt(value.substr(6)));
