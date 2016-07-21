@@ -3,7 +3,7 @@
  */
 "use strict";
 
-var dashboardController = function ($rootScope, $scope, $interpolate, commonDataService) {
+var dashboardController = function ($rootScope, $scope, $interpolate, commonDataService, state) {
 
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
@@ -57,7 +57,7 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
                 lat: parseFloat(value.WorkOrder.Latitude),
                 lng: parseFloat(value.WorkOrder.Longitude)
             }
-            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png";
+            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + Math.random();
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
@@ -99,7 +99,7 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
                 lat: parseFloat(truck.Latitude),
                 lng: parseFloat(truck.Longitude)
             }
-            var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png";
+            var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + Math.random();
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
@@ -116,21 +116,32 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
         });
     });
 
-    commonDataService.getTrucks().then(function (response) {
-        $scope.trucks = response.data;
+    //commonDataService.getTrucks().then(function (response) {
+    //    $scope.trucks = response.data;
+    //});
+    $scope.$watch(function () { return state.trucks; }, function () {
+        $scope.trucks = state.trucks;
     });
+
     var model = {
         DateWorkOrder: new Date($scope.mapDate)
     }
-    commonDataService.getLocations().then(function (response) {
-        $scope.workordersView = [];
-        $rootScope.workorders = response.data;
-        angular.forEach($rootScope.workorders, function (value, key) {
+    //commonDataService.getLocations().then(function (response) {
+    //    $scope.workordersView = [];
+    //    $rootScope.workorders = response.data;
+    //    angular.forEach($rootScope.workorders, function (value, key) {
+    //        if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
+    //            $scope.workordersView.push(value);
+    //        }
+    //    });
+    //});
+       $scope.workordersView = [];
+       // $rootScope.workorders = state.locations;
+         angular.forEach($rootScope.workorders, function (value, key) {
             if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
                 $scope.workordersView.push(value);
             }
         });
-    });
 
     commonDataService.getDashboard(model).then(function (response) {
         var dashboard = response.data;
@@ -140,4 +151,4 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
     });
 
 };
-dashboardController.$inject = ["$rootScope", "$scope", "$interpolate", "commonDataService"];
+dashboardController.$inject = ["$rootScope", "$scope", "$interpolate", "commonDataService", "state"];
