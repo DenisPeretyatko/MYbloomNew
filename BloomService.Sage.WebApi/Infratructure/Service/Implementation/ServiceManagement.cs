@@ -95,8 +95,6 @@
             return result;
         }
 
-
-
         public void Create(string name, string password)
         {
             this.password = password;
@@ -149,15 +147,8 @@
                 properties.Add("Part", workOrderItem.Part.ToString() ?? string.Empty);
             }
 
-            var resultProperties = new Dictionary<string, string>();
-            foreach (var property in properties)
-            {
-                if (!string.IsNullOrEmpty(property.Value))
-                {
-                    resultProperties.Add(property.Key, property.Value.Replace("'", "&apos;"));
-                }
-            }
-
+            properties = ReplaceInvalidCharacters(properties);
+ 
             var propertiesStr = string.Empty;
             foreach (var property in properties)
             {
@@ -168,6 +159,25 @@
             var response = SendMessage(messages);
             var workOrderItems = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrderItems;
             return workOrderItems;
+        }
+
+
+        private Dictionary<string, string> ReplaceInvalidCharacters(Dictionary<string, string> properties)
+        {
+            var resultProperties = new Dictionary<string, string>();
+            foreach (var property in properties)
+            {
+                if (!string.IsNullOrEmpty(property.Value))
+                {
+                    resultProperties.Add(property.Key, property.Value
+                        .Replace("'", "&apos;")
+                        .Replace("\"", "&quot;")
+                        .Replace("&", "&amp;")
+                        .Replace("<", "&lt;")
+                        .Replace(">", "&gt;"));
+                }
+            }
+            return resultProperties;
         }
 
         public SageWorkOrderItem[] EditWorkOrderItem(SageWorkOrderItem workOrderItem)
@@ -189,14 +199,7 @@
                 properties.Add("Part", workOrderItem.Part.ToString() ?? string.Empty);
             }
 
-            var resultProperties = new Dictionary<string, string>();
-            foreach (var property in properties)
-            {
-                if (!string.IsNullOrEmpty(property.Value))
-                {
-                    resultProperties.Add(property.Key, property.Value.Replace("'", "&apos;"));
-                }
-            }
+            properties = ReplaceInvalidCharacters(properties);
 
             var propertiesStr = string.Empty;
             foreach (var property in properties)

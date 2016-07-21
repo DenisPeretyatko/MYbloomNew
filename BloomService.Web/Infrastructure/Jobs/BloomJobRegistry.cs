@@ -55,7 +55,8 @@ namespace BloomService.Web.Infrastructure.Jobs
                         //var endTime = avaibleDay.End.TryAsDateTime();
                         //if (startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
                         //{
-                        var notificationPayload = new NotificationPayload(technician.IosDeviceToken, "Dimon");
+                        var notificationPayload = new NotificationPayload(technician.IosDeviceToken, null, 0, "default");
+                        //var notificationPayload = new NotificationPayload(technician.IosDeviceToken,"default");
                         var p = new List<NotificationPayload>();
                         p.Add(notificationPayload);
                         PushNotification push = new PushNotification(false, path, null);
@@ -67,8 +68,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         //}
                     }
                 }
-                //}).ToRunNow().AndEvery(_settings.NotificationDelay).Minutes();
-            }).ToRunNow().AndEvery(20).Seconds();
+            }).ToRunNow().AndEvery(_settings.NotificationDelay).Seconds();
 
             //Send request
             Schedule(() =>
