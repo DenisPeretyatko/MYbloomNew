@@ -311,6 +311,7 @@ namespace BloomService.Web.Controllers
 
             var workOrderItems = Mapper.Map<IEnumerable<SageWorkOrderItem>>(model.Equipment);
 
+            var dBworkOrderItems = new List<SageWorkOrderItem>();
             if (workOrderItems != null)
             {
                 foreach (var workOrderItem in workOrderItems)
@@ -330,7 +331,7 @@ namespace BloomService.Web.Controllers
                         var result = _sageApiProxy.AddWorkOrderItem(workOrderItem);
                         if (result.IsSucceed && result.Entity != null)
                         {
-                            _repository.Add<SageWorkOrderItem>(result.Entity);
+                            dBworkOrderItems.Add(result.Entity);
                         }
                     }
                     else
@@ -338,12 +339,13 @@ namespace BloomService.Web.Controllers
                         var result = _sageApiProxy.AddWorkOrderItem(workOrderItem);
                         if (result.IsSucceed && result.Entity != null)
                         {
-                            _repository.Add<SageWorkOrderItem>(result.Entity);
+                            dBworkOrderItems.Add(result.Entity);
                         }
                     }
                 }
             }
 
+            workOrderResult.Entity.WorkOrderItems = dBworkOrderItems;
             workOrderResult.Entity.Status = WorkOrderStatus.Status.FirstOrDefault(x => x.Value == model.Status).Status;
             workOrderResult.Entity.Id = workorder.Id;
             _repository.Update(workOrderResult.Entity);

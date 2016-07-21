@@ -30,60 +30,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
 
-        if ($scope.editableWorkOrder !== undefined && $scope.editableWorkOrder.WorkOrderItems !== undefined && $scope.lookups !== undefined) {
-            if($scope.editableWorkOrder.WorkOrderItems != null)
-             {
-                 var dBWOItem = [];
-                 angular.forEach($scope.editableWorkOrder.WorkOrderItems, function (value, key) {
-                     if (value != null) {
-                         dBWOItem.push({
-                             equipType: value.ItemType,
-                             empl: value.Employee,
-                             description: value.Description,
-                             date: new Date(value.WorkDate),
-                             isEditing: true,
-                             cost: value.CostQuantity,
-                             biled: value.Quantity,
-                             rate: value.UnitSale,
-                             labor: angular.copy($scope.lookups.Hours),
-                             parts: angular.copy($scope.lookups.Parts),
-                             part: ""
-                         });
-                     }
-                 });
-            }
-
-            var equipment = {
-                equipType: angular.copy($scope.EquipType),
-                empl: angular.copy($scope.lookups.Employes),
-                description: angular.copy($scope.lookups.Parts),
-                date: $scope.obj.data,
-                isEditing: true,
-                cost: 0.00,
-                biled: 0.00,
-                rate: 0.0000,
-                labor: angular.copy($scope.lookups.Hours),
-                parts: angular.copy($scope.lookups.Parts),
-                part: ""
-            }
-            $scope.equipment.push(equipment);
-        }
-        else {
-            if ($scope.lookups !== undefined)
-              var equipment = {
-                    equipType: angular.copy($scope.EquipType),
-                    empl: angular.copy($scope.lookups.Employes),
-                    description: angular.copy($scope.lookups.Parts),
-                    date: $scope.obj.data,
-                    isEditing: true,
-                    cost: 0.00,
-                    biled: 0.00,
-                    rate: 0.0000,
-                    labor: angular.copy($scope.lookups.Hours),
-                    parts: angular.copy($scope.lookups.Parts)
-                }
-                $scope.equipment.push(equipment);
-            }
+        $scope.getWOItems();
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined) {
             $scope.lookups.Customers.selected = $scope.editableWorkOrder.CustomerObj;
             $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
@@ -103,6 +50,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     });
 
     $scope.$watch(function () { return $scope.editableWorkOrder }, function () {
+        $scope.getWOItems();
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined && $scope.lookups.Customers != undefined) {
             $scope.lookups.Customers.selected = $scope.editableWorkOrder.CustomerObj;
             $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
@@ -120,6 +68,72 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.lookups.Status.selected = $scope.editableWorkOrder.StatusObj;
         }
     });
+
+    $scope.getWOItems = function () {
+        if ($scope.editableWorkOrder !== undefined && $scope.editableWorkOrder.WorkOrderItems !== undefined && $scope.lookups !== undefined) {
+            if ($scope.editableWorkOrder.WorkOrderItems != null) {
+                var dBWOItem = [];
+                angular.forEach($scope.editableWorkOrder.WorkOrderItems, function (value, key) {
+                    var laborsList = angular.copy($scope.lookups.Hours);
+                    laborsList.selected = $scope.lookups.Hours.find(function (element) {
+                        return element.Description === value.Description;
+                    });
+                    var partsList = angular.copy($scope.lookups.Parts);
+                    partsList.selected = $scope.lookups.Parts.find(function (element) {
+                        return element.Description === value.Description;
+                    });
+
+                    if (value != null) {
+                        dBWOItem.push({
+                            equipType: value.ItemType,
+                            empl: value.Employee,
+                            description: value.Description,
+                            date: new Date(value.WorkDate),
+                            isEditing: true,
+                            cost: value.CostQuantity,
+                            biled: value.Quantity,
+                            rate: value.UnitSale,
+                            labor: laborsList,
+                            parts: partsList,
+                            part: ""
+                        });
+                    }
+                });
+                $scope.equipment = dBWOItem;
+            }
+
+            var equipment = {
+                equipType: angular.copy($scope.EquipType),
+                empl: angular.copy($scope.lookups.Employes),
+                description: angular.copy($scope.lookups.Parts),
+                date: $scope.obj.data,
+                isEditing: true,
+                cost: 0.00,
+                biled: 0.00,
+                rate: 0.0000,
+                labor: angular.copy($scope.lookups.Hours),
+                parts: angular.copy($scope.lookups.Parts),
+                part: ""
+            }
+            $scope.equipment.push(equipment);
+        }
+        else {
+            if ($scope.lookups !== undefined)
+                var equipment = {
+                    equipType: angular.copy($scope.EquipType),
+                    empl: angular.copy($scope.lookups.Employes),
+                    description: angular.copy($scope.lookups.Parts),
+                    date: $scope.obj.data,
+                    isEditing: true,
+                    cost: 0.00,
+                    biled: 0.00,
+                    rate: 0.0000,
+                    labor: angular.copy($scope.lookups.Hours),
+                    parts: angular.copy($scope.lookups.Parts)
+                }
+            $scope.equipment.push(equipment);
+        }
+    }
 
     $scope.saveWorkOrder = function () {
         $scope.equipment.pop();
