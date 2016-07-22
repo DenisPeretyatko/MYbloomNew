@@ -34,16 +34,16 @@
                             <td>{{workorder.ARCustomer}}</td>
                             <td>{{workorder.Location}}</td>
                             <td>
-                                <span class="label open" ng-if="workorder.Status == 'Open'">
+                                <span class="label open statusColor" ng-if="workorder.Status == 'Open'">
                                         {{workorder.Status}}
                                     </span>
-                                <span class="label return" ng-if="workorder.Status == 'Return Required'" >
+                                <span class="label return statusColor" ng-if="workorder.Status == 'Return Required'" >
                                     {{workorder.Status}}
                                 </span>
-                                <span class="label work" ng-if="workorder.Status == 'Work Complete'">
+                                <span class="label work statusColor" ng-if="workorder.Status == 'Work Complete'">
                                     {{workorder.Status}}
                                 </span>
-                                <span class="label closed" ng-if="workorder.Status == 'Closed'" >
+                                <span class="label closed statusColor" ng-if="workorder.Status == 'Closed'" >
                                     {{workorder.Status}}
                                 </span>
                             </td>

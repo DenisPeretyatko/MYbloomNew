@@ -82,7 +82,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                     });
                     var partsList = angular.copy($scope.lookups.Parts);
                     partsList.selected = $scope.lookups.Parts.find(function (element) {
-                        return element.Description === value.Description;
+                        return element.PartNumber + " " + element.Description === value.Description;
                     });
 
                     if (value != null) {
@@ -218,7 +218,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         }
         else {
             var selectedDesc = $scope.lookups.Parts.find(function (element) {
-                return element.Description === item.description;
+                return element.PartNumber + " " + element.Description === item.description;
             });
             item.description = angular.copy($scope.lookups.Parts);
             item.description.selected = selectedDesc;
@@ -247,7 +247,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                 item.description = item.labor.selected.Description;
             }
             else {
-                item.description = item.parts.selected.Description;
+                item.description = item.parts.selected.PartNumber + " " + item.parts.selected.Description;
                 item.part = item.parts.selected.Part;
             }
 

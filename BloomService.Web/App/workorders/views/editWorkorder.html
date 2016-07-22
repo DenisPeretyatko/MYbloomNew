@@ -348,9 +348,9 @@
                                                 </ui-select>
                                                 <ui-select ng-if="equipm.equipType.selected == 'Parts' || !equipm.equipType.selected" ng-model="equipm.parts.selected" theme="bootstrap"
                                                            on-select="setRate(this, equipm)">
-                                                    <ui-select-match placeholder="Description">{{$select.selected.Description}}</ui-select-match>
+                                                    <ui-select-match placeholder="Description">{{$select.selected.PartNumber}} {{$select.selected.Description}}</ui-select-match>
                                                     <ui-select-choices repeat="item in equipm.parts | filter: $select.search | limitTo:100">
-                                                        <div>{{item.Part}} {{item.Description}}</div>
+                                                        <div>{{item.PartNumber}} {{item.Description}}</div>
                                                     </ui-select-choices>
                                                 </ui-select>
                                             </td>
