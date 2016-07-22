@@ -30,8 +30,9 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
 
-        $scope.getWOItems();
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined) {
+            $scope.getWOItems();
+
             $scope.lookups.Customers.selected = $scope.editableWorkOrder.CustomerObj;
             $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
@@ -49,9 +50,10 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         }
     });
 
-    $scope.$watch(function () { return $scope.editableWorkOrder }, function () {
-        $scope.getWOItems();
+    $scope.$watch(function () { return $scope.editableWorkOrder }, function () {        
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined && $scope.lookups.Customers != undefined) {
+            $scope.getWOItems();
+
             $scope.lookups.Customers.selected = $scope.editableWorkOrder.CustomerObj;
             $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
@@ -83,14 +85,12 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                         return element.Description === value.Description;
                     });
 
-                    var workDate = new Date(value.WorkDate.substring(0, 10))
-
                     if (value != null) {
                         dBWOItem.push({
                             equipType: value.ItemType,
                             empl: value.Employee,
                             description: value.Description,
-                            date: workDate.getFullYear() + '-' + (workDate.getMonth() + 1) + '-' + workDate.getDate(),
+                            date: value.WorkDate.substring(0, 10),
                             isEditing: false,
                             cost: value.CostQuantity,
                             biled: value.Quantity,
