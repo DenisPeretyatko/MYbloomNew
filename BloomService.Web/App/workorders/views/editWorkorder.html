@@ -350,7 +350,7 @@
                                                            on-select="setRate(this, equipm)">
                                                     <ui-select-match placeholder="Description">{{$select.selected.Description}}</ui-select-match>
                                                     <ui-select-choices repeat="item in equipm.parts | filter: $select.search | limitTo:100">
-                                                        <div>{{item.Description}}</div>
+                                                        <div>{{item.Part}} {{item.Description}}</div>
                                                     </ui-select-choices>
                                                 </ui-select>
                                             </td>
