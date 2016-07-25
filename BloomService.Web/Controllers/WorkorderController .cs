@@ -316,33 +316,50 @@ namespace BloomService.Web.Controllers
             {
                 foreach (var workOrderItem in workOrderItems)
                 {
-                    workOrderItem.WorkOrder = Convert.ToInt32(model.WorkOrder);
-                    workOrderItem.TotalSale = workOrderItem.Quantity * workOrderItem.UnitSale;
-                    if (workOrderItem.ItemType == "Parts")
+                    if (workorder.WorkOrderItems.Contains(workOrderItem))
                     {
-                        workOrderItem.PartsSale = workOrderItem.UnitSale;
+                        _sageApiProxy.EditWorkOrderItem(workOrderItem);
                     }
                     else
                     {
-                        workOrderItem.LaborSale = workOrderItem.UnitSale;
-                    }
-                    if (workOrderItem.WorkOrderItem == 0)
-                    {
-                        var result = _sageApiProxy.AddWorkOrderItem(workOrderItem);
-                        if (result.IsSucceed && result.Entity != null)
+                        workOrderItem.WorkOrder = Convert.ToInt32(model.WorkOrder);
+                        workOrderItem.TotalSale = workOrderItem.Quantity * workOrderItem.UnitSale;
+                        if (workOrderItem.ItemType == "Parts")
                         {
-                            dBworkOrderItems.Add(result.Entity);
+                            workOrderItem.PartsSale = workOrderItem.UnitSale;
                         }
-                    }
-                    else
-                    {
-                        var result = _sageApiProxy.AddWorkOrderItem(workOrderItem);
-                        if (result.IsSucceed && result.Entity != null)
+                        else
                         {
-                            dBworkOrderItems.Add(result.Entity);
+                            workOrderItem.LaborSale = workOrderItem.UnitSale;
+                        }
+                        if (workOrderItem.WorkOrderItem == 0)
+                        {
+                            var result = _sageApiProxy.AddWorkOrderItem(workOrderItem);
+                            if (result.IsSucceed && result.Entity != null)
+                            {
+                                dBworkOrderItems.Add(result.Entity);
+                            }
+                        }
+                        else
+                        {
+                            var result = _sageApiProxy.AddWorkOrderItem(workOrderItem);
+                            if (result.IsSucceed && result.Entity != null)
+                            {
+                                dBworkOrderItems.Add(result.Entity);
+                            }
                         }
                     }
                 }
+
+                List<int> idsToRemove = new List<int>();
+
+                foreach (var woItem in workorder.WorkOrderItems)  {
+                    if (!workOrderItems.Contains(woItem)) {
+                        idsToRemove.Add(woItem.WorkOrderItem);
+                    }
+                }
+
+                _sageApiProxy.DeleteWorkOrderItems(idsToRemove);
             }
 
             workOrderResult.Entity.WorkOrderItems = dBworkOrderItems;

@@ -141,6 +141,7 @@
             if (workOrderItem.ItemType == "Labor")
             {
                 properties.Add("CostQuantity", workOrderItem.CostQuantity.ToString() ?? string.Empty);
+
             }
             if (workOrderItem.ItemType == "Parts")
             {
@@ -323,6 +324,14 @@
             var response = SendMessage(messages);
             var entities = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrders;
             var result = AutoMapper.Mapper.Map<SageWorkOrder[]>(entities);
+            return result;
+        }
+
+        public SageWorkOrderItem[] WorkOrderItems()
+        {
+            var message = string.Format(Messages.GetWorkOrderItems);
+            var response = SendMessage(message);
+            var result = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrderItems;
             return result;
         }
 

@@ -52,7 +52,7 @@
 
         private AuthorizationResponse CheckUser(string name, string password)
         {
-            var request = new RestRequest(EndPoints.AuthorizationEndPoint, Method.POST) { RequestFormat = DataFormat.Json };
+            var request = new RestRequest(EndPoints.Authorization, Method.POST) { RequestFormat = DataFormat.Json };
             var requestBody = new AuthorizationRequest() { Name = name, Password = password };
             request.AddBody(requestBody);
             request.AddHeader("Authorization", string.Format("Basic {0}:{1}", _configuration.SageUsername, _configuration.SagePassword));

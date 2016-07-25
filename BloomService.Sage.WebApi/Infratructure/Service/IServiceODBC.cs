@@ -18,5 +18,7 @@
         List<SageRateSheet> RateSheets();
 
         List<SagePermissionCode> PermissionCodes();
+
+        void DeleteWorkOrderItems(IEnumerable<int> ids);
     }
 }

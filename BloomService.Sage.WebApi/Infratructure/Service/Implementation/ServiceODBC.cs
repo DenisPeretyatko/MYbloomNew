@@ -76,7 +76,7 @@
         public void EditWorkOrder(SageWorkOrder workOrder)
         {
             var query = Queries.BuildEditWorkOrderQuery(workOrder);
-            var properties = ExecuteQuery(timberlineServiceManagementConnectionString, query);
+            ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
 
         public List<SageWorkOrder> WorkOrders()
@@ -110,6 +110,12 @@
                 adapter.Fill(dataSet);
             }
             return dataSet;
+        }
+
+        public void DeleteWorkOrderItems(IEnumerable<int> ids)
+        {
+            var query = Queries.BuildDeleteWorkOrderItemQuery(ids);
+            ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
 
         public List<Dictionary<string, object>> ExecuteQueryAndGetData(string connectionString, string query)

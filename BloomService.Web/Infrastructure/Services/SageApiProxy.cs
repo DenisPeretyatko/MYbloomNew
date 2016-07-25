@@ -47,7 +47,6 @@
             return Add(workOrderItem, EndPoints.AddWorkOrderItem);
         }
 
-
         public SageResponse<SageWorkOrderItem> EditWorkOrderItem(SageWorkOrderItem workOrderItem)
         {
             return Edit(workOrderItem, EndPoints.EditWorkOrderItem);
@@ -130,6 +129,17 @@
             return GetAll<SageRepair>(EndPoints.GetRepairs);
         }
 
+        public SageResponse<SageWorkOrderItem> DeleteWorkOrderItems(IEnumerable<int> ids)
+        {
+            var request = new RestRequest(EndPoints.DeleteWorkOrderItems, Method.DELETE) { RequestFormat = DataFormat.Json };
+            request.AddObject(ids);
+            BuildAuthenticationHeader(request);
+            var response = restClient.Execute<SageResponse<SageWorkOrderItem>>(request);
+            var results = response.Data;
+            return results;
+        }
+
+
         public SageResponse<SageWorkOrder> GetWorkorder(string id)
         {
             return Get<SageWorkOrder>(id, EndPoints.GetWorkorder);
@@ -138,6 +148,16 @@
         public SageResponse<SageWorkOrder> GetWorkorders()
         {
             return GetAll<SageWorkOrder>(EndPoints.GetWorkorder);
+        }
+
+        public SageResponse<SageWorkOrderItem> GetWorkorderItemsByWorkOrderId(string id)
+        {
+            var request = new RestRequest(EndPoints.GetWorkOrderItemsByWorkorderId, Method.GET) { RequestFormat = DataFormat.Json };
+            request.AddUrlSegment("id", id);
+            BuildAuthenticationHeader(request);
+            var response = restClient.Execute<SageResponse<SageWorkOrderItem>>(request);
+            var result = response.Data;
+            return result;
         }
 
         public SageResponse<SageWorkOrder> UnassignWorkOrders(string id)

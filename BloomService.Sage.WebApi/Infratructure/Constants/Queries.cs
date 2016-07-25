@@ -11,6 +11,19 @@ namespace Sage.WebApi.Infratructure.Constants
         public static readonly string SelectWorkOrders = "SELECT * FROM WRKORDER";
         public static readonly string SelectPermissionCodes = "SELECT * FROM PERMISSIONCODE";
         public static readonly string SelectRateSheets = "SELECT * FROM RATESHEET";
+        
+        public static string BuildDeleteWorkOrderItemQuery(IEnumerable<int> ids)
+        {
+            var query = "DELETE FROM WOITEMS WHERE WRKORDNBR  = 12459 and WRKORDITEM in ({0})";
+            var idString = "{0},";
+            var resultIdString = "";
+            foreach(var id in ids)
+            {
+                resultIdString += string.Format(idString, id);
+            }
+            var result = string.Format(query, resultIdString).Replace(",)", ")");
+            return result;
+        }
 
         public static string BuildEditWorkOrderQuery(SageWorkOrder workOrder)
         {
