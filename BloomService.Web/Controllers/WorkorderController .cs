@@ -318,7 +318,7 @@ namespace BloomService.Web.Controllers
             {
                 foreach (var workOrderItem in workOrderItems)
                 {
-                    if (workOrderFromMongo.WorkOrderItems.Contains(workOrderItem))
+                    if ((workOrderFromMongo.WorkOrderItems != null && workOrderFromMongo.WorkOrderItems.Contains(workOrderItem)))
                     {
                         _sageApiProxy.EditWorkOrderItem(workOrderItem);
                     }
@@ -353,20 +353,22 @@ namespace BloomService.Web.Controllers
                     }
                 }
 
-                List<int> idsToRemove = new List<int>();
+                //List<int> idsToRemove = new List<int>();
 
-                foreach (var woItem in workOrderFromMongo.WorkOrderItems)  {
-                    if (!workOrderItems.Contains(woItem)) {
-                        idsToRemove.Add(woItem.WorkOrderItem);
-                    }
-                }
+                //foreach (var woItem in workOrderFromMongo.WorkOrderItems)  {
+                //    if (!workOrderItems.Select(x=>x.WorkOrderItem).Contains(woItem.WorkOrderItem))
+                //    {
+                //        idsToRemove.Add(woItem.WorkOrderItem);
+                //    }
+                //}
 
-                _sageApiProxy.DeleteWorkOrderItems(idsToRemove);
+                //_sageApiProxy.DeleteWorkOrderItems(idsToRemove);
             }
 
             workOrderResult.Entity.WorkOrderItems = dBworkOrderItems;
             workOrderResult.Entity.Status = WorkOrderStatus.Status.FirstOrDefault(x => x.Value == model.Status).Status;
             workOrderResult.Entity.Id = workorder.Id;
+            workOrderResult.Entity.WorkOrderItems = _sageApiProxy.GetWorkorderItemsByWorkOrderId(workorder.WorkOrder).Entities;
             _repository.Update(workOrderResult.Entity);
 
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
