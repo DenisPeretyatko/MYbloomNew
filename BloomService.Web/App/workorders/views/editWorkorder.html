@@ -421,7 +421,7 @@
                                     <div ng-repeat="picture in pictures.Images">
                                         {{picture.Id}}.
                                         <a href="#" title="{{picture.Description}}" ng-click="displayLocation(picture.Latitude, picture.Longitude, picture, pictures.WorkOrder)" data-toggle="modal" data-target="#myModal">
-                                            <img ng-src="public/images/{{pictures.WorkOrder}}/{{picture.Image}}" alt="{{picture.Description}}">
+                                            <img ng-src="public/images/{{pictures.WorkOrder}}/{{picture.Image}}" >
                                         </a>
                                     </div>
                                 </div>
