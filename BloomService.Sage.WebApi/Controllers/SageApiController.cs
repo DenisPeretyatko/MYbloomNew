@@ -512,5 +512,20 @@
                 return result;
             }
         }
+
+        [HttpGet, Route("api/v2/sm/workorders/workorderitems/get")]
+        public SageResponse<SageWorkOrderItem> GetWorkOrderItems()
+        {
+            try
+            {
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = true, Entities = this.serviceManager.WorkOrderItems().ToList() };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
     }
 }

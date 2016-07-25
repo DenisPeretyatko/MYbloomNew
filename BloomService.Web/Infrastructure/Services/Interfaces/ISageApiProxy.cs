@@ -25,6 +25,7 @@
         SageResponse<SageWorkOrder> UnassignWorkOrders(string id);
         SageResponse<SageWorkOrder> GetWorkorder(string id);
         SageResponse<SageWorkOrder> GetWorkorders();
+        SageResponse<SageWorkOrderItem> GetWorkorderItemsByWorkOrderId(string id);
 
         SageResponse<SageWorkOrderItem> AddWorkOrderItem(SageWorkOrderItem workOrderItem);
         SageResponse<SageWorkOrderItem> EditWorkOrderItem(SageWorkOrderItem workOrderItem);

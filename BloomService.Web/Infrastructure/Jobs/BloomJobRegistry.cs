@@ -140,9 +140,13 @@ namespace BloomService.Web.Infrastructure.Jobs
                         {
                             var mongoEntity = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == entity.WorkOrder).SingleOrDefault();
                             if (mongoEntity == null)
+                            {
+                                entity.WorkOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(entity.WorkOrder).Entities;
                                 _repository.Add(entity);
+                            }
                             else
                             {
+                                entity.WorkOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(entity.WorkOrder).Entities;
                                 entity.Id = mongoEntity.Id;
                                 entity.Status = mongoEntity.Status;
                                 entity.AssignmentId = mongoEntity.AssignmentId;
@@ -155,28 +159,6 @@ namespace BloomService.Web.Infrastructure.Jobs
                     {
                         _log.ErrorFormat("Can`t sync SageWorkOrder {0}", ex);
                     }
-
-                    try
-                    {
-                        var workOrderItemsArray = _proxy.GetPermissionCodes();
-                        foreach (var entity in workOrderItemsArray.Entities)
-                        {
-                            var mongoEntity = _repository.SearchFor<SagePermissionCode>(x => x.PERMISSIONCODE == entity.PERMISSIONCODE).SingleOrDefault();
-                            if (mongoEntity == null)
-                                _repository.Add(entity);
-                            else
-                            {
-                                entity.Id = mongoEntity.Id;
-                                _repository.Update(entity);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _log.ErrorFormat("Can`t sync SagePermissionCode {0}", ex);
-                    }
-
-
 
                     try
                     {

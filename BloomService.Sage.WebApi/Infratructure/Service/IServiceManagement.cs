@@ -55,5 +55,7 @@
         void UnassignWorkOrder(string id);
 
         SageAssignment[] GetAssignmentByWorkOrderId(string number);
+
+        SageWorkOrderItem[] WorkOrderItems();
     }
 }
