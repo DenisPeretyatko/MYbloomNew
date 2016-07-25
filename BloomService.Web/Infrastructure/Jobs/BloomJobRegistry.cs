@@ -93,117 +93,117 @@ namespace BloomService.Web.Infrastructure.Jobs
             {
                 lock (_syncSageLock)
                 {
-                    //try
-                    //{
-                    //    var rateSheetArray = _proxy.GetRateSheets();
-                    //    foreach (var entity in rateSheetArray.Entities)
-                    //    {
-                    //        var mongoEntity = _repository.SearchFor<SageRateSheet>(x => x.RATESHEETNBR == entity.RATESHEETNBR).SingleOrDefault();
-                    //        if (mongoEntity == null)
-                    //            _repository.Add(entity);
-                    //        else
-                    //        {
-                    //            entity.Id = mongoEntity.Id;
-                    //            _repository.Update(entity);
-                    //        }
-                    //    }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    _log.ErrorFormat("Can`t sync SageRateSheet {0}", ex);
-                    //}
+                    try
+                    {
+                        var rateSheetArray = _proxy.GetRateSheets();
+                        foreach (var entity in rateSheetArray.Entities)
+                        {
+                            var mongoEntity = _repository.SearchFor<SageRateSheet>(x => x.RATESHEETNBR == entity.RATESHEETNBR).SingleOrDefault();
+                            if (mongoEntity == null)
+                                _repository.Add(entity);
+                            else
+                            {
+                                entity.Id = mongoEntity.Id;
+                                _repository.Update(entity);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.ErrorFormat("Can`t sync SageRateSheet {0}", ex);
+                    }
 
-                    //try
-                    //{
-                    //    var permissionCodesArray = _proxy.GetPermissionCodes();
-                    //    foreach (var entity in permissionCodesArray.Entities)
-                    //    {
-                    //        var mongoEntity = _repository.SearchFor<SagePermissionCode>(x => x.PERMISSIONCODE == entity.PERMISSIONCODE).SingleOrDefault();
-                    //        if (mongoEntity == null)
-                    //            _repository.Add(entity);
-                    //        else
-                    //        {
-                    //            entity.Id = mongoEntity.Id;
-                    //            _repository.Update(entity);
-                    //        }
-                    //    }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    _log.ErrorFormat("Can`t sync SagePermissionCode {0}", ex);
-                    //}
+                    try
+                    {
+                        var permissionCodesArray = _proxy.GetPermissionCodes();
+                        foreach (var entity in permissionCodesArray.Entities)
+                        {
+                            var mongoEntity = _repository.SearchFor<SagePermissionCode>(x => x.PERMISSIONCODE == entity.PERMISSIONCODE).SingleOrDefault();
+                            if (mongoEntity == null)
+                                _repository.Add(entity);
+                            else
+                            {
+                                entity.Id = mongoEntity.Id;
+                                _repository.Update(entity);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.ErrorFormat("Can`t sync SagePermissionCode {0}", ex);
+                    }
 
-                    //try
-                    //{
-                    //    var workOrders = _proxy.GetWorkorders();
-                    //    foreach (var entity in workOrders.Entities)
-                    //    {
-                    //        var mongoEntity = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == entity.WorkOrder).SingleOrDefault();
-                    //        if (mongoEntity == null)
-                    //        {
-                    //            entity.WorkOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(entity.WorkOrder).Entities;
-                    //            _repository.Add(entity);
-                    //        }
-                    //        else
-                    //        {
-                    //            entity.WorkOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(entity.WorkOrder).Entities;
-                    //            entity.Id = mongoEntity.Id;
-                    //            entity.Status = mongoEntity.Status;
-                    //            entity.AssignmentId = mongoEntity.AssignmentId;
-                    //            entity.ScheduleDate = mongoEntity.ScheduleDate;
-                    //            _repository.Update(entity);
-                    //        }
-                    //    }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    _log.ErrorFormat("Can`t sync SageWorkOrder {0}", ex);
-                    //}
+                    try
+                    {
+                        var workOrders = _proxy.GetWorkorders();
+                        foreach (var entity in workOrders.Entities)
+                        {
+                            var mongoEntity = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == entity.WorkOrder).SingleOrDefault();
+                            if (mongoEntity == null)
+                            {
+                                entity.WorkOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(entity.WorkOrder).Entities;
+                                _repository.Add(entity);
+                            }
+                            else
+                            {
+                                entity.WorkOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(entity.WorkOrder).Entities;
+                                entity.Id = mongoEntity.Id;
+                                entity.Status = mongoEntity.Status;
+                                entity.AssignmentId = mongoEntity.AssignmentId;
+                                entity.ScheduleDate = mongoEntity.ScheduleDate;
+                                _repository.Update(entity);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.ErrorFormat("Can`t sync SageWorkOrder {0}", ex);
+                    }
 
-                    //try
-                    //{
-                    //    var callTypeArray = _proxy.GetCalltypes();
-                    //    foreach (var entity in callTypeArray.Entities)
-                    //    {
-                    //        var mongoEntity = _repository.SearchFor<SageCallType>(x => x.CallType == entity.CallType).SingleOrDefault();
-                    //        if (mongoEntity == null)
-                    //            _repository.Add(entity);
-                    //        else
-                    //        {
-                    //            entity.Id = mongoEntity.Id;
-                    //            _repository.Update(entity);
-                    //        }
-                    //    }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    _log.ErrorFormat("Can`t sync  SageCallType {0}", ex);
-                    //}
+                    try
+                    {
+                        var callTypeArray = _proxy.GetCalltypes();
+                        foreach (var entity in callTypeArray.Entities)
+                        {
+                            var mongoEntity = _repository.SearchFor<SageCallType>(x => x.CallType == entity.CallType).SingleOrDefault();
+                            if (mongoEntity == null)
+                                _repository.Add(entity);
+                            else
+                            {
+                                entity.Id = mongoEntity.Id;
+                                _repository.Update(entity);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.ErrorFormat("Can`t sync  SageCallType {0}", ex);
+                    }
 
-                    //try
-                    //{
-                    //    var emploees = _proxy.GetEmployees();
-                    //    foreach (var entity in emploees.Entities)
-                    //    {
-                    //        var mongoEntity = _repository.SearchFor<SageEmployee>(x => x.Employee == entity.Employee).SingleOrDefault();
-                    //        if (mongoEntity == null)
-                    //            _repository.Add(entity);
-                    //        else
-                    //        {
-                    //            entity.Id = mongoEntity.Id;
-                    //            entity.Color = mongoEntity.Color;
-                    //            entity.Picture = mongoEntity.Picture;
-                    //            entity.AvailableDays = mongoEntity.AvailableDays;
-                    //            entity.IsAvailable = mongoEntity.IsAvailable;
-                    //            entity.IosDeviceToken = mongoEntity.IosDeviceToken;
-                    //            _repository.Update(entity);
-                    //        }
-                    //    }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    _log.ErrorFormat("Can`t sync SageEmployee {0}", ex);
-                    //}
+                    try
+                    {
+                        var emploees = _proxy.GetEmployees();
+                        foreach (var entity in emploees.Entities)
+                        {
+                            var mongoEntity = _repository.SearchFor<SageEmployee>(x => x.Employee == entity.Employee).SingleOrDefault();
+                            if (mongoEntity == null)
+                                _repository.Add(entity);
+                            else
+                            {
+                                entity.Id = mongoEntity.Id;
+                                entity.Color = mongoEntity.Color;
+                                entity.Picture = mongoEntity.Picture;
+                                entity.AvailableDays = mongoEntity.AvailableDays;
+                                entity.IsAvailable = mongoEntity.IsAvailable;
+                                entity.IosDeviceToken = mongoEntity.IosDeviceToken;
+                                _repository.Update(entity);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.ErrorFormat("Can`t sync SageEmployee {0}", ex);
+                    }
 
                     try
                     {
