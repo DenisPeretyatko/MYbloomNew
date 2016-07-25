@@ -34,7 +34,7 @@ mainModuleConfig.$inject = ["$stateProvider", "$urlRouterProvider", "$ocLazyLoad
         'bloom.map',                    // Map
         'bloom.schedule',               // Schedule
         'bloom.technician',             // Technician
-
+        'angularUtils.directives.dirPagination',
         'bloom.workorder',              // Workorder
         'bloom.login'                   // Login
     ])
