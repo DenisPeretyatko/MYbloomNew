@@ -21,7 +21,8 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService, s
     };
 
     $scope.ShowPage = function (page) {
-        if (page == $scope.pagesCount) return true;
+        if (page === false) return false;
+        if (page == $scope.pagesCount) return false;
         
         model.Index = page;
         model.Column = $scope.sorting;
@@ -72,9 +73,8 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService, s
         if (currentPage == undefined) {
             currentPage = 0;
         }
-      
-        if (currentPage + 6 < pagesNum) {
-            for (var i = currentPage; i < currentPage + 5; i++) {
+        if (currentPage < 5) {
+          for (var i = 0; i < 8; i++) {
                 var name = i + 1;
                 paginationList.push({
                     name: $sce.trustAsHtml(String(name)),
@@ -89,7 +89,8 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService, s
                 name: $sce.trustAsHtml(String(pagesNum)),
                 link: pagesNum - 1
             });
-        } else {
+        }
+        else if (currentPage + 5 < pagesNum) {
             paginationList.push({
                 name: $sce.trustAsHtml('1'),
                 link: 0
@@ -98,7 +99,31 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService, s
                 name: $sce.trustAsHtml('...'),
                 link: pagesNum
             });
-            for (var i = pagesNum-6; i < pagesNum; i++) {
+            for (var i = currentPage-2; i < currentPage + 4; i++) {
+                var name = i + 1;
+                paginationList.push({
+                    name: $sce.trustAsHtml(String(name)),
+                    link: i
+                });
+            }
+            paginationList.push({
+                name: $sce.trustAsHtml('...'),
+                link: pagesNum
+            });
+            paginationList.push({
+                name: $sce.trustAsHtml(String(pagesNum)),
+                link: pagesNum - 1
+            });
+        } else { 
+            paginationList.push({
+                name: $sce.trustAsHtml('1'),
+                link: 0
+            });
+            paginationList.push({
+                name: $sce.trustAsHtml('...'),
+                link: pagesNum
+            });
+            for (var i = pagesNum-8; i < pagesNum; i++) {
                 var name = i + 1;
                 paginationList.push({
                     name: $sce.trustAsHtml(String(name)),
@@ -134,7 +159,7 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService, s
     }
 
     $scope.getNextPage = function (num) {
-        if (currentPage < num)
+        if (currentPage < num-1)
             currentPage++;
         else {
             return false;
