@@ -205,21 +205,17 @@
 }
 .open {
    background-color: #E41117 !important;
-       color: #fff !important;
 }
 .return {
     background-color: #EE811B !important;
-        color: #fff !important;
 }
 .work {
     background-color: #859436 !important;
-        color: #fff !important;
 }
 .closed {
     background-color: #30B335 !important;
-        color: #fff !important;
 }
 
-.form-control {
-    color: #888888 !important;
+.label.open.statusColor, .label.closed.statusColor, .label.return.statusColor, .label.work.statusColor {
+    color : #fff !important;
 }

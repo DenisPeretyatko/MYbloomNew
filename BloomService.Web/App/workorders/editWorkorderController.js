@@ -30,8 +30,9 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
 
-        $scope.getWOItems();
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined) {
+            $scope.getWOItems();
+
             $scope.lookups.Customers.selected = $scope.editableWorkOrder.CustomerObj;
             $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
@@ -46,12 +47,17 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
             $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
             $scope.lookups.Status.selected = $scope.editableWorkOrder.StatusObj;
+
+            commonDataService.getWorkorderPictures($scope.editableWorkOrder.WorkOrder).then(function (response) {
+                return $scope.pictures = response.data;
+            });
         }
     });
 
-    $scope.$watch(function () { return $scope.editableWorkOrder }, function () {
-        $scope.getWOItems();
+    $scope.$watch(function () { return $scope.editableWorkOrder }, function () {        
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined && $scope.lookups.Customers != undefined) {
+            $scope.getWOItems();
+
             $scope.lookups.Customers.selected = $scope.editableWorkOrder.CustomerObj;
             $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
@@ -66,6 +72,10 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
             $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
             $scope.lookups.Status.selected = $scope.editableWorkOrder.StatusObj;
+
+            commonDataService.getWorkorderPictures($scope.editableWorkOrder.WorkOrder).then(function (response) {
+                return $scope.pictures = response.data;
+            });
         }
     });
 
@@ -80,17 +90,15 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                     });
                     var partsList = angular.copy($scope.lookups.Parts);
                     partsList.selected = $scope.lookups.Parts.find(function (element) {
-                        return element.Description === value.Description;
+                        return element.PartNumber + " " + element.Description === value.Description;
                     });
-
-                    var workDate = new Date(value.WorkDate.substring(0, 10))
 
                     if (value != null) {
                         dBWOItem.push({
                             equipType: value.ItemType,
                             empl: value.Employee,
                             description: value.Description,
-                            date: workDate.getFullYear() + '-' + (workDate.getMonth() + 1) + '-' + workDate.getDate(),
+                            date: value.WorkDate.substring(0, 10),
                             isEditing: false,
                             cost: value.CostQuantity,
                             biled: value.Quantity,
@@ -185,10 +193,6 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         return $scope.editableWorkOrder = response.data;
     });
 
-    commonDataService.getWorkorderPictures($stateParams.id).then(function (response) {
-        return $scope.pictures = response.data;
-    });
-
     $scope.setRate = function (selected,item) {
         if (item.equipType.selected == 'Parts' || item.equipType.selected == undefined) {
             item.rate = parseFloat(selected.$select.selected.Level1Price);
@@ -218,7 +222,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
         }
         else {
             var selectedDesc = $scope.lookups.Parts.find(function (element) {
-                return element.Description === item.description;
+                return element.PartNumber + " " + element.Description === item.description;
             });
             item.description = angular.copy($scope.lookups.Parts);
             item.description.selected = selectedDesc;
@@ -247,7 +251,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                 item.description = item.labor.selected.Description;
             }
             else {
-                item.description = item.parts.selected.Description;
+                item.description = item.parts.selected.PartNumber + " " + item.parts.selected.Description;
                 item.part = item.parts.selected.Part;
             }
 
