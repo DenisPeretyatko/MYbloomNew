@@ -47,6 +47,10 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
             $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
             $scope.lookups.Status.selected = $scope.editableWorkOrder.StatusObj;
+
+            commonDataService.getWorkorderPictures($scope.editableWorkOrder.WorkOrder).then(function (response) {
+                return $scope.pictures = response.data;
+            });
         }
     });
 
@@ -68,6 +72,10 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
             $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
             $scope.lookups.Status.selected = $scope.editableWorkOrder.StatusObj;
+
+            commonDataService.getWorkorderPictures($scope.editableWorkOrder.WorkOrder).then(function (response) {
+                return $scope.pictures = response.data;
+            });
         }
     });
 
@@ -183,10 +191,6 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
 
     commonDataService.getWorkorder($stateParams.id).then(function (response) {
         return $scope.editableWorkOrder = response.data;
-    });
-
-    commonDataService.getWorkorderPictures($stateParams.id).then(function (response) {
-        return $scope.pictures = response.data;
     });
 
     $scope.setRate = function (selected,item) {

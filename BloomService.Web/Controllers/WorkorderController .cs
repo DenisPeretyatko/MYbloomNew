@@ -128,7 +128,7 @@ namespace BloomService.Web.Controllers
         [Route("Workorderpictures/{id}")]
         public ActionResult GetWorkOrdersPictures(string id)
         {
-            var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrderBsonId == id).SingleOrDefault();
+            var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
             if(pictures != null)
             {
                 pictures.Images = pictures.Images.OrderBy(x => x.Id).ToList();
