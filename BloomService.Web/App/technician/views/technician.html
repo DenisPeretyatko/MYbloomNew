@@ -9,17 +9,17 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
-                    <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
+                    <table class="footable table " data-page-size="10" data-filter=#filter>
                         <thead>
                         <tr>
-                            <th ng-click="changeSorting('Employee')">#</th>
-                            <th ng-click="changeSorting('Name')">Full Name</th>
-                            <th ng-click="changeSorting('IsAvailable')" data-hide="phone,tablet">Available</th>
+                            <th ng-click="sort('Employee')">#</th>
+                            <th ng-click="sort('Name')">Full Name</th>
+                            <th ng-click="sort('IsAvailable')" data-hide="phone,tablet">Available</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="technician in technicians| orderBy:sortType:sortDirection ">
+                        <tr dir-paginate="technician in technicians|orderBy:sortKey:reverse|filter:search|itemsPerPage:10">
                             <td>{{technician.Employee}}</td>
                             <td>{{technician.Name}}</td>
                             <td>
@@ -31,13 +31,16 @@
                                 <a ui-sref="manager.technician.edit({ id: '{{technician.Id}}' })" c class="btn btn-primary btn-xs">Edit...</a>
                             </td>
                         </tr>
-                        <tfoot class="hide-if-no-paging">
-                            <tr>
-                                <td colspan="5" class="text-center">
-                                    <ul class="pagination"></ul>
+                    </table>
+                     <table class="table">
+                            <tr  style="display: table-row !important;">
+                                <td colspan="6" class="text-center">
+                                    <dir-pagination-controls max-size="10"
+                                                             direction-links="true">
+                                        <!--  boundary-links="true"-->
+                                    </dir-pagination-controls>
                                 </td>
                             </tr>
-                        </tfoot>
                     </table>
                 </div>
             </div>
