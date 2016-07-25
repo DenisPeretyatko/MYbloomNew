@@ -311,12 +311,14 @@ namespace BloomService.Web.Controllers
 
             var workOrderItems = Mapper.Map<IEnumerable<SageWorkOrderItem>>(model.Equipment);
 
+            var workOrderFromMongo = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == workorder.WorkOrder).Single();
+
             var dBworkOrderItems = new List<SageWorkOrderItem>();
             if (workOrderItems != null)
             {
                 foreach (var workOrderItem in workOrderItems)
                 {
-                    if (workorder.WorkOrderItems.Contains(workOrderItem))
+                    if (workOrderFromMongo.WorkOrderItems.Contains(workOrderItem))
                     {
                         _sageApiProxy.EditWorkOrderItem(workOrderItem);
                     }
@@ -353,7 +355,7 @@ namespace BloomService.Web.Controllers
 
                 List<int> idsToRemove = new List<int>();
 
-                foreach (var woItem in workorder.WorkOrderItems)  {
+                foreach (var woItem in workOrderFromMongo.WorkOrderItems)  {
                     if (!workOrderItems.Contains(woItem)) {
                         idsToRemove.Add(woItem.WorkOrderItem);
                     }
