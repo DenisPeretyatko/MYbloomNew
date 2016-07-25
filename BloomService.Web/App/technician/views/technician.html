@@ -8,8 +8,8 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                    <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
-                    <table class="footable table " data-page-size="10" data-filter=#filter>
+                    <input type="text" class="form-control input-sm m-b-xs" ng-model="search" id="filter" placeholder="Search in table">
+                    <table class="table footable">
                         <thead>
                         <tr>
                             <th ng-click="sort('Employee')">#</th>
