@@ -527,5 +527,21 @@
                 return result;
             }
         }
+
+        [HttpDelete, Route("api/v2/sm/workorders/workorderitems/delete")]
+        public SageResponse<SageWorkOrderItem> DeleteWorkOrderItems(IEnumerable<int> ids)
+        {
+            try
+            {
+                serviceOdbc.DeleteWorkOrderItems(ids);
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = true };
+                return result;
+            }
+            catch (Exception exception)
+            {
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = false, ErrorMassage = exception.Message };
+                return result;
+            }
+        }
     }
 }

@@ -2,7 +2,7 @@
 {
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Domain.Entities.Concrete.Auxiliary;
-
+    using System.Collections.Generic;
     public interface ISageApiProxy
     {
         SageResponse<SageCustomer> GetCustomers();
@@ -26,6 +26,7 @@
         SageResponse<SageWorkOrder> GetWorkorder(string id);
         SageResponse<SageWorkOrder> GetWorkorders();
         SageResponse<SageWorkOrderItem> GetWorkorderItemsByWorkOrderId(string id);
+        SageResponse<SageWorkOrderItem> DeleteWorkOrderItems(IEnumerable<int> ids);
 
         SageResponse<SageWorkOrderItem> AddWorkOrderItem(SageWorkOrderItem workOrderItem);
         SageResponse<SageWorkOrderItem> EditWorkOrderItem(SageWorkOrderItem workOrderItem);

@@ -129,6 +129,17 @@
             return GetAll<SageRepair>(EndPoints.GetRepairs);
         }
 
+        public SageResponse<SageWorkOrderItem> DeleteWorkOrderItems(IEnumerable<int> ids)
+        {
+            var request = new RestRequest(EndPoints.DeleteWorkOrderItems, Method.DELETE) { RequestFormat = DataFormat.Json };
+            request.AddObject(ids);
+            BuildAuthenticationHeader(request);
+            var response = restClient.Execute<SageResponse<SageWorkOrderItem>>(request);
+            var results = response.Data;
+            return results;
+        }
+
+
         public SageResponse<SageWorkOrder> GetWorkorder(string id)
         {
             return Get<SageWorkOrder>(id, EndPoints.GetWorkorder);
