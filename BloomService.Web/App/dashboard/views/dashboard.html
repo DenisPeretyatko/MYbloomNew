@@ -52,20 +52,32 @@
                     <h5>Workorders</h5>
                 </div>
                 <div class="ibox-content">
-                    <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
-                    <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
+                    <input type="text" class="form-control input-sm m-b-xs" ng-model="search" id="filter" placeholder="Search in table">
+                    <table class="table footable">
                         <thead>
                         <tr>
-                            <th ng-click="changeSorting('WorkOrder')">#</th>
-                            <th ng-click="changeSorting('ScheduleDate')" class="footable-sorted">Schedule Date</th>
-                            <th ng-click="changeSorting('DateEntered')">Entered Date</th>
-                            <th ng-click="changeSorting('ARCustomer')" data-hide="phone,tablet">Customer</th>
-                            <th ng-click="changeSorting('Location')" data-hide="phone,tablet">Location</th>
-                            <th ng-click="changeSorting('Status')">Status</th>
+                            <th ng-click="sort('WorkOrder')">
+                                #
+                            </th>
+                            <th ng-click="sort('ScheduleDate')" class="footable-sorted">
+                                Schedule Date
+                            </th>
+                            <th ng-click="sort('DateEntered')">
+                                Entered Date
+                            </th>
+                            <th ng-click="sort('ARCustomer')">
+                                Customer
+                            </th>
+                            <th ng-click="sort('Location')">
+                                Location
+                            </th>
+                            <th ng-click="sort('status')">
+                                Status
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="workorder in listworkorders | orderBy:sortType:sortDirection">
+                        <tr dir-paginate="workorder in listworkorders|orderBy:sortKey:reverse|filter:search|itemsPerPage:10">
                             <td>{{workorder.WorkOrder}}</td>
                             <td data-sort-initial="true">{{workorder.ScheduleDate|date:mediumTime}}</td>
                             <td>{{workorder.DateEntered|date:mediumTime}}</td>
@@ -78,15 +90,21 @@
                             </td>
                         </tr>
                         </tbody>
-                        <tfoot>
-                        <tr>
-                            <td colspan="6" class="text-center">
-                                <ul class="pagination"></ul>
-                            </td>
-                        </tr>
-                        </tfoot>
                     </table>
+                    <table class="table">
+                            <tr class="hide-if-no-paging" style="display: table-row !important;">
+                                <td colspan="6" class="text-center">
+                                    <dir-pagination-controls max-size="10"
+                                                             direction-links="true">
+                                        <!--  boundary-links="true"-->
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                    </table>
+
+               
                 </div>
+
             </div>
         </div>
     </div>    
