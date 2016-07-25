@@ -16,14 +16,15 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
     $scope.workordersView = [];
     $scope.workorderMarkers = [];
   
-    $scope.changeSorting = function (data) {
-        if ($scope.sortType != data) {
-            $scope.sortType = data;
-            $scope.sortDirection = true;
+    $scope.sort = function (data) {
+        if ($scope.sortKey != data) {
+            $scope.sortKey = data;
+            $scope.reverse = true;
         } else {
-            $scope.sortDirection = !$scope.sortDirection;
+            $scope.reverse = !$scope.reverse;
         }
     }
+    $scope.sort('ScheduleDate');
 
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");

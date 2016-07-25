@@ -8,15 +8,25 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
     $scope.createdEvents = [];
     $scope.color = '';
     $scope.obj = {};
+    $scope.obj.notAvailable = undefined;
 
-    //$.connection.hub.start().done(function () { });
+   
     var date = new Date();
 
     commonDataService.getTechnician($stateParams.id).then(function (response) {
         $scope.technician = response.data;
 
         $scope.obj.notAvailable = $scope.technician.IsAvailable;
-        
+       
+         var span = $('.switchery');
+        if ($scope.obj.notAvailable == true) {
+            span[0].style = "box-shadow: rgb(237, 85, 101) 0px 0px 0px 16px inset; border-color: rgb(237, 85, 101); transition: border 0.4s, box-shadow 0.4s, background-color 1.2s; background-color: rgb(237, 85, 101)";
+            span[0].firstChild.style = "left: 20px; transition: left 0.2s;";
+        } else {
+            span[0].style = "box-shadow: rgb(223, 66, 66) 0px 0px 0px 0px inset; border-color: rgb(223, 66, 66); transition: border 0.4s, box-shadow 0.4s;";
+            span[0].firstChild.style = "left: 0px; transition: left 0.2s;";
+        }
+
         if ($scope.technician.AvailableDays != null) {
             angular.forEach($scope.technician.AvailableDays, function (value, key) {
                 $scope.events.push({

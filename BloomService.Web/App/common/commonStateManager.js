@@ -30,6 +30,12 @@
     $rootScope.workorders = [];
     $rootScope.unavailableTechniciansIds = [];
 
+    var model = {
+        Index: 0,
+        Search: '',
+        Column: '',
+        Direction: false
+    };
   
 
     var connection = commonHub.GetConnection();
@@ -51,7 +57,6 @@
                 return _this.locations = response.data;
             });
         }
-    
         if (_this.technicians == undefined) {
             commonDataService.getTechnicians().then(function(response) {
                 return _this.technicians = response.data;
@@ -63,21 +68,11 @@
                 return _this.trucks = response.data;
             });
         }
-        //if (_this.notificationTime == undefined || _this.lookups == undefined || _this.notifications == undefined) {
-        //    _this.alreadyLoaded = true;
-        //    $q.all([commonDataService.getLookups(), commonDataService.getLocations(), commonDataService.getWorkordesPaged(paginationModel), commonDataService.getTechnicians(), commonDataService.getTrucks()]).then(function (values) {
-
-        //        $rootScope.notifications = values[0].data.Notifications;
-        //        _this.notifications = values[0].data.Notifications;
-        //        _this.notificationTime = values[0].data.NotificationTime;
-        //        _this.lookups = values[0].data;
-        //        _this.locations = values[1].data;
-        //        _this.workorders = values[2].data;
-        //        _this.technicians = values[3].data;
-        //        $rootScope.trucks = values[4].data;
-        //        _this.trucks = values[4].data;
-        //    });
-        //}
+        if (_this.workorders == undefined) {
+            commonDataService.getWorkordesPaged(model).then(function (response) {
+                return _this.workorders = response.data;
+            });
+        }
     }
 
     connection.client.UpdateWorkOrder = function (workorder) {
