@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\MigrationAddMoreMemory_20160726160929.cs" />
     <Compile Include="Migrations\MigrationInitial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

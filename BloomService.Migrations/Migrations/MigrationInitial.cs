@@ -10,7 +10,7 @@ namespace BloomService.Migrations.Migrations
         }
         public override void Update()
         {
-            //Database.Eval(new BsonJavaScript("db.WorkOrderCollection.createIndex( { WorkOrder:1, ScheduleDate: 1, DateEntered: 1, ARCustomer: 1, Location: 1, Status: 1 } );"));
+           
         }
     }
 }
