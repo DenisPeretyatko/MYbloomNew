@@ -146,10 +146,9 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     }
 
     $scope.saveWorkOrder = function () {
-        $scope.equipment.pop();
         var equipment = [];
         angular.forEach($scope.equipment, function (value, key) {
-            if (value != null) {
+            if (value != null && key < $scope.equipment.length - 1) {
                 equipment.push({
                     WorkDate: value.date,
                     Type: value.equipType,
