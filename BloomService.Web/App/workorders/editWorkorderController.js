@@ -105,7 +105,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                             rate: value.UnitSale,
                             labor: laborsList,
                             parts: partsList,
-                            part: ""
+                            part: "",
+                            woItem: value.WorkOrderItem,
                         });
                     }
                 });
@@ -123,7 +124,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                 rate: 0.0000,
                 labor: angular.copy($scope.lookups.Hours),
                 parts: angular.copy($scope.lookups.Parts),
-                part: ""
+                part: "",
+                woItem: '',
             }
             $scope.equipment.push(equipment);
         }
@@ -139,17 +141,17 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                     biled: 0.00,
                     rate: 0.0000,
                     labor: angular.copy($scope.lookups.Hours),
-                    parts: angular.copy($scope.lookups.Parts)
+                    parts: angular.copy($scope.lookups.Parts),
+                    woItem: '',
                 }
             $scope.equipment.push(equipment);
         }
     }
 
     $scope.saveWorkOrder = function () {
-        $scope.equipment.pop();
         var equipment = [];
         angular.forEach($scope.equipment, function (value, key) {
-            if (value != null) {
+            if (value != null && key < $scope.equipment.length - 1) {
                 equipment.push({
                     WorkDate: value.date,
                     Type: value.equipType,
@@ -158,7 +160,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                     CostQty: value.cost,
                     BiledQty: value.biled,
                     Rate: value.rate,
-                    Part: parseInt(value.part)
+                    Part: parseInt(value.part),
+                    WorkOrderItem: value.woItem,
                 });
             }
         });
@@ -275,7 +278,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                     rate: 0.0000,
                     labor: angular.copy($scope.lookups.Hours),
                     parts: angular.copy($scope.lookups.Parts),
-                    part: ""
+                    part: "",
+                    woItem: "",
                 }
                 $scope.equipment.push(equipment);
             }

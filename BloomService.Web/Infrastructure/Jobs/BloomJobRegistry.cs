@@ -258,8 +258,6 @@ namespace BloomService.Web.Infrastructure.Jobs
                         _log.ErrorFormat("Can`t sync SageAssignment {0}", ex);
                     }
 
-
-
                     try
                     {
                         var equipments = _proxy.GetEquipment();
@@ -279,8 +277,6 @@ namespace BloomService.Web.Infrastructure.Jobs
                     {
                         _log.ErrorFormat("Can`t sync SageEquipment {0}", ex);
                     }
-
-
 
                     try
                     {
@@ -349,7 +345,6 @@ namespace BloomService.Web.Infrastructure.Jobs
                     {
                         _log.ErrorFormat("Can`t sync SageLocation {0}", ex);
                     }
-
 
                     try
                     {
