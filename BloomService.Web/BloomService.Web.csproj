@@ -119,6 +119,10 @@
       <HintPath>..\packages\mongocsharpdriver.2.2.4\lib\net45\MongoDB.Driver.Legacy.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MongoMigrations, Version=2.0.1.20, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoMigrations.2.0.1.20\lib\net45\MongoMigrations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MoonAPNS, Version=0.0.4.188, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MoonAPNS.0.0.4.188\lib\net451\MoonAPNS.dll</HintPath>
       <Private>True</Private>
@@ -306,6 +310,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\ModelBinderConfig.cs" />
+    <Compile Include="App_Start\MongoMigrations.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\OwinConfig.cs" />
@@ -849,6 +854,10 @@
     <ProjectReference Include="..\BloomService.Domain\BloomService.Domain.csproj">
       <Project>{c864fa21-c500-4d98-9009-9a6f88709f8c}</Project>
       <Name>BloomService.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BloomService.Migrations\BloomService.Migrations.csproj">
+      <Project>{c626f4e7-202f-4ced-88d9-f1628971a836}</Project>
+      <Name>BloomService.Migrations</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
