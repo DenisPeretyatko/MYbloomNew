@@ -46,6 +46,7 @@
               .ForMember(dest => dest.Quantity, opts => opts.MapFrom(src => src.BiledQty))
               .ForMember(dest => dest.CostQuantity, opts => opts.MapFrom(src => src.CostQty))
               .ForMember(dest => dest.Employee, opts => opts.MapFrom(src => src.Employee))
+              .ForMember(dest => dest.JCCostCode, opts => opts.MapFrom(src => src.LaborItem.JCCostCode))
               .ReverseMap();
         }
     }

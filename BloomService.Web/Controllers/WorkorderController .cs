@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using BloomService.Web.Infrastructure.Dependecy;
+﻿using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Jobs;
-using BloomService.Web.Infrastructure.Services.Interfaces;
 using Common.Logging;
 
 namespace BloomService.Web.Controllers
@@ -21,8 +18,6 @@ namespace BloomService.Web.Controllers
     using Infrastructure.Services.Interfaces;
     using Infrastructure.Constants;
     using Domain.Extensions;
-    using Infrastructure.Constants;
-    using Domain.Entities.Concrete.Auxiliary;
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
@@ -81,11 +76,12 @@ namespace BloomService.Web.Controllers
                 result.Entity.AssignmentId = assignment.Assignment;
                 _repository.Add(assignment);
             }
-            else {
+            else
+            {
                 var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Emploee).SingleOrDefault();
                 assignment.EmployeeId = employee != null ? employee.Employee : null;
                 assignment.Start = ((DateTime)assignment.ScheduleDate).Add(((DateTime)assignment.StartTime).TimeOfDay).ToString();
-                assignment.End = ((DateTime)assignment.ScheduleDate).Add(((DateTime)assignment.StartTime).TimeOfDay).AddHours(assignment.EstimatedRepairHours.AsDouble() == 0? 1: assignment.EstimatedRepairHours.AsDouble()).ToString();
+                assignment.End = ((DateTime)assignment.ScheduleDate).Add(((DateTime)assignment.StartTime).TimeOfDay).AddHours(assignment.EstimatedRepairHours.AsDouble() == 0 ? 1 : assignment.EstimatedRepairHours.AsDouble()).ToString();
                 assignment.Color = employee?.Color ?? "";
                 assignment.Customer = result.Entity.ARCustomer;
                 assignment.Location = result.Entity.Location;
@@ -109,7 +105,7 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkorder(string id)
         {
             var workOrder = _repository.Get<SageWorkOrder>(id);
-            
+
             workOrder.CustomerObj = _repository.SearchFor<SageCustomer>(x => x.Customer == workOrder.ARCustomer).SingleOrDefault();
             workOrder.LocationObj = _repository.SearchFor<SageLocation>(x => x.Name == workOrder.Location && x.ARCustomer == workOrder.ARCustomer).SingleOrDefault();
             workOrder.CalltypeObj = _repository.SearchFor<SageCallType>(x => x.Description == workOrder.CallType).SingleOrDefault();
@@ -117,10 +113,10 @@ namespace BloomService.Web.Controllers
             workOrder.RateSheetObj = _repository.SearchFor<SageRateSheet>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.RateSheet).SingleOrDefault();
             workOrder.EmployeeObj = _repository.SearchFor<SageEmployee>(x => x.Name == workOrder.Employee).SingleOrDefault();
             workOrder.HourObj = _repository.SearchFor<SageRepair>(x => x.Repair == workOrder.EstimatedRepairHours.ToString()).SingleOrDefault();
-            workOrder.PermissionCodeObj = _repository.SearchFor<SagePermissionCode>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode).SingleOrDefault(); 
+            workOrder.PermissionCodeObj = _repository.SearchFor<SagePermissionCode>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode).SingleOrDefault();
             workOrder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workOrder.PayMethod.Trim());
             workOrder.StatusObj = WorkOrderStatus.Status.FirstOrDefault(x => x.Status == workOrder.Status);
-            
+
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
@@ -129,7 +125,7 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkOrdersPictures(string id)
         {
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
-            if(pictures != null)
+            if (pictures != null)
             {
                 pictures.Images = pictures.Images.OrderBy(x => x.Id).ToList();
             }
@@ -174,7 +170,7 @@ namespace BloomService.Web.Controllers
                 return Json(locations, JsonRequestBehavior.AllowGet);
             }
             var result = _repository.GetAll<SageLocation>().Where(x => x.ARCustomer == customer).ToList();
-            if(!result.Any())
+            if (!result.Any())
             {
                 result = new List<SageLocation>();
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -283,20 +279,20 @@ namespace BloomService.Web.Controllers
             };
 
             var workOrderResult = _sageApiProxy.EditWorkOrder(workorder);
-                     
+
             if (!workOrderResult.IsSucceed)
             {
                 _log.ErrorFormat("Was not able to update workorder to sage. !result.IsSucceed");
                 return Error("Was not able to update workorder to sage");
-            }            
-                       
-            if (!string.IsNullOrEmpty(model.Emploee))           
+            }
+
+            if (!string.IsNullOrEmpty(model.Emploee))
             {
                 var assignmentDb = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
                 var editedAssignment = new AssignmentViewModel();
                 editedAssignment.Employee = model.Emploee;
                 editedAssignment.EndDate = (DateTime)assignmentDb.Enddate;
-                editedAssignment.EstimatedRepairHours = assignmentDb.EstimatedRepairHours.AsDouble() == 0 ? "1.00" : assignmentDb.EstimatedRepairHours; 
+                editedAssignment.EstimatedRepairHours = assignmentDb.EstimatedRepairHours.AsDouble() == 0 ? "1.00" : assignmentDb.EstimatedRepairHours;
                 editedAssignment.Id = assignmentDb.Id;
                 editedAssignment.ScheduleDate = (DateTime)assignmentDb.StartTime;
                 editedAssignment.WorkOrder = assignmentDb.WorkOrder;
@@ -337,15 +333,15 @@ namespace BloomService.Web.Controllers
                         if (workOrderItem.WorkOrderItem == 0)
                         {
                             var result = _sageApiProxy.AddWorkOrderItem(workOrderItem);
-                            if (result.IsSucceed && result.Entity != null)
+                            if (result != null && result.IsSucceed && result.Entity != null)
                             {
                                 dBworkOrderItems.Add(result.Entity);
                             }
                         }
                         else
                         {
-                            var result = _sageApiProxy.AddWorkOrderItem(workOrderItem);
-                            if (result.IsSucceed && result.Entity != null)
+                            var result = _sageApiProxy.EditWorkOrderItem(workOrderItem);
+                            if (result != null && result.IsSucceed && result.Entity != null)
                             {
                                 dBworkOrderItems.Add(result.Entity);
                             }
@@ -353,17 +349,17 @@ namespace BloomService.Web.Controllers
                     }
                 }
 
-                List<int> idsToRemove = new List<int>();
+                //List<int> idsToRemove = new List<int>();
 
-                foreach (var woItem in workOrderFromMongo.WorkOrderItems)
-                {
-                    if (!workOrderItems.Select(x => x.WorkOrderItem).Contains(woItem.WorkOrderItem))
-                    {
-                        idsToRemove.Add(woItem.WorkOrderItem);
-                    }
-                }
+                //foreach (var woItem in workOrderFromMongo.WorkOrderItems)
+                //{
+                //    if (!workOrderItems.Select(x => x.WorkOrderItem).Contains(woItem.WorkOrderItem))
+                //    {
+                //        idsToRemove.Add(woItem.WorkOrderItem);
+                //    }
+                //}
 
-                _sageApiProxy.DeleteWorkOrderItems(idsToRemove);
+                //_sageApiProxy.DeleteWorkOrderItems(idsToRemove);
             }
 
             workOrderResult.Entity.WorkOrderItems = dBworkOrderItems;

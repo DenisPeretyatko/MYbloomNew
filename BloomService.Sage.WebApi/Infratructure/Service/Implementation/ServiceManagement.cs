@@ -141,7 +141,7 @@
             if (workOrderItem.ItemType == "Labor")
             {
                 properties.Add("CostQuantity", workOrderItem.CostQuantity.ToString() ?? string.Empty);
-
+                properties.Add("JCCostCode", workOrderItem.JCCostCode.ToString() ?? string.Empty);
             }
             if (workOrderItem.ItemType == "Parts")
             {
@@ -161,7 +161,6 @@
             var workOrderItems = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrderItems;
             return workOrderItems;
         }
-
 
         private Dictionary<string, string> ReplaceInvalidCharacters(Dictionary<string, string> properties)
         {
@@ -190,10 +189,12 @@
             properties.Add("WorkDate", workOrderItem.WorkDate.ToString() ?? string.Empty);
             properties.Add("UnitSale", workOrderItem.UnitSale.ToString() ?? string.Empty);
             properties.Add("WorkOrder", workOrderItem.WorkOrder.ToString() ?? string.Empty);
+            properties.Add("WorkOrderItem", workOrderItem.WorkOrderItem.ToString() ?? string.Empty);
 
             if (workOrderItem.ItemType == "Labor")
             {
                 properties.Add("CostQuantity", workOrderItem.CostQuantity.ToString() ?? string.Empty);
+                properties.Add("JCCostCode", workOrderItem.JCCostCode.ToString() ?? string.Empty);
             }
             if (workOrderItem.ItemType == "Parts")
             {
