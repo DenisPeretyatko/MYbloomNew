@@ -132,7 +132,7 @@
         public SageResponse<SageWorkOrderItem> DeleteWorkOrderItems(IEnumerable<int> ids)
         {
             var request = new RestRequest(EndPoints.DeleteWorkOrderItems, Method.DELETE) { RequestFormat = DataFormat.Json };
-            request.AddObject(ids);
+            request.AddBody(ids);
             BuildAuthenticationHeader(request);
             var response = restClient.Execute<SageResponse<SageWorkOrderItem>>(request);
             var results = response.Data;
