@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BloomService.Domain.Entities.Concrete;
+using System;
 
 namespace BloomService.Web.Models
 {
@@ -17,5 +18,6 @@ namespace BloomService.Web.Models
         public decimal LaborSale { get; set; }
         public decimal PartsSale { get; set; }
         public int Part { get; set; }
+        public SageRepair LaborItem { get; set; }
     }
 }
