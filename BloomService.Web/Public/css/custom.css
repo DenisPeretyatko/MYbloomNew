@@ -219,3 +219,6 @@
 .label.open.statusColor, .label.closed.statusColor, .label.return.statusColor, .label.work.statusColor {
     color : #fff !important;
 }
+.dropdown-menu.dropdown-alerts.notification-messages {
+    width: 500px;
+}

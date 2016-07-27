@@ -107,6 +107,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                             parts: partsList,
                             part: "",
                             woItem: value.WorkOrderItem,
+                            laborItem: laborsList.selected
                         });
                     }
                 });
@@ -126,6 +127,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                 parts: angular.copy($scope.lookups.Parts),
                 part: "",
                 woItem: '',
+                laborItem:""
             }
             $scope.equipment.push(equipment);
         }
@@ -143,6 +145,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                     labor: angular.copy($scope.lookups.Hours),
                     parts: angular.copy($scope.lookups.Parts),
                     woItem: '',
+                    laborItem:""
                 }
             $scope.equipment.push(equipment);
         }
@@ -162,6 +165,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                     Rate: value.rate,
                     Part: parseInt(value.part),
                     WorkOrderItem: value.woItem,
+                    LaborItem: value.laborItem
                 });
             }
         });
@@ -252,6 +256,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             item.equipType = item.equipType.selected;
             if (item.equipType == 'Labor') {
                 item.description = item.labor.selected.Description;
+                item.laborItem = item.labor.selected;
             }
             else {
                 item.description = item.parts.selected.PartNumber + " " + item.parts.selected.Description;
