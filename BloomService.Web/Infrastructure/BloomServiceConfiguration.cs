@@ -1,4 +1,6 @@
-﻿namespace BloomService.Web.Infrastructure
+﻿using System.Configuration;
+
+namespace BloomService.Web.Infrastructure
 {
     using System;
     using System.Collections.Specialized;
@@ -34,8 +36,10 @@
                     SizeSmallPhoto = int.Parse(nameValueCollection["SizeSmallPhoto"]),
                     CurrentTimezone = nameValueCollection["CurrentTimezone"],
                     NotificationDelay = int.Parse(nameValueCollection["NotificationDelay"]),
-                    SynchronizationDelay = int.Parse(nameValueCollection["SynchronizationDelay"])
-                };
+                    SynchronizationDelay = int.Parse(nameValueCollection["SynchronizationDelay"]),
+                    Connection = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString,
+                    DbName = ConfigurationManager.AppSettings["MainDb"]
+            };
 
                 return configuration;
             }
@@ -68,5 +72,7 @@
         public string CurrentTimezone { get; set; }
         public int NotificationDelay { get; set; }
         public int SynchronizationDelay { get; set; }
+        public string DbName { get; set; }
+        public string Connection { get; set; }
     }
 }
