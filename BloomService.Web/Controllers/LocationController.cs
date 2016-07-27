@@ -39,7 +39,7 @@ namespace BloomService.Web.Controllers
                 if (item.WorkOrder == "11537") {
                     var t = "";
                 }
-                var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder).OrderBy(x => x.ScheduleDate).ThenByDescending(x => x.StartTime).FirstOrDefault();
+                var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder).OrderByDescending(x => x.ScheduleDate).ThenByDescending(x => x.StartTime).FirstOrDefault();
 
                 if (string.IsNullOrEmpty(assignment?.Employee) || item.AssignmentId != null) continue;
                 result.Add(new MapViewModel()
