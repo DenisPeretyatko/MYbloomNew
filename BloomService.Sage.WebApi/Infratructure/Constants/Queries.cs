@@ -14,7 +14,8 @@ namespace Sage.WebApi.Infratructure.Constants
         
         public static string BuildDeleteWorkOrderItemQuery(int workOrderId, IEnumerable<int> ids)
         {
-            var query = "DELETE FROM WOITEMS WHERE WRKORDNBR  = {0} and WRKORDITEM in ({1})";
+            var query = "DELETE FROM WOITEMS WHERE WRKORDNBR  = {0} and WRKORDITEM in ({1});" 
+               + " DELETE FROM WOCOST WHERE WRKORDNBR  = {0} AND WRKORDITEM in ({1});";
             var idString = "{0},";
             var resultIdString = "";
             foreach(var id in ids)

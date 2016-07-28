@@ -153,7 +153,11 @@
             var propertiesStr = string.Empty;
             foreach (var property in properties)
             {
-                propertiesStr += string.Format(Messages.Property, property.Key, property.Value);
+                propertiesStr += string.Format(Messages.Property, property.Key, property.Value
+                          .Replace("'", "&apos;")
+                          .Replace("\"", "&quot;")
+                          .Replace("<", "&lt;")
+                          .Replace(">", "&gt;"));
             }
 
             var messages = string.Format(Messages.AddWorkOrderItem, propertiesStr);
@@ -206,7 +210,11 @@
             var propertiesStr = string.Empty;
             foreach (var property in properties)
             {
-                propertiesStr += string.Format(Messages.Property, property.Key, property.Value);
+                propertiesStr += string.Format(Messages.Property, property.Key, property.Value
+                          .Replace("'", "&apos;")
+                          .Replace("\"", "&quot;")
+                          .Replace("<", "&lt;")
+                          .Replace(">", "&gt;"));
             }
 
             var messages = string.Format(Messages.EditWorkOrderItem, propertiesStr);

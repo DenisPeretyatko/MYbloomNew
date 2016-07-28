@@ -348,10 +348,11 @@ namespace BloomService.Web.Controllers
                         }
                     }
                 }
+               
 
-                if (workOrderFromMongo.WorkOrderItems.Any())
+                if (workOrderFromMongo.WorkOrderItems != null)
                 {
-                    List<int> idsToRemove = new List<int>();
+                    var idsToRemove = new List<int>();
 
                     foreach (var woItem in workOrderFromMongo.WorkOrderItems)
                     {
@@ -365,6 +366,15 @@ namespace BloomService.Web.Controllers
                     {
                         _sageApiProxy.DeleteWorkOrderItems(Convert.ToInt32(workOrderFromMongo.WorkOrder), idsToRemove);
                     }
+                }
+            }
+            else
+            {
+                var idsToRemove = workOrderFromMongo.WorkOrderItems.Select(x => x.WorkOrderItem);
+
+                if (idsToRemove.Any())
+                {
+                    _sageApiProxy.DeleteWorkOrderItems(Convert.ToInt32(workOrderFromMongo.WorkOrder), idsToRemove);
                 }
             }
 

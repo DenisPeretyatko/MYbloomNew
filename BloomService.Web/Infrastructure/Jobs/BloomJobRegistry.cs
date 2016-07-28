@@ -182,8 +182,8 @@ namespace BloomService.Web.Infrastructure.Jobs
 
                     try
                     {
-                        var emploees = _proxy.GetEmployees();
-                        foreach (var entity in emploees.Entities)
+                        var emploees = _proxy.GetEmployees().Entities.Where(x=> string.IsNullOrEmpty(x.JCJob));
+                        foreach (var entity in emploees)
                         {
                             var mongoEntity = _repository.SearchFor<SageEmployee>(x => x.Employee == entity.Employee).SingleOrDefault();
                             if (mongoEntity == null)
