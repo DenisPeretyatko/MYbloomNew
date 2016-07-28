@@ -141,7 +141,7 @@
             if (workOrderItem.ItemType == "Labor")
             {
                 properties.Add("CostQuantity", workOrderItem.CostQuantity.ToString() ?? string.Empty);
-                properties.Add("JCCostCode", workOrderItem.JCCostCode.ToString() ?? string.Empty);
+                properties.Add("Repair", workOrderItem.Repair.ToString() ?? string.Empty);
             }
             if (workOrderItem.ItemType == "Parts")
             {
@@ -194,7 +194,7 @@
             if (workOrderItem.ItemType == "Labor")
             {
                 properties.Add("CostQuantity", workOrderItem.CostQuantity.ToString() ?? string.Empty);
-                properties.Add("JCCostCode", workOrderItem.JCCostCode.ToString() ?? string.Empty);
+                properties.Add("Repair", workOrderItem.Repair.ToString() ?? string.Empty);
             }
             if (workOrderItem.ItemType == "Parts")
             {

@@ -529,11 +529,11 @@
         }
 
         [HttpDelete, Route("api/v2/sm/workorders/workorderitems/delete")]
-        public SageResponse<SageWorkOrderItem> DeleteWorkOrderItems(IEnumerable<int> ids)
+        public SageResponse<SageWorkOrderItem> DeleteWorkOrderItems(int workOrderId, IEnumerable<int> ids)
         {
             try
             {
-                serviceOdbc.DeleteWorkOrderItems(ids);
+                serviceOdbc.DeleteWorkOrderItems(workOrderId, ids);
                 var result = new SageResponse<SageWorkOrderItem> { IsSucceed = true };
                 return result;
             }

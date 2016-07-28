@@ -78,6 +78,8 @@ namespace BloomService.Domain.Entities.Concrete
         [XmlAttribute]
         public int Part { get; set; }
         [XmlAttribute]
+        public int Repair { get; set; }
+        [XmlAttribute]
         public string PartsProduct { get; set; }
         [XmlAttribute]
         public decimal PartsSale { get; set; }

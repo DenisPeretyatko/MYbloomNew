@@ -349,17 +349,23 @@ namespace BloomService.Web.Controllers
                     }
                 }
 
-                //List<int> idsToRemove = new List<int>();
+                if (workOrderFromMongo.WorkOrderItems.Any())
+                {
+                    List<int> idsToRemove = new List<int>();
 
-                //foreach (var woItem in workOrderFromMongo.WorkOrderItems)
-                //{
-                //    if (!workOrderItems.Select(x => x.WorkOrderItem).Contains(woItem.WorkOrderItem))
-                //    {
-                //        idsToRemove.Add(woItem.WorkOrderItem);
-                //    }
-                //}
+                    foreach (var woItem in workOrderFromMongo.WorkOrderItems)
+                    {
+                        if (!workOrderItems.Select(x => x.WorkOrderItem).Contains(woItem.WorkOrderItem))
+                        {
+                            idsToRemove.Add(woItem.WorkOrderItem);
+                        }
+                    }
 
-                //_sageApiProxy.DeleteWorkOrderItems(idsToRemove);
+                    if (idsToRemove.Any())
+                    {
+                        _sageApiProxy.DeleteWorkOrderItems(Convert.ToInt32(workOrderFromMongo.WorkOrder), idsToRemove);
+                    }
+                }
             }
 
             workOrderResult.Entity.WorkOrderItems = dBworkOrderItems;

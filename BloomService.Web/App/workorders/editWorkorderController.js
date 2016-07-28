@@ -92,6 +92,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                     partsList.selected = $scope.lookups.Parts.find(function (element) {
                         return element.PartNumber + " " + element.Description === value.Description;
                     });
+                    var part = partsList.selected != undefined ? parseInt(partsList.selected.Part) : 0;
 
                     if (value != null) {
                         dBWOItem.push({
@@ -105,7 +106,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                             rate: value.UnitSale,
                             labor: laborsList,
                             parts: partsList,
-                            part: "",
+                            part: part,
                             woItem: value.WorkOrderItem,
                             laborItem: laborsList.selected
                         });

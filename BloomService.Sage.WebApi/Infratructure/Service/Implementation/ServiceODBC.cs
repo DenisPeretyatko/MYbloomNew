@@ -112,9 +112,9 @@
             return dataSet;
         }
 
-        public void DeleteWorkOrderItems(IEnumerable<int> ids)
+        public void DeleteWorkOrderItems(int workOrderId, IEnumerable<int> ids)
         {
-            var query = Queries.BuildDeleteWorkOrderItemQuery(ids);
+            var query = Queries.BuildDeleteWorkOrderItemQuery(workOrderId, ids);
             ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
 
