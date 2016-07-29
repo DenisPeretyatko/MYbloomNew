@@ -31,7 +31,7 @@ namespace BloomService.Web.Controllers
 
     using BloomService.Web.Infrastructure;
     using BloomService.Web.Infrastructure.Mongo;
-
+    using AutoMapper;
     public class ApiMobileController : BaseController
     {
         private readonly IImageService _imageService;
@@ -180,37 +180,89 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Apimobile/AddItem")]
-        public ActionResult AddWOItem(AddWOItemModel model)
+        public ActionResult AddWOItem(LaborPartsModel model)
         {
-            var items = repository.GetAll<SageWorkOrderItem>().ToList().Where(x => x.WorkOrder == model.WorkOrder);
-            var item = items.SingleOrDefault(x => x.WorkOrderItem == model.WorkOrderItem);
-            if (item == null)
+            var workOrderItemId = model.WorkOrderItem.AsInt();
+            var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
+
+            var workOrderItem = new SageWorkOrderItem();
+            workOrderItem = Mapper.Map<SageWorkOrderItem>(model);
+            var dBworkOrderItems = new List<SageWorkOrderItem>();
+
+            if (workOrder.WorkOrderItems == null || (workOrder.WorkOrderItems != null && workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId) == null))
             {
-                var newItem = new SageWorkOrderItem()
+                if (workOrder.WorkOrderItems != null)
                 {
-                    WorkOrder = model.WorkOrder,
-                    WorkOrderItem = items.Any()? items.Max(x => x.WorkOrderItem) + 1:1,
-                    WorkDate = model.WorkDate,
-                    Description = model.Description,
-                    Quantity = model.Quantity,
-                    ItemType = model.ItemType,
-                    SalesTaxAmount = model.SalesTaxAmount,
-                    FlatRateLaborTaxAmt = model.FlatRateLaborTaxAmt
-                };
-                repository.Add(newItem);
-                return Json(newItem, JsonRequestBehavior.AllowGet);
+                    dBworkOrderItems = workOrder.WorkOrderItems.ToList();
+                }
+                workOrderItem.WorkOrder = model.WorkOrder.AsInt();
+                workOrderItem.TotalSale = workOrderItem.Quantity * workOrderItem.UnitSale;
+                if (workOrderItem.ItemType == "Parts")
+                {
+                    workOrderItem.PartsSale = workOrderItem.UnitSale;
+                }
+                else
+                {
+                    workOrderItem.LaborSale = workOrderItem.UnitSale;
+                }
+                
+                var result = sageApiProxy.AddWorkOrderItem(workOrderItem);
+                if (result != null && result.IsSucceed && result.Entity != null)
+                {
+                    dBworkOrderItems.Add(result.Entity);
+                    workOrder.WorkOrderItems = dBworkOrderItems;
+                    repository.Update(workOrder);
+                }
+                else
+                {
+                    _log.ErrorFormat("Was not able to save workorderItem to sage. !result.IsSucceed");
+                    return Error("Was not able to save workorderItem to sage");
+                }
+                return Json(Success(), JsonRequestBehavior.AllowGet);
+            }
+
+            dBworkOrderItems = workOrder.WorkOrderItems.ToList();
+            workOrderItem.WorkOrder = model.WorkOrder.AsInt();
+            var resultUpdate = sageApiProxy.EditWorkOrderItem(workOrderItem);
+            if (resultUpdate != null && resultUpdate.IsSucceed && resultUpdate.Entity != null)
+            {
+                var dbEntity = dBworkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId);
+                dBworkOrderItems.Remove(dbEntity);
+                dBworkOrderItems.Add(resultUpdate.Entity);
+                workOrder.WorkOrderItems = dBworkOrderItems;
+                repository.Update(workOrder);
             }
             else
             {
-                item.WorkDate = model.WorkDate;
-                item.Description = model.Description;
-                item.Quantity = model.Quantity;
-                item.ItemType = model.ItemType;
-                item.SalesTaxAmount = model.SalesTaxAmount;
-                item.FlatRateLaborTaxAmt = model.FlatRateLaborTaxAmt;
-                repository.Update(item);
+                _log.ErrorFormat("Was not able to update workorderItem to sage. !result.IsSucceed");
+                return Error("Was not able to update workorderItem to sage");
             }
-            return Json(item, JsonRequestBehavior.AllowGet);
+            return Json(Success(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [Route("Apimobile/DeleteItem")]
+        public ActionResult DeleteWOItem(LaborPartsModel model)
+        {
+            var workOrderItemId = model.WorkOrderItem.AsInt();
+            var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
+            var item = workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId);
+            var dBworkOrderItems = new List<SageWorkOrderItem>();
+            dBworkOrderItems = workOrder.WorkOrderItems.ToList();
+
+            var result = sageApiProxy.DeleteWorkOrderItems(model.WorkOrder.AsInt(), new List<int> { model.WorkOrderItem.AsInt()});
+            if (result != null && result.IsSucceed)
+            {
+                dBworkOrderItems.Remove(item);
+                workOrder.WorkOrderItems = dBworkOrderItems;
+                repository.Update(workOrder);
+            }
+            else
+            {
+                _log.ErrorFormat("Was not able to update workorderItem to sage. !result.IsSucceed");
+                return Error("Was not able to update workorderItem to sage");
+            }
+            return Json(Success(), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
