@@ -259,13 +259,13 @@
         public bool TotalCostSpecified { get; set; }
 
         [XmlAttribute]
-        public string WorkOrder { get; set; }
+        public long WorkOrder { get; set; }
 
         [XmlAttribute]
         public string WorkOrderType { get; set; }
 
         [XmlIgnore]
-        public string AssignmentId { get; set; }
+        public long AssignmentId { get; set; }
         [XmlIgnore]
         public string Address { get; set; }
 

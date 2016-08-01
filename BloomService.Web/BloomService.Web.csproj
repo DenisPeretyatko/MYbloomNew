@@ -393,7 +393,6 @@
     <Compile Include="Models\TechnicianModel.cs" />
     <Compile Include="Models\WorkOrderModel.cs" />
     <Compile Include="Models\AssignmentViewModel.cs" />
-    <Compile Include="Infrastructure\Services\Interfaces\IApiMobileService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IImageService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IUserService.cs" />
     <Compile Include="Infrastructure\Services\ImageService.cs" />

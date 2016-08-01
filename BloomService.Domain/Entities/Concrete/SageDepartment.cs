@@ -9,7 +9,7 @@
     public class SageDepartment : SageEntity
     {
         [XmlAttribute]
-        public string Department { get; set; }
+        public long Department { get; set; }
 
         [XmlAttribute]
         public string Description { get; set; }

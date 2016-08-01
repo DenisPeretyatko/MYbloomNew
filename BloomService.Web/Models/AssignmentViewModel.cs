@@ -4,7 +4,7 @@
 
     public class AssignmentViewModel
     {
-        public string Employee { get; set; }
+        public long Employee { get; set; }
 
         public DateTime EndDate { get; set; }
 
@@ -14,6 +14,6 @@
 
         public DateTime ScheduleDate { get; set; }
 
-        public string WorkOrder { get; set; }
+        public long WorkOrder { get; set; }
     }
 }

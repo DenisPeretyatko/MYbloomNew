@@ -103,7 +103,7 @@
         public string JCJob { get; set; }
 
         [XmlAttribute]
-        public string Location { get; set; }
+        public long Location { get; set; }
 
         [XmlAttribute]
         public string LocationKey { get; set; }

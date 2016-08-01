@@ -9,7 +9,7 @@ namespace BloomService.Web.Models
         [JsonProperty("CallBack")]
         public string CallBack { get; set; }
         [JsonProperty("CallType")]
-        public string CallType { get; set; }
+        public long CallType { get; set; }
         [JsonProperty("Description")]
         public string Description { get; set; }
         [JsonProperty("FlatRateLaborProduct")]

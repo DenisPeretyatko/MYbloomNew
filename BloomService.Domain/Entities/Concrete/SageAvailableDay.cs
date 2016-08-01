@@ -5,7 +5,7 @@
     public class SageAvailableDay
     {
         [XmlAttribute]
-        public string Id { get; set; }
+        public long Id { get; set; }
         [XmlAttribute]
         public string ResourceId { get; set; }
         [XmlAttribute]

@@ -97,9 +97,9 @@ using BloomService.Domain.Entities.Concrete;
             return false;
         }
 
-        public List<ImageLocation> GetPhotoForWorkOrder(string idWorkOrder, string prefixUrl = null)
+        public List<ImageLocation> GetPhotoForWorkOrder(long idWorkOrder, string prefixUrl = null)
         {
-            var pathToImage = string.Format("{0}{1}/", this.urlToFolderPhotoWorkOrders, idWorkOrder);
+            var pathToImage = string.Format("{0}{1}/", urlToFolderPhotoWorkOrders, idWorkOrder);
             if (prefixUrl != null)
                 pathToImage = prefixUrl + pathToImage;
 

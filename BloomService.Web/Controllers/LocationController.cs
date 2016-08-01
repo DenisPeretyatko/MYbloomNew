@@ -36,18 +36,15 @@ namespace BloomService.Web.Controllers
                 item.Latitude = itemLocation.Latitude;
                 item.Longitude = itemLocation.Longitude;
 
-                if (item.WorkOrder == "11537") {
-                    var t = "";
-                }
                 var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder).OrderByDescending(x => x.ScheduleDate).ThenByDescending(x => x.StartTime).FirstOrDefault();
 
-                if (string.IsNullOrEmpty(assignment?.Employee) || item.AssignmentId != null) continue;
+                if (string.IsNullOrEmpty(assignment?.Employee) || item.AssignmentId != 0) continue;
                 result.Add(new MapViewModel()
                 {
                     WorkOrder = item,
                     DateEntered = assignment.ScheduleDate,
                     Color = assignment?.Color,
-                    Employee = assignment?.EmployeeId
+                    Employee = assignment != null ? assignment.EmployeeId : 0
             });
             }
             return Json(result, JsonRequestBehavior.AllowGet);

@@ -12,8 +12,8 @@ namespace BloomService.Web.Models
         public decimal CostQty { get; set; }
         public decimal BiledQty { get; set; }
         public decimal Rate { get; set; }
-        public string WorkOrder { get; set; }
-        public string WorkOrderItem { get; set; }
+        public long WorkOrder { get; set; }
+        public long WorkOrderItem { get; set; }
         public decimal TotalSale { get; set; }
         public decimal LaborSale { get; set; }
         public decimal PartsSale { get; set; }

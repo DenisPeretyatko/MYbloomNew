@@ -18,7 +18,7 @@
         public string Employee { get; set; }
 
         [XmlAttribute]
-        public string Equipment { get; set; }
+        public long Equipment { get; set; }
 
         [XmlAttribute]
         public string EquipmentType { get; set; }

@@ -66,10 +66,10 @@
             try
             {
                 var properties = new Dictionary<string, string>();
-                properties.Add("Assignment", assignment.Assignment ?? string.Empty);
+                properties.Add("Assignment", assignment.Assignment.ToString());
                 properties.Add("ScheduleDate", ((DateTime)assignment.ScheduleDate).ToString() ?? string.Empty);
                 properties.Add("Employee", assignment.Employee ?? string.Empty);
-                properties.Add("WorkOrder", assignment.WorkOrder ?? string.Empty);
+                properties.Add("WorkOrder", assignment.WorkOrder.ToString());
                 properties.Add("EstimatedRepairHours", assignment.EstimatedRepairHours ?? string.Empty);
                 properties.Add("StartTime", ((DateTime)assignment.StartTime).TimeOfDay.ToString() ?? string.Empty);
                 properties.Add("Enddate", assignment.Enddate.ToString() ?? string.Empty);
@@ -163,7 +163,7 @@
                 var resultAssignment = new SageAssignment();
                 if (resultWorkOrder != null)
                 {
-                   resultAssignment = this.serviceManager.GetAssignmentByWorkOrderId(resultWorkOrder.WorkOrder).SingleOrDefault();
+                   resultAssignment = this.serviceManager.GetAssignmentByWorkOrderId(resultWorkOrder.WorkOrder.ToString()).SingleOrDefault();
                 }
 
                 var result = new SageResponse<SageWorkOrder> { IsSucceed = true, Entity = resultWorkOrder, RelatedAssignment = resultAssignment };
@@ -294,7 +294,7 @@
                 var result = new SageResponse<SageWorkOrder>
                 {
                     IsSucceed = true,
-                    Entity = serviceManager.WorkOrders(workOrder.WorkOrder).SingleOrDefault()
+                    Entity = serviceManager.WorkOrders(workOrder.WorkOrder.ToString()).SingleOrDefault()
                 };
                 return result;
             }

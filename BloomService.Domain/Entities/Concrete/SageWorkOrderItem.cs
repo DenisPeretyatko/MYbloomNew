@@ -106,8 +106,8 @@ namespace BloomService.Domain.Entities.Concrete
         [XmlAttribute(DataType = "date")]
         public DateTime WorkDate { get; set; }
         [XmlAttribute]
-        public int WorkOrder { get; set; }
+        public long WorkOrder { get; set; }
         [XmlAttribute("WorkOrderItem")]
-        public int WorkOrderItem { get; set; }
+        public long WorkOrderItem { get; set; }
     }
 }

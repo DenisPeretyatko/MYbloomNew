@@ -9,7 +9,7 @@
         SageResponse<SageAssignment> AddAssignment(SageAssignment assignment);
         SageResponse<SageWorkOrder> AddWorkOrder(SageWorkOrder workOrder);
         SageResponse<SageAssignment> GetAssignments();
-        SageResponse<SageAssignment> GetAssignment(string id);
+        SageResponse<SageAssignment> GetAssignment(long id);
         SageResponse<SageCallType> GetCalltypes();
         SageResponse<SageDepartment> GetDepartments();
         SageResponse<SageAssignment> EditAssignment(SageAssignment assignment);
@@ -22,11 +22,11 @@
         SageResponse<SageProblem> GetProblems();
         SageResponse<SageRateSheet> GetRateSheets();
         SageResponse<SageRepair> GetRepairs();
-        SageResponse<SageWorkOrder> UnassignWorkOrders(string id);
-        SageResponse<SageWorkOrder> GetWorkorder(string id);
+        SageResponse<SageWorkOrder> UnassignWorkOrders(long id);
+        SageResponse<SageWorkOrder> GetWorkorder(long id);
         SageResponse<SageWorkOrder> GetWorkorders();
-        SageResponse<SageWorkOrderItem> GetWorkorderItemsByWorkOrderId(string id);
-        SageResponse<SageWorkOrderItem> DeleteWorkOrderItems(int workOrderId, IEnumerable<int> ids);
+        SageResponse<SageWorkOrderItem> GetWorkorderItemsByWorkOrderId(long id);
+        SageResponse<SageWorkOrderItem> DeleteWorkOrderItems(long workOrderId, IEnumerable<long> ids);
 
         SageResponse<SageWorkOrderItem> AddWorkOrderItem(SageWorkOrderItem workOrderItem);
         SageResponse<SageWorkOrderItem> EditWorkOrderItem(SageWorkOrderItem workOrderItem);

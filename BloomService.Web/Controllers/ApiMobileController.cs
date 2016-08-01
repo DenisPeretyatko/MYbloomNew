@@ -105,7 +105,7 @@ namespace BloomService.Web.Controllers
 
         [HttpGet]
         [Route("Apimobile/Workorder/{id}")]
-        public ActionResult GetWorkOrder(string id)
+        public ActionResult GetWorkOrder(long id)
         {
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id);
             return Json(workOrder, JsonRequestBehavior.AllowGet);
@@ -171,7 +171,7 @@ namespace BloomService.Web.Controllers
                 order.Address = location.Address;
                 if (order.Equipment != 0)
                 {
-                    var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment.ToString());
+                    var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment);
                     order.Equipments.AddRange(equipments);
                 }
             }
@@ -250,13 +250,13 @@ namespace BloomService.Web.Controllers
             
             var techLocation = new SageTechnicianLocation
             {
-                Employee = userId,
+                Employee = Convert.ToInt64(userId),
                 Latitude = lat,
                 Longitude = lng,
                 Date = DateTime.Now.GetLocalDate()
             };
             repository.Add(techLocation);
-            var emploee = repository.SearchFor<SageEmployee>(x => x.Employee == userId).Single();
+            var emploee = repository.SearchFor<SageEmployee>(x => x.Employee.ToString() == userId).Single();
             emploee.Longitude = lat;
             emploee.Latitude = lng;
             _hub.UpdateTechnicianLocation(emploee);
@@ -266,7 +266,7 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Apimobile/ChangeWorkorderStatus")]
-        public ActionResult ChangeWorkorderStatus(string id, string status)
+        public ActionResult ChangeWorkorderStatus(long id, string status)
         {
             _log.InfoFormat("Method: ChangeWorkorderStatus. Id: {0}, Status {1}", id, status);
             var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();

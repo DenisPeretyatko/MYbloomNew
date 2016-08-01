@@ -57,7 +57,7 @@
         public string Contact9 { get; set; }
         public double CreditLimit { get; set; }
         public string CreditRating { get; set; }
-        public string Customer { get; set; }
+        public long Customer { get; set; }
         public object CustomerFileLinks { get; set; }
         public object CustomerNotes { get; set; }
         public string CustomerType { get; set; }

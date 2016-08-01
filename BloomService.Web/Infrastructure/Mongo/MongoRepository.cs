@@ -28,7 +28,7 @@
             var collection = GetCollection<TEntity>();
             if (entity.Id == null)
             {
-                entity.Id = ObjectId.GenerateNewId().ToString();
+                entity.Id = ObjectId.GenerateNewId().ToString(); ;
             }
             else if (Get<TEntity>(entity.Id) != null)
             {

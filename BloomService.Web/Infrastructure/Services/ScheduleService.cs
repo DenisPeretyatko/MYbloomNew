@@ -49,7 +49,7 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
                 return false;
             }
 
-            databaseAssignment.EmployeeId = employee != null ? employee.Employee : null;
+            databaseAssignment.EmployeeId = employee != null ? employee.Employee : 0;
             databaseAssignment.Start = ((DateTime)edited.Entity.ScheduleDate).Add(((DateTime)edited.Entity.StartTime).TimeOfDay).ToString();
             databaseAssignment.End = ((DateTime)edited.Entity.ScheduleDate).Add(((DateTime)edited.Entity.StartTime).TimeOfDay).AddHours(edited.Entity.EstimatedRepairHours.AsDouble()).ToString();
             databaseAssignment.Color = employee?.Color ?? "";
@@ -65,7 +65,7 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
             workorder.Longitude = itemLocation.Longitude;
 
             _repository.Update(databaseAssignment);
-            workorder.AssignmentId = null;
+            workorder.AssignmentId = 0;
             _repository.Update(workorder);
 
 
@@ -73,7 +73,7 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
             {
                 WorkOrder = workorder,
                 DateEntered = databaseAssignment.ScheduleDate,
-                Employee = employee?.Employee ?? "",
+                Employee = employee?.Employee ?? 0,
                 Color = employee?.Color ?? ""
             });
 
@@ -96,7 +96,7 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
                 return false;
             }
             databaseAssignment.Employee = "";
-            databaseAssignment.EmployeeId = null;
+            databaseAssignment.EmployeeId = 0;
             databaseAssignment.Start = "";
             databaseAssignment.End = "";
             databaseAssignment.Color = "";

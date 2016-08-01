@@ -68,7 +68,7 @@
                 .ForMember(dest => dest.TimeEntered, opts => opts.MapFrom(src => src.TIMEENTER))
                 .ForMember(dest => dest.TotalCost, opts => opts.MapFrom(src => src.TOTALCOST))
                 .ForMember(dest => dest.WorkOrderType, opts => opts.MapFrom(src => src.WOTYPE))
-                .ForMember(dest => dest.WorkOrder, opts => opts.MapFrom(src => src.WRKORDNBR));
+                .ForMember(dest => dest.WorkOrder, opts => opts.MapFrom(src => Convert.ToInt64(src.WRKORDNBR)));
 
             this.CreateMap<AssignmentReturnParam, SageAssignment>()
                 .ForMember(dest => dest.ElapsedTime, opts => opts.MapFrom(src => src.ElapsedTime.AsDoubleSafe()))
@@ -84,19 +84,21 @@
                 .ForMember(dest => dest.PostedTime, opts => opts.MapFrom(src => ConvertToTime(src.PostedTime)))
                 .ForMember(dest => dest.ScheduleDate, opts => opts.MapFrom(src => ConvertToDate(src.ScheduleDate)))
                 .ForMember(dest => dest.StartTime, opts => opts.MapFrom(src => ConvertToTime(src.StartTime)))
+                .ForMember(dest => dest.Assignment, opts => opts.MapFrom(src => Convert.ToInt64(src.Assignment)))
                 .ForMember(dest => dest.TimeEntered, opts => opts.MapFrom(src => ConvertToTime(src.TimeEntered)));
 
             this.CreateMap<LocationReturnParam, SageLocation>()
                 .ForMember(dest => dest.AccountOpenDate, opts => opts.MapFrom(src => ConvertToDate(src.AccountOpenDate)));
 
-            this.CreateMap<BloomService.Domain.Entities.Concrete.ReturnParamModels.EquipmentReturnParam, SageEquipment>()
-                .ForMember(dest => dest.DateRemoved, (IMemberConfigurationExpression<BloomService.Domain.Entities.Concrete.ReturnParamModels.EquipmentReturnParam> opts) => opts.MapFrom(src => ConvertToDate(src.DateRemoved)))
-                .ForMember(dest => dest.DateReplaced, (IMemberConfigurationExpression<BloomService.Domain.Entities.Concrete.ReturnParamModels.EquipmentReturnParam> opts) => opts.MapFrom(src => ConvertToDate(src.DateReplaced)))
-                .ForMember(dest => dest.InstallDate, (IMemberConfigurationExpression<BloomService.Domain.Entities.Concrete.ReturnParamModels.EquipmentReturnParam> opts) => opts.MapFrom(src => ConvertToDate(src.InstallDate)));
+            this.CreateMap<EquipmentReturnParam, SageEquipment>()
+                .ForMember(dest => dest.DateRemoved, (IMemberConfigurationExpression<EquipmentReturnParam> opts) => opts.MapFrom(src => ConvertToDate(src.DateRemoved)))
+                .ForMember(dest => dest.DateReplaced, (IMemberConfigurationExpression<EquipmentReturnParam> opts) => opts.MapFrom(src => ConvertToDate(src.DateReplaced)))
+                .ForMember(dest => dest.InstallDate, (IMemberConfigurationExpression<EquipmentReturnParam> opts) => opts.MapFrom(src => ConvertToDate(src.InstallDate)));
 
             this.CreateMap<EmployeeReturnParam, SageEmployee>()
                .ForMember(dest => dest.Birthdate, opts => opts.MapFrom(src => ConvertToDate(src.Birthdate)))
                .ForMember(dest => dest.DefaultStartTime, opts => opts.MapFrom(src => ConvertToTime(src.DefaultStartTime)))
+               .ForMember(dest => dest.Employee, opts => opts.MapFrom(src => Convert.ToInt64(src.Employee)))
                .ForMember(dest => dest.NormalEndTime, opts => opts.MapFrom(src => ConvertToTime(src.NormalEndTime)));
 
             this.CreateMap<CustomerReturnParam, SageCustomer>()
@@ -118,6 +120,7 @@
               .ForMember(dest => dest.LastActivityDate, opts => opts.MapFrom(src => ConvertToDate(src.LastActivityDate)))
               .ForMember(dest => dest.LastOrderDate, opts => opts.MapFrom(src => ConvertToDate(src.LastOrderDate)))
               .ForMember(dest => dest.LastReceivedDate, opts => opts.MapFrom(src => ConvertToDate(src.LastReceivedDate)))
+              .ForMember(dest => dest.Part, opts => opts.MapFrom(src => Convert.ToInt64(src.Part)))
               .ForMember(dest => dest.OrderLeadTime, opts => opts.MapFrom(src => ConvertToTime(src.OrderLeadTime)));
 
             this.CreateMap<WorkOrderReturnParam, SageWorkOrder>()
@@ -130,6 +133,7 @@
              .ForMember(dest => dest.InvoiceDate, opts => opts.MapFrom(src => ConvertToDate(src.InvoiceDate)))
              .ForMember(dest => dest.QuoteExpirationDate, opts => opts.MapFrom(src => ConvertToDate(src.QuoteExpirationDate)))
              .ForMember(dest => dest.TimeComplete, opts => opts.MapFrom(src => ConvertToTime(src.TimeComplete)))
+             .ForMember(dest => dest.WorkOrder, opts => opts.MapFrom(src => Convert.ToInt64(src.TimeComplete)))
              .ForMember(dest => dest.TimeEntered, opts => opts.MapFrom(src => ConvertToTime(src.TimeEntered)));
         }
 

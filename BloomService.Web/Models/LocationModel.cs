@@ -7,7 +7,7 @@ namespace BloomService.Web.Models
         [JsonProperty("SiteType")]
         public string SiteType { get; set; }
         [JsonProperty("Location")]
-        public string Location { get; set; }
+        public long Location { get; set; }
         [JsonProperty("Alias")]
         public string Alias { get; set; }
         [JsonProperty("ARCustomer")]

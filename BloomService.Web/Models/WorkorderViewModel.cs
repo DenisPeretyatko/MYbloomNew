@@ -12,6 +12,6 @@
 
         public string Status { get; set; }
 
-        public string WorkOrder { get; set; }
+        public long WorkOrder { get; set; }
     }
 }

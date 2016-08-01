@@ -9,7 +9,7 @@
     {
         public List<ImageLocation> Images { get; set; }
 
-        public string WorkOrder { get; set; }
+        public long WorkOrder { get; set; }
         public string WorkOrderBsonId { get; set; }
     }
 

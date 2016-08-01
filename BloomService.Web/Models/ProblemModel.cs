@@ -5,7 +5,7 @@ namespace BloomService.Web.Models
     public class ProblemModel : EntityModel
     {
         [JsonProperty("Problem")]
-        public int Problem { get; set; }
+        public long Problem { get; set; }
         [JsonProperty("Description")]
         public string Description { get; set; }
         [JsonProperty("Department")]

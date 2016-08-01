@@ -64,7 +64,7 @@
             }
         }
 
-        public SageResponse<SageAssignment> GetAssignment(string id)
+        public SageResponse<SageAssignment> GetAssignment(long id)
         {
             return Get<SageAssignment>(id, EndPoints.GetAssignments);
         }
@@ -129,7 +129,7 @@
             return GetAll<SageRepair>(EndPoints.GetRepairs);
         }
 
-        public SageResponse<SageWorkOrderItem> DeleteWorkOrderItems(int workOrderId, IEnumerable<int> ids)
+        public SageResponse<SageWorkOrderItem> DeleteWorkOrderItems(long workOrderId, IEnumerable<long> ids)
         {
             var request = new RestRequest(EndPoints.DeleteWorkOrderItems, Method.DELETE) { RequestFormat = DataFormat.Json };
             request.AddParameter("workOrderId", workOrderId.ToString());
@@ -141,7 +141,7 @@
         }
 
 
-        public SageResponse<SageWorkOrder> GetWorkorder(string id)
+        public SageResponse<SageWorkOrder> GetWorkorder(long id)
         {
             return Get<SageWorkOrder>(id, EndPoints.GetWorkorder);
         }
@@ -151,17 +151,17 @@
             return GetAll<SageWorkOrder>(EndPoints.GetWorkorder);
         }
 
-        public SageResponse<SageWorkOrderItem> GetWorkorderItemsByWorkOrderId(string id)
+        public SageResponse<SageWorkOrderItem> GetWorkorderItemsByWorkOrderId(long id)
         {
             var request = new RestRequest(EndPoints.GetWorkOrderItemsByWorkorderId, Method.GET) { RequestFormat = DataFormat.Json };
-            request.AddUrlSegment("id", id);
+            request.AddUrlSegment("id", id.ToString());
             BuildAuthenticationHeader(request);
             var response = restClient.Execute<SageResponse<SageWorkOrderItem>>(request);
             var result = response.Data;
             return result;
         }
 
-        public SageResponse<SageWorkOrder> UnassignWorkOrders(string id)
+        public SageResponse<SageWorkOrder> UnassignWorkOrders(long id)
         {
             return Delete<SageWorkOrder>(id, EndPoints.UnassignWorkOrders);
         }
@@ -184,10 +184,10 @@
             return request;
         }
 
-        private SageResponse<TEntity> Delete<TEntity>(string id, string endPoint) where TEntity : IEntity
+        private SageResponse<TEntity> Delete<TEntity>(long id, string endPoint) where TEntity : IEntity
         {
             var request = new RestRequest(endPoint + "/{id}", Method.DELETE) { RequestFormat = DataFormat.Json };
-            request.AddUrlSegment("id", id);
+            request.AddUrlSegment("id", id.ToString());
             BuildAuthenticationHeader(request);
             var response = restClient.Execute<SageResponse<TEntity>>(request);
             var results = response.Data;
@@ -204,10 +204,10 @@
             return result;
         }
        
-        private SageResponse<TEntity> Get<TEntity>(string id, string endPoint) where TEntity : IEntity
+        private SageResponse<TEntity> Get<TEntity>(long id, string endPoint) where TEntity : IEntity
         {
             var request = new RestRequest(endPoint + "/{id}", Method.GET) { RequestFormat = DataFormat.Json };
-            request.AddUrlSegment("id", id);
+            request.AddUrlSegment("id", id.ToString());
             BuildAuthenticationHeader(request);
             var response = restClient.Execute<SageResponse<TEntity>>(request);
             var result = response.Data;

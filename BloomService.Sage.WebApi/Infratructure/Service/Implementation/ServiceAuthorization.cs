@@ -93,9 +93,9 @@ namespace Sage.WebApi.Infratructure.Service.Implementation
             return searchResponse;
         }
 
-        private string GetId(string mail)
+        private long GetId(string mail)
         {
-            var id = string.Empty;
+            long id = 0;
             var technicians = _serviceManagement.Employees();
             var technician = technicians.FirstOrDefault(x => x.Email == mail);
             if (technician != null)

@@ -12,7 +12,7 @@
 
         public string Customerpo { get; set; }
 
-        public string Emploee { get; set; }
+        public long Emploee { get; set; }
 
         public List<LaborPartsModel> Equipment { get; set; }
 
@@ -34,7 +34,7 @@
 
         public string Ratesheet { get; set; }
 
-        public string WorkOrder { get; set; }
+        public long WorkOrder { get; set; }
 
         public int Status { get; set; }
     }
