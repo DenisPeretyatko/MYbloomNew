@@ -182,6 +182,10 @@ namespace BloomService.Web.Controllers
         [Route("WorkorderPage")]
         public ActionResult GetWorkorderPage(WorkorderSortModel model)
         {
+
+            long search = -1;
+            long.TryParse(model.Search, out search);
+
             var workorders = _repository.GetAll<SageWorkOrder>();
 
             if (!string.IsNullOrEmpty(model.Search))
@@ -190,9 +194,10 @@ namespace BloomService.Web.Controllers
                         .Where(x => x.ARCustomer.ToLower().Contains(model.Search.ToLower()) ||
                                     x.Location.ToLower().Contains(model.Search.ToLower()) ||
                                     x.Status.ToLower().Contains(model.Search.ToLower()) ||
-                                    x.WorkOrder.ToString().Contains(model.Search)
+                                    x.WorkOrder == search
                         );
             }
+
             var entitiesCount = workorders.Count();
 
             switch (model.Column) //sort
@@ -247,7 +252,7 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkorderPageCount()
         {
             //var date = new DateTime(year, 0, 0);
-            var entitiesCount = _repository.GetAll<SageWorkOrder>().Count();
+            var entitiesCount = _repository.GetAll<SageWorkOrder>().Where(x => !string.IsNullOrEmpty(x.Employee)).Count();
             var countPage = entitiesCount % _itemsOnPage == 0 ? entitiesCount / _itemsOnPage : entitiesCount / _itemsOnPage + 1;
             return Json(countPage, JsonRequestBehavior.AllowGet);
         }

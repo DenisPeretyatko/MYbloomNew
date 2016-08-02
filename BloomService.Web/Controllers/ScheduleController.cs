@@ -31,7 +31,6 @@ namespace BloomService.Web.Controllers
         private readonly INotificationService _notification;
         private readonly IScheduleService _scheduleService;
 
-
         public ScheduleController(IRepository repository, ISageApiProxy sageApiProxy, IBloomServiceHub hub, INotificationService notification, IScheduleService scheduleService)
         {
             _repository = repository;
@@ -51,7 +50,8 @@ namespace BloomService.Web.Controllers
             var employees = _repository.GetAll<SageEmployee>().ToList();
             //var mappedEmployees = Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employees);
             var mappedAssignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(assignments);
-            foreach (var item in mappedAssignments) {
+            foreach (var item in mappedAssignments)
+            {
                 if (!string.IsNullOrEmpty(item.Employee))
                 {
                     item.Color = employees.FirstOrDefault(e => e.Name == item.Employee).Color;

@@ -91,7 +91,6 @@ namespace BloomService.Web.Controllers
             return Json(dashboard, JsonRequestBehavior.AllowGet);
         }
 
-
         [HttpPost]
         [Route("Dashboard/UpdateNotificationTime")]
         public ActionResult UpdateNotificationTime(string str = null)
@@ -141,7 +140,5 @@ namespace BloomService.Web.Controllers
         {
             throw new Exception("Exception");
         }
-
-
     }
 }
