@@ -218,7 +218,7 @@ namespace BloomService.Web.Controllers
                     _log.ErrorFormat("Was not able to save workorderItem to sage. !result.IsSucceed");
                     return Error("Was not able to save workorderItem to sage");
                 }
-                return Json(Success(), JsonRequestBehavior.AllowGet);
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
 
             dBworkOrderItems = workOrder.WorkOrderItems.ToList();
@@ -237,7 +237,7 @@ namespace BloomService.Web.Controllers
                 _log.ErrorFormat("Was not able to update workorderItem to sage. !result.IsSucceed");
                 return Error("Was not able to update workorderItem to sage");
             }
-            return Json(Success(), JsonRequestBehavior.AllowGet);
+            return Json(resultUpdate, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
