@@ -318,7 +318,7 @@ namespace BloomService.Web.Controllers
         }
 
         [HttpPost]
-        [Route("Apimobile/ChangeWorkorderStatus")]
+        [Route("Apimobile/ChangeWorkorderStatus/{id}/{status}")]
         public ActionResult ChangeWorkorderStatus(string id, string status)
         {
             _log.InfoFormat("Method: ChangeWorkorderStatus. Id: {0}, Status {1}", id, status);
