@@ -32,6 +32,7 @@ namespace BloomService.Web.Controllers
     using BloomService.Web.Infrastructure;
     using BloomService.Web.Infrastructure.Mongo;
     using AutoMapper;
+    using Infrastructure.Constants;
     public class ApiMobileController : BaseController
     {
         private readonly IImageService _imageService;
@@ -324,15 +325,15 @@ namespace BloomService.Web.Controllers
             var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
             if (workorder == null)
                 return Error("Workorder not found");
+            workorder.Status = status == "Closed" ? WorkOrderStatus.Status.FirstOrDefault(x => x.Status == status).Status : WorkOrderStatus.Status.FirstOrDefault(x => x.Status == "Open").Status;
+
+            var result = sageApiProxy.EditWorkOrder(workorder);
+            if (!result.IsSucceed)
+                return Error("Was not able to save workorder to sage");
+
             workorder.Status = status;
-
-            //var result = sageApiProxy.EditWorkOrder(workorder);
-            //if (!result.IsSucceed)
-            //    return Error("Was not able to save workorder to sage");
-
             repository.Update(workorder);
             _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, status);
-            var workorder2 = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
             notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, status));
             return Success();
         }
