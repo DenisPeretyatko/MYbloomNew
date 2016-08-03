@@ -325,9 +325,9 @@ namespace BloomService.Web.Controllers
             var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
             if (workorder == null)
                 return Error("Workorder not found");
-            workorder.Status = status == "Closed" ? WorkOrderStatus.Status.FirstOrDefault(x => x.Status == status).Status : WorkOrderStatus.Status.FirstOrDefault(x => x.Status == "Open").Status;
+            var sageStatus = status == "Closed" ? WorkOrderStatus.Status.FirstOrDefault(x => x.Status == status).Value : WorkOrderStatus.Status.FirstOrDefault(x => x.Status == "Open").Value;
 
-            var result = sageApiProxy.EditWorkOrder(workorder);
+            var result = sageApiProxy.EditWorkOrderStatus(id, sageStatus.ToString());
             if (!result.IsSucceed)
                 return Error("Was not able to save workorder to sage");
 

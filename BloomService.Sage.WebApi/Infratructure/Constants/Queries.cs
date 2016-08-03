@@ -1,4 +1,5 @@
 ﻿using BloomService.Domain.Entities.Concrete;
+using System;
 using System.Collections.Generic;
 
 namespace Sage.WebApi.Infratructure.Constants
@@ -11,7 +12,8 @@ namespace Sage.WebApi.Infratructure.Constants
         public static readonly string SelectWorkOrders = "SELECT * FROM WRKORDER";
         public static readonly string SelectPermissionCodes = "SELECT * FROM PERMISSIONCODE";
         public static readonly string SelectRateSheets = "SELECT * FROM RATESHEET";
-        
+        public static readonly string EditWorkOrderStatus = "UPDATE WRKORDER SET STATUS = {0} WHERE WRKORDNBR = {1}";
+
         public static string BuildDeleteWorkOrderItemQuery(int workOrderId, IEnumerable<int> ids)
         {
             var query = "DELETE FROM WOITEMS WHERE WRKORDNBR  = {0} and WRKORDITEM in ({1});" 
@@ -41,7 +43,7 @@ namespace Sage.WebApi.Infratructure.Constants
             }
             if (workOrder.CallTime != null)
             {
-                parameters.Add("CALLTIME", workOrder.CallTime.ToString() ?? ((System.DateTime)workOrder.CallTime).ToString("yyyy-MM-dd"));
+                parameters.Add("CALLTIME", ((DateTime)workOrder.CallTime).ToString("HH:mm:ss") ?? ((DateTime)workOrder.CallTime).ToString("HH:mm:ss"));
             }
             parameters.Add("PROBLEMCODE", workOrder.Problem);
             parameters.Add("RATESHEETNBR", workOrder.RateSheet);
@@ -65,7 +67,11 @@ namespace Sage.WebApi.Infratructure.Constants
             {
                 if (parameter.Value != string.Empty && parameter.Value != null)
                 {
-                    query += string.Format("{0} = '{1}', ", parameter.Key, parameter.Value.Replace("'", "&apos;"));
+                    query += string.Format("{0} = '{1}', ", parameter.Key, parameter.Value.Replace("'", "&apos;")
+                           .Replace("\"", "&quot;")
+                           .Replace("<", "&lt;")
+                           .Replace("&", "&amp;")
+                           .Replace(">", "&gt;"));
                 }
             }
 

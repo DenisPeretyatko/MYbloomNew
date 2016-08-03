@@ -20,5 +20,7 @@
         List<SagePermissionCode> PermissionCodes();
 
         void DeleteWorkOrderItems(int workOrderId, IEnumerable<int> ids);
+
+        void EditWorkOrderStatus(string id, string status);
     }
 }

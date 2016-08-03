@@ -308,8 +308,7 @@ namespace BloomService.Web.Controllers
             var workOrderItems = Mapper.Map<IEnumerable<SageWorkOrderItem>>(model.Equipment);
 
             var workOrderFromMongo = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == workorder.WorkOrder).Single();
-
-            var dBworkOrderItems = new List<SageWorkOrderItem>();
+            
             if (workOrderItems != null)
             {
                 foreach (var workOrderItem in workOrderItems)
@@ -332,19 +331,11 @@ namespace BloomService.Web.Controllers
                         }
                         if (workOrderItem.WorkOrderItem == 0)
                         {
-                            var result = _sageApiProxy.AddWorkOrderItem(workOrderItem);
-                            if (result != null && result.IsSucceed && result.Entity != null)
-                            {
-                                dBworkOrderItems.Add(result.Entity);
-                            }
+                            _sageApiProxy.AddWorkOrderItem(workOrderItem);                            
                         }
                         else
                         {
-                            var result = _sageApiProxy.EditWorkOrderItem(workOrderItem);
-                            if (result != null && result.IsSucceed && result.Entity != null)
-                            {
-                                dBworkOrderItems.Add(result.Entity);
-                            }
+                            _sageApiProxy.EditWorkOrderItem(workOrderItem);                           
                         }
                     }
                 }
@@ -377,8 +368,7 @@ namespace BloomService.Web.Controllers
                     _sageApiProxy.DeleteWorkOrderItems(Convert.ToInt32(workOrderFromMongo.WorkOrder), idsToRemove);
                 }
             }
-
-            workOrderResult.Entity.WorkOrderItems = dBworkOrderItems;
+            
             workOrderResult.Entity.Status = WorkOrderStatus.Status.FirstOrDefault(x => x.Value == model.Status).Status;
             workOrderResult.Entity.Id = workorder.Id;
             workOrderResult.Entity.WorkOrderItems = _sageApiProxy.GetWorkorderItemsByWorkOrderId(workorder.WorkOrder).Entities;

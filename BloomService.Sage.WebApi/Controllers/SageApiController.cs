@@ -155,6 +155,7 @@
                            .Replace("'", "&apos;")
                            .Replace("\"", "&quot;")
                            .Replace("<", "&lt;")
+                           .Replace("&", "&amp;")
                            .Replace(">", "&gt;"));
                     }
                 }
@@ -270,6 +271,7 @@
                            .Replace("'", "&apos;")
                            .Replace("\"", "&quot;")
                            .Replace("<", "&lt;")
+                           .Replace("&", "&amp;")
                            .Replace(">", "&gt;"));
                     }
                 }
@@ -295,6 +297,25 @@
                 {
                     IsSucceed = true,
                     Entity = serviceManager.WorkOrders(workOrder.WorkOrder).SingleOrDefault()
+                };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
+
+        [HttpPost, Route("api/v2/sm/workorders/status/edit/{id}/{status}")]
+        public SageResponse<SageWorkOrder> EditWorkOrderStatus(string id, string status)
+        {
+            try
+            {
+                serviceOdbc.EditWorkOrderStatus(id, status);
+                var result = new SageResponse<SageWorkOrder>
+                {
+                    IsSucceed = true
                 };
                 return result;
             }
