@@ -108,7 +108,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                             parts: partsList,
                             part: part,
                             woItem: value.WorkOrderItem,
-                            laborItem: laborsList.selected
+                            laborItem: laborsList.selected,
+                            WOId : value.WorkOrder
                         });
                     }
                 });
@@ -128,7 +129,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                 parts: angular.copy($scope.lookups.Parts),
                 part: "",
                 woItem: '',
-                laborItem:""
+                laborItem: "",
+                WOId: $scope.editableWorkOrder.WorkOrder
             }
             $scope.equipment.push(equipment);
         }
@@ -146,7 +148,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                     labor: angular.copy($scope.lookups.Hours),
                     parts: angular.copy($scope.lookups.Parts),
                     woItem: '',
-                    laborItem:""
+                    laborItem: "",
+                    WOId: $scope.editableWorkOrder.WorkOrder
                 }
             $scope.equipment.push(equipment);
         }
@@ -166,7 +169,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                     Rate: value.rate,
                     Part: parseInt(value.part),
                     WorkOrderItem: value.woItem,
-                    LaborItem: value.laborItem
+                    LaborItem: value.laborItem,
+                    WorkOrder: value.WOId 
                 });
             }
         });
@@ -286,6 +290,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                     parts: angular.copy($scope.lookups.Parts),
                     part: "",
                     woItem: "",
+                    WOId: $scope.editableWorkOrder.WorkOrder
                 }
                 $scope.equipment.push(equipment);
             }
