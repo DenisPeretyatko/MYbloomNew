@@ -136,22 +136,32 @@ namespace BloomService.Web.Infrastructure.Jobs
                     try
                     {
                         var workOrders = _proxy.GetWorkorders();
-                        foreach (var entity in workOrders.Entities)
+                        var emploees = _proxy.GetEmployees().Entities.Where(x => !string.IsNullOrEmpty(x.JCJob));
+                        foreach (var workOrder in workOrders.Entities)
                         {
-                            var mongoEntity = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == entity.WorkOrder).SingleOrDefault();
-                            if (mongoEntity == null)
+                            if (emploees.SingleOrDefault(x => x.Name == workOrder.Employee) != null)
                             {
-                                entity.WorkOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(entity.WorkOrder).Entities;
-                                _repository.Add(entity);
+                                workOrder.IsValid = true;
                             }
                             else
                             {
-                                entity.WorkOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(entity.WorkOrder).Entities;
-                                entity.Id = mongoEntity.Id;
-                                entity.Status = mongoEntity.Status;
-                                entity.AssignmentId = mongoEntity.AssignmentId;
-                                entity.ScheduleDate = mongoEntity.ScheduleDate;
-                                _repository.Update(entity);
+                                workOrder.IsValid = false;
+                            }
+
+                            var mongoEntity = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == workOrder.WorkOrder).SingleOrDefault();
+                            if (mongoEntity == null)
+                            {
+                                workOrder.WorkOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder).Entities;
+                                _repository.Add(workOrder);
+                            }
+                            else
+                            {
+                                workOrder.WorkOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder).Entities;
+                                workOrder.Id = mongoEntity.Id;
+                                workOrder.Status = mongoEntity.Status;
+                                workOrder.AssignmentId = mongoEntity.AssignmentId;
+                                workOrder.ScheduleDate = mongoEntity.ScheduleDate;
+                                _repository.Update(workOrder);
                             }
                         }
                     }
@@ -208,8 +218,17 @@ namespace BloomService.Web.Infrastructure.Jobs
                     try
                     {
                         var assignments = _proxy.GetAssignments();
+                        var emploees = _proxy.GetEmployees().Entities.Where(x => !string.IsNullOrEmpty(x.JCJob));
                         foreach (var assigment in assignments.Entities)
                         {
+                            if (emploees.SingleOrDefault(x => x.Name == assigment.Employee) != null)
+                            {
+                                assigment.IsValid = true;
+                            }
+                            else
+                            {
+                                assigment.IsValid = false;
+                            }
                             var mongoEntity = _repository.SearchFor<SageAssignment>(x => x.Assignment == assigment.Assignment).SingleOrDefault();
                             var workorder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == assigment.WorkOrder).SingleOrDefault();
                             if (mongoEntity == null)

@@ -291,5 +291,7 @@
         public SagePaymentMethod PaymentMethodObj { get; set; }
         [XmlIgnore]
         public SageWorkOrderStatus StatusObj { get; set; }
+        [XmlIgnore]
+        public bool IsValid { get; set; }
     }
 }
