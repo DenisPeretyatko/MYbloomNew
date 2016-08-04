@@ -79,6 +79,12 @@
             ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
 
+        public void EditWorkOrderStatus(string id, string status)
+        {
+            var query = string.Format(Queries.EditWorkOrderStatus, status, id);
+            ExecuteQuery(timberlineServiceManagementConnectionString, query);
+        }
+
         public List<SageWorkOrder> WorkOrders()
         {
             var query = Queries.SelectWorkOrders;

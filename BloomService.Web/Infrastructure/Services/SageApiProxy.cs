@@ -37,6 +37,17 @@
             return Edit(assignment, EndPoints.EditAssignment);
         }
 
+        public SageResponse<SageWorkOrder> EditWorkOrderStatus(long id, string status)
+        {
+            var request = new RestRequest(EndPoints.EditWorkOrderStatus + "/{id}/{status}", Method.POST) { RequestFormat = DataFormat.Json };
+            request.AddUrlSegment("id", id.ToString());
+            request.AddUrlSegment("status", status);
+            BuildAuthenticationHeader(request);
+            var response = restClient.Execute<SageResponse<SageWorkOrder>>(request);
+            var results = response.Data;
+            return results;
+        }
+
         public SageResponse<SageWorkOrder> EditWorkOrder(SageWorkOrder workOrder)
         {
             return Edit(workOrder, EndPoints.EditWorkOrder);

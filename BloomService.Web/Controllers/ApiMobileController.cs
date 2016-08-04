@@ -31,7 +31,8 @@ namespace BloomService.Web.Controllers
 
     using BloomService.Web.Infrastructure;
     using BloomService.Web.Infrastructure.Mongo;
-
+    using AutoMapper;
+    using Infrastructure.Constants;
     public class ApiMobileController : BaseController
     {
         private readonly IImageService _imageService;
@@ -180,37 +181,89 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Apimobile/AddItem")]
-        public ActionResult AddWOItem(AddWOItemModel model)
+        public ActionResult AddWOItem(LaborPartsModel model)
         {
-            var items = repository.GetAll<SageWorkOrderItem>().ToList().Where(x => x.WorkOrder == model.WorkOrder);
-            var item = items.SingleOrDefault(x => x.WorkOrderItem == model.WorkOrderItem);
-            if (item == null)
+            var workOrderItemId = model.WorkOrderItem;
+            var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
+
+            var workOrderItem = new SageWorkOrderItem();
+            workOrderItem = Mapper.Map<SageWorkOrderItem>(model);
+            var dBworkOrderItems = new List<SageWorkOrderItem>();
+
+            if (workOrder.WorkOrderItems == null || (workOrder.WorkOrderItems != null && workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId) == null))
             {
-                var newItem = new SageWorkOrderItem()
+                if (workOrder.WorkOrderItems != null)
                 {
-                    WorkOrder = model.WorkOrder,
-                    WorkOrderItem = items.Any()? items.Max(x => x.WorkOrderItem) + 1:1,
-                    WorkDate = model.WorkDate,
-                    Description = model.Description,
-                    Quantity = model.Quantity,
-                    ItemType = model.ItemType,
-                    SalesTaxAmount = model.SalesTaxAmount,
-                    FlatRateLaborTaxAmt = model.FlatRateLaborTaxAmt
-                };
-                repository.Add(newItem);
-                return Json(newItem, JsonRequestBehavior.AllowGet);
+                    dBworkOrderItems = workOrder.WorkOrderItems.ToList();
+                }
+                workOrderItem.WorkOrder = model.WorkOrder;
+                workOrderItem.TotalSale = workOrderItem.Quantity * workOrderItem.UnitSale;
+                if (workOrderItem.ItemType == "Parts")
+                {
+                    workOrderItem.PartsSale = workOrderItem.UnitSale;
+                }
+                else
+                {
+                    workOrderItem.LaborSale = workOrderItem.UnitSale;
+                }
+                
+                var result = sageApiProxy.AddWorkOrderItem(workOrderItem);
+                if (result != null && result.IsSucceed && result.Entity != null)
+                {
+                    dBworkOrderItems.Add(result.Entity);
+                    workOrder.WorkOrderItems = dBworkOrderItems;
+                    repository.Update(workOrder);
+                }
+                else
+                {
+                    _log.ErrorFormat("Was not able to save workorderItem to sage. !result.IsSucceed");
+                    return Error("Was not able to save workorderItem to sage");
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+
+            dBworkOrderItems = workOrder.WorkOrderItems.ToList();
+            workOrderItem.WorkOrder = model.WorkOrder;
+            var resultUpdate = sageApiProxy.EditWorkOrderItem(workOrderItem);
+            if (resultUpdate != null && resultUpdate.IsSucceed && resultUpdate.Entity != null)
+            {
+                var dbEntity = dBworkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId);
+                dBworkOrderItems.Remove(dbEntity);
+                dBworkOrderItems.Add(resultUpdate.Entity);
+                workOrder.WorkOrderItems = dBworkOrderItems;
+                repository.Update(workOrder);
             }
             else
             {
-                item.WorkDate = model.WorkDate;
-                item.Description = model.Description;
-                item.Quantity = model.Quantity;
-                item.ItemType = model.ItemType;
-                item.SalesTaxAmount = model.SalesTaxAmount;
-                item.FlatRateLaborTaxAmt = model.FlatRateLaborTaxAmt;
-                repository.Update(item);
+                _log.ErrorFormat("Was not able to update workorderItem to sage. !result.IsSucceed");
+                return Error("Was not able to update workorderItem to sage");
             }
-            return Json(item, JsonRequestBehavior.AllowGet);
+            return Json(resultUpdate, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [Route("Apimobile/DeleteItem")]
+        public ActionResult DeleteWOItem(LaborPartsModel model)
+        {
+            var workOrderItemId = model.WorkOrderItem;
+            var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
+            var item = workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId);
+            var dBworkOrderItems = new List<SageWorkOrderItem>();
+            dBworkOrderItems = workOrder.WorkOrderItems.ToList();
+
+            var result = sageApiProxy.DeleteWorkOrderItems(model.WorkOrder, new List<long> { model.WorkOrderItem});
+            if (result != null && result.IsSucceed)
+            {
+                dBworkOrderItems.Remove(item);
+                workOrder.WorkOrderItems = dBworkOrderItems;
+                repository.Update(workOrder);
+            }
+            else
+            {
+                _log.ErrorFormat("Was not able to update workorderItem to sage. !result.IsSucceed");
+                return Error("Was not able to update workorderItem to sage");
+            }
+            return Json(Success(), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -266,22 +319,22 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Apimobile/ChangeWorkorderStatus")]
-        public ActionResult ChangeWorkorderStatus(long id, string status)
+        public ActionResult ChangeWorkorderStatus(StatusModel model)
         {
-            _log.InfoFormat("Method: ChangeWorkorderStatus. Id: {0}, Status {1}", id, status);
-            var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
+            _log.InfoFormat("Method: ChangeWorkorderStatus. Id: {0}, Status {1}", model.Id, model.Status);
+            var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.Id).FirstOrDefault();
             if (workorder == null)
                 return Error("Workorder not found");
-            workorder.Status = status;
+            var sageStatus = model.Status == "Closed" ? WorkOrderStatus.Status.FirstOrDefault(x => x.Status == model.Status).Value : WorkOrderStatus.Status.FirstOrDefault(x => x.Status == "Open").Value;
 
-            //var result = sageApiProxy.EditWorkOrder(workorder);
-            //if (!result.IsSucceed)
-            //    return Error("Was not able to save workorder to sage");
+            var result = sageApiProxy.EditWorkOrderStatus(model.Id, sageStatus.ToString());
+            if (!result.IsSucceed)
+                return Error("Was not able to save workorder to sage");
 
+            workorder.Status = model.Status;
             repository.Update(workorder);
-            _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, status);
-            var workorder2 = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
-            notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, status));
+            _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, model.Status);
+            notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, model.Status));
             return Success();
         }
 

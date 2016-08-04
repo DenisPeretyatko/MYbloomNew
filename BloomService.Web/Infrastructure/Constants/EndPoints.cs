@@ -28,5 +28,6 @@
         public static string Authorization = "api/v2/Authorization/Authorization";
         public static string GetWorkOrderItemsByWorkorderId = endPointBase + "workorder/{id}/equipments";
         public static string DeleteWorkOrderItems = endPointBase + "workorders/workorderitems/delete";
+        public static string EditWorkOrderStatus = endPointBase + "workorders/status/edit";
     }
 }

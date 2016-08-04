@@ -25,8 +25,11 @@
         SageResponse<SageWorkOrder> UnassignWorkOrders(long id);
         SageResponse<SageWorkOrder> GetWorkorder(long id);
         SageResponse<SageWorkOrder> GetWorkorders();
-        SageResponse<SageWorkOrderItem> GetWorkorderItemsByWorkOrderId(long id);
+
         SageResponse<SageWorkOrderItem> DeleteWorkOrderItems(long workOrderId, IEnumerable<long> ids);
+        SageResponse<SageWorkOrderItem> GetWorkorderItemsByWorkOrderId(long id);
+    
+        SageResponse<SageWorkOrder> EditWorkOrderStatus(long id, string status);
 
         SageResponse<SageWorkOrderItem> AddWorkOrderItem(SageWorkOrderItem workOrderItem);
         SageResponse<SageWorkOrderItem> EditWorkOrderItem(SageWorkOrderItem workOrderItem);
