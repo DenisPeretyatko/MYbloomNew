@@ -385,6 +385,7 @@
     <Compile Include="Models\EquipmentModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\ProblemModel.cs" />
+    <Compile Include="Models\StatusModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\ILocationService.cs" />
     <Compile Include="Infrastructure\Services\LocationService.cs" />

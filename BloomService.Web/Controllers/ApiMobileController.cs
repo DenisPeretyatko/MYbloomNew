@@ -318,23 +318,23 @@ namespace BloomService.Web.Controllers
         }
 
         [HttpPost]
-        [Route("Apimobile/ChangeWorkorderStatus/{id}/{status}")]
-        public ActionResult ChangeWorkorderStatus(string id, string status)
+        [Route("Apimobile/ChangeWorkorderStatus")]
+        public ActionResult ChangeWorkorderStatus(StatusModel model)
         {
-            _log.InfoFormat("Method: ChangeWorkorderStatus. Id: {0}, Status {1}", id, status);
-            var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).FirstOrDefault();
+            _log.InfoFormat("Method: ChangeWorkorderStatus. Id: {0}, Status {1}", model.Id, model.Status);
+            var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.Id).FirstOrDefault();
             if (workorder == null)
                 return Error("Workorder not found");
-            var sageStatus = status == "Closed" ? WorkOrderStatus.Status.FirstOrDefault(x => x.Status == status).Value : WorkOrderStatus.Status.FirstOrDefault(x => x.Status == "Open").Value;
+            var sageStatus = model.Status == "Closed" ? WorkOrderStatus.Status.FirstOrDefault(x => x.Status == model.Status).Value : WorkOrderStatus.Status.FirstOrDefault(x => x.Status == "Open").Value;
 
-            var result = sageApiProxy.EditWorkOrderStatus(id, sageStatus.ToString());
+            var result = sageApiProxy.EditWorkOrderStatus(model.Id, sageStatus.ToString());
             if (!result.IsSucceed)
                 return Error("Was not able to save workorder to sage");
 
-            workorder.Status = status;
+            workorder.Status = model.Status;
             repository.Update(workorder);
-            _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, status);
-            notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, status));
+            _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, model.Status);
+            notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, model.Status));
             return Success();
         }
 
