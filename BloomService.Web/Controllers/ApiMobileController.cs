@@ -338,6 +338,24 @@ namespace BloomService.Web.Controllers
             return Success();
         }
 
+
+        [HttpPost]
+        [Route("Apimobile/DeletePicture")]
+        public ActionResult DeletePicture(PictureModel model)
+        {
+            _log.InfoFormat("Method: DeletePicture. Id: {0}, WorkOrder {1}", model.Id, model.WorkOrder);
+            var ImageItem = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrder).FirstOrDefault();
+            if (ImageItem == null)
+                return Error("Workorder images not found");
+            var imageId = model.Id.AsInt();
+            var image = ImageItem.Images.FirstOrDefault(x => x.Id == imageId);
+            ImageItem.Images.Remove(image);
+            repository.Update(ImageItem);
+            _log.InfoFormat("Image ({0}) deleted. Repository updated",  model.Id);
+            notification.SendNotification(string.Format("Image {0} deleted. Repository updated", model.Id));
+            return Success();
+        }
+
         //private LoginResponseModel GetToken(string mail, string password)
         //{
         //    _log.InfoFormat("Method: GetToken. Mail {0}, password {1}", mail, password);

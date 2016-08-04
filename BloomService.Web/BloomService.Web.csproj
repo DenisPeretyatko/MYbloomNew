@@ -379,6 +379,7 @@
     <Compile Include="Models\PartModel.cs" />
     <Compile Include="Models\PaymentMethodModel.cs" />
     <Compile Include="Models\PermissionCodeModel.cs" />
+    <Compile Include="Models\PictureModel.cs" />
     <Compile Include="Models\RateSheetModel.cs" />
     <Compile Include="Models\ScheduleViewModel.cs" />
     <Compile Include="Models\LookupsModel.cs" />
