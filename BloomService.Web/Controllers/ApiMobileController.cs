@@ -210,6 +210,7 @@ namespace BloomService.Web.Controllers
                 var result = sageApiProxy.AddWorkOrderItem(workOrderItem);
                 if (result != null && result.IsSucceed && result.Entity != null)
                 {
+                    result.Entity.Part = model.Part;
                     dBworkOrderItems.Add(result.Entity);
                     workOrder.WorkOrderItems = dBworkOrderItems;
                     repository.Update(workOrder);
@@ -229,6 +230,7 @@ namespace BloomService.Web.Controllers
             {
                 var dbEntity = dBworkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId);
                 dBworkOrderItems.Remove(dbEntity);
+                resultUpdate.Entity.Part = model.Part;
                 dBworkOrderItems.Add(resultUpdate.Entity);
                 workOrder.WorkOrderItems = dBworkOrderItems;
                 repository.Update(workOrder);
@@ -344,13 +346,13 @@ namespace BloomService.Web.Controllers
         public ActionResult DeletePicture(PictureModel model)
         {
             _log.InfoFormat("Method: DeletePicture. Id: {0}, WorkOrder {1}", model.Id, model.WorkOrder);
-            var ImageItem = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrder).FirstOrDefault();
-            if (ImageItem == null)
+            var imageItem = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrder).FirstOrDefault();
+            if (imageItem == null)
                 return Error("Workorder images not found");
             var imageId = model.Id.AsInt();
-            var image = ImageItem.Images.FirstOrDefault(x => x.Id == imageId);
-            ImageItem.Images.Remove(image);
-            repository.Update(ImageItem);
+            var image = imageItem.Images.FirstOrDefault(x => x.Id == imageId);
+            imageItem.Images.Remove(image);
+            repository.Update(imageItem);
             _log.InfoFormat("Image ({0}) deleted. Repository updated",  model.Id);
             notification.SendNotification(string.Format("Image {0} deleted. Repository updated", model.Id));
             return Success();
