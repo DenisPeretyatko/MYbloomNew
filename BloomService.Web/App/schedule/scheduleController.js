@@ -211,8 +211,10 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             resourceLabelText: 'Technicians',
             resources: $scope.resources,
             forceEventDuration: true,
-            dayRender: function(date, cell){
-                if (date < new Date()){
+            dayRender: function (date, cell) {
+                var expected = moment(cell.data('date')).local();
+                var now = moment().local();
+                if (expected < now) {
                     $(cell).css("background-color", "#e6e6e6");
                 }
             }
