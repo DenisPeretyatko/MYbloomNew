@@ -14,5 +14,10 @@ namespace BloomService.Web.Infrastructure.Queries
         {
             return query.Where(x => x.Employee != "");
         }
+
+        public static IQueryable<SageAssignment> ToEmployee(this IQueryable<SageAssignment> query, string employeeId)
+        {
+            return query.Where(x => x.Employee == employeeId);
+        }
     }
 }

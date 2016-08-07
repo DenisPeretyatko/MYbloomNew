@@ -22,7 +22,7 @@ namespace BloomService.Web.Controllers
     {
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
-        private const int _itemsOnPage = 12;
+        private const int ItemsOnPage = 12;
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
         private readonly IBloomServiceHub _hub;
         private readonly IDashboardService _dashboardService;
@@ -115,7 +115,7 @@ namespace BloomService.Web.Controllers
             workOrder.HourObj = _repository.SearchFor<SageRepair>(x => x.Repair == workOrder.EstimatedRepairHours.ToString()).SingleOrDefault();
             workOrder.PermissionCodeObj = _repository.SearchFor<SagePermissionCode>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode).SingleOrDefault();
             workOrder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workOrder.PayMethod.Trim());
-            workOrder.StatusObj = WorkOrderStatus.Status.FirstOrDefault(x => x.Status == workOrder.Status);
+            workOrder.StatusObj = WorkOrderStatus.Status.Single(x => x.Status == workOrder.Status);
 
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
@@ -136,7 +136,6 @@ namespace BloomService.Web.Controllers
         [Route("Workorder")]
         public ActionResult GetWorkorders()
         {
-            //var minDate = DateTime.Now.AddYears(-1);
             var list = _repository.SearchFor<SageWorkOrder>().OrderByDescending(x => x.DateEntered).Take(500).ToList();
             var result = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(list);
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -220,8 +219,8 @@ namespace BloomService.Web.Controllers
                     break;
             }
 
-            if (entitiesCount > _itemsOnPage)
-                workorders = workorders.Skip(model.Index * _itemsOnPage).Take(_itemsOnPage);
+            if (entitiesCount > ItemsOnPage)
+                workorders = workorders.Skip(model.Index * ItemsOnPage).Take(ItemsOnPage);
 
             var workorderList = workorders.ToList();
             foreach (var obj in workorderList)
@@ -235,7 +234,7 @@ namespace BloomService.Web.Controllers
 
             var result = new WorkorderSortViewModel()
             {
-                CountPage = entitiesCount % _itemsOnPage == 0 ? entitiesCount / _itemsOnPage : entitiesCount / _itemsOnPage + 1,
+                CountPage = entitiesCount % ItemsOnPage == 0 ? entitiesCount / ItemsOnPage : entitiesCount / ItemsOnPage + 1,
                 WorkordersList = workorderList
             };
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -248,7 +247,7 @@ namespace BloomService.Web.Controllers
         {
             //var date = new DateTime(year, 0, 0);
             var entitiesCount = _repository.GetAll<SageWorkOrder>().Count();
-            var countPage = entitiesCount % _itemsOnPage == 0 ? entitiesCount / _itemsOnPage : entitiesCount / _itemsOnPage + 1;
+            var countPage = entitiesCount % ItemsOnPage == 0 ? entitiesCount / ItemsOnPage : entitiesCount / ItemsOnPage + 1;
             return Json(countPage, JsonRequestBehavior.AllowGet);
         }
 
@@ -275,7 +274,9 @@ namespace BloomService.Web.Controllers
                 PayMethod = model.Paymentmethods,
                 WorkOrder = model.WorkOrder,
                 Id = model.Id,
-                Status = model.Status == 3 ? WorkOrderStatus.Status.FirstOrDefault(x => x.Value == model.Status).Status : WorkOrderStatus.Status.FirstOrDefault(x => x.Value == 0).Status
+                Status = model.Status == WorkOrderStatus.ClosedId
+                    ? WorkOrderStatus.ById(WorkOrderStatus.ClosedId)
+                    : WorkOrderStatus.ById(WorkOrderStatus.OpenId)
             };
 
             var workOrderResult = _sageApiProxy.EditWorkOrder(workorder);
@@ -369,7 +370,7 @@ namespace BloomService.Web.Controllers
                 }
             }
             
-            workOrderResult.Entity.Status = WorkOrderStatus.Status.FirstOrDefault(x => x.Value == model.Status).Status;
+            workOrderResult.Entity.Status = WorkOrderStatus.ById(model.Status);
             workOrderResult.Entity.Id = workorder.Id;
             workOrderResult.Entity.WorkOrderItems = _sageApiProxy.GetWorkorderItemsByWorkOrderId(workorder.WorkOrder).Entities;
             _repository.Update(workOrderResult.Entity);
