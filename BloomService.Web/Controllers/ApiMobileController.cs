@@ -7,32 +7,17 @@ namespace BloomService.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
-    using System.IO;
     using System.Linq;
-    using System.Net;
-    using System.Runtime.Serialization.Json;
-    using System.Text;
-    using System.Web.Hosting;
     using System.Web.Mvc;
-    using System.Web.Script.Serialization;
-
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Domain.Extensions;
-    using BloomService.Web.Models;
-
-    using System.Security.Claims;
-    using System.Threading;
+    using Domain.Entities.Concrete;
+    using Domain.Extensions;
+    using Models;
     using Infrastructure.SignalR;
-    using RestSharp;
-    using Domain.Models.Requests;
-    using RestSharp.Serializers;
-    using System.Xml.Serialization;
-
-    using BloomService.Web.Infrastructure;
-    using BloomService.Web.Infrastructure.Mongo;
+    using Infrastructure;
+    using Infrastructure.Mongo;
     using AutoMapper;
     using Infrastructure.Constants;
+    using Infrastructure.Queries;
     public class ApiMobileController : BaseController
     {
         private readonly IImageService _imageService;
@@ -139,44 +124,42 @@ namespace BloomService.Web.Controllers
         {
             var userId = UserModel.Name;
 
-            var assignments = repository.SearchFor<SageAssignment>(x => x.Employee == userId).ToList();
-            var allWorkorders = repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
+            var assignments = repository.SearchFor<SageAssignment>().ToEmployee(userId).ToList();
+            var allWorkorders = repository.SearchFor<SageWorkOrder>().NotClosed().ToList();
 
-            var result = new List<SageWorkOrder>();
+            var workorders = new List<SageWorkOrder>();
 
             foreach (var assignment in assignments)
             {
-                var workorder = allWorkorders.Where(x => x.WorkOrder == assignment.WorkOrder).SingleOrDefault();
+                var workorder = allWorkorders.SingleOrDefault(x => x.WorkOrder == assignment.WorkOrder);
                 if (workorder != null)
                 {
                     workorder.Images = workorder.Images.OrderBy(x => x.Id).ToList();
                     workorder.ScheduleDate = assignment.Start.TryAsDateTime();
-                    result.Add(workorder);
+                    workorders.Add(workorder);
                 }
             }
 
             var locations = repository.GetAll<SageLocation>();
-            foreach (var order in result)
+            foreach (var order in workorders)
             {
                 order.Equipments = new List<SageEquipment>();
-
-                order.Images = _imageService.GetPhotoForWorkOrder(order.WorkOrder, settings.SiteUrl);
+                order.Images = _imageService.GetPhotoForWorkOrder(order.WorkOrder, settings.SiteUrl).OrderBy(x => x.Id).ToList();
 
                 var location = locations.FirstOrDefault(x => x.Name == order.Location);
-                if (location == null)
+                if (location != null)
                 {
-                    continue;
-                }
-                order.Latitude = location.Latitude;
-                order.Longitude = location.Longitude;
-                order.Address = location.Address;
-                if (order.Equipment != 0)
-                {
-                    var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment.ToString());
-                    order.Equipments.AddRange(equipments);
+                    order.Latitude = location.Latitude;
+                    order.Longitude = location.Longitude;
+                    order.Address = location.FullAddress;
+                    if (order.Equipment != 0)
+                    {
+                        var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment.ToString());
+                        order.Equipments.AddRange(equipments);
+                    }
                 }
             }
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(workorders, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -186,8 +169,7 @@ namespace BloomService.Web.Controllers
             var workOrderItemId = model.WorkOrderItem.AsInt();
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
 
-            var workOrderItem = new SageWorkOrderItem();
-            workOrderItem = Mapper.Map<SageWorkOrderItem>(model);
+            var workOrderItem = Mapper.Map<SageWorkOrderItem>(model);
             var dBworkOrderItems = new List<SageWorkOrderItem>();
 
             if (workOrder.WorkOrderItems == null || (workOrder.WorkOrderItems != null && workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId) == null))
@@ -274,26 +256,28 @@ namespace BloomService.Web.Controllers
         {
             _log.InfoFormat("Method: PostImage. Workorder Id: {0}", model.IdWorkOrder);
             var result = _imageService.SavePhotoForWorkOrder(model);
-            if (result != null)
+            if (result == null)
             {
-                _log.InfoFormat("Add image for workorder success");
-                return Json(result, JsonRequestBehavior.AllowGet);
-            }
-            else
+                _log.InfoFormat("Add image faild");
                 return Error("Add image faild");
+            }
+
+            _log.InfoFormat("Add image for workorder success");
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [Route("Apimobile/CommentImage")]
         public ActionResult ComentImage(CommentImageModel model)
         {
-            if (_imageService.SaveDescriptionsForPhoto(model))
+            if (!_imageService.SaveDescriptionsForPhoto(model))
             {
-                _log.InfoFormat("Add image for workorder success");
-                return Success();
-            }
-            else
+                _log.InfoFormat("Add descriptions image failed");
                 return Error("Add descriptions image faild");
+            }
+
+            _log.InfoFormat("Add image for workorder success");
+            return Success();               
         }
 
         [HttpPost]
@@ -327,8 +311,10 @@ namespace BloomService.Web.Controllers
             var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.Id).FirstOrDefault();
             if (workorder == null)
                 return Error("Workorder not found");
-            var sageStatus = model.Status == "Closed" ? WorkOrderStatus.Status.FirstOrDefault(x => x.Status == model.Status).Value : WorkOrderStatus.Status.FirstOrDefault(x => x.Status == "Open").Value;
 
+            var sageStatus = model.Status == WorkOrderStatus.Closed ?
+                                             WorkOrderStatus.ByStatus(WorkOrderStatus.Closed) :
+                                             WorkOrderStatus.ByStatus(WorkOrderStatus.Open);
             var result = sageApiProxy.EditWorkOrderStatus(model.Id, sageStatus.ToString());
             if (!result.IsSucceed)
                 return Error("Was not able to save workorder to sage");
@@ -348,7 +334,10 @@ namespace BloomService.Web.Controllers
             _log.InfoFormat("Method: DeletePicture. Id: {0}, WorkOrder {1}", model.Id, model.WorkOrder);
             var imageItem = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrder).FirstOrDefault();
             if (imageItem == null)
+            {
+                _log.InfoFormat("Workorder {0} images not found", model.WorkOrder);
                 return Error("Workorder images not found");
+            }
             var imageId = model.Id.AsInt();
             var image = imageItem.Images.FirstOrDefault(x => x.Id == imageId);
             imageItem.Images.Remove(image);

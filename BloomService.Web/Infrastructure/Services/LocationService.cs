@@ -18,12 +18,12 @@
         public void ResolveLocation(SageLocation sageLocation)
         {
             Thread.Sleep(1000);
-            var parametersSearch = sageLocation.Address + " " + sageLocation.City + " " + sageLocation.ZIP + " " + sageLocation.State;
-            var location = this.GetLocation(parametersSearch);
-            if (location != null && location.result != null && location.result.Any())
+            var parametersSearch = GetGeoLocationAddress(sageLocation);
+            var location = GetLocation(parametersSearch);
+            if (location?.result != null && location.result.Any())
             {
-                var geometry = location.result.FirstOrDefault().geometry;
-                if (geometry != null && geometry.location != null)
+                var geometry = location.result.First().geometry;
+                if (geometry?.location != null)
                 {
                     sageLocation.Latitude = geometry.location.lat;
                     sageLocation.Longitude = geometry.location.lng;
@@ -31,10 +31,8 @@
             }
         }
 
-
         public GeocodeResponse GetLocation(string address)
         {
-            ASCIIEncoding encoding = new ASCIIEncoding();
             var searchUrl = string.Format(url, address);
             var request = WebRequest.Create(searchUrl);
             request.Method = "POST";
@@ -56,6 +54,21 @@
             {
                 return null;
             }
+        }
+
+        private string GetGeoLocationAddress(SageLocation sageLocation)
+        {
+            var sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(sageLocation.Address))
+                sb.AppendFormat("{0} ", sageLocation.Address);
+            if (!string.IsNullOrEmpty(sageLocation.Address2) && string.IsNullOrEmpty(sageLocation.Address))
+                sb.AppendFormat("{0} ", sageLocation.Address2);
+
+            sb.AppendFormat("{0} ", sageLocation.City);
+            sb.AppendFormat("{0} ", sageLocation.ZIP);
+            sb.AppendFormat("{0} ", sageLocation.State);
+
+            return sb.ToString().TrimEnd(' ');
         }
     }
 }

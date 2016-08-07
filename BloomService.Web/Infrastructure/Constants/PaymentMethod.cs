@@ -1,7 +1,6 @@
 ﻿namespace BloomService.Web.Infrastructure.Constants
 {
     using Domain.Entities.Concrete;
-    using Models;
     using System.Collections.Generic;
 
     public static class PaymentMethod
