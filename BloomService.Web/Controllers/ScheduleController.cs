@@ -46,22 +46,22 @@ namespace BloomService.Web.Controllers
         {
             var lastMonth = DateTime.Now.GetLocalDate().AddMonths(-1);
             var model = new ScheduleViewModel();
-            var assignments = _repository.SearchFor<SageAssignment>(x => x.WorkOrder != 0 && x.DateEntered > lastMonth && x.IsValid).OrderByDescending(x => x.DateEntered).ToList();
-            var employees = _repository.GetAll<SageEmployee>().ToList();
+            var assignments = _repository.SearchFor<SageAssignment>(x => (x.WorkOrder != 0 && x.DateEntered > lastMonth) && x.IsValid).OrderByDescending(x => x.DateEntered).ToList();
+            var employees = _repository.GetAll<SageEmployee>().ToList(); 
             //var mappedEmployees = Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employees);
             var mappedAssignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(assignments);
             foreach (var item in mappedAssignments)
             {
                 if (!string.IsNullOrEmpty(item.Employee))
                 {
-                    var emps = employees.FirstOrDefault(e => e.Name == item.Employee);
-                    if (emps != null)
-                    {
-                        item.Color = emps.Color;
-                    }
+                    item.Color = employees.FirstOrDefault(e => e.Name == item.Employee).Color; ;
+                    //if (emps != null)
+                    //{
+                    //    item.Color = emps.Color;
+                    //}
                 }
             };
-            var workorders = _repository.GetAll<SageWorkOrder>();
+            var workorders = _repository.SearchFor<SageWorkOrder>().Where(x => x.IsValid);
             var workOrdersForLastMonth = workorders.Where(x => x.Status == "Open" && x.DateEntered > lastMonth && x.AssignmentId != 0).ToList();
             model.Assigments = mappedAssignments.OrderByDescending(x => x.Id).ToList();
             model.UnassignedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(workOrdersForLastMonth);

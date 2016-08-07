@@ -1,4 +1,5 @@
-﻿/**
+﻿
+/**
  * scheduleController - controller
  */
 
@@ -65,7 +66,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
     };
     var setTechnicianColor = function (event) {
         var resource = $scope.resources.find(function (element) {
-            return element.id === event.resourceId;
+            return element.id.toString() === event.resourceId;
         });
         event.color = resource.color;
         return event;

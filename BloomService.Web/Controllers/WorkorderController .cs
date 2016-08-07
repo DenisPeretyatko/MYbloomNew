@@ -71,6 +71,8 @@ namespace BloomService.Web.Controllers
             }
 
             var assignment = result.RelatedAssignment;
+
+            assignment.IsValid = true;
             if (string.IsNullOrEmpty(model.Emploee.ToString()))
             {
                 result.Entity.AssignmentId = assignment.Assignment;
@@ -104,7 +106,7 @@ namespace BloomService.Web.Controllers
         [Route("Workorder/{id}")]
         public ActionResult GetWorkorder(string id)
         {
-            var workOrder = _repository.Get<SageWorkOrder>(id);
+            var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.IsValid && x.Id == id).Single();
 
             workOrder.CustomerObj = _repository.SearchFor<SageCustomer>(x => x.Customer == workOrder.ARCustomer).SingleOrDefault();
             workOrder.LocationObj = _repository.SearchFor<SageLocation>(x => x.Name == workOrder.Location && x.ARCustomer == workOrder.ARCustomer).SingleOrDefault();
@@ -137,7 +139,7 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkorders()
         {
             //var minDate = DateTime.Now.AddYears(-1);
-            var list = _repository.SearchFor<SageWorkOrder>().OrderByDescending(x => x.DateEntered).Take(500).ToList();
+            var list = _repository.SearchFor<SageWorkOrder>(x => x.IsValid).OrderByDescending(x => x.DateEntered).Take(500).ToList();
             var result = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(list);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -182,19 +184,18 @@ namespace BloomService.Web.Controllers
         [Route("WorkorderPage")]
         public ActionResult GetWorkorderPage(WorkorderSortModel model)
         {
-
             long search = -1;
             long.TryParse(model.Search, out search);
 
-            var workorders = _repository.GetAll<SageWorkOrder>();
+            var workorders = _repository.GetAll<SageWorkOrder>().Where(x => x.IsValid);
 
             if (!string.IsNullOrEmpty(model.Search))
             {
                 workorders = _repository.GetAll<SageWorkOrder>()
-                        .Where(x => x.ARCustomer.ToLower().Contains(model.Search.ToLower()) ||
+                        .Where(x => x.IsValid && (x.ARCustomer.ToLower().Contains(model.Search.ToLower()) ||
                                     x.Location.ToLower().Contains(model.Search.ToLower()) ||
                                     x.Status.ToLower().Contains(model.Search.ToLower()) ||
-                                    x.WorkOrder == search
+                                    x.WorkOrder == search)
                         );
             }
 
@@ -246,13 +247,12 @@ namespace BloomService.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-
         [HttpGet]
         [Route("WorkorderPageCount")]
         public ActionResult GetWorkorderPageCount()
         {
             //var date = new DateTime(year, 0, 0);
-            var entitiesCount = _repository.GetAll<SageWorkOrder>().Where(x => !string.IsNullOrEmpty(x.Employee)).Count();
+            var entitiesCount = _repository.GetAll<SageWorkOrder>().Where(x => x.IsValid && !string.IsNullOrEmpty(x.Employee)).Count();
             var countPage = entitiesCount % _itemsOnPage == 0 ? entitiesCount / _itemsOnPage : entitiesCount / _itemsOnPage + 1;
             return Json(countPage, JsonRequestBehavior.AllowGet);
         }
@@ -293,7 +293,7 @@ namespace BloomService.Web.Controllers
 
             if (!string.IsNullOrEmpty(model.Emploee.ToString()))
             {
-                var assignmentDb = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
+                var assignmentDb = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder && x.IsValid).Single();
                 var editedAssignment = new AssignmentViewModel();
                 editedAssignment.Employee = model.Emploee;
                 editedAssignment.EndDate = (DateTime)assignmentDb.Enddate;
@@ -312,7 +312,7 @@ namespace BloomService.Web.Controllers
 
             var workOrderItems = Mapper.Map<IEnumerable<SageWorkOrderItem>>(model.Equipment);
 
-            var workOrderFromMongo = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == workorder.WorkOrder).Single();
+            var workOrderFromMongo = _repository.SearchFor<SageWorkOrder>(x =>  x.WorkOrder == workorder.WorkOrder && x.IsValid).Single();
             
             if (workOrderItems != null)
             {
@@ -376,6 +376,7 @@ namespace BloomService.Web.Controllers
             
             workOrderResult.Entity.Status = WorkOrderStatus.Status.FirstOrDefault(x => x.Value == model.Status).Status;
             workOrderResult.Entity.Id = workorder.Id;
+            workOrderResult.Entity.IsValid = true;
             workOrderResult.Entity.WorkOrderItems = _sageApiProxy.GetWorkorderItemsByWorkOrderId(workorder.WorkOrder).Entities;
             _repository.Update(workOrderResult.Entity);
 

@@ -28,7 +28,7 @@ namespace BloomService.Web.Controllers
         public ActionResult GetLocations(MapModel model)
         {
             var result = new List<MapViewModel>();
-            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open");
+            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.IsValid);
             foreach (var item in workOrders)
             {
                 var itemLocation = _repository.SearchFor<SageLocation>(l => l.Name == item.Location).FirstOrDefault();
@@ -36,7 +36,7 @@ namespace BloomService.Web.Controllers
                 item.Latitude = itemLocation.Latitude;
                 item.Longitude = itemLocation.Longitude;
 
-                var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder).OrderByDescending(x => x.ScheduleDate).ThenByDescending(x => x.StartTime).FirstOrDefault();
+                var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder && x.IsValid).OrderByDescending(x => x.ScheduleDate).ThenByDescending(x => x.StartTime).FirstOrDefault();
 
                 if (string.IsNullOrEmpty(assignment?.Employee) || item.AssignmentId != 0) continue;
                 result.Add(new MapViewModel()

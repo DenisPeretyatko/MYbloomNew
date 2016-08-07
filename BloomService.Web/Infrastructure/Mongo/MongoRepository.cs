@@ -11,7 +11,8 @@
     using MongoDB.Driver;
     using MongoDB.Driver.Builders;
     using MongoDB.Driver.Linq;
-
+    using Utils;
+    using Domain.Entities.Concrete;
     public class MongoRepository : IRepository
     {
         private readonly MongoDatabase database;

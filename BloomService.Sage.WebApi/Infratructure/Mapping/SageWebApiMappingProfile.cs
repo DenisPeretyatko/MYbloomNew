@@ -133,7 +133,7 @@
              .ForMember(dest => dest.InvoiceDate, opts => opts.MapFrom(src => ConvertToDate(src.InvoiceDate)))
              .ForMember(dest => dest.QuoteExpirationDate, opts => opts.MapFrom(src => ConvertToDate(src.QuoteExpirationDate)))
              .ForMember(dest => dest.TimeComplete, opts => opts.MapFrom(src => ConvertToTime(src.TimeComplete)))
-             .ForMember(dest => dest.WorkOrder, opts => opts.MapFrom(src => Convert.ToInt64(src.TimeComplete)))
+             .ForMember(dest => dest.WorkOrder, opts => opts.MapFrom(src => Convert.ToInt64(src.WorkOrder)))
              .ForMember(dest => dest.TimeEntered, opts => opts.MapFrom(src => ConvertToTime(src.TimeEntered)));
         }
 

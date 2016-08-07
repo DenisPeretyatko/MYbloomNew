@@ -71,8 +71,8 @@ namespace BloomService.Web.Controllers
         public ActionResult GetDashboard(MapModel model)
         {
             var dashboard = new DashboardViewModel();
-            var workorders = _repository.SearchFor<SageWorkOrder>().Open().ToArray();
-            var assignments = _repository.SearchFor<SageAssignment>(x => x.Employee == "").ToArray();
+            var workorders = _repository.SearchFor<SageWorkOrder>(x => x.IsValid).Open().ToArray();
+            var assignments = _repository.SearchFor<SageAssignment>(x => x.Employee == "" && x.IsValid).ToArray();
             var chart = new List<ChartModel>();
             var chartModel = new ChartModel();
 
