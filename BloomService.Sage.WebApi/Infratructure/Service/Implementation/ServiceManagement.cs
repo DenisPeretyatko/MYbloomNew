@@ -7,9 +7,11 @@
     using BloomService.Domain.Entities.Concrete;
 
     using Sage.Messaging;
-    using Sage.WebApi.Infratructure.Constants;
+    using Constants;
     using MessageResponse;
     using Common.Logging;
+    using BloomService.Domain.Extensions;
+
     public class ServiceManagement : IServiceManagement
     {
         private readonly ClaimsAgent claimsAgent;
@@ -20,9 +22,7 @@
 
         private MessageTypeDescriptor messageTypeDescriptor;
 
-        private string name;
-
-        private string password;
+        private readonly SageWebConfig config;
 
         private readonly ILog _log = LogManager.GetLogger(typeof(ServiceManagement));
 
@@ -30,7 +30,8 @@
         {
             this.claimsAgent = claimsAgent;
             CatalogPath = configConstants.CatalogPath;
-        }
+            config = configConstants;
+        } 
 
         public string CatalogPath { get; set; }
 
@@ -97,8 +98,6 @@
 
         public void Create(string name, string password)
         {
-            this.password = password;
-            this.name = name;
             isCreated = true;
             messageTypeDescriptor = new MessageTypeDescriptor();
             var xmlMessage = string.Format(Messages.MessageTypeDescriptor, name, password);
@@ -147,41 +146,17 @@
             {
                 properties.Add("Part", workOrderItem.Part.ToString() ?? string.Empty);
             }
-
-            properties = ReplaceInvalidCharacters(properties);
  
             var propertiesStr = string.Empty;
             foreach (var property in properties)
             {
-                propertiesStr += string.Format(Messages.Property, property.Key, property.Value
-                          .Replace("'", "&apos;")
-                          .Replace("\"", "&quot;")
-                          .Replace("<", "&lt;")
-                          .Replace(">", "&gt;"));
+                propertiesStr += string.Format(Messages.Property, property.Key, property.Value.Sanitize());
             }
 
             var messages = string.Format(Messages.AddWorkOrderItem, propertiesStr);
             var response = SendMessage(messages);
             var workOrderItems = (response as MessageResponses).MessageResponse.ReturnParams.ReturnParam.WorkOrderItems;
             return workOrderItems;
-        }
-
-        private Dictionary<string, string> ReplaceInvalidCharacters(Dictionary<string, string> properties)
-        {
-            var resultProperties = new Dictionary<string, string>();
-            foreach (var property in properties)
-            {
-                if (!string.IsNullOrEmpty(property.Value))
-                {
-                    resultProperties.Add(property.Key, property.Value
-                        .Replace("'", "&apos;")
-                        .Replace("\"", "&quot;")
-                        .Replace("&", "&amp;")
-                        .Replace("<", "&lt;")
-                        .Replace(">", "&gt;"));
-                }
-            }
-            return resultProperties;
         }
 
         public SageWorkOrderItem[] EditWorkOrderItem(SageWorkOrderItem workOrderItem)
@@ -205,16 +180,11 @@
                 properties.Add("Part", workOrderItem.Part.ToString() ?? string.Empty);
             }
 
-            properties = ReplaceInvalidCharacters(properties);
-
             var propertiesStr = string.Empty;
             foreach (var property in properties)
             {
-                propertiesStr += string.Format(Messages.Property, property.Key, property.Value
-                          .Replace("'", "&apos;")
-                          .Replace("\"", "&quot;")
-                          .Replace("<", "&lt;")
-                          .Replace(">", "&gt;"));
+                propertiesStr += string.Format(Messages.Property, property.Key, property.Value.Sanitize());
+                          
             }
 
             var messages = string.Format(Messages.EditWorkOrderItem, propertiesStr);
@@ -271,7 +241,7 @@
         {
             if (!isCreated)
             {
-                Create("kris", "sageDEV!!");
+                Create(config.SageUserName, config.SageUserName);
             }
 
             var response = messageBoard.SendMessage(messageTypeDescriptor.Xml, message);
@@ -283,7 +253,7 @@
             _log.InfoFormat("Send message: {0}", message);
             if (!isCreated)
             {
-                Create("kris", "sageDEV!!");
+                Create(config.SageUserName, config.SageUserName);
             }
 
             var response = messageBoard.SendMessage(messageTypeDescriptor.Xml, message);

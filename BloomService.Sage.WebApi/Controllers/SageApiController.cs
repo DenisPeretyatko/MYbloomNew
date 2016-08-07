@@ -14,7 +14,7 @@
     using Sage.WebApi.Infratructure.MessageResponse;
     using Sage.WebApi.Infratructure.Service;
     using Sage.WebApi.Models;
-
+    using BloomService.Domain.Extensions;
     [BasicAuthentication]
     public class SageApiController : ApiController
     {
@@ -150,13 +150,7 @@
                 {
                     if (!string.IsNullOrEmpty(property.Value))
                     {
-                        resultProperties.Add(
-                           property.Key, property.Value
-                           .Replace("'", "&apos;")
-                           .Replace("\"", "&quot;")
-                           .Replace("<", "&lt;")
-                           .Replace("&", "&amp;")
-                           .Replace(">", "&gt;"));
+                        resultProperties.Add(property.Key, property.Value.Sanitize());
                     }
                 }
 
@@ -254,7 +248,7 @@
                 var properties = new Dictionary<string, string>();
                 properties.Add("Assignment", assignment.Assignment.ToString() ?? string.Empty);
                 properties.Add("ScheduleDate", assignment.ScheduleDate.ToString() ?? string.Empty);
-                properties.Add("Employee",  assignment.Employee.Replace("'", "&apos;") ?? string.Empty);
+                properties.Add("Employee",  assignment.Employee.ToString() ?? string.Empty);
                 properties.Add("WorkOrder",  assignment.WorkOrder.ToString() ?? string.Empty);
                 properties.Add("EstimatedRepairHours",  assignment.EstimatedRepairHours.ToString() ?? string.Empty);
                 properties.Add("StartTime",((DateTime)assignment.StartTime).TimeOfDay.ToString() ?? string.Empty);
@@ -266,13 +260,7 @@
                 {
                     if (!string.IsNullOrEmpty(property.Value))
                     {
-                        resultProperties.Add(
-                           property.Key, property.Value
-                           .Replace("'", "&apos;")
-                           .Replace("\"", "&quot;")
-                           .Replace("<", "&lt;")
-                           .Replace("&", "&amp;")
-                           .Replace(">", "&gt;"));
+                        resultProperties.Add(property.Key, property.Value.Sanitize());
                     }
                 }
 

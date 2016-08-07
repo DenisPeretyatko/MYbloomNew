@@ -2,17 +2,15 @@
 using BloomService.Domain.Models.Responses;
 using Common.Logging;
 using System;
-using System.Collections.Generic;
 using System.DirectoryServices.Protocols;
 using System.Linq;
 using System.Net;
-using System.Web;
 
 namespace Sage.WebApi.Infratructure.Service.Implementation
 {
     public class ServiceAuthorization : IServiceAuthorization
     {
-        IServiceManagement _serviceManagement;
+        private readonly IServiceManagement _serviceManagement;
 
         private readonly ILog _log = LogManager.GetLogger(typeof(ServiceAuthorization));
 

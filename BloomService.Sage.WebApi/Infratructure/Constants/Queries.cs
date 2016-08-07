@@ -1,4 +1,5 @@
 ﻿using BloomService.Domain.Entities.Concrete;
+using BloomService.Domain.Extensions;
 using System;
 using System.Collections.Generic;
 
@@ -67,11 +68,7 @@ namespace Sage.WebApi.Infratructure.Constants
             {
                 if (parameter.Value != string.Empty && parameter.Value != null)
                 {
-                    query += string.Format("{0} = '{1}', ", parameter.Key, parameter.Value.Replace("'", "&apos;")
-                           .Replace("\"", "&quot;")
-                           .Replace("<", "&lt;")
-                           .Replace("&", "&amp;")
-                           .Replace(">", "&gt;"));
+                    query += string.Format("{0} = '{1}', ", parameter.Key, parameter.Value.Sanitize());
                 }
             }
 
