@@ -14,6 +14,7 @@ namespace Sage.WebApi.Infratructure.Constants
         public static readonly string SelectPermissionCodes = "SELECT * FROM PERMISSIONCODE";
         public static readonly string SelectRateSheets = "SELECT * FROM RATESHEET";
         public static readonly string EditWorkOrderStatus = "UPDATE WRKORDER SET STATUS = {0} WHERE WRKORDNBR = {1}";
+        public static readonly string EditWorkJcJob = "UPDATE WRKORDER SET JCJOB = {0} WHERE WRKORDNBR = {1}";
 
         public static string BuildDeleteWorkOrderItemQuery(int workOrderId, IEnumerable<int> ids)
         {

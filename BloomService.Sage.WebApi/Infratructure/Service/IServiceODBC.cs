@@ -7,13 +7,13 @@
 {
         List<SageCustomer> Customers();
 
-        List<Dictionary<string, object>> Trucks();
+        //List<Dictionary<string, object>> Trucks();
 
         void UnassignWorkOrder(string id);
 
         void EditWorkOrder(SageWorkOrder workOrder);
 
-        List<SageWorkOrder> WorkOrders();
+        //List<SageWorkOrder> WorkOrders();
 
         List<SageRateSheet> RateSheets();
 
@@ -22,5 +22,7 @@
         void DeleteWorkOrderItems(int workOrderId, IEnumerable<int> ids);
 
         void EditWorkOrderStatus(string id, string status);
+
+        void EditWorkJcJob(string id, string jcjob);
     }
 }

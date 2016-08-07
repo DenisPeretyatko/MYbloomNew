@@ -342,6 +342,7 @@
     <Compile Include="Infrastructure\Jobs\BloomJobRegistry.cs" />
     <Compile Include="Infrastructure\ModelBinders\JsonNetModelBinder.cs" />
     <Compile Include="Infrastructure\Queries\AssignmentQueries.cs" />
+    <Compile Include="Infrastructure\Queries\PartsQueries.cs" />
     <Compile Include="Infrastructure\Queries\WorkorderQueries.cs" />
     <Compile Include="Infrastructure\Services\AuthorizationService.cs" />
     <Compile Include="Infrastructure\Services\HttpContextProvider.cs" />

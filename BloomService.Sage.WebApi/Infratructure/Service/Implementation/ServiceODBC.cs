@@ -45,11 +45,11 @@
             return result;
         }
 
-        public List<Dictionary<string, object>> Trucks()
-        {
-            var result = ExecuteQueryAndGetData(timberlineDataConnectionString, Queries.SelectTrucks);
-            return result;
-        }
+        //public List<Dictionary<string, object>> Trucks()
+        //{
+        //    var result = ExecuteQueryAndGetData(timberlineDataConnectionString, Queries.SelectTrucks);
+        //    return result;
+        //}
 
         public List<SageRateSheet> RateSheets()
         {
@@ -85,13 +85,19 @@
             ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
 
-        public List<SageWorkOrder> WorkOrders()
+        public void EditWorkJcJob(string id, string jcjob)
         {
-            var query = Queries.SelectWorkOrders;
-            var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query);
-            var result = DictionaryToWorkOrderList(response);
-            return result;
+            var query = string.Format(Queries.EditWorkJcJob, jcjob, id);
+            ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
+
+        //public List<SageWorkOrder> WorkOrders()
+        //{
+        //    var query = Queries.SelectWorkOrders;
+        //    var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query);
+        //    var result = DictionaryToWorkOrderList(response);
+        //    return result;
+        //}
 
         private List<SageWorkOrder> DictionaryToWorkOrderList(List<Dictionary<string, object>> response)
         {

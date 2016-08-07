@@ -497,7 +497,9 @@
         {
             try
             {
-                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = true, Entity = serviceManager.AddWorkOrderItem(workOrderItem).Single() };
+                serviceOdbc.EditWorkJcJob(workOrderItem.Id, workOrderItem.JCJob);
+                var woItem = serviceManager.AddWorkOrderItem(workOrderItem).Single();
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = true, Entity = woItem };
                 return result;
             }
             catch (ResponseException exception)
