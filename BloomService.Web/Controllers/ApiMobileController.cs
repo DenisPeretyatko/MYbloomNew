@@ -54,13 +54,13 @@ namespace BloomService.Web.Controllers
             _hub = hub;
         }
 
-        [HttpPost]
-        [Route("Apimobile/Workorder/{id}/Equipment")]
-        public ActionResult AddEquipmentToWorkOrder()
-        {
-            _log.Info("Method: AddEquipmentToWorkOrder");
-            return Success();
-        }
+        //[HttpPost]
+        //[Route("Apimobile/Workorder/{id}/Equipment")]
+        //public ActionResult AddEquipmentToWorkOrder()
+        //{
+        //    _log.Info("Method: AddEquipmentToWorkOrder");
+        //    return Success();
+        //}
 
         [HttpPost]
         [AllowAnonymous]
@@ -101,7 +101,7 @@ namespace BloomService.Web.Controllers
         [Route("Apimobile/Part")]
         public ActionResult GetPart()
         {
-            var result = repository.GetAll<SagePart>().Where(x => x.PartNumber.StartsWith("R-") && x.Inactive == "No");
+            var result = repository.GetAll<SagePart>().Avaliable();
             return Json(result);
         }
 
@@ -111,11 +111,6 @@ namespace BloomService.Web.Controllers
         {
             var result = repository.GetAll<SageRepair>();
             return Json(result);
-        }
-
-        public class ModelItem
-        {
-            public string Model { get; set; }
         }
 
         [HttpGet]
@@ -164,7 +159,7 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Apimobile/AddItem")]
-        public ActionResult AddWOItem(LaborPartsModel model)
+        public ActionResult AddWorkOrderItem(LaborPartsModel model)
         {
             var workOrderItemId = model.WorkOrderItem.AsInt();
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
@@ -227,13 +222,15 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Apimobile/DeleteItem")]
-        public ActionResult DeleteWOItem(LaborPartsModel model)
+        public ActionResult DeleteWorkOrderItem(LaborPartsModel model)
         {
             var workOrderItemId = model.WorkOrderItem.AsInt();
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
+            if (workOrder == null)
+                return Error("WorkOrder doesn't exists");
+
             var item = workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId);
-            var dBworkOrderItems = new List<SageWorkOrderItem>();
-            dBworkOrderItems = workOrder.WorkOrderItems.ToList();
+            var dBworkOrderItems = workOrder.WorkOrderItems.ToList();
 
             var result = sageApiProxy.DeleteWorkOrderItems(model.WorkOrder.AsInt(), new List<int> { model.WorkOrderItem.AsInt()});
             if (result != null && result.IsSucceed)
@@ -252,7 +249,7 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Apimobile/Image")]
-        public ActionResult PostImage(ImageModel model)
+        public ActionResult PostWorkOrderImage(ImageModel model)
         {
             _log.InfoFormat("Method: PostImage. Workorder Id: {0}", model.IdWorkOrder);
             var result = _imageService.SavePhotoForWorkOrder(model);
@@ -267,8 +264,28 @@ namespace BloomService.Web.Controllers
         }
 
         [HttpPost]
+        [Route("Apimobile/DeletePicture")]
+        public ActionResult RemoveWorkOrderPicture(PictureModel model)
+        {
+            _log.InfoFormat("Method: DeletePicture. Id: {0}, WorkOrder {1}", model.Id, model.WorkOrder);
+            var imageItem = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrder).FirstOrDefault();
+            if (imageItem == null)
+            {
+                _log.InfoFormat("Workorder {0} images not found", model.WorkOrder);
+                return Error("Workorder images not found");
+            }
+            var imageId = model.Id.AsInt();
+            var image = imageItem.Images.FirstOrDefault(x => x.Id == imageId);
+            imageItem.Images.Remove(image);
+            repository.Update(imageItem);
+            _log.InfoFormat("Image ({0}) deleted. Repository updated", model.Id);
+            notification.SendNotification(string.Format("Image {0} deleted. Repository updated", model.Id));
+            return Success();
+        }
+
+        [HttpPost]
         [Route("Apimobile/CommentImage")]
-        public ActionResult ComentImage(CommentImageModel model)
+        public ActionResult ComentWorkOrderImage(CommentImageModel model)
         {
             if (!_imageService.SaveDescriptionsForPhoto(model))
             {
@@ -282,7 +299,7 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("Apimobile/Location")]
-        public ActionResult PostLocation(decimal lat, decimal lng)
+        public ActionResult UpdateTechnicianLocation(decimal lat, decimal lng)
         {
             var userId = UserModel.Id;
             _log.InfoFormat("Method: PostLocation. technicianId: {0}, lat: {1}, lng {2}", userId, lat, lng);
@@ -325,60 +342,5 @@ namespace BloomService.Web.Controllers
             notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, model.Status));
             return Success();
         }
-
-
-        [HttpPost]
-        [Route("Apimobile/DeletePicture")]
-        public ActionResult DeletePicture(PictureModel model)
-        {
-            _log.InfoFormat("Method: DeletePicture. Id: {0}, WorkOrder {1}", model.Id, model.WorkOrder);
-            var imageItem = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrder).FirstOrDefault();
-            if (imageItem == null)
-            {
-                _log.InfoFormat("Workorder {0} images not found", model.WorkOrder);
-                return Error("Workorder images not found");
-            }
-            var imageId = model.Id.AsInt();
-            var image = imageItem.Images.FirstOrDefault(x => x.Id == imageId);
-            imageItem.Images.Remove(image);
-            repository.Update(imageItem);
-            _log.InfoFormat("Image ({0}) deleted. Repository updated",  model.Id);
-            notification.SendNotification(string.Format("Image {0} deleted. Repository updated", model.Id));
-            return Success();
-        }
-
-        //private LoginResponseModel GetToken(string mail, string password)
-        //{
-        //    _log.InfoFormat("Method: GetToken. Mail {0}, password {1}", mail, password);
-        //   ASCIIEncoding encoding = new ASCIIEncoding();
-        //    string postData = "username=" + mail;
-        //    postData += "&password=" + password;
-        //    postData += "&grant_type=" + "password";
-        //    byte[] data = encoding.GetBytes(postData);
-
-        //    var url = ConfigurationManager.AppSettings["SiteUrl"] + "/apimobile/Token";
-        //    var request = WebRequest.Create(url);
-        //    request.Headers.Add(HttpRequestHeader.Authorization, "usernamepassword");
-        //    request.ContentType = "application/x-www-form-urlencoded";
-        //    request.Method = "POST";
-        //    var newStream = request.GetRequestStream();
-        //    newStream.Write(data, 0, data.Length);
-        //    newStream.Close();
-        //    try
-        //    {
-        //        var response = (HttpWebResponse)request.GetResponse();
-        //        var dataStream = response.GetResponseStream();
-
-        //        DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(LoginResponseModel));
-        //        var model = (LoginResponseModel)ser.ReadObject(dataStream);
-        //        _log.InfoFormat("Success. Returned LoginResponseModel (ID: {0})", model.Id);
-        //        return model;
-        //    }
-        //    catch
-        //    {
-        //        _log.ErrorFormat("Method: GetToken. Error. Returned null");
-        //        return null;
-        //    }
-        //}
     }
 }
