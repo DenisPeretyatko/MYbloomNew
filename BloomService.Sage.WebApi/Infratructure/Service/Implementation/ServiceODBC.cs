@@ -32,8 +32,8 @@
             this.claimsAgent = claimsAgent;
             timberlineDataConnectionString = "Driver={Timberline Data};" + string.Format(
                 "UID={0};pwd={1};DBQ={2}",
-                /*claimsAgent.Name*/ "kris",
-                /*claimsAgent.Password*/ "sageDEV!!", configConstants.TimberlineDataConnectionString);
+                claimsAgent.Name,
+                claimsAgent.Password, configConstants.TimberlineDataConnectionString);
             timberlineServiceManagementConnectionString = configConstants.TimberlineServiceManagementConnectionString;
         }
 

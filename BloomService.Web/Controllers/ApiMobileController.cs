@@ -188,14 +188,14 @@ namespace BloomService.Web.Controllers
 
             var workOrderItem = new SageWorkOrderItem();
             workOrderItem = Mapper.Map<SageWorkOrderItem>(model);
-            var dBworkOrderItems = new List<SageWorkOrderItem>();
+            //var dBworkOrderItems = new List<SageWorkOrderItem>();
 
-            if (workOrder.WorkOrderItems == null || (workOrder.WorkOrderItems != null && workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId) == null))
+            if (workOrder.WorkOrderItems != null && workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId) == null)
             {
-                if (workOrder.WorkOrderItems != null)
-                {
-                    dBworkOrderItems = workOrder.WorkOrderItems.ToList();
-                }
+                //if (workOrder.WorkOrderItems != null)
+                //{
+                //    dBworkOrderItems = workOrder.WorkOrderItems.ToList();
+                //}
                 workOrderItem.WorkOrder = model.WorkOrder;
                 workOrderItem.TotalSale = workOrderItem.Quantity * workOrderItem.UnitSale;
                 if (workOrderItem.ItemType == "Parts")
@@ -210,8 +210,9 @@ namespace BloomService.Web.Controllers
                 var result = sageApiProxy.AddWorkOrderItem(workOrderItem);
                 if (result != null && result.IsSucceed && result.Entity != null)
                 {
-                    dBworkOrderItems.Add(result.Entity);
-                    workOrder.WorkOrderItems = dBworkOrderItems;
+                    //dBworkOrderItems.Add(result.Entity);
+                    //workOrder.WorkOrderItems = dBworkOrderItems;
+                    workOrder.WorkOrderItems = sageApiProxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder).Entities; 
                     repository.Update(workOrder);
                 }
                 else
@@ -222,15 +223,16 @@ namespace BloomService.Web.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
 
-            dBworkOrderItems = workOrder.WorkOrderItems.ToList();
-            workOrderItem.WorkOrder = model.WorkOrder;
+            //dBworkOrderItems = workOrder.WorkOrderItems.ToList();
+            //workOrderItem.WorkOrder = model.WorkOrder;
             var resultUpdate = sageApiProxy.EditWorkOrderItem(workOrderItem);
             if (resultUpdate != null && resultUpdate.IsSucceed && resultUpdate.Entity != null)
             {
-                var dbEntity = dBworkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId);
-                dBworkOrderItems.Remove(dbEntity);
-                dBworkOrderItems.Add(resultUpdate.Entity);
-                workOrder.WorkOrderItems = dBworkOrderItems;
+                //var dbEntity = dBworkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId);
+                //dBworkOrderItems.Remove(dbEntity);
+                //dBworkOrderItems.Add(resultUpdate.Entity);
+                //workOrder.WorkOrderItems = dBworkOrderItems;
+                workOrder.WorkOrderItems = sageApiProxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder).Entities;
                 repository.Update(workOrder);
             }
             else
