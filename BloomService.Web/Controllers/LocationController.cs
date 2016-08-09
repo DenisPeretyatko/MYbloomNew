@@ -28,25 +28,13 @@ namespace BloomService.Web.Controllers
             var workOrders = _repository.SearchFor<SageWorkOrder>().NotClosed();
             foreach (var item in workOrders)
             {
-                var itemLocation = _repository.SearchFor<SageLocation>(l => l.Name == item.Location).FirstOrDefault();
-                if (itemLocation == null)
-                    continue;
-
-                item.Latitude = itemLocation.Latitude;
-                item.Longitude = itemLocation.Longitude;
-
-                var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder).OrderByDescending(x => x.ScheduleDate).ThenByDescending(x => x.StartTime).FirstOrDefault();
-
-                if (string.IsNullOrEmpty(assignment?.Employee) || item.AssignmentId != null)
-                    continue;
-
                 result.Add(new MapViewModel()
                 {
                     WorkOrder = item,
-                    DateEntered = assignment.ScheduleDate,
-                    Color = assignment?.Color,
-                    Employee = assignment?.EmployeeId
-            });
+                    DateEntered = item.ScheduleDate,
+                    Color = item?.Color,
+                    Employee = item?.EmployeeId
+                });
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }

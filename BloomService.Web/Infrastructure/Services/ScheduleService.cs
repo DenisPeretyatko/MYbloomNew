@@ -63,6 +63,8 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
             workorder.ScheduleDate = databaseAssignment.ScheduleDate;
             workorder.Latitude = itemLocation.Latitude;
             workorder.Longitude = itemLocation.Longitude;
+            workorder.Color = databaseAssignment.Color;
+            workorder.EmployeeId = databaseAssignment.EmployeeId;
 
             _repository.Update(databaseAssignment);
             workorder.AssignmentId = null;
