@@ -47,7 +47,7 @@
 
             lookups.PaymentMethods = PaymentMethod.PaymentMethods;
             lookups.Parts = Mapper.Map<List<SagePart>, List<PartModel>>(parts.ToList());
-            lookups.Status = WorkOrderStatus.Status;
+            lookups.Status = WorkOrderStatus.StatusForManager;
 
             return lookups;
         }

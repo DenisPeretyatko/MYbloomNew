@@ -215,8 +215,21 @@
 .closed {
     background-color: #30B335 !important;
 }
+.cancelled {
+    background-color: #BFB8B5 !important;
+}
+.expired {
+    background-color: #7F4FAC !important;
+}
+.reviewed {
+    background-color: #5258B7 !important;
+}
+.invoiced {
+    background-color: #E8C316 !important;
+}
 
-.label.open.statusColor, .label.closed.statusColor, .label.return.statusColor, .label.work.statusColor {
+.label.open.statusColor, .label.closed.statusColor, .label.return.statusColor, .label.work.statusColor,
+.label.cancelled.statusColor, .label.expired.statusColor, .label.reviewed.statusColor, .label.invoiced.statusColor {
     color : #fff !important;
 }
 .dropdown-menu.dropdown-alerts.notification-messages {

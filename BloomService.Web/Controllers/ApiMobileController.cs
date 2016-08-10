@@ -120,7 +120,7 @@ namespace BloomService.Web.Controllers
             var userId = UserModel.Name;
 
             var assignments = repository.SearchFor<SageAssignment>().ToEmployee(userId).ToList();
-            var allWorkorders = repository.SearchFor<SageWorkOrder>().NotClosed().ToList();
+            var allWorkorders = repository.SearchFor<SageWorkOrder>().VisibleForTechnicain().ToList();
 
             var workorders = new List<SageWorkOrder>();
 
