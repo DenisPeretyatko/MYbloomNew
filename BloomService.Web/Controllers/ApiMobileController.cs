@@ -161,22 +161,28 @@ namespace BloomService.Web.Controllers
             return Json(workorders, JsonRequestBehavior.AllowGet);
         }
 
+
+
         [HttpPost]
         [Route("Apimobile/AddItem")]
-        public ActionResult AddWorkOrderItem(LaborPartsModel model)
+        public ActionResult AddWOItem(LaborPartsModel model)
         {
-            var workOrderItemId = model.WorkOrderItem.AsInt();
+            int workOrderItemId;
+            if (model.WorkOrderItem != null)
+            {
+                workOrderItemId = Convert.ToInt32(model.WorkOrderItem);
+            }
+            else
+            {
+                workOrderItemId = -1;
+            }
+
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
 
             var workOrderItem = Mapper.Map<SageWorkOrderItem>(model);
-            var dBworkOrderItems = new List<SageWorkOrderItem>();
 
-            if (workOrder.WorkOrderItems == null || (workOrder.WorkOrderItems != null && workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId) == null))
+            if (workOrder.WorkOrderItems != null && workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId) == null)
             {
-                if (workOrder.WorkOrderItems != null)
-                {
-                    dBworkOrderItems = workOrder.WorkOrderItems.ToList();
-                }
                 workOrderItem.WorkOrder = model.WorkOrder.AsInt();
                 workOrderItem.TotalSale = workOrderItem.Quantity * workOrderItem.UnitSale;
                 if (workOrderItem.ItemType == "Parts")
@@ -187,13 +193,11 @@ namespace BloomService.Web.Controllers
                 {
                     workOrderItem.LaborSale = workOrderItem.UnitSale;
                 }
-                
+
                 var result = sageApiProxy.AddWorkOrderItem(workOrderItem);
                 if (result != null && result.IsSucceed && result.Entity != null)
                 {
-                    result.Entity.Part = model.Part;
-                    dBworkOrderItems.Add(result.Entity);
-                    workOrder.WorkOrderItems = dBworkOrderItems;
+                    workOrder.WorkOrderItems = sageApiProxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder).Entities;
                     repository.Update(workOrder);
                 }
                 else
@@ -204,16 +208,11 @@ namespace BloomService.Web.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
 
-            dBworkOrderItems = workOrder.WorkOrderItems.ToList();
-            workOrderItem.WorkOrder = model.WorkOrder.AsInt();
+            
             var resultUpdate = sageApiProxy.EditWorkOrderItem(workOrderItem);
             if (resultUpdate != null && resultUpdate.IsSucceed && resultUpdate.Entity != null)
             {
-                var dbEntity = dBworkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId);
-                dBworkOrderItems.Remove(dbEntity);
-                resultUpdate.Entity.Part = model.Part;
-                dBworkOrderItems.Add(resultUpdate.Entity);
-                workOrder.WorkOrderItems = dBworkOrderItems;
+                workOrder.WorkOrderItems = sageApiProxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder).Entities;
                 repository.Update(workOrder);
             }
             else
