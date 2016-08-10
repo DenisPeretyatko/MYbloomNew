@@ -144,6 +144,7 @@
                 properties.Add("CustomerPO", workOrder.CustomerPO ?? string.Empty);
                 properties.Add("PermissionCode", workOrder.PermissionCode ?? string.Empty);
                 properties.Add("PayMethod", workOrder.PayMethod ?? string.Empty);
+                properties.Add("JCJob", workOrder.JCJob ?? string.Empty);
 
                 var resultProperties = new Dictionary<string, string>();
                 foreach (var property in properties)
@@ -497,7 +498,6 @@
         {
             try
             {
-                serviceOdbc.EditWorkJcJob(workOrderItem.Id, workOrderItem.JCJob);
                 var woItem = serviceManager.AddWorkOrderItem(workOrderItem).Single();
                 var result = new SageResponse<SageWorkOrderItem> { IsSucceed = true, Entity = woItem };
                 return result;

@@ -56,6 +56,7 @@ namespace Sage.WebApi.Infratructure.Constants
             parameters.Add("CUSTOMERPO", workOrder.CustomerPO);
             parameters.Add("PERMISSIONCODE", workOrder.PermissionCode);
             parameters.Add("PAYMETHOD", workOrder.PayMethod);
+            parameters.Add("JCJOB", workOrder.JCJob);
             if (workOrder.Status == "Open")
             {
                 parameters.Add("STATUS", "0");

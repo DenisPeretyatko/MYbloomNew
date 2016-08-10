@@ -193,6 +193,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             WorkOrder: $scope.editableWorkOrder.WorkOrder,
             Equipment: equipment,
             Status: $scope.lookups.Status.selected == null ? "" : $scope.lookups.Status.selected.Value,
+            JCJob: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.JCJob,
         };
 
         commonDataService.saveWorkorder(workorder).then(function (response) {

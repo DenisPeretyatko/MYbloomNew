@@ -37,5 +37,7 @@
         public string WorkOrder { get; set; }
 
         public int Status { get; set; }
+
+        public string JCJob { get; set; }
     }
 }

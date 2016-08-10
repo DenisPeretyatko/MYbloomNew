@@ -57,7 +57,8 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             Locationcomments: $scope.obj.locationcomments,
             Customerpo: $scope.obj.customerpo,
             Permissiocode: $scope.lookups.PermissionCodes.selected == null ? "" : $scope.lookups.PermissionCodes.selected.DESCRIPTION,
-            Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected.Method
+            Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected.Method,
+            JCJob: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.JCJob,
         };
 
         commonDataService.createWorkorder(workorder).then(function (response) {

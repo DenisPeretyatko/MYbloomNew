@@ -60,7 +60,8 @@ namespace BloomService.Web.Controllers
                 Comments = model.Locationcomments,
                 CustomerPO = model.Customerpo,
                 PermissionCode = model.Permissiocode,
-                PayMethod = model.Paymentmethods
+                PayMethod = model.Paymentmethods,
+                JCJob = model.JCJob
             };
 
             var result = _sageApiProxy.AddWorkOrder(workorder);
@@ -276,7 +277,8 @@ namespace BloomService.Web.Controllers
                 Id = model.Id,
                 Status = model.Status == WorkOrderStatus.ClosedId
                     ? WorkOrderStatus.ById(WorkOrderStatus.ClosedId)
-                    : WorkOrderStatus.ById(WorkOrderStatus.OpenId)
+                    : WorkOrderStatus.ById(WorkOrderStatus.OpenId), 
+                JCJob = model.JCJob 
             };
 
             var workOrderResult = _sageApiProxy.EditWorkOrder(workorder);
