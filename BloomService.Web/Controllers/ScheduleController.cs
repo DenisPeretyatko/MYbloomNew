@@ -54,7 +54,8 @@ namespace BloomService.Web.Controllers
             foreach (var item in mappedAssignments) {
                 if (!string.IsNullOrEmpty(item.Employee))
                 {
-                    item.Color = employees.FirstOrDefault(e => e.Name == item.Employee).Color;
+                    var color = employees.FirstOrDefault(e => e.Name == item.Employee);
+                    item.Color = color != null? color.Color : "";
                 }
             };
             var workorders = _repository.GetAll<SageWorkOrder>();

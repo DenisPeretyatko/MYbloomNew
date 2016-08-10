@@ -150,7 +150,12 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 entity.Id = mongoEntity.Id;
                                 entity.Status = mongoEntity.Status;
                                 entity.AssignmentId = mongoEntity.AssignmentId;
+                                entity.Latitude = mongoEntity.Latitude;
+                                entity.Longitude = mongoEntity.Longitude;
+
                                 entity.ScheduleDate = mongoEntity.ScheduleDate;
+                                entity.Color = mongoEntity.Color;
+                                entity.EmployeeId = mongoEntity.EmployeeId;
                                 _repository.Update(entity);
                             }
                         }
@@ -227,6 +232,8 @@ namespace BloomService.Web.Infrastructure.Jobs
                                         assigment.Customer = workorder.ARCustomer;
                                         assigment.Location = workorder.Location;
                                         workorder.ScheduleDate = assignmentDate;
+                                        workorder.Color = assigment.Color;
+                                        workorder.EmployeeId = assigment.EmployeeId;
                                         _repository.Update(workorder);
                                     }
                                 }
@@ -327,9 +334,16 @@ namespace BloomService.Web.Infrastructure.Jobs
 
                             if (mongoEntity == null)
                             {
-                                var hasOpenWorkOrder = _repository.SearchFor<SageWorkOrder>(x => x.Location == entity.Name && x.Status == "Open").Any();
+                                var woBylocation = _repository.SearchFor<SageWorkOrder>(x => x.Location == entity.Name && x.Status == "Open"); 
+                                var hasOpenWorkOrder = woBylocation.Any();
                                 if (hasOpenWorkOrder)
                                     _locationService.ResolveLocation(entity);
+                                foreach (var wo in woBylocation)
+                                {
+                                    wo.Latitude = entity.Latitude;
+                                    wo.Longitude = entity.Longitude;
+                                    _repository.Update(wo);
+                                }
                                 _repository.Add(entity);
                             }
                             else

@@ -139,7 +139,11 @@ namespace BloomService.Web.Controllers
             foreach (var order in workorders)
             {
                 order.Equipments = new List<SageEquipment>();
-                order.Images = _imageService.GetPhotoForWorkOrder(order.WorkOrder, settings.SiteUrl).OrderBy(x => x.Id).ToList();
+                order.Images = _imageService.GetPhotoForWorkOrder(order.WorkOrder, settings.SiteUrl);
+                if (order.Images != null)
+                {
+                    order.Images.OrderBy(x => x.Id).ToList();
+                }
 
                 var location = locations.FirstOrDefault(x => x.Name == order.Location);
                 if (location != null)

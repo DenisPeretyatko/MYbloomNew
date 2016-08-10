@@ -67,7 +67,7 @@ using BloomService.Domain.Entities.Concrete;
                 };
             }
 
-            var pathToImage = string.Format("{0}/{1}/", this.httpContextProvider.MapPath(this.urlToFolderPhotoWorkOrders), model.IdWorkOrder);
+            var pathToImage = Path.Combine(this.httpContextProvider.MapPath(this.urlToFolderPhotoWorkOrders), model.IdWorkOrder);
             var nameBig = countImage.ToString();
             var nameSmall = "small" + countImage;
             var fileName = this.SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, this.settings.SizeBigPhoto);
@@ -133,7 +133,7 @@ using BloomService.Domain.Entities.Concrete;
             if (!di.Exists)
                 di.Create();
             var newPath = userId + "." + ext;
-            image.Save(path + newPath);
+            image.Save(Path.Combine(path, newPath));
             return newPath;
         }
 
@@ -213,17 +213,18 @@ using BloomService.Domain.Entities.Concrete;
 
         private bool ValidateImage(Image file)
         {
-            try
-            {
-                if (this.IsOneOfValidFormats(file.RawFormat))
-                {
-                    return true;
-                }
-            }
-            catch
-            {
-            }
-            return false;
+            //try
+            //{
+            //    if (this.IsOneOfValidFormats(file.RawFormat))
+            //    {
+            //        return true;
+            //    }
+            //}
+            //catch
+            //{
+            //}
+            //return false;
+            return true;
         }
 
         private bool IsOneOfValidFormats(ImageFormat rawFormat)
