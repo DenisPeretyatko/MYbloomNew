@@ -10,12 +10,15 @@ namespace BloomService.Web.Infrastructure.Queries
     {
         public static IQueryable<SageWorkOrder> Open(this IQueryable<SageWorkOrder> query)
         {
-            return query.Where(x => x.Status == WorkOrderStatus.Open);
+            return query.Where(x => x.Status == WorkOrderStatus.Open ||
+                                    x.Status == WorkOrderStatus.ReturnRequired);
         }
 
-        public static IQueryable<SageWorkOrder> NotClosed(this IQueryable<SageWorkOrder> query)
+        public static IQueryable<SageWorkOrder> VisibleForTechnicain(this IQueryable<SageWorkOrder> query)
         {
-            return query.Where(x => x.Status != WorkOrderStatus.Closed);
+            return query.Where(x => x.Status == WorkOrderStatus.Open ||
+                                    x.Status == WorkOrderStatus.ReturnRequired ||
+                                    x.Status == WorkOrderStatus.WorkComplete);
         }
 
         public static List<SageWorkOrder> ForDate(this IQueryable<SageWorkOrder> query, DateTime date)

@@ -25,7 +25,7 @@ namespace BloomService.Web.Controllers
         public ActionResult GetLocations(MapModel model)
         {
             var result = new List<MapViewModel>();
-            var workOrders = _repository.SearchFor<SageWorkOrder>().NotClosed();
+            var workOrders = _repository.SearchFor<SageWorkOrder>().Open();
             foreach (var item in workOrders)
             {
                 result.Add(new MapViewModel()

@@ -46,6 +46,18 @@
                                 <span class="label closed statusColor" ng-if="workorder.Status == 'Closed'" >
                                     {{workorder.Status}}
                                 </span>
+                                <span class="label cancelled statusColor" ng-if="workorder.Status == 'Cancelled'">
+                                    {{workorder.Status}}
+                                </span>
+                                <span class="label expired statusColor" ng-if="workorder.Status == 'Expired Quote'">
+                                    {{workorder.Status}}
+                                </span>
+                                <span class="label reviewed statusColor" ng-if="workorder.Status == 'Reviewed'">
+                                    {{workorder.Status}}
+                                </span>
+                                <span class="label invoiced statusColor" ng-if="workorder.Status == 'Invoiced'">
+                                    {{workorder.Status}}
+                                </span>
                             </td>
                             <td class="center">
                                 <a ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})" class="btn btn-primary btn-xs">Edit...</a>
