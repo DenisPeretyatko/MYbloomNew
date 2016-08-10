@@ -241,7 +241,7 @@
         {
             if (!isCreated)
             {
-                Create(config.SageUserName, config.SageUserName);
+                Create(config.SageUserName, config.SagePassword);
             }
 
             var response = messageBoard.SendMessage(messageTypeDescriptor.Xml, message);
@@ -253,7 +253,7 @@
             _log.InfoFormat("Send message: {0}", message);
             if (!isCreated)
             {
-                Create(config.SageUserName, config.SageUserName);
+                Create(config.SageUserName, config.SagePassword);
             }
 
             var response = messageBoard.SendMessage(messageTypeDescriptor.Xml, message);

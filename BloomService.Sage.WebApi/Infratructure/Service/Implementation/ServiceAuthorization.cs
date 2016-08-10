@@ -67,14 +67,17 @@ namespace Sage.WebApi.Infratructure.Service.Implementation
                 }
                 _log.InfoFormat("Authorization success: Mail: {0}, Type: {1}, Id: {2}", response.Mail, response.Type, response.Id);
                 return response;
-            }
+        }
             catch(Exception ex)
             {
-                _log.InfoFormat("Error authorization: {0}", ex.Message);
+                _log.InfoFormat("Error authorization: {0}", ex);
+                if(ex.InnerException != null)
+                {
+                    _log.InfoFormat("Authorization inner exeption: {0}", ex);
+                }
                 return null;
             }
-
-        }
+}
 
         private SearchResponse CheckGroup(LdapConnection ldapConnection, string nameGroup, string nameUser)
         {
