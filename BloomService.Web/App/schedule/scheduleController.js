@@ -423,9 +423,15 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             $("." + data + "").addClass("footable-sorted");
             $("." + data + "").removeClass("footable-sorted-desc");
         } else {
-            $scope.increase = !$scope.increase;
-            $("." + data + "").addClass("footable-sorted-desc");
-            $("." + data + "").removeClass("footable-sorted");
+             $scope.increase = !$scope.increase;
+             if ($("." + data + "").hasClass("footable-sorted-desc")) {
+                 $("." + data + "").addClass("footable-sorted");
+                 $("." + data + "").removeClass("footable-sorted-desc");
+             }
+             else{
+             $("." + data + "").addClass("footable-sorted-desc");
+             $("." + data + "").removeClass("footable-sorted");
+         }
         }
         model.Column = $scope.sorting;
         model.Direction = $scope.increase;
