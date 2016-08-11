@@ -163,18 +163,6 @@
       <HintPath>..\packages\RestSharp.Newtonsoft.Json.1.0.0\lib\net45\RestSharp.Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sage.LS1.Core">
-      <HintPath>..\lib\Sage.LS1.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sage.LS1.Messaging">
-      <HintPath>..\lib\Sage.LS1.Messaging.dll</HintPath>
-    </Reference>
-    <Reference Include="Sage.LS1.Messaging.Interfaces">
-      <HintPath>..\lib\Sage.LS1.Messaging.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Sage.LS1.Messaging.Provider">
-      <HintPath>..\lib\Sage.LS1.Messaging.Provider.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />

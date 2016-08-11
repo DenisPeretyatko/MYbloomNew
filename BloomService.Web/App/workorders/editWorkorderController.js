@@ -19,6 +19,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     $scope.obj.locationcomments = "";
     $scope.obj.customerpo = "";
     $scope.obj.permissiocode = "";
+    $scope.obj.hours = '';
     $scope.paymentmethods = "";
     $scope.lookups = state.lookups;
     $scope.EquipType = ["Labor", "Parts"];
@@ -40,7 +41,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.lookups.Problems.selected = $scope.editableWorkOrder.ProblemObj;
             $scope.lookups.RateSheets.selected = $scope.editableWorkOrder.RateSheetObj;
             $scope.lookups.Employes.selected = $scope.editableWorkOrder.EmployeeObj;
-            $scope.lookups.Hours.selected = $scope.editableWorkOrder.HourObj;
+            //$scope.lookups.Hours.selected = $scope.editableWorkOrder.HourObj;
+            $scope.obj.hours = $scope.editableWorkOrder.EstimatedRepairHours;
             $scope.obj.nottoexceed = $scope.editableWorkOrder.NottoExceed;
             $scope.obj.locationcomments = $scope.editableWorkOrder.Comments;
             $scope.obj.customerpo = $scope.editableWorkOrder.CustomerPO;
@@ -65,7 +67,8 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             $scope.lookups.Problems.selected = $scope.editableWorkOrder.ProblemObj;
             $scope.lookups.RateSheets.selected = $scope.editableWorkOrder.RateSheetObj;
             $scope.lookups.Employes.selected = $scope.editableWorkOrder.EmployeeObj;
-            $scope.lookups.Hours.selected = $scope.editableWorkOrder.HourObj;
+            //$scope.lookups.Hours.selected = $scope.editableWorkOrder.HourObj;
+            $scope.obj.hours = $scope.editableWorkOrder.EstimatedRepairHours;
             $scope.obj.nottoexceed = $scope.editableWorkOrder.NottoExceed;
             $scope.obj.locationcomments = $scope.editableWorkOrder.Comments;
             $scope.obj.customerpo = $scope.editableWorkOrder.CustomerPO;
@@ -184,7 +187,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             Problem: $scope.lookups.Problems.selected == null ? "" : $scope.lookups.Problems.selected.Problem,
             Ratesheet: $scope.lookups.RateSheets.selected == null ? "" : $scope.lookups.RateSheets.selected.RATESHEETNBR,
             Emploee: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.Employee,
-            Estimatehours: $scope.lookups.Hours.selected == null ? "0" : $scope.lookups.Hours.selected.Repair,
+            Estimatehours: $scope.obj.hours, //$scope.lookups.Hours.selected == null ? "" : $scope.lookups.Hours.selected.Repair,
             Nottoexceed: $scope.obj.nottoexceed,
             Locationcomments: $scope.obj.locationcomments,
             Customerpo: $scope.obj.customerpo,
@@ -334,7 +337,7 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             lat: parseFloat(lat),
             lng: parseFloat(lng)
         }
-
+        
         var marker = new google.maps.Marker({
             position: pos,
             map: $scope.locationMap,
@@ -346,12 +349,16 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
                 content: content
             });
             infowindow.open($scope.locationMap, marker);
-        });       
+        });
+        $('#myModal').on('shown.bs.modal', function () {
+            google.maps.event.trigger($scope.locationMap, 'resize');
+            $scope.locationMap.setCenter(new google.maps.LatLng(pos.lat, pos.lng));
+        })
     };
 
-    $('#myModal').on('shown.bs.modal', function () {
-        google.maps.event.trigger($scope.locationMap, 'resize');
-    })
+    $scope.setEstimateHour = function (selected) {
+        $scope.obj.hours = parseFloat(selected.$select.selected.EstimatedRepairHours);
+    };
 
 };
 editWorkorderController.$inject = ["$scope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state"];
