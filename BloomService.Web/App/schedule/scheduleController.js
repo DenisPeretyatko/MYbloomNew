@@ -3,6 +3,15 @@
  */
 
 var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $q, commonDataService) {
+    $scope.sorting = "date";
+    $scope.increase = false;
+    var model = {
+        Index: 0,
+        Search: '',
+        Column: '',
+        Direction: false
+    };
+
     var date = new Date();  
     var remainsFullHours = function(start, end) {
         var dateDifference = end.getTime() - start.getTime();
@@ -404,6 +413,26 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         });
     }
 
+
+     $scope.changeSorting = function (data, element) {
+         if ($scope.sorting != data) {
+             $("." + $scope.sorting + "").removeClass("footable-sorted");
+             $("." + $scope.sorting + "").removeClass("footable-sorted-desc");
+            $scope.sorting = data;
+            $scope.increase = false;
+            $("." + data + "").addClass("footable-sorted");
+            $("." + data + "").removeClass("footable-sorted-desc");
+        } else {
+            $scope.increase = !$scope.increase;
+            $("." + data + "").addClass("footable-sorted-desc");
+            $("." + data + "").removeClass("footable-sorted");
+        }
+        model.Column = $scope.sorting;
+        model.Direction = $scope.increase;
+        return commonDataService.sortUnAssignWorkorder(model).then(function (response) {
+            $scope.unassignedWorkorders = response.data;
+        });
+    }
 
 };
 scheduleController.$inject = ["$rootScope", "$scope", "$interpolate", "$timeout", "$q", "commonDataService"];
