@@ -235,3 +235,17 @@
 .dropdown-menu.dropdown-alerts.notification-messages {
     width: 500px;
 }
+
+.picture_desc {
+    width: 235px;
+    word-wrap: break-word;
+    overflow: hidden;
+    -moz-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    /* white-space: nowrap; */
+    text-align: center;
+    line-height: 18px;
+    /* height: 36px; */
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}

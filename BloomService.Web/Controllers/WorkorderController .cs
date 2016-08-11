@@ -295,7 +295,7 @@ namespace BloomService.Web.Controllers
                 var editedAssignment = new AssignmentViewModel();
                 editedAssignment.Employee = model.Emploee;
                 editedAssignment.EndDate = (DateTime)assignmentDb.Enddate;
-                editedAssignment.EstimatedRepairHours = assignmentDb.EstimatedRepairHours.AsDouble() == 0 ? "1.00" : assignmentDb.EstimatedRepairHours;
+                editedAssignment.EstimatedRepairHours = workorder.EstimatedRepairHours.ToString();
                 editedAssignment.Id = assignmentDb.Id;
                 editedAssignment.ScheduleDate = (DateTime)assignmentDb.StartTime;
                 editedAssignment.WorkOrder = assignmentDb.WorkOrder;
@@ -364,11 +364,14 @@ namespace BloomService.Web.Controllers
             }
             else
             {
-                var idsToRemove = workOrderFromMongo.WorkOrderItems.Select(x => x.WorkOrderItem);
-
-                if (idsToRemove.Any())
+                if (workOrderFromMongo.WorkOrderItems != null)
                 {
-                    _sageApiProxy.DeleteWorkOrderItems(Convert.ToInt32(workOrderFromMongo.WorkOrder), idsToRemove);
+                    var idsToRemove = workOrderFromMongo.WorkOrderItems.Select(x => x.WorkOrderItem);
+
+                    if (idsToRemove.Any())
+                    {
+                        _sageApiProxy.DeleteWorkOrderItems(Convert.ToInt32(workOrderFromMongo.WorkOrder), idsToRemove);
+                    }
                 }
             }
             

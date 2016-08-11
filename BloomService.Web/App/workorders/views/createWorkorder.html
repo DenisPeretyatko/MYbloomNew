@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Problem</label>
-                                        <ui-select ng-model="lookups.Problems.selected" theme="bootstrap">
+                                        <ui-select ng-model="lookups.Problems.selected" theme="bootstrap" on-select="setEstimateHour(this)">
                                             <ui-select-match placeholder="Problem">{{$select.selected.Description}}</ui-select-match>
                                             <ui-select-choices repeat="item in lookups.Problems | filter: $select.search">
                                                 <div>{{item.Description}}</div>
@@ -79,12 +79,13 @@
                                     <!--md 1.2-->
                                     <div class="form-group hidden-lg hidden-md">
                                         <label>Estimated Repair Hours</label>
-                                        <ui-select ng-model="lookups.Hours.selected" theme="bootstrap">
+                                            <input type="number" class="form-control" ng-model="obj.hours" step="0.50" min="0.00" value="0.00" placeholder="Estimated Repair Hours">
+                                        <!--<ui-select ng-model="lookups.Hours.selected" theme="bootstrap">
                                             <ui-select-match placeholder="Estimated Repair Hours">{{$select.selected.Description}}</ui-select-match>
                                             <ui-select-choices repeat="item in lookups.Hours | filter: $select.search">
                                                 <div>{{item.Description}}</div>
                                             </ui-select-choices>
-                                        </ui-select>
+                                        </ui-select>-->
                                     </div>
                                     <div class="form-group hidden-lg hidden-md">
                                         <label>Not to Exceed</label>
@@ -135,12 +136,13 @@
                                 <div class="ibox-content">
                                     <div class="form-group hidden-lg">
                                         <label>Estimated Repair Hours</label>
-                                        <ui-select ng-model="lookups.Hours.selected" theme="bootstrap">
+                                            <input type="number" class="form-control" ng-model="obj.hours" step="0.50" min="0.00" value="0.00" placeholder="Estimated Repair Hours">
+                                        <!--<ui-select ng-model="lookups.Hours.selected" theme="bootstrap">
                                             <ui-select-match placeholder="Estimated Repair Hours">{{$select.selected.Description}}</ui-select-match>
                                             <ui-select-choices repeat="item in lookups.Hours | filter: $select.search">
                                                 <div>{{item.Description}}</div>
                                             </ui-select-choices>
-                                        </ui-select>
+                                        </ui-select>-->
                                     </div>
                                     <div class="form-group hidden-lg">
                                         <label>Not to Exceed</label>
@@ -209,12 +211,13 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Estimated Repair Hours</label>
-                                        <ui-select ng-model="lookups.Hours.selected" theme="bootstrap">
+                                            <input type="number" class="form-control" ng-model="obj.hours" step="0.50" min="0.00" value="0.00" placeholder="Estimated Repair Hours">
+                                        <!--<ui-select ng-model="lookups.Hours.selected" theme="bootstrap">
                                             <ui-select-match placeholder="Estimated Repair Hours">{{$select.selected.Description}}</ui-select-match>
                                             <ui-select-choices repeat="item in lookups.Hours | filter: $select.search">
                                                 <div>{{item.Description}}</div>
                                             </ui-select-choices>
-                                        </ui-select>
+                                        </ui-select>-->
                                     </div>
                                     <div class="form-group">
                                         <label>Not to Exceed</label>
