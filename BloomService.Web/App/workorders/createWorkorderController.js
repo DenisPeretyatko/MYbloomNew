@@ -31,7 +31,9 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             $scope.lookups.Calltypes.selected = '';
             $scope.obj.calldate;
             $scope.lookups.Problems.selected  = '';
-            $scope.lookups.RateSheets.selected  = '';
+            $scope.lookups.RateSheets.selected = $scope.lookups.RateSheets.find(function (element) {
+                return element.RATESHEETNBR == 1;
+            });;
             $scope.lookups.Employes.selected  = '';
             $scope.lookups.Equipment.selected = '';
             $scope.lookups.Hours.selected = '';
