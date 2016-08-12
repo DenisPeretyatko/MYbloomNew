@@ -45,6 +45,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                 {
                     var path = _httpContextProvider.MapPath(_settings.SertificateUrl);
                     var technicians = _repository.SearchFor<SageEmployee>(x => x.IsAvailable && !string.IsNullOrEmpty(x.IosDeviceToken));
+
                     foreach (var technician in technicians)
                     {
                         //if (technician.AvailableDays != null && technician.AvailableDays.Any())
@@ -55,7 +56,24 @@ namespace BloomService.Web.Infrastructure.Jobs
                         //var endTime = avaibleDay.End.TryAsDateTime();
                         //if (startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
                         //{
-                        var notificationPayload = new NotificationPayload(technician.IosDeviceToken, null, 0, "default");
+
+                       var notificationPayload = new NotificationPayload(technician.IosDeviceToken);
+
+                        if (_settings.AlertNotificationEnabled)
+                        {
+                            notificationPayload = new NotificationPayload(technician.IosDeviceToken, _settings.NotificationAlert);
+                        }
+
+                        if (_settings.AlertBadgeNotificationEnabled)
+                        {
+                            notificationPayload = new NotificationPayload(technician.IosDeviceToken, _settings.NotificationAlert, _settings.NotificationBadge);
+                        }
+
+                        if (_settings.AlertBadgeSoundNotificationEnabled)
+                        {
+                            notificationPayload = new NotificationPayload(technician.IosDeviceToken, _settings.NotificationAlert, _settings.NotificationBadge, _settings.NotificationSound);
+                        }
+
                         //var notificationPayload = new NotificationPayload(technician.IosDeviceToken,"default");
                         var p = new List<NotificationPayload>();
                         p.Add(notificationPayload);
