@@ -84,49 +84,5 @@ namespace BloomService.Web.Controllers
                 return Error();
             return Success();      
         }
-
-        [HttpPost]
-        [Route("Schedule/SortWorkorder")]
-        public ActionResult SortWorkorder(WorkorderSortModel model)
-        {
-            var lastMonth = DateTime.Now.GetLocalDate().AddMonths(-1);
-            var workorders = _repository.GetAll<SageWorkOrder>();
-            var workOrdersForLastMonth = workorders.Where(x => x.Status == "Open" && x.DateEntered > lastMonth && !string.IsNullOrEmpty(x.AssignmentId)).ToList();
-
-            switch (model.Column) //sort
-            {
-                case "num":
-                    workOrdersForLastMonth = model.Direction
-                        ? workOrdersForLastMonth.OrderBy(x => x.WorkOrder).ToList()
-                        : workOrdersForLastMonth.OrderByDescending(x => x.WorkOrder).ToList();
-                    break;
-                case "date":
-                    workOrdersForLastMonth = model.Direction
-                        ? workOrdersForLastMonth.OrderBy(x => x.ScheduleDate).ToList()
-                        : workOrdersForLastMonth.OrderByDescending(x => x.ScheduleDate).ToList();
-                    break;
-                case "customer":
-                    workOrdersForLastMonth = model.Direction
-                        ? workOrdersForLastMonth.OrderBy(x => x.ARCustomer).ToList()
-                        : workOrdersForLastMonth.OrderByDescending(x => x.ARCustomer).ToList();
-                    break;
-                case "location":
-                    workOrdersForLastMonth = model.Direction
-                        ? workOrdersForLastMonth.OrderBy(x => x.Location).ToList()
-                        : workOrdersForLastMonth.OrderByDescending(x => x.Location).ToList();
-                    break;
-                case "hours":
-                    workOrdersForLastMonth = model.Direction
-                        ? workOrdersForLastMonth.OrderBy(x => x.EstimatedRepairHours).ToList()
-                        : workOrdersForLastMonth.OrderByDescending(x => x.EstimatedRepairHours).ToList();
-                    break;
-                case null:
-                    workOrdersForLastMonth = workOrdersForLastMonth.OrderByDescending(x => x.ScheduleDate).ToList();
-                    break;
-            }
-
-            var result = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(workOrdersForLastMonth);
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
     }
 }

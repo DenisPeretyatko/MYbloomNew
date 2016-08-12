@@ -86,14 +86,6 @@ var commonDataService = function ($http, $window) {
         });
     }
 
-    this.sortUnAssignWorkorder = function (model) {
-        return $http.post("/Schedule/SortWorkorder", model, {
-            headers: {
-                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
-            }
-        });
-    }
-
     this.getDashboard = function (map) {
         return $http.post("/Dashboard", map, {
             headers: {

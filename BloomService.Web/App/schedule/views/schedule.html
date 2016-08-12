@@ -22,28 +22,28 @@
                 <div class="ibox-content">
                     <div class="footable table table-stripped" data-page-size="8" data-filter=#filter>
                         <div class="table row " style="display: block">
-                            <div class="footable-sortable col-lg-1 col-md-1 col-sm-6 col-xs-6 num" ng-init="data = ''" ng-click="data='num'; changeSorting(data, this)">
+                            <div class="footable-sortable col-lg-1 col-md-1 col-sm-6 col-xs-6 WorkOrder" ng-init="data = ''" ng-click="data='WorkOrder'; changeSorting(data)">
                                 <h4>#</h4><span class="footable-sort-indicator"></span>
                             </div>
-                            <div class="footable-sortable col-lg-2 col-md-2 col-sm-6 col-xs-6 date" ng-click="data = 'date'; changeSorting(data, this)">
+                            <div class="footable-sortable col-lg-2 col-md-2 col-sm-6 col-xs-6 DateEntered" ng-click="data = 'DateEntered'; changeSorting(data)">
                                 <h4>Date</h4>
                                 <span class="footable-sort-indicator"></span>
                             </div>
-                            <div class="footable-sortable col-lg-3 col-md-3 hidden-sm hidden-xs customer" ng-click="data = 'customer'; changeSorting(data, this)">
+                            <div class="footable-sortable col-lg-3 col-md-3 hidden-sm hidden-xs ARCustomer" ng-click="data = 'ARCustomer'; changeSorting(data)">
                                 <h4>Customer</h4>
                                 <span class="footable-sort-indicator"></span>
                             </div>
-                            <div class="footable-sortable col-lg-4 col-md-4 hidden-sm hidden-xs location" ng-click="data = 'location'; changeSorting(data, this)">
+                            <div class="footable-sortable col-lg-4 col-md-4 hidden-sm hidden-xs Location" ng-click="data = 'Location'; changeSorting(data)">
                                 <h4>Location</h4>
                                 <span class="footable-sort-indicator"></span>
                             </div>
-                            <div class="footable-sortable col-lg-2 col-md-2 hidden-sm hidden-xs hours" ng-click="data = 'hours'; changeSorting(data, this)">
+                            <div class="footable-sortable col-lg-2 col-md-2 hidden-sm hidden-xs EstimatedRepairHours" ng-click="data = 'EstimatedRepairHours'; changeSorting(data)">
                                 <h4>Hours</h4>
                                 <span class="footable-sort-indicator"></span>
                             </div>
                         </div>
                         <div id="new-row"></div>
-                        <div ng-repeat="workorder in unassignedWorkorders" class="drag fc-event table row table-row dragdemo" style="z-index: 999; display: block" draggable="true">
+                        <div ng-repeat="workorder in unassignedWorkorders|orderBy:sortKey:reverse" class="drag fc-event table row table-row dragdemo" style="z-index: 999; display: block" draggable="true">
                             <div class="table-row col-lg-1 col-md-1 col-sm-6 col-xs-6">{{workorder.WorkOrder}}</div>
                             <div class="table-row col-lg-2 col-md-2 col-sm-6 col-xs-6">{{workorder.DateEntered}}</div>
                             <div class="table-row col-lg-3 col-md-3 hidden-sm hidden-xs">{{workorder.ARCustomer}}</div>
