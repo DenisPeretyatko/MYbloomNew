@@ -200,7 +200,7 @@ namespace BloomService.Web.Controllers
                 else
                 {
                     _log.ErrorFormat("Was not able to save workorderItem to sage. !result.IsSucceed");
-                    return Json(new { Error = "Was not able to save workorderItem to sage", InnerError = result.ErrorMassage });
+                    return Json(new { Error = "Work order item save failed", InnerError = result.ErrorMassage });
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
 
@@ -220,7 +220,7 @@ namespace BloomService.Web.Controllers
                 else
                 {
                     _log.ErrorFormat("Was not able to update workorderItem to sage. !result.IsSucceed");
-                    return Json(new { Error = "Was not able to update workorderItem to sage", InnerError = resultUpdate.ErrorMassage });
+                    return Json(new { Error = "Work order item update failed", InnerError = resultUpdate.ErrorMassage });
                 }
                 return Json(resultUpdate, JsonRequestBehavior.AllowGet);
             }
