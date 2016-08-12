@@ -15,6 +15,7 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
     $scope.showAll = false;
     $scope.workordersView = [];
     $scope.workorderMarkers = [];
+    $scope.globalTimezone = global.TimeZone;
   
     $scope.sort = function (data) {
         if ($scope.sortKey != data) {

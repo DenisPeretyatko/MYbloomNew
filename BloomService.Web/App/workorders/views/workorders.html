@@ -29,8 +29,8 @@
                         <tbody>
                         <tr ng-repeat="workorder in workorders">
                             <td>{{workorder.WorkOrder}}</td>
-                            <td>{{workorder.ScheduleDate|date:'mediumDate' : 'UTC'}}</td>
-                            <td>{{workorder.DateEntered|date:'mediumDate' : 'UTC' }}</td>
+                            <td>{{workorder.ScheduleDate|date:'mediumDate' : globalTimezone}}</td>
+                            <td>{{workorder.DateEntered|date:'mediumDate' : globalTimezone }}</td>
                             <td>{{workorder.ARCustomer}}</td>
                             <td>{{workorder.Location}}</td>
                             <td>

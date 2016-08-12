@@ -79,8 +79,8 @@
                         <tbody>
                         <tr dir-paginate="workorder in listworkorders|orderBy:sortKey:reverse|filter:search|itemsPerPage:10">
                             <td>{{workorder.WorkOrder}}</td>
-                            <td data-sort-initial="true">{{workorder.ScheduleDate|date:'mediumDate' : 'UTC'}}</td>
-                            <td>{{workorder.DateEntered|date:'mediumDate' : 'UTC'}}</td>
+                            <td data-sort-initial="true">{{workorder.ScheduleDate|date:'mediumDate' : globalTimezone}}</td>
+                            <td>{{workorder.DateEntered|date:'mediumDate' : globalTimezone}}</td>
                             <td>{{workorder.ARCustomer}}</td>
                             <td>{{workorder.Location}}</td>
                             <td>
