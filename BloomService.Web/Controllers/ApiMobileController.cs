@@ -166,23 +166,16 @@ namespace BloomService.Web.Controllers
         [Route("Apimobile/AddItem")]
         public ActionResult AddWOItem(LaborPartsModel model)
         {
-            int workOrderItemId;
-            if (model.WorkOrderItem != null)
-            {
-                workOrderItemId = Convert.ToInt32(model.WorkOrderItem);
-            }
-            else
-            {
-                workOrderItemId = -1;
-            }
-
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
 
             var workOrderItem = Mapper.Map<SageWorkOrderItem>(model);
             workOrderItem.Employee = UserModel.Name;
 
-            if (workOrder.WorkOrderItems != null && workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId) == null)
+            int workOrderItemId;
+            if (string.IsNullOrEmpty(model.WorkOrderItem))
             {
+                workOrderItemId = Convert.ToInt32(model.WorkOrderItem);
+                                
                 workOrderItem.WorkOrder = model.WorkOrder.AsInt();
                 workOrderItem.TotalSale = workOrderItem.Quantity * workOrderItem.UnitSale;
                 if (workOrderItem.ItemType == "Parts")
@@ -197,8 +190,12 @@ namespace BloomService.Web.Controllers
                 var result = sageApiProxy.AddWorkOrderItem(workOrderItem);
                 if (result != null && result.IsSucceed && result.Entity != null)
                 {
-                    workOrder.WorkOrderItems = sageApiProxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder).Entities;
-                    repository.Update(workOrder);
+                    var woiResult = sageApiProxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder);
+                    if (woiResult.IsSucceed)
+                    {
+                        workOrder.WorkOrderItems = woiResult.Entities;
+                        repository.Update(workOrder);
+                    }
                 }
                 else
                 {
@@ -206,21 +203,27 @@ namespace BloomService.Web.Controllers
                     return Json(new { Error = "Was not able to save workorderItem to sage", InnerError = result.ErrorMassage });
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
-            }
 
-            
-            var resultUpdate = sageApiProxy.EditWorkOrderItem(workOrderItem);
-            if (resultUpdate != null && resultUpdate.IsSucceed && resultUpdate.Entity != null)
-            {
-                workOrder.WorkOrderItems = sageApiProxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder).Entities;
-                repository.Update(workOrder);
             }
             else
             {
-                _log.ErrorFormat("Was not able to update workorderItem to sage. !result.IsSucceed");
-                return Json(new { Error = "Was not able to update workorderItem to sage", InnerError = resultUpdate.ErrorMassage });
+                var resultUpdate = sageApiProxy.EditWorkOrderItem(workOrderItem);
+                if (resultUpdate != null && resultUpdate.IsSucceed && resultUpdate.Entity != null)
+                {
+                    var woiResult = sageApiProxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder);
+                    if (woiResult.IsSucceed)
+                    {
+                        workOrder.WorkOrderItems = woiResult.Entities;
+                        repository.Update(workOrder);
+                    }
+                }
+                else
+                {
+                    _log.ErrorFormat("Was not able to update workorderItem to sage. !result.IsSucceed");
+                    return Json(new { Error = "Was not able to update workorderItem to sage", InnerError = resultUpdate.ErrorMassage });
+                }
+                return Json(resultUpdate, JsonRequestBehavior.AllowGet);
             }
-            return Json(resultUpdate, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
