@@ -18,14 +18,16 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
         private readonly IBloomServiceHub _hub;
         private readonly INotificationService _notification;
+        private readonly ILocationService _locationService;
 
 
-        public ScheduleService(IRepository repository, ISageApiProxy sageApiProxy, IBloomServiceHub hub, INotificationService notification)
+        public ScheduleService(IRepository repository, ISageApiProxy sageApiProxy, IBloomServiceHub hub, INotificationService notification, ILocationService locationService)
         {
             _repository = repository;
             _sageApiProxy = sageApiProxy;
             _hub = hub;
             _notification = notification;
+            _locationService = locationService;
         }
 
         public bool CerateAssignment(AssignmentViewModel model)
@@ -60,6 +62,10 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
             databaseAssignment.Location = workorder.Location;
             var locations = _repository.GetAll<SageLocation>().ToArray();
             var itemLocation = locations.FirstOrDefault(l => l.Name == workorder.Location);
+            if (itemLocation.Longitude == 0 || itemLocation.Longitude == 0)
+            {
+                _locationService.ResolveLocation(itemLocation);
+            }
             workorder.ScheduleDate = databaseAssignment.ScheduleDate;
             workorder.Latitude = itemLocation.Latitude;
             workorder.Longitude = itemLocation.Longitude;
@@ -69,6 +75,7 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
             _repository.Update(databaseAssignment);
             workorder.AssignmentId = null;
             _repository.Update(workorder);
+            _repository.Update(itemLocation);
 
 
             _hub.CreateAssignment(new MapViewModel()

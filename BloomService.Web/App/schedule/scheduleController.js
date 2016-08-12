@@ -124,28 +124,28 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             },
             eventDragStop: function (event, jsEvent, ui, view) {
                 if (isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
-                    var innerHtml = "<div class=\"table-row col-lg-1 col-md-1 col-sm-6 col-xs-6 ng-binding\">" + event.workorderId + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 col-sm-6 col-xs-6 ng-binding\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div class=\"table-row col-lg-3 col-md-3 hidden-sm hidden-xs ng-binding\">" + event.customerFoo + "</div>" +
-                                  "<div class=\"table-row col-lg-4 col-md-4 hidden-sm hidden-xs ng-binding\">" + event.locationFoo + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 hidden-sm hidden-xs ng-binding\">" + parseInt(event.hourFoo) + "</div>";
+                    //var innerHtml = "<div class=\"table-row col-lg-1 col-md-1 col-sm-6 col-xs-6 ng-binding\">" + event.workorderId + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 col-sm-6 col-xs-6 ng-binding\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div class=\"table-row col-lg-3 col-md-3 hidden-sm hidden-xs ng-binding\">" + event.customerFoo + "</div>" +
+                    //              "<div class=\"table-row col-lg-4 col-md-4 hidden-sm hidden-xs ng-binding\">" + event.locationFoo + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 hidden-sm hidden-xs ng-binding\">" + parseInt(event.hourFoo) + "</div>";
 
-                    var el = $("<div class=\"drag fc-event table row table-row dragdemo\" style=\"z-index: 999; display: block\" draggable=\"true\">").appendTo('#new-row').html(innerHtml);
-                    el.draggable({
-                        zIndex: 999,
-                        revert: true,
-                        revertDuration: 0
-                    });
-                    el.data('event', {
-                        title: event.title,
-                        id: event.id,
-                        start: event.start,
-                        end: event.end,
-                        workorderId: event.workorderId,
-                        description: event.description,
-                        dateFoo: event.dateFoo,
-                        customerFoo: event.customerFoo,
-                        locationFoo: event.locationFoo,
-                        hourFoo: parseInt(event.hourFoo),
-                        durationEditable: false
-                    });
+                    //var el = $("<div class=\"drag fc-event table row table-row dragdemo\" style=\"z-index: 999; display: block\" draggable=\"true\">").appendTo('#new-row').html(innerHtml);
+                    //el.draggable({
+                    //    zIndex: 999,
+                    //    revert: true,
+                    //    revertDuration: 0
+                    //});
+                    //el.data('event', {
+                    //    title: event.title,
+                    //    id: event.id,
+                    //    start: event.start,
+                    //    end: event.end,
+                    //    workorderId: event.workorderId,
+                    //    description: event.description,
+                    //    dateFoo: event.dateFoo,
+                    //    customerFoo: event.customerFoo,
+                    //    locationFoo: event.locationFoo,
+                    //    hourFoo: parseInt(event.hourFoo),
+                    //    durationEditable: false
+                    //});
 
                     $('#calendar').fullCalendar('removeEvents', event._id);
 
@@ -165,6 +165,15 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     angular.forEach($scope.events, function (value, key) {
                         if (value.workorderId == event.workorderId) {
                             $scope.events.splice(key, 1);
+                            var element = {
+                                ARCustomer: event.customerFoo,
+                                DateEntered: formatDate(new Date(event.dateFoo)),
+                                EstimatedRepairHours: parseInt(event.hourFoo),
+                                Location: event.locationFoo,
+                                Status: "Open",
+                                WorkOrder: event.workorderId
+                            }
+                            $scope.unassignedWorkorders.push(element);
                         };
                     });
                     commonDataService.unAssignWorkorder(assignment);
@@ -181,6 +190,12 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     event.end._d = new Date(date.setHours(date.getHours() + (estimate == 0? 1: estimate > 8? 8 : estimate)));
                     $('#calendar').fullCalendar('rerenderEvents');
                     saveEvent(event);
+                    
+                    angular.forEach($scope.unassignedWorkorders, function (value, key) {
+                        if (value.WorkOrder == event.workorderId) {
+                            $scope.unassignedWorkorders.splice(key, 1);
+                        };
+                    });
                 } else {
                     $('#calendar').fullCalendar('removeEvents', event._id);
                     ///
@@ -404,6 +419,27 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         });
     }
 
+
+     $scope.changeSorting = function (data) {
+         if ($scope.sortKey != data) {
+             $("." + $scope.sortKey + "").removeClass("footable-sorted");
+             $("." + $scope.sortKey + "").removeClass("footable-sorted-desc");
+             $scope.sortKey = data;
+             $scope.reverse = true;
+            $("." + data + "").addClass("footable-sorted");
+            $("." + data + "").removeClass("footable-sorted-desc");
+        } else {
+             $scope.reverse = !$scope.reverse;
+             if ($("." + data + "").hasClass("footable-sorted-desc")) {
+                 $("." + data + "").addClass("footable-sorted");
+                 $("." + data + "").removeClass("footable-sorted-desc");
+             }
+             else{
+             $("." + data + "").addClass("footable-sorted-desc");
+             $("." + data + "").removeClass("footable-sorted");
+         }
+        }
+    }
 
 };
 scheduleController.$inject = ["$rootScope", "$scope", "$interpolate", "$timeout", "$q", "commonDataService"];
