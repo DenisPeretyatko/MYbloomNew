@@ -841,7 +841,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Test\" />
+    <Folder Include="Views\Shared\Test\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

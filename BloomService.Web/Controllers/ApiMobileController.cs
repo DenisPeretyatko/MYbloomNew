@@ -195,6 +195,7 @@ namespace BloomService.Web.Controllers
                     {
                         workOrder.WorkOrderItems = woiResult.Entities;
                         repository.Update(workOrder);
+                        _hub.UpdateSageWorkOrder(workOrder);
                     }
                 }
                 else
@@ -244,6 +245,7 @@ namespace BloomService.Web.Controllers
                 dBworkOrderItems.Remove(item);
                 workOrder.WorkOrderItems = dBworkOrderItems;
                 repository.Update(workOrder);
+                _hub.UpdateSageWorkOrder(workOrder);
             }
             else
             {
@@ -284,6 +286,7 @@ namespace BloomService.Web.Controllers
             var image = imageItem.Images.FirstOrDefault(x => x.Id == imageId);
             imageItem.Images.Remove(image);
             repository.Update(imageItem);
+            _hub.UpdateWorkOrderPicture(imageItem);
             _log.InfoFormat("Image ({0}) deleted. Repository updated", model.Id);
             notification.SendNotification(string.Format("Image {0} deleted. Repository updated", model.Id));
             return Success();
@@ -344,6 +347,7 @@ namespace BloomService.Web.Controllers
 
             workorder.Status = model.Status;
             repository.Update(workorder);
+            _hub.UpdateSageWorkOrder(workorder);
             _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, model.Status);
             notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, model.Status));
             return Success();

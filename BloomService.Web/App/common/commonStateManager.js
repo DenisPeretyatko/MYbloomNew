@@ -29,6 +29,8 @@
     $rootScope.notifications = [];
     $rootScope.workorders = [];
     $rootScope.unavailableTechniciansIds = [];
+    $rootScope.AddedImage = [];
+    $rootScope.updatedSageWorkOrder = [];
 
     var model = {
         Index: 0,
@@ -74,7 +76,17 @@
             });
         }
     }
+    
+    connection.client.UpdateSageWorkOrder = function (model) {
+        $rootScope.updatedSageWorkOrder = model;
+        $rootScope.$digest();
+    };
 
+    connection.client.UpdateWorkOrderPicture = function (image) {
+        $rootScope.addedImage = image;
+        $rootScope.$digest();
+    };
+    
     connection.client.UpdateWorkOrder = function (workorder) {
         angular.forEach(_this.workorders, function (value, key) {
             if (value.WorkOrder === workorder.WorkOrder) {

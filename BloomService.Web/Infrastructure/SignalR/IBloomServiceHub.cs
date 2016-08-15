@@ -21,6 +21,7 @@ namespace BloomService.Web.Infrastructure.SignalR
         void UpdateEquipment(EquipmentModel model);
         void UpdateTechnicianLocation(SageEmployee model);
         void ChangeWorkOrderStatus(string id, string status);
-        void AddWorkOrderPicture();
+        void UpdateWorkOrderPicture(SageImageWorkOrder model);
+        void UpdateSageWorkOrder(SageWorkOrder model);
     }
 }
