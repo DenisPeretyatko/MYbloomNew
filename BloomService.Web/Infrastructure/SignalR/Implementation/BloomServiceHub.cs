@@ -23,9 +23,9 @@
             throw new NotImplementedException();
         }
 
-        public void AddWorkOrderPicture()
+        public void UpdateWorkOrderPicture(SageImageWorkOrder model)
         {
-            throw new NotImplementedException();
+            this._clients.All.UpdateWorkOrderPicture(model);
         }
 
         public void ChangeWorkOrderStatus(string id, string status)
@@ -76,6 +76,11 @@
         public void UpdateWorkOrder(WorkOrderModel model)
         {
             this._clients.All.UpdateWorkOrder(model);
+        }
+
+        public void UpdateSageWorkOrder(SageWorkOrder model)
+        {
+            this._clients.All.UpdateSageWorkOrder(model);
         }
     }
 }

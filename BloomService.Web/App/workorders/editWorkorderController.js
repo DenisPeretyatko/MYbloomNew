@@ -2,8 +2,10 @@
  * editWorkorderController - controller
  */
 
-var editWorkorderController = function ($scope, $stateParams, $state, $compile, $interpolate, commonDataService, state) {
+var editWorkorderController = function ($scope, $rootScope, $stateParams, $state, $compile, $interpolate, commonDataService, state) {
 
+    $rootScope.updatedSageWorkOrder = [];
+    $rootScope.addedImage = [];
     $scope.mapOptions = googleMapOptions;
     $scope.obj = {}
     $scope.customer = "";
@@ -81,6 +83,26 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
             });
         }
     });
+
+    $scope.$watchCollection(function () {
+            return $rootScope.addedImage;
+      }, function () {
+          if ($rootScope.addedImage != undefined && $scope.editableWorkOrder != undefined) {
+              if ($rootScope.addedImage.WorkOrder == $scope.editableWorkOrder.WorkOrder) {
+                  $scope.pictures = $rootScope.addedImage;
+              }
+          }
+      });
+
+      $scope.$watchCollection(function () {
+          return $rootScope.updatedSageWorkOrder;
+      }, function () {
+          if ($rootScope.updatedSageWorkOrder != undefined && $scope.editableWorkOrder != undefined) {
+              if ($rootScope.updatedSageWorkOrder.WorkOrder == $scope.editableWorkOrder.WorkOrder) {
+                  $scope.editableWorkOrder = $rootScope.updatedSageWorkOrder;
+              }
+          }
+      });
 
     $scope.getWOItems = function () {
         if ($scope.editableWorkOrder !== undefined && $scope.editableWorkOrder.WorkOrderItems !== undefined && $scope.lookups !== undefined) {
@@ -361,4 +383,4 @@ var editWorkorderController = function ($scope, $stateParams, $state, $compile, 
     };
 
 };
-editWorkorderController.$inject = ["$scope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state"];
+editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state"];

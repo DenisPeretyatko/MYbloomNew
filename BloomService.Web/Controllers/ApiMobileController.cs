@@ -70,7 +70,7 @@ namespace BloomService.Web.Controllers
             var token = authorizationService.Authorization(name, password);
             if (token == null)
             {
-                return Json(new { Error = "Invalid login or password", InnerError = string.Empty });
+                return Json(new { Error = "Invalid login or password", InnerError = "token == null, Authorization failed" });
             }
 
             var employee = repository.SearchFor<SageEmployee>(x => x.Employee == token.Id).FirstOrDefault();
@@ -195,12 +195,15 @@ namespace BloomService.Web.Controllers
                     {
                         workOrder.WorkOrderItems = woiResult.Entities;
                         repository.Update(workOrder);
+                        _hub.UpdateSageWorkOrder(workOrder);
                     }
                 }
                 else
                 {
                     _log.ErrorFormat("Was not able to save workorderItem to sage. !result.IsSucceed");
-                    return Json(new { Error = "Work order item save failed", InnerError = result.ErrorMassage });
+                    return Json(new { Error = "Work order item save failed", InnerError =
+                        $"AddWorkOrderItem method IsSucceed==false. {result?.ErrorMassage}. Was not able to save workorderItem to sage"
+                    });
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
 
@@ -220,7 +223,9 @@ namespace BloomService.Web.Controllers
                 else
                 {
                     _log.ErrorFormat("Was not able to update workorderItem to sage. !result.IsSucceed");
-                    return Json(new { Error = "Work order item update failed", InnerError = resultUpdate.ErrorMassage });
+                    return Json(new { Error = "Work order item update failed", InnerError = 
+                        $"EditWorkOrderItem method IsSucceed==false. {resultUpdate?.ErrorMassage}. Was not able to update workorderItem to sage"
+                    });
                 }
                 return Json(resultUpdate, JsonRequestBehavior.AllowGet);
             }
@@ -233,7 +238,7 @@ namespace BloomService.Web.Controllers
             var workOrderItemId = model.WorkOrderItem.AsInt();
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
             if (workOrder == null)
-                return Json(new { Error = "WorkOrder doesn't exists", InnerError = String.Empty });
+                return Json(new { Error = "WorkOrder doesn't exists", InnerError = $"There is no workorders with id {model.WorkOrder}. workOrder==null" });
 
             var item = workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId);
             var dBworkOrderItems = workOrder.WorkOrderItems.ToList();
@@ -244,11 +249,14 @@ namespace BloomService.Web.Controllers
                 dBworkOrderItems.Remove(item);
                 workOrder.WorkOrderItems = dBworkOrderItems;
                 repository.Update(workOrder);
+                _hub.UpdateSageWorkOrder(workOrder);
             }
             else
             {
                 _log.ErrorFormat("Was not able to update workorderItem to sage. !result.IsSucceed");
-                return Json(new { Error = "Was not able to update workorderItem to sage", InnerError = result != null ? result.ErrorMassage : string.Empty });
+                return Json(new { Error = "Was not able to update workorderItem to sage", InnerError =
+                    $"DeleteWorkOrderItems method IsSucceed==false. {(result != null ? result.ErrorMassage : string.Empty)}. Was not able to update workorderItem to sage"
+                });
             }
             return Json(Success(), JsonRequestBehavior.AllowGet);
         }
@@ -262,7 +270,7 @@ namespace BloomService.Web.Controllers
             if (result == null)
             {
                 _log.InfoFormat("Add image faild");
-                return Json(new { Error = "Add image faild", InnerError =  string.Empty });
+                return Json(new { Error = "Add image faild", InnerError = "SavePhotoForWorkOrder method return null. Add image faild." });
             }
 
             _log.InfoFormat("Add image for workorder success");
@@ -278,14 +286,15 @@ namespace BloomService.Web.Controllers
             if (imageItem == null)
             {
                 _log.InfoFormat("Workorder {0} images not found", model.WorkOrder);
-                return Json(new { Error = "Workorder images not found", InnerError = string.Empty });
+                return Json(new { Error = "Workorder images not found", InnerError = $"There is no SageImageWorkOrder with Workorder {model.WorkOrder}. imageItem == null" });
             }
             var imageId = model.Id.AsInt();
             var image = imageItem.Images.FirstOrDefault(x => x.Id == imageId);
             imageItem.Images.Remove(image);
             repository.Update(imageItem);
+            _hub.UpdateWorkOrderPicture(imageItem);
             _log.InfoFormat("Image ({0}) deleted. Repository updated", model.Id);
-            notification.SendNotification(string.Format("Image {0} deleted. Repository updated", model.Id));
+          //  notification.SendNotification(string.Format("Image {0} deleted. Repository updated", model.Id));
             return Success();
         }
 
@@ -296,7 +305,8 @@ namespace BloomService.Web.Controllers
             if (!_imageService.SaveDescriptionsForPhoto(model))
             {
                 _log.InfoFormat("Add descriptions image failed");
-                return Json(new { Error = "Add descriptions image faild", InnerError = string.Empty });
+                return Json(new { Error = "Add descriptions image faild", InnerError = 
+                    $"There is no SageImageWorkOrder for Workorder, or SageImageWorkOrder item dont dontain Image. Add descriptions image faild" });
             }
 
             _log.InfoFormat("Add image for workorder success");
@@ -333,19 +343,21 @@ namespace BloomService.Web.Controllers
             _log.InfoFormat("Method: ChangeWorkorderStatus. Id: {0}, Status {1}", model.Id, model.Status);
             var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.Id).FirstOrDefault();
             if (workorder == null)
-                return Json(new { Error = "Workorder not found", InnerError = string.Empty });
+                return Json(new { Error = "Workorder not found", InnerError = $"There is no workorders with id {model.Id}. workorder == null" });
 
             var sageStatus = model.Status == WorkOrderStatus.Closed ?
                                              WorkOrderStatus.ByStatus(WorkOrderStatus.Closed) :
                                              WorkOrderStatus.ByStatus(WorkOrderStatus.Open);
             var result = sageApiProxy.EditWorkOrderStatus(model.Id, sageStatus.ToString());
             if (!result.IsSucceed)
-                return Json(new { Error = "Was not able to save workorder to sage", InnerError = result.ErrorMassage });
+                return Json(new { Error = "Was not able to save workorder to sage", InnerError = 
+                    $"EditWorkOrderStatus method IsSucceed==false. {result.ErrorMassage}. Was not able to save workorder to sage" });
 
             workorder.Status = model.Status;
             repository.Update(workorder);
+            _hub.UpdateSageWorkOrder(workorder);
             _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, model.Status);
-            notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, model.Status));
+            notification.SendNotification($"Workorder {workorder.Name} change status by {model.Status}");
             return Success();
         }
     }
