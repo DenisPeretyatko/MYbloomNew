@@ -320,7 +320,7 @@
                                     </thead>
                                     <tbody>
                                         <tr class="gradeX" ng-repeat="equipm in equipment track by $index">
-                                            <td ng-if="equipm.isEditing == true">
+                                            <td ng-if="equipm.isEditing == true" class="editable-woitem">
                                                 <div class="input-group date">
                                                     <input type="datetime" class="form-control" date-time ng-model="equipm.date" view="date" auto-close="true" min-view="date" format="YYYY-MM-DD">
                                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
@@ -329,7 +329,7 @@
                                             <td ng-if="equipm.isEditing == false">
                                                 <label>{{equipm.date}}</label>
                                             </td>
-                                            <td ng-if="equipm.isEditing == true">
+                                            <td ng-if="equipm.isEditing == true" class="editable-woitem">
                                                 <ui-select ng-model="equipm.equipType.selected" theme="bootstrap">
                                                     <ui-select-match placeholder="Type">{{$select.selected}}</ui-select-match>
                                                     <ui-select-choices repeat="item in equipm.equipType | filter: $select.search">
@@ -337,10 +337,10 @@
                                                     </ui-select-choices>
                                                 </ui-select>
                                             </td>
-                                            <td ng-if="equipm.isEditing == false">
+                                            <td ng-if="equipm.isEditing == false" >
                                                 <label>{{equipm.equipType}}</label>
                                             </td>
-                                            <td ng-if="equipm.isEditing == true">
+                                            <td ng-if="equipm.isEditing == true" class="editable-woitem">
                                                 <ui-select ng-if="equipm.equipType.selected == 'Labor'" ng-model="equipm.labor.selected" theme="bootstrap"
                                                            on-select="setRate(this, equipm)">
                                                     <ui-select-match placeholder="Description">{{$select.selected.Description}}</ui-select-match>
@@ -359,7 +359,7 @@
                                             <td ng-if="equipm.isEditing == false">
                                                 <label>{{equipm.description}}</label>
                                             </td>
-                                            <td ng-if="equipm.isEditing == true">
+                                            <td ng-if="equipm.isEditing == true" class="editable-woitem">
                                                 <ui-select ng-model="equipm.empl.selected" theme="bootstrap">
                                                     <ui-select-match placeholder="Employee">{{$select.selected.Name}}</ui-select-match>
                                                     <ui-select-choices repeat="item in equipm.empl | filter: $select.search">
@@ -370,7 +370,7 @@
                                             <td ng-if="equipm.isEditing == false">
                                                 <label>{{equipm.empl}}</label>
                                             </td>
-                                            <td ng-if="equipm.isEditing == true">
+                                            <td ng-if="equipm.isEditing == true" class="editable-woitem">
                                                 <div class="input-group workorder-edit-control">
                                                     <input type="number" class="form-control" ng-model="equipm.biled" step="1" min="0" value="1">
                                                 </div>
@@ -378,7 +378,7 @@
                                             <td ng-if="equipm.isEditing == false">
                                                 <label>{{equipm.biled}}</label>
                                             </td>
-                                            <td ng-if="equipm.isEditing == true">
+                                            <td ng-if="equipm.isEditing == true" class="editable-woitem">
                                                 <div class="input-group workorder-edit-control" ng-if="equipm.equipType.selected == 'Labor'">
                                                     <input type="number" class="form-control" ng-model="equipm.cost = equipm.biled * equipm.rate" step="0.01" min="0.00" value="0.00">
                                                 </div>
@@ -389,7 +389,7 @@
                                             <td ng-if="equipm.isEditing == false">
                                                 <label>{{equipm.cost}}</label>
                                             </td>
-                                            <td ng-if="equipm.isEditing == true">
+                                            <td ng-if="equipm.isEditing == true" class="editable-woitem">
                                                 <div class="input-group workorder-edit-control">
                                                     <input type="number" class="form-control" ng-model="equipm.rate" step="0.0001" min="0.0000" value="0">
                                                 </div>
@@ -399,7 +399,7 @@
                                             </td>
 
 
-                                            <td class="center" ng-if="equipm.isEditing == true">
+                                            <td class="center" ng-if="equipm.isEditing == true" class="editable-woitem">
                                                 <a class="btn btn-danger btn-xs" ng-click="saveRow(equipm, $index)">Save</a>
                                             </td>
                                             <td ng-if="equipm.isEditing == false">
