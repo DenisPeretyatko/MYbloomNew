@@ -15,6 +15,8 @@
 
         public string SagePassword { get; set; }
 
+        public string CurrentTimeZone { get; set; }
+
         public static SageWebConfig FromWebConfig(NameValueCollection nameValueCollection)
         {
             try
@@ -26,7 +28,8 @@
                     TimberlineDataConnectionString = nameValueCollection["connectionString"], 
                     TimberlineServiceManagementConnectionString = nameValueCollection["TimberlineServiceManagementConnectionString"],
                     SageUserName = nameValueCollection["SageUsername"],
-                    SagePassword = nameValueCollection["SagePassword"]
+                    SagePassword = nameValueCollection["SagePassword"],
+                    CurrentTimeZone = nameValueCollection["CurrentTimezone"]
                 };
 
                 return configuration;
