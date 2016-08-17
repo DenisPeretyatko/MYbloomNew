@@ -227,6 +227,15 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         });
     };
 
+    $scope.markAsReviewed = function () {
+        var workorderId = "{'workorderId':'" + $scope.editableWorkOrder.WorkOrder + "'}";
+        commonDataService.markAsReviewed(workorderId).then(function (response) {
+            if (response.data.success == false)
+                alert("Failed to mark as reviewed");
+        });
+    }
+
+
     commonDataService.getWorkorder($stateParams.id).then(function (response) {
         return $scope.editableWorkOrder = response.data;
     });

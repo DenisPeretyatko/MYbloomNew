@@ -10,11 +10,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using BloomService.Web.Infrastructure.Services;
 
 namespace BloomService.Web.Infrastructure.Jobs
 {
     using BloomService.Web.Infrastructure.Mongo;
     using MoonAPNS;
+    using Utils;
     public class BloomJobRegistry : Registry
     {
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
@@ -23,9 +25,12 @@ namespace BloomService.Web.Infrastructure.Jobs
         private readonly IRepository _repository;
         private readonly object _iosPushNotificationLock = new object();
         private readonly object _syncSageLock = new object();
+        private readonly object _checkTechniciansLock = new object();
         private readonly IHttpContextProvider _httpContextProvider;
         private readonly ILocationService _locationService;
         private readonly object _keepAlive = new object();
+        private readonly INotificationService _notification;
+        private readonly IMapDistanceService _mapDistanceService;
 
 
         public BloomJobRegistry()
@@ -35,7 +40,8 @@ namespace BloomService.Web.Infrastructure.Jobs
             _repository = ComponentContainer.Current.Get<IRepository>();
             _httpContextProvider = ComponentContainer.Current.Get<IHttpContextProvider>();
             _locationService = ComponentContainer.Current.Get<ILocationService>();
-
+            _notification = ComponentContainer.Current.Get<INotificationService>();
+            _mapDistanceService = ComponentContainer.Current.Get<IMapDistanceService>();
 
 
             //Send silent push notifications to iOS
@@ -57,7 +63,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         //if (startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
                         //{
 
-                       var notificationPayload = new NotificationPayload(technician.IosDeviceToken);
+                        var notificationPayload = new NotificationPayload(technician.IosDeviceToken);
 
                         if (_settings.AlertNotificationEnabled)
                         {
@@ -226,7 +232,7 @@ namespace BloomService.Web.Infrastructure.Jobs
 
                     try
                     {
-                        var emploees = _proxy.GetEmployees().Entities.Where(x=> !string.IsNullOrEmpty(x.JCJob));
+                        var emploees = _proxy.GetEmployees().Entities.Where(x => !string.IsNullOrEmpty(x.JCJob));
                         foreach (var entity in emploees)
                         {
                             var mongoEntity = _repository.SearchFor<SageEmployee>(x => x.Employee == entity.Employee).SingleOrDefault();
@@ -382,7 +388,7 @@ namespace BloomService.Web.Infrastructure.Jobs
 
                             if (mongoEntity == null)
                             {
-                                var woBylocation = _repository.SearchFor<SageWorkOrder>(x => x.Location == entity.Name && x.Status == "Open"); 
+                                var woBylocation = _repository.SearchFor<SageWorkOrder>(x => x.Location == entity.Name && x.Status == "Open");
                                 var hasOpenWorkOrder = woBylocation.Any();
                                 if (hasOpenWorkOrder)
                                     _locationService.ResolveLocation(entity);
@@ -449,6 +455,43 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
                 }
             }).ToRunNow().AndEvery(_settings.SynchronizationDelay).Minutes();
+
+            //Check technicians position
+            Schedule(() =>
+            {
+                var timeUtc = DateTime.UtcNow;
+                var easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                var easternTime = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, easternZone);
+                lock (_checkTechniciansLock)
+                {
+                    var technicians = _repository.SearchFor<SageEmployee>(x => x.IsAvailable);
+                    foreach (var technician in technicians)
+                    {
+                        var assigments = _repository.SearchFor<SageAssignment>(x => x.EmployeeId == technician.Employee);
+                        var assigment = assigments.OrderByDescending(x => x.ScheduleDate).FirstOrDefault();
+
+                        if (assigment.ScheduleDate.GetValueOrDefault().Date != easternTime.Date) continue;
+                        var workorder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == assigment.WorkOrder && x.ScheduleDate != null).SingleOrDefault();
+                        if (workorder == null || workorder.ScheduleDate.GetValueOrDefault().Date != easternTime.Date) continue;
+                        var wts = (TimeSpan)(easternTime - workorder.ScheduleDate);
+                        if (
+                           _mapDistanceService.Distance(workorder.Latitude, workorder.Longitude,
+                               technician.Latitude, technician.Longitude) > 5 && wts.TotalMinutes > 10)
+                        {
+                            _notification.SendNotification($"Technician {technician.Name} is not within 5mi with 10min until assignment.");
+                        }
+
+                        if (
+                            _mapDistanceService.Distance(workorder.Latitude, workorder.Longitude,
+                                technician.Latitude, technician.Longitude) > 15 && wts.TotalMinutes > 30)
+                        {
+                            _notification.SendNotification($"Technician {technician.Name} is not within 15mi with 30min until assignment.");
+                        }
+                    }
+                }
+            }).ToRunNow().AndEvery(_settings.CheckTechniciansDelay).Seconds();
         }
+
+
     }
 }

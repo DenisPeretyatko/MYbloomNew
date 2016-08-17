@@ -93,13 +93,13 @@ namespace BloomService.Web
             kernel.Bind<IAuthorizationService>().To<AuthorizationService>();
             kernel.Bind<IDashboardService>().To<DashboardService>();
             kernel.Bind<IScheduleService>().To<ScheduleService>();
+            kernel.Bind<IMapDistanceService>().To<MapDistanceService>();
 
             ComponentContainer.Current = new NinjectComponentContainer(kernel, new[] {
                     typeof(MongoRepository).Assembly
             });
             kernel.Bind<IBloomServiceHub>().To<BloomServiceHub>();
             kernel.Bind<INotificationService>().To<NotificationService>();
-
             kernel.Bind<IHubConnectionContext<dynamic>>().ToMethod(ctx => GlobalHost.ConnectionManager.GetHubContext<BloomServiceHub>().Clients);
         }
     }

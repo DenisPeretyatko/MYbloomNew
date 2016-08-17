@@ -86,6 +86,14 @@ var commonDataService = function ($http, $window) {
         });
     }
 
+    this.markAsReviewed = function (workorderId) {
+        return $http.post("/workorder/markAsReviewed", workorderId, {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    }
+
     this.getDashboard = function (map) {
         return $http.post("/Dashboard", map, {
             headers: {

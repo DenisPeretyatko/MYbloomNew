@@ -36,6 +36,7 @@ namespace BloomService.Web.Infrastructure
                     SizeSmallPhoto = int.Parse(nameValueCollection["SizeSmallPhoto"]),
                     CurrentTimezone = nameValueCollection["CurrentTimezone"],
                     NotificationDelay = int.Parse(nameValueCollection["NotificationDelay"]),
+                    CheckTechniciansDelay = int.Parse(nameValueCollection["CheckTechniciansDelay"]),
                     SynchronizationDelay = int.Parse(nameValueCollection["SynchronizationDelay"]),
                     Connection = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString,
                     DbName = ConfigurationManager.AppSettings["MainDb"],
@@ -81,6 +82,7 @@ namespace BloomService.Web.Infrastructure
         public int SizeSmallPhoto { get; set; }
         public string CurrentTimezone { get; set; }
         public int NotificationDelay { get; set; }
+        public int CheckTechniciansDelay { get; set; }
         public int SynchronizationDelay { get; set; }
         public string DbName { get; set; }
         public string Connection { get; set; }
