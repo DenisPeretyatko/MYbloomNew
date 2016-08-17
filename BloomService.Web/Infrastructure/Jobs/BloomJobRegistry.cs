@@ -419,6 +419,44 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
                 }
             }).ToRunNow().AndEvery(_settings.SynchronizationDelay).Minutes();
+
+            //Check technicians position
+            Schedule(() =>
+            {
+                lock (_iosPushNotificationLock)
+                {
+                    var technicians = _repository.SearchFor<SageEmployee>(x => x.IsAvailable);
+                    foreach (var technician in technicians)
+                    {
+                        var assigments = _repository.SearchFor<SageAssignment>(x => x.EmployeeId == technician.Employee);
+                        foreach (var assigment in assigments)
+                        {
+                            var workorder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == assigment.WorkOrder).SingleOrDefault(); 
+                        }
+                    }
+                }
+            }).ToRunNow().AndEvery(_settings.CheckTechniciansDelay).Seconds();
+        }
+
+        public double Distance(string latitude1, string longitude1, string latitude2, string longitude2)
+        {//Haversine formula
+            //var distance = Math.Sqrt(Math.Pow((double.Parse(latitude1) - double.Parse(latitude2)), 2) +
+            //               Math.Pow((double.Parse(longitude1) - double.Parse(longitude2)), 2));
+            //return distance;
+            var R = 6378137; // Earth’s mean radius in meter
+            var dLat = Rad(double.Parse(latitude2) - double.Parse(latitude1));
+            var dLong = Rad(double.Parse(longitude2) - double.Parse(longitude1));
+            var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+              Math.Cos(Rad(double.Parse(latitude1))) * Math.Cos(Rad(double.Parse(latitude2))) *
+              Math.Sin(dLong / 2) * Math.Sin(dLong / 2);
+            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            var d = R * c;// returns the distance in meter
+            return d* 0.000621371; //mile
+        }
+
+        public double Rad(double x)
+        {
+            return x * Math.PI / 180;
         }
     }
 }

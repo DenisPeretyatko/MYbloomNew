@@ -384,5 +384,12 @@ namespace BloomService.Web.Controllers
             _hub.UpdateWorkOrder(model);
             return Success();
         }
+
+        [HttpPost]
+        [Route("Workorder/markAsReviewed")]
+        public ActionResult MarkAsReviewed(string workorderId)
+        {
+            return Success();
+        }
     }
 }

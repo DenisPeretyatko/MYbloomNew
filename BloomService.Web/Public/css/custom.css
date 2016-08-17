@@ -301,8 +301,13 @@
 }
 
 .date {
-    max-width: none !important; 
+    max-width: none !important;
 }
+
 .editable-woitem {
     padding-left: 0px !important;
+}
+
+.btn-mark-as {
+    height: 34px;
 }
