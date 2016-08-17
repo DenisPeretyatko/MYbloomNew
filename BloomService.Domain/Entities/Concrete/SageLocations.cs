@@ -1,4 +1,6 @@
-﻿namespace BloomService.Domain.Entities.Concrete
+﻿using System.Text;
+
+namespace BloomService.Domain.Entities.Concrete
 {
     using System.Xml.Serialization;
 
@@ -152,5 +154,26 @@
 
         [XmlAttribute]
         public string ZIP { get; set; }
+
+        [XmlIgnore]
+        public string FullAddress
+        {
+            get
+            {
+                var sb = new StringBuilder();
+                if (!string.IsNullOrEmpty(Address))
+                    sb.AppendFormat("{0}, ", Address);
+                if (string.IsNullOrEmpty(Address) && !string.IsNullOrEmpty(Address2))
+                    sb.AppendFormat("{0}, ", Address2);
+                if (!string.IsNullOrEmpty(City))
+                    sb.AppendFormat("{0}, ", City);
+                if (!string.IsNullOrEmpty(State))
+                    sb.AppendFormat("{0} ", State);
+                if (!string.IsNullOrEmpty(ZIP))
+                    sb.AppendFormat("{0}", ZIP);
+                
+                return sb.ToString().TrimEnd(',').TrimEnd(' ');
+            }
+        }
     }
 }

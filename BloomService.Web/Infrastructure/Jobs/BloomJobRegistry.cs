@@ -45,6 +45,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                 {
                     var path = _httpContextProvider.MapPath(_settings.SertificateUrl);
                     var technicians = _repository.SearchFor<SageEmployee>(x => x.IsAvailable && !string.IsNullOrEmpty(x.IosDeviceToken));
+
                     foreach (var technician in technicians)
                     {
                         //if (technician.AvailableDays != null && technician.AvailableDays.Any())
@@ -55,7 +56,24 @@ namespace BloomService.Web.Infrastructure.Jobs
                         //var endTime = avaibleDay.End.TryAsDateTime();
                         //if (startTime != null && endTime != null && DateTime.Now > startTime && DateTime.Now < endTime)
                         //{
-                        var notificationPayload = new NotificationPayload(technician.IosDeviceToken, null, 0, "default");
+
+                       var notificationPayload = new NotificationPayload(technician.IosDeviceToken);
+
+                        if (_settings.AlertNotificationEnabled)
+                        {
+                            notificationPayload = new NotificationPayload(technician.IosDeviceToken, _settings.NotificationAlert);
+                        }
+
+                        if (_settings.AlertBadgeNotificationEnabled)
+                        {
+                            notificationPayload = new NotificationPayload(technician.IosDeviceToken, _settings.NotificationAlert, _settings.NotificationBadge);
+                        }
+
+                        if (_settings.AlertBadgeSoundNotificationEnabled)
+                        {
+                            notificationPayload = new NotificationPayload(technician.IosDeviceToken, _settings.NotificationAlert, _settings.NotificationBadge, _settings.NotificationSound);
+                        }
+
                         //var notificationPayload = new NotificationPayload(technician.IosDeviceToken,"default");
                         var p = new List<NotificationPayload>();
                         p.Add(notificationPayload);
@@ -156,17 +174,16 @@ namespace BloomService.Web.Infrastructure.Jobs
                             }
                             else
                             {
-                                var workOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder);
-
-                                if(workOrderItems != null)
-                                {
-                                    workOrder.WorkOrderItems = workOrderItems.Entities;
-                                }
-
+                                workOrder.WorkOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder).Entities;
                                 workOrder.Id = mongoEntity.Id;
                                 workOrder.Status = mongoEntity.Status;
                                 workOrder.AssignmentId = mongoEntity.AssignmentId;
+                                workOrder.Latitude = mongoEntity.Latitude;
+                                workOrder.Longitude = mongoEntity.Longitude;
+
                                 workOrder.ScheduleDate = mongoEntity.ScheduleDate;
+                                workOrder.Color = mongoEntity.Color;
+                                workOrder.EmployeeId = mongoEntity.EmployeeId;
                                 _repository.Update(workOrder);
                             }
                         }
@@ -252,6 +269,8 @@ namespace BloomService.Web.Infrastructure.Jobs
                                         assigment.Customer = workorder.ARCustomer;
                                         assigment.Location = workorder.Location;
                                         workorder.ScheduleDate = assignmentDate;
+                                        workorder.Color = assigment.Color;
+                                        workorder.EmployeeId = assigment.EmployeeId;
                                         _repository.Update(workorder);
                                     }
                                 }
@@ -352,9 +371,16 @@ namespace BloomService.Web.Infrastructure.Jobs
 
                             if (mongoEntity == null)
                             {
-                                var hasOpenWorkOrder = _repository.SearchFor<SageWorkOrder>(x => x.Location == entity.Name && x.Status == "Open").Any();
+                                var woBylocation = _repository.SearchFor<SageWorkOrder>(x => x.Location == entity.Name && x.Status == "Open"); 
+                                var hasOpenWorkOrder = woBylocation.Any();
                                 if (hasOpenWorkOrder)
                                     _locationService.ResolveLocation(entity);
+                                foreach (var wo in woBylocation)
+                                {
+                                    wo.Latitude = entity.Latitude;
+                                    wo.Longitude = entity.Longitude;
+                                    _repository.Update(wo);
+                                }
                                 _repository.Add(entity);
                             }
                             else

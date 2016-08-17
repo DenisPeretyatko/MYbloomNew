@@ -291,6 +291,11 @@
         public SagePaymentMethod PaymentMethodObj { get; set; }
         [XmlIgnore]
         public SageWorkOrderStatus StatusObj { get; set; }
+        
+        [XmlIgnore]
+        public string Color { get; set; }
+        [XmlIgnore]
+        public long EmployeeId { get; set; }
         [XmlIgnore]
         public bool IsValid { get; set; }
     }

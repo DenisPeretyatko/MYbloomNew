@@ -38,8 +38,18 @@ namespace BloomService.Web.Infrastructure
                     NotificationDelay = int.Parse(nameValueCollection["NotificationDelay"]),
                     SynchronizationDelay = int.Parse(nameValueCollection["SynchronizationDelay"]),
                     Connection = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString,
-                    DbName = ConfigurationManager.AppSettings["MainDb"]
-            };
+                    DbName = ConfigurationManager.AppSettings["MainDb"],
+
+                    PureNotificationEnabled = bool.Parse(ConfigurationManager.AppSettings["PureNotificationEnabled"]),
+                    AlertNotificationEnabled = bool.Parse(ConfigurationManager.AppSettings["AlertNotificationEnabled"]),
+                    AlertBadgeNotificationEnabled = bool.Parse(ConfigurationManager.AppSettings["AlertBadgeNotificationEnabled"]),
+                    AlertBadgeSoundNotificationEnabled = bool.Parse(ConfigurationManager.AppSettings["AlertBadgeSoundNotificationEnabled"]),
+
+
+                    NotificationAlert = ConfigurationManager.AppSettings["NotificationAlert"],
+                    NotificationBadge = int.Parse(ConfigurationManager.AppSettings["NotificationBadge"]),
+                    NotificationSound = ConfigurationManager.AppSettings["NotificationSound"]
+                };
 
                 return configuration;
             }
@@ -74,5 +84,14 @@ namespace BloomService.Web.Infrastructure
         public int SynchronizationDelay { get; set; }
         public string DbName { get; set; }
         public string Connection { get; set; }
+
+        public bool PureNotificationEnabled { get; set; }
+        public bool AlertNotificationEnabled { get; set; }
+        public bool AlertBadgeNotificationEnabled { get; set; }
+        public bool AlertBadgeSoundNotificationEnabled { get; set; }
+
+        public string NotificationAlert { get; set; }
+        public int NotificationBadge { get; set; }
+        public string NotificationSound { get; set; }
     }
 }

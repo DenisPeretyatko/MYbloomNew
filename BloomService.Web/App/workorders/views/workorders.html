@@ -29,8 +29,8 @@
                         <tbody>
                         <tr ng-repeat="workorder in workorders">
                             <td>{{workorder.WorkOrder}}</td>
-                            <td>{{workorder.ScheduleDate|date:mediumTime}}</td>
-                            <td>{{workorder.DateEntered|date:mediumTime}}</td>
+                            <td>{{workorder.ScheduleDate|date:'mediumDate' : globalTimezone}}</td>
+                            <td>{{workorder.DateEntered|date:'mediumDate' : globalTimezone }}</td>
                             <td>{{workorder.ARCustomer}}</td>
                             <td>{{workorder.Location}}</td>
                             <td>
@@ -44,6 +44,18 @@
                                     {{workorder.Status}}
                                 </span>
                                 <span class="label closed statusColor" ng-if="workorder.Status == 'Closed'" >
+                                    {{workorder.Status}}
+                                </span>
+                                <span class="label cancelled statusColor" ng-if="workorder.Status == 'Cancelled'">
+                                    {{workorder.Status}}
+                                </span>
+                                <span class="label expired statusColor" ng-if="workorder.Status == 'Expired Quote'">
+                                    {{workorder.Status}}
+                                </span>
+                                <span class="label reviewed statusColor" ng-if="workorder.Status == 'Reviewed'">
+                                    {{workorder.Status}}
+                                </span>
+                                <span class="label invoiced statusColor" ng-if="workorder.Status == 'Invoiced'">
                                     {{workorder.Status}}
                                 </span>
                             </td>

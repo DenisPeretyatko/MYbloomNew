@@ -22,7 +22,7 @@ namespace BloomService.Web.Controllers
     {
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
-        private const int _itemsOnPage = 12;
+        private const int ItemsOnPage = 12;
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
         private readonly IBloomServiceHub _hub;
         private readonly IDashboardService _dashboardService;
@@ -60,7 +60,8 @@ namespace BloomService.Web.Controllers
                 Comments = model.Locationcomments,
                 CustomerPO = model.Customerpo,
                 PermissionCode = model.Permissiocode,
-                PayMethod = model.Paymentmethods
+                PayMethod = model.Paymentmethods,
+                JCJob = model.JCJob
             };
 
             var result = _sageApiProxy.AddWorkOrder(workorder);
@@ -106,7 +107,7 @@ namespace BloomService.Web.Controllers
         [Route("Workorder/{id}")]
         public ActionResult GetWorkorder(string id)
         {
-            var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.IsValid && x.Id == id).Single();
+            var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.Id == id).Single();
 
             workOrder.CustomerObj = _repository.SearchFor<SageCustomer>(x => x.Customer == workOrder.ARCustomer).SingleOrDefault();
             workOrder.LocationObj = _repository.SearchFor<SageLocation>(x => x.Name == workOrder.Location && x.ARCustomer == workOrder.ARCustomer).SingleOrDefault();
@@ -117,7 +118,7 @@ namespace BloomService.Web.Controllers
             workOrder.HourObj = _repository.SearchFor<SageRepair>(x => x.Repair == workOrder.EstimatedRepairHours.ToString()).SingleOrDefault();
             workOrder.PermissionCodeObj = _repository.SearchFor<SagePermissionCode>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode).SingleOrDefault();
             workOrder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workOrder.PayMethod.Trim());
-            workOrder.StatusObj = WorkOrderStatus.Status.FirstOrDefault(x => x.Status == workOrder.Status);
+            workOrder.StatusObj = WorkOrderStatus.Status.Single(x => x.Status == workOrder.Status);
 
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
@@ -139,7 +140,7 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkorders()
         {
             //var minDate = DateTime.Now.AddYears(-1);
-            var list = _repository.SearchFor<SageWorkOrder>(x => x.IsValid).OrderByDescending(x => x.DateEntered).Take(500).ToList();
+            var list = _repository.SearchFor<SageWorkOrder>().OrderByDescending(x => x.DateEntered).Take(500).ToList();
             var result = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(list);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -187,15 +188,15 @@ namespace BloomService.Web.Controllers
             long search = -1;
             long.TryParse(model.Search, out search);
 
-            var workorders = _repository.GetAll<SageWorkOrder>().Where(x => x.IsValid);
+            var workorders = _repository.GetAll<SageWorkOrder>();
 
             if (!string.IsNullOrEmpty(model.Search))
             {
                 workorders = _repository.GetAll<SageWorkOrder>()
-                        .Where(x => x.IsValid && (x.ARCustomer.ToLower().Contains(model.Search.ToLower()) ||
+                        .Where(x => x.ARCustomer.ToLower().Contains(model.Search.ToLower()) ||
                                     x.Location.ToLower().Contains(model.Search.ToLower()) ||
                                     x.Status.ToLower().Contains(model.Search.ToLower()) ||
-                                    x.WorkOrder == search)
+                                    x.WorkOrder == search
                         );
             }
 
@@ -226,8 +227,8 @@ namespace BloomService.Web.Controllers
                     break;
             }
 
-            if (entitiesCount > _itemsOnPage)
-                workorders = workorders.Skip(model.Index * _itemsOnPage).Take(_itemsOnPage);
+            if (entitiesCount > ItemsOnPage)
+                workorders = workorders.Skip(model.Index * ItemsOnPage).Take(ItemsOnPage);
 
             var workorderList = workorders.ToList();
             foreach (var obj in workorderList)
@@ -241,7 +242,7 @@ namespace BloomService.Web.Controllers
 
             var result = new WorkorderSortViewModel()
             {
-                CountPage = entitiesCount % _itemsOnPage == 0 ? entitiesCount / _itemsOnPage : entitiesCount / _itemsOnPage + 1,
+                CountPage = entitiesCount % ItemsOnPage == 0 ? entitiesCount / ItemsOnPage : entitiesCount / ItemsOnPage + 1,
                 WorkordersList = workorderList
             };
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -252,8 +253,8 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkorderPageCount()
         {
             //var date = new DateTime(year, 0, 0);
-            var entitiesCount = _repository.GetAll<SageWorkOrder>().Where(x => x.IsValid && !string.IsNullOrEmpty(x.Employee)).Count();
-            var countPage = entitiesCount % _itemsOnPage == 0 ? entitiesCount / _itemsOnPage : entitiesCount / _itemsOnPage + 1;
+            var entitiesCount = _repository.GetAll<SageWorkOrder>().Where(x => !string.IsNullOrEmpty(x.Employee)).Count();
+            var countPage = entitiesCount % ItemsOnPage == 0 ? entitiesCount / ItemsOnPage : entitiesCount / ItemsOnPage + 1;
             return Json(countPage, JsonRequestBehavior.AllowGet);
         }
 
@@ -280,7 +281,10 @@ namespace BloomService.Web.Controllers
                 PayMethod = model.Paymentmethods,
                 WorkOrder = model.WorkOrder,
                 Id = model.Id,
-                Status = model.Status == 3 ? WorkOrderStatus.Status.FirstOrDefault(x => x.Value == model.Status).Status : WorkOrderStatus.Status.FirstOrDefault(x => x.Value == 0).Status
+                Status = model.Status == WorkOrderStatus.ClosedId
+                    ? WorkOrderStatus.ById(WorkOrderStatus.ClosedId)
+                    : WorkOrderStatus.ById(WorkOrderStatus.OpenId), 
+                JCJob = model.JCJob 
             };
 
             var workOrderResult = _sageApiProxy.EditWorkOrder(workorder);
@@ -293,11 +297,11 @@ namespace BloomService.Web.Controllers
 
             if (!string.IsNullOrEmpty(model.Emploee.ToString()))
             {
-                var assignmentDb = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder && x.IsValid).Single();
+                var assignmentDb = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
                 var editedAssignment = new AssignmentViewModel();
                 editedAssignment.Employee = model.Emploee;
                 editedAssignment.EndDate = (DateTime)assignmentDb.Enddate;
-                editedAssignment.EstimatedRepairHours = assignmentDb.EstimatedRepairHours.AsDouble() == 0 ? "1.00" : assignmentDb.EstimatedRepairHours;
+                editedAssignment.EstimatedRepairHours = workorder.EstimatedRepairHours.ToString();
                 editedAssignment.Id = assignmentDb.Id;
                 editedAssignment.ScheduleDate = (DateTime)assignmentDb.StartTime;
                 editedAssignment.WorkOrder = assignmentDb.WorkOrder;
@@ -312,7 +316,7 @@ namespace BloomService.Web.Controllers
 
             var workOrderItems = Mapper.Map<IEnumerable<SageWorkOrderItem>>(model.Equipment);
 
-            var workOrderFromMongo = _repository.SearchFor<SageWorkOrder>(x =>  x.WorkOrder == workorder.WorkOrder && x.IsValid).Single();
+            var workOrderFromMongo = _repository.SearchFor<SageWorkOrder>(x =>  x.WorkOrder == workorder.WorkOrder).Single();
             
             if (workOrderItems != null)
             {
@@ -366,15 +370,18 @@ namespace BloomService.Web.Controllers
             }
             else
             {
-                var idsToRemove = workOrderFromMongo.WorkOrderItems.Select(x => x.WorkOrderItem);
-
-                if (idsToRemove.Any())
+                if (workOrderFromMongo.WorkOrderItems != null)
                 {
-                    _sageApiProxy.DeleteWorkOrderItems(Convert.ToInt32(workOrderFromMongo.WorkOrder), idsToRemove);
+                    var idsToRemove = workOrderFromMongo.WorkOrderItems.Select(x => x.WorkOrderItem);
+
+                    if (idsToRemove.Any())
+                    {
+                        _sageApiProxy.DeleteWorkOrderItems(Convert.ToInt32(workOrderFromMongo.WorkOrder), idsToRemove);
+                    }
                 }
             }
             
-            workOrderResult.Entity.Status = WorkOrderStatus.Status.FirstOrDefault(x => x.Value == model.Status).Status;
+            workOrderResult.Entity.Status = WorkOrderStatus.ById(model.Status);
             workOrderResult.Entity.Id = workorder.Id;
             workOrderResult.Entity.IsValid = true;
             workOrderResult.Entity.WorkOrderItems = _sageApiProxy.GetWorkorderItemsByWorkOrderId(workorder.WorkOrder).Entities;

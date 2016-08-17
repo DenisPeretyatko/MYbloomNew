@@ -2,17 +2,15 @@
 using BloomService.Domain.Models.Responses;
 using Common.Logging;
 using System;
-using System.Collections.Generic;
 using System.DirectoryServices.Protocols;
 using System.Linq;
 using System.Net;
-using System.Web;
 
 namespace Sage.WebApi.Infratructure.Service.Implementation
 {
     public class ServiceAuthorization : IServiceAuthorization
     {
-        IServiceManagement _serviceManagement;
+        private readonly IServiceManagement _serviceManagement;
 
         private readonly ILog _log = LogManager.GetLogger(typeof(ServiceAuthorization));
 
@@ -69,14 +67,17 @@ namespace Sage.WebApi.Infratructure.Service.Implementation
                 }
                 _log.InfoFormat("Authorization success: Mail: {0}, Type: {1}, Id: {2}", response.Mail, response.Type, response.Id);
                 return response;
-            }
+        }
             catch(Exception ex)
             {
-                _log.InfoFormat("Error authorization: {0}", ex.Message);
+                _log.InfoFormat("Error authorization: {0}", ex);
+                if(ex.InnerException != null)
+                {
+                    _log.InfoFormat("Authorization inner exeption: {0}", ex);
+                }
                 return null;
             }
-
-        }
+}
 
         private SearchResponse CheckGroup(LdapConnection ldapConnection, string nameGroup, string nameUser)
         {

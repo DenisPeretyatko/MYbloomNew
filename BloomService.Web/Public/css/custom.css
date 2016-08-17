@@ -215,10 +215,65 @@
 .closed {
     background-color: #30B335 !important;
 }
+.cancelled {
+    background-color: #BFB8B5 !important;
+}
+.expired {
+    background-color: #7F4FAC !important;
+}
+.reviewed {
+    background-color: #5258B7 !important;
+}
+.invoiced {
+    background-color: #E8C316 !important;
+}
 
-.label.open.statusColor, .label.closed.statusColor, .label.return.statusColor, .label.work.statusColor {
+.label.open.statusColor, .label.closed.statusColor, .label.return.statusColor, .label.work.statusColor,
+.label.cancelled.statusColor, .label.expired.statusColor, .label.reviewed.statusColor, .label.invoiced.statusColor {
     color : #fff !important;
 }
 .dropdown-menu.dropdown-alerts.notification-messages {
     width: 500px;
+}
+
+.picture_desc {
+    width: 235px;
+    word-wrap: break-word;
+    overflow: hidden;
+    -moz-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    /* white-space: nowrap; */
+    text-align: center;
+    line-height: 18px;
+    /* height: 36px; */
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+
+.footable > div > div > h4 {
+    display: inline-block;
+}
+.footable > div > div:hover {
+  cursor: pointer;
+}
+.footable > div > div.footable-sorted > span.footable-sort-indicator:before {
+  content: "\e013";
+}
+.footable > div > div.footable-sorted-desc > span.footable-sort-indicator:before {
+  content: "\e012";
+}
+.footable > div > div >span.footable-sort-indicator {
+  display: inline-block;
+  font-family: 'footable';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  padding-left: 5px;
+}
+.footable > div > div >span.footable-sort-indicator:before {
+  content: "\e022";
 }

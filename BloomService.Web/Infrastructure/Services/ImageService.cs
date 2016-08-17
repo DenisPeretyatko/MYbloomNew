@@ -1,20 +1,20 @@
 ﻿namespace BloomService.Web.Infrastructure.Services
 {
-using System;
-using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
     using System.Configuration;
-using System.Drawing;
+    using System.Drawing;
     using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Web;
+    using System.Drawing.Imaging;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
 
-using BloomService.Domain.Entities.Concrete;
+    using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Infrastructure.Mongo;
     using BloomService.Web.Infrastructure.Services.Interfaces;
     using BloomService.Web.Models;
-
+    using SignalR;
     public class ImageService : IImageService
     {
         private static readonly Dictionary<ImageFormat, string> _knownImageFormats = new Dictionary<ImageFormat, string>()
@@ -26,6 +26,7 @@ using BloomService.Domain.Entities.Concrete;
 
         private readonly IHttpContextProvider httpContextProvider;
         private readonly IRepository repository;
+        private readonly IBloomServiceHub _hub;
 
         private readonly string urlToTechnicianIcon = "/Public/images/technician.png";
         private readonly string urlToWorkOrderIcon = "/Public/images/workorder.png";
@@ -36,11 +37,12 @@ using BloomService.Domain.Entities.Concrete;
         private readonly Color colorWorkOrderIcon = Color.FromArgb(255, 0, 4);
         private readonly BloomServiceConfiguration settings;
 
-        public ImageService(IHttpContextProvider httpContextProvider, IRepository repository)
+        public ImageService(IHttpContextProvider httpContextProvider, IRepository repository, IBloomServiceHub hub)
         {
             this.httpContextProvider = httpContextProvider;
             this.repository = repository;
             this.settings = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
+            _hub = hub;
         }
 
         public ImageLocation SavePhotoForWorkOrder(ImageModel model)
@@ -67,7 +69,7 @@ using BloomService.Domain.Entities.Concrete;
                 };
             }
 
-            var pathToImage = string.Format("{0}/{1}/", this.httpContextProvider.MapPath(this.urlToFolderPhotoWorkOrders), model.IdWorkOrder);
+            var pathToImage = Path.Combine(this.httpContextProvider.MapPath(this.urlToFolderPhotoWorkOrders), model.IdWorkOrder.ToString());
             var nameBig = countImage.ToString();
             var nameSmall = "small" + countImage;
             var fileName = this.SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, this.settings.SizeBigPhoto);
@@ -76,6 +78,7 @@ using BloomService.Domain.Entities.Concrete;
             var image = new ImageLocation { Image = fileNameSmall, BigImage = fileName, Latitude = model.Latitude, Longitude = model.Longitude, Id = maxId + 1, Description = model.Description };
             imagesDb.Images.Add(image);
             this.repository.Add(imagesDb);
+            _hub.UpdateWorkOrderPicture(imagesDb);
             return image;
         }
 
@@ -91,6 +94,7 @@ using BloomService.Domain.Entities.Concrete;
                     image.Description = model.Description;
                     imagesDb.Images.Add(image);
                     this.repository.Update(imagesDb);
+                    _hub.UpdateWorkOrderPicture(imagesDb);
                     return true;
                 }
             }
@@ -133,7 +137,7 @@ using BloomService.Domain.Entities.Concrete;
             if (!di.Exists)
                 di.Create();
             var newPath = userId + "." + ext;
-            image.Save(path + newPath);
+            image.Save(Path.Combine(path, newPath));
             return newPath;
         }
 
@@ -159,7 +163,7 @@ using BloomService.Domain.Entities.Concrete;
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -213,17 +217,18 @@ using BloomService.Domain.Entities.Concrete;
 
         private bool ValidateImage(Image file)
         {
-            try
-            {
-                if (this.IsOneOfValidFormats(file.RawFormat))
-                {
-                    return true;
-                }
-            }
-            catch
-            {
-            }
-            return false;
+            //try
+            //{
+            //    if (this.IsOneOfValidFormats(file.RawFormat))
+            //    {
+            //        return true;
+            //    }
+            //}
+            //catch
+            //{
+            //}
+            //return false;
+            return true;
         }
 
         private bool IsOneOfValidFormats(ImageFormat rawFormat)

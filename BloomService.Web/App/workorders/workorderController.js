@@ -9,6 +9,7 @@ var workorderController = function ($scope, $timeout, $sce, commonDataService, s
      $scope.sorting = "date";
     $scope.increase = false;
     $scope.Search = "";
+    $scope.globalTimezone = global.TimeZone;
 
     commonDataService.getWorkordesPaged(model).then(function (response) {
         $scope.workorders = response.data.WorkordersList;

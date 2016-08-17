@@ -7,32 +7,17 @@ namespace BloomService.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
-    using System.IO;
     using System.Linq;
-    using System.Net;
-    using System.Runtime.Serialization.Json;
-    using System.Text;
-    using System.Web.Hosting;
     using System.Web.Mvc;
-    using System.Web.Script.Serialization;
-
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Domain.Extensions;
-    using BloomService.Web.Models;
-
-    using System.Security.Claims;
-    using System.Threading;
+    using Domain.Entities.Concrete;
+    using Domain.Extensions;
+    using Models;
     using Infrastructure.SignalR;
-    using RestSharp;
-    using Domain.Models.Requests;
-    using RestSharp.Serializers;
-    using System.Xml.Serialization;
-
-    using BloomService.Web.Infrastructure;
-    using BloomService.Web.Infrastructure.Mongo;
+    using Infrastructure;
+    using Infrastructure.Mongo;
     using AutoMapper;
     using Infrastructure.Constants;
+    using Infrastructure.Queries;
     public class ApiMobileController : BaseController
     {
         private readonly IImageService _imageService;
@@ -69,13 +54,13 @@ namespace BloomService.Web.Controllers
             _hub = hub;
         }
 
-        [HttpPost]
-        [Route("Apimobile/Workorder/{id}/Equipment")]
-        public ActionResult AddEquipmentToWorkOrder()
-        {
-            _log.Info("Method: AddEquipmentToWorkOrder");
-            return Success();
-        }
+        //[HttpPost]
+        //[Route("Apimobile/Workorder/{id}/Equipment")]
+        //public ActionResult AddEquipmentToWorkOrder()
+        //{
+        //    _log.Info("Method: AddEquipmentToWorkOrder");
+        //    return Success();
+        //}
 
         [HttpPost]
         [AllowAnonymous]
@@ -85,8 +70,9 @@ namespace BloomService.Web.Controllers
             var token = authorizationService.Authorization(name, password);
             if (token == null)
             {
-                return Error("Invalid login or password");
+                return Json(new { Error = "Invalid login or password", InnerError = "token == null, Authorization failed" });
             }
+
             var employee = repository.SearchFor<SageEmployee>(x => x.Employee == token.Id).FirstOrDefault();
             if (employee != null && !string.IsNullOrEmpty(deviceToken))
             {
@@ -116,7 +102,7 @@ namespace BloomService.Web.Controllers
         [Route("Apimobile/Part")]
         public ActionResult GetPart()
         {
-            var result = repository.GetAll<SagePart>().Where(x => x.PartNumber.StartsWith("R-") && x.Inactive == "No");
+            var result = repository.GetAll<SagePart>().Avaliable();
             return Json(result);
         }
 
@@ -128,42 +114,40 @@ namespace BloomService.Web.Controllers
             return Json(result);
         }
 
-        public class ModelItem
-        {
-            public string Model { get; set; }
-        }
-
         [HttpGet]
         [Route("Apimobile/Workorder")]
         public ActionResult GetWorkOrders()
         {
             var userId = UserModel.Name;
 
-            var assignments = repository.SearchFor<SageAssignment>(x => x.Employee == userId).ToList();
-            var allWorkorders = repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
+            var assignments = repository.SearchFor<SageAssignment>().ToEmployee(userId).ToList();
+            var allWorkorders = repository.SearchFor<SageWorkOrder>().VisibleForTechnicain().ToList();
 
-            var result = new List<SageWorkOrder>();
+            var workorders = new List<SageWorkOrder>();
 
             foreach (var assignment in assignments)
             {
-                var workorder = allWorkorders.Where(x => x.WorkOrder == assignment.WorkOrder).SingleOrDefault();
+                var workorder = allWorkorders.SingleOrDefault(x => x.WorkOrder == assignment.WorkOrder);
                 if (workorder != null)
                 {
                     workorder.Images = workorder.Images.OrderBy(x => x.Id).ToList();
                     workorder.ScheduleDate = assignment.Start.TryAsDateTime();
-                    result.Add(workorder);
+                    workorders.Add(workorder);
                 }
             }
 
             var locations = repository.GetAll<SageLocation>();
-            foreach (var order in result)
+            foreach (var order in workorders)
             {
                 order.Equipments = new List<SageEquipment>();
-
                 order.Images = _imageService.GetPhotoForWorkOrder(order.WorkOrder, settings.SiteUrl);
+                if (order.Images != null)
+                {
+                    order.Images.OrderBy(x => x.Id).ToList();
+                }
 
                 var location = locations.FirstOrDefault(x => x.Name == order.Location);
-                if (location == null)
+                if (location != null)
                 {
                     continue;
                 }
@@ -176,26 +160,23 @@ namespace BloomService.Web.Controllers
                     order.Equipments.AddRange(equipments);
                 }
             }
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(workorders, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [Route("Apimobile/AddItem")]
         public ActionResult AddWOItem(LaborPartsModel model)
         {
-            var workOrderItemId = model.WorkOrderItem;
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
 
-            var workOrderItem = new SageWorkOrderItem();
-            workOrderItem = Mapper.Map<SageWorkOrderItem>(model);
-            //var dBworkOrderItems = new List<SageWorkOrderItem>();
+            var workOrderItem = Mapper.Map<SageWorkOrderItem>(model);
+            workOrderItem.Employee = UserModel.Name;
 
-            if (workOrder.WorkOrderItems != null && workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId) == null)
+            int workOrderItemId;
+            if (model.WorkOrderItem != 0)
             {
-                //if (workOrder.WorkOrderItems != null)
-                //{
-                //    dBworkOrderItems = workOrder.WorkOrderItems.ToList();
-                //}
+                workOrderItemId = Convert.ToInt32(model.WorkOrderItem);
+                                
                 workOrderItem.WorkOrder = model.WorkOrder;
                 workOrderItem.TotalSale = workOrderItem.Quantity * workOrderItem.UnitSale;
                 if (workOrderItem.ItemType == "Parts")
@@ -206,52 +187,62 @@ namespace BloomService.Web.Controllers
                 {
                     workOrderItem.LaborSale = workOrderItem.UnitSale;
                 }
-                
+
                 var result = sageApiProxy.AddWorkOrderItem(workOrderItem);
                 if (result != null && result.IsSucceed && result.Entity != null)
                 {
-                    //dBworkOrderItems.Add(result.Entity);
-                    //workOrder.WorkOrderItems = dBworkOrderItems;
-                    workOrder.WorkOrderItems = sageApiProxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder).Entities; 
-                    repository.Update(workOrder);
+                    var woiResult = sageApiProxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder);
+                    if (woiResult.IsSucceed)
+                    {
+                        workOrder.WorkOrderItems = woiResult.Entities;
+                        repository.Update(workOrder);
+                        _hub.UpdateSageWorkOrder(workOrder);
+                    }
                 }
                 else
                 {
                     _log.ErrorFormat("Was not able to save workorderItem to sage. !result.IsSucceed");
-                    return Error("Was not able to save workorderItem to sage");
+                    return Json(new { Error = "Work order item save failed", InnerError =
+                        $"AddWorkOrderItem method IsSucceed==false. {result?.ErrorMassage}. Was not able to save workorderItem to sage"
+                    });
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
-            }
 
-            //dBworkOrderItems = workOrder.WorkOrderItems.ToList();
-            //workOrderItem.WorkOrder = model.WorkOrder;
-            var resultUpdate = sageApiProxy.EditWorkOrderItem(workOrderItem);
-            if (resultUpdate != null && resultUpdate.IsSucceed && resultUpdate.Entity != null)
-            {
-                //var dbEntity = dBworkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId);
-                //dBworkOrderItems.Remove(dbEntity);
-                //dBworkOrderItems.Add(resultUpdate.Entity);
-                //workOrder.WorkOrderItems = dBworkOrderItems;
-                workOrder.WorkOrderItems = sageApiProxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder).Entities;
-                repository.Update(workOrder);
             }
             else
             {
-                _log.ErrorFormat("Was not able to update workorderItem to sage. !result.IsSucceed");
-                return Error("Was not able to update workorderItem to sage");
+                var resultUpdate = sageApiProxy.EditWorkOrderItem(workOrderItem);
+                if (resultUpdate != null && resultUpdate.IsSucceed && resultUpdate.Entity != null)
+                {
+                    var woiResult = sageApiProxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder);
+                    if (woiResult.IsSucceed)
+                    {
+                        workOrder.WorkOrderItems = woiResult.Entities;
+                        repository.Update(workOrder);
+                    }
+                }
+                else
+                {
+                    _log.ErrorFormat("Was not able to update workorderItem to sage. !result.IsSucceed");
+                    return Json(new { Error = "Work order item update failed", InnerError = 
+                        $"EditWorkOrderItem method IsSucceed==false. {resultUpdate?.ErrorMassage}. Was not able to update workorderItem to sage"
+                    });
+                }
+                return Json(resultUpdate, JsonRequestBehavior.AllowGet);
             }
-            return Json(resultUpdate, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [Route("Apimobile/DeleteItem")]
-        public ActionResult DeleteWOItem(LaborPartsModel model)
+        public ActionResult DeleteWorkOrderItem(LaborPartsModel model)
         {
             var workOrderItemId = model.WorkOrderItem;
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
+            if (workOrder == null)
+                return Json(new { Error = "WorkOrder doesn't exists", InnerError = $"There is no workorders with id {model.WorkOrder}. workOrder==null" });
+
             var item = workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId);
-            var dBworkOrderItems = new List<SageWorkOrderItem>();
-            dBworkOrderItems = workOrder.WorkOrderItems.ToList();
+            var dBworkOrderItems = workOrder.WorkOrderItems.ToList();
 
             var result = sageApiProxy.DeleteWorkOrderItems(model.WorkOrder, new List<long> { model.WorkOrderItem});
             if (result != null && result.IsSucceed)
@@ -259,46 +250,73 @@ namespace BloomService.Web.Controllers
                 dBworkOrderItems.Remove(item);
                 workOrder.WorkOrderItems = dBworkOrderItems;
                 repository.Update(workOrder);
+                _hub.UpdateSageWorkOrder(workOrder);
             }
             else
             {
                 _log.ErrorFormat("Was not able to update workorderItem to sage. !result.IsSucceed");
-                return Error("Was not able to update workorderItem to sage");
+                return Json(new { Error = "Was not able to update workorderItem to sage", InnerError =
+                    $"DeleteWorkOrderItems method IsSucceed==false. {(result != null ? result.ErrorMassage : string.Empty)}. Was not able to update workorderItem to sage"
+                });
             }
             return Json(Success(), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [Route("Apimobile/Image")]
-        public ActionResult PostImage(ImageModel model)
+        public ActionResult PostWorkOrderImage(ImageModel model)
         {
             _log.InfoFormat("Method: PostImage. Workorder Id: {0}", model.IdWorkOrder);
             var result = _imageService.SavePhotoForWorkOrder(model);
-            if (result != null)
+            if (result == null)
             {
-                _log.InfoFormat("Add image for workorder success");
-                return Json(result, JsonRequestBehavior.AllowGet);
+                _log.InfoFormat("Add image faild");
+                return Json(new { Error = "Add image faild", InnerError = "SavePhotoForWorkOrder method return null. Add image faild." });
             }
-            else
-                return Error("Add image faild");
+
+            _log.InfoFormat("Add image for workorder success");
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [Route("Apimobile/DeletePicture")]
+        public ActionResult RemoveWorkOrderPicture(PictureModel model)
+        {
+            _log.InfoFormat("Method: DeletePicture. Id: {0}, WorkOrder {1}", model.Id, model.WorkOrder);
+            var imageItem = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrder).FirstOrDefault();
+            if (imageItem == null)
+            {
+                _log.InfoFormat("Workorder {0} images not found", model.WorkOrder);
+                return Json(new { Error = "Workorder images not found", InnerError = $"There is no SageImageWorkOrder with Workorder {model.WorkOrder}. imageItem == null" });
+            }
+            var imageId = model.Id.AsInt();
+            var image = imageItem.Images.FirstOrDefault(x => x.Id == imageId);
+            imageItem.Images.Remove(image);
+            repository.Update(imageItem);
+            _hub.UpdateWorkOrderPicture(imageItem);
+            _log.InfoFormat("Image ({0}) deleted. Repository updated", model.Id);
+          //  notification.SendNotification(string.Format("Image {0} deleted. Repository updated", model.Id));
+            return Success();
         }
 
         [HttpPost]
         [Route("Apimobile/CommentImage")]
-        public ActionResult ComentImage(CommentImageModel model)
+        public ActionResult ComentWorkOrderImage(CommentImageModel model)
         {
-            if (_imageService.SaveDescriptionsForPhoto(model))
+            if (!_imageService.SaveDescriptionsForPhoto(model))
             {
-                _log.InfoFormat("Add image for workorder success");
-                return Success();
+                _log.InfoFormat("Add descriptions image failed");
+                return Json(new { Error = "Add descriptions image faild", InnerError = 
+                    $"There is no SageImageWorkOrder for Workorder, or SageImageWorkOrder item dont dontain Image. Add descriptions image faild" });
             }
-            else
-                return Error("Add descriptions image faild");
+
+            _log.InfoFormat("Add image for workorder success");
+            return Success();               
         }
 
         [HttpPost]
         [Route("Apimobile/Location")]
-        public ActionResult PostLocation(decimal lat, decimal lng)
+        public ActionResult UpdateTechnicianLocation(decimal lat, decimal lng)
         {
             var userId = UserModel.Id;
             _log.InfoFormat("Method: PostLocation. technicianId: {0}, lat: {1}, lng {2}", userId, lat, lng);
@@ -326,52 +344,22 @@ namespace BloomService.Web.Controllers
             _log.InfoFormat("Method: ChangeWorkorderStatus. Id: {0}, Status {1}", model.Id, model.Status);
             var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.Id).FirstOrDefault();
             if (workorder == null)
-                return Error("Workorder not found");
-            var sageStatus = model.Status == "Closed" ? WorkOrderStatus.Status.FirstOrDefault(x => x.Status == model.Status).Value : WorkOrderStatus.Status.FirstOrDefault(x => x.Status == "Open").Value;
+                return Json(new { Error = "Workorder not found", InnerError = $"There is no workorders with id {model.Id}. workorder == null" });
 
+            var sageStatus = model.Status == WorkOrderStatus.Closed ?
+                                             WorkOrderStatus.ByStatus(WorkOrderStatus.Closed) :
+                                             WorkOrderStatus.ByStatus(WorkOrderStatus.Open);
             var result = sageApiProxy.EditWorkOrderStatus(model.Id, sageStatus.ToString());
             if (!result.IsSucceed)
-                return Error("Was not able to save workorder to sage");
+                return Json(new { Error = "Was not able to save workorder to sage", InnerError = 
+                    $"EditWorkOrderStatus method IsSucceed==false. {result.ErrorMassage}. Was not able to save workorder to sage" });
 
             workorder.Status = model.Status;
             repository.Update(workorder);
+            _hub.UpdateSageWorkOrder(workorder);
             _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, model.Status);
-            notification.SendNotification(string.Format("Workorder {0} change status by {1}", workorder.Name, model.Status));
+            notification.SendNotification($"Workorder {workorder.Name} change status by {model.Status}");
             return Success();
         }
-
-        //private LoginResponseModel GetToken(string mail, string password)
-        //{
-        //    _log.InfoFormat("Method: GetToken. Mail {0}, password {1}", mail, password);
-        //   ASCIIEncoding encoding = new ASCIIEncoding();
-        //    string postData = "username=" + mail;
-        //    postData += "&password=" + password;
-        //    postData += "&grant_type=" + "password";
-        //    byte[] data = encoding.GetBytes(postData);
-
-        //    var url = ConfigurationManager.AppSettings["SiteUrl"] + "/apimobile/Token";
-        //    var request = WebRequest.Create(url);
-        //    request.Headers.Add(HttpRequestHeader.Authorization, "usernamepassword");
-        //    request.ContentType = "application/x-www-form-urlencoded";
-        //    request.Method = "POST";
-        //    var newStream = request.GetRequestStream();
-        //    newStream.Write(data, 0, data.Length);
-        //    newStream.Close();
-        //    try
-        //    {
-        //        var response = (HttpWebResponse)request.GetResponse();
-        //        var dataStream = response.GetResponseStream();
-
-        //        DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(LoginResponseModel));
-        //        var model = (LoginResponseModel)ser.ReadObject(dataStream);
-        //        _log.InfoFormat("Success. Returned LoginResponseModel (ID: {0})", model.Id);
-        //        return model;
-        //    }
-        //    catch
-        //    {
-        //        _log.ErrorFormat("Method: GetToken. Error. Returned null");
-        //        return null;
-        //    }
-        //}
     }
 }

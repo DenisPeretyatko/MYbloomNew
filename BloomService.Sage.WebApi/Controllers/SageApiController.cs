@@ -14,7 +14,7 @@
     using Sage.WebApi.Infratructure.MessageResponse;
     using Sage.WebApi.Infratructure.Service;
     using Sage.WebApi.Models;
-
+    using BloomService.Domain.Extensions;
     [BasicAuthentication]
     public class SageApiController : ApiController
     {
@@ -144,19 +144,14 @@
                 properties.Add("CustomerPO", workOrder.CustomerPO ?? string.Empty);
                 properties.Add("PermissionCode", workOrder.PermissionCode ?? string.Empty);
                 properties.Add("PayMethod", workOrder.PayMethod ?? string.Empty);
+                properties.Add("JCJob", workOrder.JCJob ?? string.Empty);
 
                 var resultProperties = new Dictionary<string, string>();
                 foreach (var property in properties)
                 {
                     if (!string.IsNullOrEmpty(property.Value))
                     {
-                        resultProperties.Add(
-                           property.Key, property.Value
-                           .Replace("'", "&apos;")
-                           .Replace("\"", "&quot;")
-                           .Replace("<", "&lt;")
-                           .Replace("&", "&amp;")
-                           .Replace(">", "&gt;"));
+                        resultProperties.Add(property.Key, property.Value.Sanitize());
                     }
                 }
 
@@ -266,13 +261,7 @@
                 {
                     if (!string.IsNullOrEmpty(property.Value))
                     {
-                        resultProperties.Add(
-                           property.Key, property.Value
-                           .Replace("'", "&apos;")
-                           .Replace("\"", "&quot;")
-                           .Replace("<", "&lt;")
-                           .Replace("&", "&amp;")
-                           .Replace(">", "&gt;"));
+                        resultProperties.Add(property.Key, property.Value.Sanitize());
                     }
                 }
 
@@ -509,7 +498,8 @@
         {
             try
             {
-                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = true, Entity = serviceManager.AddWorkOrderItem(workOrderItem).Single() };
+                var woItem = serviceManager.AddWorkOrderItem(workOrderItem).Single();
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = true, Entity = woItem };
                 return result;
             }
             catch (ResponseException exception)

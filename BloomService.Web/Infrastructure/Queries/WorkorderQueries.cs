@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BloomService.Web.Infrastructure.Constants;
 
 namespace BloomService.Web.Infrastructure.Queries
 {
@@ -9,7 +10,15 @@ namespace BloomService.Web.Infrastructure.Queries
     {
         public static IQueryable<SageWorkOrder> Open(this IQueryable<SageWorkOrder> query)
         {
-            return query.Where(x => x.Status == "Open");
+            return query.Where(x => x.Status == WorkOrderStatus.Open ||
+                                    x.Status == WorkOrderStatus.ReturnRequired);
+        }
+
+        public static IQueryable<SageWorkOrder> VisibleForTechnicain(this IQueryable<SageWorkOrder> query)
+        {
+            return query.Where(x => x.Status == WorkOrderStatus.Open ||
+                                    x.Status == WorkOrderStatus.ReturnRequired ||
+                                    x.Status == WorkOrderStatus.WorkComplete);
         }
 
         public static List<SageWorkOrder> ForDate(this IQueryable<SageWorkOrder> query, DateTime date)

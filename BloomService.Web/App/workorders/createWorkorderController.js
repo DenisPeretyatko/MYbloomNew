@@ -17,6 +17,7 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
     $scope.obj.locationcomments = '';
     $scope.obj.customerpo = '';
     $scope.obj.permissiocode = '';
+    $scope.obj.hours = '';
     $scope.paymentmethods = '';
     $scope.lookups = state.lookups;
 
@@ -30,15 +31,20 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             $scope.lookups.Calltypes.selected = '';
             $scope.obj.calldate;
             $scope.lookups.Problems.selected  = '';
-            $scope.lookups.RateSheets.selected  = '';
+            $scope.lookups.RateSheets.selected = $scope.lookups.RateSheets.find(function (element) {
+                return element.RATESHEETNBR == 1;
+            });;
             $scope.lookups.Employes.selected  = '';
             $scope.lookups.Equipment.selected = '';
             $scope.lookups.Hours.selected = '';
             $scope.obj.nottoexceed = '';
             $scope.obj.locationcomments = '';
             $scope.obj.customerpo = '';
+            $scope.obj.hours = 0;
             $scope.lookups.PermissionCodes.selected  = '';
-            $scope.lookups.PaymentMethods.selected = '';
+            $scope.lookups.PaymentMethods.selected = $scope.lookups.PaymentMethods.find(function (element) {
+                return element.Value == 3;
+            });;
         }
     });
 
@@ -52,12 +58,13 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             Ratesheet: $scope.lookups.RateSheets.selected == null ? "" : $scope.lookups.RateSheets.selected.DESCRIPTION.trim(),
             Emploee: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.Employee,
             Equipment: $scope.lookups.Equipment.selected == null ? "0" : $scope.lookups.Equipment.selected.Equipment,
-            Estimatehours: $scope.lookups.Hours.selected == null ? "" : $scope.lookups.Hours.selected.Repair,
+            Estimatehours: $scope.obj.hours, //$scope.lookups.Hours.selected == null ? "" : $scope.lookups.Hours.selected.Repair,
             Nottoexceed: $scope.obj.nottoexceed,
             Locationcomments: $scope.obj.locationcomments,
             Customerpo: $scope.obj.customerpo,
             Permissiocode: $scope.lookups.PermissionCodes.selected == null ? "" : $scope.lookups.PermissionCodes.selected.DESCRIPTION,
-            Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected.Method
+            Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected.Method,
+            JCJob: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.JCJob,
         };
 
         commonDataService.createWorkorder(workorder).then(function (response) {
@@ -87,6 +94,10 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
         commonDataService.customerByLocation(request).then(function (response) {
             $scope.lookups.Customers.selected = response.data;
         });    
+    };
+
+    $scope.setEstimateHour = function (selected) {
+        $scope.obj.hours = parseFloat(selected.$select.selected.EstimatedRepairHours);
     };
 
 };

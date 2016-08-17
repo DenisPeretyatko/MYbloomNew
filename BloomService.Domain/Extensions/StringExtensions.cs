@@ -56,5 +56,14 @@ namespace BloomService.Domain.Extensions
             int result;
             return int.TryParse(text, out result) ? result : defaultValue;
         }
+
+        public static string Sanitize(this string text)
+        {
+            return text.Replace("'", "&apos;")
+                       .Replace("\"", "&quot;")
+                       .Replace("&", "&amp;")
+                       .Replace("<", "&lt;")
+                       .Replace(">", "&gt;");
+        }
     }
 }

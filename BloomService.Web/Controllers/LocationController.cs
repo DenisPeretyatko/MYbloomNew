@@ -8,18 +8,15 @@ namespace BloomService.Web.Controllers
     using Domain.Entities.Concrete;
     using System.Collections.Generic;
 
-    using BloomService.Web.Infrastructure.Mongo;
-    using BloomService.Web.Infrastructure.Services.Interfaces;
-    using Domain.Extensions;
-    using System;
+    using Infrastructure.Mongo;
+    using Infrastructure.Queries;
+
     public class LocationController : BaseController
     {
-        private readonly ILocationService _locationService;
         private readonly IRepository _repository;
 
-        public LocationController(ILocationService locationService, IRepository repository)
+        public LocationController(IRepository repository)
         {
-            _locationService = locationService;
             _repository = repository;
         }
 
@@ -28,7 +25,7 @@ namespace BloomService.Web.Controllers
         public ActionResult GetLocations(MapModel model)
         {
             var result = new List<MapViewModel>();
-            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.IsValid);
+            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open");
             foreach (var item in workOrders)
             {
                 var itemLocation = _repository.SearchFor<SageLocation>(l => l.Name == item.Location).FirstOrDefault();
@@ -36,7 +33,7 @@ namespace BloomService.Web.Controllers
                 item.Latitude = itemLocation.Latitude;
                 item.Longitude = itemLocation.Longitude;
 
-                var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder && x.IsValid).OrderByDescending(x => x.ScheduleDate).ThenByDescending(x => x.StartTime).FirstOrDefault();
+                var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder ).OrderByDescending(x => x.ScheduleDate).ThenByDescending(x => x.StartTime).FirstOrDefault();
 
                 if (string.IsNullOrEmpty(assignment?.Employee) || item.AssignmentId != 0) continue;
                 result.Add(new MapViewModel()

@@ -46,7 +46,7 @@ namespace BloomService.Web.Controllers
         {
             var lastMonth = DateTime.Now.GetLocalDate().AddMonths(-1);
             var model = new ScheduleViewModel();
-            var assignments = _repository.SearchFor<SageAssignment>(x => (x.WorkOrder != 0 && x.DateEntered > lastMonth) && x.IsValid).OrderByDescending(x => x.DateEntered).ToList();
+            var assignments = _repository.SearchFor<SageAssignment>(x => x.WorkOrder != 0 && x.DateEntered > lastMonth).OrderByDescending(x => x.DateEntered).ToList();
             var employees = _repository.GetAll<SageEmployee>().ToList(); 
             //var mappedEmployees = Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employees);
             var mappedAssignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(assignments);
@@ -54,14 +54,11 @@ namespace BloomService.Web.Controllers
             {
                 if (!string.IsNullOrEmpty(item.Employee))
                 {
-                    item.Color = employees.FirstOrDefault(e => e.Name == item.Employee).Color; ;
-                    //if (emps != null)
-                    //{
-                    //    item.Color = emps.Color;
-                    //}
+                    var color = employees.FirstOrDefault(e => e.Name == item.Employee);
+                    item.Color = color != null? color.Color : "";
                 }
             };
-            var workorders = _repository.SearchFor<SageWorkOrder>().Where(x => x.IsValid);
+            var workorders = _repository.SearchFor<SageWorkOrder>();
             var workOrdersForLastMonth = workorders.Where(x => x.Status == "Open" && x.DateEntered > lastMonth && x.AssignmentId != 0).ToList();
             model.Assigments = mappedAssignments.OrderByDescending(x => x.Id).ToList();
             model.UnassignedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(workOrdersForLastMonth);

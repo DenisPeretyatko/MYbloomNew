@@ -163,18 +163,6 @@
       <HintPath>..\packages\RestSharp.Newtonsoft.Json.1.0.0\lib\net45\RestSharp.Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sage.LS1.Core">
-      <HintPath>..\lib\Sage.LS1.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sage.LS1.Messaging">
-      <HintPath>..\lib\Sage.LS1.Messaging.dll</HintPath>
-    </Reference>
-    <Reference Include="Sage.LS1.Messaging.Interfaces">
-      <HintPath>..\lib\Sage.LS1.Messaging.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Sage.LS1.Messaging.Provider">
-      <HintPath>..\lib\Sage.LS1.Messaging.Provider.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -342,6 +330,7 @@
     <Compile Include="Infrastructure\Jobs\BloomJobRegistry.cs" />
     <Compile Include="Infrastructure\ModelBinders\JsonNetModelBinder.cs" />
     <Compile Include="Infrastructure\Queries\AssignmentQueries.cs" />
+    <Compile Include="Infrastructure\Queries\PartsQueries.cs" />
     <Compile Include="Infrastructure\Queries\WorkorderQueries.cs" />
     <Compile Include="Infrastructure\Services\AuthorizationService.cs" />
     <Compile Include="Infrastructure\Services\HttpContextProvider.cs" />
@@ -380,6 +369,7 @@
     <Compile Include="Models\PartModel.cs" />
     <Compile Include="Models\PaymentMethodModel.cs" />
     <Compile Include="Models\PermissionCodeModel.cs" />
+    <Compile Include="Models\PictureModel.cs" />
     <Compile Include="Models\RateSheetModel.cs" />
     <Compile Include="Models\ScheduleViewModel.cs" />
     <Compile Include="Models\LookupsModel.cs" />
@@ -776,9 +766,8 @@
     <Content Include="Public\mock\getWorkorder.json" />
     <Content Include="Public\mock\getWorkorders.json" />
     <Content Include="Public\mock\getLookups.json" />
-    <Content Include="App_Data\PushNotification\iQueSoft_APNS_dev.p12" />
-    <Content Include="App_Data\PushNotification\iQueSoft_Prod_apns.p12" />
-    <Content Include="App_Data\PushNotification\Certificates.p12" />
+    <Content Include="App_Data\PushNotification\BloomServiceAPNSAdHoc.p12" />
+    <Content Include="App_Data\PushNotification\BloomServiceBetaAPNSAdHoc.p12" />
     <None Include="Properties\PublishProfiles\b.pubxml" />
     <None Include="Properties\PublishProfiles\bloom.pubxml" />
     <Content Include="Public\mock\getEmployees.json" />
@@ -844,9 +833,15 @@
     <Content Include="Scripts\jquery-2.2.2.min.map" />
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
     <Content Include="Views\Dashboard\Index.cshtml" />
+    <None Include="Web.Beta.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Development.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Test\" />
+    <Folder Include="Views\Shared\Test\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -867,6 +862,24 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Beta|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Development|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />

@@ -1,4 +1,5 @@
 ﻿using BloomService.Domain.Entities.Concrete;
+using BloomService.Domain.Extensions;
 using System;
 using System.Collections.Generic;
 
@@ -13,6 +14,7 @@ namespace Sage.WebApi.Infratructure.Constants
         public static readonly string SelectPermissionCodes = "SELECT * FROM PERMISSIONCODE";
         public static readonly string SelectRateSheets = "SELECT * FROM RATESHEET";
         public static readonly string EditWorkOrderStatus = "UPDATE WRKORDER SET STATUS = {0} WHERE WRKORDNBR = {1}";
+        public static readonly string EditWorkJcJob = "UPDATE WRKORDER SET JCJOB = {0} WHERE WRKORDNBR = {1}";
 
         public static string BuildDeleteWorkOrderItemQuery(int workOrderId, IEnumerable<int> ids)
         {
@@ -54,6 +56,7 @@ namespace Sage.WebApi.Infratructure.Constants
             parameters.Add("CUSTOMERPO", workOrder.CustomerPO);
             parameters.Add("PERMISSIONCODE", workOrder.PermissionCode);
             parameters.Add("PAYMETHOD", workOrder.PayMethod);
+            parameters.Add("JCJOB", workOrder.JCJob);
             if (workOrder.Status == "Open")
             {
                 parameters.Add("STATUS", "0");
@@ -67,11 +70,7 @@ namespace Sage.WebApi.Infratructure.Constants
             {
                 if (parameter.Value != string.Empty && parameter.Value != null)
                 {
-                    query += string.Format("{0} = '{1}', ", parameter.Key, parameter.Value.Replace("'", "&apos;")
-                           .Replace("\"", "&quot;")
-                           .Replace("<", "&lt;")
-                           .Replace("&", "&amp;")
-                           .Replace(">", "&gt;"));
+                    query += string.Format("{0} = '{1}', ", parameter.Key, parameter.Value.Sanitize());
                 }
             }
 
