@@ -444,16 +444,16 @@ namespace BloomService.Web.Infrastructure.Jobs
                         var workorder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == assigment.WorkOrder && x.ScheduleDate != null).SingleOrDefault();
                         if (workorder == null || workorder.ScheduleDate.GetValueOrDefault().Date != easternTime.Date) continue;
                         var wts = (TimeSpan)(easternTime - workorder.ScheduleDate);
-                        if (
+                        if (wts.TotalMinutes >= 10 && wts.TotalMinutes < 30 &&
                            _mapDistanceService.Distance(workorder.Latitude, workorder.Longitude,
-                               technician.Latitude, technician.Longitude) > 5 && wts.TotalMinutes > 10)
+                               technician.Latitude, technician.Longitude) > 5)
                         {
                             _notification.SendNotification($"Technician {technician.Name} is not within 5mi with 10min until assignment.");
                         }
 
-                        if (
+                        if (wts.TotalMinutes >= 30 &&
                             _mapDistanceService.Distance(workorder.Latitude, workorder.Longitude,
-                                technician.Latitude, technician.Longitude) > 15 && wts.TotalMinutes > 30)
+                                technician.Latitude, technician.Longitude) > 15)
                         {
                             _notification.SendNotification($"Technician {technician.Name} is not within 15mi with 30min until assignment.");
                         }
