@@ -169,12 +169,23 @@ namespace BloomService.Web.Infrastructure.Jobs
                             var mongoEntity = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == workOrder.WorkOrder).SingleOrDefault();
                             if (mongoEntity == null)
                             {
-                                workOrder.WorkOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder).Entities;
+                                var result = _proxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder);
+                                if (result != null)
+                                {
+                                    workOrder.WorkOrderItems = result.Entities;
+
+                                }
                                 _repository.Add(workOrder);
                             }
                             else
                             {
-                                workOrder.WorkOrderItems = _proxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder).Entities;
+
+                                var result = _proxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder);
+                                if (result != null)
+                                {
+                                    workOrder.WorkOrderItems = result.Entities;
+
+                                }
                                 workOrder.Id = mongoEntity.Id;
                                 workOrder.Status = mongoEntity.Status;
                                 workOrder.AssignmentId = mongoEntity.AssignmentId;
