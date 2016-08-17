@@ -7,10 +7,8 @@ namespace BloomService.Web.Models
 {
     public class EmployeeModel : EntityModel
     {
-        [JsonProperty("Id")]
-        public string Id { get; set; }
         [JsonProperty("Employee")]
-        public string Employee { get; set; }
+        public long Employee { get; set; }
         [JsonProperty("Center")]
         public string Center { get; set; }
         [JsonProperty("Name")]

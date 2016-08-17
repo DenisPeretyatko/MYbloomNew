@@ -11,7 +11,8 @@
     using MongoDB.Driver;
     using MongoDB.Driver.Builders;
     using MongoDB.Driver.Linq;
-
+    using Utils;
+    using Domain.Entities.Concrete;
     public class MongoRepository : IRepository
     {
         private readonly MongoDatabase database;
@@ -28,7 +29,7 @@
             var collection = GetCollection<TEntity>();
             if (entity.Id == null)
             {
-                entity.Id = ObjectId.GenerateNewId().ToString();
+                entity.Id = ObjectId.GenerateNewId().ToString(); ;
             }
             else if (Get<TEntity>(entity.Id) != null)
             {

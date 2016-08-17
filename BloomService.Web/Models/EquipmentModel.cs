@@ -7,7 +7,7 @@ namespace BloomService.Web.Models
     public class EquipmentModel : EntityModel
     {
         [JsonProperty("Equipment")]
-        public string Equipment { get; set; }
+        public long Equipment { get; set; }
         [JsonProperty("Parentnumber")]
         public string Parentnumber { get; set; }
         [JsonProperty("Part")]

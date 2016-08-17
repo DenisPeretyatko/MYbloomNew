@@ -11,7 +11,7 @@
     using Sage.WebApi.Models;
     using Ninject;
     using System.Configuration;
-    public class SageWebApiMappingProfile : Profile, ISageWebApiMappingProfile
+    public class SageWebApiMappingProfile : Profile
     {
         [Inject]
         public SageWebConfig config { get; set; }
@@ -80,7 +80,7 @@
                 .ForMember(dest => dest.TimeEntered, opts => opts.MapFrom(src => src.TIMEENTER))
                 .ForMember(dest => dest.TotalCost, opts => opts.MapFrom(src => src.TOTALCOST))
                 .ForMember(dest => dest.WorkOrderType, opts => opts.MapFrom(src => src.WOTYPE))
-                .ForMember(dest => dest.WorkOrder, opts => opts.MapFrom(src => src.WRKORDNBR));
+                .ForMember(dest => dest.WorkOrder, opts => opts.MapFrom(src => Convert.ToInt64(src.WRKORDNBR)));
 
             this.CreateMap<AssignmentReturnParam, SageAssignment>()
                 .ForMember(dest => dest.ElapsedTime, opts => opts.MapFrom(src => src.ElapsedTime.AsDoubleSafe()))

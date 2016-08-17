@@ -5,7 +5,7 @@ namespace BloomService.Domain.Entities.Concrete
     [CollectionName("RateSheetCollection")]
     public class SageRateSheet : SageEntity
     {
-        public int RATESHEETNBR { get; set; }
+        public long RATESHEETNBR { get; set; }
         public string DESCRIPTION { get; set; }
         public double LABORRATE { get; set; }
         public double STOCKPARTSMARKUP { get; set; }

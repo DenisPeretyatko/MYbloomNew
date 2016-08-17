@@ -353,6 +353,7 @@
     <Compile Include="Infrastructure\Mongo\MongoRepository.cs" />
     <Compile Include="Infrastructure\Constants\PaymentMethod.cs" />
     <Compile Include="Infrastructure\Constants\EndPoints.cs" />
+    <Compile Include="Infrastructure\Utils\PropertyUtil.cs" />
     <Compile Include="Models\AddWOItemModel.cs" />
     <Compile Include="Models\CallTypeModel.cs" />
     <Compile Include="Models\AssignmentModel.cs" />
@@ -386,7 +387,6 @@
     <Compile Include="Models\TechnicianModel.cs" />
     <Compile Include="Models\WorkOrderModel.cs" />
     <Compile Include="Models\AssignmentViewModel.cs" />
-    <Compile Include="Infrastructure\Services\Interfaces\IApiMobileService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IImageService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IUserService.cs" />
     <Compile Include="Infrastructure\Services\ImageService.cs" />

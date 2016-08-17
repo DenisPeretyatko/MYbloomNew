@@ -55,7 +55,7 @@ namespace BloomService.Web.Controllers
             _log.InfoFormat("Method: SaveTechnician. Model ID: {0}", model.Id);
             var employee = repository.Get<SageEmployee>(model.Id);
             var assignment = repository.SearchFor<SageAssignment>(e => e.EmployeeId == employee.Employee).FirstOrDefault();
-            model.Id = employee.Employee;
+            model.Id = employee.Employee.ToString();
             var technician = Mapper.Map<SageEmployee, EmployeeModel>(employee);
             technician.AvailableDays = model.AvailableDays;
             technician.IsAvailable = model.IsAvailable;

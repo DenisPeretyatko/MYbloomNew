@@ -84,7 +84,7 @@ namespace BloomService.Web.Models
         public DateTime? OrderLeadTime { get; set; }
 
         [JsonProperty("Part")]
-        public string Part { get; set; }
+        public long Part { get; set; }
 
         [JsonProperty("PartNumber")]
         public string PartNumber { get; set; }

@@ -31,7 +31,6 @@ namespace BloomService.Web.Controllers
         private readonly INotificationService _notification;
         private readonly IScheduleService _scheduleService;
 
-
         public ScheduleController(IRepository repository, ISageApiProxy sageApiProxy, IBloomServiceHub hub, INotificationService notification, IScheduleService scheduleService)
         {
             _repository = repository;
@@ -47,19 +46,20 @@ namespace BloomService.Web.Controllers
         {
             var lastMonth = DateTime.Now.GetLocalDate().AddMonths(-1);
             var model = new ScheduleViewModel();
-            var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.WorkOrder) && x.DateEntered > lastMonth).OrderByDescending(x => x.DateEntered).ToList();
-            var employees = _repository.GetAll<SageEmployee>().ToList();
+            var assignments = _repository.SearchFor<SageAssignment>(x => x.WorkOrder != 0 && x.DateEntered > lastMonth).OrderByDescending(x => x.DateEntered).ToList();
+            var employees = _repository.GetAll<SageEmployee>().ToList(); 
             //var mappedEmployees = Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employees);
             var mappedAssignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(assignments);
-            foreach (var item in mappedAssignments) {
+            foreach (var item in mappedAssignments)
+            {
                 if (!string.IsNullOrEmpty(item.Employee))
                 {
                     var color = employees.FirstOrDefault(e => e.Name == item.Employee);
                     item.Color = color != null? color.Color : "";
                 }
             };
-            var workorders = _repository.GetAll<SageWorkOrder>();
-            var workOrdersForLastMonth = workorders.Where(x => x.Status == "Open" && x.DateEntered > lastMonth && !string.IsNullOrEmpty(x.AssignmentId)).ToList();
+            var workorders = _repository.SearchFor<SageWorkOrder>();
+            var workOrdersForLastMonth = workorders.Where(x => x.Status == "Open" && x.DateEntered > lastMonth && x.AssignmentId != 0).ToList();
             model.Assigments = mappedAssignments.OrderByDescending(x => x.Id).ToList();
             model.UnassignedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(workOrdersForLastMonth);
             return Json(model, JsonRequestBehavior.AllowGet);

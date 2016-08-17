@@ -9,7 +9,7 @@
     {
         ImageLocation SavePhotoForWorkOrder(ImageModel model);
         bool BuildTechnicianIcons(TechnicianModel technician);
-        List<ImageLocation> GetPhotoForWorkOrder(string idWorkOrder, string prefixUrl = null);
+        List<ImageLocation> GetPhotoForWorkOrder(long idWorkOrder, string prefixUrl = null);
         bool SaveDescriptionsForPhoto(CommentImageModel model);
     }
 }

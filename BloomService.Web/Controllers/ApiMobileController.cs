@@ -92,7 +92,7 @@ namespace BloomService.Web.Controllers
 
         [HttpGet]
         [Route("Apimobile/Workorder/{id}")]
-        public ActionResult GetWorkOrder(string id)
+        public ActionResult GetWorkOrder(long id)
         {
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id);
             return Json(workOrder, JsonRequestBehavior.AllowGet);
@@ -149,14 +149,15 @@ namespace BloomService.Web.Controllers
                 var location = locations.FirstOrDefault(x => x.Name == order.Location);
                 if (location != null)
                 {
-                    order.Latitude = location.Latitude;
-                    order.Longitude = location.Longitude;
-                    order.Address = location.FullAddress;
-                    if (order.Equipment != 0)
-                    {
-                        var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment.ToString());
-                        order.Equipments.AddRange(equipments);
-                    }
+                    continue;
+                }
+                order.Latitude = location.Latitude;
+                order.Longitude = location.Longitude;
+                order.Address = location.Address;
+                if (order.Equipment != 0)
+                {
+                    var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment);
+                    order.Equipments.AddRange(equipments);
                 }
             }
             return Json(workorders, JsonRequestBehavior.AllowGet);
@@ -172,11 +173,11 @@ namespace BloomService.Web.Controllers
             workOrderItem.Employee = UserModel.Name;
 
             int workOrderItemId;
-            if (string.IsNullOrEmpty(model.WorkOrderItem))
+            if (model.WorkOrderItem != 0)
             {
                 workOrderItemId = Convert.ToInt32(model.WorkOrderItem);
                                 
-                workOrderItem.WorkOrder = model.WorkOrder.AsInt();
+                workOrderItem.WorkOrder = model.WorkOrder;
                 workOrderItem.TotalSale = workOrderItem.Quantity * workOrderItem.UnitSale;
                 if (workOrderItem.ItemType == "Parts")
                 {
@@ -235,7 +236,7 @@ namespace BloomService.Web.Controllers
         [Route("Apimobile/DeleteItem")]
         public ActionResult DeleteWorkOrderItem(LaborPartsModel model)
         {
-            var workOrderItemId = model.WorkOrderItem.AsInt();
+            var workOrderItemId = model.WorkOrderItem;
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
             if (workOrder == null)
                 return Json(new { Error = "WorkOrder doesn't exists", InnerError = $"There is no workorders with id {model.WorkOrder}. workOrder==null" });
@@ -243,7 +244,7 @@ namespace BloomService.Web.Controllers
             var item = workOrder.WorkOrderItems.SingleOrDefault(x => x.WorkOrderItem == workOrderItemId);
             var dBworkOrderItems = workOrder.WorkOrderItems.ToList();
 
-            var result = sageApiProxy.DeleteWorkOrderItems(model.WorkOrder.AsInt(), new List<int> { model.WorkOrderItem.AsInt()});
+            var result = sageApiProxy.DeleteWorkOrderItems(model.WorkOrder, new List<long> { model.WorkOrderItem});
             if (result != null && result.IsSucceed)
             {
                 dBworkOrderItems.Remove(item);
@@ -322,13 +323,13 @@ namespace BloomService.Web.Controllers
             
             var techLocation = new SageTechnicianLocation
             {
-                Employee = userId,
+                Employee = Convert.ToInt64(userId),
                 Latitude = lat,
                 Longitude = lng,
                 Date = DateTime.Now.GetLocalDate()
             };
             repository.Add(techLocation);
-            var emploee = repository.SearchFor<SageEmployee>(x => x.Employee == userId).Single();
+            var emploee = repository.SearchFor<SageEmployee>(x => x.Employee.ToString() == userId).Single();
             emploee.Longitude = lat;
             emploee.Latitude = lng;
             _hub.UpdateTechnicianLocation(emploee);

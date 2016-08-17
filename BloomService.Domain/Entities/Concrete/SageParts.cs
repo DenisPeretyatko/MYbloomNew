@@ -87,7 +87,7 @@
         public DateTime? OrderLeadTime { get; set; }
 
         [XmlAttribute]
-        public string Part { get; set; }
+        public long Part { get; set; }
 
         [XmlAttribute]
         public string PartNumber { get; set; }

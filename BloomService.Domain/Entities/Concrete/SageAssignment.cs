@@ -21,7 +21,7 @@
         public string Area { get; set; }
 
         [XmlAttribute]
-        public string Assignment { get; set; }
+        public long Assignment { get; set; }
 
         [XmlAttribute]
         public string Assignmenttype { get; set; }
@@ -108,7 +108,7 @@
         public DateTime? TimeEntered { get; set; }
 
         [XmlAttribute]
-        public string WorkOrder { get; set; }
+        public long WorkOrder { get; set; }
 
         [XmlIgnore]
         public string Start { get; set; }
@@ -121,6 +121,8 @@
         [XmlIgnore]
         public string Color { get; set; }
         [XmlIgnore]
-        public string EmployeeId { get; set; }
+        public long EmployeeId { get; set; }
+        [XmlIgnore]
+        public bool IsValid { get; set; }
     }
 }

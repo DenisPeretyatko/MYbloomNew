@@ -30,7 +30,7 @@
         public string Priority { get; set; }
 
         [XmlAttribute]
-        public string Problem { get; set; }
+        public long Problem { get; set; }
 
         [XmlAttribute]
         public string Skill { get; set; }

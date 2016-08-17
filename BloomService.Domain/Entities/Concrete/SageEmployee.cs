@@ -51,7 +51,7 @@ namespace BloomService.Domain.Entities.Concrete
         public string Email { get; set; }
 
         [XmlAttribute]
-        public string Employee { get; set; }
+        public long Employee { get; set; }
 
         [XmlAttribute]
         public string Fax { get; set; }

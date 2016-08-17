@@ -4,8 +4,8 @@ namespace BloomService.Web.Models
 {
     public class AddWOItemModel
     {
-        public int WorkOrder { get; set; }
-        public int WorkOrderItem { get; set; }
+        public long WorkOrder { get; set; }
+        public long WorkOrderItem { get; set; }
         public string ItemType { get; set; }
         public decimal Quantity { get; set; }
         public DateTime WorkDate { get; set; }

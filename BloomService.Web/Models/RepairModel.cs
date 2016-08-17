@@ -11,6 +11,6 @@ namespace BloomService.Web.Models
         [JsonProperty("JCCostCode")]
         public string JcCostCode { get; set; }
         [JsonProperty("Repair")]
-        public byte Repair { get; set; }
+        public long Repair { get; set; }
     }
 }

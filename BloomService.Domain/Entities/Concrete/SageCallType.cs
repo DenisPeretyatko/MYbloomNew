@@ -15,7 +15,7 @@
         public string CallBack { get; set; }
 
         [XmlAttribute]
-        public string CallType { get; set; }
+        public long CallType { get; set; }
 
         [XmlAttribute]
         public string Description { get; set; }

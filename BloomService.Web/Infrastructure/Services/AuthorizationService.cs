@@ -16,7 +16,7 @@
     using Microsoft.Owin.Security;
 
     using RestSharp;
-
+    using System;
     public class AuthorizationService : IAuthorizationService
     {
         private readonly IRepository _repository;
@@ -44,9 +44,11 @@
                     .Select(c => c.Value).SingleOrDefault()
             };
 
-            var user = this._repository.SearchFor<SageEmployee>(x => x.Employee == userModel.Id).FirstOrDefault();
+            var user = _repository.SearchFor<SageEmployee>(x => x.Employee == Convert.ToInt64(userModel.Id)).FirstOrDefault();
             if (user != null)
+            {
                 userModel.Name = user.Name;
+            }
             return userModel;
         }
 
@@ -72,7 +74,7 @@
             {
                 new Claim(ClaimTypes.Name, user.Mail ?? string.Empty),
                 new Claim(ClaimTypes.Role, user.Type.ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id ?? string.Empty),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Mail ?? string.Empty)
             };
 
@@ -81,7 +83,7 @@
             var ticket = new AuthenticationTicket(identity, new AuthenticationProperties());
             var result = new AuthorizationResponse
             {
-                Id = user.Id ?? string.Empty,
+                Id = user.Id,
                 Type = user.Type,
                 Mail = user.Mail ?? string.Empty,
                 Token = OwinConfig.OAuthOptions.AccessTokenFormat.Protect(ticket)

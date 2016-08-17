@@ -10,7 +10,7 @@
     public class SageTechnicianLocation : SageEntity
     {
         [XmlAttribute]
-        public string Employee { get; set; }
+        public long Employee { get; set; }
 
         [XmlAttribute(DataType = "dateTime")]
         public DateTime Date { get; set; }
