@@ -54,14 +54,6 @@ namespace BloomService.Web.Controllers
             _hub = hub;
         }
 
-        //[HttpPost]
-        //[Route("Apimobile/Workorder/{id}/Equipment")]
-        //public ActionResult AddEquipmentToWorkOrder()
-        //{
-        //    _log.Info("Method: AddEquipmentToWorkOrder");
-        //    return Success();
-        //}
-
         [HttpPost]
         [AllowAnonymous]
         [Route("Apimobile/Authorization")]
@@ -141,19 +133,13 @@ namespace BloomService.Web.Controllers
             {
                 order.Equipments = new List<SageEquipment>();
                 order.Images = _imageService.GetPhotoForWorkOrder(order.WorkOrder, settings.SiteUrl);
-                if (order.Images != null)
-                {
-                    order.Images.OrderBy(x => x.Id).ToList();
-                }
-
                 var location = locations.FirstOrDefault(x => x.Name == order.Location);
                 if (location != null)
                 {
-                    continue;
-                }
-                order.Latitude = location.Latitude;
-                order.Longitude = location.Longitude;
-                order.Address = location.Address;
+                    order.Latitude = location.Latitude;
+                    order.Longitude = location.Longitude;
+                    order.Address = location.Address;
+                }                
                 if (order.Equipment != 0)
                 {
                     var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment);
@@ -168,15 +154,16 @@ namespace BloomService.Web.Controllers
         public ActionResult AddWOItem(LaborPartsModel model)
         {
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
+            if (workOrder == null)
+            {
+                return Json(new { Error = "WorkOrder doesn't exists", InnerError = $"There is no workorders with id {model.WorkOrder}. workOrder==null" });
+            }
 
             var workOrderItem = Mapper.Map<SageWorkOrderItem>(model);
             workOrderItem.Employee = UserModel.Name;
 
-            int workOrderItemId;
             if (model.WorkOrderItem != 0)
             {
-                workOrderItemId = Convert.ToInt32(model.WorkOrderItem);
-                                
                 workOrderItem.WorkOrder = model.WorkOrder;
                 workOrderItem.TotalSale = workOrderItem.Quantity * workOrderItem.UnitSale;
                 if (workOrderItem.ItemType == "Parts")

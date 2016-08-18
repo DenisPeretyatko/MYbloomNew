@@ -15,6 +15,7 @@
     using BloomService.Web.Infrastructure.Services.Interfaces;
     using BloomService.Web.Models;
     using SignalR;
+    using Domain.Extensions;
     public class ImageService : IImageService
     {
         private static readonly Dictionary<ImageFormat, string> _knownImageFormats = new Dictionary<ImageFormat, string>()
@@ -33,6 +34,7 @@
         private readonly string urlToFolderTecnician = "/Public/technician/";
         private readonly string urlToFolderWorkOrder = "/Public/workorder/";
         private readonly string urlToFolderPhotoWorkOrders = "/Public/images/";
+        private readonly string small = "small";
         private readonly Color colorTechnicianIcon = Color.FromArgb(0, 13, 255);
         private readonly Color colorWorkOrderIcon = Color.FromArgb(255, 0, 4);
         private readonly BloomServiceConfiguration settings;
@@ -71,15 +73,16 @@
 
             var pathToImage = Path.Combine(this.httpContextProvider.MapPath(this.urlToFolderPhotoWorkOrders), model.IdWorkOrder.ToString());
             var nameBig = countImage.ToString();
-            var nameSmall = "small" + countImage;
+            var nameSmall = small + countImage;
             var fileName = this.SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, this.settings.SizeBigPhoto);
             var fileNameSmall = this.SavePhotoForWorkOrder(model.Image, pathToImage, nameSmall, this.settings.SizeSmallPhoto);
             var maxId = imagesDb.Images.Any() ? imagesDb.Images.Max(x => x.Id) : 0;
             var image = new ImageLocation { Image = fileNameSmall, BigImage = fileName, Latitude = model.Latitude, Longitude = model.Longitude, Id = maxId + 1, Description = model.Description };
             imagesDb.Images.Add(image);
             this.repository.Add(imagesDb);
-            imagesDb.Images[imagesDb.Images.Count - 1].Image += $"?{DateTime.Now.TimeOfDay.TotalMilliseconds}";
-            imagesDb.Images[imagesDb.Images.Count - 1].BigImage += $"?{DateTime.Now.TimeOfDay.TotalMilliseconds}";
+            var milliseconds = DateTime.Now.TimeOfDay.TotalMilliseconds;
+            image.Image += $"?{milliseconds}";
+            image.BigImage += $"?{milliseconds}";
             _hub.UpdateWorkOrderPicture(imagesDb);
             return image;
         }
@@ -106,20 +109,21 @@
         public List<ImageLocation> GetPhotoForWorkOrder(long idWorkOrder, string prefixUrl = null)
         {
             var pathToImage = string.Format("{0}{1}/", urlToFolderPhotoWorkOrders, idWorkOrder);
-            if (prefixUrl != null)
-                pathToImage = prefixUrl + pathToImage;
-
+            var baseUri = prefixUrl == null ? urlToFolderPhotoWorkOrders.UriCombine(idWorkOrder.ToString()) :
+                prefixUrl.UriCombine(pathToImage);
             var images = this.repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == idWorkOrder).SingleOrDefault();
-            if (images != null)
+
+            if (images == null)
+                return new List<ImageLocation>();
+
+            var milliseconds = DateTime.Now.TimeOfDay.TotalMilliseconds;
+            foreach (var image in images.Images)
             {
-                foreach (var image in images.Images)
-                {
-                    image.Image = pathToImage + image.Image;
-                    image.BigImage = pathToImage + image.BigImage;
-                }
-                return images.Images;
+                image.Image = baseUri.UriCombine($"{image.Image}?{milliseconds}");
+                image.BigImage = baseUri.UriCombine($"{image.BigImage}?{milliseconds}");
             }
-            return null;
+            return images.Images.OrderBy(x=>x.Id).ToList();
+
         }
 
         private string SavePhotoForWorkOrder(HttpPostedFileBase file, string path, string userId, int MaxSize)
@@ -131,7 +135,7 @@
             if (!this.ValidateImage(image))
                 return string.Empty;
             string name;
-            string ext = "jpg";
+            string ext = _knownImageFormats[ImageFormat.Jpeg];
             if (_knownImageFormats.TryGetValue(image.RawFormat, out name))
                 ext = name.ToLower();
             image = this.ResizeImage(image, new Size(MaxSize, MaxSize));
@@ -174,13 +178,13 @@
         public bool BuildTechnicianIcons(TechnicianModel technician)
         {
             var pathToTechnicianIcon = this.httpContextProvider.MapPath(this.urlToTechnicianIcon);
-            var pathToResultIconTechnician = string.Format("{0}{1}.png",
-                this.httpContextProvider.MapPath(this.urlToFolderTecnician), technician.Id);
+            var pathToResultIconTechnician = string.Format("{0}{1}.{2}",
+                this.httpContextProvider.MapPath(this.urlToFolderTecnician), technician.Id, _knownImageFormats[ImageFormat.Png]);
 
             var pathToWorkOrderIcon = this.httpContextProvider.MapPath(this.urlToWorkOrderIcon);
-            var pathToResultIconWorkOrder = string.Format("{0}{1}.png",
+            var pathToResultIconWorkOrder = string.Format("{0}{1}.{2}",
                 this.httpContextProvider.MapPath(this.urlToFolderWorkOrder),
-                technician.Id
+                technician.Id, _knownImageFormats[ImageFormat.Png]
                 );
 
             return this.CreateIcon(pathToTechnicianIcon, technician.Color, pathToResultIconTechnician, this.colorTechnicianIcon)
