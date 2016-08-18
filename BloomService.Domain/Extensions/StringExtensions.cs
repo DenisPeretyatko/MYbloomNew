@@ -65,5 +65,12 @@ namespace BloomService.Domain.Extensions
                        .Replace("<", "&lt;")
                        .Replace(">", "&gt;");
         }
+
+        public static string UriCombine(this string val, string append)
+        {
+            if (String.IsNullOrEmpty(val)) return append;
+            if (String.IsNullOrEmpty(append)) return val;
+            return val.TrimEnd('/') + "/" + append.TrimStart('/');
+        }
     }
 }

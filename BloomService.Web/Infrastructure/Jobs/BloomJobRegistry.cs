@@ -30,7 +30,7 @@ namespace BloomService.Web.Infrastructure.Jobs
         private readonly ILocationService _locationService;
         private readonly object _keepAlive = new object();
         private readonly INotificationService _notification;
-        private readonly IMapDistanceService _mapDistanceService;
+     
 
 
         public BloomJobRegistry()
@@ -41,8 +41,6 @@ namespace BloomService.Web.Infrastructure.Jobs
             _httpContextProvider = ComponentContainer.Current.Get<IHttpContextProvider>();
             _locationService = ComponentContainer.Current.Get<ILocationService>();
             _notification = ComponentContainer.Current.Get<INotificationService>();
-            _mapDistanceService = ComponentContainer.Current.Get<IMapDistanceService>();
-
 
             //Send silent push notifications to iOS
             Schedule(() =>
@@ -477,14 +475,14 @@ namespace BloomService.Web.Infrastructure.Jobs
                         if (workorder == null || workorder.ScheduleDate.GetValueOrDefault().Date != easternTime.Date) continue;
                         var wts = (TimeSpan)(easternTime - workorder.ScheduleDate);
                         if (wts.TotalMinutes >= 10 && wts.TotalMinutes < 30 &&
-                           _mapDistanceService.Distance(workorder.Latitude, workorder.Longitude,
+                           _locationService.Distance(workorder.Latitude, workorder.Longitude,
                                technician.Latitude, technician.Longitude) > 5)
                         {
                             _notification.SendNotification($"Technician {technician.Name} is not within 5mi with 10min until assignment.");
                         }
 
                         if (wts.TotalMinutes >= 30 &&
-                            _mapDistanceService.Distance(workorder.Latitude, workorder.Longitude,
+                            _locationService.Distance(workorder.Latitude, workorder.Longitude,
                                 technician.Latitude, technician.Longitude) > 15)
                         {
                             _notification.SendNotification($"Technician {technician.Name} is not within 15mi with 30min until assignment.");
