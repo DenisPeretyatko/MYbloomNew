@@ -273,11 +273,13 @@ namespace BloomService.Web.Infrastructure.Jobs
                             var workorder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == assigment.WorkOrder).SingleOrDefault();
                             if (mongoEntity == null)
                             {
-                                if (assigment.Employee != "")
+                                if (!string.IsNullOrEmpty(assigment.Employee))
                                 {
                                     var employee = _repository.SearchFor<SageEmployee>(e => e.Name == assigment.Employee).SingleOrDefault();
                                     assigment.EmployeeId = employee != null ? employee.Employee : 0;
+
                                     var assignmentDate = assigment.ScheduleDate.Value.Add(((DateTime)assigment.StartTime).TimeOfDay);
+
                                     assigment.Start = assignmentDate.ToString();
                                     assigment.End = assignmentDate.AddHours(assigment.EstimatedRepairHours.AsDouble()).ToString();
                                     assigment.Color = employee?.Color ?? "";
@@ -470,7 +472,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         var assigments = _repository.SearchFor<SageAssignment>(x => x.EmployeeId == technician.Employee);
                         var assigment = assigments.OrderByDescending(x => x.ScheduleDate).FirstOrDefault();
 
-                        if (assigment.ScheduleDate.GetValueOrDefault().Date != easternTime.Date) continue;
+                        if (assigment == null || assigment.ScheduleDate.GetValueOrDefault().Date != easternTime.Date) continue;
                         var workorder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == assigment.WorkOrder && x.ScheduleDate != null).SingleOrDefault();
                         if (workorder == null || workorder.ScheduleDate.GetValueOrDefault().Date != easternTime.Date) continue;
                         var wts = (TimeSpan)(easternTime - workorder.ScheduleDate);
