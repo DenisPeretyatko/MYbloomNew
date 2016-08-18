@@ -78,6 +78,8 @@
             var image = new ImageLocation { Image = fileNameSmall, BigImage = fileName, Latitude = model.Latitude, Longitude = model.Longitude, Id = maxId + 1, Description = model.Description };
             imagesDb.Images.Add(image);
             this.repository.Add(imagesDb);
+            imagesDb.Images[imagesDb.Images.Count - 1].Image += $"?{DateTime.Now.TimeOfDay.TotalMilliseconds}";
+            imagesDb.Images[imagesDb.Images.Count - 1].BigImage += $"?{DateTime.Now.TimeOfDay.TotalMilliseconds}";
             _hub.UpdateWorkOrderPicture(imagesDb);
             return image;
         }
