@@ -93,7 +93,6 @@ namespace BloomService.Web
             kernel.Bind<IAuthorizationService>().To<AuthorizationService>();
             kernel.Bind<IDashboardService>().To<DashboardService>();
             kernel.Bind<IScheduleService>().To<ScheduleService>();
-            kernel.Bind<IMapDistanceService>().To<MapDistanceService>();
 
             ComponentContainer.Current = new NinjectComponentContainer(kernel, new[] {
                     typeof(MongoRepository).Assembly
