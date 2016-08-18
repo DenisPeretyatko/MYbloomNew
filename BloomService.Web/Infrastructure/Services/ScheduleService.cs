@@ -37,12 +37,12 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
 
             var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
             databaseAssignment.Employee = employee?.Name ?? "";
-            databaseAssignment.ScheduleDate = model.ScheduleDate.ToUniversalTime();
+            databaseAssignment.ScheduleDate = model.ScheduleDate;
             databaseAssignment.WorkOrder = model.WorkOrder;
             databaseAssignment.EstimatedRepairHours = model.EstimatedRepairHours;
-            databaseAssignment.StartTime = model.ScheduleDate.ToUniversalTime();
-            databaseAssignment.Enddate = model.EndDate.ToUniversalTime();
-            databaseAssignment.Endtime = model.EndDate.ToUniversalTime();
+            databaseAssignment.StartTime = model.ScheduleDate;
+            databaseAssignment.Enddate = model.EndDate;
+            databaseAssignment.Endtime = model.EndDate;
 
             var edited = _sageApiProxy.EditAssignment(databaseAssignment);
             if (edited.IsSucceed == false)

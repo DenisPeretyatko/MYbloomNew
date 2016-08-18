@@ -149,22 +149,24 @@
         {
             DateTime result;
 
-            if (DateTime.TryParse(dateString, out result))
-            {
-                return TimeZoneInfo.ConvertTimeFromUtc(result, timeZoneInfo).Date;
-            }
-            return new DateTime(2000, 1, 1).Date;
+            //if (DateTime.TryParse(dateString, out result))
+            //{
+            //    return TimeZoneInfo.ConvertTimeFromUtc(result, timeZoneInfo).Date;
+            //}
+            return dateString.TryAsDateTime() ?? new DateTime(2000, 1, 1).Date;
+            //return new DateTime(2000, 1, 1).Date;
         }
 
         private static DateTime ConvertToTime(string timeString, TimeZoneInfo timeZoneInfo)
         {
             DateTime result;
 
-            if (DateTime.TryParse(timeString, out result))
-            {
-                return TimeZoneInfo.ConvertTimeFromUtc(result, timeZoneInfo);
-            }
-            return new DateTime(2000, 1, 1);
+            //if (DateTime.TryParse(timeString, out result))
+            //{
+            //    return TimeZoneInfo.ConvertTimeFromUtc(result, timeZoneInfo);
+            //}
+            return timeString.TryAsDateTime() ?? new DateTime(2000, 1, 1);
+            //return new DateTime(2000, 1, 1);
         }
     }
 }

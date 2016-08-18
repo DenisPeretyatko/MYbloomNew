@@ -70,8 +70,10 @@ namespace BloomService.Web.Controllers
         public ActionResult CreateAssignment(AssignmentViewModel model)
         {
             var result = _scheduleService.CerateAssignment(model);
-            if (result != true)
-                return Error();
+            if (!result)
+            {
+                return Error("Create assignment failed");
+            }
             return Success();
         }
 
@@ -80,8 +82,10 @@ namespace BloomService.Web.Controllers
         public ActionResult DeleteAssignment(AssignmentViewModel model)
         {
             var result = _scheduleService.DeleteAssignment(model);
-            if (result != true)
-                return Error();
+            if (!result)
+            {
+                return Error("Delete assignment failed");
+            }
             return Success();      
         }
     }

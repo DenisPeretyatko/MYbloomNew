@@ -13,7 +13,7 @@ namespace BloomService.Web.Models
         [JsonProperty("Area")]
         public string Area { get; set; }
         [JsonProperty("Assignment")]
-        public long Assignment { get; set; }
+        public string Assignment { get; set; }
         [JsonProperty("Assignmenttype")]
         public string Assignmenttype { get; set; }
         [JsonProperty("CallType")]
@@ -73,7 +73,7 @@ namespace BloomService.Web.Models
         [JsonProperty("TimeEntered")]
         public string TimeEntered { get; set; }
         [JsonProperty("WorkOrder")]
-        public long WorkOrder { get; set; }
+        public string WorkOrder { get; set; }
 
         [JsonProperty("Start")]
         public string Start { get; set; }

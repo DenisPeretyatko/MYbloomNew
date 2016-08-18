@@ -49,9 +49,11 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
 
     var saveEvent = function (event) {
         var workorder = event.workorderId;
+        var now = new Date();
+        var start = new Date(event._start._d.getTime() + (now.getTimezoneOffset() * 60000));
+        var end = new Date(event._end._d.getTime() + (now.getTimezoneOffset() * 60000));
 
-        var start = new Date(event.start);
-        var end = new Date(event.end);
+
         var estimate = remainsFullHours(start, end);
 
         var assignment = {
@@ -81,8 +83,8 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             height: 400,
             resourceAreaWidth: '15%',
             editable: true,
-            ignoreTimezone: true,
-            timezone: "UTC -05:00",
+            //ignoreTimezone: true,
+           // timezone: "UTC -05:00",
             events: $scope.events,
             eventDragStart:
                 function (event, element) {
