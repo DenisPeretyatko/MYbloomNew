@@ -156,7 +156,7 @@ namespace BloomService.Web.Controllers
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
             if (workOrder == null)
             {
-                return Json(new { Error = "WorkOrder doesn't exists", InnerError = $"There is no workorders with id {model.WorkOrder}. workOrder==null" });
+                return Error("WorkOrder doesn't exists", $"There is no workorders with id {model.WorkOrder}. workOrder==null" );
             }
 
             var workOrderItem = Mapper.Map<SageWorkOrderItem>(model);
