@@ -36,8 +36,8 @@
                     .Select(c => c.Value).SingleOrDefault(),
                 Password = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Surname)
                     .Select(c => c.Value).SingleOrDefault(),
-                Id = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)
-                    .Select(c => c.Value).SingleOrDefault(),
+                Id = Convert.ToInt64(claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)
+                    .Select(c => c.Value).SingleOrDefault()),
                 Type = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Role)
                     .Select(c => c.Value).SingleOrDefault(),
                 Mail = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Email)

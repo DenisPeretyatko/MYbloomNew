@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Web;
 using BloomService.Domain.Entities.Concrete;
-using BloomService.Domain.Extensions;
 using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using BloomService.Web.Infrastructure.SignalR;
@@ -13,7 +10,7 @@ using BloomService.Web.Models;
 namespace BloomService.Web.Infrastructure.Services
 {
     using BloomService.Web.Infrastructure.Mongo;
-
+    using Constants;
     public class NotificationService : INotificationService
     {
         private readonly IRepository _repository;
@@ -40,7 +37,7 @@ namespace BloomService.Web.Infrastructure.Services
             {
                 IsViewed = true,
                 Message = message,
-                Time = String.Format("{0} {1}", curDate.Date.ToString("dd-MM-yyyy"), curDate.ToString(@"HH\:mm\:ss"))
+                Time = String.Format("{0} {1}", curDate.Date.ToString(DateTimeFormat.DateFormat), curDate.ToString(DateTimeFormat.TimeFormat))
             });
         }
 
@@ -57,7 +54,7 @@ namespace BloomService.Web.Infrastructure.Services
                 result.Add(new NotificationModel()
                 {
                     Message = obj.Message,
-                    Time = String.Format("{0} {1}", obj.Date.Date.ToString("dd-MM-yyyy"), obj.Time.ToString(@"hh\:mm\:ss")), 
+                    Time = String.Format("{0} {1}", obj.Date.Date.ToString(DateTimeFormat.DateFormat), obj.Time.ToString(DateTimeFormat.TimeFormat)), 
                     IsViewed = true
                 });
                 
@@ -65,6 +62,5 @@ namespace BloomService.Web.Infrastructure.Services
             result.Reverse();
             return result;
         }
-
     }
 }

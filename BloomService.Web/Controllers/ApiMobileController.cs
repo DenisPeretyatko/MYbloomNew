@@ -312,7 +312,7 @@ namespace BloomService.Web.Controllers
                 Date = DateTime.Now.GetLocalDate()
             };
             repository.Add(techLocation);
-            var emploee = repository.SearchFor<SageEmployee>(x => x.Employee.ToString() == userId).Single();
+            var emploee = repository.SearchFor<SageEmployee>(x => x.Employee == userId).Single();
             emploee.Longitude = lat;
             emploee.Latitude = lng;
             _hub.UpdateTechnicianLocation(emploee);

@@ -8,7 +8,7 @@ namespace BloomService.Domain.Entities.Concrete
     public class SageUserProfile : SageEntity
     {
         [XmlAttribute]
-        public string UserId { get; set; }
+        public long UserId { get; set; }
         [XmlAttribute(DataType = "date")]
         public DateTime Date { get; set; }
         [XmlAttribute(DataType = "time")]

@@ -105,11 +105,11 @@ namespace BloomService.Web.Controllers
             var notificationTime = _repository.GetAll<SageUserProfile>().LastOrDefault(x => x.UserId == UserModel.Id) ?? new SageUserProfile()
             {
                 UserId = UserModel.Id,
-                Date = DateTime.Now.GetLocalDate(),
-                Time = DateTime.UtcNow.GetLocalDate().TimeOfDay
+                Date = currentDate,
+                Time = currentDate.TimeOfDay
             };
 
-            var stringDate = String.Format("{0} {1}", notificationTime.Date.Date.ToString("dd-MM-yyyy"), notificationTime.Time.ToString(@"hh\:mm\:ss"));
+            var stringDate = String.Format("{0} {1}", notificationTime.Date.Date.ToString(DateTimeFormat.DateFormat), notificationTime.Time.ToString(DateTimeFormat.TimeFormat));
             
             return Json(stringDate, JsonRequestBehavior.AllowGet);
         }
@@ -129,7 +129,7 @@ namespace BloomService.Web.Controllers
             };
 
             lookups.Notifications = _notification.GetLastNotifications();
-            lookups.NotificationTime = String.Format("{0} {1}", notificationTime.Date.Date.ToString("dd-MM-yyyy"), notificationTime.Time.ToString(@"hh\:mm\:ss"));
+            lookups.NotificationTime = String.Format("{0} {1}", notificationTime.Date.Date.ToString(DateTimeFormat.DateFormat), notificationTime.Time.ToString(DateTimeFormat.TimeFormat));
 
             return Json(lookups, JsonRequestBehavior.AllowGet);
         }

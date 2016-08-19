@@ -84,7 +84,8 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             resourceAreaWidth: '15%',
             editable: true,
             //ignoreTimezone: true,
-           // timezone: "UTC -05:00",
+            //timezone: "UTC -05:00",
+            timezone: "UTC -05:00",
             events: $scope.events,
             eventDragStart:
                 function (event, element) {
