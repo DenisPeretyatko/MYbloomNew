@@ -134,6 +134,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                             part: part,
                             woItem: value.WorkOrderItem,
                             laborItem: laborsList.selected,
+                            amount: value.TotalSale,
                             WOId : value.WorkOrder
                         });
                     }
@@ -155,6 +156,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                 part: "",
                 woItem: '',
                 laborItem: "",
+                amount: 0.0000,
                 WOId: $scope.editableWorkOrder.WorkOrder
             }
             $scope.equipment.push(equipment);
@@ -325,6 +327,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                     parts: angular.copy($scope.lookups.Parts),
                     part: "",
                     woItem: "",
+                    amount: 0.0000,
                     WOId: $scope.editableWorkOrder.WorkOrder
                 }
                 $scope.equipment.push(equipment);
