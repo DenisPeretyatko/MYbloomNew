@@ -176,6 +176,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                     parts: angular.copy($scope.lookups.Parts),
                     woItem: '',
                     laborItem: "",
+                    amount: 0.0000,
                     WOId: $scope.editableWorkOrder.WorkOrder
                 }
             $scope.equipment.push(equipment);
@@ -309,9 +310,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             var date = new Date(item.date);
             item.date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
             item.isEditing = false;
-            item.cost = parseFloat(item.cost);
+            item.cost = item.cost != NaN ? parseFloat(item.cost) : 0;
             item.biled = parseFloat(item.biled);
             item.rate = parseFloat(item.rate);
+            item.amount = parseFloat(item.amount);
 
             if (index == ($scope.equipment.length - 1)) {
                 var equipment = {
