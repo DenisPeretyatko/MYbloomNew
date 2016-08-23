@@ -50,7 +50,10 @@ namespace Sage.WebApi.Infratructure.Constants
             parameters.Add("PROBLEMCODE", workOrder.Problem);
             parameters.Add("RATESHEETNBR", workOrder.RateSheet);
             parameters.Add("TECHNICIAN", workOrder.Employee);
-            parameters.Add("ESTREPAIRHRS", workOrder.EstimatedRepairHours.ToString());
+            if(workOrder.EstimatedRepairHours != 0)
+            {
+                parameters.Add("ESTREPAIRHRS", workOrder.EstimatedRepairHours.ToString());
+            }
             parameters.Add("NOTTOEXCEED", workOrder.NottoExceed);
             parameters.Add("COMMENTS", workOrder.Comments);
             parameters.Add("CUSTOMERPO", workOrder.CustomerPO);

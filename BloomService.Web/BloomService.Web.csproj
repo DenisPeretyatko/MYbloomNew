@@ -367,6 +367,7 @@
     <Compile Include="Models\LoginResponseModel.cs" />
     <Compile Include="Models\MapModel.cs" />
     <Compile Include="Models\MapViewModel.cs" />
+    <Compile Include="Models\NotesModel.cs" />
     <Compile Include="Models\PartModel.cs" />
     <Compile Include="Models\PaymentMethodModel.cs" />
     <Compile Include="Models\PermissionCodeModel.cs" />
