@@ -96,10 +96,6 @@
         else if ($rootScope.unavailableTechniciansIds.includes(technician.Id) === false && technician.IsAvailable === false) {
             $rootScope.unavailableTechniciansIds.unshift(technician.Id);
         }
-        commonDataService.getLocations().then(function (response) {
-            $rootScope.workorders = response.data;
-            return _this.locations = response.data;
-        });
     };
 
     connection.client.updateTechnicianLocation = function (technician) {
