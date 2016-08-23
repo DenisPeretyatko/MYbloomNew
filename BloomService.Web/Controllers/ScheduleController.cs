@@ -48,7 +48,6 @@ namespace BloomService.Web.Controllers
             var model = new ScheduleViewModel();
             var assignments = _repository.SearchFor<SageAssignment>(x => x.WorkOrder != 0 && x.DateEntered > lastMonth).OrderByDescending(x => x.DateEntered).ToList();
             var employees = _repository.GetAll<SageEmployee>().ToList(); 
-            //var mappedEmployees = Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employees);
             var mappedAssignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(assignments);
             foreach (var item in mappedAssignments)
             {
@@ -58,10 +57,11 @@ namespace BloomService.Web.Controllers
                     item.Color = color != null? color.Color : "";
                 }
             };
-            var workorders = _repository.SearchFor<SageWorkOrder>();
-            var workOrdersForLastMonth = workorders.Where(x => x.Status == "Open" && x.DateEntered > lastMonth && x.AssignmentId != 0).ToList();
+            var workorders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.DateEntered > lastMonth && x.AssignmentId != 0).ToList();
             model.Assigments = mappedAssignments.OrderByDescending(x => x.Id).ToList();
-            model.UnassignedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(workOrdersForLastMonth);
+            var mappedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(workorders);
+            //model.UnassignedWorkorders = ResolveEstimatedRepairHours(mappedWorkorders, mappedAssignments);
+            model.UnassignedWorkorders = mappedWorkorders;
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
@@ -88,5 +88,18 @@ namespace BloomService.Web.Controllers
             }
             return Success();      
         }
+
+        [NonAction]
+        private IEnumerable<WorkorderViewModel> ResolveEstimatedRepairHours(List<WorkorderViewModel> workOrders, List<AssignmentModel> assignments)
+        {
+            var resultWorkOrders = new List<WorkorderViewModel>();
+            foreach (var workorder in workOrders)
+            {
+                workorder.EstimatedRepairHours =
+                    assignments.Single(x => x.WorkOrder == workorder.WorkOrder).EstimatedRepairHours;
+                resultWorkOrders.Add(workorder);
+            }
+            return resultWorkOrders;
+        } 
     }
 }
