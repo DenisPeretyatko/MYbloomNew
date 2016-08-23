@@ -17,29 +17,8 @@ var loginController = function ($scope, $rootScope, $state, commonDataService, c
                 if (response.access_token != null && response.access_token != "" && response.access_token != undefined) {
                     window.localStorage.setItem('Token', response.access_token);
                     commonHub.LoginHub();
-
-                    if (state.alreadyLoaded == false) {
-                        var model = {
-                            Index: 0,
-                            Search: '',
-                            Column: '',
-                            Direction: false
-                        };
-                        $q.all([commonDataService.getLookups(), commonDataService.getLocations(), commonDataService.getTechnicians(), commonDataService.getTrucks(), commonDataService.getWorkordesPaged(model)]).then(function(values) {
-                            $rootScope.notifications = values[0].data.Notifications;
-                            state.notifications = values[0].data.Notifications;
-                            state.notificationTime = values[0].data.NotificationTime;
-                            state.lookups = values[0].data;
-                            state.locations = values[1].data;
-                            $rootScope.workorders = values[1].data;
-                            state.technicians = values[2].data;
-                            $rootScope.trucks = values[3].data;
-                            state.trucks = values[3].data;
-                            state.workorders = values[4].data;
-                            $scope.isDisabled = false;
-                            $state.go('manager.dashboard');
-                        });
-                    } else $state.go('manager.dashboard');
+                    $scope.isDisabled = false;
+                    $state.go('manager.dashboard');
                 } else {
                     $scope.isDisabled = false;
                     $scope.obj.message = 'Incorrect login or password';

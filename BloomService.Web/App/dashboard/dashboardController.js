@@ -3,7 +3,7 @@
  */
 "use strict";
 
-var dashboardController = function ($rootScope, $scope, $interpolate, commonDataService, state) {
+var dashboardController = function ($rootScope, $scope, $interpolate, $q, commonDataService, state) {
 
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
@@ -16,7 +16,8 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
     $scope.workordersView = [];
     $scope.workorderMarkers = [];
     $scope.globalTimezone = global.TimeZone;
-  
+    $scope.inProgress = true;
+
     $scope.sort = function (data) {
         if ($scope.sortKey != data) {
             $scope.sortKey = data;
@@ -26,6 +27,39 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
         }
     }
     $scope.sort('ScheduleDate');
+
+    commonDataService.getDashboard(model).then(function (response) {
+        var dashboard = response.data;
+        $scope.listworkorders = dashboard.WorkOrders;
+        $scope.chartData = dashboard.Chart;
+        $scope.flotChartOptions = flotChartOptions;
+        if (state.alreadyLoaded == true) { $scope.inProgress = false; }
+    });
+
+    if (state.alreadyLoaded == false) {
+        $scope.inProgress = true;
+        var model = {
+            Index: 0,
+            Search: '',
+            Column: '',
+            Direction: false
+        };
+        $q.all([commonDataService.getLookups(), commonDataService.getLocations(), commonDataService.getTechnicians(), commonDataService.getTrucks(), commonDataService.getWorkordesPaged(model)]).then(function(values) {
+            $rootScope.notifications = values[0].data.Notifications;
+            state.notifications = values[0].data.Notifications;
+            state.notificationTime = values[0].data.NotificationTime;
+            state.lookups = values[0].data;
+            state.locations = values[1].data;
+            $rootScope.workorders = values[1].data;
+            state.technicians = values[2].data;
+            $rootScope.trucks = values[3].data;
+            state.trucks = values[3].data;
+            state.workorders = values[4].data;
+            $scope.inProgress = false;
+            state.alreadyLoaded = true;
+        });
+    } 
+
 
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
@@ -144,13 +178,5 @@ var dashboardController = function ($rootScope, $scope, $interpolate, commonData
                 $scope.workordersView.push(value);
             }
         });
-
-    commonDataService.getDashboard(model).then(function (response) {
-        var dashboard = response.data;
-        $scope.listworkorders = dashboard.WorkOrders;
-        $scope.chartData = dashboard.Chart;
-        $scope.flotChartOptions = flotChartOptions;
-    });
-
 };
-dashboardController.$inject = ["$rootScope", "$scope", "$interpolate", "commonDataService", "state"];
+dashboardController.$inject = ["$rootScope", "$scope", "$interpolate", "$q", "commonDataService", "state"];

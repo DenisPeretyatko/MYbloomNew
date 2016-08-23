@@ -460,7 +460,6 @@
     <Content Include="Public\css\patterns\header-profile-skin-2.png" />
     <Content Include="Public\css\patterns\header-profile-skin-3.png" />
     <Content Include="Public\css\patterns\header-profile.png" />
-    <Content Include="Public\images\logo.png" />
     <Content Include="Public\css\patterns\otis_redding.png" />
     <Content Include="Public\css\patterns\shattered.png" />
     <Content Include="Public\css\patterns\triangular.png" />
@@ -479,6 +478,8 @@
     <Content Include="Public\font-awesome\css\font-awesome.min.css" />
     <Content Include="Public\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Public\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Public\images\loading.gif" />
+    <Content Include="Public\images\logo.png" />
     <Content Include="Public\images\technician.png" />
     <Content Include="Public\images\user.png" />
     <Content Include="Public\images\workorder.png" />

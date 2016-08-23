@@ -343,7 +343,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             var y = e.pageY;
             var innerText = [];
             angular.forEach(this.children, function (value, key) {
-                innerText[key] = value.outerText;
+                innerText[key] = $(value).text();
             });
             var element = this;
             prevDivState = this.cloneNode(true);;

@@ -1,3 +1,5 @@
+<div id="cover" ng-hide="!inProgress">
+</div>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-9">
         <h2>Dashboard</h2>
@@ -35,8 +37,8 @@
                         <label class="pull-right"><input type="checkbox" class="dashboard-checkbox" ng-change="showAllLocations()" ng-model="showAll" value="">Show all</label>
                     </div>
                 </div>
-               
-                
+
+
                 <div class="ibox-content">
                     <section id="map">
                         <div ui-map="locationMap" ui-options="mapOptions" class="google-map" style="height: 360px;"></div>
@@ -92,20 +94,20 @@
                         </tbody>
                     </table>
                     <table class="table">
-                            <tr class="hide-if-no-paging" style="display: table-row !important;">
-                                <td colspan="6" class="text-center">
-                                    <dir-pagination-controls max-size="10"
-                                                             direction-links="true">
-                                        <!--  boundary-links="true"-->
-                                    </dir-pagination-controls>
-                                </td>
-                            </tr>
+                        <tr class="hide-if-no-paging" style="display: table-row !important;">
+                            <td colspan="6" class="text-center">
+                                <dir-pagination-controls max-size="10"
+                                                         direction-links="true">
+                                    <!-- boundary-links="true"-->
+                                </dir-pagination-controls>
+                            </td>
+                        </tr>
                     </table>
 
-               
+
                 </div>
 
             </div>
         </div>
-    </div>    
+    </div>
 </div>

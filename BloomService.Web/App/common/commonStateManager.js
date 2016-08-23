@@ -42,40 +42,40 @@
 
     var connection = commonHub.GetConnection();
 
-    if (window.localStorage.getItem('Token') != null && window.localStorage.getItem('Token') != "") {
-        $state.go('manager.dashboard');
-        if (_this.notificationTime == undefined || _this.lookups == undefined || _this.notifications == undefined) {
-            _this.alreadyLoaded = true;
-            commonDataService.getLookups().then(function(response) {
-                $rootScope.notifications = response.data.Notifications;
-                _this.notifications = response.data.Notifications;
-                _this.notificationTime = response.data.NotificationTime;
-                return _this.lookups = response.data;
-            });
-        }
-        if (_this.locations == undefined) {
-            commonDataService.getLocations().then(function(response) {
-                $rootScope.workorders = response.data;
-                return _this.locations = response.data;
-            });
-        }
-        if (_this.technicians == undefined) {
-            commonDataService.getTechnicians().then(function(response) {
-                return _this.technicians = response.data;
-            });
-        }
-        if (_this.trucks == undefined) {
-            commonDataService.getTrucks().then(function(response) {
-                $rootScope.trucks = response.data;
-                return _this.trucks = response.data;
-            });
-        }
-        if (_this.workorders == undefined) {
-            commonDataService.getWorkordesPaged(model).then(function (response) {
-                return _this.workorders = response.data;
-            });
-        }
-    }
+    //if (window.localStorage.getItem('Token') != null && window.localStorage.getItem('Token') != "") {
+    //    $state.go('manager.dashboard');
+    //    if (_this.notificationTime == undefined || _this.lookups == undefined || _this.notifications == undefined) {
+    //        commonDataService.getLookups().then(function(response) {
+    //            $rootScope.notifications = response.data.Notifications;
+    //            _this.notifications = response.data.Notifications;
+    //            _this.notificationTime = response.data.NotificationTime;
+    //            return _this.lookups = response.data;
+    //        });
+    //    }
+    //    if (_this.locations == undefined) {
+    //        commonDataService.getLocations().then(function(response) {
+    //            $rootScope.workorders = response.data;
+    //            return _this.locations = response.data;
+    //        });
+    //    }
+    //    if (_this.technicians == undefined) {
+    //        commonDataService.getTechnicians().then(function(response) {
+    //            return _this.technicians = response.data;
+    //        });
+    //    }
+    //    if (_this.trucks == undefined) {
+    //        commonDataService.getTrucks().then(function(response) {
+    //            $rootScope.trucks = response.data;
+    //            return _this.trucks = response.data;
+    //        });
+    //    }
+    //    if (_this.workorders == undefined) {
+    //        commonDataService.getWorkordesPaged(model).then(function (response) {
+    //            return _this.workorders = response.data;
+    //        });
+    //    }
+    //     _this.alreadyLoaded = true;
+    //}
     
     connection.client.UpdateSageWorkOrder = function (model) {
         $rootScope.updatedSageWorkOrder = model;
