@@ -407,6 +407,7 @@
     <Content Include="App\common\commonDataService.js" />
     <Content Include="App\common\commonDirectives.js" />
     <Content Include="App\common\commonHub.js" />
+    <Content Include="App\common\commonLoadingBarService.js" />
     <Content Include="App\common\commonModule.js" />
     <Content Include="App\common\commonNotificationService.js" />
     <Content Include="App\common\commonStateManager.js" />

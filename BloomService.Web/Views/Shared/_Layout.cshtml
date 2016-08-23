@@ -31,7 +31,7 @@
 
 </head>
 <body ng-controller="mainController as main">
-
+    <loading-Bar></loading-Bar>
     @RenderBody()
 
     @Scripts.Render("~/bundles/jquery")
@@ -83,6 +83,7 @@
     <script src="~/app/common/commonDirectives.js"></script>
     <script src="~/app/common/commonDataService.js"></script>
     <script src="~/app/common/commonStateManager.js"></script>
+    <script src="~/App/common/commonLoadingBarService.js"></script>
     <script src="~/App/common/commonHub.js"></script>
     <script src="~/app/common/commonNotificationService.js"></script>
     <script src="~/app/common/mainController.js"></script>
