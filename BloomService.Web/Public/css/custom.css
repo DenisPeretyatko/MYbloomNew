@@ -154,6 +154,7 @@
 
 .dashboard-checkbox {
     margin-right: 5px !important;
+    height: 12px;
 }
 
 .fc-content {
@@ -312,4 +313,17 @@
 
 .btn-mark-as {
     height: 34px;
+}
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none !important;
+}
+
+.ibox-title h5 {
+    margin: 0 !important;
+    padding-top: 3px !important;
+}
+
+.dashboard-label {
+    display: inline-flex;
 }

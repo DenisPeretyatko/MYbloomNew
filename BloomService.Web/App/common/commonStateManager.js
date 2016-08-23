@@ -120,17 +120,24 @@
     
     connection.client.CreateAssignment = function (model) {
         $rootScope.workorders.unshift(model);
-        commonDataService.getLocations().then(function (response) {
-            $rootScope.workorders = response.data;
-            return _this.locations = response.data;
+        angular.forEach(_this.locations, function (value, key) {
+            if (value.WorkOrder.WorkOrder == model.WorkOrder) {
+                _this.locations = value;
+            }
+        });
+        angular.forEach($rootScope.workorders, function (value, key) {
+            if (value.WorkOrder.WorkOrder == model.WorkOrder) {
+                $rootScope.workorders = value;
+            }
         });
         $rootScope.$digest();
     };
 
     connection.client.DeleteAssigment = function (model) {
-      commonDataService.getLocations().then(function (response) {
-            $rootScope.workorders = response.data;
-            return _this.locations = response.data;
+        angular.forEach(_this.locations, function (value, key) {
+            if (value.WorkOrder.WorkOrder == model.WorkOrder) {
+                _this.locations.splice(key, 1);
+            }
         });
         angular.forEach($rootScope.workorders, function(value, key) {
             if (value.WorkOrder.WorkOrder == model.WorkOrder) {
@@ -138,7 +145,6 @@
             }
         });
         $rootScope.$digest();
-    
     };
 
     $.connection.hub.start().done(function () { });
