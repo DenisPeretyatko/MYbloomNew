@@ -373,7 +373,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             lat: parseFloat(lat),
             lng: parseFloat(lng)
         }
-        
+        $scope.locationMap.setZoom(100);
         var marker = new google.maps.Marker({
             position: pos,
             map: $scope.locationMap,
