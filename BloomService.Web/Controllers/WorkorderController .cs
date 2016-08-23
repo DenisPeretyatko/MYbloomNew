@@ -140,14 +140,11 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkOrdersPictures(EditCommentModel model)
         {
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
-            if (pictures != null)
-            {
-                pictures.Images.Find(x => x.Id == model.Id).Description = model.Comment;
-                _repository.Update(pictures);
-            }
-            else
+            if (pictures == null)
                 return Error("Edit picture comments failed", $"GetWorkOrdersPictures method SageImageWorkOrder==false.");
-
+            pictures.Images.Find(x => x.Id == model.Id).Description = model.Comment;
+            _repository.Update(pictures);
+            _hub.UpdateWorkOrderPicture(pictures);
             return Success();
         }
         
