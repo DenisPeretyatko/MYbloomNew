@@ -322,6 +322,27 @@ namespace BloomService.Web.Controllers
         }
 
         [HttpPost]
+        [Route("Apimobile/ChangeWorkOrderNotes")]
+        public ActionResult ChangeWorkOrderNotes(NotesModel model)
+        {
+            _log.InfoFormat("Method: AddNotesToWorkOrder. Workorder Id: {0}", model.WorkOrderId);
+            var result = sageApiProxy.EditWorkOrder(new SageWorkOrder()
+            {
+                WorkOrder = model.WorkOrderId,
+                Comments = model.Notes
+            });
+
+            if (result == null)
+            {
+                _log.InfoFormat("Add image failed");
+                return Error("Add image failed", "SavePhotoForWorkOrder method return null. Add image failed.");
+            }
+
+            _log.InfoFormat("Add image for workorder success");
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         [Route("Apimobile/ChangeWorkorderStatus")]
         public ActionResult ChangeWorkorderStatus(StatusModel model)
         {

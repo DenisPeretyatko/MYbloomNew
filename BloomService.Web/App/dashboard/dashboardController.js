@@ -16,7 +16,6 @@ var dashboardController = function ($rootScope, $scope, $interpolate, $q, common
     $scope.workordersView = [];
     $scope.workorderMarkers = [];
     $scope.globalTimezone = global.TimeZone;
-    $scope.inProgress = true;
 
     $scope.sort = function (data) {
         if ($scope.sortKey != data) {
@@ -33,11 +32,9 @@ var dashboardController = function ($rootScope, $scope, $interpolate, $q, common
         $scope.listworkorders = dashboard.WorkOrders;
         $scope.chartData = dashboard.Chart;
         $scope.flotChartOptions = flotChartOptions;
-        if (state.alreadyLoaded == true) { $scope.inProgress = false; }
     });
 
     if (state.alreadyLoaded == false) {
-        $scope.inProgress = true;
         var model = {
             Index: 0,
             Search: '',
@@ -55,7 +52,6 @@ var dashboardController = function ($rootScope, $scope, $interpolate, $q, common
             $rootScope.trucks = values[3].data;
             state.trucks = values[3].data;
             state.workorders = values[4].data;
-            $scope.inProgress = false;
             state.alreadyLoaded = true;
         });
     } 

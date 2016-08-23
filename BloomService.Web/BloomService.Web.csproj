@@ -359,6 +359,7 @@
     <Compile Include="Models\ChartModel.cs" />
     <Compile Include="Models\CommentImageModel.cs" />
     <Compile Include="Models\DashboardViewModel.cs" />
+    <Compile Include="Models\EditCommentModel.cs" />
     <Compile Include="Models\EntityModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\GoogleLocation.cs" />
@@ -367,6 +368,7 @@
     <Compile Include="Models\LoginResponseModel.cs" />
     <Compile Include="Models\MapModel.cs" />
     <Compile Include="Models\MapViewModel.cs" />
+    <Compile Include="Models\NotesModel.cs" />
     <Compile Include="Models\PartModel.cs" />
     <Compile Include="Models\PaymentMethodModel.cs" />
     <Compile Include="Models\PermissionCodeModel.cs" />
@@ -406,6 +408,7 @@
     <Content Include="App\common\commonDataService.js" />
     <Content Include="App\common\commonDirectives.js" />
     <Content Include="App\common\commonHub.js" />
+    <Content Include="App\common\commonLoadingBarService.js" />
     <Content Include="App\common\commonModule.js" />
     <Content Include="App\common\commonNotificationService.js" />
     <Content Include="App\common\commonStateManager.js" />

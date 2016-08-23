@@ -154,3 +154,32 @@ function backButton($window) {
         }
     };
 };
+
+/**
+ * loadingBar - loading page bar
+*/
+function loadingBar() {
+    var directive = {
+        link: link,
+        scope: {
+
+        },
+        template: '<div id="cover"></div>',
+        replace: true,
+        restrict: 'E'
+    };
+    return directive;
+
+    function link(scope, element, attrs) {
+
+        scope.$on("ajax-start", function () {
+            element.removeClass('hide');
+            scope.ajaxBusy = true;
+        });
+
+        scope.$on("ajax-stop", function () {
+            element.addClass('hide');
+            scope.ajaxBusy = false;
+        });
+    }
+}

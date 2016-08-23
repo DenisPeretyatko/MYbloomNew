@@ -85,7 +85,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             editable: true,
             //ignoreTimezone: true,
             //timezone: "UTC -05:00",
-            timezone: "UTC -05:00",
+            timezone: "UTC -08:00",
             events: $scope.events,
             eventDragStart:
                 function (event, element) {
@@ -128,30 +128,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             },
             eventDragStop: function (event, jsEvent, ui, view) {
                 if (isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
-                    //var innerHtml = "<div class=\"table-row col-lg-1 col-md-1 col-sm-6 col-xs-6 ng-binding\">" + event.workorderId + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 col-sm-6 col-xs-6 ng-binding\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div class=\"table-row col-lg-3 col-md-3 hidden-sm hidden-xs ng-binding\">" + event.customerFoo + "</div>" +
-                    //              "<div class=\"table-row col-lg-4 col-md-4 hidden-sm hidden-xs ng-binding\">" + event.locationFoo + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 hidden-sm hidden-xs ng-binding\">" + parseInt(event.hourFoo) + "</div>";
-
-                    //var el = $("<div class=\"drag fc-event table row table-row dragdemo\" style=\"z-index: 999; display: block\" draggable=\"true\">").appendTo('#new-row').html(innerHtml);
-                    //el.draggable({
-                    //    zIndex: 999,
-                    //    revert: true,
-                    //    revertDuration: 0
-                    //});
-                    //el.data('event', {
-                    //    title: event.title,
-                    //    id: event.id,
-                    //    start: event.start,
-                    //    end: event.end,
-                    //    workorderId: event.workorderId,
-                    //    description: event.description,
-                    //    dateFoo: event.dateFoo,
-                    //    customerFoo: event.customerFoo,
-                    //    locationFoo: event.locationFoo,
-                    //    hourFoo: parseInt(event.hourFoo),
-                    //    durationEditable: false
-                    //});
-
-                    $("#calendar").fullCalendar("removeEvents", event._id);
+                    $('#calendar').fullCalendar('removeEvents', event._id);
 
                     var workorder = event.workorderId;
 

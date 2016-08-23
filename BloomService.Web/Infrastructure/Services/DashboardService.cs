@@ -23,30 +23,30 @@
         public LookupsModel GetLookups()
         {
             var lookups = new LookupsModel();
-            var locations = this._repository.GetAll<SageLocation>();
-            var calltypes = this._repository.GetAll<SageCallType>();
-            var problems = this._repository.GetAll<SageProblem>();
-            var employes = this._repository.GetAll<SageEmployee>();
-            var equipment = this._repository.GetAll<SageEquipment>();
-            var customer = this._repository.GetAll<SageCustomer>();
-            var repairs = this._repository.GetAll<SageRepair>();
-            var ratesheets = this._repository.GetAll<SageRateSheet>().Where(x => x.QINACTIVE == "N");
-            var permissionCodes = this._repository.GetAll<SagePermissionCode>();
-            var parts = this._repository.GetAll<SagePart>().Where(x => x.PartNumber.StartsWith("R-") && x.Inactive == "No");
+            var locations = this._repository.GetAll<SageLocation>().ToList();
+            var calltypes = this._repository.GetAll<SageCallType>().ToList();
+            var problems = this._repository.GetAll<SageProblem>().ToList();
+            var employes = this._repository.GetAll<SageEmployee>().ToList();
+            var equipment = this._repository.GetAll<SageEquipment>().ToList();
+            var customer = this._repository.GetAll<SageCustomer>().ToList();
+            var repairs = this._repository.GetAll<SageRepair>().ToList();
+            var ratesheets = this._repository.GetAll<SageRateSheet>().Where(x => x.QINACTIVE == "N").ToList();
+            var permissionCodes = this._repository.GetAll<SagePermissionCode>().ToList();
+            var parts = this._repository.GetAll<SagePart>().Where(x => x.PartNumber.StartsWith("R-") && x.Inactive == "No").ToList();
 
-            lookups.Locations = Mapper.Map<List<SageLocation>, List<LocationModel>>(locations.ToList());
-            lookups.Calltypes = Mapper.Map<List<SageCallType>, List<CallTypeModel>>(calltypes.ToList());
-            lookups.Problems = Mapper.Map<List<SageProblem>, List<ProblemModel>>(problems.ToList());
-            lookups.Employes = Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employes.ToList());
-            lookups.Equipment = Mapper.Map<List<SageEquipment>, List<EquipmentModel>>(equipment.ToList());
-            lookups.Customers = Mapper.Map<List<SageCustomer>, List<CustomerModel>>(customer.ToList());
-            lookups.Hours = Mapper.Map<List<SageRepair>, List<RepairModel>>(repairs.ToList());
+            lookups.Locations = Mapper.Map<List<SageLocation>, List<LocationModel>>(locations);
+            lookups.Calltypes = Mapper.Map<List<SageCallType>, List<CallTypeModel>>(calltypes);
+            lookups.Problems = Mapper.Map<List<SageProblem>, List<ProblemModel>>(problems);
+            lookups.Employes = Mapper.Map<List<SageEmployee>, List<EmployeeModel>>(employes);
+            lookups.Equipment = Mapper.Map<List<SageEquipment>, List<EquipmentModel>>(equipment);
+            lookups.Customers = Mapper.Map<List<SageCustomer>, List<CustomerModel>>(customer);
+            lookups.Hours = Mapper.Map<List<SageRepair>, List<RepairModel>>(repairs);
 
-            lookups.RateSheets = Mapper.Map<List<SageRateSheet>, List<RateSheetModel>>(ratesheets.ToList());
-            lookups.PermissionCodes = Mapper.Map<List<SagePermissionCode>, List<PermissionCodeModel>>(permissionCodes.ToList());
+            lookups.RateSheets = Mapper.Map<List<SageRateSheet>, List<RateSheetModel>>(ratesheets);
+            lookups.PermissionCodes = Mapper.Map<List<SagePermissionCode>, List<PermissionCodeModel>>(permissionCodes);
 
             lookups.PaymentMethods = PaymentMethod.PaymentMethods;
-            lookups.Parts = Mapper.Map<List<SagePart>, List<PartModel>>(parts.ToList());
+            lookups.Parts = Mapper.Map<List<SagePart>, List<PartModel>>(parts);
             lookups.Status = WorkOrderStatus.StatusForManager;
 
             return lookups;

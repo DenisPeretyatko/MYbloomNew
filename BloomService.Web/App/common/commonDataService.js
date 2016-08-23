@@ -38,6 +38,14 @@ var commonDataService = function ($http, $window) {
         });
     }
 
+    this.editComment = function (model) {
+       return $http.post("/EditComment", model, {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    }
+
     this.getWorkorderPage = function (index, search) {
         return $http.get("/WorkorderPage?index=" + index + "&searchString=" + search, {
             headers: {
