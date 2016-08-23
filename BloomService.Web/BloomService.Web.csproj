@@ -359,6 +359,7 @@
     <Compile Include="Models\ChartModel.cs" />
     <Compile Include="Models\CommentImageModel.cs" />
     <Compile Include="Models\DashboardViewModel.cs" />
+    <Compile Include="Models\EditCommentModel.cs" />
     <Compile Include="Models\EntityModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\GoogleLocation.cs" />
