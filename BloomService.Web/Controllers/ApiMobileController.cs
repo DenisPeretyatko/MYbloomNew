@@ -320,7 +320,7 @@ namespace BloomService.Web.Controllers
             return Success();
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("Apimobile/ChangeWorkOrderNotes")]
         public ActionResult ChangeWorkOrderNotes(NotesModel model)
         {
