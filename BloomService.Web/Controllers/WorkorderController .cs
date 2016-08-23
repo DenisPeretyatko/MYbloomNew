@@ -135,6 +135,19 @@ namespace BloomService.Web.Controllers
             return Json(pictures, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        [Route("EditComment")]
+        public ActionResult GetWorkOrdersPictures(EditCommentModel model)
+        {
+            var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
+            if (pictures == null)
+                return Error("Edit picture comments failed", $"GetWorkOrdersPictures method SageImageWorkOrder==false.");
+            pictures.Images.Find(x => x.Id == model.Id).Description = model.Comment;
+            _repository.Update(pictures);
+            _hub.UpdateWorkOrderPicture(pictures);
+            return Success();
+        }
+        
         [HttpGet]
         [Route("Workorder")]
         public ActionResult GetWorkorders()

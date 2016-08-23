@@ -451,9 +451,14 @@
                                             <img ng-src="public/images/{{pictures.WorkOrder}}/{{picture.Image}}">
                                         </a>
                                         <br />
-                                        <div class="col-lg-12 picture_desc" title="{{picture.Description}}">
+                                        <div class="col-lg-12 picture_desc" title="{{picture.Description}}" ng-hide="editing" ng-click="editing = true">
                                             {{picture.Description}}
                                         </div>
+                                        <form ng-show="editing" ng-submit="editing = false">
+                                            <textarea rows="3" placeholder="Comment" ng-model="picture.Description" class="form-control"></textarea>
+                                                <button class="btn btn-sm btn-primary" type="submit" ng-click="saveComment(picture.Description, pictures.WorkOrder, picture.Id)"><strong>Save</strong></button>
+                                                <button class="btn btn-sm btn-danger" type="submit"><strong>Cancel</strong></button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

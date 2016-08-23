@@ -21,6 +21,7 @@ angular
     .directive('minimalizaSidebar', minimalizaSidebar)
     .directive('iboxToolsFullScreen', iboxToolsFullScreen)
     .directive('back', backButton)
+    .directive('loadingBar', loadingBar)
     .constant('flotChartOptions', flotChartOptions)
     .constant('googleMapStyles', googleMapStyles)
     .constant('googleMapOptions', googleMapOptions)
@@ -29,5 +30,8 @@ angular
     .service('notify', commonNotificationService)
     .service('state', commonStateManager)
     .service('commonHub', commonHub)
-    .config(commonModuleConfig);
+     .service('loadingBarService', loadingBarService)
+    .config(commonModuleConfig)
+     .config(loadingBarConfig);
+    
     

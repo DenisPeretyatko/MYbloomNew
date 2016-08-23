@@ -373,7 +373,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             lat: parseFloat(lat),
             lng: parseFloat(lng)
         }
-        
+        $scope.locationMap.setZoom(100);
         var marker = new google.maps.Marker({
             position: pos,
             map: $scope.locationMap,
@@ -395,6 +395,18 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.setEstimateHour = function (selected) {
         $scope.obj.hours = parseFloat(selected.$select.selected.EstimatedRepairHours);
     };
+
+    $scope.saveComment = function(comment, wo, id) {
+        var model = {
+            comment: comment,
+            workOrder: wo,
+            id: id
+        };
+        commonDataService.editComment(model).then(function (response) {
+            if (response.data.success == false)
+                alert("Failed to edit comment");
+        });
+    }
 
 };
 editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state"];
