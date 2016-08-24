@@ -25,24 +25,27 @@ namespace BloomService.Web.Controllers
         public ActionResult GetLocations(MapModel model)
         {
             var result = new List<MapViewModel>();
-            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open");
+            var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.AssignmentId == 0).ToList();
+            var tmpLocations = workOrders.Select(x => x.Location);
+            var itemLocations = _repository.SearchFor<SageLocation>(x => tmpLocations.Contains(x.Name)).ToList();
+            var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.Employee)).OrderByDescending(x => x.ScheduleDate).ThenByDescending(x => x.StartTime).ToList();
+            
             foreach (var item in workOrders)
             {
-                var itemLocation = _repository.SearchFor<SageLocation>(l => l.Name == item.Location).FirstOrDefault();
+                var itemLocation = itemLocations.FirstOrDefault(l => l.Name == item.Location);
                 if (itemLocation == null) continue;
                 item.Latitude = itemLocation.Latitude;
                 item.Longitude = itemLocation.Longitude;
 
-                var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == item.WorkOrder ).OrderByDescending(x => x.ScheduleDate).ThenByDescending(x => x.StartTime).FirstOrDefault();
-
-                if (string.IsNullOrEmpty(assignment?.Employee) || item.AssignmentId != 0) continue;
-                result.Add(new MapViewModel()
+                var assignment = assignments.FirstOrDefault(x => x.WorkOrder == item.WorkOrder);
+                if (string.IsNullOrEmpty(assignment?.Employee)) continue;
+                result.Add(new MapViewModel
                 {
                     WorkOrder = item,
                     DateEntered = assignment.ScheduleDate,
                     Color = assignment?.Color,
                     Employee = assignment != null ? assignment.EmployeeId : 0
-            });
+                });
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
