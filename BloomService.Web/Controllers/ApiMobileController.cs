@@ -262,6 +262,7 @@ namespace BloomService.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+
         [HttpPost]
         [Route("Apimobile/DeletePicture")]
         public ActionResult RemoveWorkOrderPicture(PictureModel model)
