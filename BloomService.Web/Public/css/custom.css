@@ -248,24 +248,6 @@
     width: 500px;
 }
 
-.picture_desc {
-    width: 235px;
-    word-wrap: break-word;
-    overflow: hidden;
-    -moz-text-overflow: ellipsis;
-    text-overflow: ellipsis;
-    /* white-space: nowrap; */
-    text-align: center;
-    line-height: 18px;
-    /* height: 36px; */
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    font-size: 125%;
-    padding-bottom: 5px;
-    cursor: pointer;
-}
-
-
 .footable > div > div > h4 {
     display: inline-block;
 }
@@ -326,4 +308,118 @@
 
 .dashboard-label {
     display: inline-flex;
+}
+
+/* Adaptive grid wo pictures*/
+.picture_desc {
+    width: 235px;
+    min-height: 24px;
+    word-wrap: break-word;
+    overflow: hidden;
+    -moz-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    /* white-space: nowrap; */
+    text-align: center;
+    line-height: 18px;
+    /* height: 36px; */
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-size: 125%;
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+
+.picture-textarea {
+       width: 100%;
+}
+
+.edit-icon {
+    color: #df4242 !important;
+    cursor: pointer;
+}
+
+.picture-card {
+    margin: 10px;
+}
+
+.cbp-rfgrid {
+    margin: 35px 0 0 0;
+    padding: 0;
+    list-style: none;
+    position: relative;
+    width: 100%;
+}
+
+    .cbp-rfgrid li {
+        position: relative;
+        float: left;
+        overflow: hidden;
+        width: 25%; 
+        width: -webkit-calc(100% / 5);
+        width: calc(100% / 5);
+        height: 370px;
+    }
+
+        .cbp-rfgrid li a,
+        .cbp-rfgrid li a img {
+            display: block;
+            cursor: pointer;
+        }
+
+            .cbp-rfgrid li a img {
+                max-width: 200px;
+                max-height: 200px;
+            }
+
+            /* Заголовок по центру */
+            .cbp-rfgrid li a div {
+                position: absolute;
+                left: 20px;
+                top: 20px;
+                right: 20px;
+                bottom: 20px;
+                background: rgba(71,163,218,0.2);
+                display: -webkit-flex;
+                display: -moz-flex;
+                display: -ms-flex;
+                display: flex;
+                -webkit-align-items: center;
+                -moz-align-items: center;
+                -ms-align-items: center;
+                align-items: center;
+                text-align: center;
+                opacity: 0;
+            }
+
+@media screen and (max-width: 1700px) {
+    .cbp-rfgrid li {
+        width: 25%;
+        width: -webkit-calc(100% / 4);
+        width: calc(100% / 4);
+    }
+}
+
+@media screen and (max-width: 1440px) {
+    .cbp-rfgrid li {
+        width: 33%;
+        width: -webkit-calc(100% / 3);
+        width: calc(100% / 3);
+    }
+}
+
+@media screen and (max-width: 1150px) {
+    .cbp-rfgrid li {
+        width: 50%;
+        width: -webkit-calc(100% / 2);
+        width: calc(100% / 2);
+    }
+}
+
+
+@media screen and (max-width: 860px) {
+    .cbp-rfgrid li {
+        width: 95%;
+        width: -webkit-calc(100%);
+        width: calc(100%);
+    }
 }
