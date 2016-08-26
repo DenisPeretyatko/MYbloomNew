@@ -87,13 +87,11 @@ namespace BloomService.Web.Infrastructure.Jobs
                             notificationPayload = new NotificationPayload(technician.IosDeviceToken, _settings.NotificationAlert, _settings.NotificationBadge, _settings.NotificationSound);
                         }
 
-                        //var notificationPayload = new NotificationPayload(technician.IosDeviceToken,"default");
                         var p = new List<NotificationPayload>();
                         p.Add(notificationPayload);
-                        PushNotification push = new PushNotification(false, path, null);
-                        push.P12File = path;
+                        var push = new PushNotification(false, path, null) {P12File = path};
                         push.SendToApple(p);
-                        _log.InfoFormat("push notification send to {0} at {1}", technician.IosDeviceToken, DateTime.Now.ToString());
+                        _log.InfoFormat("push notification send to {0} at {1}", technician.IosDeviceToken, DateTime.Now);
                         //    }
                         //}
                         //}
