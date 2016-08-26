@@ -1,9 +1,12 @@
 /**
  * Bloom service angular application
  */
-var mainModuleConfig = function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
-    $urlRouterProvider.otherwise("/login");
-
+var mainModuleConfig = function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
+    var token = window.localStorage.getItem('Token');
+    if (token == "" || token == null)
+        $urlRouterProvider.otherwise("/login");
+    else
+        $urlRouterProvider.otherwise("/dashboard");
     $ocLazyLoadProvider.config({
         // Set to true if you want to see what and when is dynamically loaded
         debug: true
@@ -43,10 +46,10 @@ mainModuleConfig.$inject = ["$stateProvider", "$urlRouterProvider", "$ocLazyLoad
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             angular.element(window).on;
             var token = window.localStorage.getItem('Token');
-            if((token == '' || token == null) && toState.Name != 'login')
+            if ((token == '' || token == null) && toState.Name != 'login')
                 $location.url('/login');
         });
         $rootScope.$state = $state;
-    });    
+    });
 })();
 
