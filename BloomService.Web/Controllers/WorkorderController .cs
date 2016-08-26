@@ -432,5 +432,12 @@ namespace BloomService.Web.Controllers
         {
             return Success();
         }
+
+        [HttpGet]
+        [Route("WorkOrder/GetNotes")]
+        public ActionResult GetNotes()
+        {
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
     }
 }

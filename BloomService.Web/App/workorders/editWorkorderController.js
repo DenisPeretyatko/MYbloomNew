@@ -32,6 +32,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.noteObj = {};
     $scope.noteObj.Subject = "";
     $scope.noteObj.Note = "";
+    $scope.workOrderNotes = [];
 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
@@ -407,7 +408,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         });
     }
 
-    $scope.workOrderNotes = [];
+    commonDataService.getNotes().then(function (response) {
+        $scope.workOrderNotes = response.data;
+    });
+    
 
     $scope.addNote = function (wo) {
         if ($scope.noteObj.Subject && $scope.noteObj.Note) {

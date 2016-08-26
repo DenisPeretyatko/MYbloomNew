@@ -247,5 +247,12 @@ var commonDataService = function ($http, $window) {
         });
     }
 
+    this.getNotes = function () {
+        return $http.get("/WorkOrder/GetNotes", {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    }
 }
 commonDataService.$inject = ['$http', '$window'];
