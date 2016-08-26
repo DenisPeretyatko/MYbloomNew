@@ -70,20 +70,22 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
                 lat: parseFloat(truck.Latitude),
                 lng: parseFloat(truck.Longitude)
             }
-            var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + Math.random();
-            var marker = new google.maps.Marker({
-                position: pos,
-                map: $scope.locationMap,
-                icon: icon,
-                title: truck.Name
-            });
-            $scope.truckMarkers.push(marker);
-            marker.addListener('click', function () {
-                var infowindow = new google.maps.InfoWindow({
-                    content: content
+            if (pos.lat !== 0 && pos.lng !== 0) {
+                var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + Math.random();
+                var marker = new google.maps.Marker({
+                    position: pos,
+                    map: $scope.locationMap,
+                    icon: icon,
+                    title: truck.Name
                 });
-                infowindow.open($scope.locationMap, marker);
-            });
+                $scope.truckMarkers.push(marker);
+                marker.addListener('click', function () {
+                    var infowindow = new google.maps.InfoWindow({
+                        content: content
+                    });
+                    infowindow.open($scope.locationMap, marker);
+                });
+            }
         });
     });
 
