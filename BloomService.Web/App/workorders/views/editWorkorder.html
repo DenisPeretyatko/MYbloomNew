@@ -454,7 +454,7 @@
                                                         <img ng-src="public/images/{{pictures.WorkOrder}}/{{picture.Image}}">
                                                     </a>
                                                     <div class="caption">
-                                                         <span ng-hide="editing"  ng-click="editing = true" class="badge-white pull-right glyphicon glyphicon-pencil edit-icon"></span>
+                                                        <span ng-hide="editing" ng-click="editing = true" class="badge-white pull-right glyphicon glyphicon-pencil edit-icon"></span>
                                                         <div class="picture_desc" title="{{picture.Description}}" ng-hide="editing" ng-click="editing = true">
                                                             {{picture.Description}}
                                                         </div>
@@ -468,6 +468,50 @@
                                             </li>
                                         </ul>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Notes">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content">
+                                <table data-sort="false" class="footable table table-stripped equip">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-lg-4 col-md-4 col-xs-4 col-sm-4">Subject</th>
+                                            <th class="col-lg-6 col-md-6 col-xs-6 col-sm-6">Note</th>
+                                            <th class="col-lg-2 col-md-2 col-xs-2 col-sm-2">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="gradeX" ng-repeat="note in workOrderNotes">
+                                            <td class="col-lg-4 col-md-4 col-xs-4 col-sm-4" ng-bind="note.Subject"></td>
+                                            <td class="col-lg-6 col-md-6 col-xs-6 col-sm-6" ng-bind="note.Note"></td>
+                                            <td class="col-lg-2 col-md-2 col-xs-2 col-sm-2">
+                                                <a class="btn btn-danger btn-xs" ng-click="editNote($index, note)">Edit</a>
+                                                <a class="btn btn-danger btn-xs" ng-click="deleteNote($event, note)">Remove</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="row">
+                                    <form class="note-form">
+                                        <div class="input-group col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                                            <input type="text" ng-model="noteObj.Subject" class="form-control subject-input col-lg-12 col-md-12 col-xs-12 col-sm-12" placeholder="Subject" required />
+                                        </div>
+                                        <div class="input-group col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                                            <textarea placeholder="Note" ng-model="noteObj.Note" class="form-control note-input " rows="5" required></textarea>
+                                        </div>
+                                        <div class="input-group col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                                            <button class="btn btn-sm btn-primary note-button" ng-hide="isEditNote" ng-click="addNote(editableWorkOrder.WorkOrder)"><strong>Add note</strong></button>
+                                            <button class="btn btn-sm btn-primary note-button" ng-show="isEditNote" ng-click="saveNote()"><strong>Save</strong></button>
+                                            <button class="btn btn-sm btn-danger note-button" type="cancel" ng-show="isEditNote" ng-click="saveNote()"><strong>Cancel</strong></button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
