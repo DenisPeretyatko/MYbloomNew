@@ -321,38 +321,38 @@ namespace BloomService.Web.Controllers
             return Success();
         }
 
-        [HttpPost]
-        [Route("Apimobile/ChangeWorkOrderNotes")]
-        public ActionResult ChangeWorkOrderNotes(NotesModel model)
-        {
-            _log.InfoFormat("Method: AddNotesToWorkOrder. Workorder Id: {0}", model.WorkOrderId);
+        //[HttpPost]
+        //[Route("Apimobile/ChangeWorkOrderNotes")]
+        //public ActionResult ChangeWorkOrderNotes(NotesModel model)
+        //{
+        //    _log.InfoFormat("Method: AddNotesToWorkOrder. Workorder Id: {0}", model.WorkOrderId);
 
-            var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrderId).FirstOrDefault();
-            if (workorder == null)
-                return Error("Workorder not found", $"There is no workorders with id {model.WorkOrderId}. workorder == null");
+        //    var workorder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrderId).FirstOrDefault();
+        //    if (workorder == null)
+        //        return Error("Workorder not found", $"There is no workorders with id {model.WorkOrderId}. workorder == null");
 
-            var result = sageApiProxy.EditWorkOrder(new SageWorkOrder()
-            {
-                WorkOrder = model.WorkOrderId,
-                Comments = model.Notes
-            });
+        //    var result = sageApiProxy.EditWorkOrder(new SageWorkOrder()
+        //    {
+        //        WorkOrder = model.WorkOrderId,
+        //        Comments = model.Notes
+        //    });
 
-            if (result == null)
-            {
-                _log.InfoFormat("Work order notes changing failed");
-                return Error("Work order notes changing failed", "EditWorkOrder method return null. Work order notes changing failed.");
-            }
+        //    if (result == null)
+        //    {
+        //        _log.InfoFormat("Work order notes changing failed");
+        //        return Error("Work order notes changing failed", "EditWorkOrder method return null. Work order notes changing failed.");
+        //    }
 
-            if (result.Entity != null)
-            {
-                result.Entity.Id = workorder.Id;
-                repository.Update(result.Entity);
-                _hub.UpdateSageWorkOrder(result.Entity);
-            }
+        //    if (result.Entity != null)
+        //    {
+        //        result.Entity.Id = workorder.Id;
+        //        repository.Update(result.Entity);
+        //        _hub.UpdateSageWorkOrder(result.Entity);
+        //    }
 
-            _log.InfoFormat("Work order notes change success");
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
+        //    _log.InfoFormat("Work order notes change success");
+        //    return Json(result, JsonRequestBehavior.AllowGet);
+        //}
 
         [HttpPost]
         [Route("Apimobile/ChangeWorkorderStatus")]

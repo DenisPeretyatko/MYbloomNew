@@ -39,21 +39,15 @@
 
         public List<SageCustomer> Customers()
         {
-            var response = ExecuteQueryAndGetData(timberlineDataConnectionString, Queries.SelectCustomer);
+            var response = ExecuteQueryAndGetData(timberlineDataConnectionString, Queries.SelectCustomerQuery);
             var result = new List<SageCustomer>();
             response.ForEach(x => result.Add(x.ToObject<SageCustomer>()));
             return result;
         }
 
-        //public List<Dictionary<string, object>> Trucks()
-        //{
-        //    var result = ExecuteQueryAndGetData(timberlineDataConnectionString, Queries.SelectTrucks);
-        //    return result;
-        //}
-
         public List<SageRateSheet> RateSheets()
         {
-            var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, Queries.SelectRateSheets);
+            var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, Queries.SelectRateSheetsQuery);
             var result = new List<SageRateSheet>();
             response.ForEach(x => result.Add(x.ToObject<SageRateSheet>()));
             return result;
@@ -61,7 +55,7 @@
 
         public List<SagePermissionCode> PermissionCodes()
         {
-            var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, Queries.SelectPermissionCodes);
+            var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, Queries.SelectPermissionCodesQuery);
             var result = new List<SagePermissionCode>();
             response.ForEach(x => result.Add(x.ToObject<SagePermissionCode>()));
             return result;
@@ -69,7 +63,7 @@
 
         public void UnassignWorkOrder(string id)
         {
-            var query = Queries.SelectAssignment.Replace("%ID%", id);
+            var query = string.Format(Queries.UpdateAssignmentQuery, id);
             ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
 
@@ -81,23 +75,42 @@
 
         public void EditWorkOrderStatus(string id, string status)
         {
-            var query = string.Format(Queries.EditWorkOrderStatus, status, id);
+            var query = string.Format(Queries.EditWorkOrderStatusQuery, status, id);
             ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
 
         public void EditWorkJcJob(string id, string jcjob)
         {
-            var query = string.Format(Queries.EditWorkJcJob, jcjob, id);
+            var query = string.Format(Queries.EditWorkJcJobQuery, jcjob, id);
             ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
 
-        //public List<SageWorkOrder> WorkOrders()
-        //{
-        //    var query = Queries.SelectWorkOrders;
-        //    var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query);
-        //    var result = DictionaryToWorkOrderList(response);
-        //    return result;
-        //}
+        public void AddNote(SageNote note)
+        {
+            var query = Queries.BuildAddNoteQuery(note);
+            ExecuteQuery(timberlineServiceManagementConnectionString, query);
+        }
+
+        public void EditNote(SageNote note)
+        {
+            var query = Queries.BuildEditNoteQuery(note);
+            ExecuteQuery(timberlineServiceManagementConnectionString, query);
+        }
+
+        public void DeleteNote(string id)
+        {
+            var query = string.Format(Queries.DeleteNoteQuery, id);
+            ExecuteQuery(timberlineServiceManagementConnectionString, query);
+        }
+
+        public List<SageNote> GetNotes(string id)
+        {
+            var query = string.Format(Queries.SelectNotesQuery, id);
+            var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query);
+            var result = new List<SageNote>();
+            response.ForEach(x => result.Add(x.ToObject<SageNote>()));
+            return result;
+        }
 
         private List<SageWorkOrder> DictionaryToWorkOrderList(List<Dictionary<string, object>> response)
         {

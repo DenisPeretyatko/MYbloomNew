@@ -7,13 +7,9 @@
 {
         List<SageCustomer> Customers();
 
-        //List<Dictionary<string, object>> Trucks();
-
         void UnassignWorkOrder(string id);
 
         void EditWorkOrder(SageWorkOrder workOrder);
-
-        //List<SageWorkOrder> WorkOrders();
 
         List<SageRateSheet> RateSheets();
 
@@ -24,5 +20,13 @@
         void EditWorkOrderStatus(string id, string status);
 
         void EditWorkJcJob(string id, string jcjob);
+
+        void AddNote(SageNote note);
+
+        void EditNote(SageNote note);
+
+        void DeleteNote(string id);
+
+        List<SageNote> GetNotes(string id);
     }
 }

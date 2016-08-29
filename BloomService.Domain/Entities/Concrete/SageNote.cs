@@ -4,20 +4,20 @@ namespace BloomService.Domain.Entities.Concrete
 {
     public class SageNote
     {
-        public long Type { get; set; }
-        public long TransNbr { get; set; }
-        public long TransNbr2 { get; set; }
-        public long TransNbr3 { get; set; }
-        public DateTime Date { get; set; }
-        public long EmployeeNbr { get; set; }
-        public DateTime DateEnter { get; set; }
-        public long Format { get; set; }
-        public long DatabaseNbr { get; set; }
-        public long Notenbr { get; set; }
-        public string QSysGen { get; set; }
-        public string QCustView { get; set; }
-        public string Spare { get; set; }
-        public string SubjectLine { get; set; }
-        public string Text { get; set; }
+        public long TYPE { get; set; }
+        public long TRANSNBR { get; set; }
+        public long TRANSNBR2 { get; set; }
+        public long TRANSNBR3 { get; set; }
+        public DateTime? DATE { get; set; }
+        public long EMPLOYEENBR { get; set; }
+        public DateTime? DATEENTER { get; set; }
+        public long FORMAT { get; set; }
+        public long DATABASENBR { get; set; }
+        public long NOTENBR { get; set; }
+        public string QSYSGEN { get; set; }
+        public string QCUSTVIEW { get; set; }
+        public string SPARE { get; set; }
+        public string SUBJECTLINE { get; set; }
+        public string TEXT { get; set; }
     }
 }

@@ -196,6 +196,15 @@
         {
             try
             {
+                if (id == string.Empty || id == null)
+                {
+                    return new SageResponse<SageAssignment>
+                    {
+                        IsSucceed = false,
+                        ErrorMassage = "Assignment Id is null or empty."
+                    };
+                }
+
                 var assignments = this.serviceManager.Assignments(id);
                 var result = new SageResponse<SageAssignment>
                 {
@@ -292,6 +301,100 @@
             catch (ResponseException exception)
             {
                 var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
+
+        [HttpPut, Route("api/v2/sm/workorders/notes/edit")]
+        public SageResponse<SageNote> EditWorkOrderNote(SageNote note)
+        {
+            try
+            {
+                serviceOdbc.EditNote(note);
+                var result = new SageResponse<SageNote>
+                {
+                    IsSucceed = true
+                };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageNote> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
+
+        [HttpPost, Route("api/v2/sm/workorders/notes/add")]
+        public SageResponse<SageNote> CreateWorkOrderNote(SageNote note)
+        {
+            try
+            {
+                serviceOdbc.AddNote(note);
+                var result = new SageResponse<SageNote>
+                {
+                    IsSucceed = true
+                };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageNote> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
+
+        [HttpDelete, Route("api/v2/sm/workorders/notes/remove/{id}")]
+        public SageResponse<SageNote> DeleteWorkOrderNote(string id)
+        {
+            try
+            {
+                if (id == string.Empty || id == null)
+                {
+                    return new SageResponse<SageNote>
+                    {
+                        IsSucceed = false,
+                        ErrorMassage = "Note Id is null or empty."
+                    };
+                }
+
+                serviceOdbc.DeleteNote(id);
+                var result = new SageResponse<SageNote>
+                {
+                    IsSucceed = true
+                };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageNote> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
+
+        [HttpGet, Route("api/v2/sm/workorders/notes/{id}")]
+        public SageResponse<SageNote> GetWorkOrderNotes(string id)
+        {
+            try
+            {
+                if (id == string.Empty || id == null)
+                {
+                    return new SageResponse<SageNote>
+                    {
+                        IsSucceed = false,
+                        ErrorMassage = "WorkOrder Id is null or empty."
+                    };
+                }
+
+                var result = new SageResponse<SageNote>
+                {
+                    IsSucceed = true,
+                    Entities = serviceOdbc.GetNotes(id)
+                };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageNote> { IsSucceed = false, ErrorMassage = exception.Error.Message };
                 return result;
             }
         }
