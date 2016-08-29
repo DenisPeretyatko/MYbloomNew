@@ -460,7 +460,7 @@
                                                         </div>
                                                         <form ng-show="editing" ng-submit="editing = false">
                                                             <textarea class="picture-textarea" rows="3" placeholder="Comment" ng-model="picture.Description" class="form-control"></textarea>
-                                                            <button class="btn btn-sm btn-primary" type="submit" ng-click="saveComment(picture.Description, pictures.WorkOrder, picture.Id)"><strong>Save</strong></button>
+                                                            <button class="btn btn-sm btn-primary" type="submit" ng-click="saveComment(picture.Description, pictures.WorkOrder, picture.id)"><strong>Save</strong></button>
                                                             <button class="btn btn-sm btn-danger" type="submit"><strong>Cancel</strong></button>
                                                         </form>
                                                     </div>
@@ -489,8 +489,8 @@
                                     </thead>
                                     <tbody>
                                         <tr class="gradeX" ng-repeat="note in workOrderNotes">
-                                            <td class="col-lg-4 col-md-4 col-xs-4 col-sm-4" ng-bind="note.Subject"></td>
-                                            <td class="col-lg-6 col-md-6 col-xs-6 col-sm-6" ng-bind="note.Note"></td>
+                                            <td class="col-lg-4 col-md-4 col-xs-4 col-sm-4" ng-bind="note.SubjectLine"></td>
+                                            <td class="col-lg-6 col-md-6 col-xs-6 col-sm-6" ng-bind="note.Text"></td>
                                             <td class="col-lg-2 col-md-2 col-xs-2 col-sm-2">
                                                 <a class="btn btn-danger btn-xs" ng-click="editNote($index, note)">Edit</a>
                                                 <a class="btn btn-danger btn-xs" ng-click="deleteNote($event, note)">Remove</a>

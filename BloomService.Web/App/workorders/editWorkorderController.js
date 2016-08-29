@@ -416,9 +416,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.addNote = function (wo) {
         if ($scope.noteObj.Subject && $scope.noteObj.Note) {
             var model = {
-                Subject: $scope.noteObj.Subject,
-                Note: $scope.noteObj.Note,
-                WorkOrder: wo
+                WorkOrderId: wo,
+                NoteId: null,
+                SubjectLine: $scope.noteObj.Subject,
+                Text: $scope.noteObj.Note
             };
             commonDataService.addNote(model).then(function (response) {
                 if (response.data.success == false)
@@ -435,8 +436,8 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.editNote = function (index, note) {
         $scope.isEditNote = true;
         $scope.editableNote = note;
-        $scope.noteObj.Subject = note.Subject;
-        $scope.noteObj.Note = note.Note;
+        $scope.noteObj.Subject = note.SubjectLine;
+        $scope.noteObj.Note = note.Text;
     }
 
     $scope.saveNote = function () {
@@ -446,15 +447,21 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             $scope.noteObj.Subject = "";
             $scope.noteObj.Note = "";
         } else { //save
+            var model = {
+                WorkOrderId: $scope.editableWorkOrder.WorkOrder,
+                NoteId: $scope.editableNote.NoteId,
+                SubjectLine: $scope.noteObj.Subject,
+                Text: $scope.noteObj.Note
+            };
             if ($scope.noteObj.Subject && $scope.noteObj.Note) {
-                commonDataService.editNote($scope.editableNote.Id).then(function (response) {
+                commonDataService.editNote(model).then(function (response) {
                     if (response.data.success == false)
                         alert("Failed to save note");
                     else {
                         angular.forEach($scope.workOrderNotes, function (value, key) {
                             if (value == $scope.editableNote) {
-                                value.Subject = $scope.noteObj.Subject;
-                                value.Note = $scope.noteObj.Note;
+                                value.SubjectLine = $scope.noteObj.Subject;
+                                value.Text = $scope.noteObj.Note;
                             }
                         });
                         $scope.isEditNote = false;
@@ -468,7 +475,13 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
 
     $scope.deleteNote = function ($event, item) {
-        commonDataService.deleteNote(item.Id).then(function (response) {
+        var model = {
+            WorkOrderId: item.WorkOrderId,
+            NoteId: item.NoteId,
+            SubjectLine: item.SubjectLine,
+            Text: item.Text
+        };
+        commonDataService.deleteNote(model).then(function (response) {
             if (response.data.success == false)
                 alert("Failed to delete note");
             else {
@@ -477,16 +490,6 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                 $scope.workOrderNotes.splice($scope.workOrderNotes.indexOf(item), 1);
             }
         });
-       
-        //commonDataService.deleteNote(model).then(function (response) {
-        //    if (response.data.success == false)
-        //        alert("Failed to delete note");
-        //    else {
-        //        var el = angular.element($event.target);
-        //        el.parent().parent().remove();
-        //        $scope.workOrderNotes.splice($scope.workOrderNotes.indexOf(item), 1);
-        //    }
-        //});
     }
 
     $scope.editRow = function (item, index) {

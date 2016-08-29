@@ -414,21 +414,21 @@ namespace BloomService.Web.Controllers
 
         [HttpPost]
         [Route("WorkOrder/AddNote")]
-        public ActionResult AddNote(WorkorderSortModel model)
+        public ActionResult AddNote(WorkOrderNoteModel model)
         {
             return Success();
         }
 
         [HttpPost]
         [Route("WorkOrder/EditNote")]
-        public ActionResult EditNote(WorkorderSortModel model)
+        public ActionResult EditNote(WorkOrderNoteModel model)
         {
             return Success();
         }
 
         [HttpPost]
         [Route("WorkOrder/DeleteNote")]
-        public ActionResult DeleteNote(WorkorderSortModel model)
+        public ActionResult DeleteNote(WorkOrderNoteModel model)
         {
             return Success();
         }

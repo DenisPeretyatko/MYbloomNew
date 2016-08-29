@@ -65,7 +65,7 @@
              .ForMember(dest => dest.QSYSGEN, opts => opts.UseValue("N"))
              .ForMember(dest => dest.QCUSTVIEW, opts => opts.UseValue("Y"))
              .ForMember(dest => dest.SUBJECTLINE, opts => opts.MapFrom(src => src.SubjectLine))
-             .ForMember(dest => dest.TEXT, opts => opts.MapFrom(src => src.Text));
+             .ForMember(dest => dest.TEXT, opts => opts.MapFrom(src => src.Text)).ReverseMap();
          }
     }
 }
