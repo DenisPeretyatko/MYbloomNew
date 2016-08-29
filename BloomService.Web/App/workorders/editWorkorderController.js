@@ -28,7 +28,11 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.equipmentList = [];
     $scope.obj.data = new Date();
     $scope.Rate = 0;
-
+    $scope.isEditNote = false;
+    $scope.noteObj = {};
+    $scope.noteObj.Subject = "";
+    $scope.noteObj.Note = "";
+    $scope.workOrderNotes = [];
 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
@@ -58,7 +62,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         }
     });
 
-    $scope.$watch(function () { return $scope.editableWorkOrder }, function () {        
+    $scope.$watch(function () { return $scope.editableWorkOrder }, function () {
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined && $scope.lookups.Customers != undefined) {
             $scope.getWOItems();
 
@@ -85,24 +89,24 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     });
 
     $scope.$watchCollection(function () {
-            return $rootScope.addedImage;
-      }, function () {
-          if ($rootScope.addedImage != undefined && $scope.editableWorkOrder != undefined) {
-              if ($rootScope.addedImage.WorkOrder == $scope.editableWorkOrder.WorkOrder) {
-                  $scope.pictures = $rootScope.addedImage;
-              }
-          }
-      });
+        return $rootScope.addedImage;
+    }, function () {
+        if ($rootScope.addedImage != undefined && $scope.editableWorkOrder != undefined) {
+            if ($rootScope.addedImage.WorkOrder == $scope.editableWorkOrder.WorkOrder) {
+                $scope.pictures = $rootScope.addedImage;
+            }
+        }
+    });
 
-      $scope.$watchCollection(function () {
-          return $rootScope.updatedSageWorkOrder;
-      }, function () {
-          if ($rootScope.updatedSageWorkOrder != undefined && $scope.editableWorkOrder != undefined) {
-              if ($rootScope.updatedSageWorkOrder.WorkOrder == $scope.editableWorkOrder.WorkOrder) {
-                  $scope.editableWorkOrder = $rootScope.updatedSageWorkOrder;
-              }
-          }
-      });
+    $scope.$watchCollection(function () {
+        return $rootScope.updatedSageWorkOrder;
+    }, function () {
+        if ($rootScope.updatedSageWorkOrder != undefined && $scope.editableWorkOrder != undefined) {
+            if ($rootScope.updatedSageWorkOrder.WorkOrder == $scope.editableWorkOrder.WorkOrder) {
+                $scope.editableWorkOrder = $rootScope.updatedSageWorkOrder;
+            }
+        }
+    });
 
     $scope.getWOItems = function () {
         if ($scope.editableWorkOrder !== undefined && $scope.editableWorkOrder.WorkOrderItems !== undefined && $scope.lookups !== undefined) {
@@ -135,7 +139,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                             woItem: value.WorkOrderItem,
                             laborItem: laborsList.selected,
                             amount: value.TotalSale,
-                            WOId : value.WorkOrder
+                            WOId: value.WorkOrder
                         });
                     }
                 });
@@ -160,8 +164,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                 WOId: $scope.editableWorkOrder.WorkOrder
             }
             $scope.equipment.push(equipment);
-        }
-        else {
+        } else {
             if ($scope.lookups !== undefined)
                 var equipment = {
                     equipType: angular.copy($scope.EquipType),
@@ -198,7 +201,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                     Part: parseInt(value.part),
                     WorkOrderItem: value.woItem,
                     LaborItem: value.laborItem,
-                    WorkOrder: value.WOId 
+                    WorkOrder: value.WOId
                 });
             }
         });
@@ -243,11 +246,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         return $scope.editableWorkOrder = response.data;
     });
 
-    $scope.setRate = function (selected,item) {
+    $scope.setRate = function (selected, item) {
         if (item.equipType.selected == 'Parts' || item.equipType.selected == undefined) {
             item.rate = parseFloat(selected.$select.selected.Level1Price);
-        }
-        else {
+        } else {
             item.rate = 85.0000;
         }
     };
@@ -269,8 +271,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
             item.labor = angular.copy($scope.lookups.Hours);
             item.labor.selected = selectedDesc;
-        }
-        else {
+        } else {
             var selectedDesc = $scope.lookups.Parts.find(function (element) {
                 return element.PartNumber + " " + element.Description === item.description;
             });
@@ -300,8 +301,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             if (item.equipType == 'Labor') {
                 item.description = item.labor.selected.Description;
                 item.laborItem = item.labor.selected;
-            }
-            else {
+            } else {
                 item.description = item.parts.selected.PartNumber + " " + item.parts.selected.Description;
                 item.part = item.parts.selected.Part;
             }
@@ -396,7 +396,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         $scope.obj.hours = parseFloat(selected.$select.selected.EstimatedRepairHours);
     };
 
-    $scope.saveComment = function(comment, wo, id) {
+    $scope.saveComment = function (comment, wo, id) {
         var model = {
             comment: comment,
             workOrder: wo,
@@ -408,5 +408,89 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         });
     }
 
-};
+    commonDataService.getNotes().then(function (response) {
+        $scope.workOrderNotes = response.data;
+    });
+    
+
+    $scope.addNote = function (wo) {
+        if ($scope.noteObj.Subject && $scope.noteObj.Note) {
+            var model = {
+                Subject: $scope.noteObj.Subject,
+                Note: $scope.noteObj.Note,
+                WorkOrder: wo
+            };
+            commonDataService.addNote(model).then(function (response) {
+                if (response.data.success == false)
+                    alert("Failed to add note");
+                else {
+                    $scope.workOrderNotes.push(model);
+                    $scope.noteObj.Subject = "";
+                    $scope.noteObj.Note = "";
+                }
+            });
+        }
+    }
+
+    $scope.editNote = function (index, note) {
+        $scope.isEditNote = true;
+        $scope.editableNote = note;
+        $scope.noteObj.Subject = note.Subject;
+        $scope.noteObj.Note = note.Note;
+    }
+
+    $scope.saveNote = function () {
+        if (!$scope.isEditNote) //cancel
+        {
+            $scope.isEditNote = false;
+            $scope.noteObj.Subject = "";
+            $scope.noteObj.Note = "";
+        } else { //save
+            if ($scope.noteObj.Subject && $scope.noteObj.Note) {
+                commonDataService.editNote($scope.editableNote.Id).then(function (response) {
+                    if (response.data.success == false)
+                        alert("Failed to save note");
+                    else {
+                        angular.forEach($scope.workOrderNotes, function (value, key) {
+                            if (value == $scope.editableNote) {
+                                value.Subject = $scope.noteObj.Subject;
+                                value.Note = $scope.noteObj.Note;
+                            }
+                        });
+                        $scope.isEditNote = false;
+                        $scope.noteObj.Subject = "";
+                        $scope.noteObj.Note = "";
+                    }
+                });
+            }
+        }
+    }
+
+
+    $scope.deleteNote = function ($event, item) {
+        commonDataService.deleteNote(item.Id).then(function (response) {
+            if (response.data.success == false)
+                alert("Failed to delete note");
+            else {
+                var el = angular.element($event.target);
+                el.parent().parent().remove();
+                $scope.workOrderNotes.splice($scope.workOrderNotes.indexOf(item), 1);
+            }
+        });
+       
+        //commonDataService.deleteNote(model).then(function (response) {
+        //    if (response.data.success == false)
+        //        alert("Failed to delete note");
+        //    else {
+        //        var el = angular.element($event.target);
+        //        el.parent().parent().remove();
+        //        $scope.workOrderNotes.splice($scope.workOrderNotes.indexOf(item), 1);
+        //    }
+        //});
+    }
+
+    $scope.editRow = function (item, index) {
+        item.isEditing = true;
+    };
+}
 editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state"];

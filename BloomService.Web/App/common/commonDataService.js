@@ -222,5 +222,37 @@ var commonDataService = function ($http, $window) {
             }
         });
     };
+
+    this.addNote = function (model) {
+        return $http.post("/WorkOrder/AddNote", model, {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    }
+
+     this.editNote = function (model) {
+        return $http.post("/WorkOrder/EditNote", model, {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    }
+
+    this.deleteNote = function (model) {
+        return $http.post("/WorkOrder/DeleteNote", model, {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    }
+
+    this.getNotes = function () {
+        return $http.get("/WorkOrder/GetNotes", {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    }
 }
 commonDataService.$inject = ['$http', '$window'];

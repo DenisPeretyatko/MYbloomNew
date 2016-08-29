@@ -411,5 +411,33 @@ namespace BloomService.Web.Controllers
         {
             return Success();
         }
+
+        [HttpPost]
+        [Route("WorkOrder/AddNote")]
+        public ActionResult AddNote(WorkorderSortModel model)
+        {
+            return Success();
+        }
+
+        [HttpPost]
+        [Route("WorkOrder/EditNote")]
+        public ActionResult EditNote(WorkorderSortModel model)
+        {
+            return Success();
+        }
+
+        [HttpPost]
+        [Route("WorkOrder/DeleteNote")]
+        public ActionResult DeleteNote(WorkorderSortModel model)
+        {
+            return Success();
+        }
+
+        [HttpGet]
+        [Route("WorkOrder/GetNotes")]
+        public ActionResult GetNotes()
+        {
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
     }
 }
