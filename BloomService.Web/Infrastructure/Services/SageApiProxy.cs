@@ -27,6 +27,26 @@
             return Add(assignment, EndPoints.AddAssignment);
         }
 
+        public SageResponse<SageNote> AddNote(SageNote note)
+        {
+            return Add(note, EndPoints.CreateNote);
+        }
+
+        public SageResponse<SageNote> EditNote(SageNote note)
+        {
+            return Edit(note, EndPoints.EditNote);
+        }
+
+        public SageResponse<SageNote> GetNotes(long id)
+        {
+            return Get<SageNote>(id, EndPoints.GetNotes);
+        }
+
+        public SageResponse<SageNote> DeleteNote(long id)
+        {
+            return Delete<SageNote>(id, EndPoints.DeleteNote);
+        }
+
         public SageResponse<SageWorkOrder> AddWorkOrder(SageWorkOrder workOrder)
         {
             return Add(workOrder, EndPoints.AddWorkOrder);

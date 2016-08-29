@@ -33,5 +33,10 @@
 
         SageResponse<SageWorkOrderItem> AddWorkOrderItem(SageWorkOrderItem workOrderItem);
         SageResponse<SageWorkOrderItem> EditWorkOrderItem(SageWorkOrderItem workOrderItem);
+
+        SageResponse<SageNote> AddNote(SageNote note);
+        SageResponse<SageNote> EditNote(SageNote note);
+        SageResponse<SageNote> GetNotes(long id);
+        SageResponse<SageNote> DeleteNote(long id);
     }
 }

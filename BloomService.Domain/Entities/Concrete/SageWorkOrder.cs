@@ -15,6 +15,9 @@
         [XmlIgnore]
         public IEnumerable<SageWorkOrderItem> WorkOrderItems { get; set; }
 
+        [XmlIgnore]
+        public IEnumerable<SageNote> WorkNotes { get; set; }
+
         public List<ImageLocation> Images { get; set; }
 
         public decimal Latitude { get; set; }

@@ -30,8 +30,9 @@
         public static string DeleteWorkOrderItems = endPointBase + "workorders/workorderitems/delete";
         public static string EditWorkOrderStatus = endPointBase + "workorders/status/edit";
 
-        public static string CreateNote = endPointBase + "workorders/notes/create";
+        public static string CreateNote = endPointBase + "workorders/notes/add";
         public static string EditNote = endPointBase + "workorders/notes/edit";
         public static string DeleteNote = endPointBase + "workorders/notes/remove";
+        public static string GetNotes = endPointBase + "workorders/notes";
     }
 }

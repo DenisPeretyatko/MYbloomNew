@@ -4,6 +4,7 @@
 
     using BloomService.Domain.Entities.Concrete;
     using BloomService.Web.Models;
+    using Infrastructure.Constants;
     using System;
     public static class AutoMapperConfig
     {
@@ -48,6 +49,23 @@
               .ForMember(dest => dest.Employee, opts => opts.MapFrom(src => src.Employee))
               .ForMember(dest => dest.Repair, opts => opts.MapFrom(src => Convert.ToInt32(src.LaborItem.Repair)))
               .ReverseMap();
-        }
+
+
+            Mapper.CreateMap<WorkOrderNoteModel, SageNote>()
+             .ForMember(dest => dest.TYPE, opts => opts.UseValue(3))
+             .ForMember(dest => dest.TRANSNBR, opts => opts.MapFrom(src => src.WorkOrderId))
+             .ForMember(dest => dest.TRANSNBR2, opts => opts.UseValue(0))
+             .ForMember(dest => dest.TRANSNBR3, opts => opts.UseValue(0))
+             .ForMember(dest => dest.DATE, opts => opts.UseValue(DateTime.Now))
+             .ForMember(dest => dest.EMPLOYEENBR, opts => opts.UseValue(0))
+             .ForMember(dest => dest.DATEENTER, opts => opts.UseValue(DateTime.Now))
+             .ForMember(dest => dest.FORMAT, opts => opts.UseValue(0))
+             .ForMember(dest => dest.DATABASENBR, opts => opts.UseValue(0))
+             .ForMember(dest => dest.NOTENBR, opts => opts.MapFrom(src => src.NoteId))
+             .ForMember(dest => dest.QSYSGEN, opts => opts.UseValue("N"))
+             .ForMember(dest => dest.QCUSTVIEW, opts => opts.UseValue("Y"))
+             .ForMember(dest => dest.SUBJECTLINE, opts => opts.MapFrom(src => src.SubjectLine))
+             .ForMember(dest => dest.TEXT, opts => opts.MapFrom(src => src.Text));
+         }
     }
 }

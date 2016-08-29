@@ -395,6 +395,7 @@
     <Compile Include="Models\NotificationModel.cs" />
     <Compile Include="Models\LocationJsonModel.cs" />
     <Compile Include="Models\TechnicianViewModel.cs" />
+    <Compile Include="Models\WorkOrderNoteModel.cs" />
     <Compile Include="Models\WorkorderSortModel.cs" />
     <Compile Include="Models\WorkorderSortViewModel.cs" />
     <Compile Include="Models\WorkorderViewModel.cs" />

@@ -191,12 +191,18 @@ namespace BloomService.Web.Infrastructure.Jobs
                             else
                             {
 
-                                var result = _proxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder);
-                                if (result != null)
+                                var woiResult = _proxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder);
+                                if (woiResult != null)
                                 {
-                                    workOrder.WorkOrderItems = result.Entities;
-
+                                    workOrder.WorkOrderItems = woiResult.Entities;
                                 }
+
+                                var notesResult = _proxy.GetNotes(workOrder.WorkOrder);
+                                if (notesResult != null)
+                                {
+                                    workOrder.WorkNotes = notesResult.Entities;
+                                }
+
                                 workOrder.Id = mongoEntity.Id;
                                 workOrder.Status = mongoEntity.Status;
                                 workOrder.AssignmentId = mongoEntity.AssignmentId;

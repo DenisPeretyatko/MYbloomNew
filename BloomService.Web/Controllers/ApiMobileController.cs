@@ -378,5 +378,93 @@ namespace BloomService.Web.Controllers
             notification.SendNotification($"Workorder {workorder.Name} change status by {model.Status}");
             return Success();
         }
+
+        [HttpPost]
+        [Route("Apimobile/AddNote")]
+        public ActionResult AddNote(WorkOrderNoteModel model)
+        {
+            var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrderId).SingleOrDefault();
+            if (workOrder == null)
+            {
+                return Error("Work Order does not exist", $"There are no Work Orders with ID: {model.WorkOrderId}. workOrder == null");
+            }
+
+            var note = Mapper.Map<SageNote>(model);
+            var addNoteResult = sageApiProxy.AddNote(note);
+            var getNotesResult = sageApiProxy.GetNotes(note.TRANSNBR);
+
+            if (addNoteResult.IsSucceed && getNotesResult.IsSucceed && getNotesResult.Entities != null)
+            {
+                workOrder.WorkNotes = getNotesResult.Entities;
+                repository.Update(workOrder);
+                _hub.UpdateSageWorkOrder(workOrder);
+            }
+            else
+            {
+                _log.ErrorFormat("Was not able to add note to sage. !result.IsSucceed");
+                return Error("Note save failed", $"AddNote method IsSucceed==false. {addNoteResult?.ErrorMassage}"
+                );
+            }
+            return Json(addNoteResult, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [Route("Apimobile/EditNote")]
+        public ActionResult EditNote(WorkOrderNoteModel model)
+        {
+            var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrderId).SingleOrDefault();
+            if (workOrder == null)
+            {
+                return Error("Work Order does not exist", $"There are no Work Orders with ID: {model.WorkOrderId}. workOrder == null");
+            }
+
+            var note = Mapper.Map<SageNote>(model);
+            var editNoteResult = sageApiProxy.EditNote(note);
+            var getNotesResult = sageApiProxy.GetNotes(note.TRANSNBR);
+
+            if (editNoteResult.IsSucceed && getNotesResult.IsSucceed && getNotesResult.Entities != null)
+            {
+                workOrder.WorkNotes = getNotesResult.Entities;
+                repository.Update(workOrder);
+                _hub.UpdateSageWorkOrder(workOrder);
+            }
+            else
+            {
+                _log.ErrorFormat("Was not able to save note to sage. !result.IsSucceed");
+                return Error("Note save failed", $"EditNote method IsSucceed==false. {editNoteResult?.ErrorMassage}"
+                );
+            }
+            return Json(editNoteResult, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [Route("Apimobile/DeleteNote")]
+        public ActionResult DeleteNote(WorkOrderNoteModel model)
+        {
+            var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrderId).SingleOrDefault();
+            if (workOrder == null)
+            {
+                return Error("Work Order does not exist", $"There are no Work Orders with ID: {model.WorkOrderId}. workOrder == null");
+            }
+
+            var note = Mapper.Map<SageNote>(model);
+
+            var deleteNoteResult = sageApiProxy.DeleteNote(note.NOTENBR);
+            var getNotesResult = sageApiProxy.GetNotes(note.TRANSNBR);
+
+            if (deleteNoteResult.IsSucceed && getNotesResult.IsSucceed && getNotesResult.Entities != null)
+            {
+                workOrder.WorkNotes = getNotesResult.Entities;
+                repository.Update(workOrder);
+                _hub.UpdateSageWorkOrder(workOrder);
+            }
+            else
+            {
+                _log.ErrorFormat("Was not able to remove note from sage. !result.IsSucceed");
+                return Error("Note delete failed", $"DeleteNote method IsSucceed==false. {deleteNoteResult?.ErrorMassage}"
+                );
+            }
+            return Json(deleteNoteResult, JsonRequestBehavior.AllowGet);
+        }
     }
 }

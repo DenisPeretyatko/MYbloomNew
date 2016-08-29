@@ -2,7 +2,7 @@
 
 namespace BloomService.Domain.Entities.Concrete
 {
-    public class SageNote
+    public class SageNote : SageEntity
     {
         public long TYPE { get; set; }
         public long TRANSNBR { get; set; }
