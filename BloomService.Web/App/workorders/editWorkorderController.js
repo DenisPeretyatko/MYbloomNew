@@ -243,7 +243,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
 
     commonDataService.getWorkorder($stateParams.id).then(function (response) {
-        return $scope.editableWorkOrder = response.data;
+        $scope.editableWorkOrder = response.data;
+        commonDataService.getNotes(response.data.WorkOrder).then(function (result) {
+            $scope.workOrderNotes = result.data;
+        });
     });
 
     $scope.setRate = function (selected, item) {
@@ -420,10 +423,9 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                 alert("Failed to edit comment");
         });
     }
+   
 
-    commonDataService.getNotes().then(function (response) {
-        $scope.workOrderNotes = response.data;
-    });
+   
     
 
     $scope.addNote = function (wo) {

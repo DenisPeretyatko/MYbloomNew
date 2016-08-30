@@ -501,10 +501,11 @@ namespace BloomService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("WorkOrder/GetNotes")]
-        public ActionResult GetNotes()
+        [Route("WorkOrder/GetNotes/{id}")]
+        public ActionResult GetNotes(string id)
         {
-            return Json("", JsonRequestBehavior.AllowGet);
+            var notes = this._repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == Convert.ToInt64(id)).SingleOrDefault().WorkNotes;
+            return Json(notes, JsonRequestBehavior.AllowGet);
         }
     }
 }
