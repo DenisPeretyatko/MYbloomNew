@@ -247,8 +247,8 @@ var commonDataService = function ($http, $window) {
         });
     }
 
-    this.getNotes = function () {
-        return $http.get("/WorkOrder/GetNotes", {
+    this.getNotes = function (id) {
+        return $http.get("/WorkOrder/GetNotes/" + id, {
             headers: {
                 'Authorization': 'bearer ' + window.localStorage.getItem('Token')
             }
