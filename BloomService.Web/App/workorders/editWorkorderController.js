@@ -374,22 +374,35 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             lng: parseFloat(lng)
         }
         $scope.locationMap.setZoom(100);
+        $scope.locationMap.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+
         var marker = new google.maps.Marker({
             position: pos,
             map: $scope.locationMap,
             icon: "/public/images/workorder.png",
             title: woNumber
         });
-        marker.addListener('click', function () {
-            var infowindow = new google.maps.InfoWindow({
-                content: content
-            });
+        var infowindow = new google.maps.InfoWindow({
+            content: content
+        });
+        marker.addListener('mouseover', function () {
             infowindow.open($scope.locationMap, marker);
         });
-        $('#myModal').on('shown.bs.modal', function () {
+        marker.addListener('mouseout', function () {
+            infowindow.close();
+        });
+        marker.addListener('click', function () {
+            $state.go("manager.workorder.edit", { id: value.WorkOrder.Id });
+        });
+        $('#myModal').on('shown.bs.modal', function() {
             google.maps.event.trigger($scope.locationMap, 'resize');
             $scope.locationMap.setCenter(new google.maps.LatLng(pos.lat, pos.lng));
-        })
+            $("#modalImg").attr('src', 'public/images/' + $scope.editableWorkOrder.WorkOrder + '/' + picture.BigImage);
+            $("#modalComment").text(picture.Description);
+        });
+        $('#myModal').on('hidden.bs.modal', function() {
+            marker.setMap(null);
+        });
     };
 
     $scope.setEstimateHour = function (selected) {

@@ -3,7 +3,7 @@
  */
 "use strict";
 
-var dashboardController = function ($rootScope, $scope, $interpolate, $q, commonDataService, state) {
+var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q, commonDataService, state) {
 
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
@@ -97,11 +97,17 @@ var dashboardController = function ($rootScope, $scope, $interpolate, $q, common
                 title: value.WorkOrder.WorkOrder
             });
             $scope.workorderMarkers.push(marker);
-            marker.addListener('click', function () {
-                var infowindow = new google.maps.InfoWindow({
-                    content: content
-                });
+            var infowindow = new google.maps.InfoWindow({
+                content: content
+            });
+            marker.addListener('mouseover', function () {
                 infowindow.open($scope.locationMap, marker);
+            });
+            marker.addListener('mouseout', function () {
+                infowindow.close();
+            });
+            marker.addListener('click', function () {
+                $state.go("manager.workorder.edit", { id: value.WorkOrder.Id });
             });
         });
     });
@@ -139,11 +145,17 @@ var dashboardController = function ($rootScope, $scope, $interpolate, $q, common
                 title: truck.Name
             });
             $scope.truckMarkers.push(marker);
-            marker.addListener('click', function () {
-                var infowindow = new google.maps.InfoWindow({
-                    content: content
-                });
+            var infowindow = new google.maps.InfoWindow({
+                content: content
+            });
+            marker.addListener('mouseover', function () {
                 infowindow.open($scope.locationMap, marker);
+            });
+            marker.addListener('mouseout', function () {
+                infowindow.close();
+            });
+            marker.addListener('click', function () {
+                $state.go("manager.technician.edit", { id: truck.Id });
             });
         });
     });
@@ -175,4 +187,4 @@ var dashboardController = function ($rootScope, $scope, $interpolate, $q, common
             }
         });
 };
-dashboardController.$inject = ["$rootScope", "$scope", "$interpolate", "$q", "commonDataService", "state"];
+dashboardController.$inject = ["$rootScope", "$scope", "$state","$interpolate", "$q", "commonDataService", "state"];

@@ -442,3 +442,28 @@
 .note-button {
     margin: 5px;
 }
+
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.shedule-row {
+    z-index: 999;
+    display: block;
+}
+
+#modalImg {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    max-height: 80vh;
+}
+
+.wo-modal {
+    width: 90%;
+}
+
+.wo-map {
+    min-height: 80vh !important;
+}

@@ -22,7 +22,7 @@ namespace BloomService.Web.Controllers
     {
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
-        private const int ItemsOnPage = 12;
+        private const int ItemsOnPage = 50;
         private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
         private readonly IBloomServiceHub _hub;
         private readonly IDashboardService _dashboardService;

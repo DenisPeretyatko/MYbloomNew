@@ -528,14 +528,19 @@
             </div>
         </div>
         <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
-            <div class="modal-dialog">
+            <div class="modal-dialog wo-modal">
                 <div class="modal-content animated bounceInRight">
                     <div class="modal-body">
                         <div class="ibox">
-                            <div class="ibox-content">
-                                <section id="map">
-                                    <div ui-map="locationMap" ui-options="mapOptions" class="google-map" style="height: 700px; min-height: 100%;"></div>
-                                </section>
+                            <div class="row ibox-content">
+                                <div id="map" class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
+                                    <div ui-map="locationMap" ui-options="mapOptions" class="google-map wo-map"></div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
+                                    <img name="modalImg" id="modalImg" class="thumbnail" />
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12" name="modalComment" id="modalComment">
+                                </div>
                             </div>
                         </div>
                     </div>
