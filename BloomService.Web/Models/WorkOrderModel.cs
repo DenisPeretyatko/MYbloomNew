@@ -39,5 +39,7 @@
         public int Status { get; set; }
 
         public string JCJob { get; set; }
+
+        public List<WorkOrderNoteModel> Notes { get; set; }
     }
 }
