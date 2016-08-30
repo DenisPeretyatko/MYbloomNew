@@ -416,6 +416,28 @@ namespace BloomService.Web.Controllers
         [Route("WorkOrder/AddNote")]
         public ActionResult AddNote(WorkOrderNoteModel model)
         {
+            var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrderId).SingleOrDefault();
+            if (workOrder == null)
+            {
+                return Error("Work Order does not exist", $"There are no Work Orders with ID: {model.WorkOrderId}. workOrder == null");
+            }
+
+            var note = Mapper.Map<SageNote>(model);
+            var addNoteResult = _sageApiProxy.AddNote(note);
+            var getNotesResult = _sageApiProxy.GetNotes(note.TRANSNBR);
+
+            if (addNoteResult.IsSucceed && getNotesResult.IsSucceed && getNotesResult.Entities != null)
+            {
+                workOrder.WorkNotes = getNotesResult.Entities;
+                _repository.Update(workOrder);
+                _hub.UpdateSageWorkOrder(workOrder);
+            }
+            else
+            {
+                _log.ErrorFormat("Was not able to add note to sage. !result.IsSucceed");
+                return Error("Note save failed", $"AddNote method IsSucceed==false. {addNoteResult?.ErrorMassage}"
+                );
+            }
             return Success();
         }
 
@@ -423,6 +445,28 @@ namespace BloomService.Web.Controllers
         [Route("WorkOrder/EditNote")]
         public ActionResult EditNote(WorkOrderNoteModel model)
         {
+            var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrderId).SingleOrDefault();
+            if (workOrder == null)
+            {
+                return Error("Work Order does not exist", $"There are no Work Orders with ID: {model.WorkOrderId}. workOrder == null");
+            }
+
+            var note = Mapper.Map<SageNote>(model);
+            var editNoteResult = _sageApiProxy.EditNote(note);
+            var getNotesResult = _sageApiProxy.GetNotes(note.TRANSNBR);
+
+            if (editNoteResult.IsSucceed && getNotesResult.IsSucceed && getNotesResult.Entities != null)
+            {
+                workOrder.WorkNotes = getNotesResult.Entities;
+                _repository.Update(workOrder);
+                _hub.UpdateSageWorkOrder(workOrder);
+            }
+            else
+            {
+                _log.ErrorFormat("Was not able to save note to sage. !result.IsSucceed");
+                return Error("Note save failed", $"EditNote method IsSucceed==false. {editNoteResult?.ErrorMassage}"
+                );
+            }
             return Success();
         }
 
@@ -430,6 +474,29 @@ namespace BloomService.Web.Controllers
         [Route("WorkOrder/DeleteNote")]
         public ActionResult DeleteNote(WorkOrderNoteModel model)
         {
+            var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrderId).SingleOrDefault();
+            if (workOrder == null)
+            {
+                return Error("Work Order does not exist", $"There are no Work Orders with ID: {model.WorkOrderId}. workOrder == null");
+            }
+
+            var note = Mapper.Map<SageNote>(model);
+
+            var deleteNoteResult = _sageApiProxy.DeleteNote(note.NOTENBR);
+            var getNotesResult = _sageApiProxy.GetNotes(note.TRANSNBR);
+
+            if (deleteNoteResult.IsSucceed && getNotesResult.IsSucceed && getNotesResult.Entities != null)
+            {
+                workOrder.WorkNotes = getNotesResult.Entities;
+                _repository.Update(workOrder);
+                _hub.UpdateSageWorkOrder(workOrder);
+            }
+            else
+            {
+                _log.ErrorFormat("Was not able to remove note from sage. !result.IsSucceed");
+                return Error("Note delete failed", $"DeleteNote method IsSucceed==false. {deleteNoteResult?.ErrorMassage}"
+                );
+            }
             return Success();
         }
 

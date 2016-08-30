@@ -1,15 +1,15 @@
 ﻿using System;
-using BloomService.Web.Models;
-using BloomService.Web.Infrastructure.Mongo;
-using BloomService.Web.Infrastructure.Jobs;
-using Common.Logging;
-using BloomService.Web.Infrastructure.SignalR;
-using BloomService.Domain.Entities.Concrete;
 using System.Linq;
-using System.Web.Mvc;
+using BloomService.Domain.Entities.Concrete;
 using BloomService.Domain.Extensions;
+using BloomService.Web.Infrastructure.Jobs;
+using BloomService.Web.Infrastructure.Mongo;
+using BloomService.Web.Infrastructure.Services.Interfaces;
+using BloomService.Web.Infrastructure.SignalR;
+using BloomService.Web.Models;
+using Common.Logging;
 
-namespace BloomService.Web.Infrastructure.Services.Interfaces
+namespace BloomService.Web.Infrastructure.Services
 {
     public class ScheduleService : IScheduleService
     {

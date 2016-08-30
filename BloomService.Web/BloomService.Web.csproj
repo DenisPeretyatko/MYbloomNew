@@ -347,6 +347,12 @@
     <Compile Include="Infrastructure\Services\SageApiProxy.cs" />
     <Compile Include="Infrastructure\SignalR\IBloomServiceHub.cs" />
     <Compile Include="Infrastructure\SignalR\Implementation\BloomServiceHub.cs" />
+    <Compile Include="Infrastructure\StorageProviders\Implementation\FileSystemStorageFile.cs" />
+    <Compile Include="Infrastructure\StorageProviders\Implementation\FileSystemStorageFolder.cs" />
+    <Compile Include="Infrastructure\StorageProviders\Implementation\FileSystemStorageProvider.cs" />
+    <Compile Include="Infrastructure\StorageProviders\IStorageFile.cs" />
+    <Compile Include="Infrastructure\StorageProviders\IStorageFolder.cs" />
+    <Compile Include="Infrastructure\StorageProviders\IStorageProvider.cs" />
     <Compile Include="Infrastructure\Utils\JsonHelper.cs" />
     <Compile Include="Infrastructure\Mongo\IRepository.cs" />
     <Compile Include="Infrastructure\Mongo\MongoRepository.cs" />
