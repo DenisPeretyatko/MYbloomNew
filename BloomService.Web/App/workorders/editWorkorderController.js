@@ -479,5 +479,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.editRow = function (item, index) {
         item.isEditing = true;
     };
+
+    $scope.closeModal = function()
+    {
+        $('#myModal').modal('hide');
+    }
 }
 editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state"];

@@ -467,3 +467,16 @@
 .wo-map {
     min-height: 80vh !important;
 }
+
+.red-icon {
+    color: #df4242;
+    cursor: pointer;
+}
+
+.modal-close {
+    width: 0px;
+    position: absolute;
+    font-size: 1.4em;
+    /*margin-top: 3px;
+    margin-left: 3px;*/
+}
