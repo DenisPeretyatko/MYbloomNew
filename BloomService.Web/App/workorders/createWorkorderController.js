@@ -19,6 +19,7 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
     $scope.obj.permissiocode = '';
     $scope.obj.hours = '';
     $scope.paymentmethods = '';
+    $scope.obj.contact = '';
     $scope.lookups = state.lookups;
 
     $scope.$watch(function () { return state.lookups; }, function () {
@@ -35,12 +36,13 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
                 return element.RATESHEETNBR == 1;
             });;
             $scope.lookups.Employes.selected  = '';
-            $scope.lookups.Equipment.selected = '';
+            $scope.lookups.Equipment = state.lookups.Equipment;
             $scope.lookups.Hours.selected = '';
             $scope.obj.nottoexceed = '';
             $scope.obj.locationcomments = '';
             $scope.obj.customerpo = '';
             $scope.obj.hours = 0;
+            $scope.obj.contact = '';
             $scope.lookups.PermissionCodes.selected  = '';
             $scope.lookups.PaymentMethods.selected = $scope.lookups.PaymentMethods.find(function (element) {
                 return element.Value == 3;
@@ -65,6 +67,7 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             Permissiocode: $scope.lookups.PermissionCodes.selected == null ? "" : $scope.lookups.PermissionCodes.selected.DESCRIPTION,
             Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected.Method,
             JCJob: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.JCJob,
+            Contact: $scope.obj.contact
         };
 
         commonDataService.createWorkorder(workorder).then(function (response) {
@@ -72,7 +75,6 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
                 $state.go('manager.workorder.list');
         });
     };
-
 
     $scope.setCustomer = function (selected) {
         var customer = selected.$select.selected.Customer;
@@ -83,17 +85,25 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
                 selLocation = $scope.lookups.Locations.selected;
             }
             $scope.lookups.Locations = response.data.length > 0 ? response.data : [];
-            $scope.lookups.Locations.selected = selLocation;
+            $scope.lookups.Locations.selected = response.data.length === 1 ? response.data[0] : {};
         });
     };
     
     $scope.setLocation = function (selected) {
         var arCustomer = selected.$select.selected.ARCustomer;
-        var request = "{'arcustomer':'" + arCustomer + "'}";                       
+        var name = selected.$select.selected.Name;
+        var customerRequest = "{'arcustomer':'" + arCustomer + "'}";
+        var nameRequest = "{'name':'" + name + "'}";
         customerChanged = true;
-        commonDataService.customerByLocation(request).then(function (response) {
+        commonDataService.customerByLocation(customerRequest).then(function (response) {
             $scope.lookups.Customers.selected = response.data;
-        });    
+        });
+        commonDataService.equipmentByLocation(nameRequest).then(function (response) {
+            $scope.lookups.Equipment = response.data;
+            if (response.data.length === 1) {
+                $scope.lookups.Equipment.selected = response.data[0];
+            }
+        });
     };
 
     $scope.setEstimateHour = function (selected) {

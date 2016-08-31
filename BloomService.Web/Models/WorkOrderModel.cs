@@ -14,7 +14,7 @@
 
         public long Emploee { get; set; }
 
-        public List<LaborPartsModel> Equipment { get; set; }
+        public List<LaborPartsModel> PartsAndLabors { get; set; }
 
         public string Estimatehours { get; set; }
 
@@ -39,5 +39,9 @@
         public int Status { get; set; }
 
         public string JCJob { get; set; }
+
+        public string Contact { get; set; }
+
+        public ushort Equipment { get; set; }
     }
 }
