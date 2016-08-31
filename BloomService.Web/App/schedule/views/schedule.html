@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div id="new-row"></div>
-                        <div ng-repeat="workorder in unassignedWorkorders|orderBy:sortKey:reverse|filter:search" class="drag fc-event table row table-row dragdemo" style="z-index: 999; display: block" draggable="true">
+                        <div ng-repeat="workorder in unassignedWorkorders|orderBy:sortKey:reverse|filter:search" class="drag fc-event table row table-row dragdemo shedule-row cursor-pointer" draggable="true" ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})">
                             <div class="table-row col-lg-1 col-md-1 col-sm-6 col-xs-6">{{workorder.WorkOrder}}</div>
                             <div class="table-row col-lg-2 col-md-2 col-sm-6 col-xs-6">{{workorder.DateEntered}}</div>
                             <div class="table-row col-lg-3 col-md-3 hidden-sm hidden-xs">{{workorder.ARCustomer}}</div>

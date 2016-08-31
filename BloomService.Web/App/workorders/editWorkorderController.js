@@ -225,6 +225,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             Equipment: equipment,
             Status: $scope.lookups.Status.selected == null ? "" : $scope.lookups.Status.selected.Value,
             JCJob: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.JCJob,
+            Notes: $scope.workOrderNotes
         };
 
         commonDataService.saveWorkorder(workorder).then(function (response) {
@@ -245,7 +246,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     commonDataService.getWorkorder($stateParams.id).then(function (response) {
         $scope.editableWorkOrder = response.data;
         commonDataService.getNotes(response.data.WorkOrder).then(function (result) {
-            $scope.workOrderNotes = result.data;
+            if (result.data != "")
+                $scope.workOrderNotes = result.data;
+            else
+                $scope.workOrderNotes = [];
         });
     });
 
@@ -377,22 +381,35 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             lng: parseFloat(lng)
         }
         $scope.locationMap.setZoom(100);
+        $scope.locationMap.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+
         var marker = new google.maps.Marker({
             position: pos,
             map: $scope.locationMap,
             icon: "/public/images/workorder.png",
             title: woNumber
         });
-        marker.addListener('click', function () {
-            var infowindow = new google.maps.InfoWindow({
-                content: content
-            });
+        var infowindow = new google.maps.InfoWindow({
+            content: content
+        });
+        marker.addListener('mouseover', function () {
             infowindow.open($scope.locationMap, marker);
+        });
+        marker.addListener('mouseout', function () {
+            infowindow.close();
+        });
+        marker.addListener('click', function () {
+            $state.go("manager.workorder.edit", { id: value.WorkOrder.Id });
         });
         $('#myModal').on('shown.bs.modal', function () {
             google.maps.event.trigger($scope.locationMap, 'resize');
             $scope.locationMap.setCenter(new google.maps.LatLng(pos.lat, pos.lng));
-        })
+            $("#modalImg").attr('src', 'public/images/' + $scope.editableWorkOrder.WorkOrder + '/' + picture.BigImage);
+            $("#modalComment").text(picture.Description);
+        });
+        $('#myModal').on('hidden.bs.modal', function () {
+            marker.setMap(null);
+        });
     };
 
     $scope.setEstimateHour = function (selected) {
@@ -410,10 +427,6 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                 alert("Failed to edit comment");
         });
     }
-   
-
-   
-    
 
     $scope.addNote = function (wo) {
         if ($scope.noteObj.Subject && $scope.noteObj.Note) {
@@ -423,15 +436,9 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                 SubjectLine: $scope.noteObj.Subject,
                 Text: $scope.noteObj.Note
             };
-            commonDataService.addNote(model).then(function (response) {
-                if (response.data.success == false)
-                    alert("Failed to add note");
-                else {
-                    $scope.workOrderNotes.push(model);
-                    $scope.noteObj.Subject = "";
-                    $scope.noteObj.Note = "";
-                }
-            });
+            $scope.workOrderNotes.push(model);
+            $scope.noteObj.Subject = "";
+            $scope.noteObj.Note = "";
         }
     }
 
@@ -449,53 +456,33 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             $scope.noteObj.Subject = "";
             $scope.noteObj.Note = "";
         } else { //save
-            var model = {
-                WorkOrderId: $scope.editableWorkOrder.WorkOrder,
-                NoteId: $scope.editableNote.NoteId,
-                SubjectLine: $scope.noteObj.Subject,
-                Text: $scope.noteObj.Note
-            };
             if ($scope.noteObj.Subject && $scope.noteObj.Note) {
-                commonDataService.editNote(model).then(function (response) {
-                    if (response.data.success == false)
-                        alert("Failed to save note");
-                    else {
-                        angular.forEach($scope.workOrderNotes, function (value, key) {
-                            if (value == $scope.editableNote) {
-                                value.SubjectLine = $scope.noteObj.Subject;
-                                value.Text = $scope.noteObj.Note;
-                            }
-                        });
-                        $scope.isEditNote = false;
-                        $scope.noteObj.Subject = "";
-                        $scope.noteObj.Note = "";
+                angular.forEach($scope.workOrderNotes, function (value, key) {
+                    if (value == $scope.editableNote) {
+                        value.SubjectLine = $scope.noteObj.Subject;
+                        value.Text = $scope.noteObj.Note;
                     }
                 });
+                $scope.isEditNote = false;
+                $scope.noteObj.Subject = "";
+                $scope.noteObj.Note = "";
             }
         }
     }
 
-
     $scope.deleteNote = function ($event, item) {
-        var model = {
-            WorkOrderId: item.WorkOrderId,
-            NoteId: item.NoteId,
-            SubjectLine: item.SubjectLine,
-            Text: item.Text
-        };
-        commonDataService.deleteNote(model).then(function (response) {
-            if (response.data.success == false)
-                alert("Failed to delete note");
-            else {
-                var el = angular.element($event.target);
-                el.parent().parent().remove();
-                $scope.workOrderNotes.splice($scope.workOrderNotes.indexOf(item), 1);
-            }
-        });
+        var el = angular.element($event.target);
+        el.parent().parent().remove();
+        $scope.workOrderNotes.splice($scope.workOrderNotes.indexOf(item), 1);
     }
 
     $scope.editRow = function (item, index) {
         item.isEditing = true;
     };
+
+    $scope.closeModal = function()
+    {
+        $('#myModal').modal('hide');
+    }
 }
 editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state"];

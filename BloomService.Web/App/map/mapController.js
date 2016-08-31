@@ -3,7 +3,7 @@
  */
 "use strict";
 
-var mapController = function ($rootScope, $scope, $http, $compile, $interpolate, commonDataService, state) {
+var mapController = function ($rootScope, $scope, $location, $state, $http, $compile, $interpolate, commonDataService, state) {
 
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
@@ -52,11 +52,17 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
                 title: value.WorkOrder.WorkOrder
             });
             $scope.workorderMarkers.push(marker);
-            marker.addListener('click', function () {
-                var infowindow = new google.maps.InfoWindow({
-                    content: content
-                });
+            var infowindow = new google.maps.InfoWindow({
+                content: content
+            });
+            marker.addListener('mouseover', function () {
                 infowindow.open($scope.locationMap, marker);
+            });
+            marker.addListener('mouseout', function () {
+                infowindow.close();
+            });
+            marker.addListener('click', function () {
+                $state.go("manager.workorder.edit", { id: value.WorkOrder.Id });
             });
         });
     });
@@ -79,11 +85,17 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
                     title: truck.Name
                 });
                 $scope.truckMarkers.push(marker);
-                marker.addListener('click', function () {
-                    var infowindow = new google.maps.InfoWindow({
-                        content: content
-                    });
+                var infowindow = new google.maps.InfoWindow({
+                    content: content
+                });
+                marker.addListener('mouseover', function () {
                     infowindow.open($scope.locationMap, marker);
+                });
+                marker.addListener('mouseout', function () {
+                    infowindow.close();
+                });
+                marker.addListener('click', function () {
+                    $state.go("manager.technician.edit", { id: truck.Id });
                 });
             }
         });
@@ -125,4 +137,4 @@ var mapController = function ($rootScope, $scope, $http, $compile, $interpolate,
     });
 
 };
-mapController.$inject = ["$rootScope", "$scope", "$http", "$compile", "$interpolate", "commonDataService", "state"];
+mapController.$inject = ["$rootScope", "$scope", "$location", "$state", "$http", "$compile", "$interpolate", "commonDataService", "state"];

@@ -77,7 +77,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr dir-paginate="workorder in listworkorders|orderBy:sortKey:reverse|filter:search|itemsPerPage:10">
+                        <tr dir-paginate="workorder in listworkorders|orderBy:sortKey:reverse|filter:search|itemsPerPage:10" class="cursor-pointer" ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})">
                             <td>{{workorder.WorkOrder}}</td>
                             <td data-sort-initial="true">{{workorder.ScheduleDate|date:'mediumDate' : 'UTC'}}</td>
                             <td>{{workorder.DateEntered|date:'mediumDate' : 'UTC'}}</td>

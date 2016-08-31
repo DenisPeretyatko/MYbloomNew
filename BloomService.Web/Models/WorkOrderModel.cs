@@ -40,6 +40,8 @@
 
         public string JCJob { get; set; }
 
+        public List<WorkOrderNoteModel> Notes { get; set; }
+
         public string Contact { get; set; }
 
         public ushort Equipment { get; set; }

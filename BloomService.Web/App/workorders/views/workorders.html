@@ -27,7 +27,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="workorder in workorders">
+                        <tr ng-repeat="workorder in workorders" class="cursor-pointer" ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})">
                             <td>{{workorder.WorkOrder}}</td>
                             <td>{{workorder.ScheduleDate|date:'mediumDate' : 'UTC'}}</td>
                             <td>{{workorder.DateEntered|date:'mediumDate' : 'UTC' }}</td>
