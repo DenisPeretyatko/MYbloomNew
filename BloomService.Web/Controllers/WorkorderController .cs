@@ -54,14 +54,15 @@ namespace BloomService.Web.Controllers
                 Problem = model.Problem,
                 RateSheet = model.Ratesheet,
                 Employee = model.Emploee.ToString(),
-                Equipment = 0,
                 EstimatedRepairHours = Convert.ToDecimal(model.Estimatehours),
                 NottoExceed = model.Nottoexceed,
                 Comments = model.Locationcomments,
                 CustomerPO = model.Customerpo,
                 PermissionCode = model.Permissiocode,
                 PayMethod = model.Paymentmethods,
-                JCJob = model.JCJob
+                JCJob = model.JCJob,
+                Contact = model.Contact,
+                Equipment = model.Equipment
             };
 
             var result = _sageApiProxy.AddWorkOrder(workorder);
@@ -195,6 +196,23 @@ namespace BloomService.Web.Controllers
         }
 
         [HttpPost]
+        [Route("Workorder/EquipmentByLocation")]
+        public ActionResult GetEquipmentByLocation(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return Json(new List<SageEquipment>(), JsonRequestBehavior.AllowGet);
+            }
+            var result = _repository.GetAll<SageEquipment>().Where(x => x.Location == name).ToList();
+            if (!result.Any())
+            {
+                result = new List<SageEquipment>();
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         [Route("WorkorderPage")]
         public ActionResult GetWorkorderPage(WorkorderSortModel model)
         {
@@ -285,7 +303,6 @@ namespace BloomService.Web.Controllers
                 Problem = model.Problem,
                 RateSheet = model.Ratesheet,
                 Employee = model.Emploee.ToString(),
-                Equipment = 0,
                 EstimatedRepairHours = Convert.ToDecimal(model.Estimatehours),
                 NottoExceed = model.Nottoexceed,
                 Comments = model.Locationcomments,
@@ -297,7 +314,9 @@ namespace BloomService.Web.Controllers
                 Status = model.Status == WorkOrderStatus.ClosedId
                     ? WorkOrderStatus.ById(WorkOrderStatus.ClosedId)
                     : WorkOrderStatus.ById(WorkOrderStatus.OpenId), 
-                JCJob = model.JCJob 
+                JCJob = model.JCJob,
+                Contact = model.Contact,
+                Equipment = model.Equipment
             };
 
             var workOrderResult = _sageApiProxy.EditWorkOrder(workorder);
@@ -327,7 +346,7 @@ namespace BloomService.Web.Controllers
                 workOrderResult.Entity.Longitude = itemLocation.Longitude;
             }
 
-            var workOrderItems = Mapper.Map<IEnumerable<SageWorkOrderItem>>(model.Equipment);
+            var workOrderItems = Mapper.Map<IEnumerable<SageWorkOrderItem>>(model.PartsAndLabors);
 
             var workOrderFromMongo = _repository.SearchFor<SageWorkOrder>(x =>  x.WorkOrder == workorder.WorkOrder).Single();
             

@@ -215,6 +215,14 @@ var commonDataService = function ($http, $window) {
         });
     };
 
+    this.equipmentByLocation = function (name) {
+        return $http.post("Workorder/EquipmentByLocation", name, {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    };
+
     this.updateNotificationTime = function () {
         return $http.post("/Dashboard/UpdateNotificationTime", "", {
             headers: {

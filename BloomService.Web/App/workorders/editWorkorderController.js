@@ -16,6 +16,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.ratesheet = "";
     $scope.emploee = "";
     $scope.equipment = [];
+    $scope.obj.equipment = "";
     $scope.estimatehours = "";
     $scope.obj.nottoexceed = "";
     $scope.obj.locationcomments = "";
@@ -52,6 +53,8 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             $scope.obj.nottoexceed = $scope.editableWorkOrder.NottoExceed;
             $scope.obj.locationcomments = $scope.editableWorkOrder.Comments;
             $scope.obj.customerpo = $scope.editableWorkOrder.CustomerPO;
+            $scope.obj.contact = $scope.editableWorkOrder.Contact;
+            $scope.obj.equipment = $scope.editableWorkOrder.Equipment;
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
             $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
             $scope.lookups.Status.selected = $scope.editableWorkOrder.StatusObj;
@@ -78,6 +81,8 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             $scope.obj.nottoexceed = $scope.editableWorkOrder.NottoExceed;
             $scope.obj.locationcomments = $scope.editableWorkOrder.Comments;
             $scope.obj.customerpo = $scope.editableWorkOrder.CustomerPO;
+            $scope.obj.contact = $scope.editableWorkOrder.Contact;
+            $scope.obj.equipment = $scope.editableWorkOrder.Equipment;
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
             $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
             $scope.lookups.Status.selected = $scope.editableWorkOrder.StatusObj;
@@ -222,10 +227,12 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             Permissiocode: $scope.lookups.PermissionCodes.selected == null ? "" : $scope.lookups.PermissionCodes.selected.DESCRIPTION,
             Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected.Value,
             WorkOrder: $scope.editableWorkOrder.WorkOrder,
-            Equipment: equipment,
+            Equipment: $scope.editableWorkOrder.Equipment,
+            PartsAndLabors: equipment,
             Status: $scope.lookups.Status.selected == null ? "" : $scope.lookups.Status.selected.Value,
             JCJob: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.JCJob,
-            Notes: $scope.workOrderNotes
+            Notes: $scope.workOrderNotes,
+            Contact: $scope.obj.contact
         };
 
         commonDataService.saveWorkorder(workorder).then(function (response) {
@@ -241,7 +248,6 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                 alert("Failed to mark as reviewed");
         });
     }
-
 
     commonDataService.getWorkorder($stateParams.id).then(function (response) {
         $scope.editableWorkOrder = response.data;
@@ -260,7 +266,6 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             item.rate = 85.0000;
         }
     };
-
 
     $scope.editRow = function (item, index) {
         item.isEditing = true;
@@ -365,13 +370,20 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
     $scope.setLocation = function (selected) {
         var arCustomer = selected.$select.selected.ARCustomer;
-        var request = "{'arcustomer':'" + arCustomer + "'}";
+        var name = selected.$select.selected.Name;
+        var customerRequest = "{'arcustomer':'" + arCustomer + "'}";
+        var nameRequest = "{'name':'" + name + "'}";
         customerChanged = true;
-        commonDataService.customerByLocation(request).then(function (response) {
+        commonDataService.customerByLocation(customerRequest).then(function (response) {
             $scope.lookups.Customers.selected = response.data;
         });
+        commonDataService.equipmentByLocation(nameRequest).then(function (response) {
+            $scope.lookups.Equipment = response.data;
+            if (response.data.length === 1) {
+                $scope.lookups.Equipment.selected = response.data[0];
+            }
+        });
     };
-
 
     $scope.displayLocation = function (lat, lng, picture, woNumber) {
         var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Id}}. {{Image}}</h1><div>{{Description}}</div></div>");

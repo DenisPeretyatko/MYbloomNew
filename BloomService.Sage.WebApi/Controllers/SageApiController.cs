@@ -142,6 +142,7 @@
                 properties.Add("NottoExceed", workOrder.NottoExceed ?? string.Empty);
                 properties.Add("Comments", workOrder.Comments ?? string.Empty);
                 properties.Add("CustomerPO", workOrder.CustomerPO ?? string.Empty);
+                properties.Add("Contact", workOrder.Contact ?? string.Empty);
                 properties.Add("PermissionCode", workOrder.PermissionCode ?? string.Empty);
                 properties.Add("PayMethod", workOrder.PayMethod ?? string.Empty);
                 properties.Add("JCJob", workOrder.JCJob ?? string.Empty);
