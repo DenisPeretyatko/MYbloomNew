@@ -31,6 +31,7 @@
     $rootScope.unavailableTechniciansIds = [];
     $rootScope.AddedImage = [];
     $rootScope.updatedSageWorkOrder = [];
+    $rootScope.updatedTechnican = [];
 
     var model = {
         Index: 0,
@@ -82,6 +83,7 @@
     };
 
     connection.client.UpdateTechnician = function (technician) {
+        $rootScope.updatedTechnican = technician;
         angular.forEach(_this.technicians, function (value, key) {
             if (value.Employee === technician.Id) {
                 commonDataService.getTechnician(value.Id).then(function(response) {
@@ -96,6 +98,7 @@
         else if ($rootScope.unavailableTechniciansIds.includes(technician.Id) === false && technician.IsAvailable === false) {
             $rootScope.unavailableTechniciansIds.unshift(technician.Id);
         }
+        $rootScope.$digest();
     };
 
     connection.client.updateTechnicianLocation = function (technician) {
@@ -115,17 +118,23 @@
 
     
     connection.client.CreateAssignment = function (model) {
-        $rootScope.workorders.unshift(model);
+        var isExist = false;
         angular.forEach(_this.locations, function (value, key) {
-            if (value.WorkOrder.WorkOrder == model.WorkOrder) {
-                _this.locations = value;
+            if (value.WorkOrder.WorkOrder == model.WorkOrder.WorkOrder && value.Employee == model.Employee) {
+                isExist = true;
+                _this.locations[key] = value;
             }
         });
-        angular.forEach($rootScope.workorders, function (value, key) {
-            if (value.WorkOrder.WorkOrder == model.WorkOrder) {
-                $rootScope.workorders = value;
-            }
-        });
+        if (isExist) {
+            angular.forEach($rootScope.workorders, function(value, key) {
+                if (value.WorkOrder.WorkOrder == model.WorkOrder.WorkOrder && value.Employee == model.Employee) {
+                    $rootScope.workorders[key] = value;
+                }
+            });
+        } else {
+            $rootScope.workorders.unshift(model);
+          // _this.locations.push(model);
+        }
         $rootScope.$digest();
     };
 

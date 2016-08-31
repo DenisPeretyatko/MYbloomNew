@@ -418,7 +418,15 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
              $("." + data + "").removeClass("footable-sorted");
          }
         }
-    }
+     }
+
+     $rootScope.$watchCollection(function () { return $rootScope.updatedTechnican; }, function () {
+         angular.forEach($scope.resources, function (value, key) {
+             if (value.id == $rootScope.updatedTechnican.Id) {
+                 $scope.resources[key].color = $rootScope.updatedTechnican.Сolor;
+             }
+         });
+     });
 
 };
 scheduleController.$inject = ["$rootScope", "$scope", "$interpolate", "$timeout", "$q", "commonDataService"];

@@ -119,7 +119,7 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
                 }
             });
         } else {
-            $scope.workordersView = $rootScope.workorders;
+            $scope.workordersView = angular.copy($rootScope.workorders);
         }
     });
 
@@ -132,7 +132,7 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
                 }
             });
         } else {
-            $scope.workordersView = $rootScope.workorders;
+            $scope.workordersView = angular.copy($rootScope.workorders);
         }
     });
 

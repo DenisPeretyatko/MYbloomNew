@@ -19,6 +19,12 @@
         _this.connection = $.connection.bloomServiceHub;
         return _this.connection;
     }
+
+    $.connection.hub.disconnected(function () {
+        setTimeout(function () {
+            $.connection.hub.start();
+        }, 1000); 
+    });
 }
  
 //commonHub.$inject = [];
