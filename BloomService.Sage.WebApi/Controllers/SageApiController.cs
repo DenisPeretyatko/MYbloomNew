@@ -349,7 +349,7 @@
         {
             try
             {
-                if (id == string.Empty || id == null)
+                if (string.IsNullOrEmpty(id))
                 {
                     return new SageResponse<SageNote>
                     {
@@ -372,12 +372,28 @@
             }
         }
 
+        [HttpDelete, Route("api/v2/sm/workorders/notes/delete/")]
+        public SageResponse<SageNote> DeleteWorkOrderNotes(IEnumerable<long> ids)
+        {
+            try
+            {
+                this.serviceOdbc.DeleteNotes(ids);
+                var result = new SageResponse<SageNote> { IsSucceed = true };
+                return result;
+            }
+            catch (Exception exception)
+            {
+                var result = new SageResponse<SageNote> { IsSucceed = false, ErrorMassage = exception.Message };
+                return result;
+            }
+        }
+
         [HttpGet, Route("api/v2/sm/workorders/notes/{id}")]
         public SageResponse<SageNote> GetWorkOrderNotes(string id)
         {
             try
             {
-                if (id == string.Empty || id == null)
+                if (string.IsNullOrEmpty(id))
                 {
                     return new SageResponse<SageNote>
                     {
