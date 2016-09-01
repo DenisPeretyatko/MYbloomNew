@@ -85,7 +85,7 @@
     connection.client.UpdateTechnician = function (technician) {
         $rootScope.updatedTechnican = technician;
         angular.forEach(_this.technicians, function (value, key) {
-            if (value.Employee === technician.Id) {
+            if (value.Employee == technician.Id) {
                 commonDataService.getTechnician(value.Id).then(function(response) {
                     delete _this.technicians[key];
                     _this.technicians[key] = response.data;
@@ -103,7 +103,7 @@
 
     connection.client.updateTechnicianLocation = function (technician) {
         angular.forEach($rootScope.trucks, function (value, key) {
-            if (value.Employee === technician.Employee) {
+            if (value.Employee == technician.Employee) {
                     delete $rootScope.trucks[key];
                     $rootScope.trucks[key] = technician;
             }
