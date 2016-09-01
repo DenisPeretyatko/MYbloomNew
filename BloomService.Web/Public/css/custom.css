@@ -488,3 +488,41 @@ body {
 .li-wopicture {
     min-width: 273px;
 }
+
+.vertical-middle {
+    vertical-align: middle;
+}
+
+/*Columns wo-edit*/
+  .wo-ibox {
+        height: 540px;
+    }
+
+@media screen and (max-width: 1199px) {
+    .wo-ibox {
+        height: 612px;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .wo-ibox {
+        height: inherit;
+    }
+}
+
+/*Columns wo-create*/
+  .wo-create-ibox {
+        height: 436px;
+    }
+
+@media screen and (max-width: 1199px) {
+    .wo-create-ibox {
+        height: 612px;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .wo-create-ibox {
+        height: inherit;
+    }
+}

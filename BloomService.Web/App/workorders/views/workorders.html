@@ -34,33 +34,33 @@
                             <td>{{workorder.ARCustomer}}</td>
                             <td>{{workorder.Location}}</td>
                             <td>
-                                <span class="label open statusColor" ng-if="workorder.Status == 'Open'">
+                                <span class="label open statusColor vertical-middle" ng-if="workorder.Status == 'Open'">
                                         {{workorder.Status}}
                                     </span>
-                                <span class="label return statusColor" ng-if="workorder.Status == 'Return Required'" >
+                                <span class="label return statusColor vertical-middle" ng-if="workorder.Status == 'Return Required'" >
                                     {{workorder.Status}}
                                 </span>
-                                <span class="label work statusColor" ng-if="workorder.Status == 'Work Complete'">
+                                <span class="label work statusColor vertical-middle" ng-if="workorder.Status == 'Work Complete'">
                                     {{workorder.Status}}
                                 </span>
-                                <span class="label closed statusColor" ng-if="workorder.Status == 'Closed'" >
+                                <span class="label closed statusColor vertical-middle" ng-if="workorder.Status == 'Closed'" >
                                     {{workorder.Status}}
                                 </span>
-                                <span class="label cancelled statusColor" ng-if="workorder.Status == 'Cancelled'">
+                                <span class="label cancelled statusColor vertical-middle" ng-if="workorder.Status == 'Cancelled'">
                                     {{workorder.Status}}
                                 </span>
-                                <span class="label expired statusColor" ng-if="workorder.Status == 'Expired Quote'">
+                                <span class="label expired statusColor vertical-middle" ng-if="workorder.Status == 'Expired Quote'">
                                     {{workorder.Status}}
                                 </span>
-                                <span class="label reviewed statusColor" ng-if="workorder.Status == 'Reviewed'">
+                                <span class="label reviewed statusColor vertical-middle" ng-if="workorder.Status == 'Reviewed'">
                                     {{workorder.Status}}
                                 </span>
-                                <span class="label invoiced statusColor" ng-if="workorder.Status == 'Invoiced'">
+                                <span class="label invoiced statusColor vertical-middle" ng-if="workorder.Status == 'Invoiced'">
                                     {{workorder.Status}}
                                 </span>
                             </td>
                             <td class="center">
-                                <a ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})" class="btn btn-primary btn-xs">Edit...</a>
+                                <a ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})" class="btn btn-primary btn-xs no-margins">Edit...</a>
                             </td>
                         </tr>
                         </tbody>
