@@ -484,3 +484,7 @@
 body {
     padding-right: 0px !important;
 }
+
+.li-wopicture {
+    min-width: 273px;
+}

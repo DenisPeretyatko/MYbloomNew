@@ -267,6 +267,18 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         }
     };
 
+    $scope.resetForm = function (item) {
+        item.description.selected = undefined;
+        item.empl.selected = undefined;
+        item.biled = 0;
+        item.cost = 0;
+        item.rate = 0;
+        item.labor.selected = undefined;
+        item.parts.selected = undefined;
+    };
+
+
+
     $scope.editRow = function (item, index) {
         item.isEditing = true;
 

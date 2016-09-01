@@ -354,7 +354,7 @@
                                                 <label>{{equipm.date}}</label>
                                             </td>
                                             <td ng-if="equipm.isEditing == true" class="editable-woitem">
-                                                <ui-select ng-model="equipm.equipType.selected" theme="bootstrap">
+                                                <ui-select ng-model="equipm.equipType.selected" theme="bootstrap" on-select="resetForm(equipm)">
                                                     <ui-select-match placeholder="Type">{{$select.selected}}</ui-select-match>
                                                     <ui-select-choices repeat="item in equipm.equipType | filter: $select.search">
                                                         <div>{{item}}</div>
