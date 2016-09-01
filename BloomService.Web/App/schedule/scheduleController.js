@@ -28,7 +28,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
     $scope.alertOnDrop = function (event, delta, revertFunc, jsEvent, ui, view, dayDelta, minuteDelta, allDay) {
         var now = new Date();
         var eventDate = new Date(event._start._d.getTime() + (now.getTimezoneOffset() * 60000));
-        if (!$rootScope.unavailableTechniciansIds.includes(event.resourceId) && now <= eventDate) {
+        if (!$rootScope.unavailableTechniciansIds.includes(parseInt(event.resourceId)) && now <= eventDate) {
             $scope.alertMessage = (event.title + ": Droped to make dayDelta " + dayDelta);
             event = setTechnicianColor(event);
             $("#calendar").fullCalendar("rerenderEvents");
@@ -163,7 +163,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             eventReceive: function (event) {
                 var now = new Date();
                 var eventDate = new Date(event._start._d.getTime() + (now.getTimezoneOffset() * 60000));
-                if (!$rootScope.unavailableTechniciansIds.includes(event.resourceId) && eventDate >= now) {
+                if (!$rootScope.unavailableTechniciansIds.includes(parseInt(event.resourceId)) && eventDate >= now) {
                     event = setTechnicianColor(event);
                     event.title = event.workorderId + " " + event.customerFoo + " " + event.locationFoo;
                     var estimate = parseInt(event.hourFoo);
@@ -246,7 +246,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     color: value.Color == "" ? "" : value.Color
                 });
                 if (value.IsAvailable == false) {
-                    $rootScope.unavailableTechniciansIds.unshift(value.Employee);
+                    $rootScope.unavailableTechniciansIds.unshift(parseInt(value.Employee));
                 }
             }
         }, $scope.resources);

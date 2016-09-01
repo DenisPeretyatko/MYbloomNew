@@ -494,9 +494,9 @@ body {
 }
 
 /*Columns wo-edit*/
-  .wo-ibox {
-        height: 540px;
-    }
+.wo-ibox {
+    height: 540px;
+}
 
 @media screen and (max-width: 1199px) {
     .wo-ibox {
@@ -511,9 +511,9 @@ body {
 }
 
 /*Columns wo-create*/
-  .wo-create-ibox {
-        height: 436px;
-    }
+.wo-create-ibox {
+    height: 436px;
+}
 
 @media screen and (max-width: 1199px) {
     .wo-create-ibox {
@@ -525,4 +525,10 @@ body {
     .wo-create-ibox {
         height: inherit;
     }
+}
+/**/
+.circle {
+    border-radius: 50%;
+    height: 27px;
+    width: 27px;
 }
