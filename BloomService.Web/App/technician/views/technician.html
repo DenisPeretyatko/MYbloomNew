@@ -15,6 +15,7 @@
                             <th ng-click="sort('Employee')">#</th>
                             <th ng-click="sort('Name')">Full Name</th>
                             <th ng-click="sort('IsAvailable')" data-hide="phone,tablet">Available</th>
+                            <th>Color</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -26,6 +27,10 @@
                                 <span class="label" ng-class="technician.IsAvailable == true ? 'label-available' : 'label-danger'">
                                     {{technician.IsAvailable == true ? "Available" : "Not Available" }}
                                 </span>
+                            </td>
+                            <td>
+                                <div ng-hide="technician.Color==null" class="circle" style="background-color: {{technician.Color}}"></div>
+                                <div ng-show="technician.Color==null" class="circle" style="background-color: #ed5565"></div>
                             </td>
                             <td class="center">
                                 <a ui-sref="manager.technician.edit({ id: '{{technician.Id}}' })" c class="btn btn-primary btn-xs">Edit...</a>
