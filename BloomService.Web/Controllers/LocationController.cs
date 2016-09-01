@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using BloomService.Web.Models;
 
 namespace BloomService.Web.Controllers
@@ -29,7 +30,7 @@ namespace BloomService.Web.Controllers
             var tmpLocations = workOrders.Select(x => x.Location);
             var itemLocations = _repository.SearchFor<SageLocation>(x => tmpLocations.Contains(x.Name)).ToList();
             var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.Employee)).OrderByDescending(x => x.ScheduleDate).ThenByDescending(x => x.StartTime).ToList();
-            
+
             foreach (var item in workOrders)
             {
                 var itemLocation = itemLocations.FirstOrDefault(l => l.Name == item.Location);
@@ -54,17 +55,17 @@ namespace BloomService.Web.Controllers
         [Route("Location/Trucks")]
         public ActionResult GetTrucks()
         {
-            var employees = _repository.GetAll<SageEmployee>().ToList();
-            var techLocations = _repository.GetAll<SageTechnicianLocation>();
+            var utcDateLimit = DateTime.UtcNow.AddHours(-1);
+            var techLocations = _repository.SearchFor<SageTechnicianLocation>(x => x.Date >= utcDateLimit);
+            var employees = new List<SageEmployee>();
 
-            foreach (var employee in employees)
+            foreach (var location in techLocations)
             {
-                var itemLocation = techLocations.Where(x => x.Employee == employee.Employee).OrderByDescending(x => x.Date).FirstOrDefault();
-                if (itemLocation == null)
-                    continue;
-
-                employee.Latitude = itemLocation.Latitude;
-                employee.Longitude = itemLocation.Longitude;
+                var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == location.Employee).FirstOrDefault();
+                if (employee == null) continue;
+                employee.Latitude = location.Latitude;
+                employee.Longitude = location.Longitude;
+                employees.Add(employee);
             }
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
