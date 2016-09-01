@@ -27,6 +27,8 @@
 
         void DeleteNote(string id);
 
+        void DeleteNotes(IEnumerable<long> ids);
+
         List<SageNote> GetNotes(string id);
     }
 }

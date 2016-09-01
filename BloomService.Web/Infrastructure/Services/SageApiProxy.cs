@@ -44,8 +44,19 @@
 
         public SageResponse<SageNote> DeleteNote(long id)
         {
-            return Delete<SageNote>(id, EndPoints.DeleteNote);
+            return Delete<SageNote>(id, EndPoints.RemoveNote);
         }
+
+        public SageResponse<SageNote> DeleteNotes(IEnumerable<long> ids)
+        {
+            var request = new RestRequest(EndPoints.DeleteNotes, Method.DELETE) { RequestFormat = DataFormat.Json };
+            request.AddBody(ids);
+            BuildAuthenticationHeader(request);
+            var response = this.restClient.Execute<SageResponse<SageNote>>(request);
+            var results = response.Data;
+            return results;
+        }
+
 
         public SageResponse<SageWorkOrder> AddWorkOrder(SageWorkOrder workOrder)
         {

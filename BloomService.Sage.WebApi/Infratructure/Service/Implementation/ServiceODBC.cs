@@ -103,6 +103,12 @@
             ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
 
+        public void DeleteNotes(IEnumerable<long> ids)
+        {
+            var query = string.Format(Queries.BuildDeleteWorkOrderNotesQuery(ids));
+            ExecuteQuery(timberlineServiceManagementConnectionString, query);
+        }
+
         public List<SageNote> GetNotes(string id)
         {
             var query = string.Format(Queries.SelectNotesQuery, id);

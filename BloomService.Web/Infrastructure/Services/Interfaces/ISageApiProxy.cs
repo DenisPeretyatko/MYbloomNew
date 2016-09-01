@@ -38,5 +38,6 @@
         SageResponse<SageNote> EditNote(SageNote note);
         SageResponse<SageNote> GetNotes(long id);
         SageResponse<SageNote> DeleteNote(long id);
+        SageResponse<SageNote> DeleteNotes(IEnumerable<long> ids);
     }
 }
