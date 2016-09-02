@@ -4,7 +4,7 @@
 
 "use strict";
 
-var commonModuleConfig = function($stateProvider) {
+var commonModuleConfig = function ($stateProvider) {
     $stateProvider
         .state('manager.common', {
             url: "/common",
@@ -21,7 +21,8 @@ angular
     .directive('minimalizaSidebar', minimalizaSidebar)
     .directive('iboxToolsFullScreen', iboxToolsFullScreen)
     .directive('back', backButton)
-    .directive('loadingBar', loadingBar)
+    .directive('loadingBar', loadingBar) 
+    .directive('interceptor', interceptor)
     .constant('flotChartOptions', flotChartOptions)
     .constant('googleMapStyles', googleMapStyles)
     .constant('googleMapOptions', googleMapOptions)
@@ -33,5 +34,5 @@ angular
      .service('loadingBarService', loadingBarService)
     .config(commonModuleConfig)
      .config(loadingBarConfig);
-    
-    
+
+
