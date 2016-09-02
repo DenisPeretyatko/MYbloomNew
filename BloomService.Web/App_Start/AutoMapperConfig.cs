@@ -65,7 +65,13 @@
              .ForMember(dest => dest.QSYSGEN, opts => opts.UseValue("N"))
              .ForMember(dest => dest.QCUSTVIEW, opts => opts.UseValue("Y"))
              .ForMember(dest => dest.SUBJECTLINE, opts => opts.MapFrom(src => src.SubjectLine))
-             .ForMember(dest => dest.TEXT, opts => opts.MapFrom(src => src.Text)).ReverseMap();
-         }
+             .ForMember(dest => dest.TEXT, opts => opts.MapFrom(src => src.Text));
+
+            Mapper.CreateMap<SageNote, WorkOrderNoteModel>()
+             .ForMember(dest => dest.WorkOrderId, opts => opts.MapFrom(src => src.TRANSNBR))
+             .ForMember(dest => dest.NoteId, opts => opts.MapFrom(src => src.NOTENBR))
+             .ForMember(dest => dest.SubjectLine, opts => opts.MapFrom(src => src.SUBJECTLINE))
+             .ForMember(dest => dest.Text, opts => opts.MapFrom(src => src.TEXT));
+        }
     }
 }

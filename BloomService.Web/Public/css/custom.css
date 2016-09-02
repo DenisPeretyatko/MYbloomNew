@@ -582,3 +582,11 @@ body {
 .validation-message {
     color: #df4242;
 }
+
+/**/
+.circle {
+    border-radius: 50%;
+    height: 27px;
+    width: 27px;
+}
+

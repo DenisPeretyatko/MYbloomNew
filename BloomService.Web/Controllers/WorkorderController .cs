@@ -346,10 +346,27 @@ namespace BloomService.Web.Controllers
                 workOrderResult.Entity.Longitude = itemLocation.Longitude;
             }
 
-            var workOrderItems = Mapper.Map<IEnumerable<SageWorkOrderItem>>(model.PartsAndLabors);
+            this.ResolveWorkOrderItems(model);
+            this.ResolveWorkOrderNotes(model);
 
-            var workOrderFromMongo = _repository.SearchFor<SageWorkOrder>(x =>  x.WorkOrder == workorder.WorkOrder).Single();
-            
+            workOrderResult.Entity.Status = WorkOrderStatus.ById(model.Status);
+            workOrderResult.Entity.Id = workorder.Id;
+            workOrderResult.Entity.IsValid = true;
+            workOrderResult.Entity.WorkOrderItems = _sageApiProxy.GetWorkorderItemsByWorkOrderId(workorder.WorkOrder).Entities;
+            workOrderResult.Entity.WorkNotes = this._sageApiProxy.GetNotes(workorder.WorkOrder).Entities;
+            _repository.Update(workOrderResult.Entity);
+
+            _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
+            _hub.UpdateWorkOrder(model);
+            return Success();
+        }
+
+        [NonAction]
+        private void ResolveWorkOrderItems(WorkOrderModel model)
+        {
+            var workOrderItems = Mapper.Map<IEnumerable<SageWorkOrderItem>>(model.PartsAndLabors);
+            var workOrderFromMongo = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).Single();
+
             if (workOrderItems != null)
             {
                 foreach (var workOrderItem in workOrderItems)
@@ -372,15 +389,15 @@ namespace BloomService.Web.Controllers
                         }
                         if (workOrderItem.WorkOrderItem == 0)
                         {
-                            _sageApiProxy.AddWorkOrderItem(workOrderItem);                            
+                            _sageApiProxy.AddWorkOrderItem(workOrderItem);
                         }
                         else
                         {
-                            _sageApiProxy.EditWorkOrderItem(workOrderItem);                           
+                            _sageApiProxy.EditWorkOrderItem(workOrderItem);
                         }
                     }
                 }
-               
+
 
                 if (workOrderFromMongo.WorkOrderItems != null)
                 {
@@ -412,16 +429,67 @@ namespace BloomService.Web.Controllers
                     }
                 }
             }
-            
-            workOrderResult.Entity.Status = WorkOrderStatus.ById(model.Status);
-            workOrderResult.Entity.Id = workorder.Id;
-            workOrderResult.Entity.IsValid = true;
-            workOrderResult.Entity.WorkOrderItems = _sageApiProxy.GetWorkorderItemsByWorkOrderId(workorder.WorkOrder).Entities;
-            _repository.Update(workOrderResult.Entity);
+        }
 
-            _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
-            _hub.UpdateWorkOrder(model);
-            return Success();
+        [NonAction]
+        private void ResolveWorkOrderNotes(WorkOrderModel model)
+        {
+            var workOrderNotes = Mapper.Map<IEnumerable<SageNote>>(model.Notes);
+            var workOrderFromMongo = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).Single();
+
+            if (workOrderNotes != null)
+            {
+                foreach (var workOrderNote in workOrderNotes)
+                {
+                    if ((workOrderFromMongo.WorkNotes != null
+                         && workOrderFromMongo.WorkNotes.Contains(workOrderNote)))
+                    {
+                        this._sageApiProxy.EditNote(workOrderNote);
+                    }
+                    else
+                    {
+                        if (workOrderNote.NOTENBR == 0)
+                        {
+                            this._sageApiProxy.AddNote(workOrderNote);
+                        }
+                        else
+                        {
+                            this._sageApiProxy.EditNote(workOrderNote);
+                        }
+                    }
+                }
+
+
+            if (workOrderFromMongo.WorkNotes != null)
+                {
+                    var idsToRemove = new List<long>();
+
+                    foreach (var woNote in workOrderFromMongo.WorkNotes)
+                    {
+                        if (!workOrderNotes.Select(x => x.NOTENBR).Contains(woNote.NOTENBR))
+                        {
+                            idsToRemove.Add(woNote.NOTENBR);
+                        }
+                    }
+
+                    if (idsToRemove.Any())
+                    {
+                        this._sageApiProxy.DeleteNotes(idsToRemove);
+                    }
+                }
+            }
+            else
+            {
+                if (workOrderFromMongo.WorkNotes != null)
+                {
+                    var idsToRemove = workOrderFromMongo.WorkNotes.Select(x => x.NOTENBR);
+
+                    if (idsToRemove.Any())
+                    {
+                        _sageApiProxy.DeleteNotes(idsToRemove);
+                    }
+                }
+            }
         }
 
         [HttpPost]
@@ -524,7 +592,8 @@ namespace BloomService.Web.Controllers
         public ActionResult GetNotes(string id)
         {
             var notes = this._repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == Convert.ToInt64(id)).SingleOrDefault().WorkNotes;
-            return Json(notes, JsonRequestBehavior.AllowGet);
+            var result = Mapper.Map<IEnumerable<WorkOrderNoteModel>>(notes).OrderBy(x => x.NoteId);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }
