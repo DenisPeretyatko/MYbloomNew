@@ -22,6 +22,34 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
     $scope.obj.contact = '';
     $scope.lookups = state.lookups;
 
+    $scope.validation = {
+        location: false,
+        problem: false,
+        other: false,
+        message: ""
+    };
+    
+    var validation = function (message) {
+        $scope.validation.location = false;
+        $scope.validation.problem = false;
+        $scope.validation.other = false;
+        $scope.validation.message = "";
+
+        if (message.toLowerCase().indexOf('location') !== -1) {
+            $scope.validation.location = true;
+            $scope.validation.message = message;
+
+        }
+        else if (message.toLowerCase().indexOf('problem') !== -1) {
+            $scope.validation.problem = true;
+            $scope.validation.message = message;
+        } else {
+            $scope.validation.other = true;
+            $scope.validation.message = message;
+        }
+    }
+
+
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
         if ($scope.lookups != undefined && $scope.lookups.Customers != undefined) {
@@ -73,6 +101,9 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
         commonDataService.createWorkorder(workorder).then(function (response) {
             if (response.data.success == true)
                 $state.go('manager.workorder.list');
+            else {
+                validation(response.data.message);
+            }
         });
     };
 
@@ -109,6 +140,5 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
     $scope.setEstimateHour = function (selected) {
         $scope.obj.hours = parseFloat(selected.$select.selected.EstimatedRepairHours);
     };
-
 };
 createWorkorderController.$inject = ["$scope", "$stateParams", "$state", "state", "commonDataService"];

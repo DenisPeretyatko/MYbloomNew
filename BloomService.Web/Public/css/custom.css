@@ -575,3 +575,10 @@ body {
     margin-right: 14px;
 }
 
+.wo-validation span {
+    border-color: #df4242;
+}
+
+.validation-message {
+    color: #df4242;
+}

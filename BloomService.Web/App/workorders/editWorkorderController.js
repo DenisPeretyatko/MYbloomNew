@@ -35,6 +35,33 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.noteObj.Note = "";
     $scope.workOrderNotes = [];
 
+    $scope.validation = {
+        location: false,
+        problem: false,
+        other: false,
+        message: ""
+    };
+
+    var validation = function (message) {
+        $scope.validation.location = false;
+        $scope.validation.problem = false;
+        $scope.validation.other = false;
+        $scope.validation.message = "";
+
+        if (message.toLowerCase().indexOf('location') !== -1) {
+            $scope.validation.location = true;
+            $scope.validation.message = message;
+
+        }
+        else if (message.toLowerCase().indexOf('problem') !== -1) {
+            $scope.validation.problem = true;
+            $scope.validation.message = message;
+        } else {
+            $scope.validation.other = true;
+            $scope.validation.message = message;
+        }
+    }
+
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
 
@@ -238,6 +265,9 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         commonDataService.saveWorkorder(workorder).then(function (response) {
             if (response.data.success == true)
                 $state.go("manager.workorder.list");
+            else {
+                validation(response.data.message);
+            }
         });
     };
 

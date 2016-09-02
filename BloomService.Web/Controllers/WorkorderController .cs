@@ -69,7 +69,7 @@ namespace BloomService.Web.Controllers
             if (!result.IsSucceed)
             {
                 _log.ErrorFormat("Was not able to save workorder to sage. !result.IsSucceed");
-                return Error("Was not able to save workorder to sage");
+                return Error(result.ErrorMassage);
             }
 
             var assignment = result.RelatedAssignment;
