@@ -94,7 +94,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
                 position: pos,
                 map: $scope.locationMap,
                 icon: icon,
-                title: value.WorkOrder.WorkOrder
+                title: value.WorkOrder.WorkOrder.toString()
             });
             $scope.workorderMarkers.push(marker);
             var infowindow = new google.maps.InfoWindow({
@@ -142,7 +142,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
                 position: pos,
                 map: $scope.locationMap,
                 icon: icon,
-                title: truck.Name
+                title: truck.Name.toString()
             });
             $scope.truckMarkers.push(marker);
             var infowindow = new google.maps.InfoWindow({
