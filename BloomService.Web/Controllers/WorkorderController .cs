@@ -45,6 +45,10 @@ namespace BloomService.Web.Controllers
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
             _log.InfoFormat("Method: CreateWorkOrder. Model ID {0}", model.Id);
+            if (!ModelState.IsValid)
+            {
+                return Error("Not valid data. Please fill out the form.");
+            }
             var workorder = new SageWorkOrder()
             {
                 ARCustomer = model.Customer,
@@ -148,7 +152,7 @@ namespace BloomService.Web.Controllers
             _hub.UpdateWorkOrderPicture(pictures);
             return Success();
         }
-        
+
         [HttpGet]
         [Route("Workorder")]
         public ActionResult GetWorkorders()
@@ -294,6 +298,17 @@ namespace BloomService.Web.Controllers
         public ActionResult SaveWorkOrder(WorkOrderModel model)
         {
             _log.InfoFormat("Method: SaveWorkOrder. Model ID {0}", model.Id);
+            if (!ModelState.IsValid)
+            {
+                if (model.Emploee == 0)
+                    return Error("Employee is required");
+                if (model.Location == null)
+                    return Error("Location is required");
+                if (model.Problem == null)
+                    return Error("Problem is required");
+                return Error("Not valid data. Please fill out the form.");
+            }
+           
             var workorder = new SageWorkOrder()
             {
                 ARCustomer = model.Customer,
@@ -313,7 +328,7 @@ namespace BloomService.Web.Controllers
                 Id = model.Id,
                 Status = model.Status == WorkOrderStatus.ClosedId
                     ? WorkOrderStatus.ById(WorkOrderStatus.ClosedId)
-                    : WorkOrderStatus.ById(WorkOrderStatus.OpenId), 
+                    : WorkOrderStatus.ById(WorkOrderStatus.OpenId),
                 JCJob = model.JCJob,
                 Contact = model.Contact,
                 Equipment = model.Equipment
@@ -460,7 +475,7 @@ namespace BloomService.Web.Controllers
                 }
 
 
-            if (workOrderFromMongo.WorkNotes != null)
+                if (workOrderFromMongo.WorkNotes != null)
                 {
                     var idsToRemove = new List<long>();
 

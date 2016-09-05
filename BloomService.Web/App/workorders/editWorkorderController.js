@@ -37,6 +37,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
     $scope.validation = {
         location: false,
+        employee: false,
         problem: false,
         other: false,
         message: ""
@@ -45,18 +46,23 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     var validation = function (message) {
         $scope.validation.location = false;
         $scope.validation.problem = false;
+        $scope.validation.employee = false;
         $scope.validation.other = false;
         $scope.validation.message = "";
 
-        if (message.toLowerCase().indexOf('location') !== -1) {
+        if (message.toLowerCase().indexOf('employee') !== -1) {
+            $scope.validation.employee = true;
+            $scope.validation.message = message;
+        }
+        else if (message.toLowerCase().indexOf('location') !== -1) {
             $scope.validation.location = true;
             $scope.validation.message = message;
-
         }
         else if (message.toLowerCase().indexOf('problem') !== -1) {
             $scope.validation.problem = true;
             $scope.validation.message = message;
-        } else {
+        }
+        else {
             $scope.validation.other = true;
             $scope.validation.message = message;
         }
@@ -534,8 +540,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         item.isEditing = true;
     };
 
-    $scope.closeModal = function()
-    {
+    $scope.closeModal = function () {
         $('#myModal').modal('hide');
     }
 }

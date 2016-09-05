@@ -6,6 +6,11 @@
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="ibox float-e-margins">
         <tabset>
+            <div class="row" ng-show="validation.other">
+                <div class="col-lg-12 ibox">
+                    <span class="validation-message-head" ng-bind="validation.message"></span>
+                </div>
+            </div>
             <tab heading="Workorder">
                 <form role="form" name="workorder_form" novalidate ng-submit="createWorkOrder()">
                     <div class="row">
@@ -15,7 +20,7 @@
                                 <div class="ibox-content wo-create-ibox">
                                     <div class="form-group">
                                         <label>Location</label>
-                                        <ui-select ng-model="lookups.Locations.selected" theme="bootstrap" on-select="setLocation(this)" class="{{validation.location ? 'wo-validation' : ' ' }}" >
+                                        <ui-select ng-model="lookups.Locations.selected" theme="bootstrap" on-select="setLocation(this)" class="{{validation.location ? 'wo-validation' : ' ' }}" ng-required="true">
                                             <ui-select-match placeholder="Location">{{$select.selected.Name}}</ui-select-match>
                                             <ui-select-choices repeat="item in lookups.Locations | filter: $select.search | limitTo:100">
                                                 <div>{{item.Name}}</div>
@@ -25,7 +30,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Location comments</label>
-                                        <textarea rows="3" placeholder="Location comments" class="form-control" name="locationComments" ng-model="obj.locationcomments" required></textarea>
+                                        <textarea rows="3" placeholder="Location comments" class="form-control" name="locationComments" ng-model="obj.locationcomments"></textarea>
                                         <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                             <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                         </div>
@@ -41,7 +46,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Customer PO</label>
-                                        <input type="text" placeholder="Customer PO" class="form-control" name="CustomerPO" ng-model="obj.customerpo" required>
+                                        <input type="text" placeholder="Customer PO" class="form-control" name="CustomerPO" ng-model="obj.customerpo">
                                         <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                             <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                         </div>
@@ -75,14 +80,14 @@
                                     </div>
                                     <div class="form-group hidden-lg hidden-md">
                                         <label>Contact</label>
-                                        <input type="text" placeholder="Contact" class="form-control" name="Contact" ng-model="obj.contact" required>
+                                        <input type="text" placeholder="Contact" class="form-control" name="Contact" ng-model="obj.contact">
                                         <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                             <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                         </div>
                                     </div>
                                     <div class="form-group hidden-lg hidden-md">
                                         <label>Problem</label>
-                                        <ui-select ng-model="lookups.Problems.selected" theme="bootstrap" on-select="setEstimateHour(this)" class="{{validation.problem ? 'wo-validation' : ' ' }}">
+                                        <ui-select ng-model="lookups.Problems.selected" theme="bootstrap" on-select="setEstimateHour(this)" class="{{validation.problem ? 'wo-validation' : ' ' }}" ng-required="true">
                                             <ui-select-match placeholder="Problem">{{$select.selected.Description}}</ui-select-match>
                                             <ui-select-choices repeat="item in lookups.Problems | filter: $select.search">
                                                 <div>{{item.Description}}</div>
@@ -115,7 +120,7 @@
                                     </div>
                                     <div class="form-group hidden-lg hidden-md">
                                         <label>Not to Exceed</label>
-                                        <input type="text" placeholder="Not to Exceed" class="form-control" name="notToExceed" ng-model="obj.nottoexceed" required>
+                                        <input type="text" placeholder="Not to Exceed" class="form-control" name="notToExceed" ng-model="obj.nottoexceed">
                                         <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                             <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                         </div>
@@ -149,14 +154,14 @@
                                 <div class="ibox-content hidden-lg wo-create-ibox">
                                     <div class="form-group">
                                         <label>Contact</label>
-                                        <input type="text" placeholder="Contact" class="form-control" name="Contact" ng-model="obj.contact" required>
+                                        <input type="text" placeholder="Contact" class="form-control" name="Contact" ng-model="obj.contact">
                                         <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                             <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                         </div>
                                     </div>
                                     <div class="form-group hidden-lg">
                                         <label>Problem</label>
-                                        <ui-select ng-model="lookups.Problems.selected" theme="bootstrap" on-select="setEstimateHour(this)" class="{{validation.problem ? 'wo-validation' : ' ' }}">
+                                        <ui-select ng-model="lookups.Problems.selected" theme="bootstrap" on-select="setEstimateHour(this)" class="{{validation.problem ? 'wo-validation' : ' ' }}" ng-required="true">
                                             <ui-select-match placeholder="Problem">{{$select.selected.Description}}</ui-select-match>
                                             <ui-select-choices repeat="item in lookups.Problems | filter: $select.search">
                                                 <div>{{item.Description}}</div>
@@ -188,7 +193,7 @@
                                     </div>
                                     <div class="form-group hidden-lg">
                                         <label>Not to Exceed</label>
-                                        <input type="text" placeholder="Not to Exceed" class="form-control" name="notToExceed" ng-model="obj.nottoexceed" required>
+                                        <input type="text" placeholder="Not to Exceed" class="form-control" name="notToExceed" ng-model="obj.nottoexceed">
                                         <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                             <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                         </div>
@@ -237,14 +242,14 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Contact</label>
-                                        <input type="text" placeholder="Contact" class="form-control" name="Contact" ng-model="obj.contact" required>
+                                        <input type="text" placeholder="Contact" class="form-control" name="Contact" ng-model="obj.contact">
                                         <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                             <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label>Problem</label>
-                                        <ui-select ng-model="lookups.Problems.selected" theme="bootstrap" on-select="setEstimateHour(this)" class="{{validation.problem ? 'wo-validation' : ' ' }}">
+                                        <ui-select ng-model="lookups.Problems.selected" theme="bootstrap" on-select="setEstimateHour(this)" class="{{validation.problem ? 'wo-validation' : ' ' }}" ng-required="true">
                                             <ui-select-match placeholder="Problem">{{$select.selected.Description}}</ui-select-match>
                                             <ui-select-choices repeat="item in lookups.Problems | filter: $select.search">
                                                 <div>{{item.Description}}</div>
@@ -283,7 +288,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Not to Exceed</label>
-                                        <input type="text" placeholder="Not to Exceed" class="form-control" name="notToExceed" ng-model="obj.nottoexceed" required>
+                                        <input type="text" placeholder="Not to Exceed" class="form-control" name="notToExceed" ng-model="obj.nottoexceed">
                                         <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                             <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                         </div>
@@ -310,21 +315,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <button class="btn btn-sm btn-primary" type="submit" ng-disabled="workorder_form.$invalid" ng-click="createWorkOrder()"><strong>Create</strong></button>
+                                <button class="btn btn-sm btn-danger" type="cancel" back><strong>Cancel</strong></button>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </tab>
         </tabset>
     </div>
-    <div class="row" ng-show="validation.other">
-            <div class="col-lg-12 ibox">
-                <span class="validation-message" ng-bind="validation.message">dsfdsfsdf</span>
-            </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="form-group">
-                <button class="btn btn-sm btn-primary" type="submit" ng-click="createWorkOrder()"><strong>Create</strong></button>
-                <button class="btn btn-sm btn-danger" type="cancel" back><strong>Cancel</strong></button>
-            </div>
-        </div>
-    </div>
-    </div>
+</div>
