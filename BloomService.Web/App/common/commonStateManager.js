@@ -92,6 +92,11 @@
                 });
             } 
         });
+        angular.forEach($rootScope.workorders, function (value, key) {
+            if (value.Employee == technician.Id) {
+                $rootScope.workorders[key].Color = technician.Color;
+            }
+        });
         if ($rootScope.unavailableTechniciansIds.includes(technician.Id) && technician.IsAvailable) {
             $rootScope.unavailableTechniciansIds.splice($rootScope.unavailableTechniciansIds.indexOf(technician.Id), 1);
         }
