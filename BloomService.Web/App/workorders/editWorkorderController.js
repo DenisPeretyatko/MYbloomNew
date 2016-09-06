@@ -536,10 +536,6 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         $scope.workOrderNotes.splice($scope.workOrderNotes.indexOf(item), 1);
     }
 
-    $scope.editRow = function (item, index) {
-        item.isEditing = true;
-    };
-
     $scope.closeModal = function () {
         $('#myModal').modal('hide');
     }
