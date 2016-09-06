@@ -591,9 +591,13 @@ namespace BloomService.Web.Controllers
         [Route("WorkOrder/GetNotes/{id}")]
         public ActionResult GetNotes(string id)
         {
-            var notes = this._repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == Convert.ToInt64(id)).SingleOrDefault().WorkNotes;
-            var result = Mapper.Map<IEnumerable<WorkOrderNoteModel>>(notes).OrderBy(x => x.NoteId);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var notes = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == Convert.ToInt64(id)).SingleOrDefault().WorkNotes;
+            if(notes != null)
+            {
+                var result = Mapper.Map<IEnumerable<WorkOrderNoteModel>>(notes).OrderBy(x => x.NoteId);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            return Json(null, JsonRequestBehavior.AllowGet);
         }
     }
 }

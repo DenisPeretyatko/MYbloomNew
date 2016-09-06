@@ -1,41 +1,41 @@
 using BloomService.Web;
+
 using WebActivatorEx;
 
 [assembly: PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
 
-
 namespace BloomService.Web
 {
     using System;
     using System.Configuration;
+    using System.IO;
     using System.Web;
 
     using BloomService.Web.Infrastructure;
+    using BloomService.Web.Infrastructure.Dependecy;
+    using BloomService.Web.Infrastructure.Dependecy.Ninject;
     using BloomService.Web.Infrastructure.Mongo;
+    using BloomService.Web.Infrastructure.Services;
+    using BloomService.Web.Infrastructure.Services.Interfaces;
+    using BloomService.Web.Infrastructure.SignalR;
     using BloomService.Web.Infrastructure.SignalR.Implementation;
+    using BloomService.Web.Infrastructure.StorageProviders;
+    using BloomService.Web.Infrastructure.StorageProviders.Implementation;
 
+    using Microsoft.AspNet.SignalR;
+    using Microsoft.AspNet.SignalR.Hubs;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+
     using Ninject;
     using Ninject.Web.Common;
-    using RestSharp;
-    using Domain.Extensions;
 
-    using Infrastructure.Services.Interfaces;
-    using Infrastructure.Services;
-    using Infrastructure.Dependecy;
-    using Infrastructure.Dependecy.Ninject;
-    using Infrastructure.SignalR;
-    using Microsoft.AspNet.SignalR.Hubs;
-    using Microsoft.AspNet.SignalR;
+    using RestSharp;
 
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
 
-        /// <summary>
-        /// Starts the application
-        /// </summary>
         public static void Start()
         {
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
@@ -48,10 +48,6 @@ namespace BloomService.Web
             Bootstrapper.ShutDown();
         }
 
-        /// <summary>
-        /// Creates the kernel that will manage your application.
-        /// </summary>
-        /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
             var kernel = new StandardKernel();
@@ -70,10 +66,6 @@ namespace BloomService.Web
             }
         }
 
-        /// <summary>
-        /// Load your modules or register your services here!
-        /// </summary>
-        /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
             var setting = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
@@ -81,7 +73,11 @@ namespace BloomService.Web
             var dbName = ConfigurationManager.AppSettings["MainDb"];
             var sageApiHost = setting.SageApiHost;
 
-            kernel.Bind<IRepository>().To<MongoRepository>().WithConstructorArgument("connectionString",connectionString).WithConstructorArgument("dbName", dbName);
+
+            kernel.Bind<IRepository>()
+                .To<MongoRepository>()
+                .WithConstructorArgument("connectionString", connectionString)
+                .WithConstructorArgument("dbName", dbName);
             kernel.Bind<BloomServiceConfiguration>().ToConstant(setting);
 
             kernel.Bind<IHttpContextProvider>().To<HttpContextProvider>();
@@ -94,12 +90,20 @@ namespace BloomService.Web
             kernel.Bind<IDashboardService>().To<DashboardService>();
             kernel.Bind<IScheduleService>().To<ScheduleService>();
 
-            ComponentContainer.Current = new NinjectComponentContainer(kernel, new[] {
-                    typeof(MongoRepository).Assembly
-            });
+
+            kernel.Bind<IStorageProvider>().To<FileSystemStorageProvider>().WithConstructorArgument("basePath", setting.StorageUrl).WithConstructorArgument("baseUrl", setting.StorageUrl);
+
+            kernel.Bind<IStorageFolder>().To<FileSystemStorageFolder>();
+            kernel.Bind<IStorageFile>().To<FileSystemStorageFile>();
+
+
+            ComponentContainer.Current = new NinjectComponentContainer(
+                kernel, 
+                new[] { typeof(MongoRepository).Assembly });
             kernel.Bind<IBloomServiceHub>().To<BloomServiceHub>();
             kernel.Bind<INotificationService>().To<NotificationService>();
-            kernel.Bind<IHubConnectionContext<dynamic>>().ToMethod(ctx => GlobalHost.ConnectionManager.GetHubContext<BloomServiceHub>().Clients);
+            kernel.Bind<IHubConnectionContext<dynamic>>()
+                .ToMethod(ctx => GlobalHost.ConnectionManager.GetHubContext<BloomServiceHub>().Clients);
         }
     }
 }

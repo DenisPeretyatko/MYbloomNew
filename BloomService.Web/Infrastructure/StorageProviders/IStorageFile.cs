@@ -1,18 +1,24 @@
-﻿using System;
-using System.IO;
-
-namespace BloomService.Web.Infrastructure.StorageProviders
+﻿namespace BloomService.Web.Infrastructure.StorageProviders
 {
+    using System;
+    using System.IO;
+
     public interface IStorageFile
     {
-        string GetPath();
-        string GetFullPath();
-        string GetName();
-        long GetSize();
-        DateTime GetLastUpdated();
         string GetFileType();
 
+        string GetFullPath();
+
+        DateTime GetLastUpdated();
+
+        string GetName();
+
+        string GetPath();
+
+        long GetSize();
+
         Stream OpenRead();
+
         Stream OpenWrite();
     }
 }

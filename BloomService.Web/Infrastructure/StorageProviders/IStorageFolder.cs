@@ -1,13 +1,17 @@
-﻿using System;
-
-namespace BloomService.Web.Infrastructure.StorageProviders
+﻿namespace BloomService.Web.Infrastructure.StorageProviders
 {
+    using System;
+
     public interface IStorageFolder
     {
-        string GetPath();
-        string GetName();
-        long GetSize();
         DateTime GetLastUpdated();
+
+        string GetName();
+
         IStorageFolder GetParent();
+
+        string GetPath();
+
+        long GetSize();
     }
 }

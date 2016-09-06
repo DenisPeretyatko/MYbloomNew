@@ -1,58 +1,58 @@
-﻿using System;
-using System.IO;
-
-namespace BloomService.Web.Infrastructure.StorageProviders.Implementation
+﻿namespace BloomService.Web.Infrastructure.StorageProviders.Implementation
 {
+    using System;
+    using System.IO;
+
     public class FileSystemStorageFile : IStorageFile
     {
-        private readonly FileInfo _fileInfo;
-        private readonly string _path;
+        private readonly FileInfo fileInfo;
+        private readonly string path;
 
         public FileSystemStorageFile(string path, FileInfo fileInfo)
         {
-            _path = path;
-            _fileInfo = fileInfo;
+            this.path = path;
+            this.fileInfo = fileInfo;
         }
 
         #region Implementation of IStorageFile
         public string GetFullPath()
         {
-            return Path.Combine(_path, _fileInfo.Name);
+            return Path.Combine(path, fileInfo.Name);
         }
 
         public string GetPath()
         {
-            return _path;
+            return path;
         }
 
         public string GetName()
         {
-            return _fileInfo.Name;
+            return fileInfo.Name;
         }
 
         public long GetSize()
         {
-            return _fileInfo.Length;
+            return fileInfo.Length;
         }
 
         public DateTime GetLastUpdated()
         {
-            return _fileInfo.LastWriteTime;
+            return fileInfo.LastWriteTime;
         }
 
         public string GetFileType()
         {
-            return _fileInfo.Extension;
+            return fileInfo.Extension;
         }
 
         public Stream OpenRead()
         {
-            return new FileStream(_fileInfo.FullName, FileMode.Open, FileAccess.Read);
+            return new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read);
         }
 
         public Stream OpenWrite()
         {
-            return new FileStream(_fileInfo.FullName, FileMode.Open, FileAccess.ReadWrite);
+            return new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.ReadWrite);
         }
         #endregion
     }
