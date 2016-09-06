@@ -30,7 +30,7 @@ namespace BloomService.Web.Controllers
             var tmpLocations = workOrders.Select(x => x.Location);
             var itemLocations = _repository.SearchFor<SageLocation>(x => tmpLocations.Contains(x.Name)).ToList();
             var assignments = _repository.SearchFor<SageAssignment>(x => !string.IsNullOrEmpty(x.Employee)).OrderByDescending(x => x.ScheduleDate).ThenByDescending(x => x.StartTime).ToList();
-
+            var employees = _repository.GetAll<SageEmployee>().ToList();
             foreach (var item in workOrders)
             {
                 var itemLocation = itemLocations.FirstOrDefault(l => l.Name == item.Location);
@@ -40,11 +40,13 @@ namespace BloomService.Web.Controllers
 
                 var assignment = assignments.FirstOrDefault(x => x.WorkOrder == item.WorkOrder);
                 if (string.IsNullOrEmpty(assignment?.Employee)) continue;
+                var employee = employees.SingleOrDefault(x => x.Employee == assignment.EmployeeId);
+
                 result.Add(new MapViewModel
                 {
                     WorkOrder = item,
                     DateEntered = assignment.ScheduleDate,
-                    Color = assignment?.Color,
+                    Color = employee?.Color,
                     Employee = assignment != null ? assignment.EmployeeId : 0
                 });
             }

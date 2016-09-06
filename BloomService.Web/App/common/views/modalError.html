@@ -1,0 +1,14 @@
+﻿<div ng-init="showModal = false"  class="lightbox modal-error" id="text" ng-show="showModal">
+    <div class="box">
+        <p class="title">Connection error</p>
+        <div class="content">
+            <p>An error on the server. Please reload the page.</p>
+            <div class="row">
+                <div class="col-lg-offset-8 col-md-offset-8 col-xs-offset-8 col-sm-offset-8 buttons">
+                    <button class="btn btn-sm btn-primary" ng-click="reloadPage()"><strong>Reload</strong></button>
+                    <button class="btn btn-sm btn-danger" ng-click="showModal = false"><strong>Cancel</strong></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

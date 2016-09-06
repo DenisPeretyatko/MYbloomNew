@@ -1,4 +1,6 @@
-﻿namespace BloomService.Web.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BloomService.Web.Models
 {
     using System;
     using System.Collections.Generic;
@@ -20,6 +22,7 @@
 
         public string Id { get; set; }
 
+        [Required]
         public string Location { get; set; }
 
         public string Locationcomments { get; set; }
@@ -30,6 +33,7 @@
 
         public string Permissiocode { get; set; }
 
+        [Required]
         public string Problem { get; set; }
 
         public string Ratesheet { get; set; }

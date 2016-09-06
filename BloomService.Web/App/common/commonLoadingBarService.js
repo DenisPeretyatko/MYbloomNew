@@ -12,6 +12,13 @@
             $rootScope.$broadcast("ajax-stop");
         }
     }
+      function showError() {
+        requests--;
+        if (!requests) {
+            $rootScope.$broadcast("responseError");
+        }
+    }
+
     return {
         'request': function (config) {
             show();
@@ -20,7 +27,7 @@
             hide();
             return $q.when(response);
         }, 'responseError': function (rejection) {
-            hide();
+            showError();
             return $q.reject(rejection);
         }
     };

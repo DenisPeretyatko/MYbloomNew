@@ -181,5 +181,34 @@ function loadingBar() {
             element.addClass('hide');
             scope.ajaxBusy = false;
         });
+
+        scope.$on("responseError", function () {
+            element.addClass('hide');
+            scope.ajaxBusy = false;
+            });
+    }
+}
+
+function interceptor($window) {
+    var directive = {
+        link: link,
+        scope: {
+
+        },
+        templateUrl: '../App/common/views/modalError.html',
+        replace: true,
+        restrict: 'E'
+    };
+    return directive;
+
+    function link(scope, element, attrs) {
+        scope.$on("responseError", function () {
+            scope.showModal = true;
+            scope.ajaxBusy = true;
+        });
+
+        scope.reloadPage = function() {
+            $window.location.reload();
+        }
     }
 }

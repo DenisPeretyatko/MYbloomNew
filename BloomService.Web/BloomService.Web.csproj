@@ -422,6 +422,7 @@
     <Content Include="App\common\mainController.js" />
     <Content Include="App\common\views\content.html" />
     <Content Include="App\common\views\footer.html" />
+    <Content Include="App\common\views\modalError.html" />
     <Content Include="App\login\views\login.html" />
     <Content Include="App\common\views\navigation.html" />
     <Content Include="App\common\views\topnavbar.html" />
