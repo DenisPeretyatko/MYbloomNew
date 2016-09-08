@@ -41,7 +41,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
             Column: '',
             Direction: false
         };
-        $q.all([commonDataService.getLookups(), commonDataService.getLocations(), commonDataService.getTechnicians(), commonDataService.getTrucks(), commonDataService.getWorkordesPaged(model)]).then(function(values) {
+        $q.all([commonDataService.getLookups(), commonDataService.getLocations(), commonDataService.getTechnicians(), commonDataService.getTrucks(), commonDataService.getWorkordesPaged(model)]).then(function (values) {
             $rootScope.notifications = values[0].data.Notifications;
             state.notifications = values[0].data.Notifications;
             state.notificationTime = values[0].data.NotificationTime;
@@ -54,7 +54,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
             state.workorders = values[4].data;
             state.alreadyLoaded = true;
         });
-    } 
+    }
 
 
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
@@ -65,19 +65,21 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
     };
 
     $scope.showAllLocations = function () {
-       if ($scope.showAll == true) {
+        var tempWorkordersView = [];
+        if ($scope.showAll == true) {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                    $scope.workordersView.push(value);
+                tempWorkordersView.push(value);
             });
         } else {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
                 if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
-                    $scope.workordersView.push(value);
+                    tempWorkordersView.push(value);
                 }
             });
         }
+        $scope.workordersView = tempWorkordersView;
     }
 
     $scope.$watchCollection(function () { return $scope.workordersView; }, function () {
@@ -114,17 +116,19 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
 
     $scope.$watchCollection(function () { return $rootScope.workorders; }, function () {
         $scope.workordersView = [];
-        if ($scope.showAll == false) {          
+        var tempWorkordersView = [];
+        if ($scope.showAll == false) {
             angular.forEach($rootScope.workorders, function (value, key) {
                 if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
-                    $scope.workordersView.push(value);
+                    tempWorkordersView.push(value);
                 }
             });
         } else {
             angular.forEach($rootScope.workorders, function (value, key) {
-                $scope.workordersView.push(value);
+                tempWorkordersView.push(value);
             });
         }
+        $scope.workordersView = tempWorkordersView;
     });
 
     $rootScope.$watchCollection(function () { return $rootScope.trucks; }, function () {
@@ -160,31 +164,19 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
         });
     });
 
-    //commonDataService.getTrucks().then(function (response) {
-    //    $scope.trucks = response.data;
-    //});
+
     $scope.$watch(function () { return state.trucks; }, function () {
         $scope.trucks = state.trucks;
     });
 
-    var model = {
-        DateWorkOrder: new Date($scope.mapDate)
-    }
-    //commonDataService.getLocations().then(function (response) {
-    //    $scope.workordersView = [];
-    //    $rootScope.workorders = response.data;
-    //    angular.forEach($rootScope.workorders, function (value, key) {
-    //        if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
-    //            $scope.workordersView.push(value);
-    //        }
-    //    });
-    //});
-       $scope.workordersView = [];
-       // $rootScope.workorders = state.locations;
-         angular.forEach($rootScope.workorders, function (value, key) {
-            if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
-                $scope.workordersView.push(value);
-            }
-        });
+
+    var tempWorkordersView = [];
+    angular.forEach($rootScope.workorders, function (value, key) {
+        if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
+            tempWorkordersView.push(value);
+        }
+    });
+    $scope.workordersView = tempWorkordersView;
+
 };
-dashboardController.$inject = ["$rootScope", "$scope", "$state","$interpolate", "$q", "commonDataService", "state"];
+dashboardController.$inject = ["$rootScope", "$scope", "$state", "$interpolate", "$q", "commonDataService", "state"];
