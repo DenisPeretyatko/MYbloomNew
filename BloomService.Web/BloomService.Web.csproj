@@ -328,7 +328,19 @@
     <Compile Include="Infrastructure\BloomServiceConfiguration.cs" />
     <Compile Include="Infrastructure\Constants\EstimateRepairHours.cs" />
     <Compile Include="Infrastructure\Constants\RateSheets.cs" />
-    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.cs" />
+	 <Compile Include="Infrastructure\Jobs\BloomJobRegistry.cs" />
+    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.CheckTechnicians.cs">  
+<DependentUpon>BloomJobRegistry.cs</DependentUpon>	
+	  </Compile>
+    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.Requests.cs" >
+	<DependentUpon>BloomJobRegistry.cs</DependentUpon>
+	  </Compile>
+    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.SilentNotifications.cs" >
+	<DependentUpon>BloomJobRegistry.cs</DependentUpon>
+	  </Compile>
+    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.Synchronization.cs" >
+	<DependentUpon>BloomJobRegistry.cs</DependentUpon>
+	  </Compile>
     <Compile Include="Infrastructure\ModelBinders\JsonNetModelBinder.cs" />
     <Compile Include="Infrastructure\Queries\AssignmentQueries.cs" />
     <Compile Include="Infrastructure\Queries\PartsQueries.cs" />
