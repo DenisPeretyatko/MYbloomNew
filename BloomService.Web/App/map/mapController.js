@@ -44,7 +44,7 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
                 lat: parseFloat(value.WorkOrder.Latitude),
                 lng: parseFloat(value.WorkOrder.Longitude)
             }
-            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + Math.random();
+            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + value.Color;
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
@@ -77,7 +77,7 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
                 lng: parseFloat(truck.Longitude)
             }
             if (pos.lat !== 0 && pos.lng !== 0) {
-                var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + Math.random();
+                var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + truck.Color;
                 var marker = new google.maps.Marker({
                     position: pos,
                     map: $scope.locationMap,

@@ -91,7 +91,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
                 lat: parseFloat(value.WorkOrder.Latitude),
                 lng: parseFloat(value.WorkOrder.Longitude)
             }
-            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + Math.random();
+            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + value.Color;
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
@@ -141,7 +141,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
                 lat: parseFloat(truck.Latitude),
                 lng: parseFloat(truck.Longitude)
             }
-            var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + Math.random();
+            var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + truck.Color;
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
