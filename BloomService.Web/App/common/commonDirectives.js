@@ -1,15 +1,15 @@
-/**
+﻿/**
  * pageTitle - Directive for set Page title - mata title
  */
 function pageTitle($rootScope, $timeout) {
     return {
-        link: function(scope, element) {
-            var listener = function(event, toState, toParams, fromState, fromParams) {
+        link: function (scope, element) {
+            var listener = function (event, toState, toParams, fromState, fromParams) {
                 // Default title - load on Dashboard 1
                 var title = 'Bloom Field Service Operations';
                 // Create your own title pattern
                 if (toState.data && toState.data.pageTitle) title = 'Bloom Field Service Operations ';
-                $timeout(function() {
+                $timeout(function () {
                     element.text(title);
                 });
             };
@@ -24,9 +24,9 @@ function pageTitle($rootScope, $timeout) {
 function sideNavigation($timeout) {
     return {
         restrict: 'A',
-        link: function(scope, element) {
+        link: function (scope, element) {
             // Call the metsiMenu plugin and plug it to sidebar navigation
-            $timeout(function(){
+            $timeout(function () {
                 element.metisMenu();
             });
         }
@@ -56,7 +56,7 @@ function iboxTools($timeout) {
                     ibox.find('[id^=map-]').resize();
                 }, 50);
             },
-                // Function for close ibox
+            // Function for close ibox
                 $scope.closebox = function () {
                     var ibox = $element.closest('div.ibox');
                     ibox.remove();
@@ -100,7 +100,7 @@ function iboxToolsFullScreen($timeout) {
                 $('body').toggleClass('fullscreen-ibox-mode');
                 button.toggleClass('fa-expand').toggleClass('fa-compress');
                 ibox.toggleClass('fullscreen');
-                setTimeout(function() {
+                setTimeout(function () {
                     $(window).trigger('resize');
                 }, 100);
             }
@@ -126,7 +126,7 @@ function minimalizaSidebar($timeout) {
                         function () {
                             $('#side-menu').fadeIn(400);
                         }, 200);
-                } else if ($('body').hasClass('fixed-sidebar')){
+                } else if ($('body').hasClass('fixed-sidebar')) {
                     $('#side-menu').hide();
                     setTimeout(
                         function () {
@@ -185,15 +185,18 @@ function loadingBar() {
         scope.$on("responseError", function () {
             element.addClass('hide');
             scope.ajaxBusy = false;
-            });
+        });
+        scope.$on("serverError", function () {
+            element.addClass('hide');
+            scope.ajaxBusy = false;
+        });
     }
 }
 
-function interceptor($window) {
+function interceptor($window, $rootScope) {
     var directive = {
         link: link,
         scope: {
-
         },
         templateUrl: '../App/common/views/modalError.html',
         replace: true,
@@ -201,14 +204,61 @@ function interceptor($window) {
     };
     return directive;
 
-    function link(scope, element, attrs) {
+    function link(scope) {
+        var div = $('#read-more-error');
+      
+
         scope.$on("responseError", function () {
+            scope.hidden = false;
+            scope.tittle = "Unexpected server error";
+            scope.message = "Unexpected server error, please reload the page.";
+            debugger;
+            div.removeClass();
+            div.addClass("ng-hide");
+            if ($rootScope.rejectionError != undefined) {
+                if ($rootScope.rejectionError.status != undefined)
+                    div.addClass('read-more-large');
+                else
+                    div.addClass('read-more-little');
+            }
+            $("#prepended").remove();
+            div.append('<div id="prepended">' + $rootScope.rejectionError.data + '</div>');
+
             scope.showModal = true;
             scope.ajaxBusy = true;
         });
 
-        scope.reloadPage = function() {
+        scope.$on("serverError", function () {
+            scope.hidden = false;
+            scope.tittle = "Connection server error";
+            scope.message = "Connection server error, please reload the page.";
+            div.removeClass();
+            div.addClass("ng-hide");
+            if ($rootScope.rejectionError != undefined) {
+                if ($rootScope.rejectionError.status != undefined)
+                    div.addClass('read-more-large');
+                else
+                    div.addClass('read-more-little');
+            }
+            $("#prepended").remove();
+            div.append('<div id="prepended">' + $rootScope.rejectionError.data + '</div>');
+
+            scope.showModal = true;
+            scope.ajaxBusy = true;
+        });
+
+        scope.reloadPage = function () {
             $window.location.reload();
+        }
+
+        scope.hide = function () {
+            scope.hidden = !scope.hidden;
+            if ($rootScope.rejectionError.status != undefined) {
+                if (scope.hidden)
+                    $(".box").addClass("read-more-opened");
+                else
+                    $(".box").removeClass("read-more-opened");
+            }
         }
     }
 }

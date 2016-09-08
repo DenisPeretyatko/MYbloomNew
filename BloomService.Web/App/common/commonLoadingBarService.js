@@ -12,11 +12,13 @@
             $rootScope.$broadcast("ajax-stop");
         }
     }
-      function showError() {
-        requests--;
-        if (!requests) {
+      function responseError() {
             $rootScope.$broadcast("responseError");
-        }
+    }
+
+    function serverError() {
+            $rootScope.$broadcast("serverError");
+        
     }
 
     return {
@@ -24,10 +26,25 @@
             show();
             return $q.when(config);
         }, 'response': function (response) {
+            if (response.data.success == false) {
+                $rootScope.rejectionError = {};
+                $rootScope.rejectionError.data = {};
+                $rootScope.rejectionError.data = response.data.message;
+                $rootScope.$broadcast("responseError");
+            }
             hide();
             return $q.when(response);
         }, 'responseError': function (rejection) {
-            showError();
+            debugger;
+            $rootScope.rejectionError = rejection;
+            var start = $rootScope.rejectionError.data.indexOf("<style>");
+            var end = $rootScope.rejectionError.data.indexOf("</style>");
+            $rootScope.rejectionError.data = $rootScope.rejectionError.data.replace($rootScope.rejectionError.data.substring(start, end), "");
+            if (rejection.status == 404 || rejection.status == 408 || rejection.status == 504 || rejection.status == 0)
+                serverError();
+            else
+                responseError();
+
             return $q.reject(rejection);
         }
     };
