@@ -85,8 +85,7 @@ namespace BloomService.Web.Infrastructure.Jobs
             customers = _proxy.GetCustomers();
             parts = _proxy.GetParts();
             workOrderNotes = _proxy.GetNotes();
-            workOrderItems = _proxy.GetItems();
-
+            // workOrderItems = _proxy.GetItems();
         }
     }
 }
