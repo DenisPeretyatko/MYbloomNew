@@ -45,7 +45,7 @@ namespace BloomService.Web.Controllers
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
             _log.InfoFormat("Method: CreateWorkOrder. Model ID {0}", model.Id);
-          
+            
             var workorder = new SageWorkOrder()
             {
                 ARCustomer = model.Customer,
@@ -76,7 +76,7 @@ namespace BloomService.Web.Controllers
             var assignment = result.RelatedAssignment;
 
             assignment.IsValid = true;
-            if (string.IsNullOrEmpty(model.Emploee.ToString()))
+            if (model.Emploee==0)
             {
                 result.Entity.AssignmentId = assignment.Assignment;
                 _repository.Add(assignment);
@@ -85,8 +85,8 @@ namespace BloomService.Web.Controllers
             {
                 var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Emploee).SingleOrDefault();
                 assignment.EmployeeId = employee != null ? employee.Employee : 0;
-                assignment.Start = ((DateTime)assignment.ScheduleDate).Add(((DateTime)assignment.StartTime).TimeOfDay).ToString();
-                assignment.End = ((DateTime)assignment.ScheduleDate).Add(((DateTime)assignment.StartTime).TimeOfDay).AddHours(assignment.EstimatedRepairHours.AsDouble() == 0 ? 1 : assignment.EstimatedRepairHours.AsDouble()).ToString();
+                assignment.Start = (model.AssignmentDate.Date).Add((model.AssignmentTime).TimeOfDay).ToString();
+                assignment.End = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay).AddHours(assignment.EstimatedRepairHours.AsDouble() == 0 ? 1 : assignment.EstimatedRepairHours.AsDouble()).ToString();
                 assignment.Color = employee?.Color ?? "";
                 assignment.Customer = result.Entity.ARCustomer;
                 assignment.Location = result.Entity.Location;
@@ -337,21 +337,21 @@ namespace BloomService.Web.Controllers
                 return Error("Was not able to update workorder to sage");
             }
 
-            if (!string.IsNullOrEmpty(model.Emploee.ToString()))
+            if (model.Emploee!=0)
             {
                 var assignmentDb = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
                 var editedAssignment = new AssignmentViewModel();
                 editedAssignment.Employee = model.Emploee;
-                editedAssignment.EndDate = (DateTime)assignmentDb.Enddate;
+                editedAssignment.EndDate = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay).AddHours(assignmentDb.EstimatedRepairHours.AsDouble() == 0 ? 1 : assignmentDb.EstimatedRepairHours.AsDouble());
                 editedAssignment.EstimatedRepairHours = workorder.EstimatedRepairHours.ToString();
                 editedAssignment.Id = assignmentDb.Id;
-                editedAssignment.ScheduleDate = (DateTime)assignmentDb.StartTime;
+                editedAssignment.ScheduleDate = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay); 
                 editedAssignment.WorkOrder = assignmentDb.WorkOrder;
                 _scheduleService.CerateAssignment(editedAssignment);
 
                 var locations = _repository.GetAll<SageLocation>().ToArray();
                 var itemLocation = locations.FirstOrDefault(l => l.Name == workOrderResult.Entity.Location);
-                workOrderResult.Entity.ScheduleDate = (DateTime)assignmentDb.StartTime;
+                workOrderResult.Entity.ScheduleDate = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay);
                 workOrderResult.Entity.Latitude = itemLocation.Latitude;
                 workOrderResult.Entity.Longitude = itemLocation.Longitude;
             }
@@ -608,6 +608,18 @@ namespace BloomService.Web.Controllers
             }
             var result = Mapper.Map<IEnumerable<WorkOrderNoteModel>>(notes).OrderBy(x => x.NoteId);
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        [Route("WorkOrder/GetAssignment/{id}")]
+        public ActionResult GetAssignment(string id)
+        {
+            var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == Convert.ToInt64(id)).Single();
+            if (assignment == null)
+            {
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
+            return Json(assignment, JsonRequestBehavior.AllowGet);
         }
     }
 }

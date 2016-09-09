@@ -238,5 +238,13 @@ var commonDataService = function ($http, $window) {
             }
         });
     }
+
+    this.getAssignment = function (id) {
+        return $http.get("/WorkOrder/GetAssignment/" + id, {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    }
 }
 commonDataService.$inject = ['$http', '$window'];

@@ -28,6 +28,8 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.EquipType = ["Labor", "Parts"];
     $scope.equipmentList = [];
     $scope.obj.data = new Date();
+    $scope.obj.assignmentDate = new Date();
+    $scope.obj.assignmentTime = new Date(2000, 0, 1, 00, 00, 0);
     $scope.Rate = 0;
     $scope.isEditNote = false;
     $scope.noteObj = {};
@@ -78,6 +80,8 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
             $scope.obj.calldate = $scope.editableWorkOrder.CallDate;
+            $scope.obj.assignmentDate = moment($scope.editableWoAssignment.ScheduleDate).toDate();
+            $scope.obj.assignmentTime = moment($scope.editableWoAssignment.StartTime).toDate();
             $scope.lookups.Problems.selected = $scope.editableWorkOrder.ProblemObj;
             $scope.lookups.RateSheets.selected = $scope.editableWorkOrder.RateSheetObj;
             $scope.lookups.Employes.selected = $scope.editableWorkOrder.EmployeeObj;
@@ -106,6 +110,8 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
             $scope.obj.calldate = $scope.editableWorkOrder.CallDate;
+            $scope.obj.assignmentDate = moment($scope.editableWoAssignment.ScheduleDate).toDate();
+            $scope.obj.assignmentTime = moment($scope.editableWoAssignment.StartTime).toDate();
             $scope.lookups.Problems.selected = $scope.editableWorkOrder.ProblemObj;
             $scope.lookups.RateSheets.selected = $scope.editableWorkOrder.RateSheetObj;
             $scope.lookups.Employes.selected = $scope.editableWorkOrder.EmployeeObj;
@@ -265,7 +271,9 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             Status: $scope.lookups.Status.selected == null ? "" : $scope.lookups.Status.selected.Value,
             JCJob: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.JCJob,
             Notes: $scope.workOrderNotes,
-            Contact: $scope.obj.contact
+            Contact: $scope.obj.contact,
+            AssignmentDate: $scope.obj.assignmentDate,
+            AssignmentTime: $scope.obj.assignmentTime
         };
 
         commonDataService.saveWorkorder(workorder).then(function (response) {
@@ -287,6 +295,12 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
     commonDataService.getWorkorder($stateParams.id).then(function (response) {
         $scope.editableWorkOrder = response.data;
+        commonDataService.getAssignment(response.data.WorkOrder).then(function (result) {
+            debugger;
+            $scope.editableWoAssignment = result.data;
+            $scope.obj.assignmentDate = moment(result.data.ScheduleDate).toDate();
+            $scope.obj.assignmentTime = moment(result.data.StartTime).toDate();
+        });
         commonDataService.getNotes(response.data.WorkOrder).then(function (result) {
             if (result.data != "")
                 $scope.workOrderNotes = result.data;
