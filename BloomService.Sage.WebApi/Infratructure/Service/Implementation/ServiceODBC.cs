@@ -16,7 +16,6 @@
 
     using Sage.WebApi.Infratructure.Utils;
     using Sage.WebApi.Models;
-
     public class ServiceOdbc : IServiceOdbc
     {
         private readonly ILog _log = LogManager.GetLogger(typeof(ServiceOdbc));
@@ -50,6 +49,15 @@
             var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, Queries.SelectRateSheetsQuery);
             var result = new List<SageRateSheet>();
             response.ForEach(x => result.Add(x.ToObject<SageRateSheet>()));
+            return result;
+        }
+
+        public List<SageWorkOrderLocationAccordance> GetWorkOrderLocationAccordance()
+        {
+            var query = Queries.SelectWorkOrderLocationAccordanceQuery;
+            var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query);
+            var result = new List<SageWorkOrderLocationAccordance>();
+            response.ForEach(x => result.Add(x.ToObject<SageWorkOrderLocationAccordance>()));
             return result;
         }
 

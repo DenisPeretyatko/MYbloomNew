@@ -193,6 +193,9 @@
         public string Location { get; set; }
 
         [XmlAttribute]
+        public string LocationNumber { get; set; }
+
+        [XmlAttribute]
         public string Misc { get; set; }
 
         [XmlAttribute]

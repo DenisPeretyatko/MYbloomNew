@@ -58,6 +58,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         foreach (var workOrder in workOrders.Entities)
                         {
                             var mongoEntity = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == workOrder.WorkOrder).SingleOrDefault();
+                            var WorkOrderLocationAccordance = _proxy.GetAccordance();
 
                             if (mongoEntity == null)
                             {
@@ -86,7 +87,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 //{
                                 //    workOrder.WorkOrderItems = woiResult;
                                 //}
-                                
+
                                 var notesResult = workOrderNotes.Entities.Where(x => x.TRANSNBR == workOrder.WorkOrder).ToList();
                                 if (notesResult.Count != 0)
                                 {
