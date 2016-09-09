@@ -42,5 +42,7 @@
 
         SageResponse<SageNote> GetNotes();
         SageResponse<SageWorkOrderItem> GetItems();
+
+        SageResponse<SageWorkOrderLocationAccordance> GetAccordance();
     }
 }

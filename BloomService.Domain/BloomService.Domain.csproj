@@ -102,6 +102,7 @@
   <ItemGroup>
     <Compile Include="Entities\Concrete\Auxiliary\SageResponse.cs" />
     <Compile Include="Entities\Concrete\Auxiliary\ChangeType.cs" />
+    <Compile Include="Entities\Concrete\SageWorkOrderLocationAccordance.cs" />
     <Compile Include="Entities\Concrete\Notification.cs" />
     <Compile Include="Entities\Concrete\SageNote.cs" />
     <Compile Include="Entities\Concrete\SageWorkOrderStatus.cs" />
