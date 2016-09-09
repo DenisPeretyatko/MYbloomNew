@@ -65,20 +65,27 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 if (result != null)
                                 {
                                     workOrder.WorkOrderItems = result.Entities;
-
                                 }
+                                //var result = workOrderItems.Entities.Where(x => x.WorkOrder == workOrder.WorkOrder).ToList();
+                                //if (result.Count != 0)
+                                //{
+                                //    workOrder.WorkOrderItems = result;
+                                //}
                                 _repository.Add(workOrder);
                             }
                             else
                             {
-
-                               
-                                var woiResult = workOrderItems.Entities.Where(x => x.WorkOrder == workOrder.WorkOrder).ToList();
-                                if (woiResult.Count != 0)
+                                var woiResult = _proxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder);
+                                if (woiResult != null)
                                 {
-                                    workOrder.WorkOrderItems = woiResult;
+                                    workOrder.WorkOrderItems = woiResult.Entities;
                                 }
 
+                                //var woiResult = workOrderItems.Entities.Where(x => x.WorkOrder == workOrder.WorkOrder).ToList();
+                                //if (woiResult.Count != 0)
+                                //{
+                                //    workOrder.WorkOrderItems = woiResult;
+                                //}
                                 
                                 var notesResult = workOrderNotes.Entities.Where(x => x.TRANSNBR == workOrder.WorkOrder).ToList();
                                 if (notesResult.Count != 0)
