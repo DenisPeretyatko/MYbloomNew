@@ -15,43 +15,43 @@ namespace BloomService.Web.Infrastructure.Jobs
                 lock (_syncSageLock)
                 {
                     GetEntities();
-                    try
-                    {
-                        foreach (var entity in rateSheetArray.Entities)
-                        {
-                            var mongoEntity = _repository.SearchFor<SageRateSheet>(x => x.RATESHEETNBR == entity.RATESHEETNBR).SingleOrDefault();
-                            if (mongoEntity == null)
-                                _repository.Add(entity);
-                            else
-                            {
-                                entity.Id = mongoEntity.Id;
-                                _repository.Update(entity);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _log.ErrorFormat("Can`t sync SageRateSheet {0}", ex);
-                    }
+                    //try
+                    //{
+                    //    foreach (var entity in rateSheetArray.Entities)
+                    //    {
+                    //        var mongoEntity = _repository.SearchFor<SageRateSheet>(x => x.RATESHEETNBR == entity.RATESHEETNBR).SingleOrDefault();
+                    //        if (mongoEntity == null)
+                    //            _repository.Add(entity);
+                    //        else
+                    //        {
+                    //            entity.Id = mongoEntity.Id;
+                    //            _repository.Update(entity);
+                    //        }
+                    //    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    _log.ErrorFormat("Can`t sync SageRateSheet {0}", ex);
+                    //}
 
-                    try
-                    {
-                        foreach (var entity in permissionCodesArray.Entities)
-                        {
-                            var mongoEntity = _repository.SearchFor<SagePermissionCode>(x => x.PERMISSIONCODE == entity.PERMISSIONCODE).SingleOrDefault();
-                            if (mongoEntity == null)
-                                _repository.Add(entity);
-                            else
-                            {
-                                entity.Id = mongoEntity.Id;
-                                _repository.Update(entity);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _log.ErrorFormat("Can`t sync SagePermissionCode {0}", ex);
-                    }
+                    //try
+                    //{
+                    //    foreach (var entity in permissionCodesArray.Entities)
+                    //    {
+                    //        var mongoEntity = _repository.SearchFor<SagePermissionCode>(x => x.PERMISSIONCODE == entity.PERMISSIONCODE).SingleOrDefault();
+                    //        if (mongoEntity == null)
+                    //            _repository.Add(entity);
+                    //        else
+                    //        {
+                    //            entity.Id = mongoEntity.Id;
+                    //            _repository.Update(entity);
+                    //        }
+                    //    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    _log.ErrorFormat("Can`t sync SagePermissionCode {0}", ex);
+                    //}
 
                     try
                     {
@@ -72,6 +72,9 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 //{
                                 //    workOrder.WorkOrderItems = result;
                                 //}
+                                workOrder.LocationNumber =
+                                    WorkOrderLocationAccordance.Entities.Single(x => x.WRKORDNBR == workOrder.WorkOrder)
+                                        .SERVSITENBR;
                                 _repository.Add(workOrder);
                             }
                             else
@@ -99,10 +102,12 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 workOrder.AssignmentId = mongoEntity.AssignmentId;
                                 workOrder.Latitude = mongoEntity.Latitude;
                                 workOrder.Longitude = mongoEntity.Longitude;
-
                                 workOrder.ScheduleDate = mongoEntity.ScheduleDate;
                                 workOrder.Color = mongoEntity.Color;
                                 workOrder.EmployeeId = mongoEntity.EmployeeId;
+                                workOrder.LocationNumber =
+                                    WorkOrderLocationAccordance.Entities.Single(x => x.WRKORDNBR == workOrder.WorkOrder)
+                                        .SERVSITENBR;
                                 _repository.Update(workOrder);
                             }
                         }

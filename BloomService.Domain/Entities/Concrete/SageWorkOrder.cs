@@ -193,7 +193,7 @@
         public string Location { get; set; }
 
         [XmlAttribute]
-        public string LocationNumber { get; set; }
+        public long LocationNumber { get; set; }
 
         [XmlAttribute]
         public string Misc { get; set; }
