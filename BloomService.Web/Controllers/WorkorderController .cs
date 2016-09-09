@@ -45,10 +45,7 @@ namespace BloomService.Web.Controllers
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
             _log.InfoFormat("Method: CreateWorkOrder. Model ID {0}", model.Id);
-            if (!ModelState.IsValid)
-            {
-                return Error("Not valid data. Please fill out the form.");
-            }
+          
             var workorder = new SageWorkOrder()
             {
                 ARCustomer = model.Customer,

@@ -49,5 +49,9 @@ namespace BloomService.Web.Models
         public string Contact { get; set; }
 
         public ushort Equipment { get; set; }
+
+        public DateTime AssignmentDate { get; set; }
+
+        public DateTime AssignmentTime { get; set; }
     }
 }

@@ -20,8 +20,10 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
     $scope.obj.hours = '';
     $scope.paymentmethods = '';
     $scope.obj.contact = '';
+    $scope.obj.assignmentDate = new Date();
+    $scope.obj.assignmentTime = new Date(2000, 0, 1, 00, 00, 0);
     $scope.lookups = state.lookups;
-
+    
     $scope.validation = {
         location: false,
         problem: false,
@@ -95,7 +97,9 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             Permissiocode: $scope.lookups.PermissionCodes.selected == null ? "" : $scope.lookups.PermissionCodes.selected.DESCRIPTION,
             Paymentmethods: $scope.lookups.PaymentMethods.selected == null ? "" : $scope.lookups.PaymentMethods.selected.Method,
             JCJob: $scope.lookups.Employes.selected == null ? "" : $scope.lookups.Employes.selected.JCJob,
-            Contact: $scope.obj.contact
+            Contact: $scope.obj.contact,
+            AssignmentDate: $scope.obj.assignmentDate,
+            AssignmentTime: $scope.obj.assignmentTime
         };
 
         commonDataService.createWorkorder(workorder).then(function (response) {
