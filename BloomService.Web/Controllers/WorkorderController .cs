@@ -298,17 +298,15 @@ namespace BloomService.Web.Controllers
         public ActionResult SaveWorkOrder(WorkOrderModel model)
         {
             _log.InfoFormat("Method: SaveWorkOrder. Model ID {0}", model.Id);
-            if (!ModelState.IsValid)
-            {
-                if (model.Emploee == 0)
-                    return Error("Employee is required");
-                if (model.Location == null)
-                    return Error("Location is required");
-                if (model.Problem == null)
-                    return Error("Problem is required");
-                return Error("Not valid data. Please fill out the form.");
-            }
-           
+
+            if (model.Emploee == 0)
+                return Error("Employee is required");
+            if (model.Location == null)
+                return Error("Location is required");
+            if (model.Problem == null)
+                return Error("Problem is required");
+
+
             var workorder = new SageWorkOrder()
             {
                 ARCustomer = model.Customer,

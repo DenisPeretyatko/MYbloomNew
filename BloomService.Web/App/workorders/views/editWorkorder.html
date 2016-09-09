@@ -445,7 +445,7 @@
                                 </td>
 
                                 <td class="center" ng-if="equipm.isEditing == true" class="editable-woitem">
-                                    <a class="btn btn-danger btn-xs" ng-click="saveRow(equipm, $index)">Save</a>
+                                    <a class="btn btn-danger btn-xs save-btn" ng-click="saveRow(equipm, $index)">Save</a>
                                 </td>
                                 <td ng-if="equipm.isEditing == false">
                                     <a class="btn btn-danger btn-xs" ng-click="editRow(equipm, $index)">Edit</a>
@@ -464,8 +464,8 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
-                        <p ng-show="pictures==''" style="font-size: 125%">There are is no pictures yet</p>
-                        <div class="wogalary">
+                        <div ng-show="pictures==''" class="wo-no-pictures">There are is no pictures yet</div>
+                        <div class="wogalary" ng-hide="pictures==''">
                             <div>
                                 <ul class="cbp-rfgrid">
                                     <li style="margin-bottom: 15px" ng-repeat="picture in pictures.Images" class="li-wopicture">

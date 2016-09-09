@@ -7,32 +7,32 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
 
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
-    //$rootScope.workorders = [];
     $scope.workordersView = [];
     $scope.truckMarkers = [];
     $scope.workorderMarkers = [];
     $scope.obj = {};
     $scope.obj.mapDate = new Date();
     $scope.showAll = false;
-    //$rootScope.workorders = [];
 
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
 
-    $scope.showAllLocations = function() {
+    $scope.showAllLocations = function () {
+        var tempWorkordersView = [];
         if ($scope.showAll == true) {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                    $scope.workordersView.push(value);
+                    tempWorkordersView.push(value);
             });
         } else {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
                 if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
-                    $scope.workordersView.push(value);
+                    tempWorkordersView.push(value);
                 }
             });
         }
+        $scope.workordersView = tempWorkordersView;
     }
 
     $scope.$watchCollection(function () { return $scope.workordersView; }, function () {
@@ -44,7 +44,7 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
                 lat: parseFloat(value.WorkOrder.Latitude),
                 lng: parseFloat(value.WorkOrder.Longitude)
             }
-            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + Math.random();
+            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + value.Color;
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
@@ -77,7 +77,7 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
                 lng: parseFloat(truck.Longitude)
             }
             if (pos.lat !== 0 && pos.lng !== 0) {
-                var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + Math.random();
+                var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + truck.Color;
                 var marker = new google.maps.Marker({
                     position: pos,
                     map: $scope.locationMap,
@@ -101,23 +101,24 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
         });
     });
 
-    //commonDataService.getLocations().then(function (response) {
-    //    $rootScope.workorders = response.data;
+    var tempWorkordersView = [];
         angular.forEach($rootScope.workorders, function (value, key) {
             if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
-                $scope.workordersView.push(value);
+               tempWorkordersView.push(value);
             }
         });
-    //});
+    $scope.workordersView = tempWorkordersView;
 
     $scope.$watch(function () { return $scope.obj.mapDate; }, function () { 
         if ($scope.showAll == false) {
             $scope.workordersView = [];
+             var tempWorkordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
                 if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
-                    $scope.workordersView.push(value);
+                    tempWorkordersView.push(value);
                 }
             });
+            $scope.workordersView = tempWorkordersView;
         } else {
             $scope.workordersView = angular.copy($rootScope.workorders);
         }
@@ -125,12 +126,14 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
 
     $scope.$watchCollection(function () { return $rootScope.workorders; }, function () {
         if ($scope.showAll == false) {
+        var tempWorkordersView = [];
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
                 if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
-                    $scope.workordersView.push(value);
+                   tempWorkordersView.push(value);
                 }
             });
+            $scope.workordersView = tempWorkordersView;
         } else {
             $scope.workordersView = angular.copy($rootScope.workorders);
         }

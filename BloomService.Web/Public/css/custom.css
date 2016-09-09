@@ -548,6 +548,7 @@ body {
     position: fixed;
     left: 38%;
     top: 30%;
+    width: 625px;
 }
 
 .lightbox .title {
@@ -575,6 +576,12 @@ body {
 .lightbox .buttons {
     float: right;
     margin-right: 14px;
+}
+
+.lightbox .read-more-opened {
+    width: 98% !important;
+    left: 1% !important;
+    top: 0 !important;
 }
 
 .wo-validation span {
@@ -607,4 +614,29 @@ div.ng-invalid.ng-touched span {
 .btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled:active, .btn-primary.disabled.active, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled]:active, .btn-primary.active[disabled], fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary:hover, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary.active {
     background-color: #df4242 !important;
     border-color: #df4242 !important;
+}
+
+.wo-no-pictures {
+    font-size: 150%;
+    width: 98%;
+    text-align: center;
+}
+
+.read-more-large {
+    overflow: scroll;
+    height: 450px;
+    margin-bottom: 10px;
+}
+
+.read-more-little {
+    overflow: inherit;
+    height: inherit;
+    margin-bottom: 10px;
+}
+
+.save-btn {
+    margin-top: 5px;
+}
+img[src="https://maps.gstatic.com/mapfiles/api-3/images/mapcnt6.png"] {
+    display: none;
 }
