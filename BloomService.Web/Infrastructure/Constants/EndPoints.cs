@@ -35,5 +35,6 @@
         public static string RemoveNote = endPointBase + "workorders/notes/remove";
         public static string DeleteNotes = endPointBase + "workorders/notes/delete";
         public static string GetNotes = endPointBase + "workorders/notes";
+        public static string GetItems = endPointBase + "workorders/items";
     }
 }

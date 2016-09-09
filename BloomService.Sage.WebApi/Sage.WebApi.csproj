@@ -364,6 +364,7 @@
     <Compile Include="Infratructure\Mapping\SageWebApiMappingProfile.cs" />
     <Compile Include="Models\TestXmlModel.cs" />
     <Compile Include="Models\WorkOrderDbModel.cs" />
+    <Compile Include="Models\WorkOrderItemDbModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infratructure\ModelBinders\ProportiesModelBinder .cs" />
     <Compile Include="Infratructure\Results\ChallengeResult.cs" />
@@ -457,7 +458,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50924</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50926/</IISUrl>
+          <IISUrl>http://localhost:50927/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

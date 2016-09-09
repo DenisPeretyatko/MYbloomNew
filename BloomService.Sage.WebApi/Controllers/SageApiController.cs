@@ -416,6 +416,44 @@
             }
         }
 
+        [HttpGet, Route("api/v2/sm/workorders/notes")]
+        public SageResponse<SageNote> GetWorkOrderNotes()
+        {
+            try
+            {
+                var result = new SageResponse<SageNote>
+                {
+                    IsSucceed = true,
+                    Entities = serviceOdbc.GetNotes()
+                };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageNote> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
+
+        [HttpGet, Route("api/v2/sm/workorders/items")]
+        public SageResponse<SageWorkOrderItem> GetItems()
+        {
+            try
+            {
+                var result = new SageResponse<SageWorkOrderItem>
+                {
+                    IsSucceed = true,
+                    Entities = serviceOdbc.GetWorkOrderItems()
+                };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
+
         [HttpPost, Route("api/v2/sm/workorders/status/edit/{id}/{status}")]
         public SageResponse<SageWorkOrder> EditWorkOrderStatus(string id, string status)
         {

@@ -16,6 +16,8 @@ namespace Sage.WebApi.Infratructure.Constants
         public static readonly string EditWorkJcJobQuery = "UPDATE WRKORDER SET JCJOB = {0} WHERE WRKORDNBR = {1}";
         public static readonly string DeleteNoteQuery = "DELETE FROM NOTES WHERE NOTENBR = {0}";
         public static readonly string SelectNotesQuery = "SELECT * FROM NOTES WHERE TRANSNBR = {0}";
+        public static readonly string SelectAllNotesQuery = "SELECT * FROM NOTES";
+        public static readonly string SelectAllWorkOrderItemsQuery = "SELECT * FROM WOITEMS";
 
         public static string BuildDeleteWorkOrderItemQuery(int workOrderId, IEnumerable<int> ids)
         {

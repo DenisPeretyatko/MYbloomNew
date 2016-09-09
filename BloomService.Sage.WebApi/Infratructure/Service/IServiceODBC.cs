@@ -30,5 +30,9 @@
         void DeleteNotes(IEnumerable<long> ids);
 
         List<SageNote> GetNotes(string id);
+
+        List<SageNote> GetNotes();
+
+        List<SageWorkOrderItem> GetWorkOrderItems();
     }
 }

@@ -122,61 +122,56 @@ namespace BloomService.Web.Infrastructure.Jobs
             {
                 lock (_syncSageLock)
                 {
-                    try
-                    {
-                        var rateSheetArray = _proxy.GetRateSheets();
-                        foreach (var entity in rateSheetArray.Entities)
-                        {
-                            var mongoEntity = _repository.SearchFor<SageRateSheet>(x => x.RATESHEETNBR == entity.RATESHEETNBR).SingleOrDefault();
-                            if (mongoEntity == null)
-                                _repository.Add(entity);
-                            else
-                            {
-                                entity.Id = mongoEntity.Id;
-                                _repository.Update(entity);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _log.ErrorFormat("Can`t sync SageRateSheet {0}", ex);
-                    }
+                    //try
+                    //{
+                    //    var rateSheetArray = _proxy.GetRateSheets();
+                    //    foreach (var entity in rateSheetArray.Entities)
+                    //    {
+                    //        var mongoEntity = _repository.SearchFor<SageRateSheet>(x => x.RATESHEETNBR == entity.RATESHEETNBR).SingleOrDefault();
+                    //        if (mongoEntity == null)
+                    //            _repository.Add(entity);
+                    //        else
+                    //        {
+                    //            entity.Id = mongoEntity.Id;
+                    //            _repository.Update(entity);
+                    //        }
+                    //    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    _log.ErrorFormat("Can`t sync SageRateSheet {0}", ex);
+                    //}
 
-                    try
-                    {
-                        var permissionCodesArray = _proxy.GetPermissionCodes();
-                        foreach (var entity in permissionCodesArray.Entities)
-                        {
-                            var mongoEntity = _repository.SearchFor<SagePermissionCode>(x => x.PERMISSIONCODE == entity.PERMISSIONCODE).SingleOrDefault();
-                            if (mongoEntity == null)
-                                _repository.Add(entity);
-                            else
-                            {
-                                entity.Id = mongoEntity.Id;
-                                _repository.Update(entity);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _log.ErrorFormat("Can`t sync SagePermissionCode {0}", ex);
-                    }
+                    //try
+                    //{
+                    //    var permissionCodesArray = _proxy.GetPermissionCodes();
+                    //    foreach (var entity in permissionCodesArray.Entities)
+                    //    {
+                    //        var mongoEntity = _repository.SearchFor<SagePermissionCode>(x => x.PERMISSIONCODE == entity.PERMISSIONCODE).SingleOrDefault();
+                    //        if (mongoEntity == null)
+                    //            _repository.Add(entity);
+                    //        else
+                    //        {
+                    //            entity.Id = mongoEntity.Id;
+                    //            _repository.Update(entity);
+                    //        }
+                    //    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    _log.ErrorFormat("Can`t sync SagePermissionCode {0}", ex);
+                    //}
 
                     try
                     {
                         var workOrders = _proxy.GetWorkorders();
+                        var workOrderItems = _proxy.GetItems();
+                        var workOrderNotes = _proxy.GetNotes();
+
                         var emploees = _proxy.GetEmployees().Entities.Where(x => !string.IsNullOrEmpty(x.JCJob));
                         foreach (var workOrder in workOrders.Entities)
                         {
-                            if (emploees.SingleOrDefault(x => x.Name == workOrder.Employee) != null)
-                            {
-                                workOrder.IsValid = true;
-                            }
-                            else
-                            {
-                                workOrder.IsValid = false;
-                            }
-
+                           
                             var mongoEntity = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == workOrder.WorkOrder).SingleOrDefault();
                             if (mongoEntity == null)
                             {

@@ -14,6 +14,8 @@
 
     public class ServiceManagement : IServiceManagement
     {
+        private static object lockObject;
+
         private readonly ClaimsAgent claimsAgent;
 
         private bool isCreated;

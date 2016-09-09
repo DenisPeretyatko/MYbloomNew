@@ -15,9 +15,9 @@
 
             foreach (KeyValuePair<string, object> item in source)
             {
-                if (item.Value.ToString() != string.Empty && item.Value.GetType() != typeof(DBNull))
+                if (!string.IsNullOrEmpty(item.Value.ToString()) && item.Value.GetType() != typeof(DBNull))
                 {
-                    someObjectType.GetProperty(item.Key.Replace("_", string.Empty)).SetValue(someObject, item.Value, null);
+                    someObjectType.GetProperty(item.Key).SetValue(someObject, item.Value, null);
                 }
             }
 

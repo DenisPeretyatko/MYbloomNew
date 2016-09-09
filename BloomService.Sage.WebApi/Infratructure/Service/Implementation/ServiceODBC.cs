@@ -118,6 +118,23 @@
             return result;
         }
 
+        public List<SageNote> GetNotes()
+        {
+            var query = Queries.SelectAllNotesQuery;
+            var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query);
+            var result = new List<SageNote>();
+            response.ForEach(x => result.Add(x.ToObject<SageNote>()));
+            return result;
+        }
+
+        public List<SageWorkOrderItem> GetWorkOrderItems()
+        {
+            var query = Queries.SelectAllWorkOrderItemsQuery;
+            var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query);
+            var result = DictionaryToWorkOrderItemList(response);
+            return result;
+        }
+
         private List<SageWorkOrder> DictionaryToWorkOrderList(List<Dictionary<string, object>> response)
         {
             var result = new List<SageWorkOrder>();
@@ -125,6 +142,18 @@
             {
                 var workOrderDbModel = item.ToObject<WorkOrderDbModel>();
                 var workOrder = Mapper.Map<SageWorkOrder>(workOrderDbModel);
+                result.Add(workOrder);
+            }
+            return result;
+        }
+
+        private List<SageWorkOrderItem> DictionaryToWorkOrderItemList(List<Dictionary<string, object>> response)
+        {
+            var result = new List<SageWorkOrderItem>();
+            foreach (var item in response)
+            {
+                var workOrderItemDbModel = item.ToObject<WorkOrderItemDbModel>();
+                var workOrder = Mapper.Map<SageWorkOrderItem>(workOrderItemDbModel);
                 result.Add(workOrder);
             }
             return result;
