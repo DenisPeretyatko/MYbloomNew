@@ -14,7 +14,7 @@
 
     public class ServiceManagement : IServiceManagement
     {
-        private static object lockObject;
+        private static object lockObject= new object();
 
         private readonly ClaimsAgent claimsAgent;
 
@@ -252,28 +252,31 @@
 
         public object SendMessage(string message)
         {
-            _log.InfoFormat("Send message: {0}", message);
-            if (!isCreated)
+            lock (lockObject)
             {
-                Create(config.SageUserName, config.SagePassword);
-            }
+                _log.InfoFormat("Send message: {0}", message);
+                if (!isCreated)
+                {
+                    Create(config.SageUserName, config.SagePassword);
+                }
 
-            var response = messageBoard.SendMessage(messageTypeDescriptor.Xml, message);
-            _log.InfoFormat("Response {0}", response);
-            var serializer = new XmlSerializer(typeof(MessageResponses));
-            object result;
-            using (TextReader reader = new StringReader(response))
-            {
-                result = serializer.Deserialize(reader);
-            }
+                var response = messageBoard.SendMessage(messageTypeDescriptor.Xml, message);
+                _log.InfoFormat("Response {0}", response);
+                var serializer = new XmlSerializer(typeof(MessageResponses));
+                object result;
+                using (TextReader reader = new StringReader(response))
+                {
+                    result = serializer.Deserialize(reader);
+                }
 
-            var messageResponses = result as MessageResponses;
-            if (messageResponses != null && messageResponses.MessageResponse.Error != null)
-            {
-                throw new ResponseException(messageResponses.MessageResponse.Error);
-            }
+                var messageResponses = result as MessageResponses;
+                if (messageResponses != null && messageResponses.MessageResponse.Error != null)
+                {
+                    throw new ResponseException(messageResponses.MessageResponse.Error);
+                }
 
-            return result;
+                return result;
+            }
         }
 
         public SageWorkOrder[] WorkOrders()
