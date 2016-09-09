@@ -34,5 +34,7 @@
         List<SageNote> GetNotes();
 
         List<SageWorkOrderItem> GetWorkOrderItems();
+
+        List<SageWorkOrderLocationAccordance> GetWorkOrderLocationAccordance();
     }
 }

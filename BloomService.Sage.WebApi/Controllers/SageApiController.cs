@@ -173,6 +173,25 @@
             }
         }
 
+        [HttpGet, Route("api/v2/sm/workorders/accordance/get")]
+        public SageResponse<SageWorkOrderLocationAccordance> GetAccordance()
+        {
+            try
+            {
+                var result = new SageResponse<SageWorkOrderLocationAccordance>
+                {
+                    IsSucceed = true,
+                    Entities = serviceOdbc.GetWorkOrderLocationAccordance().ToList()
+                };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageWorkOrderLocationAccordance> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
+
         [HttpGet, Route("api/v2/sm/assignments/get/")]
         public SageResponse<SageAssignment> GetAssignments()
         {
@@ -181,7 +200,7 @@
                 var result = new SageResponse<SageAssignment>
                 {
                     IsSucceed = true,
-                    Entities = this.serviceManager.Assignments().ToList()
+                    Entities = serviceManager.Assignments().ToList()
                 };
                 return result;
             }

@@ -9,7 +9,6 @@
     using BloomService.Web.Infrastructure.Services.Interfaces;
 
     using RestSharp;
-
     public class SageApiProxy : ISageApiProxy
     {
         private readonly BloomServiceConfiguration configuration;
@@ -40,6 +39,12 @@
         public SageResponse<SageNote> GetNotes(long id)
         {
             return Get<SageNote>(id, EndPoints.GetNotes);
+        }
+
+
+        public SageResponse<SageWorkOrderLocationAccordance> GetAccordance()
+        {
+            return GetAll<SageWorkOrderLocationAccordance>(EndPoints.GetAccordance);
         }
 
         public SageResponse<SageNote> DeleteNote(long id)
