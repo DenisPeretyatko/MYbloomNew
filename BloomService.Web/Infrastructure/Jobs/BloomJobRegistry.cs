@@ -42,6 +42,8 @@ namespace BloomService.Web.Infrastructure.Jobs
         public SageResponse<SageLocation> locations { get; set; }
         public SageResponse<SageCustomer> customers { get; set; }
         public SageResponse<SagePart> parts { get; set; }
+        public SageResponse<SageNote> workOrderNotes { get; set; }
+        public SageResponse<SageWorkOrderItem> workOrderItems { get; set; }
 
         public class LateTechnician
         {
@@ -61,7 +63,7 @@ namespace BloomService.Web.Infrastructure.Jobs
             _locationService = ComponentContainer.Current.Get<ILocationService>();
             _notification = ComponentContainer.Current.Get<INotificationService>();
             lateTechnicians = new List<LateTechnician>();
-           
+
             SendNotifications();
             SendRequest();
             Synchronization();
@@ -82,6 +84,9 @@ namespace BloomService.Web.Infrastructure.Jobs
             locations = _proxy.GetLocations();
             customers = _proxy.GetCustomers();
             parts = _proxy.GetParts();
+            workOrderNotes = _proxy.GetNotes();
+            workOrderItems = _proxy.GetItems();
+
         }
     }
 }

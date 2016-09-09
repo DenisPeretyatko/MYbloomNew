@@ -133,7 +133,7 @@
 
         public SageResponse<SageWorkOrderItem> GetItems()
         {
-            var request = new RestRequest(EndPoints.GetItems, Method.GET) { RequestFormat = DataFormat.Json, AlwaysMultipartFormData = true };
+            var request = new RestRequest(EndPoints.GetItems, Method.GET) { RequestFormat = DataFormat.Json, AlwaysMultipartFormData = true};
             BuildAuthenticationHeader(request);
             var response = restClient.Execute<SageResponse<SageWorkOrderItem>>(request);
             var results = response.Data;

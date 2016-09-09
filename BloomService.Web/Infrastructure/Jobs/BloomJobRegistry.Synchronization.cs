@@ -59,9 +59,6 @@ namespace BloomService.Web.Infrastructure.Jobs
                         {
                             var mongoEntity = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == workOrder.WorkOrder).SingleOrDefault();
 
-                            var workOrderItems = _proxy.GetItems();
-                            var workOrderNotes = _proxy.GetNotes();
-
                             if (mongoEntity == null)
                             {
                                 var result = _proxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder);
@@ -75,16 +72,18 @@ namespace BloomService.Web.Infrastructure.Jobs
                             else
                             {
 
-                                var woiResult = _proxy.GetWorkorderItemsByWorkOrderId(workOrder.WorkOrder);
-                                if (woiResult != null)
+                               
+                                var woiResult = workOrderItems.Entities.Where(x => x.WorkOrder == workOrder.WorkOrder).ToList();
+                                if (woiResult.Count != 0)
                                 {
-                                    workOrder.WorkOrderItems = woiResult.Entities;
+                                    workOrder.WorkOrderItems = woiResult;
                                 }
 
-                                var notesResult = _proxy.GetNotes(workOrder.WorkOrder);
-                                if (notesResult != null)
+                                
+                                var notesResult = workOrderNotes.Entities.Where(x => x.TRANSNBR == workOrder.WorkOrder).ToList();
+                                if (notesResult.Count != 0)
                                 {
-                                    workOrder.WorkNotes = notesResult.Entities;
+                                    workOrder.WorkNotes = notesResult;
                                 }
 
                                 workOrder.Id = mongoEntity.Id;
