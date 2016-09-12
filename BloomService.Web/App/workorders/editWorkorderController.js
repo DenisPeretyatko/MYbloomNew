@@ -80,8 +80,8 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
             $scope.obj.calldate = $scope.editableWorkOrder.CallDate;
-            $scope.obj.assignmentDate = moment($scope.editableWoAssignment.ScheduleDate).toDate();
-            $scope.obj.assignmentTime = moment($scope.editableWoAssignment.StartTime).toDate();
+            $scope.obj.assignmentDate = moment($scope.editableWoAssignment.ScheduleDate).utc().toDate();
+            $scope.obj.assignmentTime = moment($scope.editableWoAssignment.Start).utc().toDate();
             $scope.lookups.Problems.selected = $scope.editableWorkOrder.ProblemObj;
             $scope.lookups.RateSheets.selected = $scope.editableWorkOrder.RateSheetObj;
             $scope.lookups.Employes.selected = $scope.editableWorkOrder.EmployeeObj;
@@ -110,8 +110,8 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             $scope.lookups.Locations.selected = $scope.editableWorkOrder.LocationObj;
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
             $scope.obj.calldate = $scope.editableWorkOrder.CallDate;
-            $scope.obj.assignmentDate = moment($scope.editableWoAssignment.ScheduleDate).toDate();
-            $scope.obj.assignmentTime = moment($scope.editableWoAssignment.StartTime).toDate();
+            $scope.obj.assignmentDate = moment($scope.editableWoAssignment.ScheduleDate).utc().toDate();
+            $scope.obj.assignmentTime = moment($scope.editableWoAssignment.Start).utc().toDate();
             $scope.lookups.Problems.selected = $scope.editableWorkOrder.ProblemObj;
             $scope.lookups.RateSheets.selected = $scope.editableWorkOrder.RateSheetObj;
             $scope.lookups.Employes.selected = $scope.editableWorkOrder.EmployeeObj;
@@ -298,8 +298,8 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         commonDataService.getAssignment(response.data.WorkOrder).then(function (result) {
             debugger;
             $scope.editableWoAssignment = result.data;
-            $scope.obj.assignmentDate = moment(result.data.ScheduleDate).toDate();
-            $scope.obj.assignmentTime = moment(result.data.StartTime).toDate();
+            $scope.obj.assignmentDate = moment(result.data.ScheduleDate).utc().toDate();
+            $scope.obj.assignmentTime = moment(result.data.Start).utc().toDate();
         });
         commonDataService.getNotes(response.data.WorkOrder).then(function (result) {
             if (result.data != "")
@@ -552,6 +552,13 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
     $scope.closeModal = function () {
         $('#myModal').modal('hide');
+    }
+
+      $scope.clockPopup = function()
+    {
+          $('.clockpicker').clockpicker({
+              donetext: 'Ok'
+          });
     }
 }
 editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state"];

@@ -328,19 +328,19 @@
     <Compile Include="Infrastructure\BloomServiceConfiguration.cs" />
     <Compile Include="Infrastructure\Constants\EstimateRepairHours.cs" />
     <Compile Include="Infrastructure\Constants\RateSheets.cs" />
-	 <Compile Include="Infrastructure\Jobs\BloomJobRegistry.cs" />
-    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.CheckTechnicians.cs">  
-<DependentUpon>BloomJobRegistry.cs</DependentUpon>	
-	  </Compile>
-    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.Requests.cs" >
-	<DependentUpon>BloomJobRegistry.cs</DependentUpon>
-	  </Compile>
-    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.SilentNotifications.cs" >
-	<DependentUpon>BloomJobRegistry.cs</DependentUpon>
-	  </Compile>
-    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.Synchronization.cs" >
-	<DependentUpon>BloomJobRegistry.cs</DependentUpon>
-	  </Compile>
+    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.cs" />
+    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.CheckTechnicians.cs">
+      <DependentUpon>BloomJobRegistry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.Requests.cs">
+      <DependentUpon>BloomJobRegistry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.SilentNotifications.cs">
+      <DependentUpon>BloomJobRegistry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\Jobs\BloomJobRegistry.Synchronization.cs">
+      <DependentUpon>BloomJobRegistry.cs</DependentUpon>
+    </Compile>
     <Compile Include="Infrastructure\ModelBinders\JsonNetModelBinder.cs" />
     <Compile Include="Infrastructure\Queries\AssignmentQueries.cs" />
     <Compile Include="Infrastructure\Queries\PartsQueries.cs" />
@@ -540,6 +540,8 @@
     <Content Include="Public\js\jquery\moment.min.js" />
     <Content Include="Public\js\plugins\angucomplete\angucomplete-alt.css" />
     <Content Include="Public\js\plugins\angucomplete\angucomplete-alt.min.js" />
+    <Content Include="Public\js\plugins\clockpicker\bootstrap-clockpicker.js" />
+    <Content Include="Public\js\plugins\clockpicker\bootstrap-clockpicker.min.css" />
     <Content Include="Public\js\plugins\colorpicker\css\bootstrap-colorpicker.css" />
     <Content Include="Public\js\plugins\colorpicker\css\bootstrap-colorpicker.min.css" />
     <Content Include="Public\js\plugins\colorpicker\img\bootstrap-colorpicker\alpha-horizontal.png" />
@@ -866,6 +868,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Public\js\plugins\NewFolder1\" />
     <Folder Include="Views\Shared\Test\" />
   </ItemGroup>
   <ItemGroup>

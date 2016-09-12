@@ -3,6 +3,8 @@
  */
 
 var createWorkorderController = function ($scope, $stateParams, $state, state, commonDataService) {
+   
+
     $scope.obj = {}
     $scope.customer = '';
     $scope.location = '';
@@ -144,5 +146,12 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
     $scope.setEstimateHour = function (selected) {
         $scope.obj.hours = parseFloat(selected.$select.selected.EstimatedRepairHours);
     };
+
+    $scope.clockPopup = function()
+    {
+         $('.clockpicker').clockpicker({
+              donetext: 'Ok'
+          });
+    }
 };
 createWorkorderController.$inject = ["$scope", "$stateParams", "$state", "state", "commonDataService"];
