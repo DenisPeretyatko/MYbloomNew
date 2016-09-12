@@ -63,10 +63,13 @@ namespace BloomService.Web.Controllers
                 PayMethod = model.Paymentmethods,
                 JCJob = model.JCJob,
                 Contact = model.Contact,
-                Equipment = model.Equipment
+                Equipment = model.Equipment,
+               
             };
 
             var result = _sageApiProxy.AddWorkOrder(workorder);
+            result.Entity.LocationNumber = long.Parse(model.Location);
+
             if (!result.IsSucceed)
             {
                 _log.ErrorFormat("Was not able to save workorder to sage. !result.IsSucceed");
@@ -330,7 +333,7 @@ namespace BloomService.Web.Controllers
             };
 
             var workOrderResult = _sageApiProxy.EditWorkOrder(workorder);
-
+            workOrderResult.Entity.LocationNumber = long.Parse(model.Location);
             if (!workOrderResult.IsSucceed)
             {
                 _log.ErrorFormat("Was not able to update workorder to sage. !result.IsSucceed");
