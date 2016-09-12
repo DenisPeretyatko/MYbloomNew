@@ -83,9 +83,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             height: 400,
             resourceAreaWidth: "15%",
             editable: true,
-            //ignoreTimezone: true,
-            //timezone: "UTC -05:00",
-            timezone: "UTC -08:00",
+            timezone: "America/New_York",
             events: $scope.events,
             eventDragStart:
                 function (event, element) {
@@ -209,8 +207,12 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             forceEventDuration: true,
             dayRender: function (date, cell) {
                 var expected = moment(cell.data("date")).local();
-                var now = moment().local();
-                if (expected < now) {
+                var offset = -5.0;
+                var clientDate = new Date();
+                var utc = clientDate.getTime() + (clientDate.getTimezoneOffset() * 60000);
+
+                var serverDate = new Date(utc + (3600000 * offset));
+                if (expected < serverDate) {
                     $(cell).css("background-color", "#e6e6e6");
                 }
             }
