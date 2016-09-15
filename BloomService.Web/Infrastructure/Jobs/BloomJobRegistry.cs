@@ -26,7 +26,8 @@ namespace BloomService.Web.Infrastructure.Jobs
         private readonly ILocationService _locationService;
         private readonly object _keepAlive = new object();
         private readonly INotificationService _notification;
-        private List<LateTechnician> lateTechnicians;
+        private readonly List<LateTechnician> _lateTechnicians;
+        private List<SageLocationCache> locationsCache;
 
         public IQueryable<SageEmployee> technicians { get; set; }
         public SageResponse<SageRateSheet> rateSheetArray { get; set; }
@@ -62,7 +63,7 @@ namespace BloomService.Web.Infrastructure.Jobs
             _httpContextProvider = ComponentContainer.Current.Get<IHttpContextProvider>();
             _locationService = ComponentContainer.Current.Get<ILocationService>();
             _notification = ComponentContainer.Current.Get<INotificationService>();
-            lateTechnicians = new List<LateTechnician>();
+            _lateTechnicians = new List<LateTechnician>();
 
             SendNotifications();
             SendRequest();
@@ -85,7 +86,7 @@ namespace BloomService.Web.Infrastructure.Jobs
             customers = _proxy.GetCustomers();
             parts = _proxy.GetParts();
             workOrderNotes = _proxy.GetNotes();
-            // workOrderItems = _proxy.GetItems();
+            //workOrderItems = _proxy.GetItems(); //out of memory
         }
     }
 }

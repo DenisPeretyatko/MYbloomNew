@@ -1,4 +1,6 @@
 ﻿using System;
+using BloomService.Web.Infrastructure.Dependecy;
+using BloomService.Web.Infrastructure.Mongo;
 
 namespace BloomService.Web.Infrastructure.Services
 {
@@ -16,9 +18,16 @@ namespace BloomService.Web.Infrastructure.Services
     public class LocationService : ILocationService
     {
         private static readonly string url = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false";
+        private readonly IRepository _repository;
+
+        public LocationService()
+        {
+            _repository = ComponentContainer.Current.Get<IRepository>();
+        }
 
         public void ResolveLocation(SageLocation sageLocation)
         {
+            var sageLocationCache = new SageLocationCache();
             Thread.Sleep(1000);
             var parametersSearch = GetGeoLocationAddress(sageLocation);
             var location = GetLocation(parametersSearch);
@@ -29,6 +38,12 @@ namespace BloomService.Web.Infrastructure.Services
                 {
                     sageLocation.Latitude = geometry.location.lat;
                     sageLocation.Longitude = geometry.location.lng;
+                    sageLocationCache.Latitude = geometry.location.lat;
+                    sageLocationCache.Longitude = geometry.location.lng;
+                    sageLocationCache.Location = sageLocation.Location;
+                    sageLocationCache.Address = sageLocation.Address;
+                    sageLocationCache.ResolvedDate = DateTime.UtcNow;
+                    _repository.Add(sageLocationCache);
                 }
             }
         }
@@ -72,6 +87,8 @@ namespace BloomService.Web.Infrastructure.Services
 
             return sb.ToString().TrimEnd(' ');
         }
+
+      
 
         public double Distance(decimal latitude1, decimal longitude1, decimal latitude2, decimal longitude2)
         {
