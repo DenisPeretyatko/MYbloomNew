@@ -27,11 +27,11 @@ namespace BloomService.Web.Infrastructure.Jobs
                         if (workorder == null || workorder.ScheduleDate.GetValueOrDefault().Date != easternTime.Date) continue;
                         var wts = (TimeSpan)(easternTime - workorder.ScheduleDate);
 
-                        if (!lateTechnicians.Any(x => x.Employee == technician.Employee && x.WorkOrder == workorder.WorkOrder) && wts.TotalMinutes >= 10 && wts.TotalMinutes < 30 &&
+                        if (!_lateTechnicians.Any(x => x.Employee == technician.Employee && x.WorkOrder == workorder.WorkOrder) && wts.TotalMinutes >= 10 && wts.TotalMinutes < 30 &&
                            _locationService.Distance(workorder.Latitude, workorder.Longitude,
                                technician.Latitude, technician.Longitude) > 5)
                         {
-                            lateTechnicians.Add(new LateTechnician
+                            _lateTechnicians.Add(new LateTechnician
                             {
                                 Employee = technician.Employee,
                                 TenMinutes = true,
@@ -46,9 +46,9 @@ namespace BloomService.Web.Infrastructure.Jobs
                             _locationService.Distance(workorder.Latitude, workorder.Longitude,
                                 technician.Latitude, technician.Longitude) > 15)
                         {
-                            if (lateTechnicians.Any(x => x.Employee == technician.Employee && x.WorkOrder == workorder.WorkOrder))
+                            if (_lateTechnicians.Any(x => x.Employee == technician.Employee && x.WorkOrder == workorder.WorkOrder))
                             {
-                                var lateTechnician = lateTechnicians.Find(x => x.Employee == technician.Employee && x.WorkOrder == workorder.WorkOrder);
+                                var lateTechnician = _lateTechnicians.Find(x => x.Employee == technician.Employee && x.WorkOrder == workorder.WorkOrder);
                                 if (lateTechnician.ThirtyMinutes == false)
                                 {
                                     lateTechnician.TenMinutes = true;
@@ -58,7 +58,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                             }
                             else
                             {
-                                lateTechnicians.Add(new LateTechnician
+                                _lateTechnicians.Add(new LateTechnician
                                 {
                                     Employee = technician.Employee,
                                     TenMinutes = true,

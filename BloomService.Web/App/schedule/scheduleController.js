@@ -4,7 +4,11 @@
  */
 
 var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $q, commonDataService) {
-    var date = new Date();  
+    var date = new Date(); 
+    var offset = -5.0;
+                var utc = date.getTime() + (date.getTimezoneOffset() * 60000);
+                var serverDate = new Date(utc + (3600000 * offset));
+
     var remainsFullHours = function(start, end) {
         var dateDifference = end.getTime() - start.getTime();
         var remainsDate = new Date(dateDifference);
@@ -28,7 +32,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
     $scope.alertOnDrop = function (event, delta, revertFunc, jsEvent, ui, view, dayDelta, minuteDelta, allDay) {
         var now = new Date();
         var eventDate = new Date(event._start._d.getTime() + (now.getTimezoneOffset() * 60000));
-        if (!$rootScope.unavailableTechniciansIds.includes(parseInt(event.resourceId)) && now <= eventDate) {
+        if (!$rootScope.unavailableTechniciansIds.includes(parseInt(event.resourceId)) && serverDate <= eventDate) {
             $scope.alertMessage = (event.title + ": Droped to make dayDelta " + dayDelta);
             event = setTechnicianColor(event);
             $("#calendar").fullCalendar("rerenderEvents");
@@ -78,7 +82,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
     $scope.uiConfig = {
         calendar: {
             schedulerLicenseKey: "CC-Attribution-NonCommercial-NoDerivatives",
-            now: date,
+            now: serverDate,
             defaultView: "timelineDay",
             height: 400,
             resourceAreaWidth: "15%",
@@ -98,7 +102,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                 });
             },
             eventConstraint: {
-                start: moment().format("YYYY-MM-DD HH:mm"),
+                start: moment(serverDate).format("YYYY-MM-DD HH:mm"),
                 end: "2999-01-01" // hard coded goodness unfortunately
             },
             droppable: true,
@@ -161,7 +165,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             eventReceive: function (event) {
                 var now = new Date();
                 var eventDate = new Date(event._start._d.getTime() + (now.getTimezoneOffset() * 60000));
-                if (!$rootScope.unavailableTechniciansIds.includes(parseInt(event.resourceId)) && eventDate >= now) {
+                if (!$rootScope.unavailableTechniciansIds.includes(parseInt(event.resourceId)) && eventDate >= serverDate) {
                     event = setTechnicianColor(event);
                     event.title = event.workorderId + " " + event.customerFoo + " " + event.locationFoo;
                     var estimate = parseInt(event.hourFoo);
@@ -207,11 +211,6 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             forceEventDuration: true,
             dayRender: function (date, cell) {
                 var expected = moment(cell.data("date")).local();
-                var offset = -5.0;
-                var clientDate = new Date();
-                var utc = clientDate.getTime() + (clientDate.getTimezoneOffset() * 60000);
-
-                var serverDate = new Date(utc + (3600000 * offset));
                 if (expected < serverDate) {
                     $(cell).css("background-color", "#e6e6e6");
                 }
