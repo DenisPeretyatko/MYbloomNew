@@ -14,7 +14,9 @@ namespace BloomService.Web.Infrastructure.Dependecy
             var _settings = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
             var timezonId = _settings.CurrentTimezone;
             var USEastern = TimeZoneInfo.FindSystemTimeZoneById(timezonId);
-            var result = TimeZoneInfo.ConvertTime(date.ToUniversalTime(), USEastern);
+            var utc = date.ToUniversalTime();
+            var result = utc.AddHours(USEastern.BaseUtcOffset.Hours);
+            //var result = TimeZoneInfo.ConvertTime(date.ToUniversalTime(), USEastern);
             return result;
         }
     }

@@ -12,6 +12,7 @@ var mainController = function ($scope, $rootScope, $state, commonDataService, st
     $scope.notificationsCopy = [];
     var canReadMessagesCount = 3;
     var previousNotificationCount = 0;
+    var offset = -5.0;
    
 
     var convertDate = function (value) {
@@ -68,8 +69,9 @@ var mainController = function ($scope, $rootScope, $state, commonDataService, st
                 if (convDate > convertDate(lastDate)) {
                     $scope.notificationsCount++;
                 }
-
-                value.time = moment(convDate).fromNow();
+                var utc = convDate.getTime() - (convDate.getTimezoneOffset() * 60000);
+                var serverDate = new Date(utc - (3600000 * offset));
+                value.time = moment(serverDate).fromNow();
             });
             $scope.notificationsCount += previousNotificationCount;
         });
