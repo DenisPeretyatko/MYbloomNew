@@ -4,7 +4,7 @@
 "use strict";
 
 var mapController = function ($rootScope, $scope, $location, $state, $http, $compile, $interpolate, commonDataService, state) {
-
+    var antiCache = new Date().getTime();
     $scope.mapOptions = googleMapOptions;
     $scope.trucks = [];
     $scope.workordersView = [];
@@ -22,7 +22,7 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
         if ($scope.showAll == true) {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                    tempWorkordersView.push(value);
+                tempWorkordersView.push(value);
             });
         } else {
             $scope.workordersView = [];
@@ -44,7 +44,8 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
                 lat: parseFloat(value.WorkOrder.Latitude),
                 lng: parseFloat(value.WorkOrder.Longitude)
             }
-            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + value.Color;
+            //var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + value.Color;
+            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + antiCache;
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
@@ -77,7 +78,8 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
                 lng: parseFloat(truck.Longitude)
             }
             if (pos.lat !== 0 && pos.lng !== 0) {
-                var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + truck.Color;
+                //var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + truck.Color;
+                var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + antiCache;
                 var marker = new google.maps.Marker({
                     position: pos,
                     map: $scope.locationMap,
@@ -102,17 +104,17 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
     });
 
     var tempWorkordersView = [];
-        angular.forEach($rootScope.workorders, function (value, key) {
-            if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
-               tempWorkordersView.push(value);
-            }
-        });
+    angular.forEach($rootScope.workorders, function (value, key) {
+        if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+            tempWorkordersView.push(value);
+        }
+    });
     $scope.workordersView = tempWorkordersView;
 
-    $scope.$watch(function () { return $scope.obj.mapDate; }, function () { 
+    $scope.$watch(function () { return $scope.obj.mapDate; }, function () {
         if ($scope.showAll == false) {
             $scope.workordersView = [];
-             var tempWorkordersView = [];
+            var tempWorkordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
                 if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
                     tempWorkordersView.push(value);
@@ -126,11 +128,11 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
 
     $scope.$watchCollection(function () { return $rootScope.workorders; }, function () {
         if ($scope.showAll == false) {
-        var tempWorkordersView = [];
+            var tempWorkordersView = [];
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
                 if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
-                   tempWorkordersView.push(value);
+                    tempWorkordersView.push(value);
                 }
             });
             $scope.workordersView = tempWorkordersView;
