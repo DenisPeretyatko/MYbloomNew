@@ -62,7 +62,12 @@ namespace BloomService.Web.Infrastructure.Services
             databaseAssignment.Location = workorder.Location;
             var locations = _repository.GetAll<SageLocation>().ToArray();
             var itemLocation = locations.FirstOrDefault(l => l.Name == workorder.Location);
-            if (itemLocation.Longitude == 0 || itemLocation.Longitude == 0)
+            if (itemLocation == null )
+            {
+                itemLocation = new SageLocation();
+                _locationService.ResolveLocation(itemLocation);
+            }
+            else if (itemLocation.Longitude == 0 || itemLocation.Longitude == 0)
             {
                 _locationService.ResolveLocation(itemLocation);
             }
