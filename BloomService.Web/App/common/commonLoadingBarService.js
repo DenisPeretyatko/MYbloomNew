@@ -35,7 +35,6 @@
             hide();
             return $q.when(response);
         }, 'responseError': function (rejection) {
-            debugger;
             $rootScope.rejectionError = rejection;
             var start = $rootScope.rejectionError.data.indexOf("<style>");
             var end = $rootScope.rejectionError.data.indexOf("</style>");

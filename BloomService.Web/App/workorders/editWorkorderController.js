@@ -2,8 +2,8 @@
  * editWorkorderController - controller
  */
 
-var editWorkorderController = function ($scope, $rootScope, $stateParams, $state, $compile, $interpolate, commonDataService, state) {
-
+var editWorkorderController = function ($scope, $rootScope, $stateParams, $state, $compile, $interpolate, commonDataService, state, modalWindowService) {
+    var markers = [];
     $rootScope.updatedSageWorkOrder = [];
     $rootScope.addedImage = [];
     $scope.mapOptions = googleMapOptions;
@@ -447,44 +447,48 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         });
     };
 
-    $scope.displayLocation = function (lat, lng, picture, woNumber) {
-        var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Id}}. {{Image}}</h1><div>{{Description}}</div></div>");
-        var content = tooltip(picture);
-        var pos = {
-            lat: parseFloat(lat),
-            lng: parseFloat(lng)
+    $scope.displayLocation = function (picture, woNumber) {
+        var uniqueCoords = [];
+        uniqueCoords.push($scope.pictures.Images[0]);
+        var nonUniqueCoords = [];
+        for (var i = 1; i < $scope.pictures.Images.length; i++) {
+            for (var j = i - 1; j >= 0; j--) {
+                if ($scope.pictures.Images[j].Latitude == $scope.pictures.Images[i].Latitude && $scope.pictures.Images[j].Longitude == $scope.pictures.Images[i].Longitude) {
+                    var is_unique = true; 
+                    if (uniqueCoords.length == 0) {
+                        is_unique = false;
+                    }
+                    for (var k = 0; k < uniqueCoords.length; k++) {
+                        if (uniqueCoords[k].Latitude == $scope.pictures.Images[i].Latitude && uniqueCoords[k].Longitude == $scope.pictures.Images[i].Longitude) {
+                            is_unique = false;
+                            break;
+                        }
+                    }
+                    if (is_unique) {
+                        uniqueCoords.push($scope.pictures.Images[i]);
+                    } else {
+                        nonUniqueCoords.push($scope.pictures.Images[i]);
+                    }
+                    break;
+                }
+            }
         }
-        $scope.locationMap.setZoom(100);
-        $scope.locationMap.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+        
+        var radius = 0.00001*nonUniqueCoords.length/3;
+        var step = (Math.PI * 2) / nonUniqueCoords.length;
+        angular.forEach(nonUniqueCoords, function (value, key) {
+            value.Latitude = picture.Latitude + Math.sin(step * key) * radius;
+            value.Longitude = picture.Longitude + Math.cos(step * key) * radius;
+        });
 
-        var marker = new google.maps.Marker({
-            position: pos,
-            map: $scope.locationMap,
-            icon: "/public/images/workorder.png",
-            title: woNumber
-        });
-        var infowindow = new google.maps.InfoWindow({
-            content: content
-        });
-        marker.addListener('mouseover', function () {
-            infowindow.open($scope.locationMap, marker);
-        });
-        marker.addListener('mouseout', function () {
-            infowindow.close();
-        });
-        marker.addListener('click', function () {
-            $state.go("manager.workorder.edit", { id: value.WorkOrder.Id });
-        });
-        $('#myModal').on('shown.bs.modal', function () {
-            google.maps.event.trigger($scope.locationMap, 'resize');
-            $scope.locationMap.setCenter(new google.maps.LatLng(pos.lat, pos.lng));
-            $("#modalImg").attr('src', 'public/images/' + $scope.editableWorkOrder.WorkOrder + '/' + picture.BigImage);
-            $("#modalComment").text(picture.Description);
-        });
-        $('#myModal').on('hidden.bs.modal', function () {
-            marker.setMap(null);
-        });
+        modalWindowService.setMarkers(nonUniqueCoords, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
+        modalWindowService.setMarkers(uniqueCoords, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
+        modalWindowService.setContent($scope.editableWorkOrder.WorkOrder, picture, markers, $scope.locationMap);
+        $scope.locationMap.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+        $scope.locationMap.setCenter(new google.maps.LatLng(picture.Latitude, picture.Longitude));
+        $scope.locationMap.setZoom(100);
     };
+
 
     $scope.setEstimateHour = function (selected) {
         $scope.obj.hours = parseFloat(selected.$select.selected.EstimatedRepairHours);
@@ -561,4 +565,4 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
           });
     }
 }
-editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state"];
+editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state", "modalWindowService"];

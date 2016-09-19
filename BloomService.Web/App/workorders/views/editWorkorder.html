@@ -475,8 +475,8 @@
                                             <ul class="cbp-rfgrid">
                                                 <li style="margin-bottom: 15px" ng-repeat="picture in pictures.Images" class="li-wopicture">
                                                     <div class="thumbnail picture-card">
-                                                        <span>{{$index+1}}.</span>
-                                                        <a href="#" title="{{picture.Description}}" ng-click="displayLocation(picture.Latitude, picture.Longitude, picture, pictures.WorkOrder)" data-toggle="modal" data-target="#myModal">
+                                                        <span>{{picture.Id}}.</span>
+                                                        <a href="#" title="{{picture.Description}}" ng-click="displayLocation(picture, pictures.WorkOrder)" data-toggle="modal" data-target="#myModal">
                                                             <img ng-src="public/images/{{pictures.WorkOrder}}/{{picture.Image}}">
                                                         </a>
                                                         <div class="caption">
@@ -486,7 +486,7 @@
                                                             </div>
                                                             <form ng-show="editing" ng-submit="editing = false">
                                                                 <textarea class="picture-textarea" rows="3" placeholder="Comment" ng-model="picture.Description" class="form-control"></textarea>
-                                                                <button class="btn btn-sm btn-primary" type="submit" ng-click="saveComment(picture.Description, pictures.WorkOrder, picture.id)"><strong>Save</strong></button>
+                                                                <button class="btn btn-sm btn-primary" type="submit" ng-click="saveComment(picture.Description, pictures.WorkOrder, picture.Id)"><strong>Save</strong></button>
                                                                 <button class="btn btn-sm btn-danger" type="submit"><strong>Cancel</strong></button>
                                                             </form>
                                                         </div>

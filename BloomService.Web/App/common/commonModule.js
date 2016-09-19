@@ -32,6 +32,7 @@ angular
     .service('state', commonStateManager)
     .service('commonHub', commonHub)
      .service('loadingBarService', loadingBarService)
+     .service('modalWindowService', modalWindowService)
     .config(commonModuleConfig)
      .config(loadingBarConfig);
 

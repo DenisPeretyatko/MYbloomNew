@@ -457,6 +457,7 @@
     <Content Include="App\technician\views\technician.html" />
     <Content Include="App\workorders\createWorkorderController.js" />
     <Content Include="App\workorders\editWorkorderController.js" />
+    <Content Include="App\workorders\modalWindowService.js" />
     <Content Include="App\workorders\views\createWorkorder.html" />
     <Content Include="App\workorders\views\editWorkorder.html" />
     <Content Include="App\workorders\views\workorders.html" />
