@@ -295,10 +295,10 @@ namespace BloomService.Web.Infrastructure.Jobs
                     {
                         var workorderList = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
                         var tmpLocations = workorderList.Select(x => x.LocationNumber);
-                        var locationList =  _repository.SearchFor<SageLocation>(x => tmpLocations.Contains(x.Location)).ToList();
+                        var locationList = _repository.SearchFor<SageLocation>(x => tmpLocations.Contains(x.Location)).ToList();
 
                         locationsCache = _repository.GetAll<SageLocationCache>().ToList();
-                      
+
                         var utcNow = DateTime.UtcNow;
                         foreach (var entity in locationList)
                         {
@@ -313,7 +313,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 var wts = (TimeSpan)(utcNow - mongoEntity.ResolvedDate);
                                 if (wts.TotalDays >= 30)
                                 {
-                                    _locationService.ResolveLocation(entity);
+                                    _locationService.ResolveLocation(entity, mongoEntity);
                                 }
                                 else
                                 {

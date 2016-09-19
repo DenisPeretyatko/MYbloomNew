@@ -4,7 +4,7 @@
 
     public interface ILocationService
     {
-        void ResolveLocation(SageLocation entity);
+        void ResolveLocation(SageLocation entity, SageLocationCache cache = null);
         double Distance(decimal latitude1, decimal longitude1, decimal latitude2, decimal longitude2);
     }
 }

@@ -25,9 +25,9 @@ namespace BloomService.Web.Infrastructure.Services
             _repository = ComponentContainer.Current.Get<IRepository>();
         }
 
-        public void ResolveLocation(SageLocation sageLocation)
+        public void ResolveLocation(SageLocation sageLocation, SageLocationCache cache = null)
         {
-            var sageLocationCache = new SageLocationCache();
+            //var sageLocationCache = new SageLocationCache();
             Thread.Sleep(1000);
             var parametersSearch = GetGeoLocationAddress(sageLocation);
             var location = GetLocation(parametersSearch);
@@ -38,12 +38,31 @@ namespace BloomService.Web.Infrastructure.Services
                 {
                     sageLocation.Latitude = geometry.location.lat;
                     sageLocation.Longitude = geometry.location.lng;
-                    sageLocationCache.Latitude = geometry.location.lat;
-                    sageLocationCache.Longitude = geometry.location.lng;
-                    sageLocationCache.Location = sageLocation.Location;
-                    sageLocationCache.Address = sageLocation.Address;
-                    sageLocationCache.ResolvedDate = DateTime.UtcNow;
-                    _repository.Add(sageLocationCache);
+
+                    var sageLocationCache = cache ?? _repository.SearchFor<SageLocationCache>(x => x.Location == sageLocation.Location)
+                        .SingleOrDefault();
+
+
+                    if (sageLocationCache != null)
+                    {
+                        sageLocationCache.Latitude = geometry.location.lat;
+                        sageLocationCache.Longitude = geometry.location.lng;
+                        sageLocationCache.Location = sageLocation.Location;
+                        sageLocationCache.Address = sageLocation.Address;
+                        sageLocationCache.ResolvedDate = DateTime.UtcNow;
+                        _repository.Update(sageLocationCache);
+                    }
+                    else
+                    {
+                        _repository.Add(new SageLocationCache
+                        {
+                            Latitude = geometry.location.lat,
+                            Longitude = geometry.location.lng,
+                            Location = sageLocation.Location,
+                            Address = sageLocation.Address,
+                            ResolvedDate = DateTime.UtcNow
+                        });
+                    }
                 }
             }
         }
@@ -88,7 +107,7 @@ namespace BloomService.Web.Infrastructure.Services
             return sb.ToString().TrimEnd(' ');
         }
 
-      
+
 
         public double Distance(decimal latitude1, decimal longitude1, decimal latitude2, decimal longitude2)
         {
