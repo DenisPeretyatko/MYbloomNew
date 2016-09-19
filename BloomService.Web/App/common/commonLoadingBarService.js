@@ -1,5 +1,7 @@
 ﻿var loadingBarService = function($q, $rootScope) {
     var requests = 0;
+   
+
     function show() {
         if (!requests) {
             $rootScope.$broadcast("ajax-start");
@@ -18,7 +20,6 @@
 
     function serverError() {
             $rootScope.$broadcast("serverError");
-        
     }
 
     return {
@@ -35,6 +36,7 @@
             hide();
             return $q.when(response);
         }, 'responseError': function (rejection) {
+            requests = 0;
             $rootScope.rejectionError = rejection;
             var start = $rootScope.rejectionError.data.indexOf("<style>");
             var end = $rootScope.rejectionError.data.indexOf("</style>");
