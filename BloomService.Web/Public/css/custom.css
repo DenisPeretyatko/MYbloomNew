@@ -640,3 +640,10 @@ div.ng-invalid.ng-touched span {
 img[src="https://maps.gstatic.com/mapfiles/api-3/images/mapcnt6.png"] {
     display: none;
 }
+
+.wo-table-row {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-bottom: 1px solid #ddd;
+}

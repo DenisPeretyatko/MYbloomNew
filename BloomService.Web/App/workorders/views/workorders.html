@@ -17,17 +17,17 @@
                     <table class="footable table table-stripped" data-page-size="100" data-filter=#filter>
                         <thead>
                         <tr>
-                            <th ng-init="data = ''" ng-click="data='num'; changeSorting(data)">#</th>
-                            <th class="footable-sorted" ng-click="data = 'date'; changeSorting(data)">Schedule Date</th>
-                            <th ng-click="data = 'entered date'; changeSorting(data)">Entered Date</th>
-                            <th ng-click="data = 'customer'; changeSorting(data)" data-hide="phone,tablet">Customer</th>
-                            <th ng-click="data = 'location'; changeSorting(data)" data-hide="phone,tablet">Location</th>
-                            <th ng-click="data = 'status'; changeSorting(data)">Status</th>
-                            <th ng-click="data = 'action'; changeSorting(data)">Action</th>
+                            <th class="col-lg-1 col-md-1" ng-init="data = ''" ng-click="data='num'; changeSorting(data)">#</th>
+                            <th class="footable-sorted col-lg-2 col-md-2" ng-click="data = 'date'; changeSorting(data)">Schedule Date</th>
+                            <th class="col-lg-2 col-md-2" ng-click="data = 'entered date'; changeSorting(data)">Entered Date</th>
+                            <th class="col-lg-2 col-md-2" ng-click="data = 'customer'; changeSorting(data)" data-hide="phone,tablet">Customer</th>
+                            <th class="col-lg-3 col-md-3" ng-click="data = 'location'; changeSorting(data)" data-hide="phone,tablet">Location</th>
+                            <th class="col-lg-1 col-md-1" ng-click="data = 'status'; changeSorting(data)">Status</th>
+                            <th class="col-lg-1 col-md-1" ng-click="data = 'action'; changeSorting(data)">Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="workorder in workorders" class="cursor-pointer" ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})">
+                        <tr ng-repeat="workorder in workorders" class="cursor-pointer wo-table-row" ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})">
                             <td>{{workorder.WorkOrder}}</td>
                             <td>{{workorder.ScheduleDate|date:'mediumDate' : 'UTC'}}</td>
                             <td>{{workorder.DateEntered|date:'mediumDate' : 'UTC' }}</td>
