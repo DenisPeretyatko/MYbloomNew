@@ -13,26 +13,27 @@
             });
         });
     };
-     var changeImage = function(image, description, wo) {
-         $("#modalImg").attr('src', 'public/images/' + wo + '/' + image);
+    var changeImage = function (image, description, wo) {
+        $("#modalImg").attr('src', 'public/images/' + wo + '/' + image);
         $("#modalComment").text(description);
-     };
-     this.setMarkers = function (images, map, wo) {
+    };
+    this.setMarkers = function (images, map, wo) {
         angular.forEach(images, function (value, key) {
             var content = tooltip(value);
             var pos = {
                 lat: parseFloat(value.Latitude),
                 lng: parseFloat(value.Longitude)
             }
-            var marker = new google.maps.Marker({
+
+            var marker = new MarkerWithLabel({
                 position: pos,
-                label: {
-                    text: value.Id.toString(),
-                    color: 'white'
-                },
                 map: map,
-                icon: "/public/images/mTemplate.png",
-                title: wo
+                draggable: true,
+                raiseOnDrag: true,
+                labelContent: value.Id.toString(),
+                labelClass: "map-labels",
+                labelInBackground: false,
+                icon: "/public/images/mTemplate.png"
             });
             var infowindow = new google.maps.InfoWindow({
                 content: content

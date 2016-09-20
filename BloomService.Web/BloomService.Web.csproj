@@ -696,6 +696,7 @@
     <Content Include="Public\js\plugins\jquery-ui\jquery-ui.js" />
     <Content Include="Public\js\plugins\jquery-ui\jquery-ui.min.css" />
     <Content Include="Public\js\plugins\jquery-ui\jquery-ui.min.js" />
+    <Content Include="Public\js\plugins\markers\markerWithLabel.js" />
     <Content Include="Public\js\plugins\metisMenu\jquery.metisMenu.js" />
     <Content Include="Public\js\plugins\moment\moment.min.js" />
     <Content Include="Public\js\plugins\oclazyload\dist\ocLazyLoad.js" />
@@ -876,7 +877,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Public\js\plugins\NewFolder1\" />
     <Folder Include="Views\Shared\Test\" />
   </ItemGroup>
   <ItemGroup>

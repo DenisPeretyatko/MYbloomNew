@@ -647,3 +647,15 @@ img[src="https://maps.gstatic.com/mapfiles/api-3/images/mapcnt6.png"] {
     vertical-align: top;
     border-bottom: 1px solid #ddd;
 }
+
+.map-labels {
+    color: white;
+       background-color: transparent;
+    font-family:"Lucida Grande", "Arial", sans-serif;
+    font-size: 12px;
+    text-align: center;
+    width: 22px;
+    white-space: nowrap;
+        margin-left: -11px !important;
+    margin-top: -27px !important;
+}

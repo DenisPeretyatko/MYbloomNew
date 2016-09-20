@@ -449,12 +449,13 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
     $scope.displayLocation = function (picture, woNumber) {
         var uniqueCoords = [];
+		var images = angular.copy($scope.pictures.Images);
         uniqueCoords.push($scope.pictures.Images[0]);
         var nonUniqueCoords = [];
         for (var i = 1; i < $scope.pictures.Images.length; i++) {
             for (var j = i - 1; j >= 0; j--) {
-                if ($scope.pictures.Images[j].Latitude == $scope.pictures.Images[i].Latitude && $scope.pictures.Images[j].Longitude == $scope.pictures.Images[i].Longitude) {
-                    var is_unique = true; 
+                if (Math.abs($scope.pictures.Images[j].Latitude - $scope.pictures.Images[i].Latitude) < 0.00001 && Math.abs($scope.pictures.Images[j].Longitude - $scope.pictures.Images[i].Longitude) < 0.00001) {           
+                    var is_unique = true;
                     if (uniqueCoords.length == 0) {
                         is_unique = false;
                     }
@@ -464,11 +465,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                             break;
                         }
                     }
-                    if (is_unique) {
-                        uniqueCoords.push($scope.pictures.Images[i]);
-                    } else {
-                        nonUniqueCoords.push($scope.pictures.Images[i]);
-                    }
+                    if (!is_unique) {
+                         nonUniqueCoords.push($scope.pictures.Images[i]);
+						 images.splice(i,1);
+                    } 
                     break;
                 }
             }
@@ -482,7 +482,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         });
 
         modalWindowService.setMarkers(nonUniqueCoords, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
-        modalWindowService.setMarkers(uniqueCoords, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
+        modalWindowService.setMarkers(images, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
         modalWindowService.setContent($scope.editableWorkOrder.WorkOrder, picture, markers, $scope.locationMap);
         $scope.locationMap.setMapTypeId(google.maps.MapTypeId.SATELLITE);
         $scope.locationMap.setCenter(new google.maps.LatLng(picture.Latitude, picture.Longitude));
