@@ -1,6 +1,9 @@
-﻿using BloomService.Web.Infrastructure.Dependecy;
+﻿using System.IO;
+using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Jobs;
 using Common.Logging;
+using ICSharpCode.SharpZipLib.Core;
+using RestSharp.Extensions;
 
 namespace BloomService.Web.Controllers
 {
@@ -18,6 +21,7 @@ namespace BloomService.Web.Controllers
     using Infrastructure.Services.Interfaces;
     using Infrastructure.Constants;
     using Domain.Extensions;
+    using ICSharpCode.SharpZipLib.Zip;
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
@@ -28,9 +32,10 @@ namespace BloomService.Web.Controllers
         private readonly IDashboardService _dashboardService;
         private readonly INotificationService _notification;
         private readonly IScheduleService _scheduleService;
+        private readonly IHttpContextProvider _httpContextProvider;
 
         public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy,
-            IDashboardService dashboardService, IBloomServiceHub hub, INotificationService notification, IScheduleService scheduleService)
+            IDashboardService dashboardService, IBloomServiceHub hub, INotificationService notification, IScheduleService scheduleService, IHttpContextProvider httpContextProvider)
         {
             _repository = repository;
             _sageApiProxy = sageApiProxy;
@@ -38,6 +43,7 @@ namespace BloomService.Web.Controllers
             _notification = notification;
             _hub = hub;
             _scheduleService = scheduleService;
+            _httpContextProvider = httpContextProvider;
         }
 
         [HttpPost]
@@ -45,7 +51,7 @@ namespace BloomService.Web.Controllers
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
             _log.InfoFormat("Method: CreateWorkOrder. Model ID {0}", model.Id);
-            
+
             var workorder = new SageWorkOrder()
             {
                 ARCustomer = model.Customer,
@@ -64,7 +70,7 @@ namespace BloomService.Web.Controllers
                 JCJob = model.JCJob,
                 Contact = model.Contact,
                 Equipment = model.Equipment,
-               
+
             };
 
             var result = _sageApiProxy.AddWorkOrder(workorder);
@@ -79,7 +85,7 @@ namespace BloomService.Web.Controllers
             var assignment = result.RelatedAssignment;
 
             assignment.IsValid = true;
-            if (model.Emploee==0)
+            if (model.Emploee == 0)
             {
                 result.Entity.AssignmentId = assignment.Assignment;
                 _repository.Add(assignment);
@@ -340,7 +346,7 @@ namespace BloomService.Web.Controllers
                 return Error("Was not able to update workorder to sage");
             }
 
-            if (model.Emploee!=0)
+            if (model.Emploee != 0)
             {
                 var assignmentDb = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
                 var editedAssignment = new AssignmentViewModel();
@@ -348,7 +354,7 @@ namespace BloomService.Web.Controllers
                 editedAssignment.EndDate = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay).AddHours(assignmentDb.EstimatedRepairHours.AsDouble() == 0 ? 1 : assignmentDb.EstimatedRepairHours.AsDouble());
                 editedAssignment.EstimatedRepairHours = workorder.EstimatedRepairHours.ToString();
                 editedAssignment.Id = assignmentDb.Id;
-                editedAssignment.ScheduleDate = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay); 
+                editedAssignment.ScheduleDate = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay);
                 editedAssignment.WorkOrder = assignmentDb.WorkOrder;
                 _scheduleService.CerateAssignment(editedAssignment);
 
@@ -623,6 +629,45 @@ namespace BloomService.Web.Controllers
                 return Json("", JsonRequestBehavior.AllowGet);
             }
             return Json(assignment, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        [Route("WorkOrder/GetArchive/{id}")]
+        public ActionResult GetArchive(string id)
+        {
+            var workorder = long.Parse(id);
+            var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == workorder).SingleOrDefault();
+
+            var pathToImg = "/Public/images/" + pictures.WorkOrder;
+            var path = Path.Combine(_httpContextProvider.MapPath(pathToImg));
+            var outputMemStream = new MemoryStream();
+            var zipStream = new ZipOutputStream(outputMemStream);
+
+            zipStream.SetLevel(3); 
+
+            foreach (var record in pictures.Images)
+            {
+                var newEntry = new ZipEntry(record.BigImage) { DateTime = DateTime.Now };
+
+                zipStream.PutNextEntry(newEntry);
+                byte[] bytes;
+                using (var ms = new MemoryStream())
+                {
+                    var fsSource = new FileStream(Path.Combine(path, record.BigImage),
+                        FileMode.Open, FileAccess.Read);
+
+                    bytes = fsSource.ReadAsBytes();
+                }
+                var inStream = new MemoryStream(bytes);
+                StreamUtils.Copy(inStream, zipStream, new byte[4096]);
+                inStream.Close();
+                zipStream.CloseEntry();
+            }
+            zipStream.IsStreamOwner = false;
+            zipStream.Close();
+            outputMemStream.Position = 0;
+
+            return File(outputMemStream.ToArray(), "application/octet-stream", "test.zip");
         }
     }
 }

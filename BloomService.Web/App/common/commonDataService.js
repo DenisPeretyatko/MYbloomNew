@@ -246,5 +246,14 @@ var commonDataService = function ($http, $window) {
             }
         });
     }
+
+    this.getArchive = function (id) {
+        return $http.get("/WorkOrder/GetArchive/" + id, {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            },
+            responseType:'arraybuffer'
+        });
+    }
 }
 commonDataService.$inject = ['$http', '$window'];

@@ -2,7 +2,7 @@
  * editWorkorderController - controller
  */
 
-var editWorkorderController = function ($scope, $rootScope, $stateParams, $state, $compile, $interpolate, commonDataService, state, modalWindowService) {
+var editWorkorderController = function ($scope, $rootScope, $stateParams, $state, $compile, $interpolate, commonDataService, state, modalWindowService, $window) {
     var markers = [];
     $rootScope.updatedSageWorkOrder = [];
     $rootScope.addedImage = [];
@@ -563,6 +563,16 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
           $('.clockpicker').clockpicker({
               donetext: 'Ok'
           });
+      }
+  
+      $scope.downloadArchive  = function() {
+        commonDataService.getArchive($scope.editableWorkOrder.WorkOrder).success(function(response) {
+            var file = new Blob([response], { type: 'application/zip' });
+            var url = $window.URL || $window.webkitURL;
+            $scope.fileUrl = url.createObjectURL(file);
+            $window.saveAs(file, $scope.editableWorkOrder.WorkOrder + ".zip");
+        });
     }
+
 }
-editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state", "modalWindowService"];
+editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state", "modalWindowService", "$window"];
