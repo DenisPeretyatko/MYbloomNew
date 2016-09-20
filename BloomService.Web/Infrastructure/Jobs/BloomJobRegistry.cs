@@ -67,7 +67,7 @@ namespace BloomService.Web.Infrastructure.Jobs
 
             SendNotifications();
             SendRequest();
-           // Synchronization();
+            Synchronization();
             CheckTechnicians();
         }
 
