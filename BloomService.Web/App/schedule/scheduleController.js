@@ -262,6 +262,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         $scope.assigments = schedule.Assigments;
         angular.forEach($scope.assigments, function (value, key) {
             if (value != null) {
+                if (value.Start !== "" && value.End !== "") {
                 var spliter = (value.Customer == "" || value.Location == "") ? "" : "/";
                 tempEvents.push({
                     id: value.Assignment,
@@ -279,6 +280,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     color: value.Color == "" ? "" : value.Color,
                     durationEditable: false
                 });
+                }
             }
         });
 

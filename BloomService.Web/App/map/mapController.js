@@ -27,7 +27,7 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
         } else {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
                     tempWorkordersView.push(value);
                 }
             });
@@ -105,7 +105,7 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
 
     var tempWorkordersView = [];
     angular.forEach($rootScope.workorders, function (value, key) {
-        if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+        if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
             tempWorkordersView.push(value);
         }
     });
@@ -116,7 +116,7 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
             $scope.workordersView = [];
             var tempWorkordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
                     tempWorkordersView.push(value);
                 }
             });
@@ -131,7 +131,7 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
             var tempWorkordersView = [];
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
                     tempWorkordersView.push(value);
                 }
             });
