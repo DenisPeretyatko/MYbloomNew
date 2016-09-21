@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Jobs;
+using BloomService.Web.Infrastructure.StorageProviders;
 using Common.Logging;
 using ICSharpCode.SharpZipLib.Core;
 using RestSharp.Extensions;
@@ -22,6 +23,8 @@ namespace BloomService.Web.Controllers
     using Infrastructure.Constants;
     using Domain.Extensions;
     using ICSharpCode.SharpZipLib.Zip;
+    using Infrastructure;
+    using System.Configuration;
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
@@ -33,10 +36,14 @@ namespace BloomService.Web.Controllers
         private readonly INotificationService _notification;
         private readonly IScheduleService _scheduleService;
         private readonly IHttpContextProvider _httpContextProvider;
+        private readonly IStorageProvider _storageProvider;
+        private readonly IImageService _imageService;
+        private readonly BloomServiceConfiguration _settings;
 
         public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy,
-            IDashboardService dashboardService, IBloomServiceHub hub, INotificationService notification, IScheduleService scheduleService, IHttpContextProvider httpContextProvider)
+            IDashboardService dashboardService, IBloomServiceHub hub, INotificationService notification, IScheduleService scheduleService, IHttpContextProvider httpContextProvider, IStorageProvider storageProvider, IImageService imageService)
         {
+            _settings = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
             _repository = repository;
             _sageApiProxy = sageApiProxy;
             _dashboardService = dashboardService;
@@ -44,6 +51,8 @@ namespace BloomService.Web.Controllers
             _hub = hub;
             _scheduleService = scheduleService;
             _httpContextProvider = httpContextProvider;
+            _storageProvider = storageProvider;
+            _imageService = imageService;
         }
 
         [HttpPost]
@@ -637,37 +646,9 @@ namespace BloomService.Web.Controllers
         {
             var workorder = long.Parse(id);
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == workorder).SingleOrDefault();
+            var result = _imageService.CreateArchive(pictures);
 
-            var pathToImg = "/Public/images/" + pictures.WorkOrder;
-            var path = Path.Combine(_httpContextProvider.MapPath(pathToImg));
-            var outputMemStream = new MemoryStream();
-            var zipStream = new ZipOutputStream(outputMemStream);
-
-            zipStream.SetLevel(3); 
-
-            foreach (var record in pictures.Images)
-            {
-                var newEntry = new ZipEntry(record.BigImage) { DateTime = DateTime.Now };
-
-                zipStream.PutNextEntry(newEntry);
-                byte[] bytes;
-                using (var ms = new MemoryStream())
-                {
-                    var fsSource = new FileStream(Path.Combine(path, record.BigImage),
-                        FileMode.Open, FileAccess.Read);
-
-                    bytes = fsSource.ReadAsBytes();
-                }
-                var inStream = new MemoryStream(bytes);
-                StreamUtils.Copy(inStream, zipStream, new byte[4096]);
-                inStream.Close();
-                zipStream.CloseEntry();
-            }
-            zipStream.IsStreamOwner = false;
-            zipStream.Close();
-            outputMemStream.Position = 0;
-
-            return File(outputMemStream.ToArray(), "application/octet-stream", "test.zip");
+            return File(result, "application/octet-stream", "archive.zip");
         }
     }
 }

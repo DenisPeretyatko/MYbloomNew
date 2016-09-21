@@ -1,4 +1,6 @@
 using BloomService.Web;
+using BloomService.Web.Infrastructure.StorageProviders;
+using BloomService.Web.Infrastructure.StorageProviders.Implementation;
 using WebActivatorEx;
 
 [assembly: PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -79,6 +81,8 @@ namespace BloomService.Web
             var setting = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
             var connectionString = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString;
             var dbName = ConfigurationManager.AppSettings["MainDb"];
+            var basePath = ConfigurationManager.AppSettings["basePath"];
+            var baseUrl = ConfigurationManager.AppSettings["baseUrl"];
             var sageApiHost = setting.SageApiHost;
 
             kernel.Bind<IRepository>().To<MongoRepository>().WithConstructorArgument("connectionString",connectionString).WithConstructorArgument("dbName", dbName);
@@ -93,6 +97,7 @@ namespace BloomService.Web
             kernel.Bind<IAuthorizationService>().To<AuthorizationService>();
             kernel.Bind<IDashboardService>().To<DashboardService>();
             kernel.Bind<IScheduleService>().To<ScheduleService>();
+            kernel.Bind<IStorageProvider>().To<FileSystemStorageProvider>().WithConstructorArgument("basePath", basePath).WithConstructorArgument("baseUrl", baseUrl);
 
             ComponentContainer.Current = new NinjectComponentContainer(kernel, new[] {
                     typeof(MongoRepository).Assembly

@@ -27,7 +27,10 @@
     <link href="~/Scripts/qTip/jquery.qtip.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/public/js/plugins/gallery-master/css/blueimp-gallery.min.css">
     <script>
-        var global = { TimeZone: "@System.Configuration.ConfigurationManager.AppSettings["CurrentTimezone"]" };
+        var global = {
+            TimeZone: "@System.Configuration.ConfigurationManager.AppSettings["CurrentTimezone"]",
+            BasePath: "@System.Configuration.ConfigurationManager.AppSettings["basePath"]"
+        };
     </script>
 
 </head>

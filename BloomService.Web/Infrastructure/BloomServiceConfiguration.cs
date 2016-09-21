@@ -49,7 +49,10 @@ namespace BloomService.Web.Infrastructure
 
                     NotificationAlert = ConfigurationManager.AppSettings["NotificationAlert"],
                     NotificationBadge = int.Parse(ConfigurationManager.AppSettings["NotificationBadge"]),
-                    NotificationSound = ConfigurationManager.AppSettings["NotificationSound"]
+                    NotificationSound = ConfigurationManager.AppSettings["NotificationSound"],
+
+                    BaseUrl = ConfigurationManager.AppSettings["baseUrl"],
+                    BasePath = ConfigurationManager.AppSettings["basePath"]
                 };
 
                 return configuration;
@@ -95,5 +98,8 @@ namespace BloomService.Web.Infrastructure
         public string NotificationAlert { get; set; }
         public int NotificationBadge { get; set; }
         public string NotificationSound { get; set; }
+
+        public string BaseUrl { get; set; }
+        public string BasePath { get; set; }
     }
 }

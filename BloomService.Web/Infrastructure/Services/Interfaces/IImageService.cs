@@ -11,5 +11,6 @@
         bool BuildTechnicianIcons(TechnicianModel technician);
         List<ImageLocation> GetPhotoForWorkOrder(long idWorkOrder, string prefixUrl = null);
         bool SaveDescriptionsForPhoto(CommentImageModel model);
+        byte[] CreateArchive(SageImageWorkOrder pictures);
     }
 }
