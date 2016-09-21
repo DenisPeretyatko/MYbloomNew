@@ -74,7 +74,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
         } else {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
                     tempWorkordersView.push(value);
                 }
             });
@@ -120,7 +120,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
         var tempWorkordersView = [];
         if ($scope.showAll == false) {
             angular.forEach($rootScope.workorders, function (value, key) {
-                if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
                     tempWorkordersView.push(value);
                 }
             });
@@ -174,7 +174,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
 
     var tempWorkordersView = [];
     angular.forEach($rootScope.workorders, function (value, key) {
-        if (moment(value.WorkOrder.ScheduleDate).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
+        if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
             tempWorkordersView.push(value);
         }
     });
