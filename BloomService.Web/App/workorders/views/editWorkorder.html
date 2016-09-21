@@ -477,7 +477,7 @@
                                                     <div class="thumbnail picture-card">
                                                         <span>{{picture.Id}}.</span>
                                                         <a href="#" title="{{picture.Description}}" ng-click="displayLocation(picture, pictures.WorkOrder)" data-toggle="modal" data-target="#myModal">
-                                                            <img ng-src="public/images/{{pictures.WorkOrder}}/{{picture.Image}}">
+                                                            <img ng-src="{{basePath}}/images/{{pictures.WorkOrder}}/{{picture.Image}}">
                                                         </a>
                                                         <div class="caption">
                                                             <span ng-hide="editing" ng-click="editing = true" class="badge-white pull-right glyphicon glyphicon-pencil edit-icon"></span>

@@ -243,7 +243,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                 this.push({
                     id: value.Employee,
                     title: value.Name,
-                    avatarUrl: value.Picture != null ? value.Picture : "public/images/user.png",
+                    avatarUrl: value.Picture != null ? value.Picture : global.BasePath + "/images/user.png",
                     color: value.Color == "" ? "" : value.Color
                 });
                 if (value.IsAvailable == false) {

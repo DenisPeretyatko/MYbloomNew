@@ -92,7 +92,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
                 lng: parseFloat(value.WorkOrder.Longitude)
             }
           //  var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + value.Color;
-            var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + antiCache;
+            var icon = (value.Color == null || value.Color == "") ? global.BasePath + "/images/workorder.png" : global.BasePath + "/workorder/" + value.Employee + ".png?anti_cache=" + antiCache;
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
@@ -143,7 +143,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
                 lng: parseFloat(truck.Longitude)
             }
            // var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + truck.Color;
-            var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + antiCache;
+            var icon = truck.Color == null ? global.BasePath + "/images/technician.png" : global.BasePath + "/technician/" + truck.Employee + ".png?anti_cache=" + antiCache;
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,

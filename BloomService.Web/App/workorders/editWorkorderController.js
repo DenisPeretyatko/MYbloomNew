@@ -36,6 +36,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.noteObj.Subject = "";
     $scope.noteObj.Note = "";
     $scope.workOrderNotes = [];
+    $scope.basePath = global.BasePath;
 
     $scope.validation = {
         location: false,
@@ -296,7 +297,6 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     commonDataService.getWorkorder($stateParams.id).then(function (response) {
         $scope.editableWorkOrder = response.data;
         commonDataService.getAssignment(response.data.WorkOrder).then(function (result) {
-            debugger;
             $scope.editableWoAssignment = result.data;
             $scope.obj.assignmentDate = moment(result.data.ScheduleDate).utc().toDate();
             $scope.obj.assignmentTime = moment(result.data.Start).utc().toDate();

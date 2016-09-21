@@ -10,10 +10,10 @@ var mainController = function ($scope, $rootScope, $state, commonDataService, st
     $scope.canReadaAll = true;
     $rootScope.notifications = [];
     $scope.notificationsCopy = [];
+    $scope.basePath = global.BasePath;
     var canReadMessagesCount = 3;
     var previousNotificationCount = 0;
     var offset = -5.0;
-   
 
     var convertDate = function (value) {
         if (typeof value == "string") {

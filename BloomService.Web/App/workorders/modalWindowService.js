@@ -1,10 +1,10 @@
 ﻿var modalWindowService = function ($interpolate) {
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Id}}. {{Image}}</h1><div>{{Description}}</div></div>");
-
+    var basePath = global.BasePath;
     this.setContent = function (wo, picture, markers, map) {
         $('#myModal').on('shown.bs.modal', function () {
             google.maps.event.trigger(map, 'resize');
-            $("#modalImg").attr('src', 'public/images/' + wo + '/' + picture.BigImage);
+            $("#modalImg").attr('src', basePath+'/images/' + wo + '/' + picture.BigImage);
             $("#modalComment").text(picture.Description);
         });
         $('#myModal').on('hidden.bs.modal', function () {
@@ -14,7 +14,7 @@
         });
     };
     var changeImage = function (image, description, wo) {
-        $("#modalImg").attr('src', 'public/images/' + wo + '/' + image);
+        $("#modalImg").attr('src', basePath+'/images/' + wo + '/' + image);
         $("#modalComment").text(description);
     };
     this.setMarkers = function (images, map, wo) {
@@ -33,7 +33,7 @@
                 labelContent: value.Id.toString(),
                 labelClass: "map-labels",
                 labelInBackground: false,
-                icon: "/public/images/mTemplate.png"
+                icon: basePath+"/images/mTemplate.png"
             });
             var infowindow = new google.maps.InfoWindow({
                 content: content

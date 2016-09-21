@@ -113,9 +113,17 @@
     <script src="~/app/workorders/workorderModule.js"></script>
     <script src="~/app/login/loginController.js"></script>
     <script src="~/app/login/loginModule.js"></script>
-    <script src="~/app/app.js"></script>
+    <script src="~/app/app.js"></script> 
     <script src="~/Public/js/plugins/pagination/dirPagination.js"></script>
-    <script src="~/App/common/commonHub.js"></script>
+<script src="~/App/common/commonHub.js"></script>
+
+<script>
+    
+    window.onload = function () {
+        var loadingPath = global.BasePath + '/images/loading.gif';
+        $("#cover").css({ "background": 'url(' + loadingPath + ') no-repeat scroll 50% 50% transparent', "background-size": "3%" });
+    }
+</script>
 
 </body>
 </html>

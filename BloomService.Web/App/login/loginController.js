@@ -4,6 +4,8 @@
 
 var loginController = function ($scope, $rootScope, $state, commonDataService, commonHub, state, $q) {
     $scope.obj = {};
+    var logoPath = global.BasePath + '/images/logo.png';
+    $(".main-logo").css({ "background-image": 'url(' + logoPath + ')' });
     window.localStorage.setItem('UserName', '')
     window.localStorage.setItem('Token', '');
     $scope.obj.username = 'testofficeuser';

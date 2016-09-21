@@ -76,6 +76,7 @@ namespace BloomService.Web.Infrastructure.Services
             workorder.Longitude = itemLocation.Longitude;
             workorder.Color = databaseAssignment.Color;
             workorder.EmployeeId = databaseAssignment.EmployeeId;
+            workorder.Employee = databaseAssignment.Employee;
 
             _repository.Update(databaseAssignment);
             workorder.AssignmentId = 0;
