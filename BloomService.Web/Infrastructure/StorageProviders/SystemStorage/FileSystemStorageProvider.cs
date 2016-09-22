@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BloomService.Web.Infrastructure.Services.Interfaces;
 
 namespace BloomService.Web.Infrastructure.StorageProviders.Implementation
 {
@@ -9,14 +10,16 @@ namespace BloomService.Web.Infrastructure.StorageProviders.Implementation
     {
         private readonly string _baseUrl;
         private readonly string _storagePath;
+        private readonly IHttpContextProvider _httpContextProvider;
 
-        public FileSystemStorageProvider(string basePath, string baseUrl)
+        public FileSystemStorageProvider(string basePath, IHttpContextProvider httpContextProvider)
         {
-            _storagePath = basePath;
-            if (!baseUrl.EndsWith("/"))
-                baseUrl = baseUrl + '/';
+            _httpContextProvider = httpContextProvider;
+            _baseUrl = _httpContextProvider.MapPath("//");
 
-            _baseUrl = baseUrl;
+            _storagePath = basePath;
+            if (!_baseUrl.EndsWith("/"))
+                _baseUrl = _baseUrl + '/';
         }
 
         private string Map(string path)
@@ -121,15 +124,18 @@ namespace BloomService.Web.Infrastructure.StorageProviders.Implementation
             Directory.Move(Map(path), Map(newPath));
         }
 
-        public IStorageFile CreateFile(string path)
+        public IStorageFile CreateFile(string path, byte[] arr=null)
         {
+            if (arr == null)
+                arr = new byte[0];
+
             if (File.Exists(Map(path)))
             {
                 throw new InvalidOperationException("File " + path + " already exists");
             }
 
             var fileInfo = new FileInfo(Map(path));
-            File.WriteAllBytes(Map(path), new byte[0]);
+            File.WriteAllBytes(Map(path), arr);
 
             return new FileSystemStorageFile(Fix(path), fileInfo);
         }
@@ -142,6 +148,22 @@ namespace BloomService.Web.Infrastructure.StorageProviders.Implementation
         public bool IsFolderExits(string path)
         {
             return Directory.Exists(Map(path));
+        }
+
+        public bool TryCreateFolder(string path)
+        {
+            try
+            {
+                if (Directory.Exists(Map(path))) return false;
+                CreateFolder(path);
+                return true;
+
+                // return false to be consistent with FileSystemProvider's implementation
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public void DeleteFile(string path)

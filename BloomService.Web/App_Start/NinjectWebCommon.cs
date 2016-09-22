@@ -1,6 +1,9 @@
 using BloomService.Web;
 using BloomService.Web.Infrastructure.StorageProviders;
+using BloomService.Web.Infrastructure.StorageProviders.AzureStorage;
 using BloomService.Web.Infrastructure.StorageProviders.Implementation;
+using Microsoft.Azure;
+using Microsoft.WindowsAzure.Storage;
 using WebActivatorEx;
 
 [assembly: PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -85,7 +88,7 @@ namespace BloomService.Web
             var baseUrl = ConfigurationManager.AppSettings["baseUrl"];
             var sageApiHost = setting.SageApiHost;
 
-            kernel.Bind<IRepository>().To<MongoRepository>().WithConstructorArgument("connectionString",connectionString).WithConstructorArgument("dbName", dbName);
+            kernel.Bind<IRepository>().To<MongoRepository>().WithConstructorArgument("connectionString", connectionString).WithConstructorArgument("dbName", dbName);
             kernel.Bind<BloomServiceConfiguration>().ToConstant(setting);
 
             kernel.Bind<IHttpContextProvider>().To<HttpContextProvider>();
@@ -97,7 +100,9 @@ namespace BloomService.Web
             kernel.Bind<IAuthorizationService>().To<AuthorizationService>();
             kernel.Bind<IDashboardService>().To<DashboardService>();
             kernel.Bind<IScheduleService>().To<ScheduleService>();
-            kernel.Bind<IStorageProvider>().To<FileSystemStorageProvider>().WithConstructorArgument("basePath", basePath).WithConstructorArgument("baseUrl", baseUrl);
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+            //kernel.Bind<IStorageProvider>().To<AzureStorageProvider>().WithConstructorArgument("storageAccount", storageAccount);
+            kernel.Bind<IStorageProvider>().To<FileSystemStorageProvider>().WithConstructorArgument("basePath", basePath);
 
             ComponentContainer.Current = new NinjectComponentContainer(kernel, new[] {
                     typeof(MongoRepository).Assembly

@@ -13,8 +13,9 @@ namespace BloomService.Web.Infrastructure.StorageProviders
         void RenameFolder(string path, string newPath);
         void DeleteFile(string path);
         void RenameFile(string path, string newPath);
-        IStorageFile CreateFile(string path);
+        IStorageFile CreateFile(string path, byte[] arr=null);
         bool IsFileExists(string path);
         bool IsFolderExits(string path);
+        bool TryCreateFolder(string path);
     }
 }
