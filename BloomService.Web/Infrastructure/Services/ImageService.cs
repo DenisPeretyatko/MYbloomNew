@@ -58,31 +58,39 @@ namespace BloomService.Web.Infrastructure.Services
             _urlToFolderPhotoWorkOrders = Path.Combine(settings.BasePath, "images");
         }
 
+
+        //Upload images to Azure
+        private static List<string> DirSearch(string sDir)
+        {
+            var files = new List<string>();
+            files.AddRange(Directory.GetFiles(sDir));
+            foreach (var d in Directory.GetDirectories(sDir))
+            {
+                files.AddRange(DirSearch(d));
+            }
+            return files;
+        }
+
         private void SaveFilesHelper()
         {
-            string basePath = @"C:\Projects\BloomService\BloomService.Web\Public\userFiles\images\";
-            string finalPath = _urlToFolderPhotoWorkOrders;
-            List<string> files = new List<string>
-            {
-                "loading.gif",
-                "logo.png",
-                "mTemplate.png",
-                "technician.png",
-                "user.png",
-                "workorder.png"
-            };
+            string basePath = @"C:\Users\User\Desktop\beta";
+            string finalPath = settings.BasePath.Replace("dev", "beta");
+            if (!_storageProvider.IsFolderExits(finalPath))
+                _storageProvider.TryCreateFolder(finalPath);
+
+            List<string> files = DirSearch(basePath);
             foreach (var file in files)
             {
-                Image image = Image.FromFile(Path.Combine(basePath, file), true);
+                Image image = Image.FromFile(Path.Combine(file), true);
                 var format = image.RawFormat;
-
-
-                if (!_storageProvider.IsFolderExits(_urlToFolderPhotoWorkOrders))
-                    using (var ms = new MemoryStream())
-                    {
-                        image.Save(ms, format);
-                        _storageProvider.CreateFile(Path.Combine(finalPath, file), ms.ToArray());
-                    }
+                using (var ms = new MemoryStream())
+                {
+                    image.Save(ms, format);
+                    var newPath = file.Replace(@"C:\Users\User\Desktop\beta\userFiles\", "");
+                    if (_storageProvider.IsFileExists(Path.Combine(finalPath, newPath)))
+                        _storageProvider.DeleteFile(Path.Combine(finalPath, newPath));
+                    _storageProvider.CreateFile(Path.Combine(finalPath, newPath), ms.ToArray());
+                }
             }
         }
 
@@ -190,7 +198,7 @@ namespace BloomService.Web.Infrastructure.Services
                 _storageProvider.CreateFile(resultPath, ms.ToArray());
 
             }
-           
+
             return newPath;
         }
 
@@ -215,7 +223,7 @@ namespace BloomService.Web.Infrastructure.Services
                     using (var ms = new MemoryStream())
                     {
                         image.Save(ms, ImageFormat.Png);
-                        if(_storageProvider.IsFileExists(resultIconPath))
+                        if (_storageProvider.IsFileExists(resultIconPath))
                             _storageProvider.DeleteFile(resultIconPath);
                         _storageProvider.CreateFile(resultIconPath, ms.ToArray());
 
