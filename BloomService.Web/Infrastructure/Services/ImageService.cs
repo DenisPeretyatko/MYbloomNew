@@ -339,6 +339,19 @@ namespace BloomService.Web.Infrastructure.Services
             return outputMemStream.ToArray();
         }
 
+        public bool ChangeImageLocation(ImageLocationModel model)
+        {
+            var images = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrderId).SingleOrDefault();
+            var changedImage = images?.Images.SingleOrDefault(x => x.Id == model.PictureId);
+            if (changedImage == null)
+                return false;
+
+            changedImage.Latitude = model.Latitude;
+            changedImage.Longitude = model.Longitude;
+            repository.Update(images);
+            return true;
+        }
+
         private bool IsOneOfValidFormats(ImageFormat rawFormat)
         {
             return new[] { ImageFormat.Png, ImageFormat.Jpeg, ImageFormat.Gif }.Contains(rawFormat);

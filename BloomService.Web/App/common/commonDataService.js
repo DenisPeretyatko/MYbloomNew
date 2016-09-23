@@ -255,5 +255,13 @@ var commonDataService = function ($http, $window) {
             responseType:'arraybuffer'
         });
     }
+
+    this.changeImageLocation = function (model) {
+        return $http.post("WorkOrder/ChangeImageLocation", model, {
+            headers: {
+                'Authorization': 'bearer ' + window.localStorage.getItem('Token')
+            }
+        });
+    };
 }
 commonDataService.$inject = ['$http', '$window'];

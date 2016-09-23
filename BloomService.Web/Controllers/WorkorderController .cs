@@ -650,5 +650,15 @@ namespace BloomService.Web.Controllers
 
             return File(result, "application/octet-stream", "archive.zip");
         }
+
+        [HttpPost]
+        [Route("WorkOrder/ChangeImageLocation")]
+        public ActionResult ChangeImageLocation(ImageLocationModel model)
+        {
+            if (!_imageService.ChangeImageLocation(model))
+                return Error("Images does not exist",
+                        $"There are no images with workorderID: {model.WorkOrderId}. images == null");
+            return Success();
+        }
     }
 }

@@ -2,6 +2,7 @@
 using BloomService.Web.Infrastructure.Jobs;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using Common.Logging;
+using MongoDB.Driver;
 
 namespace BloomService.Web.Controllers
 {
@@ -468,22 +469,12 @@ namespace BloomService.Web.Controllers
         }
 
         [HttpPost]
-        [Route("Apimobile/ChangImageLocation")]
-        public ActionResult ChangImageLocation(ImageLocationModel model)
+        [Route("Apimobile/ChangeImageLocation")]
+        public ActionResult ChangeImageLocation(ImageLocationModel model)
         {
-            var images = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrderId).SingleOrDefault();
-            if (images == null)
-                return Error("Images does not exist",
+            if(!_imageService.ChangeImageLocation(model) )
+            return Error("Images does not exist",
                     $"There are no images with workorderID: {model.WorkOrderId}. images == null");
-            
-            var changedImage = images.Images.SingleOrDefault(x => x.Id == model.PictureId);
-            if (changedImage == null)
-                return Error("Image does not exist",
-                      $"There are no image with ID: {model.PictureId}. changedImage == null");
-
-            changedImage.Latitude = model.Latitude;
-            changedImage.Longitude = model.Longitude;
-            repository.Update(images);
             return Success();
         }
     }

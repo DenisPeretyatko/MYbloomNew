@@ -1,20 +1,21 @@
-﻿var modalWindowService = function ($interpolate) {
+﻿var modalWindowService = function ($interpolate, commonDataService) {
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Id}}. {{Image}}</h1><div>{{Description}}</div></div>");
     var basePath = global.BasePath;
+    var markersToRemove = [];
     this.setContent = function (wo, picture, markers, map) {
         $('#myModal').on('shown.bs.modal', function () {
             google.maps.event.trigger(map, 'resize');
-            $("#modalImg").attr('src', basePath+'/images/' + wo + '/' + picture.BigImage);
+            $("#modalImg").attr('src', basePath + '/images/' + wo + '/' + picture.BigImage);
             $("#modalComment").text(picture.Description);
         });
         $('#myModal').on('hidden.bs.modal', function () {
-            angular.forEach(markers, function (marker, key) {
+            angular.forEach(markersToRemove, function (marker, key) {
                 marker.setMap(null);
             });
         });
     };
     var changeImage = function (image, description, wo) {
-        $("#modalImg").attr('src', basePath+'/images/' + wo + '/' + image);
+        $("#modalImg").attr('src', basePath + '/images/' + wo + '/' + image);
         $("#modalComment").text(description);
     };
     this.setMarkers = function (images, map, wo) {
@@ -33,8 +34,9 @@
                 labelContent: value.Id.toString(),
                 labelClass: "map-labels",
                 labelInBackground: false,
-                icon: basePath+"/images/mTemplate.png"
+                icon: basePath + "/images/mTemplate.png"
             });
+            markersToRemove.push(marker);
             var infowindow = new google.maps.InfoWindow({
                 content: content
             });
@@ -47,7 +49,16 @@
             marker.addListener('click', function () {
                 changeImage(value.BigImage, value.Description, wo);
             });
+            marker.addListener('mouseup', function () {
+                var model = {
+                    WorkOrderId: wo,
+                    PictureId: value.Id,
+                    Latitude: marker.position.lat(),
+                    Longitude: marker.position.lng()
+                };
+                commonDataService.changeImageLocation(model);
+            });
         });
     };
 }
-modalWindowService.$inject = ["$interpolate"];
+modalWindowService.$inject = ["$interpolate", "commonDataService"];
