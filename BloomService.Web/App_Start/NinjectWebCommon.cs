@@ -85,7 +85,8 @@ namespace BloomService.Web
             var connectionString = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString;
             var dbName = ConfigurationManager.AppSettings["MainDb"];
             var basePath = ConfigurationManager.AppSettings["basePath"];
-           // var baseUrl = ConfigurationManager.AppSettings["baseUrl"];
+            var azureStorage = bool.Parse(ConfigurationManager.AppSettings["azureStorage"]);
+             
             var sageApiHost = setting.SageApiHost;
 
             kernel.Bind<IRepository>().To<MongoRepository>().WithConstructorArgument("connectionString", connectionString).WithConstructorArgument("dbName", dbName);
@@ -100,9 +101,20 @@ namespace BloomService.Web
             kernel.Bind<IAuthorizationService>().To<AuthorizationService>();
             kernel.Bind<IDashboardService>().To<DashboardService>();
             kernel.Bind<IScheduleService>().To<ScheduleService>();
-            //CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
-            //kernel.Bind<IStorageProvider>().To<AzureStorageProvider>().WithConstructorArgument("storageAccount", storageAccount);
-            kernel.Bind<IStorageProvider>().To<FileSystemStorageProvider>().WithConstructorArgument("basePath", basePath);
+
+            if (azureStorage)
+            {
+                CloudStorageAccount storageAccount =
+                    CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+                kernel.Bind<IStorageProvider>()
+                    .To<AzureStorageProvider>()
+                    .WithConstructorArgument("storageAccount", storageAccount);
+            }
+            else
+            {
+                kernel.Bind<IStorageProvider>().To<FileSystemStorageProvider>().WithConstructorArgument("basePath", basePath);
+            }
+           
 
             ComponentContainer.Current = new NinjectComponentContainer(kernel, new[] {
                     typeof(MongoRepository).Assembly
