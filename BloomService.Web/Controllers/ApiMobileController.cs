@@ -139,7 +139,7 @@ namespace BloomService.Web.Controllers
                 {
                     order.Latitude = location.Latitude;
                     order.Longitude = location.Longitude;
-                    order.Address = location.Address;
+                    order.Address = $"{location.Address} {location.City} {location.ZIP} {location.State}";
                 }                
                 if (order.Equipment != 0)
                 {
