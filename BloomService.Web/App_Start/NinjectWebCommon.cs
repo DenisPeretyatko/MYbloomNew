@@ -85,8 +85,10 @@ namespace BloomService.Web
             var connectionString = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString;
             var dbName = ConfigurationManager.AppSettings["MainDb"];
             var basePath = ConfigurationManager.AppSettings["basePath"];
+            var storageUrl = ConfigurationManager.AppSettings["storageUrl"];
             var azureStorage = bool.Parse(ConfigurationManager.AppSettings["azureStorage"]);
-             
+            var siteUrl = ConfigurationManager.AppSettings["SiteUrl"];
+
             var sageApiHost = setting.SageApiHost;
 
             kernel.Bind<IRepository>().To<MongoRepository>().WithConstructorArgument("connectionString", connectionString).WithConstructorArgument("dbName", dbName);
@@ -108,13 +110,16 @@ namespace BloomService.Web
                     CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
                 kernel.Bind<IStorageProvider>()
                     .To<AzureStorageProvider>()
-                    .WithConstructorArgument("storageAccount", storageAccount);
+                    .WithConstructorArgument("storageAccount", storageAccount)
+                    .WithConstructorArgument("storageUrl", storageUrl);
             }
             else
             {
-                kernel.Bind<IStorageProvider>().To<FileSystemStorageProvider>().WithConstructorArgument("basePath", basePath);
+                kernel.Bind<IStorageProvider>().To<FileSystemStorageProvider>()
+                    .WithConstructorArgument("basePath", basePath)
+                    .WithConstructorArgument("siteUrl", siteUrl);
             }
-           
+
 
             ComponentContainer.Current = new NinjectComponentContainer(kernel, new[] {
                     typeof(MongoRepository).Assembly

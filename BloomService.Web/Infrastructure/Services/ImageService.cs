@@ -21,6 +21,7 @@ namespace BloomService.Web.Infrastructure.Services
     using BloomService.Web.Models;
     using SignalR;
     using Domain.Extensions;
+
     public class ImageService : IImageService
     {
         private static readonly Dictionary<ImageFormat, string> _knownImageFormats = new Dictionary<ImageFormat, string>()
@@ -56,6 +57,7 @@ namespace BloomService.Web.Infrastructure.Services
             _urlToFolderTecnician = Path.Combine(settings.BasePath, "technician");
             _urlToFolderWorkOrder = Path.Combine(settings.BasePath, "workorder");
             _urlToFolderPhotoWorkOrders = Path.Combine(settings.BasePath, "images");
+
         }
 
 
@@ -156,19 +158,18 @@ namespace BloomService.Web.Infrastructure.Services
 
         public List<ImageLocation> GetPhotoForWorkOrder(long idWorkOrder, string prefixUrl = null)
         {
-            var pathToImage = string.Format("{0}{1}/", _urlToFolderPhotoWorkOrders, idWorkOrder);
-            var baseUri = prefixUrl == null ? _urlToFolderPhotoWorkOrders.UriCombine(idWorkOrder.ToString()) :
-                prefixUrl.UriCombine(pathToImage);
             var images = this.repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == idWorkOrder).SingleOrDefault();
 
             if (images == null)
                 return new List<ImageLocation>();
 
             var milliseconds = DateTime.Now.TimeOfDay.TotalMilliseconds;
+            var path = Path.Combine(this._urlToFolderPhotoWorkOrders, idWorkOrder.ToString());
+
             foreach (var image in images.Images)
             {
-                image.Image = baseUri.UriCombine($"{image.Image}?{milliseconds}");
-                image.BigImage = baseUri.UriCombine($"{image.BigImage}?{milliseconds}");
+                image.Image = _storageProvider.GetFullUrl(Path.Combine(path, $"{image.Image}?{milliseconds}"));
+                image.BigImage = _storageProvider.GetFullUrl(Path.Combine(path, $"{image.BigImage}?{milliseconds}"));
             }
             return images.Images.OrderBy(x => x.Id).ToList();
 
@@ -196,7 +197,6 @@ namespace BloomService.Web.Infrastructure.Services
                 if (_storageProvider.IsFileExists(resultPath))
                     _storageProvider.DeleteFile(resultPath);
                 _storageProvider.CreateFile(resultPath, ms.ToArray());
-
             }
 
             return newPath;

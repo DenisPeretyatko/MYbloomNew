@@ -5,6 +5,7 @@ namespace BloomService.Web.Infrastructure.StorageProviders
     public interface IStorageProvider
     {
         string GetPublicUrl(string path);
+        string GetFullUrl(string path);
         IStorageFile GetFile(string path);
         IEnumerable<IStorageFile> ListFiles(string path);
         IEnumerable<IStorageFolder> ListFolders(string path);

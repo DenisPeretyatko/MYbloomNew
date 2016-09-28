@@ -17,13 +17,15 @@ namespace BloomService.Web.Infrastructure.StorageProviders.AzureStorage
         public CloudBlobClient BlobClient { get; private set; }
         public IList<CloudBlobContainer> Containers { get; private set; }
         public Func<string, CloudBlobContainer> ContainerFactory;
+        private readonly string _storageUrl;
 
-        public AzureStorageProvider(CloudStorageAccount storageAccount)
+        public AzureStorageProvider(CloudStorageAccount storageAccount, string storageUrl)
         {
             _storageAccount = storageAccount;
             BlobClient = _storageAccount.CreateCloudBlobClient();
             Containers = new List<CloudBlobContainer>();
             ContainerFactory = CreateContainer;
+            _storageUrl = storageUrl;
         }
 
         private CloudBlobContainer EnsurePathIsRelativeAndEnsureContainer(ref string path)
@@ -96,6 +98,11 @@ namespace BloomService.Web.Infrastructure.StorageProviders.AzureStorage
         public string GetPublicUrl(string path)
         {
             return path;
+        }
+
+        public string GetFullUrl(string path)
+        {
+           return Combine(_storageUrl, path);
         }
 
         public IStorageFile GetFile(string path)

@@ -10,12 +10,14 @@ namespace BloomService.Web.Infrastructure.StorageProviders.Implementation
     {
         private readonly string _baseUrl;
         private readonly string _storagePath;
+        private readonly string _siteUrl;
         private readonly IHttpContextProvider _httpContextProvider;
 
-        public FileSystemStorageProvider(string basePath, IHttpContextProvider httpContextProvider)
+        public FileSystemStorageProvider(string basePath, string siteUrl, IHttpContextProvider httpContextProvider)
         {
             _httpContextProvider = httpContextProvider;
             _baseUrl = _httpContextProvider.MapPath("//");
+            _siteUrl = siteUrl;
 
             _storagePath = basePath;
             if (!_baseUrl.EndsWith("/"))
@@ -41,6 +43,11 @@ namespace BloomService.Web.Infrastructure.StorageProviders.Implementation
         public string GetPublicUrl(string path)
         {
             return _baseUrl + path.Replace(Path.DirectorySeparatorChar, '/');
+        }
+
+        public string GetFullUrl(string path)
+        {
+            return Path.Combine(_siteUrl, path);
         }
 
         public IStorageFile GetFile(string path)
