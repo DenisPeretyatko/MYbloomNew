@@ -102,7 +102,7 @@ namespace BloomService.Web.Infrastructure.StorageProviders.AzureStorage
 
         public string GetFullUrl(string path)
         {
-           return Combine(_storageUrl, path);
+           return Combine(_storageUrl, path).Replace("\\", "/");
         }
 
         public IStorageFile GetFile(string path)
