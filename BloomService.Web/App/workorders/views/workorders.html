@@ -16,73 +16,81 @@
                     <input type="text" class="form-control input-sm m-b-xs" placeholder="Search in table" data-ng-model="searchStr" ng-model-options="{debounce: 1000}">
                     <table class="footable table table-stripped" data-page-size="100" data-filter=#filter>
                         <thead>
-                        <tr>
-                            <th class="col-lg-1 col-md-1" ng-init="data = ''" ng-click="data='num'; changeSorting(data)">#</th>
-                            <th class="footable-sorted col-lg-2 col-md-2" ng-click="data = 'date'; changeSorting(data)">Schedule Date</th>
-                            <th class="col-lg-2 col-md-2" ng-click="data = 'entered date'; changeSorting(data)">Entered Date</th>
-                            <th class="col-lg-2 col-md-2" ng-click="data = 'customer'; changeSorting(data)" data-hide="phone,tablet">Customer</th>
-                            <th class="col-lg-3 col-md-3" ng-click="data = 'location'; changeSorting(data)" data-hide="phone,tablet">Location</th>
-                            <th class="col-lg-1 col-md-1" ng-click="data = 'status'; changeSorting(data)">Status</th>
-                            <th class="col-lg-1 col-md-1" ng-click="data = 'action'; changeSorting(data)">Action</th>
-                        </tr>
+                            <tr>
+                                <th ng-init="data = ''" ng-click="data='num'; changeSorting(data)">#</th>
+                                <th ng-click="data = 'date'; changeSorting(data)">Schedule Date</th>
+                                <th ng-click="data = 'entered date'; changeSorting(data)">Entered Date</th>
+                                <th ng-click="data = 'customer'; changeSorting(data)" data-hide="phone,tablet">Customer</th>
+                                <th ng-click="data = 'location'; changeSorting(data)" data-hide="phone,tablet">Location</th>
+                                <th ng-click="data = 'address'; changeSorting(data)" data-hide="phone,tablet">Address</th>
+                                <th ng-click="data = 'assignment'; changeSorting(data)" data-hide="phone,tablet">Assignment</th>
+                                <th ng-click="data = 'status'; changeSorting(data)">Status</th>
+                                <th ng-click="data = 'action'; changeSorting(data)">Action</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="workorder in workorders" class="cursor-pointer wo-table-row" ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})">
-                            <td>{{workorder.WorkOrder}}</td>
-                            <td>{{workorder.ScheduleDate|date:'mediumDate' : 'UTC'}}</td>
-                            <td>{{workorder.DateEntered|date:'mediumDate' : 'UTC' }}</td>
-                            <td>{{workorder.ARCustomer}}</td>
-                            <td>{{workorder.Location}}</td>
-                            <td>
-                                <span class="label open statusColor vertical-middle" ng-if="workorder.Status == 'Open'">
+                            <tr ng-repeat="workorder in workorders" class="cursor-pointer wo-table-row" ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})">
+                                <td>{{workorder.WorkOrder}}</td>
+                                <td>{{workorder.ScheduleDate|date:'mediumDate' : 'UTC'}}</td>
+                                <td>{{workorder.DateEntered|date:'mediumDate' : 'UTC' }}</td>
+                                <td>{{workorder.ARCustomer}}</td>
+                                <td>{{workorder.Location}}</td>
+                                <td>{{workorder.Address}}</td>
+                                <td>
+                                    <span class="label" ng-class="workorder.AssignmentId == 0 ? 'label-available' : 'label-danger' ">
+                                        {{workorder.AssignmentId == 0 ? 'Assigned' : 'Not assigned' }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="label open statusColor vertical-middle" ng-if="workorder.Status == 'Open'">
                                         {{workorder.Status}}
                                     </span>
-                                <span class="label return statusColor vertical-middle" ng-if="workorder.Status == 'Return Required'" >
-                                    {{workorder.Status}}
-                                </span>
-                                <span class="label work statusColor vertical-middle" ng-if="workorder.Status == 'Work Complete'">
-                                    {{workorder.Status}}
-                                </span>
-                                <span class="label closed statusColor vertical-middle" ng-if="workorder.Status == 'Closed'" >
-                                    {{workorder.Status}}
-                                </span>
-                                <span class="label cancelled statusColor vertical-middle" ng-if="workorder.Status == 'Cancelled'">
-                                    {{workorder.Status}}
-                                </span>
-                                <span class="label expired statusColor vertical-middle" ng-if="workorder.Status == 'Expired Quote'">
-                                    {{workorder.Status}}
-                                </span>
-                                <span class="label reviewed statusColor vertical-middle" ng-if="workorder.Status == 'Reviewed'">
-                                    {{workorder.Status}}
-                                </span>
-                                <span class="label invoiced statusColor vertical-middle" ng-if="workorder.Status == 'Invoiced'">
-                                    {{workorder.Status}}
-                                </span>
-                            </td>
-                            <td class="center">
-                                <a ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})" class="btn btn-primary btn-xs no-margins">Edit...</a>
-                            </td>
-                        </tr>
+                                    <span class="label return statusColor vertical-middle" ng-if="workorder.Status == 'Return Required'">
+                                        {{workorder.Status}}
+                                    </span>
+                                    <span class="label work statusColor vertical-middle" ng-if="workorder.Status == 'Work Complete'">
+                                        {{workorder.Status}}
+                                    </span>
+                                    <span class="label closed statusColor vertical-middle" ng-if="workorder.Status == 'Closed'">
+                                        {{workorder.Status}}
+                                    </span>
+                                    <span class="label cancelled statusColor vertical-middle" ng-if="workorder.Status == 'Cancelled'">
+                                        {{workorder.Status}}
+                                    </span>
+                                    <span class="label expired statusColor vertical-middle" ng-if="workorder.Status == 'Expired Quote'">
+                                        {{workorder.Status}}
+                                    </span>
+                                    <span class="label reviewed statusColor vertical-middle" ng-if="workorder.Status == 'Reviewed'">
+                                        {{workorder.Status}}
+                                    </span>
+                                    <span class="label invoiced statusColor vertical-middle" ng-if="workorder.Status == 'Invoiced'">
+                                        {{workorder.Status}}
+                                    </span>
+                                </td>
+                                <td class="center">
+                                    <a ui-sref="manager.workorder.edit({ id: '{{workorder.Id}}'})" class="btn btn-primary btn-xs no-margins">Edit...</a>
+                                </td>
+                            </tr>
                         </tbody>
                         <tfoot class="hide-if-no-paging">
-                        <tr>
-                            <td colspan="6" class="text-center">
-                                <ul class="pagination"></ul>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    <ul class="pagination"></ul>
+                                </td>
+                            </tr>
                         </tfoot>
 
                     </table>
                     <div class="nav-pager center-block">
                         <nav style="text-align: center">
                             <ul class="pagination">
-                                
+
                                 <li ng-click="PrevPage()" ng-class="{'disabled': CurrentPageNum()=='0' }">
                                     <a aria-label="Previous">
                                         <span aria-hidden="true" class="fa fa-angle-left"></span>
                                     </a>
                                 </li>
-                            <li ng-repeat="i in paginationList" ng-click="ShowPage(i.link)" ng-class="{'active':CurrentPageNum()==i.link, 'disabled':pagesCount==i.link }"><a ng-bind-html="i.name"> <span class="sr-only">(current)</span></a></li>
+                                <li ng-repeat="i in paginationList" ng-click="ShowPage(i.link)" ng-class="{'active':CurrentPageNum()==i.link, 'disabled':pagesCount==i.link }"><a ng-bind-html="i.name"> <span class="sr-only">(current)</span></a></li>
                                 <li ng-click="NextPage()" ng-class="{'disabled': CurrentPageNum()==pagesCount-1 }">
                                     <a aria-label="Next">
                                         <span aria-hidden="true" class="fa fa-angle-right"></span>

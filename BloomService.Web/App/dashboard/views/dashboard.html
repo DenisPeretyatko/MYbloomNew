@@ -71,6 +71,12 @@
                             <th ng-click="sort('Location')">
                                 Location
                             </th>
+                            <th ng-click="sort('Address')">
+                                Address
+                            </th>
+                            <th ng-click="sort('AssignmentId')">
+                                Assignment
+                            </th>
                             <th ng-click="sort('status')">
                                 Status
                             </th>
@@ -83,6 +89,12 @@
                             <td>{{workorder.DateEntered|date:'mediumDate' : 'UTC'}}</td>
                             <td>{{workorder.ARCustomer}}</td>
                             <td>{{workorder.Location}}</td>
+                            <td>{{workorder.Address}}</td>
+                            <td>
+                                <span class="label" ng-class="workorder.AssignmentId == 0 ? 'label-available' : 'label-danger' ">
+                                    {{workorder.AssignmentId == 0 ? 'Assigned' : 'Not assigned' }}
+                                </span>
+                            </td>
                             <td>
                                 <span class="label" ng-class="workorder.status == 'closed' ? 'label-danger' : 'label-primary' ">
                                         {{workorder.Status == 'closed' ? "Closed" : "Open" }}

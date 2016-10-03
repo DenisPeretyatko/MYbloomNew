@@ -1,21 +1,11 @@
 ﻿using System;
-using System.Globalization;
-using System.Security.Cryptography.X509Certificates;
 using BloomService.Web.Infrastructure.Dependecy;
-using BloomService.Web.Infrastructure.Jobs;
-using BloomService.Web.Infrastructure.Services.Interfaces;
-
-using Common.Logging;
-using Newtonsoft.Json.Linq;
 
 namespace BloomService.Web.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-
-    using AutoMapper;
-
     using BloomService.Web.Infrastructure.Mongo;
 
     using Domain.Entities.Concrete;
@@ -87,7 +77,20 @@ namespace BloomService.Web.Controllers
             chart.Add(chartModel);
 
             dashboard.Chart = chart;
+            var tmpLocations = workorders.Select(x => x.Location);
+            var locations = _repository.SearchFor<SageLocation>(x => tmpLocations.Contains(x.Name)).ToList();
             dashboard.WorkOrders = workorders.OrderByDescending(x => x.ScheduleDate);
+            foreach (var order in dashboard.WorkOrders)
+            {
+                var location = locations.FirstOrDefault(x => x.Name == order.Location);
+                if (location != null)
+                {
+                    order.Latitude = location.Latitude;
+                    order.Longitude = location.Longitude;
+                    order.Address = string.Join(" ", String.Join(", ", new[] { location.Address, location.City, location.ZIP, location.State }.Where(str => !string.IsNullOrEmpty(str))));
+                }
+            }
+            
             return Json(dashboard, JsonRequestBehavior.AllowGet);
         }
 

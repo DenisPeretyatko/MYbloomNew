@@ -38,8 +38,8 @@
         }, 'responseError': function (rejection) {
             requests = 0;
             $rootScope.rejectionError = rejection;
-           // var start = $rootScope.rejectionError.data.indexOf("<style>");
-            //var end = $rootScope.rejectionError.data.indexOf("</style>");
+            var start = $rootScope.rejectionError.data.indexOf("<style>");
+            var end = $rootScope.rejectionError.data.indexOf("</style>");
             $rootScope.rejectionError.data = $rootScope.rejectionError.data.replace($rootScope.rejectionError.data.substring(start, end), "");
             if (rejection.status == 404 || rejection.status == 408 || rejection.status == 504 || rejection.status == 0)
                 serverError();

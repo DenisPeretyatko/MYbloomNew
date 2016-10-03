@@ -133,7 +133,7 @@
         if (isExist) {
             angular.forEach($rootScope.workorders, function(value, key) {
                 if (value.WorkOrder.WorkOrder == model.WorkOrder.WorkOrder && value.Employee == model.Employee) {
-                    $rootScope.workorders[key] = value;
+                    $rootScope.workorders[key] = model;
                 }
             });
         } else {

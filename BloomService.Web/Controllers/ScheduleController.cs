@@ -46,7 +46,8 @@ namespace BloomService.Web.Controllers
         {
             var lastMonth = DateTime.Now.GetLocalDate().AddMonths(-1);
             var model = new ScheduleViewModel();
-            var assignments = _repository.SearchFor<SageAssignment>(x => x.WorkOrder != 0 && x.DateEntered > lastMonth).OrderByDescending(x => x.DateEntered).ToList();
+            //var assignments = _repository.SearchFor<SageAssignment>(x => x.WorkOrder != 0 && x.DateEntered > lastMonth).OrderByDescending(x => x.DateEntered).ToList();
+            var assignments = _repository.SearchFor<SageAssignment>(x => x.WorkOrder != 0 && x.ScheduleDate > lastMonth).OrderByDescending(x => x.ScheduleDate).ToList();
             var employees = _repository.GetAll<SageEmployee>().ToList(); 
             var mappedAssignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(assignments);
             foreach (var item in mappedAssignments)

@@ -1,10 +1,7 @@
-﻿using System.IO;
-using BloomService.Web.Infrastructure.Dependecy;
+﻿using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Jobs;
 using BloomService.Web.Infrastructure.StorageProviders;
 using Common.Logging;
-using ICSharpCode.SharpZipLib.Core;
-using RestSharp.Extensions;
 
 namespace BloomService.Web.Controllers
 {
@@ -22,7 +19,6 @@ namespace BloomService.Web.Controllers
     using Infrastructure.Services.Interfaces;
     using Infrastructure.Constants;
     using Domain.Extensions;
-    using ICSharpCode.SharpZipLib.Zip;
     using Infrastructure;
     using System.Configuration;
     public class WorkorderController : BaseController
@@ -237,8 +233,9 @@ namespace BloomService.Web.Controllers
         {
             long search = -1;
             long.TryParse(model.Search, out search);
-
             var workorders = _repository.GetAll<SageWorkOrder>();
+          
+            
 
             if (!string.IsNullOrEmpty(model.Search))
             {
@@ -251,7 +248,7 @@ namespace BloomService.Web.Controllers
             }
 
             var entitiesCount = workorders.Count();
-
+           
             switch (model.Column) //sort
             {
                 case "num":
@@ -269,6 +266,12 @@ namespace BloomService.Web.Controllers
                 case "location":
                     workorders = model.Direction ? workorders.OrderBy(x => x.Location) : workorders.OrderByDescending(x => x.Location);
                     break;
+                case "address":
+                    workorders = model.Direction ? workorders.OrderBy(x => x.Address) : workorders.OrderByDescending(x => x.Address);
+                    break;
+                case "assignment":
+                    workorders = model.Direction ? workorders.OrderBy(x => x.AssignmentId) : workorders.OrderByDescending(x => x.AssignmentId);
+                    break;
                 case "status":
                     workorders = model.Direction ? workorders.OrderBy(x => x.Status) : workorders.OrderByDescending(x => x.Status);
                     break;
@@ -281,6 +284,8 @@ namespace BloomService.Web.Controllers
                 workorders = workorders.Skip(model.Index * ItemsOnPage).Take(ItemsOnPage);
 
             var workorderList = workorders.ToList();
+            var tmpLocations = workorderList.Select(x => x.Location);
+            var locations = _repository.SearchFor<SageLocation>(x => tmpLocations.Contains(x.Name)).ToList();
             foreach (var obj in workorderList)
             {
                 if (obj.TimeEntered == null) continue;
@@ -288,6 +293,13 @@ namespace BloomService.Web.Controllers
                 // TODO Fix this convertation.
                 //obj.CallDate = obj.DateEntered?.Date.Add((DateTime)obj.TimeEntered) ?? DateTime.MinValue;
                 obj.CallDate = obj.DateEntered?.Date.Add(((DateTime)obj.TimeEntered).TimeOfDay) ?? DateTime.MinValue;
+                var location = locations.FirstOrDefault(x => x.Name == obj.Location);
+                if (location != null)
+                {
+                    obj.Latitude = location.Latitude;
+                    obj.Longitude = location.Longitude;
+                    obj.Address = string.Join(" ", String.Join(", ", new[] { location.Address, location.City, location.ZIP, location.State }.Where(str => !string.IsNullOrEmpty(str))));
+                }
             }
 
             var result = new WorkorderSortViewModel()
