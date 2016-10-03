@@ -112,7 +112,15 @@ namespace BloomService.Web.Controllers
                 result.Entity.Longitude = itemLocation.Longitude;
 
                 _repository.Add(assignment);
+                _hub.CreateAssignment(new MapViewModel()
+                {
+                    WorkOrder = result.Entity,
+                    DateEntered = assignment.ScheduleDate,
+                    Employee = employee?.Employee ?? 0,
+                    Color = employee?.Color ?? ""
+                });
             }
+
             _repository.Add(result.Entity);
             _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
             _notification.SendNotification(string.Format("{0} was created", workorder.WorkOrder));
