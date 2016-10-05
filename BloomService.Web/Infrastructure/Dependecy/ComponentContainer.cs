@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using BloomService.Domain.Extensions;
+using MongoDB.Driver;
+using RestSharp.Extensions.MonoHttp;
 
 namespace BloomService.Web.Infrastructure.Dependecy
 {
@@ -19,5 +21,13 @@ namespace BloomService.Web.Infrastructure.Dependecy
             //var result = TimeZoneInfo.ConvertTime(date.ToUniversalTime(), USEastern);
             return result;
         }
+
+        public static string DecodeSafeHtmlString(this string comment)
+        {
+            while (comment.Contains("&amp") || comment.Contains("&quot") || comment.Contains("&lt") || comment.Contains("&gt") || comment.Contains("&apos") || comment.Contains("&nbsp"))
+                comment = HttpUtility.HtmlDecode(comment);
+            return comment;
+        }
+         
     }
 }

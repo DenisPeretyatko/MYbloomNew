@@ -87,7 +87,8 @@ namespace BloomService.Web.Controllers
         [Route("Apimobile/Workorder/{id}")]
         public ActionResult GetWorkOrder(long id)
         {
-            var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id);
+            var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).Single();
+            workOrder.Comments = workOrder.Comments.DecodeSafeHtmlString();
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
