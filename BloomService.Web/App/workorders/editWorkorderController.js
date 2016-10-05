@@ -572,7 +572,12 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             $scope.fileUrl = url.createObjectURL(file);
             $window.saveAs(file, $scope.editableWorkOrder.WorkOrder + ".zip");
         });
-    }
+      }
+
+      $scope.joinStrings = function (Address, City, ZIP, State) {
+         return $.grep([Address, City, ZIP, State], Boolean).join(', ');
+
+      }
 
 }
 editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state", "modalWindowService", "$window"];

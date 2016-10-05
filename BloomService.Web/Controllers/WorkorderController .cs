@@ -21,6 +21,11 @@ namespace BloomService.Web.Controllers
     using Domain.Extensions;
     using Infrastructure;
     using System.Configuration;
+    using System.IO;
+    using System.Web;
+    using System.Security;
+    using RestSharp.Extensions;
+    using System.Text;
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
@@ -143,9 +148,12 @@ namespace BloomService.Web.Controllers
             workOrder.PermissionCodeObj = _repository.SearchFor<SagePermissionCode>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode).SingleOrDefault();
             workOrder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workOrder.PayMethod.Trim());
             workOrder.StatusObj = WorkOrderStatus.Status.Single(x => x.Status == workOrder.Status);
-
+            //var test = System.Web.HttpUtility.HtmlDecode(workOrder.Comments);
+            //test = HttpUtility.HtmlDecode(workOrder.Comments);
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
+
+       
 
         [HttpGet]
         [Route("Workorderpictures/{id}")]

@@ -22,9 +22,9 @@
                                         <div class="form-group">
                                             <label>Location</label>
                                             <ui-select ng-model="lookups.Locations.selected" theme="bootstrap" on-select="setLocation(this)" class="{{validation.location ? 'wo-validation' : ' '}}" ng-required="true" ng-click="validation.location = false">
-                                                <ui-select-match placeholder="Location">{{$select.selected.Name}}</ui-select-match>
+                                                <ui-select-match placeholder="Location" > {{joinStrings($select.selected.Address, $select.selected.City, $select.selected.ZIP, $select.selected.State)}} </ui-select-match>
                                                 <ui-select-choices repeat="item in lookups.Locations | filter: $select.search | limitTo:100">
-                                                    <div>{{item.Name}}</div>
+                                                    <div ng-bind="joinStrings(item.Address, item.City, item.ZIP, item.State)"></div>
                                                 </ui-select-choices>
                                             </ui-select>
                                             <span class="validation-message" ng-show="validation.location" ng-bind="validation.message"></span>
@@ -494,7 +494,9 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <button class="btn btn-sm btn-primary" ng-hide="pictures==''" ng-click="downloadArchive()"><strong>Download all</strong></button>
+                                        <div class="row">
+                                            <button class="btn btn-sm btn-primary" ng-hide="pictures==''" ng-click="downloadArchive()"><strong>Download all</strong></button>
+                                        </div>
                                     </div>
                                 </div>
                                

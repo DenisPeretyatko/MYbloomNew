@@ -153,5 +153,9 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
               donetext: 'Ok'
           });
     }
+     $scope.joinStrings = function (Address, City, ZIP, State) {
+         return $.grep([Address, City, ZIP, State], Boolean).join(', ');
+
+      }
 };
 createWorkorderController.$inject = ["$scope", "$stateParams", "$state", "state", "commonDataService"];
