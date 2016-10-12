@@ -193,7 +193,7 @@ namespace BloomService.Web.Infrastructure.Services
             using (var ms = new MemoryStream())
             {
                 var resultPath = Path.Combine(path, newPath);
-                image.Save(ms, ImageFormat.Png);
+                image.Save(ms, ImageFormat.Jpeg);
                 if (_storageProvider.IsFileExists(resultPath))
                     _storageProvider.DeleteFile(resultPath);
                 _storageProvider.CreateFile(resultPath, ms.ToArray());
