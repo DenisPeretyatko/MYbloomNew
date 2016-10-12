@@ -124,8 +124,8 @@ namespace BloomService.Web.Infrastructure.Services
             var pathToImage = _storageProvider.GetPublicUrl(Path.Combine(this._urlToFolderPhotoWorkOrders, model.IdWorkOrder.ToString()));
             var nameBig = countImage.ToString();
             var nameSmall = small + countImage;
-            var fileName = SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, this.settings.SizeBigPhoto);
-            var fileNameSmall = SavePhotoForWorkOrder(model.Image, pathToImage, nameSmall, this.settings.SizeSmallPhoto);
+            var fileName = SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, settings.SizeBigPhoto, countImage);
+            var fileNameSmall = SavePhotoForWorkOrder(model.Image, pathToImage, nameSmall, this.settings.SizeSmallPhoto, countImage);
             var maxId = imagesDb.Images.Any() ? imagesDb.Images.Max(x => x.Id) : 0;
             var image = new ImageLocation { Image = fileNameSmall, BigImage = fileName, Latitude = model.Latitude, Longitude = model.Longitude, Id = maxId + 1, Description = model.Description };
             imagesDb.Images.Add(image);
@@ -134,6 +134,50 @@ namespace BloomService.Web.Infrastructure.Services
             image.Image += $"?{milliseconds}";
             image.BigImage += $"?{milliseconds}";
             _hub.UpdateWorkOrderPicture(imagesDb);
+            return image;
+        }
+
+        public Bitmap ChangeOpacity(Image img, float opacityvalue)
+        {
+            Bitmap bmp = new Bitmap(img.Width, img.Height); // Determining Width and Height of Source Image
+            Graphics graphics = Graphics.FromImage(bmp);
+            ColorMatrix colormatrix = new ColorMatrix();
+            colormatrix.Matrix33 = opacityvalue;
+            ImageAttributes imgAttribute = new ImageAttributes();
+            imgAttribute.SetColorMatrix(colormatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            graphics.DrawImage(img, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, img.Width, img.Height, GraphicsUnit.Pixel, imgAttribute);
+            graphics.Dispose();   // Releasing all resource used by graphics 
+            return bmp;
+        }
+
+        private Image AddWaterMark(Image image, long number)
+        {
+            var watermarkImage = Image.FromStream(_storageProvider.GetFile(Path.Combine(_urlToFolderPhotoWorkOrders, "logo.png")).OpenRead());
+            var newWidth = image.Width / 7;
+            var newHeight = newWidth * watermarkImage.Height / watermarkImage.Width;
+            var margin = newWidth/10;
+            float opacity = (float) 0.5;
+            int fontSize = Convert.ToInt32(newHeight/4);
+            watermarkImage = ResizeImage(watermarkImage, new Size(newWidth, newHeight));
+            watermarkImage = ChangeOpacity(watermarkImage, opacity);
+            using (var graphicsHandle = Graphics.FromImage(image))
+            using (TextureBrush watermarkBrush = new TextureBrush(watermarkImage))
+            {
+                graphicsHandle.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                int x = (image.Width - newWidth - margin);
+                int y = (image.Height - newHeight);
+                watermarkBrush.TranslateTransform(x, y);
+                graphicsHandle.FillRectangle(watermarkBrush, new Rectangle(new Point(x, y), new Size(newWidth, newHeight)));
+
+                using (Font arialFont = new Font("Arial", fontSize, FontStyle.Bold))
+                {
+                    x = (image.Width - 4*margin);
+                    y = (0+margin);
+                    graphicsHandle.DrawString($"#{number}", arialFont, Brushes.Red, x, y);
+
+                }
+
+            }
             return image;
         }
 
@@ -175,17 +219,18 @@ namespace BloomService.Web.Infrastructure.Services
 
         }
 
-        private string SavePhotoForWorkOrder(HttpPostedFileBase file, string path, string userId, int MaxSize)
+        private string SavePhotoForWorkOrder(HttpPostedFileBase file, string path, string userId, int MaxSize, long imageNumber)
         {
             if (file == null)
                 return string.Empty;
             Image image = Image.FromStream(file.InputStream, true);
             if (!this.ValidateImage(image))
                 return string.Empty;
-            string name;
+            //string name;
             string ext = _knownImageFormats[ImageFormat.Jpeg];
-            if (_knownImageFormats.TryGetValue(image.RawFormat, out name))
-                ext = name.ToLower();
+            //if (_knownImageFormats.TryGetValue(image.RawFormat, out name))
+            //    ext = name.ToLower();
+            image = AddWaterMark(image, imageNumber);
             image = ResizeImage(image, new Size(MaxSize, MaxSize));
             if (!_storageProvider.IsFolderExits(path))
                 _storageProvider.TryCreateFolder(path);
