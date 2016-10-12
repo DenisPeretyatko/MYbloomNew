@@ -21,11 +21,7 @@ namespace BloomService.Web.Controllers
     using Domain.Extensions;
     using Infrastructure;
     using System.Configuration;
-    using System.IO;
-    using System.Web;
-    using System.Security;
-    using RestSharp.Extensions;
-    using System.Text;
+
     public class WorkorderController : BaseController
     {
         private readonly IRepository _repository;
@@ -61,6 +57,8 @@ namespace BloomService.Web.Controllers
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
             _log.InfoFormat("Method: CreateWorkOrder. Model ID {0}", model.Id);
+            if (string.IsNullOrEmpty(model.Calltype))
+                return Error("Call Type is required");
 
             var workorder = new SageWorkOrder()
             {
@@ -152,7 +150,7 @@ namespace BloomService.Web.Controllers
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
-       
+
 
         [HttpGet]
         [Route("Workorderpictures/{id}")]
@@ -249,8 +247,8 @@ namespace BloomService.Web.Controllers
             long search = -1;
             long.TryParse(model.Search, out search);
             var workorders = _repository.GetAll<SageWorkOrder>();
-          
-            
+
+
 
             if (!string.IsNullOrEmpty(model.Search))
             {
@@ -263,7 +261,7 @@ namespace BloomService.Web.Controllers
             }
 
             var entitiesCount = workorders.Count();
-           
+
             switch (model.Column) //sort
             {
                 case "num":
@@ -313,7 +311,7 @@ namespace BloomService.Web.Controllers
                 {
                     obj.Latitude = location.Latitude;
                     obj.Longitude = location.Longitude;
-                    obj.Address = string.Join(" ", String.Join(", ", new[] { location.Address, location.City, location.ZIP, location.State }.Where(str => !string.IsNullOrEmpty(str))));
+                    obj.Address = string.Join(" ", String.Join(", ", new[] { location.Name, location.Address, location.City, location.State, location.ZIP }.Where(str => !string.IsNullOrEmpty(str))));
                 }
             }
 

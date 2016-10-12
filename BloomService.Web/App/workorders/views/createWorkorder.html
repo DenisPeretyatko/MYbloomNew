@@ -22,9 +22,9 @@
                                         <div class="form-group">
                                             <label>Location</label>
                                             <ui-select ng-model="lookups.Locations.selected" theme="bootstrap" on-select="setLocation(this)" class="{{validation.location ? 'wo-validation' : ' '}}" ng-required="true" ng-click="validation.location = false">
-                                                <ui-select-match placeholder="Location"> {{joinStrings($select.selected.Address, $select.selected.City, $select.selected.ZIP, $select.selected.State)}} </ui-select-match>
+                                                <ui-select-match placeholder="Location"> {{joinStrings($select.selected.Name, $select.selected.Address, $select.selected.City, $select.selected.ZIP, $select.selected.State)}} </ui-select-match>
                                                 <ui-select-choices repeat="item in lookups.Locations | filter: $select.search | limitTo:100">
-                                                    <div ng-bind="joinStrings(item.Address, item.City, item.ZIP, item.State)"></div>
+                                                    <div ng-bind="joinStrings(item.Name, item.Address, item.City, item.ZIP, item.State)"></div>
                                                 </ui-select-choices>
                                             </ui-select>
                                             <span class="validation-message" ng-show="validation.location" ng-bind="validation.message"></span>
@@ -65,12 +65,13 @@
                                         <!-- 1.2-->
                                         <div class="form-group hidden-lg ">
                                             <label>Call Type</label>
-                                            <ui-select ng-model="lookups.Calltypes.selected" theme="bootstrap">
+                                            <ui-select ng-model="lookups.Calltypes.selected" theme="bootstrap"  class="{{validation.callType ? 'wo-validation' : ' '}}">
                                                 <ui-select-match placeholder="Call Type">{{$select.selected.Description}}</ui-select-match>
                                                 <ui-select-choices repeat="item in lookups.Calltypes | filter: $select.search">
                                                     <div>{{item.Description}}</div>
                                                 </ui-select-choices>
                                             </ui-select>
+                                            <span class="validation-message" ng-show="validation.callType" ng-bind="validation.message"></span>
                                         </div>
                                         <div class="form-group hidden-lg ">
                                             <label>Call Date</label>
@@ -209,12 +210,13 @@
                                     <div class="ibox-content wo-create-ibox">
                                         <div class="form-group">
                                             <label>Call Type</label>
-                                            <ui-select ng-model="lookups.Calltypes.selected" theme="bootstrap">
+                                            <ui-select ng-model="lookups.Calltypes.selected" theme="bootstrap"  class="{{validation.callType ? 'wo-validation' : ' '}}">
                                                 <ui-select-match placeholder="Call Type">{{$select.selected.Description}}</ui-select-match>
                                                 <ui-select-choices repeat="item in lookups.Calltypes | filter: $select.search">
                                                     <div>{{item.Description}}</div>
                                                 </ui-select-choices>
                                             </ui-select>
+                                            <span class="validation-message" ng-show="validation.callType" ng-bind="validation.message"></span>
                                         </div>
                                         <div class="form-group">
                                             <label>Call Date</label>

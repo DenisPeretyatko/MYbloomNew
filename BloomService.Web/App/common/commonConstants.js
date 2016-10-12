@@ -1,41 +1,23 @@
 var flotChartOptions =
 {
     series: {
-        bars: {
-            show: true,
-            barWidth: 0.6,
-            align: "center",
-            fill: true,
-            fillColor: {
-                colors: [
-                    {
-                        opacity: 0.8
-                    },
-                    {
-                        opacity: 0.8
-                    }
-                ]
+        pie: {
+            show: true,                
+            label: {
+                show:true,
+                radius: 0.8,
+                formatter: function (label, series) {                
+                    return '<div style="border:1px solid grey;font-size:8pt;text-align:center;padding:5px;color:white;">' +
+                    label + ' : ' +
+                    Math.round(series.percent) +
+                    '%</div>';
+                },
+                background: {
+                    opacity: 0.8,
+                    color: '#000'
+                }
             }
         }
-    },
-    xaxis: {
-        mode: 'categories',
-        tickLength: 0,
-        tickDecimals: 0
-    },
-    yaxis: {
-        min: 0
-    },
-    colors: ["#df4242"],
-    grid: {
-        color: "#999999",
-        hoverable: true,
-        clickable: true,
-        tickColor: "#D4D4D4",
-        borderWidth: 0
-    },
-    legend: {
-        show: false
     }
 };
 

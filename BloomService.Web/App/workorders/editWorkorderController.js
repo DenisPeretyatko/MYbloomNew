@@ -42,6 +42,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         location: false,
         employee: false,
         problem: false,
+        callType: false,
         other: false,
         message: ""
     };
@@ -63,6 +64,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         }
         else if (message.toLowerCase().indexOf('problem') !== -1) {
             $scope.validation.problem = true;
+            $scope.validation.message = message;
+        }
+        else if (message.toLowerCase().indexOf('call type') !== -1) {
+            $scope.validation.callType = true;
             $scope.validation.message = message;
         }
         else {
@@ -276,7 +281,21 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             AssignmentDate: $scope.obj.assignmentDate,
             AssignmentTime: $scope.obj.assignmentTime
         };
-
+        if (!workorder.Location) {
+            validation("Location is required");
+            return;
+        } else if (!workorder.Problem) {
+            validation("Problem is required");
+            return;
+        }
+        else if (!workorder.Emploee) {
+            validation("Employee is required");
+            return;
+        }
+        else if (!workorder.Calltype) {
+            validation("Call type is required");
+            return;
+        }
         commonDataService.saveWorkorder(workorder).then(function (response) {
             if (response.data.success == true)
                 $state.go("manager.workorder.list");
@@ -574,8 +593,8 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         });
       }
 
-      $scope.joinStrings = function (Address, City, ZIP, State) {
-         return $.grep([Address, City, ZIP, State], Boolean).join(', ');
+      $scope.joinStrings = function (Name, Address, City, ZIP, State) {
+         return $.grep([Name, Address, City, State, ZIP ], Boolean).join(', ');
 
       }
 

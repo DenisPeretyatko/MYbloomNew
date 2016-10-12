@@ -66,12 +66,12 @@ namespace BloomService.Web.Controllers
             var chart = new List<ChartModel>();
             var chartModel = new ChartModel();
 
-            var chartData = new List<List<object>>
+            var chartData = new List<Chart>
             {
-                new List<object> {"Open", workorders.Count()},
-                new List<object> {"Assigned", workorders.Count(x => assignments.Any(a => a.WorkOrder == x.WorkOrder))},
-                new List<object> {"Roof leak", workorders.Count(x => x.Problem == "Roof Leak")},
-                new List<object> {"Closed today", workorders.Count(x => x.DateClosed == DateTime.Now.GetLocalDate().Date)},
+                new Chart {label = "Open", data = workorders.Count(), color = "#000000"},
+                new Chart {label = "Assigned", data = workorders.Count(x => assignments.Any(a => a.WorkOrder == x.WorkOrder)), color = "#1ab394"},
+                new Chart {label = "Roof leak", data = workorders.Count(x => x.Problem == "Roof Leak"), color = "#df4242"},
+                new Chart {label = "Closed today", data = workorders.Count(x => x.DateClosed == DateTime.Now.GetLocalDate().Date), color = "#30B335"}
             };
             chartModel.data = chartData;
             chart.Add(chartModel);
@@ -87,10 +87,10 @@ namespace BloomService.Web.Controllers
                 {
                     order.Latitude = location.Latitude;
                     order.Longitude = location.Longitude;
-                    order.Address = string.Join(" ", String.Join(", ", new[] { location.Address, location.City, location.ZIP, location.State }.Where(str => !string.IsNullOrEmpty(str))));
+                    order.Address = string.Join(" ", String.Join(", ", new[] { location.Name, location.Address, location.City, location.State, location.ZIP }.Where(str => !string.IsNullOrEmpty(str))));
                 }
             }
-            
+
             return Json(dashboard, JsonRequestBehavior.AllowGet);
         }
 
@@ -113,7 +113,7 @@ namespace BloomService.Web.Controllers
             };
 
             var stringDate = String.Format("{0} {1}", notificationTime.Date.Date.ToString(DateTimeFormat.DateFormat), notificationTime.Time.ToString(DateTimeFormat.TimeFormat));
-            
+
             return Json(stringDate, JsonRequestBehavior.AllowGet);
         }
 
