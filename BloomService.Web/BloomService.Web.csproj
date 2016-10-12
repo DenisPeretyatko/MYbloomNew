@@ -853,6 +853,7 @@
     <Content Include="Public\js\plugins\gallery-master\css\blueimp-gallery.min.css.map" />
     <Content Include="Public\js\plugins\gallery-master\js\blueimp-gallery.min.js.map" />
     <Content Include="Public\js\plugins\gallery-master\js\jquery.blueimp-gallery.min.js.map" />
+    <Content Include="Public\fonts\OpenSans-Bold.ttf" />
     <None Include="Scripts\jquery-2.2.2.intellisense.js" />
     <Content Include="Public\userFiles\technician\readme.txt" />
     <Content Include="Public\userFiles\workorder\readme.txt" />

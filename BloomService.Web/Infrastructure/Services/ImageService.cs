@@ -1,4 +1,7 @@
-﻿using BloomService.Web.Infrastructure.StorageProviders;
+﻿using System.Drawing.Text;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using BloomService.Web.Infrastructure.StorageProviders;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using RestSharp.Extensions;
@@ -41,6 +44,7 @@ namespace BloomService.Web.Infrastructure.Services
         private readonly string _urlToFolderTecnician;
         private readonly string _urlToFolderWorkOrder;
         private readonly string _urlToFolderPhotoWorkOrders;
+        private readonly string _urlToFolderFonts;
         private readonly string small = "small";
         private readonly Color colorTechnicianIcon = Color.FromArgb(0, 13, 255);
         private readonly Color colorWorkOrderIcon = Color.FromArgb(255, 0, 4);
@@ -57,6 +61,7 @@ namespace BloomService.Web.Infrastructure.Services
             _urlToFolderTecnician = Path.Combine(settings.BasePath, "technician");
             _urlToFolderWorkOrder = Path.Combine(settings.BasePath, "workorder");
             _urlToFolderPhotoWorkOrders = Path.Combine(settings.BasePath, "images");
+            _urlToFolderFonts = Path.Combine(settings.BasePath.Replace("/userFiles", ""), "fonts");;
 
         }
 
@@ -124,8 +129,8 @@ namespace BloomService.Web.Infrastructure.Services
             var pathToImage = _storageProvider.GetPublicUrl(Path.Combine(this._urlToFolderPhotoWorkOrders, model.IdWorkOrder.ToString()));
             var nameBig = countImage.ToString();
             var nameSmall = small + countImage;
-            var fileName = SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, settings.SizeBigPhoto, countImage);
-            var fileNameSmall = SavePhotoForWorkOrder(model.Image, pathToImage, nameSmall, this.settings.SizeSmallPhoto, countImage);
+            var fileName = SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, settings.SizeBigPhoto, workOrder, countImage);
+            var fileNameSmall = SavePhotoForWorkOrder(model.Image, pathToImage, nameSmall, this.settings.SizeSmallPhoto, workOrder, countImage);
             var maxId = imagesDb.Images.Any() ? imagesDb.Images.Max(x => x.Id) : 0;
             var image = new ImageLocation { Image = fileNameSmall, BigImage = fileName, Latitude = model.Latitude, Longitude = model.Longitude, Id = maxId + 1, Description = model.Description };
             imagesDb.Images.Add(image);
@@ -139,41 +144,87 @@ namespace BloomService.Web.Infrastructure.Services
 
         public Bitmap ChangeOpacity(Image img, float opacityvalue)
         {
-            Bitmap bmp = new Bitmap(img.Width, img.Height); 
+            Bitmap bmp = new Bitmap(img.Width, img.Height);
             Graphics graphics = Graphics.FromImage(bmp);
             ColorMatrix colormatrix = new ColorMatrix();
             colormatrix.Matrix33 = opacityvalue;
             ImageAttributes imgAttribute = new ImageAttributes();
             imgAttribute.SetColorMatrix(colormatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
             graphics.DrawImage(img, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, img.Width, img.Height, GraphicsUnit.Pixel, imgAttribute);
-            graphics.Dispose();   
+            graphics.Dispose();
             return bmp;
         }
 
-        private Image AddWaterMark(Image image, long number)
+        public FontFamily LoadFontFamily(byte[] buffer, out PrivateFontCollection fontCollection)
         {
-            var watermarkImage = Image.FromStream(_storageProvider.GetFile(Path.Combine(_urlToFolderPhotoWorkOrders, "logo.png")).OpenRead());
+            var handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+            try
+            {
+                var ptr = Marshal.UnsafeAddrOfPinnedArrayElement(buffer, 0);
+                fontCollection = new PrivateFontCollection();
+                fontCollection.AddMemoryFont(ptr, buffer.Length);
+                return fontCollection.Families[0];
+            }
+            finally
+            {
+                handle.Free();
+            }
+        }
+
+        public FontFamily LoadFontFamily(Stream stream, out PrivateFontCollection fontCollection)
+        {
+            var buffer = new byte[stream.Length];
+            stream.Read(buffer, 0, buffer.Length);
+            return LoadFontFamily(buffer, out fontCollection);
+        }
+
+        private Image AddWaterMark(Image image, SageWorkOrder workOrder, long number)
+        {
+            var watermarkImage = Image.FromStream(_storageProvider.GetFile(Path.Combine(_urlToFolderPhotoWorkOrders, "watermark.png")).OpenRead());
             var newWidth = image.Width / 7;
             var newHeight = newWidth * watermarkImage.Height / watermarkImage.Width;
-            var margin = newWidth/10;
-            float opacity = (float) 0.5;
-            int fontSize = Convert.ToInt32(newHeight/4);
+            var margin = newWidth / 10;
+            float opacity = (float)0.5;
+            int fontSize = Convert.ToInt32(newHeight / 7);
+            Stream fontStream = _storageProvider.GetFile(Path.Combine(_urlToFolderFonts, "OpenSans-Bold.ttf")).OpenRead();
+            PrivateFontCollection fonts;
+            FontFamily family = LoadFontFamily(fontStream, out fonts);
+            Font theFont = new Font(family, fontSize);
+
             watermarkImage = ResizeImage(watermarkImage, new Size(newWidth, newHeight));
-            watermarkImage = ChangeOpacity(watermarkImage, opacity);
+           // watermarkImage = ChangeOpacity(watermarkImage, opacity);
+
             using (var graphicsHandle = Graphics.FromImage(image))
             using (TextureBrush watermarkBrush = new TextureBrush(watermarkImage))
             {
                 graphicsHandle.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                int x = (image.Width - newWidth - margin);
+                int x = (margin);
                 int y = (image.Height - newHeight);
                 watermarkBrush.TranslateTransform(x, y);
                 graphicsHandle.FillRectangle(watermarkBrush, new Rectangle(new Point(x, y), new Size(newWidth, newHeight)));
 
-                using (var arialFont = new Font("Arial", fontSize, FontStyle.Bold))
+                using (var arialFont = theFont)
                 {
-                    x = (image.Width - 4*margin);
-                    y = (0+margin);
-                    graphicsHandle.DrawString($"#{number}", arialFont, Brushes.Red, x, y);
+                    x = (image.Width - newWidth - margin);
+                    y = (image.Height - newHeight - 4);
+                    RectangleF rectF1 = new RectangleF(x, y, newWidth, newHeight);
+                    SolidBrush brush = new SolidBrush(Color.FromArgb(255, Color.White));
+                    StringFormat stringFormat = new StringFormat()
+                    {
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Center
+                    };
+                    
+                    graphicsHandle.FillRectangle(brush, Rectangle.Round(rectF1));
+                    var pen = new Pen(Color.Black, 0.1f);
+                    graphicsHandle.DrawRectangle(pen, Rectangle.Round(rectF1));
+                    pen.Color = Color.Red;
+                    RectangleF rectInside = new RectangleF(x+2, y+2, newWidth-4, newHeight-4);
+                    graphicsHandle.DrawRectangle(pen, Rectangle.Round(rectInside));
+                    var woDate=""; 
+                    if (workOrder.DateEntered != null)
+                         woDate = workOrder.DateEntered.Value.Date.ToShortDateString();
+                    graphicsHandle.DrawString($"WORK ORDER #{workOrder.WorkOrder}\r\n{woDate}\r\nIMAGE #{number}", arialFont, Brushes.Black, x+ newWidth/2, y+ newHeight/2, stringFormat);
                 }
 
             }
@@ -218,7 +269,7 @@ namespace BloomService.Web.Infrastructure.Services
 
         }
 
-        private string SavePhotoForWorkOrder(HttpPostedFileBase file, string path, string userId, int MaxSize, long imageNumber)
+        private string SavePhotoForWorkOrder(HttpPostedFileBase file, string path, string userId, int MaxSize, SageWorkOrder workOrder, long number)
         {
             if (file == null)
                 return string.Empty;
@@ -229,7 +280,7 @@ namespace BloomService.Web.Infrastructure.Services
             string ext = _knownImageFormats[ImageFormat.Jpeg];
             //if (_knownImageFormats.TryGetValue(image.RawFormat, out name))
             //    ext = name.ToLower();
-            image = AddWaterMark(image, imageNumber);
+            image = AddWaterMark(image, workOrder, number);
             image = ResizeImage(image, new Size(MaxSize, MaxSize));
             if (!_storageProvider.IsFolderExits(path))
                 _storageProvider.TryCreateFolder(path);

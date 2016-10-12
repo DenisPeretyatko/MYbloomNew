@@ -129,7 +129,7 @@ namespace BloomService.Web.Controllers
                     workorders.Add(workorder);
                 }
             }
-
+            var equipments = repository.GetAll<SageEquipment>();
             var locations = repository.GetAll<SageLocation>();
             foreach (var order in workorders)
             {
@@ -141,12 +141,13 @@ namespace BloomService.Web.Controllers
                     order.Latitude = location.Latitude;
                     order.Longitude = location.Longitude;
                     order.Address = string.Join(" ", String.Join(", ", new[] {location.Name, location.Address,location.City,location.State, location.ZIP }.Where(str => !string.IsNullOrEmpty(str))));
-                }                
-                if (order.Equipment != 0)
-                {
-                    var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment);
-                    order.Equipments.AddRange(equipments);
                 }
+                //if (order.Equipment != 0)
+                //{
+                //    var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment);
+                //    order.Equipments.AddRange(equipments);
+                //}
+                order.Equipments.AddRange(equipments);
             }
             return Json(workorders, JsonRequestBehavior.AllowGet);
         }
