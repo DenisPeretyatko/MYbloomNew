@@ -438,6 +438,7 @@
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\ProblemModel.cs" />
     <Compile Include="Models\StatusModel.cs" />
+    <Compile Include="Models\SweetAlertModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\ILocationService.cs" />
     <Compile Include="Infrastructure\Services\LocationService.cs" />
@@ -541,6 +542,8 @@
     <Content Include="Public\font-awesome\css\font-awesome.min.css" />
     <Content Include="Public\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Public\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Public\js\plugins\sweet_alerts\sweetalert2.min.css" />
+    <Content Include="Public\js\plugins\sweet_alerts\sweetalert2.min.js" />
     <Content Include="Public\userFiles\images\loading.gif" />
     <Content Include="Public\userFiles\images\logo.png" />
     <Content Include="Public\userFiles\images\technician.png" />

@@ -156,6 +156,9 @@
         });
         $rootScope.$digest();
     };
+    connection.client.ShowAlert = function (model) {
+        swal(model.Title, model.Message, model.Type);
+    }
 
     $.connection.hub.start().done(function () { });
     return _this;

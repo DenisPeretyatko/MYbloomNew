@@ -411,6 +411,13 @@ namespace BloomService.Web.Controllers
 
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
             _hub.UpdateWorkOrder(model);
+            if(model.Status == WorkOrderStatus.ClosedId)
+                _hub.ShowAlert(new SweetAlertModel()
+                {
+                    Message = $"Workorder #{model.WorkOrder} closed",
+                    Title = "Workorder completed",
+                    Type = "success"
+                });
             return Success();
         }
 

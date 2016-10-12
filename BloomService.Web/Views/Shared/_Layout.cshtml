@@ -74,6 +74,10 @@
     <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
     <script src="~/signalr/hubs"></script>
 
+    <!-- Sweet Alerts -->
+    <link href="~/Public/js/plugins/sweet_alerts/sweetalert2.min.css" rel="stylesheet" />
+    <script src="~/Public/js/plugins/sweet_alerts/sweetalert2.min.js"></script>
+
     <!-- Main Angular scripts-->
     <script src="~/public/js/angular/angular.min.js"></script>
     <script src="~/public/js/plugins/oclazyload/dist/ocLazyLoad.min.js"></script>
@@ -113,17 +117,17 @@
     <script src="~/app/workorders/workorderModule.js"></script>
     <script src="~/app/login/loginController.js"></script>
     <script src="~/app/login/loginModule.js"></script>
-    <script src="~/app/app.js"></script> 
+    <script src="~/app/app.js"></script>
     <script src="~/Public/js/plugins/pagination/dirPagination.js"></script>
-<script src="~/App/common/commonHub.js"></script>
+    <script src="~/App/common/commonHub.js"></script>
 
-<script>
-    
-    window.onload = function () {
-        var loadingPath = global.BasePath + '/images/loading.gif';
-        $("#cover").css({ "background": 'url(' + loadingPath + ') no-repeat scroll 50% 50% transparent', "background-size": "3%" });
-    }
-</script>
+    <script>
+
+        window.onload = function () {
+            var loadingPath = global.BasePath + '/images/loading.gif';
+            $("#cover").css({ "background": 'url(' + loadingPath + ') no-repeat scroll 50% 50% transparent', "background-size": "3%" });
+        }
+    </script>
 
 </body>
 </html>

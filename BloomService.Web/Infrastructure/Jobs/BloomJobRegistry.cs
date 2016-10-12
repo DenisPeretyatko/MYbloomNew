@@ -6,6 +6,7 @@ using Common.Logging;
 using FluentScheduler;
 using System.Collections.Generic;
 using System.Linq;
+using BloomService.Web.Infrastructure.SignalR;
 
 namespace BloomService.Web.Infrastructure.Jobs
 {
@@ -28,6 +29,7 @@ namespace BloomService.Web.Infrastructure.Jobs
         private readonly INotificationService _notification;
         private readonly List<LateTechnician> _lateTechnicians;
         private List<SageLocationCache> locationsCache;
+        private readonly IBloomServiceHub _hub;
 
         public IQueryable<SageEmployee> technicians { get; set; }
         public SageResponse<SageRateSheet> rateSheetArray { get; set; }
@@ -64,7 +66,7 @@ namespace BloomService.Web.Infrastructure.Jobs
             _locationService = ComponentContainer.Current.Get<ILocationService>();
             _notification = ComponentContainer.Current.Get<INotificationService>();
             _lateTechnicians = new List<LateTechnician>();
-
+            _hub = ComponentContainer.Current.Get<IBloomServiceHub>();
             SendNotifications();
             SendRequest();
             Synchronization();

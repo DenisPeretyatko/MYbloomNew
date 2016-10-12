@@ -139,14 +139,14 @@ namespace BloomService.Web.Infrastructure.Services
 
         public Bitmap ChangeOpacity(Image img, float opacityvalue)
         {
-            Bitmap bmp = new Bitmap(img.Width, img.Height); // Determining Width and Height of Source Image
+            Bitmap bmp = new Bitmap(img.Width, img.Height); 
             Graphics graphics = Graphics.FromImage(bmp);
             ColorMatrix colormatrix = new ColorMatrix();
             colormatrix.Matrix33 = opacityvalue;
             ImageAttributes imgAttribute = new ImageAttributes();
             imgAttribute.SetColorMatrix(colormatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
             graphics.DrawImage(img, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, img.Width, img.Height, GraphicsUnit.Pixel, imgAttribute);
-            graphics.Dispose();   // Releasing all resource used by graphics 
+            graphics.Dispose();   
             return bmp;
         }
 
@@ -169,12 +169,11 @@ namespace BloomService.Web.Infrastructure.Services
                 watermarkBrush.TranslateTransform(x, y);
                 graphicsHandle.FillRectangle(watermarkBrush, new Rectangle(new Point(x, y), new Size(newWidth, newHeight)));
 
-                using (Font arialFont = new Font("Arial", fontSize, FontStyle.Bold))
+                using (var arialFont = new Font("Arial", fontSize, FontStyle.Bold))
                 {
                     x = (image.Width - 4*margin);
                     y = (0+margin);
                     graphicsHandle.DrawString($"#{number}", arialFont, Brushes.Red, x, y);
-
                 }
 
             }

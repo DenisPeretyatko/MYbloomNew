@@ -82,5 +82,10 @@
         {
             this._clients.All.UpdateSageWorkOrder(model);
         }
+
+        public void ShowAlert(SweetAlertModel model)
+        {
+            this._clients.All.ShowAlert(model);
+        }
     }
 }

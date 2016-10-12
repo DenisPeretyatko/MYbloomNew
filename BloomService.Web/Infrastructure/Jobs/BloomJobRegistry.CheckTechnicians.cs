@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using BloomService.Domain.Entities.Concrete;
+using BloomService.Web.Models;
 
 namespace BloomService.Web.Infrastructure.Jobs
 {
@@ -39,7 +40,15 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 WorkOrder = workorder.WorkOrder
 
                             });
-                            _notification.SendNotification($"{technician.Name} is more than 5 miles from WO #{workorder.WorkOrder} which is scheduled for 10 minutes from now.");
+                            var message =
+                                $"{technician.Name} is more than 5 miles from WO #{workorder.WorkOrder} which is scheduled for 10 minutes from now.";
+                            _notification.SendNotification(message);
+                            _hub.ShowAlert(new SweetAlertModel()
+                            {
+                                Message = message,
+                                Title = "Attention",
+                                Type = "warning"
+                            });
                         }
 
                         if (wts.TotalMinutes >= 30 &&
@@ -53,7 +62,16 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 {
                                     lateTechnician.TenMinutes = true;
                                     lateTechnician.ThirtyMinutes = true;
-                                    _notification.SendNotification($"{technician.Name} is more than 15 miles from WO #{workorder.WorkOrder} which is scheduled for 30 minutes from now.");
+                                    var message =
+                                        $"{technician.Name} is more than 15 miles from WO #{workorder.WorkOrder} which is scheduled for 30 minutes from now.";
+                                    _notification.SendNotification(message);
+                                    _hub.ShowAlert(new SweetAlertModel()
+                                    {
+                                        Message = message,
+                                        Title = "Attention",
+                                        Type = "warning"
+                                    });
+
                                 }
                             }
                             else
@@ -65,7 +83,15 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     ThirtyMinutes = true,
                                     WorkOrder = workorder.WorkOrder
                                 });
-                                _notification.SendNotification($"{technician.Name} is more than 15 miles from WO #{workorder.WorkOrder} which is scheduled for 30 minutes from now.");
+                                var message =
+                                    $"{technician.Name} is more than 15 miles from WO #{workorder.WorkOrder} which is scheduled for 30 minutes from now.";
+                                _notification.SendNotification(message);
+                                _hub.ShowAlert(new SweetAlertModel()
+                                {
+                                    Message = message,
+                                    Title = "Attention",
+                                    Type = "warning"
+                                });
                             }
                         }
                     }
