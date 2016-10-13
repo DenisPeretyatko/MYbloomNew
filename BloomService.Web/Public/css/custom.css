@@ -637,6 +637,7 @@ div.ng-invalid.ng-touched span {
 .save-btn {
     margin-top: 5px;
 }
+
 img[src="https://maps.gstatic.com/mapfiles/api-3/images/mapcnt6.png"] {
     display: none;
 }
@@ -650,12 +651,52 @@ img[src="https://maps.gstatic.com/mapfiles/api-3/images/mapcnt6.png"] {
 
 .map-labels {
     color: white;
-       background-color: transparent;
-    font-family:"Lucida Grande", "Arial", sans-serif;
+    background-color: transparent;
+    font-family: "Lucida Grande", "Arial", sans-serif;
     font-size: 12px;
     text-align: center;
     width: 22px;
     white-space: nowrap;
-        margin-left: -11px !important;
+    margin-left: -11px !important;
     margin-top: -27px !important;
 }
+
+
+.ui-select-match-text span {
+    display: inline-block;
+    width: 400px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+@media (min-width: 768px) {
+    .ui-select-match-text span {
+        width: 580px;
+    }
+}
+@media (min-width: 992px) {
+    .ui-select-match-text span {
+        width: 290px;
+    }
+}
+@media (min-width: 1200px) {
+    .ui-select-match-text span {
+        width: 230px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .ui-select-match-text span {
+        width: 307px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .ui-select-match-text span {
+        width: 395px;
+    }
+}
+
+
+
+
