@@ -113,7 +113,7 @@ namespace BloomService.Web.Infrastructure.Services
             var countImage = 1;
             if (imagesDb != null && imagesDb.Images != null)
             {
-                countImage = imagesDb.Images.Count() + 1;
+                countImage = imagesDb.Images.Last().Id + 1;
             }
             else
             {
@@ -260,7 +260,7 @@ namespace BloomService.Web.Infrastructure.Services
             var milliseconds = DateTime.Now.TimeOfDay.TotalMilliseconds;
             var path = Path.Combine(this._urlToFolderPhotoWorkOrders, idWorkOrder.ToString());
 
-            foreach (var image in images.Images)
+            foreach (var image in images.Images.Where(x=>!x.IsDeleted))
             {
                 image.Image = _storageProvider.GetFullUrl(Path.Combine(path, $"{image.Image}?{milliseconds}"));
                 image.BigImage = _storageProvider.GetFullUrl(Path.Combine(path, $"{image.BigImage}?{milliseconds}"));
@@ -410,7 +410,7 @@ namespace BloomService.Web.Infrastructure.Services
             var zipStream = new ZipOutputStream(outputMemStream);
             zipStream.SetLevel(3);
 
-            foreach (var record in pictures.Images)
+            foreach (var record in pictures.Images.Where(x=>!x.IsDeleted))
             {
                 byte[] bytes;
                 try
@@ -437,7 +437,7 @@ namespace BloomService.Web.Infrastructure.Services
         public bool ChangeImageLocation(ImageLocationModel model)
         {
             var images = repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrderId).SingleOrDefault();
-            var changedImage = images?.Images.SingleOrDefault(x => x.Id == model.PictureId);
+            var changedImage = images?.Images.SingleOrDefault(x => x.Id == model.PictureId && !x.IsDeleted);
             if (changedImage == null)
                 return false;
 

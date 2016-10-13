@@ -89,6 +89,7 @@ namespace BloomService.Web.Controllers
         {
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).Single();
             workOrder.Comments = workOrder.Comments.DecodeSafeHtmlString();
+            workOrder.Images = workOrder.Images.Where(x => !x.IsDeleted).ToList();
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
@@ -124,7 +125,7 @@ namespace BloomService.Web.Controllers
                 var workorder = allWorkorders.SingleOrDefault(x => x.WorkOrder == assignment.WorkOrder);
                 if (workorder != null)
                 {
-                    workorder.Images = workorder.Images.OrderBy(x => x.Id).ToList();
+                    workorder.Images = workorder.Images.Where(x=>!x.IsDeleted).OrderBy(x => x.Id).ToList();
                     workorder.ScheduleDate = assignment.Start.TryAsDateTime();
                     workorders.Add(workorder);
                 }
@@ -279,7 +280,8 @@ namespace BloomService.Web.Controllers
             }
             var imageId = model.Id.AsInt();
             var image = imageItem.Images.FirstOrDefault(x => x.Id == imageId);
-            imageItem.Images.Remove(image);
+            if (image != null) image.IsDeleted = true;
+            //imageItem.Images.Remove(image);
             repository.Update(imageItem);
             _hub.UpdateWorkOrderPicture(imageItem);
             _log.InfoFormat("Image ({0}) deleted. Repository updated", model.Id);

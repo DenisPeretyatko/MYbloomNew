@@ -159,7 +159,7 @@ namespace BloomService.Web.Controllers
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
             if (pictures != null)
             {
-                pictures.Images = pictures.Images.OrderBy(x => x.Id).ToList();
+                pictures.Images = pictures.Images.Where(x=>!x.IsDeleted).OrderBy(x => x.Id).ToList();
             }
             return Json(pictures, JsonRequestBehavior.AllowGet);
         }
@@ -171,7 +171,7 @@ namespace BloomService.Web.Controllers
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
             if (pictures == null)
                 return Error("Edit picture comments failed", $"GetWorkOrdersPictures method SageImageWorkOrder==false.");
-            pictures.Images.Find(x => x.Id == model.Id).Description = model.Comment;
+            pictures.Images.Find(x => x.Id == model.Id && !x.IsDeleted).Description = model.Comment;
             _repository.Update(pictures);
             _hub.UpdateWorkOrderPicture(pictures);
             return Success();
