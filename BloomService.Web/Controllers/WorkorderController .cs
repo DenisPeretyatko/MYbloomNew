@@ -233,8 +233,8 @@ namespace BloomService.Web.Controllers
             var result = _repository.GetAll<SageEquipment>().Where(x => x.Location == name).ToList();
             foreach (var equipment in result)
             {
-                if (equipment.InstallLocation == name)
-                    equipment.EquipmentType = string.Format($"{equipment.EquipmentType} - installed");
+                if (equipment.InstallLocation != "")
+                    equipment.EquipmentType = string.Format($"{equipment.EquipmentType} - {equipment.InstallLocation}");
             }
             if (!result.Any())
             {

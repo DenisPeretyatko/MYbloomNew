@@ -145,11 +145,11 @@ namespace BloomService.Web.Controllers
                 }
                 if (order.Equipment != 0)
                 {
-                    var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment);
+                    var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment).ToList();
                     foreach (var equipment in equipments)
                     {
                         if (equipment.InstallLocation == order.Location)
-                            equipment.EquipmentType = string.Format($"{equipment.EquipmentType} - installed");
+                            equipment.EquipmentType = string.Format($"{equipment.EquipmentType} - {equipment.InstallLocation}");
                     }
                     order.Equipments.AddRange(equipments);
                 }
