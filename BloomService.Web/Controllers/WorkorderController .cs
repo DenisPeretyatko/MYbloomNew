@@ -78,7 +78,6 @@ namespace BloomService.Web.Controllers
                 JCJob = model.JCJob,
                 Contact = model.Contact,
                 Equipment = model.Equipment,
-
             };
 
             var result = _sageApiProxy.AddWorkOrder(workorder);
@@ -232,6 +231,11 @@ namespace BloomService.Web.Controllers
                 return Json(new List<SageEquipment>(), JsonRequestBehavior.AllowGet);
             }
             var result = _repository.GetAll<SageEquipment>().Where(x => x.Location == name).ToList();
+            foreach (var equipment in result)
+            {
+                if (equipment.InstallLocation == name)
+                    equipment.EquipmentType = string.Format($"{equipment.EquipmentType} - installed");
+            }
             if (!result.Any())
             {
                 result = new List<SageEquipment>();
