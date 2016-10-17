@@ -127,8 +127,8 @@ namespace BloomService.Web.Infrastructure.Services
 
             //var pathToImage = Path.Combine(this.httpContextProvider.MapPath(this._urlToFolderPhotoWorkOrders), model.IdWorkOrder.ToString());
             var pathToImage = _storageProvider.GetPublicUrl(Path.Combine(this._urlToFolderPhotoWorkOrders, model.IdWorkOrder.ToString()));
-            var nameBig = countImage.ToString();
-            var nameSmall = small + countImage;
+            var nameBig = $"{workOrder.WorkOrder}-{countImage}";
+            var nameSmall = $"{small}-{workOrder.WorkOrder}-{countImage}";
             var fileName = SavePhotoForWorkOrder(model.Image, pathToImage, nameBig, settings.SizeBigPhoto, workOrder, countImage);
             var fileNameSmall = SavePhotoForWorkOrder(model.Image, pathToImage, nameSmall, this.settings.SizeSmallPhoto, workOrder, countImage);
             var maxId = imagesDb.Images.Any() ? imagesDb.Images.Max(x => x.Id) : 0;
