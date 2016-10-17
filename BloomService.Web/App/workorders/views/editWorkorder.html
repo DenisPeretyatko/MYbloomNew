@@ -14,7 +14,7 @@
                 </div>
                 <tab heading="General">
                     <form role="form" name="edit_workorder_form" novalidate ng-submit="saveWorkOrder()">
-                        <div class="row">
+                        <div class="row edit-wo-tab">
                             <!--1-->
                             <div class="col-lg-4 col-md-6">
                                 <div class="ibox">
@@ -372,7 +372,7 @@
                                                 <td ng-if="equipm.isEditing == false">
                                                     <label>{{equipm.date}}</label>
                                                 </td>
-                                                <td ng-if="equipm.isEditing == true" class="editable-woitem">
+                                                <td ng-if="equipm.isEditing == true" class="editable-woitem td-part-type">
                                                     <ui-select ng-model="equipm.equipType.selected" theme="bootstrap" on-select="resetForm(equipm)">
                                                         <ui-select-match placeholder="Type">{{$select.selected}}</ui-select-match>
                                                         <ui-select-choices repeat="item in equipm.equipType | filter: $select.search">
@@ -398,6 +398,9 @@
                                                             <div>{{item.PartNumber}} {{item.Description}}</div>
                                                         </ui-select-choices>
                                                     </ui-select>
+                                                    <div ng-if="equipm.equipType.selected == 'Miscellaneous'" class="editable-woitem input-group workorder-edit-control">
+                                                            <input type="text" class="form-control" ng-model="equipm.Description">
+                                                    </div>
                                                 </td>
                                                 <td ng-if="equipm.isEditing == false">
                                                     <label>{{equipm.description}}</label>
@@ -409,6 +412,7 @@
                                                             <div>{{item.Name}}</div>
                                                         </ui-select-choices>
                                                     </ui-select>
+                                                    
                                                 </td>
                                                 <td ng-if="equipm.isEditing == false">
                                                     <label>{{equipm.empl}}</label>
@@ -428,6 +432,9 @@
                                                     <div class="input-group workorder-edit-control" ng-if="equipm.equipType.selected == 'Parts'  || !equipm.equipType.selected">
                                                         <input type="text" class="form-control" disabled="disabled" ng-model="equipm.cost">
                                                     </div>
+                                                    <div class="input-group workorder-edit-control" ng-if="equipm.equipType.selected == 'Miscellaneous'">
+                                                        <input type="text" class="form-control" ng-model="equipm.cost">
+                                                    </div>
                                                 </td>
                                                 <td ng-if="equipm.isEditing == false">
                                                     <label ng-hide="equipm.cost==0">{{equipm.cost}}</label>
@@ -439,6 +446,9 @@
                                                     </div>
                                                     <div class="input-group workorder-edit-control" ng-if="equipm.equipType.selected == 'Parts'  || !equipm.equipType.selected">
                                                         <input type="number" class="form-control" disabled="disabled" ng-model="equipm.rate" ng-change="equipm.cost=0" step="0.1" min="0.0000" value="0">
+                                                    </div>
+                                                    <div class="input-group workorder-edit-control" ng-if="equipm.equipType.selected == 'Miscellaneous'">
+                                                        <input type="number" class="form-control" ng-model="equipm.rate" step="0.1" min="0.0000" value="0">
                                                     </div>
                                                 </td>
                                                 <td ng-if="equipm.isEditing == false">

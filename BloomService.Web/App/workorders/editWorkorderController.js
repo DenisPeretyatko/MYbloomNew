@@ -25,7 +25,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.obj.hours = '';
     $scope.paymentmethods = "";
     $scope.lookups = state.lookups;
-    $scope.EquipType = ["Labor", "Parts"];
+    $scope.EquipType = ["Labor", "Parts", "Miscellaneous"];
     $scope.equipmentList = [];
     $scope.obj.data = new Date();
     $scope.obj.assignmentDate = new Date();
@@ -37,6 +37,20 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.noteObj.Note = "";
     $scope.workOrderNotes = [];
     $scope.basePath = global.BasePath;
+   
+    var sortEmployees = function() {
+        if ($scope.lookups != undefined) {
+            angular.forEach($scope.lookups.Employes, function (value, key) {
+                if (value.Alias.toLowerCase() == "other") {
+                    $scope.lookups.Employes[key] = $scope.lookups.Employes[0];
+                    $scope.lookups.Employes[0] = value;
+                    return;
+                }
+            });
+        }
+    }
+    sortEmployees();
+    
 
     $scope.validation = {
         location: false,
@@ -83,6 +97,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
+        sortEmployees()
 
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined) {
             $scope.getWOItems();
@@ -373,8 +388,8 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
             item.labor = angular.copy($scope.lookups.Hours);
             item.labor.selected = selectedDesc;
-        } else {
-            var selectedDesc = $scope.lookups.Parts.find(function (element) {
+        } else if (item.equipType.selected == 'Part') {
+            var selectedDesc = $scope.lookups.Parts.find(function(element) {
                 return element.PartNumber + " " + element.Description === item.description;
             });
             item.description = angular.copy($scope.lookups.Parts);
@@ -383,14 +398,14 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             item.parts = angular.copy($scope.lookups.Parts);
             item.parts.selected = selectedDesc;
             item.part = selectedDesc.Part;
-        }
+        } 
 
         var selectedEmpl = $scope.lookups.Employes.find(function (element) {
             return element.Name === item.empl;
         });
         item.empl = angular.copy($scope.lookups.Employes);
         item.empl.selected = selectedEmpl;
-
+        item.Description = item.description;
         item.cost = parseFloat(item.cost);
         item.biled = parseFloat(item.biled);
         item.rate = parseFloat(item.rate);
@@ -403,12 +418,15 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             if (item.equipType == 'Labor') {
                 item.description = item.labor.selected.Description;
                 item.laborItem = item.labor.selected;
-            } else {
+            } else if (item.equipType == 'Parts') {
                 item.description = item.parts.selected.PartNumber + " " + item.parts.selected.Description;
                 item.part = item.parts.selected.Part;
+            } else {
+                item.description = item.Description;
             }
-
-            item.empl = item.empl.selected.Name;
+          
+                item.empl = item.empl.selected.Name;
+            
             var date = new Date(item.date);
             item.date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
             item.isEditing = false;
