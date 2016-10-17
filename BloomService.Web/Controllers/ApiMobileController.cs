@@ -385,7 +385,7 @@ namespace BloomService.Web.Controllers
             _hub.UpdateSageWorkOrder(workorder);
             _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, model.Status);
             notification.SendNotification($"Workorder {workorder.Name} change status by {model.Status}");
-            if (model.Status == WorkOrderStatus.Closed)
+            if (model.Status == WorkOrderStatus.WorkComplete)
                 _hub.ShowAlert(new SweetAlertModel()
                 {
                     Message = $"Workorder #{workorder.WorkOrder} closed",
