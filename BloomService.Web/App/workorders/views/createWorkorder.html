@@ -82,10 +82,11 @@
                                         </div>
                                         <div class="form-group hidden-lg hidden-md">
                                             <label>Contact</label>
-                                            <input type="text" placeholder="Contact" class="form-control" name="Contact" ng-model="obj.contact">
+                                            <input type="text" placeholder="Contact" class="form-control {{validation.contact ? 'wo-validation' : ' '}}" name="Contact" ng-model="obj.contact">
                                             <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                                 <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                             </div>
+                                            <span class="validation-message" ng-show="validation.contact" ng-bind="validation.message"></span>
                                         </div>
                                         <div class="form-group hidden-lg hidden-md">
                                             <label>Problem</label>
@@ -147,10 +148,11 @@
                                     <div class="ibox-content hidden-lg wo-create-ibox">
                                         <div class="form-group">
                                             <label>Contact</label>
-                                            <input type="text" placeholder="Contact" class="form-control" name="Contact" ng-model="obj.contact">
+                                            <input type="text" placeholder="Contact" class="form-control {{validation.contact ? 'wo-validation' : ' '}}" name="Contact" ng-model="obj.contact">
                                             <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                                 <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                             </div>
+                                            <span class="validation-message" ng-show="validation.contact" ng-bind="validation.message"></span>
                                         </div>
                                         <div class="form-group hidden-lg">
                                             <label>Problem</label>
@@ -227,10 +229,11 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Contact</label>
-                                            <input type="text" placeholder="Contact" class="form-control" name="Contact" ng-model="obj.contact">
+                                            <input type="text" placeholder="Contact" class="form-control {{validation.contact ? 'wo-validation' : ' '}}" name="Contact" ng-model="obj.contact">
                                             <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                                 <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                             </div>
+                                            <span class="validation-message" ng-show="validation.contact" ng-bind="validation.message"></span>
                                         </div>
                                         <div class="form-group">
                                             <label>Problem</label>

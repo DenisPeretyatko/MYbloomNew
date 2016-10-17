@@ -31,6 +31,7 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
         problem: false,
         callType: false,
         other: false,
+        contact: false,
         message: ""
     };
     
@@ -51,6 +52,10 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
         }
         else if (message.toLowerCase().indexOf('call type') !== -1) {
             $scope.validation.callType = true;
+            $scope.validation.message = message;
+        }
+        else if (message.toLowerCase().indexOf('contact') !== -1) {
+            $scope.validation.contact = true;
             $scope.validation.message = message;
         } else {
             $scope.validation.other = true;
@@ -113,6 +118,10 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             return;
         } else if (!workorder.Problem) {
             validation("Problem is required");
+            return;
+        }
+        else if (!workorder.Contact) {
+            validation("Contact is required");
             return;
         }
         else if (!workorder.Calltype) {

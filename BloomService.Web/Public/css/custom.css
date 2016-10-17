@@ -583,6 +583,9 @@ body {
     left: 1% !important;
     top: 0 !important;
 }
+.wo-validation {
+    background-color: #f4c6c6 !important;
+}
 
 .wo-validation span {
     background-color: #f4c6c6;

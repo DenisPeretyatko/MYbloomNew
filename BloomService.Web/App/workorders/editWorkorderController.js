@@ -44,6 +44,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         problem: false,
         callType: false,
         other: false,
+        contact: false,
         message: ""
     };
 
@@ -68,6 +69,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         }
         else if (message.toLowerCase().indexOf('call type') !== -1) {
             $scope.validation.callType = true;
+            $scope.validation.message = message;
+        }
+        else if (message.toLowerCase().indexOf('contact') !== -1) {
+            $scope.validation.contact = true;
             $scope.validation.message = message;
         }
         else {
@@ -294,6 +299,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         }
         else if (!workorder.Calltype) {
             validation("Call type is required");
+            return;
+        }
+        else if (!workorder.Contact) {
+            validation("Contact is required");
             return;
         }
         commonDataService.saveWorkorder(workorder).then(function (response) {
