@@ -37,7 +37,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.noteObj.Note = "";
     $scope.workOrderNotes = [];
     $scope.basePath = global.BasePath;
-   
+    
     var sortEmployees = function() {
         if ($scope.lookups != undefined) {
             angular.forEach($scope.lookups.Employes, function (value, key) {
@@ -526,8 +526,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             value.Latitude = picture.Latitude + Math.sin(step * key) * radius;
             value.Longitude = picture.Longitude + Math.cos(step * key) * radius;
         });
-
-        modalWindowService.setMarkers(nonUniqueCoords, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
+       modalWindowService.setMarkers(nonUniqueCoords, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
         modalWindowService.setMarkers(images, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
         modalWindowService.setContent($scope.editableWorkOrder.WorkOrder, picture, markers, $scope.locationMap);
         $scope.locationMap.setMapTypeId(google.maps.MapTypeId.SATELLITE);
@@ -535,6 +534,9 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         $scope.locationMap.setZoom(100);
     };
 
+    $scope.openLargeMap = function() {
+        modalWindowService.openLargeMap($scope.locationMap, $scope.editableWorkOrder.WorkOrder);
+    }
 
     $scope.setEstimateHour = function (selected) {
         $scope.obj.hours = parseFloat(selected.$select.selected.EstimatedRepairHours);
@@ -622,8 +624,9 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
       $scope.joinStrings = function (Name, Address, City, ZIP, State) {
          return $.grep([Name, Address, City, State, ZIP ], Boolean).join(', ');
-
       }
+
+     
 
 }
 editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state", "modalWindowService", "$window"];

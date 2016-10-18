@@ -509,9 +509,9 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="row">
-                                            <button class="btn btn-sm btn-primary" ng-hide="pictures==''" ng-click="downloadArchive()"><strong>Download all</strong></button>
-                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <button class="btn btn-sm btn-primary" ng-hide="pictures==''" ng-click="downloadArchive()"><strong>Download all</strong></button>
                                     </div>
                                 </div>
                                
@@ -581,15 +581,17 @@
                         <div class="ibox">
                             <div class="row ibox-content">
                                 <div id="map" class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
-                                    <div ui-map="locationMap" ui-options="mapOptions" class="google-map wo-map"></div>
+                                    <div ui-map="locationMap" ui-options="mapOptions" class="google-map wo-map" id="wo-map"></div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
-                                    <img name="modalImg" id="modalImg" class="thumbnail" />
+                                    <img name="modalImg" id="modalImg" class="thumbnail"/>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12" name="modalComment" id="modalComment">
+
                                 </div>
                             </div>
                         </div>
+                        <button class="btn btn-sm btn-primary" ng-click="openLargeMap()"><strong>Download map</strong></button>
                     </div>
                 </div>
             </div>
