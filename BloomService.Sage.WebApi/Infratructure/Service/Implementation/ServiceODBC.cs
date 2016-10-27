@@ -75,6 +75,12 @@
             ExecuteQuery(timberlineServiceManagementConnectionString, query);
         }
 
+        public void MarkAsReviewed(string id)
+        {
+            var query = string.Format(Queries.MarkWorkOrderAsReviewed, id);
+            ExecuteQuery(timberlineServiceManagementConnectionString, query);
+        }
+
         public void EditWorkOrder(SageWorkOrder workOrder)
         {
             var query = Queries.BuildEditWorkOrderQuery(workOrder);

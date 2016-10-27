@@ -29,6 +29,8 @@
 
         void DeleteNotes(IEnumerable<long> ids);
 
+        void MarkAsReviewed(string id);
+
         List<SageNote> GetNotes(string id);
 
         List<SageNote> GetNotes();

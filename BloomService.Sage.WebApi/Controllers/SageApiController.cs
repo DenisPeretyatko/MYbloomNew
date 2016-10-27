@@ -651,6 +651,26 @@
             }
         }
 
+        [HttpDelete, Route("api/v2/sm/workorders/markasreviewed/{id}")]
+        public SageResponse<SageWorkOrder> MarkAsReviewed(string id)
+        {
+            try
+            {
+                if (id == string.Empty)
+                {
+                    throw new ResponseException(new ResponseError() { Message = "WorkOrder id is empty" });
+                }
+                this.serviceOdbc.MarkAsReviewed(id);
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = true };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageWorkOrder> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
+
         [HttpGet, Route("api/v2/sm/workorders/get")]
         public SageResponse<SageWorkOrder> GetWorkorders()
         {

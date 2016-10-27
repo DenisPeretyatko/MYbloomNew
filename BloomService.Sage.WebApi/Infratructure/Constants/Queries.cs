@@ -19,6 +19,7 @@ namespace Sage.WebApi.Infratructure.Constants
         public static readonly string SelectAllNotesQuery = "SELECT * FROM NOTES";
         public static readonly string SelectAllWorkOrderItemsQuery = "SELECT * FROM WOITEMS";
         public static readonly string SelectWorkOrderLocationAccordanceQuery = "SELECT WRKORDNBR, SERVSITENBR FROM WRKORDER";
+        public static readonly string MarkWorkOrderAsReviewed = "UPDATE \"WRKORDER\" SET STATUS=7 WHERE WRKORDNBR = {0}";
 
         public static string BuildDeleteWorkOrderItemQuery(int workOrderId, IEnumerable<int> ids)
         {
