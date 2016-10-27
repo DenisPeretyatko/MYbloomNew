@@ -560,6 +560,7 @@ namespace BloomService.Web.Controllers
         [Route("Workorder/markAsReviewed")]
         public ActionResult MarkAsReviewed(string workorderId)
         {
+            _sageApiProxy.MarkAsReviewed(long.Parse(workorderId));
             return Success();
         }
 

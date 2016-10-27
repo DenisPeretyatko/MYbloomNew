@@ -41,7 +41,6 @@
             return Get<SageNote>(id, EndPoints.GetNotes);
         }
 
-
         public SageResponse<SageWorkOrderLocationAccordance> GetAccordance()
         {
             return GetAll<SageWorkOrderLocationAccordance>(EndPoints.GetAccordance);
@@ -50,6 +49,11 @@
         public SageResponse<SageNote> DeleteNote(long id)
         {
             return Delete<SageNote>(id, EndPoints.RemoveNote);
+        }
+
+        public SageResponse<SageWorkOrder> MarkAsReviewed(long id)
+        {
+            return Delete<SageWorkOrder>(id, EndPoints.MarkAsReviewed);
         }
 
         public SageResponse<SageNote> DeleteNotes(IEnumerable<long> ids)
