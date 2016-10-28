@@ -91,7 +91,7 @@ namespace Sage.WebApi.Infratructure.Constants
                     parameters.Add("STATUS", "3");
                     break;
                 case "Cancelled":
-                    parameters.Add("STATUS", "4");
+                    parameters.Add("STATUS", "2");
                     break;
             }           
 
