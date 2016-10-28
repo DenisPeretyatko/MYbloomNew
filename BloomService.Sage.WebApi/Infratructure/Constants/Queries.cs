@@ -93,6 +93,9 @@ namespace Sage.WebApi.Infratructure.Constants
                 case "Cancelled":
                     parameters.Add("STATUS", "2");
                     break;
+                case "Reviewed":
+                    parameters.Add("STATUS", "7");
+                    break;
             }           
 
             foreach (var parameter in parameters)
