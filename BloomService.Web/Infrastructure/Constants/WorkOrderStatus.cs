@@ -7,7 +7,7 @@ namespace BloomService.Web.Infrastructure.Constants
 
     public static class WorkOrderStatus
     {
-        public static List<SageWorkOrderStatus> Status = new List <SageWorkOrderStatus> {
+        public static List<SageWorkOrderStatus> Status = new List<SageWorkOrderStatus> {
             new SageWorkOrderStatus { Status = Open, Value= OpenId },
             new SageWorkOrderStatus { Status = ReturnRequired, Value= ReturnRequiredId },
             new SageWorkOrderStatus { Status = WorkComplete, Value = WorkCompleteId },
@@ -21,7 +21,9 @@ namespace BloomService.Web.Infrastructure.Constants
             new SageWorkOrderStatus { Status = Open, Value= OpenId },
             new SageWorkOrderStatus { Status = ReturnRequired, Value= ReturnRequiredId },
             new SageWorkOrderStatus { Status = WorkComplete, Value = WorkCompleteId },
-            new SageWorkOrderStatus { Status = Closed, Value = ClosedId }
+            new SageWorkOrderStatus { Status = Closed, Value = ClosedId },
+             new SageWorkOrderStatus { Status = Cancelled, Value = CancelledId },
+             new SageWorkOrderStatus { Status = Reviewed, Value = ReviewedId }
         };
 
         public const string Open = "Open";

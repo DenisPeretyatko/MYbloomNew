@@ -145,7 +145,7 @@ namespace BloomService.Web.Controllers
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
             if (pictures != null)
             {
-                pictures.Images = pictures.Images.Where(x=>!x.IsDeleted).OrderBy(x => x.Id).ToList();
+                pictures.Images = pictures.Images.Where(x => !x.IsDeleted).OrderBy(x => x.Id).ToList();
             }
             return Json(pictures, JsonRequestBehavior.AllowGet);
         }
@@ -353,9 +353,7 @@ namespace BloomService.Web.Controllers
                 PayMethod = model.Paymentmethods,
                 WorkOrder = model.WorkOrder,
                 Id = model.Id,
-                Status = model.Status == WorkOrderStatus.ClosedId
-                    ? WorkOrderStatus.ById(WorkOrderStatus.ClosedId)
-                    : WorkOrderStatus.ById(WorkOrderStatus.OpenId),
+                Status = WorkOrderStatus.ById(model.Status),
                 JCJob = model.JCJob,
                 Contact = model.Contact,
                 Equipment = model.Equipment
@@ -400,7 +398,7 @@ namespace BloomService.Web.Controllers
 
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
             _hub.UpdateWorkOrder(model);
-            if(model.Status == WorkOrderStatus.WorkCompleteId)
+            if (model.Status == WorkOrderStatus.WorkCompleteId)
                 _hub.ShowAlert(new SweetAlertModel()
                 {
                     Message = $"Workorder #{model.WorkOrder} closed",
@@ -539,14 +537,6 @@ namespace BloomService.Web.Controllers
                     }
                 }
             }
-        }
-
-        [HttpPost]
-        [Route("Workorder/markAsReviewed")]
-        public ActionResult MarkAsReviewed(string workorderId)
-        {
-            _sageApiProxy.MarkAsReviewed(long.Parse(workorderId));
-            return Success();
         }
 
         [HttpPost]

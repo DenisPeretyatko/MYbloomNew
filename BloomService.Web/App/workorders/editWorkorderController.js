@@ -37,7 +37,8 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.noteObj.Note = "";
     $scope.workOrderNotes = [];
     $scope.basePath = global.BasePath;
-    
+    var statusCancelled = {};
+
     var sortEmployees = function() {
         if ($scope.lookups != undefined) {
             angular.forEach($scope.lookups.Employes, function (value, key) {
@@ -214,6 +215,13 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                     }
                 });
                 $scope.equipment = dBWOItem;
+                if (dBWOItem.length > 0) {
+                    angular.forEach($scope.lookups.Status, function (value, key) {
+                        if (value.Status === "Cancelled") {
+                            statusCancelled = $scope.lookups.Status.splice(key, 1);
+                        }
+                    });
+                }
             }
 
             var equipment = {
@@ -455,12 +463,20 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                 $scope.equipment.push(equipment);
             }
         }
+        angular.forEach($scope.lookups.Status, function (value, key) {
+            if (value.Status === "Cancelled") {
+                statusCancelled = $scope.lookups.Status.splice(key, 1);
+            }
+        });
     }
 
     $scope.deleteRow = function ($event, item) {
         var el = angular.element($event.target);
         el.parent().parent().remove();
         $scope.equipment.splice($scope.equipment.indexOf(item), 1);
+        if ($scope.equipment.length === 1) {//equal 0 equipments
+            $scope.lookups.Status.push(statusCancelled[0]);
+        }
     }
 
     $scope.setCustomer = function (selected) {
