@@ -28,6 +28,11 @@ namespace BloomService.Domain.Extensions
             return double.Parse(text);
         }
 
+        public static decimal AsDecimal(this string text)
+        {
+            return decimal.Parse(text);
+        }
+
         public static double? AsDoubleSafe(this string text)
         {
             double result;

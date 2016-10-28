@@ -1,6 +1,5 @@
 ﻿using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Jobs;
-using BloomService.Web.Infrastructure.StorageProviders;
 using Common.Logging;
 
 namespace BloomService.Web.Controllers
@@ -13,42 +12,32 @@ namespace BloomService.Web.Controllers
     using System.Collections.Generic;
     using AutoMapper;
 
-    using BloomService.Web.Infrastructure.Mongo;
+    using Infrastructure.Mongo;
 
     using Infrastructure.SignalR;
     using Infrastructure.Services.Interfaces;
     using Infrastructure.Constants;
     using Domain.Extensions;
-    using Infrastructure;
-    using System.Configuration;
 
     public class WorkorderController : BaseController
     {
+        private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
         private const int ItemsOnPage = 50;
-        private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
         private readonly IBloomServiceHub _hub;
-        private readonly IDashboardService _dashboardService;
         private readonly INotificationService _notification;
         private readonly IScheduleService _scheduleService;
-        private readonly IHttpContextProvider _httpContextProvider;
-        private readonly IStorageProvider _storageProvider;
         private readonly IImageService _imageService;
-        private readonly BloomServiceConfiguration _settings;
 
         public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy,
-            IDashboardService dashboardService, IBloomServiceHub hub, INotificationService notification, IScheduleService scheduleService, IHttpContextProvider httpContextProvider, IStorageProvider storageProvider, IImageService imageService)
+            IBloomServiceHub hub, INotificationService notification, IScheduleService scheduleService, IImageService imageService)
         {
-            _settings = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
             _repository = repository;
             _sageApiProxy = sageApiProxy;
-            _dashboardService = dashboardService;
             _notification = notification;
             _hub = hub;
             _scheduleService = scheduleService;
-            _httpContextProvider = httpContextProvider;
-            _storageProvider = storageProvider;
             _imageService = imageService;
         }
 
@@ -100,7 +89,7 @@ namespace BloomService.Web.Controllers
             else
             {
                 var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Emploee).SingleOrDefault();
-                assignment.EmployeeId = employee != null ? employee.Employee : 0;
+                assignment.EmployeeId = employee?.Employee ?? 0;
                 assignment.Start = (model.AssignmentDate.Date).Add((model.AssignmentTime).TimeOfDay).ToString();
                 assignment.End = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay).AddHours(assignment.EstimatedRepairHours.AsDouble() == 0 ? 1 : assignment.EstimatedRepairHours.AsDouble()).ToString();
                 assignment.Color = employee?.Color ?? "";
@@ -139,17 +128,15 @@ namespace BloomService.Web.Controllers
             workOrder.LocationObj = _repository.SearchFor<SageLocation>(x => x.Location == workOrder.LocationNumber).SingleOrDefault();
             workOrder.CalltypeObj = _repository.SearchFor<SageCallType>(x => x.Description == workOrder.CallType).SingleOrDefault();
             workOrder.ProblemObj = _repository.SearchFor<SageProblem>(x => x.Description == workOrder.Problem).SingleOrDefault();
-            workOrder.RateSheetObj = _repository.SearchFor<SageRateSheet>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.RateSheet).SingleOrDefault();
+            workOrder.RateSheetObj = _repository.SearchFor<SageRateSheet>().ToList().SingleOrDefault(x => x.DESCRIPTION.Trim() == workOrder.RateSheet);
             workOrder.EmployeeObj = _repository.SearchFor<SageEmployee>(x => x.Name == workOrder.Employee).SingleOrDefault();
             workOrder.HourObj = _repository.SearchFor<SageRepair>(x => x.Repair == workOrder.EstimatedRepairHours.ToString()).SingleOrDefault();
-            workOrder.PermissionCodeObj = _repository.SearchFor<SagePermissionCode>().ToList().Where(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode).SingleOrDefault();
+            workOrder.PermissionCodeObj = _repository.SearchFor<SagePermissionCode>().ToList().SingleOrDefault(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode);
             workOrder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workOrder.PayMethod.Trim());
             workOrder.StatusObj = WorkOrderStatus.Status.Single(x => x.Status == workOrder.Status);
             workOrder.Comments = workOrder.Comments.DecodeSafeHtmlString();
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
-
-
 
         [HttpGet]
         [Route("Workorderpictures/{id}")]
@@ -180,7 +167,6 @@ namespace BloomService.Web.Controllers
         [Route("Workorder")]
         public ActionResult GetWorkorders()
         {
-            //var minDate = DateTime.Now.AddYears(-1);
             var list = _repository.SearchFor<SageWorkOrder>().OrderByDescending(x => x.DateEntered).Take(500).ToList();
             var result = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(list);
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -199,7 +185,7 @@ namespace BloomService.Web.Controllers
             var result = _repository.GetAll<SageCustomer>().SingleOrDefault(x => x.Customer == arcustomer);
             if (result == null)
             {
-                return Json(new SageLocation(), JsonRequestBehavior.AllowGet);
+                return Json(new SageCustomer(), JsonRequestBehavior.AllowGet);
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -331,8 +317,7 @@ namespace BloomService.Web.Controllers
         [Route("WorkorderPageCount")]
         public ActionResult GetWorkorderPageCount()
         {
-            //var date = new DateTime(year, 0, 0);
-            var entitiesCount = _repository.GetAll<SageWorkOrder>().Where(x => !string.IsNullOrEmpty(x.Employee)).Count();
+            var entitiesCount = _repository.GetAll<SageWorkOrder>().Count(x => !string.IsNullOrEmpty(x.Employee));
             var countPage = entitiesCount % ItemsOnPage == 0 ? entitiesCount / ItemsOnPage : entitiesCount / ItemsOnPage + 1;
             return Json(countPage, JsonRequestBehavior.AllowGet);
         }
@@ -654,22 +639,22 @@ namespace BloomService.Web.Controllers
 
         [HttpGet]
         [Route("WorkOrder/GetNotes/{id}")]
-        public ActionResult GetNotes(string id)
+        public ActionResult GetNotes(long id)
         {
-            var notes = this._repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == Convert.ToInt64(id)).SingleOrDefault().WorkNotes;
-            if (notes == null)
+            var notes = this._repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
+            if (notes?.WorkNotes == null)
             {
                 return Json("", JsonRequestBehavior.AllowGet);
             }
-            var result = Mapper.Map<IEnumerable<WorkOrderNoteModel>>(notes).OrderBy(x => x.NoteId);
+            var result = Mapper.Map<IEnumerable<WorkOrderNoteModel>>(notes.WorkNotes).OrderBy(x => x.NoteId);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
         [Route("WorkOrder/GetAssignment/{id}")]
-        public ActionResult GetAssignment(string id)
+        public ActionResult GetAssignment(long id)
         {
-            var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == Convert.ToInt64(id)).Single();
+            var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == id).Single();
             if (assignment == null)
             {
                 return Json("", JsonRequestBehavior.AllowGet);
@@ -679,10 +664,9 @@ namespace BloomService.Web.Controllers
 
         [HttpGet]
         [Route("WorkOrder/GetArchive/{id}")]
-        public ActionResult GetArchive(string id)
+        public ActionResult GetArchive(long id)
         {
-            var workorder = long.Parse(id);
-            var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == workorder).SingleOrDefault();
+            var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
             var result = _imageService.CreateArchive(pictures);
 
             return File(result, "application/octet-stream", "archive.zip");
