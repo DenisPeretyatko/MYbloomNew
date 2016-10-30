@@ -25,17 +25,17 @@
         public static readonly string WarrantyCallNoCharge = "Warranty Call - No Charge";
 
         public static List<string> RateSheetsList = new List<string>
-                                                        {
-                                                            StandardCallRate, 
-                                                            TripCharge, 
-                                                            WarrantyCallNoCharge, 
-                                                            RoofingConsult, 
-                                                            MACI, 
-                                                            NonWarrantyNoCharge, 
-                                                            DetroitRenewablePower, 
-                                                            Midlink, 
-                                                            SnowRemoval, 
-                                                            PromotionalTwooMenHalfDay
-                                                        };
+                                                    {
+                                                        StandardCallRate,
+                                                        TripCharge,
+                                                        WarrantyCallNoCharge,
+                                                        RoofingConsult,
+                                                        MACI,
+                                                        NonWarrantyNoCharge,
+                                                        DetroitRenewablePower,
+                                                        Midlink,
+                                                        SnowRemoval,
+                                                        PromotionalTwooMenHalfDay
+                                                    };
     }
 }

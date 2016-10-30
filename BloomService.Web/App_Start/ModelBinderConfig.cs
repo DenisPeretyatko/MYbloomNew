@@ -1,10 +1,9 @@
-﻿namespace BloomService.Web
+﻿using System.Web.Mvc;
+using BloomService.Web.Infrastructure.ModelBinders;
+using BloomService.Web.Models;
+
+namespace BloomService.Web
 {
-    using System.Web.Mvc;
-
-    using BloomService.Web.Infrastructure.ModelBinders;
-    using BloomService.Web.Models;
-
     public class ModelBinderConfig
     {
         public static void RegisterAllBinders()

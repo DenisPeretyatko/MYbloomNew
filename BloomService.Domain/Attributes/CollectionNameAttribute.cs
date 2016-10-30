@@ -1,7 +1,7 @@
-﻿namespace BloomService.Domain.Attributes
-{
-    using System;
+﻿using System;
 
+namespace BloomService.Domain.Attributes
+{
     public class CollectionNameAttribute : Attribute
     {
         public CollectionNameAttribute(string name)

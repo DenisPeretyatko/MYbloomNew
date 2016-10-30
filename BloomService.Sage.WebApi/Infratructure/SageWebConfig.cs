@@ -1,8 +1,8 @@
-﻿namespace Sage.WebApi.Infratructure
-{
-    using System;
-    using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 
+namespace Sage.WebApi.Infratructure
+{
     public class SageWebConfig
     {
         public string CatalogPath { get; set; }

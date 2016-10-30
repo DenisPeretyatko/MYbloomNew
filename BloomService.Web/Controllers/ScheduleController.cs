@@ -1,69 +1,60 @@
-﻿using System.Web.Management;
-using BloomService.Web.Infrastructure.Dependecy;
-using BloomService.Web.Infrastructure.Jobs;
-using BloomService.Web.Infrastructure.Services.Interfaces;
+﻿using BloomService.Web.Infrastructure.Services.Interfaces;
 using Common.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using AutoMapper;
+using BloomService.Domain.Entities.Concrete;
+using BloomService.Domain.Extensions;
+using BloomService.Web.Infrastructure;
+using BloomService.Web.Infrastructure.Mongo;
+using BloomService.Web.Models;
 
 namespace BloomService.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Web.Mvc;
-
-    using AutoMapper;
-
-    using BloomService.Web.Infrastructure.Mongo;
-
-    using Domain.Entities.Concrete;
-    using Models;
-
-    using Domain.Extensions;
-    using Infrastructure.SignalR;
-
     public class ScheduleController : BaseController
     {
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
-        private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
-        private readonly IBloomServiceHub _hub;
-        private readonly INotificationService _notification;
+        private readonly ILog _log = LogManager.GetLogger(typeof(ScheduleController));
         private readonly IScheduleService _scheduleService;
+        private readonly BloomServiceConfiguration _settings;
 
-        public ScheduleController(IRepository repository, ISageApiProxy sageApiProxy, IBloomServiceHub hub, INotificationService notification, IScheduleService scheduleService)
+        public ScheduleController(IRepository repository, 
+            ISageApiProxy sageApiProxy, 
+            IScheduleService scheduleService,
+            BloomServiceConfiguration settings)
         {
             _repository = repository;
             _sageApiProxy = sageApiProxy;
-            _hub = hub;
-            _notification = notification;
             _scheduleService = scheduleService;
+            _settings = settings;
         }
 
         [HttpGet]
         [Route("Schedule")]
         public ActionResult GetSchedules()
         {
-            var lastMonth = DateTime.Now.GetLocalDate().AddMonths(-1);
-            var model = new ScheduleViewModel();
-            //var assignments = _repository.SearchFor<SageAssignment>(x => x.WorkOrder != 0 && x.DateEntered > lastMonth).OrderByDescending(x => x.DateEntered).ToList();
-            var assignments = _repository.SearchFor<SageAssignment>(x => x.WorkOrder != 0 && x.ScheduleDate > lastMonth).OrderByDescending(x => x.ScheduleDate).ToList();
-            var employees = _repository.GetAll<SageEmployee>().ToList(); 
+            var lastMonth = DateTime.Now.GetLocalDate(_settings.CurrentTimezone).AddMonths(-1);
+            var scheduleModel = new ScheduleViewModel();
+            var assignments = _repository.SearchFor<SageAssignment>(x => x.WorkOrder != 0 && x.ScheduleDate > lastMonth)
+                .OrderByDescending(x => x.ScheduleDate).ToList();
+            var employees = _repository.GetAll<SageEmployee>().ToArray(); 
             var mappedAssignments = Mapper.Map<List<SageAssignment>, List<AssignmentModel>>(assignments);
             foreach (var item in mappedAssignments)
             {
                 if (!string.IsNullOrEmpty(item.Employee))
                 {
-                    var color = employees.FirstOrDefault(e => e.Name == item.Employee);
-                    item.Color = color != null? color.Color : "";
+                    item.Color = employees.FirstOrDefault(e => e.Name == item.Employee)?
+                        .Color ?? "";
                 }
             };
             var workorders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.DateEntered > lastMonth && x.AssignmentId != 0).ToList();
-            model.Assigments = mappedAssignments.OrderByDescending(x => x.Id).ToList();
+            scheduleModel.Assigments = mappedAssignments.OrderByDescending(x => x.Id).ToList();
             var mappedWorkorders = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(workorders);
-            //model.UnassignedWorkorders = ResolveEstimatedRepairHours(mappedWorkorders, mappedAssignments);
-            model.UnassignedWorkorders = mappedWorkorders;
-            return Json(model, JsonRequestBehavior.AllowGet);
+            scheduleModel.UnassignedWorkorders = mappedWorkorders;
+            return Success(scheduleModel);
         }
 
         [HttpPost]
@@ -71,11 +62,7 @@ namespace BloomService.Web.Controllers
         public ActionResult CreateAssignment(AssignmentViewModel model)
         {
             var result = _scheduleService.CerateAssignment(model);
-            if (!result)
-            {
-                return Error("Create assignment failed");
-            }
-            return Success();
+            return !result ? Error("Create assignment failed") : Success();
         }
 
         [HttpPost]
@@ -83,24 +70,20 @@ namespace BloomService.Web.Controllers
         public ActionResult DeleteAssignment(AssignmentViewModel model)
         {
             var result = _scheduleService.DeleteAssignment(model);
-            if (!result)
-            {
-                return Error("Delete assignment failed");
-            }
-            return Success();      
+            return !result ? Error("Delete assignment failed") : Success();
         }
 
-        [NonAction]
-        private IEnumerable<WorkorderViewModel> ResolveEstimatedRepairHours(List<WorkorderViewModel> workOrders, List<AssignmentModel> assignments)
-        {
-            var resultWorkOrders = new List<WorkorderViewModel>();
-            foreach (var workorder in workOrders)
-            {
-                workorder.EstimatedRepairHours =
-                    assignments.Single(x => x.WorkOrder == workorder.WorkOrder).EstimatedRepairHours;
-                resultWorkOrders.Add(workorder);
-            }
-            return resultWorkOrders;
-        } 
+        //[NonAction]
+        //private IEnumerable<WorkorderViewModel> ResolveEstimatedRepairHours(List<WorkorderViewModel> workOrders, List<AssignmentModel> assignments)
+        //{
+        //    var resultWorkOrders = new List<WorkorderViewModel>();
+        //    foreach (var workorder in workOrders)
+        //    {
+        //        workorder.EstimatedRepairHours =
+        //            assignments.Single(x => x.WorkOrder == workorder.WorkOrder).EstimatedRepairHours;
+        //        resultWorkOrders.Add(workorder);
+        //    }
+        //    return resultWorkOrders;
+        //} 
     }
 }

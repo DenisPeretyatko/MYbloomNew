@@ -6,8 +6,6 @@ namespace BloomService.Web.Infrastructure.ModelBinders
 {
     public class JsonNetModelBinder : DefaultModelBinder
     {
-        private readonly JsonSerializerSettings _settings = new JsonSerializerSettings();
-
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
             if (!IsFormUrlEncodedRequest(controllerContext) && !IsJsonRequest(controllerContext))

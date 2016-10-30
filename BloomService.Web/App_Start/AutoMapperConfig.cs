@@ -1,11 +1,10 @@
-﻿namespace BloomService.Web
-{
-    using AutoMapper;
+﻿using AutoMapper;
+using BloomService.Domain.Entities.Concrete;
+using BloomService.Web.Models;
+using System;
 
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Web.Models;
-    using Infrastructure.Constants;
-    using System;
+namespace BloomService.Web
+{
     public static class AutoMapperConfig
     {
         public static void RegisterMappings()

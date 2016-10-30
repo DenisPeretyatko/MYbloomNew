@@ -2,50 +2,50 @@
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using BloomService.Web.Infrastructure.SignalR;
 using Common.Logging;
+using System.Linq;
+using System.Web.Mvc;
+using AutoMapper;
+using BloomService.Domain.Entities.Concrete;
+using BloomService.Web.Infrastructure.Mongo;
+using BloomService.Web.Models;
 
 namespace BloomService.Web.Controllers
 {
-    using System.Linq;
-    using System.Web.Mvc;
-
-    using AutoMapper;
-
-    using BloomService.Web.Infrastructure.Mongo;
-
-    using Domain.Entities.Concrete;
-    using Models;
-
     public class TechnicianController : BaseController
     {
-        private readonly IImageService imageService;
-        private readonly IBloomServiceHub hub;
-        private readonly IRepository repository;
-        private readonly INotificationService notification;
-        private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
+        private readonly ILog _log = LogManager.GetLogger(typeof(TechnicianController));
+        private readonly IImageService _imageService;
+        private readonly IBloomServiceHub _hub;
+        private readonly IRepository _repository;
+        private readonly INotificationService _notification;
 
-
-        public TechnicianController(IImageService imageService, IRepository repository, IBloomServiceHub hub, INotificationService notification)
+        public TechnicianController(IImageService imageService,
+            IRepository repository,
+            IBloomServiceHub hub,
+            INotificationService notification)
         {
-            this.imageService = imageService;
-            this.repository = repository;
-            this.hub = hub;
-            this.notification = notification;
+            _imageService = imageService;
+            _repository = repository;
+            _hub = hub;
+            _notification = notification;
         }
 
         [HttpGet]
         [Route("Technician/{id}")]
         public ActionResult GetTechnician(string id)
         {
-            var technician = repository.Get<SageEmployee>(id);
-            return Json(technician, JsonRequestBehavior.AllowGet);
+            var technician = _repository.Get<SageEmployee>(id);
+            return technician == null ?
+                Error("Technician does not exist", $"There are no Technician with technicianID: {id}. technician == null") :
+                Success(technician);
         }
 
         [HttpGet]
         [Route("Technician")]
         public ActionResult GetTechnicians()
         {
-            var list = repository.GetAll<SageEmployee>();
-            return Json(list.OrderBy(x => x.Employee), JsonRequestBehavior.AllowGet);
+            var technicians = _repository.GetAll<SageEmployee>().OrderBy(x => x.Employee);
+            return Success(technicians);
         }
 
         [HttpPost]
@@ -53,8 +53,8 @@ namespace BloomService.Web.Controllers
         public ActionResult SaveTechnician(TechnicianModel model)
         {
             _log.InfoFormat("Method: SaveTechnician. Model ID: {0}", model.Id);
-            var employee = repository.Get<SageEmployee>(model.Id);
-            var assignment = repository.SearchFor<SageAssignment>(e => e.EmployeeId == employee.Employee).FirstOrDefault();
+            var employee = _repository.Get<SageEmployee>(model.Id);
+            var assignment = _repository.SearchFor<SageAssignment>(e => e.EmployeeId == employee.Employee).FirstOrDefault();
             model.Id = employee.Employee.ToString();
             var technician = Mapper.Map<SageEmployee, EmployeeModel>(employee);
             technician.AvailableDays = model.AvailableDays;
@@ -62,17 +62,17 @@ namespace BloomService.Web.Controllers
             technician.Picture = model.Picture;
             if (model.IsAvailable == false && employee.IsAvailable)
             {
-                notification.SendNotification(string.Format("Technician {0} is unavailable", employee.Name));
+                _notification.SendNotification($"Technician {employee.Name} is unavailable");
             }
-            if (imageService.BuildTechnicianIcons(model))
+            if (_imageService.BuildTechnicianIcons(model))
             {
                 technician.Color = model.Color;
                 if (assignment != null) assignment.Color = model.Color;
             }
             var updatedTechnician = Mapper.Map<EmployeeModel, SageEmployee>(technician);
-            repository.Update(updatedTechnician);
-            repository.Update(assignment);
-            hub.UpdateTechnician(model);
+            _repository.Update(updatedTechnician);
+            _repository.Update(assignment);
+            _hub.UpdateTechnician(model);
             _log.InfoFormat("Repository update technician. Name {0}, ID {1}", updatedTechnician.Name, updatedTechnician.Id);
 
             return Success();

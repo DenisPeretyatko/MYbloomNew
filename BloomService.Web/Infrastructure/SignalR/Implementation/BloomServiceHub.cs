@@ -1,36 +1,23 @@
-﻿namespace BloomService.Web.Infrastructure.SignalR.Implementation
+﻿using BloomService.Domain.Entities.Concrete;
+using BloomService.Web.Models;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
+
+namespace BloomService.Web.Infrastructure.SignalR.Implementation
 {
-    using System;
-
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Web.Models;
-
-    using Microsoft.AspNet.SignalR;
-    using Microsoft.AspNet.SignalR.Hubs;
-
     [HubName("bloomServiceHub")]
     public class BloomServiceHub : Hub, IBloomServiceHub
     {
-        IHubConnectionContext<dynamic> _clients;
+        private readonly IHubConnectionContext<dynamic> _clients;
 
         public BloomServiceHub(IHubConnectionContext<dynamic> clients)
         {
             this._clients = clients;
         }
 
-        public void AddEquipment(EquipmentModel model)
-        {
-            throw new NotImplementedException();
-        }
-
         public void UpdateWorkOrderPicture(SageImageWorkOrder model)
         {
             this._clients.All.UpdateWorkOrderPicture(model);
-        }
-
-        public void ChangeWorkOrderStatus(string id, string status)
-        {
-            throw new NotImplementedException();
         }
 
         public void CreateAssignment(MapViewModel model)
@@ -48,19 +35,9 @@
             this._clients.All.deleteAssigment(model);
         }
 
-        public void Disconnect()
-        {
-            throw new NotImplementedException();
-        }
-
         public void SendNotification(NotificationModel model)
         {
             this._clients.All.sendNotification(model);
-        }
-
-        public void UpdateEquipment(EquipmentModel model)
-        {
-            throw new NotImplementedException();
         }
 
         public void UpdateTechnician(TechnicianModel model)

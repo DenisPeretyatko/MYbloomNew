@@ -1,37 +1,38 @@
-﻿using BloomService.Web.Infrastructure.Dependecy;
-using BloomService.Web.Infrastructure.Jobs;
-using Common.Logging;
+﻿using Common.Logging;
+using System.Web.Mvc;
+using BloomService.Domain.Entities.Concrete;
+using BloomService.Web.Models;
+using System.Linq;
+using System;
+using System.Collections.Generic;
+using AutoMapper;
+using BloomService.Web.Infrastructure.Mongo;
+using BloomService.Web.Infrastructure.SignalR;
+using BloomService.Web.Infrastructure.Services.Interfaces;
+using BloomService.Web.Infrastructure.Constants;
+using BloomService.Domain.Extensions;
+using BloomService.Web.Infrastructure;
 
 namespace BloomService.Web.Controllers
 {
-    using System.Web.Mvc;
-    using Domain.Entities.Concrete;
-    using Models;
-    using System.Linq;
-    using System;
-    using System.Collections.Generic;
-    using AutoMapper;
-
-    using Infrastructure.Mongo;
-
-    using Infrastructure.SignalR;
-    using Infrastructure.Services.Interfaces;
-    using Infrastructure.Constants;
-    using Domain.Extensions;
-
     public class WorkorderController : BaseController
     {
-        private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
+        private readonly ILog _log = LogManager.GetLogger(typeof(WorkorderController));
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
-        private const int ItemsOnPage = 50;
         private readonly IBloomServiceHub _hub;
         private readonly INotificationService _notification;
         private readonly IScheduleService _scheduleService;
         private readonly IImageService _imageService;
+        private readonly BloomServiceConfiguration _settings;
 
-        public WorkorderController(IRepository repository, ISageApiProxy sageApiProxy,
-            IBloomServiceHub hub, INotificationService notification, IScheduleService scheduleService, IImageService imageService)
+        public WorkorderController(IRepository repository,
+            ISageApiProxy sageApiProxy,
+            IBloomServiceHub hub,
+            INotificationService notification,
+            IScheduleService scheduleService,
+            IImageService imageService,
+            BloomServiceConfiguration settings)
         {
             _repository = repository;
             _sageApiProxy = sageApiProxy;
@@ -39,6 +40,7 @@ namespace BloomService.Web.Controllers
             _hub = hub;
             _scheduleService = scheduleService;
             _imageService = imageService;
+            _settings = settings;
         }
 
         [HttpPost]
@@ -54,11 +56,11 @@ namespace BloomService.Web.Controllers
                 ARCustomer = model.Customer,
                 Location = model.Location,
                 CallType = model.Calltype,
-                CallDate = model.Calldate.GetLocalDate(),
+                CallDate = model.Calldate.GetLocalDate(_settings.CurrentTimezone),
                 Problem = model.Problem,
                 RateSheet = model.Ratesheet,
                 Employee = model.Emploee.ToString(),
-                EstimatedRepairHours = Convert.ToDecimal(model.Estimatehours),
+                EstimatedRepairHours = model.Estimatehours.AsDecimal(),
                 NottoExceed = model.Nottoexceed,
                 Comments = model.Locationcomments,
                 CustomerPO = model.Customerpo,
@@ -75,7 +77,7 @@ namespace BloomService.Web.Controllers
             if (!result.IsSucceed)
             {
                 _log.ErrorFormat("Was not able to save workorder to sage. !result.IsSucceed");
-                return Error(result.ErrorMassage);
+                return Error(result.ErrorMessage);
             }
 
             var assignment = result.RelatedAssignment;
@@ -144,9 +146,8 @@ namespace BloomService.Web.Controllers
         {
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
             if (pictures != null)
-            {
                 pictures.Images = pictures.Images.Where(x => !x.IsDeleted).OrderBy(x => x.Id).ToList();
-            }
+
             return Json(pictures, JsonRequestBehavior.AllowGet);
         }
 
@@ -157,6 +158,7 @@ namespace BloomService.Web.Controllers
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
             if (pictures == null)
                 return Error("Edit picture comments failed", $"GetWorkOrdersPictures method SageImageWorkOrder==false.");
+
             pictures.Images.Find(x => x.Id == model.Id && !x.IsDeleted).Description = model.Comment;
             _repository.Update(pictures);
             _hub.UpdateWorkOrderPicture(pictures);
@@ -167,9 +169,11 @@ namespace BloomService.Web.Controllers
         [Route("Workorder")]
         public ActionResult GetWorkorders()
         {
-            var list = _repository.SearchFor<SageWorkOrder>().OrderByDescending(x => x.DateEntered).Take(500).ToList();
-            var result = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(list);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var workoders = _repository.SearchFor<SageWorkOrder>()
+                .OrderByDescending(x => x.DateEntered)
+                .Take(500).ToList();
+            var workorderModels = Mapper.Map<List<SageWorkOrder>, List<WorkorderViewModel>>(workoders);
+            return Success(workorderModels);
         }
 
         [HttpPost]
@@ -179,15 +183,12 @@ namespace BloomService.Web.Controllers
             if (string.IsNullOrEmpty(arcustomer))
             {
                 var customers = _repository.GetAll<SageCustomer>();
-                return Json(customers, JsonRequestBehavior.AllowGet);
+                return Success(customers);
             }
 
-            var result = _repository.GetAll<SageCustomer>().SingleOrDefault(x => x.Customer == arcustomer);
-            if (result == null)
-            {
-                return Json(new SageCustomer(), JsonRequestBehavior.AllowGet);
-            }
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var customer = _repository.GetAll<SageCustomer>()
+                .SingleOrDefault(x => x.Customer == arcustomer) ?? new SageCustomer();
+            return Success(customer);
         }
 
         [HttpPost]
@@ -195,17 +196,10 @@ namespace BloomService.Web.Controllers
         public ActionResult GetLocationsByCustomer(string customer)
         {
             if (string.IsNullOrEmpty(customer))
-            {
-                var locations = _repository.GetAll<SageLocation>();
-                return Json(locations, JsonRequestBehavior.AllowGet);
-            }
-            var result = _repository.GetAll<SageLocation>().Where(x => x.ARCustomer == customer).ToList();
-            if (!result.Any())
-            {
-                result = new List<SageLocation>();
-                return Json(result, JsonRequestBehavior.AllowGet);
-            }
-            return Json(result, JsonRequestBehavior.AllowGet);
+                return Success(new List<SageLocation>());
+
+            var locations = _repository.GetAll<SageLocation>().Where(x => x.ARCustomer == customer).ToArray();
+            return Success(locations);
         }
 
         [HttpPost]
@@ -213,32 +207,23 @@ namespace BloomService.Web.Controllers
         public ActionResult GetEquipmentByLocation(string name)
         {
             if (string.IsNullOrEmpty(name))
-            {
-                return Json(new List<SageEquipment>(), JsonRequestBehavior.AllowGet);
-            }
-            var result = _repository.GetAll<SageEquipment>().Where(x => x.Location == name).ToList();
-            foreach (var equipment in result)
+                return Success(new List<SageEquipment>());
+
+            var equipments = _repository.GetAll<SageEquipment>().Where(x => x.Location == name).ToArray();
+            foreach (var equipment in equipments)
             {
                 if (equipment.InstallLocation != "")
                     equipment.EquipmentType = string.Format($"{equipment.EquipmentType} - {equipment.InstallLocation}");
             }
-            if (!result.Any())
-            {
-                result = new List<SageEquipment>();
-                return Json(result, JsonRequestBehavior.AllowGet);
-            }
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Success(equipments);
         }
 
         [HttpPost]
         [Route("WorkorderPage")]
         public ActionResult GetWorkorderPage(WorkorderSortModel model)
         {
-            long search = -1;
-            long.TryParse(model.Search, out search);
+            var search = model.Search.AsLongSafe(-1);
             var workorders = _repository.GetAll<SageWorkOrder>();
-
-
 
             if (!string.IsNullOrEmpty(model.Search))
             {
@@ -246,8 +231,7 @@ namespace BloomService.Web.Controllers
                         .Where(x => x.ARCustomer.ToLower().Contains(model.Search.ToLower()) ||
                                     x.Location.ToLower().Contains(model.Search.ToLower()) ||
                                     x.Status.ToLower().Contains(model.Search.ToLower()) ||
-                                    x.WorkOrder == search
-                        );
+                                    x.WorkOrder == search);
             }
 
             var entitiesCount = workorders.Count();
@@ -283,8 +267,8 @@ namespace BloomService.Web.Controllers
                     break;
             }
 
-            if (entitiesCount > ItemsOnPage)
-                workorders = workorders.Skip(model.Index * ItemsOnPage).Take(ItemsOnPage);
+            if (entitiesCount > _settings.ItemsOnPage)
+                workorders = workorders.Skip(model.Index * _settings.ItemsOnPage).Take(_settings.ItemsOnPage);
 
             var workorderList = workorders.ToList();
             var tmpLocations = workorderList.Select(x => x.Location);
@@ -294,20 +278,21 @@ namespace BloomService.Web.Controllers
                 if (obj.TimeEntered == null) continue;
 
                 // TODO Fix this convertation.
-                //obj.CallDate = obj.DateEntered?.Date.Add((DateTime)obj.TimeEntered) ?? DateTime.MinValue;
                 obj.CallDate = obj.DateEntered?.Date.Add(((DateTime)obj.TimeEntered).TimeOfDay) ?? DateTime.MinValue;
                 var location = locations.FirstOrDefault(x => x.Name == obj.Location);
                 if (location != null)
                 {
                     obj.Latitude = location.Latitude;
                     obj.Longitude = location.Longitude;
-                    obj.Address = string.Join(" ", String.Join(", ", new[] { location.Name, location.Address, location.City, location.State, location.ZIP }.Where(str => !string.IsNullOrEmpty(str))));
+                    obj.Address = string.Join(" ", string.Join(", ", new[] { location.Name, location.Address, location.City, location.State, location.ZIP }.Where(str => !string.IsNullOrEmpty(str))));
                 }
             }
 
             var result = new WorkorderSortViewModel()
             {
-                CountPage = entitiesCount % ItemsOnPage == 0 ? entitiesCount / ItemsOnPage : entitiesCount / ItemsOnPage + 1,
+                CountPage = entitiesCount % _settings.ItemsOnPage == 0 ?
+                    entitiesCount / _settings.ItemsOnPage :
+                    entitiesCount / _settings.ItemsOnPage + 1,
                 WorkordersList = workorderList
             };
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -318,7 +303,9 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkorderPageCount()
         {
             var entitiesCount = _repository.GetAll<SageWorkOrder>().Count(x => !string.IsNullOrEmpty(x.Employee));
-            var countPage = entitiesCount % ItemsOnPage == 0 ? entitiesCount / ItemsOnPage : entitiesCount / ItemsOnPage + 1;
+            var countPage = entitiesCount % _settings.ItemsOnPage == 0 ?
+                entitiesCount / _settings.ItemsOnPage :
+                entitiesCount / _settings.ItemsOnPage + 1;
             return Json(countPage, JsonRequestBehavior.AllowGet);
         }
 
@@ -341,7 +328,7 @@ namespace BloomService.Web.Controllers
                 ARCustomer = model.Customer,
                 Location = model.Location,
                 CallType = model.Calltype,
-                CallDate = model.Calldate.GetLocalDate(),
+                CallDate = model.Calldate.GetLocalDate(_settings.CurrentTimezone),
                 Problem = model.Problem,
                 RateSheet = model.Ratesheet,
                 Employee = model.Emploee.ToString(),
@@ -386,8 +373,8 @@ namespace BloomService.Web.Controllers
                 workOrderResult.Entity.Longitude = itemLocation.Longitude;
             }
 
-            this.ResolveWorkOrderItems(model);
-            this.ResolveWorkOrderNotes(model);
+            ResolveWorkOrderItems(model);
+            ResolveWorkOrderNotes(model);
 
             workOrderResult.Entity.Status = WorkOrderStatus.ById(model.Status);
             workOrderResult.Entity.Id = workorder.Id;
@@ -399,19 +386,20 @@ namespace BloomService.Web.Controllers
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
             _hub.UpdateWorkOrder(model);
             if (model.Status == WorkOrderStatus.WorkCompleteId)
+            {
                 _hub.ShowAlert(new SweetAlertModel()
                 {
                     Message = $"Workorder #{model.WorkOrder} closed",
                     Title = "Workorder completed",
                     Type = "success"
                 });
+            }
             return Success();
         }
 
-        [NonAction]
         private void ResolveWorkOrderItems(WorkOrderModel model)
         {
-            var workOrderItems = Mapper.Map<IEnumerable<SageWorkOrderItem>>(model.PartsAndLabors);
+            var workOrderItems = Mapper.Map<List<SageWorkOrderItem>>(model.PartsAndLabors);
             var workOrderFromMongo = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).Single();
 
             if (workOrderItems != null)
@@ -424,7 +412,7 @@ namespace BloomService.Web.Controllers
                     }
                     else
                     {
-                        workOrderItem.WorkOrder = Convert.ToInt32(model.WorkOrder);
+                        workOrderItem.WorkOrder = model.WorkOrder;
                         workOrderItem.TotalSale = workOrderItem.Quantity * workOrderItem.UnitSale;
                         if (workOrderItem.ItemType == "Parts")
                         {
@@ -460,7 +448,7 @@ namespace BloomService.Web.Controllers
 
                     if (idsToRemove.Any())
                     {
-                        _sageApiProxy.DeleteWorkOrderItems(Convert.ToInt32(workOrderFromMongo.WorkOrder), idsToRemove);
+                        _sageApiProxy.DeleteWorkOrderItems(workOrderFromMongo.WorkOrder, idsToRemove);
                     }
                 }
             }
@@ -468,11 +456,11 @@ namespace BloomService.Web.Controllers
             {
                 if (workOrderFromMongo.WorkOrderItems != null)
                 {
-                    var idsToRemove = workOrderFromMongo.WorkOrderItems.Select(x => x.WorkOrderItem);
+                    var idsToRemove = workOrderFromMongo.WorkOrderItems.Select(x => x.WorkOrderItem).ToArray();
 
                     if (idsToRemove.Any())
                     {
-                        _sageApiProxy.DeleteWorkOrderItems(Convert.ToInt32(workOrderFromMongo.WorkOrder), idsToRemove);
+                        _sageApiProxy.DeleteWorkOrderItems(workOrderFromMongo.WorkOrder, idsToRemove);
                     }
                 }
             }
@@ -481,7 +469,7 @@ namespace BloomService.Web.Controllers
         [NonAction]
         private void ResolveWorkOrderNotes(WorkOrderModel model)
         {
-            var workOrderNotes = Mapper.Map<IEnumerable<SageNote>>(model.Notes);
+            var workOrderNotes = Mapper.Map<List<SageNote>>(model.Notes);
             var workOrderFromMongo = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrder).Single();
 
             if (workOrderNotes != null)
@@ -529,7 +517,7 @@ namespace BloomService.Web.Controllers
             {
                 if (workOrderFromMongo.WorkNotes != null)
                 {
-                    var idsToRemove = workOrderFromMongo.WorkNotes.Select(x => x.NOTENBR);
+                    var idsToRemove = workOrderFromMongo.WorkNotes.Select(x => x.NOTENBR).ToArray();
 
                     if (idsToRemove.Any())
                     {
@@ -562,8 +550,7 @@ namespace BloomService.Web.Controllers
             else
             {
                 _log.ErrorFormat("Was not able to add note to sage. !result.IsSucceed");
-                return Error("Note save failed", $"AddNote method IsSucceed==false. {addNoteResult?.ErrorMassage}"
-                );
+                return Error("Note save failed", $"AddNote method IsSucceed==false. {addNoteResult?.ErrorMessage}");
             }
             return Success();
         }
@@ -591,8 +578,7 @@ namespace BloomService.Web.Controllers
             else
             {
                 _log.ErrorFormat("Was not able to save note to sage. !result.IsSucceed");
-                return Error("Note save failed", $"EditNote method IsSucceed==false. {editNoteResult?.ErrorMassage}"
-                );
+                return Error("Note save failed", $"EditNote method IsSucceed==false. {editNoteResult?.ErrorMessage}");
             }
             return Success();
         }
@@ -621,8 +607,7 @@ namespace BloomService.Web.Controllers
             else
             {
                 _log.ErrorFormat("Was not able to remove note from sage. !result.IsSucceed");
-                return Error("Note delete failed", $"DeleteNote method IsSucceed==false. {deleteNoteResult?.ErrorMassage}"
-                );
+                return Error("Note delete failed", $"DeleteNote method IsSucceed==false. {deleteNoteResult?.ErrorMessage}");
             }
             return Success();
         }
@@ -631,13 +616,15 @@ namespace BloomService.Web.Controllers
         [Route("WorkOrder/GetNotes/{id}")]
         public ActionResult GetNotes(long id)
         {
-            var notes = this._repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
-            if (notes?.WorkNotes == null)
-            {
-                return Json("", JsonRequestBehavior.AllowGet);
-            }
-            var result = Mapper.Map<IEnumerable<WorkOrderNoteModel>>(notes.WorkNotes).OrderBy(x => x.NoteId);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var workorder = this._repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
+            if (workorder == null)
+                return Error("Workorder does not exist", $"There are no Workorder with workorderID: {id}. workorder == null");
+
+            if (workorder.WorkNotes == null)
+                return Error("WorkNotes notes does not exist", $"There are no WorkNotes with workorderID: {id}. WorkNotes == null");
+
+            var notes = Mapper.Map<IEnumerable<WorkOrderNoteModel>>(workorder.WorkNotes).OrderBy(x => x.NoteId);
+            return Success(notes);
         }
 
         [HttpGet]
@@ -645,31 +632,30 @@ namespace BloomService.Web.Controllers
         public ActionResult GetAssignment(long id)
         {
             var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == id).Single();
-            if (assignment == null)
-            {
-                return Json("", JsonRequestBehavior.AllowGet);
-            }
-            return Json(assignment, JsonRequestBehavior.AllowGet);
+            return assignment == null ?
+                 Error("Workorder does not exist", $"There are no Workorder with workorderID: {id}. workorder == null") :
+                 Success(assignment);
         }
 
         [HttpGet]
         [Route("WorkOrder/GetArchive/{id}")]
         public ActionResult GetArchive(long id)
         {
-            var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
-            var result = _imageService.CreateArchive(pictures);
+            var workorder = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
+            if (workorder == null)
+                return Error("Workorder does not exist", $"There are no Workorder with workorderID: {id}. workorder == null");
 
-            return File(result, "application/octet-stream", "archive.zip");
+            var result = _imageService.CreateArchive(workorder);
+            return File(result, "application/octet-stream", $"pictures-{id}.zip");
         }
 
         [HttpPost]
         [Route("WorkOrder/ChangeImageLocation")]
         public ActionResult ChangeImageLocation(ImageLocationModel model)
         {
-            if (!_imageService.ChangeImageLocation(model))
-                return Error("Images does not exist",
-                        $"There are no images with workorderID: {model.WorkOrderId}. images == null");
-            return Success();
+            return !_imageService.ChangeImageLocation(model) ?
+                Error("Images does not exist", $"There are no images with workorderID: {model.WorkOrderId}. images == null") :
+                Success();
         }
     }
 }

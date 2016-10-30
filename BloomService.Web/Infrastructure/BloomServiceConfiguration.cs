@@ -1,10 +1,9 @@
 ﻿using System.Configuration;
+using System;
+using System.Collections.Specialized;
 
 namespace BloomService.Web.Infrastructure
 {
-    using System;
-    using System.Collections.Specialized;
-
     public class BloomServiceConfiguration
     {
         public static BloomServiceConfiguration FromWebConfig(NameValueCollection nameValueCollection)
@@ -45,7 +44,6 @@ namespace BloomService.Web.Infrastructure
                     AlertNotificationEnabled = bool.Parse(ConfigurationManager.AppSettings["AlertNotificationEnabled"]),
                     AlertBadgeNotificationEnabled = bool.Parse(ConfigurationManager.AppSettings["AlertBadgeNotificationEnabled"]),
                     AlertBadgeSoundNotificationEnabled = bool.Parse(ConfigurationManager.AppSettings["AlertBadgeSoundNotificationEnabled"]),
-
 
                     NotificationAlert = ConfigurationManager.AppSettings["NotificationAlert"],
                     NotificationBadge = int.Parse(ConfigurationManager.AppSettings["NotificationBadge"]),
@@ -101,5 +99,8 @@ namespace BloomService.Web.Infrastructure
 
         public string BaseUrl { get; set; }
         public string BasePath { get; set; }
+
+        public int ItemsOnPage => 50;
+        public int NotificationOnPage = 9;
     }
 }

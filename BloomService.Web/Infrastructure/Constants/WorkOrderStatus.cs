@@ -1,10 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BloomService.Domain.Entities.Concrete;
 
 namespace BloomService.Web.Infrastructure.Constants
 {
-    using Domain.Entities.Concrete;
-    using System.Collections.Generic;
-
     public static class WorkOrderStatus
     {
         public static List<SageWorkOrderStatus> Status = new List<SageWorkOrderStatus> {
@@ -22,8 +21,8 @@ namespace BloomService.Web.Infrastructure.Constants
             new SageWorkOrderStatus { Status = ReturnRequired, Value= ReturnRequiredId },
             new SageWorkOrderStatus { Status = WorkComplete, Value = WorkCompleteId },
             new SageWorkOrderStatus { Status = Closed, Value = ClosedId },
-             new SageWorkOrderStatus { Status = Cancelled, Value = CancelledId },
-             new SageWorkOrderStatus { Status = Reviewed, Value = ReviewedId }
+            new SageWorkOrderStatus { Status = Cancelled, Value = CancelledId },
+            new SageWorkOrderStatus { Status = Reviewed, Value = ReviewedId }
         };
 
         public const string Open = "Open";

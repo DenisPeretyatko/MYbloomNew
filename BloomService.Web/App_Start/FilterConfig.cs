@@ -1,7 +1,7 @@
-﻿namespace BloomService.Web
-{
-    using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
+namespace BloomService.Web
+{
     public class FilterConfig
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)

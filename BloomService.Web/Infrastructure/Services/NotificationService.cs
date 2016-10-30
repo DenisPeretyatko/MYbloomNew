@@ -2,29 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using BloomService.Domain.Entities.Concrete;
-using BloomService.Web.Infrastructure.Dependecy;
+using BloomService.Domain.Extensions;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using BloomService.Web.Infrastructure.SignalR;
 using BloomService.Web.Models;
+using BloomService.Web.Infrastructure.Mongo;
+using BloomService.Web.Infrastructure.Constants;
 
 namespace BloomService.Web.Infrastructure.Services
 {
-    using BloomService.Web.Infrastructure.Mongo;
-    using Constants;
     public class NotificationService : INotificationService
     {
         private readonly IRepository _repository;
         private readonly IBloomServiceHub _hub;
+        private readonly BloomServiceConfiguration _settings;
 
-        public NotificationService(IRepository repository, IBloomServiceHub hub)
+        public NotificationService(IRepository repository, 
+            IBloomServiceHub hub,
+            BloomServiceConfiguration settings)
         {
             _repository = repository;
             _hub = hub;
+            _settings = settings;
         }
         
         public void SendNotification(string message)
         {
-            var curDate = DateTime.Now.GetLocalDate();
+            var curDate = DateTime.Now.GetLocalDate(_settings.CurrentTimezone);
             _repository.Add(new Notification()
             {
                 IsViewed = true,
@@ -37,30 +41,30 @@ namespace BloomService.Web.Infrastructure.Services
             {
                 IsViewed = true,
                 Message = message,
-                Time = String.Format("{0} {1}", curDate.Date.ToString(DateTimeFormat.DateFormat), curDate.ToString(DateTimeFormat.TimeFormat))
+                Time = $"{curDate.Date.ToString(DateTimeFormat.DateFormat)} {curDate.ToString(DateTimeFormat.TimeFormat)}"
             });
         }
 
         public List<NotificationModel> GetLastNotifications()
         {
-            const int itemsOnPage = 9;
             var notifications = _repository.GetAll<Notification>();
             var entitiesCount = notifications.Count();
-            if (entitiesCount > itemsOnPage)
-                notifications = notifications.Skip(entitiesCount - itemsOnPage);
-            var result = new List<NotificationModel>();
+            if (entitiesCount > _settings.NotificationOnPage)
+                notifications = notifications.Skip(entitiesCount - _settings.NotificationOnPage);
+
+            var notificationModels = new List<NotificationModel>();
             foreach (var obj in notifications)
             {
-                result.Add(new NotificationModel()
+                notificationModels.Add(new NotificationModel()
                 {
                     Message = obj.Message,
-                    Time = String.Format("{0} {1}", obj.Date.Date.ToString(DateTimeFormat.DateFormat), obj.Time.ToString(DateTimeFormat.TimeFormat)), 
+                    Time = $"{obj.Date.Date.ToString(DateTimeFormat.DateFormat)} {obj.Time.ToString(DateTimeFormat.TimeFormat)}", 
                     IsViewed = true
                 });
                 
             }
-            result.Reverse();
-            return result;
+            notificationModels.Reverse();
+            return notificationModels;
         }
     }
 }

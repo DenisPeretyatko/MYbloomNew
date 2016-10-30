@@ -1,8 +1,8 @@
-﻿namespace BloomService.Web.Infrastructure.Constants
-{
-    using Domain.Entities.Concrete;
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BloomService.Domain.Entities.Concrete;
 
+namespace BloomService.Web.Infrastructure.Constants
+{
     public static class PaymentMethod
     {
         public static List<SagePaymentMethod> PaymentMethods = new List<SagePaymentMethod> {

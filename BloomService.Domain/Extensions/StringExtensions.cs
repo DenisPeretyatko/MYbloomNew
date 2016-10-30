@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 namespace BloomService.Domain.Extensions
 {
@@ -62,6 +63,23 @@ namespace BloomService.Domain.Extensions
             return int.TryParse(text, out result) ? result : defaultValue;
         }
 
+        public static long AsLong(this string text)
+        {
+            return long.Parse(text);
+        }
+
+        public static long? AsLongSafe(this string text)
+        {
+            long result;
+            return long.TryParse(text, out result) ? result : (long?)null;
+        }
+
+        public static long AsLongSafe(this string text, long defaultValue)
+        {
+            long result;
+            return long.TryParse(text, out result) ? result : defaultValue;
+        }
+
         public static string Sanitize(this string text)
         {
             return text.Replace("'", "&apos;")
@@ -76,6 +94,13 @@ namespace BloomService.Domain.Extensions
             if (String.IsNullOrEmpty(val)) return append;
             if (String.IsNullOrEmpty(append)) return val;
             return val.TrimEnd('/') + "/" + append.TrimStart('/');
+        }
+
+        public static string DecodeSafeHtmlString(this string comment)
+        {
+            while (comment.Contains("&amp") || comment.Contains("&quot") || comment.Contains("&lt") || comment.Contains("&gt") || comment.Contains("&apos") || comment.Contains("&nbsp"))
+                comment = HttpUtility.HtmlDecode(comment);
+            return comment;
         }
     }
 }

@@ -5,35 +5,29 @@ using BloomService.Web.Infrastructure.StorageProviders.Implementation;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using WebActivatorEx;
+using System;
+using System.Configuration;
+using System.Web;
+using BloomService.Web.Infrastructure;
+using BloomService.Web.Infrastructure.Mongo;
+using BloomService.Web.Infrastructure.SignalR.Implementation;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Ninject;
+using Ninject.Web.Common;
+using RestSharp;
+using BloomService.Web.Infrastructure.Services.Interfaces;
+using BloomService.Web.Infrastructure.Services;
+using BloomService.Web.Infrastructure.Dependecy;
+using BloomService.Web.Infrastructure.Dependecy.Ninject;
+using BloomService.Web.Infrastructure.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.AspNet.SignalR;
 
-[assembly: PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
-
 
 namespace BloomService.Web
 {
-    using System;
-    using System.Configuration;
-    using System.Web;
-
-    using BloomService.Web.Infrastructure;
-    using BloomService.Web.Infrastructure.Mongo;
-    using BloomService.Web.Infrastructure.SignalR.Implementation;
-
-    using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-    using Ninject;
-    using Ninject.Web.Common;
-    using RestSharp;
-    using Domain.Extensions;
-
-    using Infrastructure.Services.Interfaces;
-    using Infrastructure.Services;
-    using Infrastructure.Dependecy;
-    using Infrastructure.Dependecy.Ninject;
-    using Infrastructure.SignalR;
-    using Microsoft.AspNet.SignalR.Hubs;
-    using Microsoft.AspNet.SignalR;
-
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper Bootstrapper = new Bootstrapper();

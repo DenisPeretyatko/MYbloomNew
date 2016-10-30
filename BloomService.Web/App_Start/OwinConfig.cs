@@ -4,7 +4,6 @@ using Owin;
 using System;
 using BloomService.Web;
 
-
 [assembly: OwinStartup(typeof(OwinConfig))]
 
 namespace BloomService.Web

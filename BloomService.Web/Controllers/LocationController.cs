@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Linq;
 using BloomService.Web.Models;
+using System.Web.Mvc;
+using BloomService.Domain.Entities.Concrete;
+using System.Collections.Generic;
+using BloomService.Web.Infrastructure.Mongo;
 
 namespace BloomService.Web.Controllers
 {
-    using System.Web.Mvc;
-
-    using Domain.Entities.Concrete;
-    using System.Collections.Generic;
-
-    using Infrastructure.Mongo;
-    using Infrastructure.Queries;
-
     public class LocationController : BaseController
     {
         private readonly IRepository _repository;
@@ -25,7 +21,7 @@ namespace BloomService.Web.Controllers
         [Route("Location")]
         public ActionResult GetLocations(MapModel model)
         {
-            var result = new List<MapViewModel>();
+            var mapModels = new List<MapViewModel>();
             var workOrders = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open" && x.AssignmentId == 0).ToList();
             var tmpLocations = workOrders.Select(x => x.Location);
             var itemLocations = _repository.SearchFor<SageLocation>(x => tmpLocations.Contains(x.Name)).ToList();
@@ -34,23 +30,27 @@ namespace BloomService.Web.Controllers
             foreach (var item in workOrders)
             {
                 var itemLocation = itemLocations.FirstOrDefault(l => l.Name == item.Location);
-                if (itemLocation == null) continue;
+                if (itemLocation == null)
+                    continue;
+
                 item.Latitude = itemLocation.Latitude;
                 item.Longitude = itemLocation.Longitude;
 
                 var assignment = assignments.FirstOrDefault(x => x.WorkOrder == item.WorkOrder);
-                if (string.IsNullOrEmpty(assignment?.Employee)) continue;
+                if (string.IsNullOrEmpty(assignment?.Employee))
+                    continue;
+
                 var employee = employees.SingleOrDefault(x => x.Employee == assignment.EmployeeId);
 
-                result.Add(new MapViewModel
+                mapModels.Add(new MapViewModel
                 {
                     WorkOrder = item,
                     DateEntered = assignment.ScheduleDate,
                     Color = employee?.Color,
-                    Employee = assignment != null ? assignment.EmployeeId : 0
+                    Employee = assignment.EmployeeId
                 });
             }
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Success(mapModels);
         }
 
         [HttpGet]
@@ -64,12 +64,15 @@ namespace BloomService.Web.Controllers
             foreach (var location in techLocations)
             {
                 var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == location.Employee).FirstOrDefault();
-                if (employee == null) continue;
+                if (employee == null)
+                    continue;
+
                 employee.Latitude = location.Latitude;
                 employee.Longitude = location.Longitude;
                 employees.Add(employee);
             }
-            return Json(employees, JsonRequestBehavior.AllowGet);
+
+            return Success(employees);
         }
     }
 }

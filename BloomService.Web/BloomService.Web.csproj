@@ -338,6 +338,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\OwinConfig.cs" />
     <Compile Include="GlimpseSecurityPolicy.cs" />
+    <Compile Include="Infrastructure\Constants\ChartColors.cs" />
     <Compile Include="Infrastructure\Constants\DateTimeFormat.cs" />
     <Compile Include="Infrastructure\Constants\WorkOrderStatus.cs" />
     <Compile Include="Infrastructure\Dependecy\ComponentContainer.cs" />
@@ -907,9 +908,6 @@
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
     <Content Include="Views\Dashboard\Index.cshtml" />
     <None Include="Web.Beta.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Development.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>

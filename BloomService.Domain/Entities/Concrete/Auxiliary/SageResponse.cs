@@ -10,7 +10,7 @@
 
         public SageAssignment RelatedAssignment{ get; set; }
 
-        public string ErrorMassage { get; set; }
+        public string ErrorMessage { get; set; }
 
         public bool IsSucceed { get; set; }
     }
