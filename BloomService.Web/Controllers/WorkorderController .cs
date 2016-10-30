@@ -56,7 +56,7 @@ namespace BloomService.Web.Controllers
                 ARCustomer = model.Customer,
                 Location = model.Location,
                 CallType = model.Calltype,
-                CallDate = model.Calldate.GetLocalDate(_settings.CurrentTimezone),
+                CallDate = model.Calldate.GetLocalDate(_settings.Timezone),
                 Problem = model.Problem,
                 RateSheet = model.Ratesheet,
                 Employee = model.Emploee.ToString(),
@@ -116,7 +116,7 @@ namespace BloomService.Web.Controllers
 
             _repository.Add(result.Entity);
             _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
-            _notification.SendNotification(string.Format("{0} was created", workorder.WorkOrder));
+            _notification.SendNotification($"{workorder.WorkOrder} was created");
             return Success();
         }
 
@@ -124,20 +124,19 @@ namespace BloomService.Web.Controllers
         [Route("Workorder/{id}")]
         public ActionResult GetWorkorder(string id)
         {
-            var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.Id == id).Single();
-
-            workOrder.CustomerObj = _repository.SearchFor<SageCustomer>(x => x.Customer == workOrder.ARCustomer).SingleOrDefault();
-            workOrder.LocationObj = _repository.SearchFor<SageLocation>(x => x.Location == workOrder.LocationNumber).SingleOrDefault();
-            workOrder.CalltypeObj = _repository.SearchFor<SageCallType>(x => x.Description == workOrder.CallType).SingleOrDefault();
-            workOrder.ProblemObj = _repository.SearchFor<SageProblem>(x => x.Description == workOrder.Problem).SingleOrDefault();
-            workOrder.RateSheetObj = _repository.SearchFor<SageRateSheet>().ToList().SingleOrDefault(x => x.DESCRIPTION.Trim() == workOrder.RateSheet);
-            workOrder.EmployeeObj = _repository.SearchFor<SageEmployee>(x => x.Name == workOrder.Employee).SingleOrDefault();
-            workOrder.HourObj = _repository.SearchFor<SageRepair>(x => x.Repair == workOrder.EstimatedRepairHours.ToString()).SingleOrDefault();
-            workOrder.PermissionCodeObj = _repository.SearchFor<SagePermissionCode>().ToList().SingleOrDefault(x => x.DESCRIPTION.Trim() == workOrder.PermissionCode);
-            workOrder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workOrder.PayMethod.Trim());
-            workOrder.StatusObj = WorkOrderStatus.Status.Single(x => x.Status == workOrder.Status);
-            workOrder.Comments = workOrder.Comments.DecodeSafeHtmlString();
-            return Json(workOrder, JsonRequestBehavior.AllowGet);
+            var workorder = _repository.SearchFor<SageWorkOrder>(x => x.Id == id).Single();
+            workorder.CustomerObj = _repository.SearchFor<SageCustomer>(x => x.Customer == workorder.ARCustomer).SingleOrDefault();
+            workorder.LocationObj = _repository.SearchFor<SageLocation>(x => x.Location == workorder.LocationNumber).SingleOrDefault();
+            workorder.CalltypeObj = _repository.SearchFor<SageCallType>(x => x.Description == workorder.CallType).SingleOrDefault();
+            workorder.ProblemObj = _repository.SearchFor<SageProblem>(x => x.Description == workorder.Problem).SingleOrDefault();
+            workorder.RateSheetObj = _repository.SearchFor<SageRateSheet>().ToList().SingleOrDefault(x => x.DESCRIPTION.Trim() == workorder.RateSheet);
+            workorder.EmployeeObj = _repository.SearchFor<SageEmployee>(x => x.Name == workorder.Employee).SingleOrDefault();
+            workorder.HourObj = _repository.SearchFor<SageRepair>(x => x.Repair == workorder.EstimatedRepairHours.ToString()).SingleOrDefault();
+            workorder.PermissionCodeObj = _repository.SearchFor<SagePermissionCode>().ToList().SingleOrDefault(x => x.DESCRIPTION.Trim() == workorder.PermissionCode);
+            workorder.PaymentMethodObj = PaymentMethod.PaymentMethods.FirstOrDefault(x => x.Method == workorder.PayMethod.Trim());
+            workorder.StatusObj = WorkOrderStatus.Status.Single(x => x.Status == workorder.Status);
+            workorder.Comments = workorder.Comments.DecodeSafeHtmlString();
+            return Success(workorder);
         }
 
         [HttpGet]
@@ -145,15 +144,19 @@ namespace BloomService.Web.Controllers
         public ActionResult GetWorkOrdersPictures(long id)
         {
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
-            if (pictures != null)
-                pictures.Images = pictures.Images.Where(x => !x.IsDeleted).OrderBy(x => x.Id).ToList();
+            if (pictures == null)
+                return Error("Edit picture comments failed", $"GetWorkOrdersPictures method SageImageWorkOrder==false.");
 
-            return Json(pictures, JsonRequestBehavior.AllowGet);
+           pictures.Images = pictures.Images.Where(x => !x.IsDeleted)
+                    .OrderBy(x => x.Id)
+                    .ToList();
+
+           return Success(pictures);
         }
 
         [HttpPost]
         [Route("EditComment")]
-        public ActionResult GetWorkOrdersPictures(EditCommentModel model)
+        public ActionResult EditWorkorderComment(EditCommentModel model)
         {
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
             if (pictures == null)
@@ -322,13 +325,12 @@ namespace BloomService.Web.Controllers
             if (model.Problem == null)
                 return Error("Problem is required");
 
-
             var workorder = new SageWorkOrder()
             {
                 ARCustomer = model.Customer,
                 Location = model.Location,
                 CallType = model.Calltype,
-                CallDate = model.Calldate.GetLocalDate(_settings.CurrentTimezone),
+                CallDate = model.Calldate.GetLocalDate(_settings.Timezone),
                 Problem = model.Problem,
                 RateSheet = model.Ratesheet,
                 Employee = model.Emploee.ToString(),
@@ -493,8 +495,6 @@ namespace BloomService.Web.Controllers
                         }
                     }
                 }
-
-
                 if (workOrderFromMongo.WorkNotes != null)
                 {
                     var idsToRemove = new List<long>();
@@ -509,7 +509,7 @@ namespace BloomService.Web.Controllers
 
                     if (idsToRemove.Any())
                     {
-                        this._sageApiProxy.DeleteNotes(idsToRemove);
+                        _sageApiProxy.DeleteNotes(idsToRemove);
                     }
                 }
             }
@@ -533,9 +533,7 @@ namespace BloomService.Web.Controllers
         {
             var workOrder = _repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == model.WorkOrderId).SingleOrDefault();
             if (workOrder == null)
-            {
                 return Error("Work Order does not exist", $"There are no Work Orders with ID: {model.WorkOrderId}. workOrder == null");
-            }
 
             var note = Mapper.Map<SageNote>(model);
             var addNoteResult = _sageApiProxy.AddNote(note);

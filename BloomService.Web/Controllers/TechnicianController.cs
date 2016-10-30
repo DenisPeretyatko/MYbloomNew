@@ -1,5 +1,4 @@
-﻿using BloomService.Web.Infrastructure.Jobs;
-using BloomService.Web.Infrastructure.Services.Interfaces;
+﻿using BloomService.Web.Infrastructure.Services.Interfaces;
 using BloomService.Web.Infrastructure.SignalR;
 using Common.Logging;
 using System.Linq;
@@ -74,7 +73,6 @@ namespace BloomService.Web.Controllers
             _repository.Update(assignment);
             _hub.UpdateTechnician(model);
             _log.InfoFormat("Repository update technician. Name {0}, ID {1}", updatedTechnician.Name, updatedTechnician.Id);
-
             return Success();
         }
     }

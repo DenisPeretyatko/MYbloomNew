@@ -14,8 +14,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                 {
                     try
                     {
-                        WebRequest req = WebRequest.Create(_settings.SiteUrl);
-                        WebResponse result = req.GetResponse();
+                        WebRequest.Create(_settings.SiteUrl).GetResponse();
                     }
                     catch (Exception ex)
                     {
@@ -23,7 +22,9 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
 
                 }
-            }).ToRunNow().AndEvery(10).Minutes();
+            }).ToRunNow()
+            .AndEvery(10)
+            .Minutes();
         }
     }
 }

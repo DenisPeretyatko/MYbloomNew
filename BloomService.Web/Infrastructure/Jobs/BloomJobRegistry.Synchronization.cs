@@ -19,7 +19,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     try
                     {
                         var rateSheetList = _repository.GetAll<SageRateSheet>().ToList();
-                        foreach (var entity in rateSheetArray.Entities)
+                        foreach (var entity in RateSheetArray.Entities)
                         {
                             var mongoEntity = rateSheetList.SingleOrDefault(x => x.RATESHEETNBR == entity.RATESHEETNBR);
                             if (mongoEntity == null)
@@ -39,7 +39,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     try
                     {
                         var permissionCodeList = _repository.GetAll<SagePermissionCode>().ToList();
-                        foreach (var entity in permissionCodesArray.Entities)
+                        foreach (var entity in PermissionCodesArray.Entities)
                         {
                             var mongoEntity =
                                 permissionCodeList.SingleOrDefault(x => x.PERMISSIONCODE == entity.PERMISSIONCODE);
@@ -61,7 +61,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     {
                         var workOrderLocationAccordance = _proxy.GetAccordance();
                         var workOrderList = _repository.GetAll<SageWorkOrder>().ToList();
-                        foreach (var workOrder in workOrders.Entities)
+                        foreach (var workOrder in WorkOrders.Entities)
                         {
                             var mongoEntity = workOrderList.SingleOrDefault(x => x.WorkOrder == workOrder.WorkOrder);
 
@@ -98,7 +98,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 //}
 
                                 var notesResult =
-                                    workOrderNotes.Entities.Where(x => x.TRANSNBR == workOrder.WorkOrder).ToList();
+                                    WorkOrderNotes.Entities.Where(x => x.TRANSNBR == workOrder.WorkOrder).ToList();
                                 if (notesResult.Count != 0)
                                 {
                                     workOrder.WorkNotes = notesResult;
@@ -127,7 +127,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     try
                     {
                         var callTypeList = _repository.GetAll<SageCallType>().ToList();
-                        foreach (var entity in callTypeArray.Entities)
+                        foreach (var entity in CallTypeArray.Entities)
                         {
                             var mongoEntity = callTypeList.SingleOrDefault(x => x.CallType == entity.CallType);
                             if (mongoEntity == null)
@@ -147,7 +147,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     try
                     {
                         var employeeList = _repository.GetAll<SageEmployee>().ToList();
-                        foreach (var entity in emploees)
+                        foreach (var entity in Technicians)
                         {
                             var mongoEntity = employeeList.SingleOrDefault(x => x.Employee == entity.Employee);
                             if (mongoEntity == null)
@@ -176,7 +176,7 @@ namespace BloomService.Web.Infrastructure.Jobs
 
                         var employeeList = _repository.GetAll<SageEmployee>().ToList();
 
-                        foreach (var assigment in assignments.Entities)
+                        foreach (var assigment in Assignments.Entities)
                         {
                             var mongoEntity = assigmentsList.SingleOrDefault(x => x.Assignment == assigment.Assignment);
                             var workorder = workordersList.SingleOrDefault(x => x.WorkOrder == assigment.WorkOrder);
@@ -185,7 +185,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 if (!string.IsNullOrEmpty(assigment.Employee))
                                 {
                                     var employee = employeeList.SingleOrDefault(e => e.Name == assigment.Employee);
-                                    assigment.EmployeeId = employee != null ? employee.Employee : 0;
+                                    assigment.EmployeeId = employee?.Employee ?? 0;
 
                                     var assignmentDate =
                                         assigment.ScheduleDate.Value.Add(((DateTime)assigment.StartTime).TimeOfDay);
@@ -235,7 +235,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     try
                     {
                         var equipmentList = _repository.GetAll<SageEquipment>().ToList();
-                        foreach (var entity in equipments.Entities)
+                        foreach (var entity in Equipments.Entities)
                         {
                             var mongoEntity = equipmentList.SingleOrDefault(x => x.Equipment == entity.Equipment);
                             if (mongoEntity == null)
@@ -255,7 +255,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     try
                     {
                         var problemList = _repository.GetAll<SageProblem>().ToList();
-                        foreach (var entity in problems.Entities)
+                        foreach (var entity in Problems.Entities)
                         {
                             var mongoEntity = problemList.SingleOrDefault(x => x.Problem == entity.Problem);
                             if (mongoEntity == null)
@@ -275,7 +275,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     try
                     {
                         var sageRepairList = _repository.GetAll<SageRepair>().ToList();
-                        foreach (var entity in repairs.Entities)
+                        foreach (var entity in Repairs.Entities)
                         {
                             var mongoEntity = sageRepairList.SingleOrDefault(x => x.Repair == entity.Repair);
                             if (mongoEntity == null)
@@ -297,12 +297,12 @@ namespace BloomService.Web.Infrastructure.Jobs
                         var tmpLocations = workorderList.Select(x => x.LocationNumber).ToList();
                         var locationList = _repository.SearchFor<SageLocation>(x => tmpLocations.Contains(x.Location)).ToList();
 
-                        locationsCache = _repository.GetAll<SageLocationCache>().ToList();
+                        _locationsCache = _repository.GetAll<SageLocationCache>().ToList();
 
                         var utcNow = DateTime.UtcNow;
                         foreach (var entity in locationList)
                         {
-                            var mongoEntity = locationsCache.SingleOrDefault(x => x.Location == entity.Location);
+                            var mongoEntity = _locationsCache.SingleOrDefault(x => x.Location == entity.Location);
                             if (mongoEntity == null)
                             {
                                 _locationService.ResolveLocation(entity);
@@ -331,13 +331,13 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
                     try
                     {
-                        locationsCache = _repository.GetAll<SageLocationCache>().ToList();
+                        _locationsCache = _repository.GetAll<SageLocationCache>().ToList();
                         var locationsList = _repository.GetAll<SageLocation>().ToList();
                         var workorderList = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
-                        foreach (var entity in locations.Entities)
+                        foreach (var entity in Locations.Entities)
                         {
                             var mongoEntity = locationsList.SingleOrDefault(x => x.Location == entity.Location);
-                            var currentCacheLocation = locationsCache.SingleOrDefault(x => x.Location == entity.Location);
+                            var currentCacheLocation = _locationsCache.SingleOrDefault(x => x.Location == entity.Location);
 
                             if (mongoEntity == null)
                             {
@@ -383,7 +383,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     try
                     {
                         var customersList = _repository.GetAll<SageCustomer>().ToList();
-                        foreach (var entity in customers.Entities)
+                        foreach (var entity in Customers.Entities)
                         {
                             var mongoEntity = customersList.SingleOrDefault(x => x.Customer == entity.Customer);
                             if (mongoEntity == null)
@@ -403,7 +403,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     try
                     {
                         var partsList = _repository.GetAll<SagePart>().ToList();
-                        foreach (var entity in parts.Entities)
+                        foreach (var entity in Parts.Entities)
                         {
                             var mongoEntity = partsList.SingleOrDefault(x => x.Part == entity.Part);
                             if (mongoEntity == null)
@@ -420,7 +420,9 @@ namespace BloomService.Web.Infrastructure.Jobs
                         _log.ErrorFormat("Can`t sync SagePart {0}", ex);
                     }
                 }
-            }).ToRunNow().AndEvery(_settings.SynchronizationDelay).Minutes();
+            }).ToRunNow()
+            .AndEvery(_settings.SynchronizationDelay)
+            .Minutes();
         }
     }
 }

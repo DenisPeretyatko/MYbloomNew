@@ -77,15 +77,12 @@ namespace BloomService.Web
         {
             var setting = BloomServiceConfiguration.FromWebConfig(ConfigurationManager.AppSettings);
             var connectionString = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString;
-            var dbName = ConfigurationManager.AppSettings["MainDb"];
-            var basePath = ConfigurationManager.AppSettings["basePath"];
-            var storageUrl = ConfigurationManager.AppSettings["storageUrl"];
-            var azureStorage = bool.Parse(ConfigurationManager.AppSettings["azureStorage"]);
-            var siteUrl = ConfigurationManager.AppSettings["SiteUrl"];
 
             var sageApiHost = setting.SageApiHost;
 
-            kernel.Bind<IRepository>().To<MongoRepository>().WithConstructorArgument("connectionString", connectionString).WithConstructorArgument("dbName", dbName);
+            kernel.Bind<IRepository>().To<MongoRepository>()
+                .WithConstructorArgument("connectionString", connectionString)
+                .WithConstructorArgument("dbName", setting.DbName);
             kernel.Bind<BloomServiceConfiguration>().ToConstant(setting);
 
             kernel.Bind<IHttpContextProvider>().To<HttpContextProvider>();
@@ -98,20 +95,20 @@ namespace BloomService.Web
             kernel.Bind<IDashboardService>().To<DashboardService>();
             kernel.Bind<IScheduleService>().To<ScheduleService>();
 
-            if (azureStorage)
+            if (setting.UseAzureStorage)
             {
-                CloudStorageAccount storageAccount =
+                CloudStorageAccount storageAccount = 
                     CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
                 kernel.Bind<IStorageProvider>()
                     .To<AzureStorageProvider>()
                     .WithConstructorArgument("storageAccount", storageAccount)
-                    .WithConstructorArgument("storageUrl", storageUrl);
+                    .WithConstructorArgument("storageUrl", setting.StorageUrl);
             }
             else
             {
                 kernel.Bind<IStorageProvider>().To<FileSystemStorageProvider>()
-                    .WithConstructorArgument("basePath", basePath)
-                    .WithConstructorArgument("siteUrl", siteUrl);
+                    .WithConstructorArgument("basePath", setting.BasePath)
+                    .WithConstructorArgument("siteUrl", setting.SiteUrl);
             }
 
 

@@ -70,7 +70,7 @@ namespace BloomService.Web.Controllers
                 new Chart {label = "Open", data = workorders.Count(), color = ChartColors.Open},
                 new Chart {label = "Assigned", data = workorders.Count(x => assignments.Any(a => a.WorkOrder == x.WorkOrder)), color = ChartColors.Assigned},
                 new Chart {label = "Roof leak", data = workorders.Count(x => x.Problem == "Roof Leak"), color = ChartColors.RoofLeak},
-                new Chart {label = "Closed today", data = workorders.Count(x => x.DateClosed == DateTime.Now.GetLocalDate(_settings.CurrentTimezone).Date), color = ChartColors.ClosedToday}
+                new Chart {label = "Closed today", data = workorders.Count(x => x.DateClosed == DateTime.Now.GetLocalDate(_settings.Timezone).Date), color = ChartColors.ClosedToday}
             };
             chartModel.data = chartData;
             chart.Add(chartModel);
@@ -100,7 +100,7 @@ namespace BloomService.Web.Controllers
         [Route("Dashboard/UpdateNotificationTime")]
         public ActionResult UpdateNotificationTime(string str = null)
         {
-            var currentDate = DateTime.Now.GetLocalDate(_settings.CurrentTimezone);
+            var currentDate = DateTime.Now.GetLocalDate(_settings.Timezone);
             _repository.Add(new SageUserProfile()
             {
                 UserId = UserModel.Id,
@@ -117,7 +117,7 @@ namespace BloomService.Web.Controllers
                     Time = currentDate.TimeOfDay
                 };
 
-            var notificationTime = $"{userProfile.Date.Date.ToString(DateTimeFormat.DateFormat)} {userProfile.Time.ToString(DateTimeFormat.TimeFormat)}";
+            var notificationTime = $"{userProfile.Date.Date.ToString(DateTimeFormat.DateFormat)} {new DateTime(userProfile.Time.Ticks).ToString(DateTimeFormat.TimeFormat)}";
             return Success(notificationTime);
         }
 
@@ -132,12 +132,12 @@ namespace BloomService.Web.Controllers
                 .LastOrDefault(x => x.UserId == UserModel.Id) ?? new SageUserProfile()
                 {
                     UserId = UserModel.Id,
-                    Date = DateTime.Now.GetLocalDate(_settings.CurrentTimezone),
-                    Time = DateTime.Now.GetLocalDate(_settings.CurrentTimezone).TimeOfDay
+                    Date = DateTime.Now.GetLocalDate(_settings.Timezone),
+                    Time = DateTime.Now.GetLocalDate(_settings.Timezone).TimeOfDay
                 };
 
             lookups.Notifications = _notification.GetLastNotifications();
-            lookups.NotificationTime = $"{userProfile.Date.Date.ToString(DateTimeFormat.DateFormat)} {userProfile.Time.ToString(DateTimeFormat.TimeFormat)}";
+            lookups.NotificationTime = $"{userProfile.Date.Date.ToString(DateTimeFormat.DateFormat)} {new DateTime(userProfile.Time.Ticks).ToString(DateTimeFormat.TimeFormat)}";
 
             return Success(lookups);
         }

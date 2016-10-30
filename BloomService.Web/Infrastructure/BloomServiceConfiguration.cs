@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System;
 using System.Collections.Specialized;
+using System.Web.WebPages;
 
 namespace BloomService.Web.Infrastructure
 {
@@ -15,32 +16,19 @@ namespace BloomService.Web.Infrastructure
                 {
                     SageUsername = nameValueCollection["SageUsername"],
                     SagePassword = nameValueCollection["SagePassword"],
-                    EndPointBase = nameValueCollection["EndPointBase"],
-                    WorkOrderEndPoint = nameValueCollection["WorkOrderEndPoint"],
-                    EmployeeEndPoint = nameValueCollection["EmployeeEndPoint"],
-                    LocationEndPoint = nameValueCollection["LocationEndPoint"],
-                    ProblemEndPoint = nameValueCollection["ProblemEndPoint"],
-                    CallTypeEndPoint = nameValueCollection["CallTypeEndPoint"],
-                    PartEndPoint = nameValueCollection["PartEndPoint"],
-                    RepairEndPoint = nameValueCollection["RepairEndPoint"],
-                    EquipmentEndPoint = nameValueCollection["EquipmentEndPoint"],
-                    DepartmentEndPoint = nameValueCollection["DepartmentEndPoint"],
-                    AssignmentEndPoint = nameValueCollection["AssignmentEndPoint"],
-                    CustomerEndPoint = nameValueCollection["CustomerEndPoint"],
                     SyncDb = nameValueCollection["SyncDb"],
                     SageApiHost = nameValueCollection["SageApiHost"],
                     SiteUrl = nameValueCollection["SiteUrl"],
-                    SertificateUrl = nameValueCollection["SertificateUrl"],
+                    PushCertificateUrl = nameValueCollection["PushCertificateUrl"],
                     SizeBigPhoto = int.Parse(nameValueCollection["SizeBigPhoto"]),
                     SizeSmallPhoto = int.Parse(nameValueCollection["SizeSmallPhoto"]),
-                    CurrentTimezone = nameValueCollection["CurrentTimezone"],
+                    Timezone = nameValueCollection["Timezone"],
                     NotificationDelay = int.Parse(nameValueCollection["NotificationDelay"]),
                     CheckTechniciansDelay = int.Parse(nameValueCollection["CheckTechniciansDelay"]),
                     SynchronizationDelay = int.Parse(nameValueCollection["SynchronizationDelay"]),
                     Connection = ConfigurationManager.ConnectionStrings["MongoServerSettings"].ConnectionString,
-                    DbName = ConfigurationManager.AppSettings["MainDb"],
+                    DbName = ConfigurationManager.AppSettings["DbName"],
 
-                    PureNotificationEnabled = bool.Parse(ConfigurationManager.AppSettings["PureNotificationEnabled"]),
                     AlertNotificationEnabled = bool.Parse(ConfigurationManager.AppSettings["AlertNotificationEnabled"]),
                     AlertBadgeNotificationEnabled = bool.Parse(ConfigurationManager.AppSettings["AlertBadgeNotificationEnabled"]),
                     AlertBadgeSoundNotificationEnabled = bool.Parse(ConfigurationManager.AppSettings["AlertBadgeSoundNotificationEnabled"]),
@@ -48,9 +36,11 @@ namespace BloomService.Web.Infrastructure
                     NotificationAlert = ConfigurationManager.AppSettings["NotificationAlert"],
                     NotificationBadge = int.Parse(ConfigurationManager.AppSettings["NotificationBadge"]),
                     NotificationSound = ConfigurationManager.AppSettings["NotificationSound"],
+                    IngoreTechnicianAvaliability = bool.Parse(ConfigurationManager.AppSettings["IngoreTechnicianAvaliability"]),
 
-                    BaseUrl = ConfigurationManager.AppSettings["baseUrl"],
-                    BasePath = ConfigurationManager.AppSettings["basePath"]
+                    BasePath = ConfigurationManager.AppSettings["BasePath"],
+                    StorageUrl = ConfigurationManager.AppSettings["StorageUrl"],
+                    UseAzureStorage = bool.Parse(ConfigurationManager.AppSettings["UseAzureStorage"])
                 };
 
                 return configuration;
@@ -63,32 +53,20 @@ namespace BloomService.Web.Infrastructure
 
         public string SageUsername { get; set; }
         public string SagePassword { get; set; }
-        public string EndPointBase { get; set; }
-        public string WorkOrderEndPoint { get; set; }
-        public string EmployeeEndPoint { get; set; }
-        public string LocationEndPoint { get; set; }
-        public string ProblemEndPoint { get; set; }
-        public string CallTypeEndPoint { get; set; }
-        public string PartEndPoint { get; set; }
-        public string RepairEndPoint { get; set; }
-        public string EquipmentEndPoint { get; set; }
-        public string DepartmentEndPoint { get; set; }
-        public string AssignmentEndPoint { get; set; }
-        public string CustomerEndPoint { get; set; }
         public string SyncDb { get; set; }
         public string SageApiHost { get; set; }
         public string SiteUrl { get; set; }
-        public string SertificateUrl { get; set; }
+
         public int SizeBigPhoto { get; set; }
         public int SizeSmallPhoto { get; set; }
-        public string CurrentTimezone { get; set; }
+        public string Timezone { get; set; }
         public int NotificationDelay { get; set; }
         public int CheckTechniciansDelay { get; set; }
         public int SynchronizationDelay { get; set; }
         public string DbName { get; set; }
         public string Connection { get; set; }
 
-        public bool PureNotificationEnabled { get; set; }
+        public string PushCertificateUrl { get; set; }
         public bool AlertNotificationEnabled { get; set; }
         public bool AlertBadgeNotificationEnabled { get; set; }
         public bool AlertBadgeSoundNotificationEnabled { get; set; }
@@ -96,9 +74,12 @@ namespace BloomService.Web.Infrastructure
         public string NotificationAlert { get; set; }
         public int NotificationBadge { get; set; }
         public string NotificationSound { get; set; }
+        public bool IngoreTechnicianAvaliability { get; set; }
 
+        public bool UseAzureStorage { get; set; }
         public string BaseUrl { get; set; }
         public string BasePath { get; set; }
+        public string StorageUrl { get; set; }
 
         public int ItemsOnPage => 50;
         public int NotificationOnPage = 9;

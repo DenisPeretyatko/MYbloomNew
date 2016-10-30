@@ -1,22 +1,21 @@
-﻿namespace BloomService.Web.Infrastructure.Services
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Web.Script.Serialization;
+using BloomService.Domain.Entities.Concrete;
+using BloomService.Domain.Models.Requests;
+using BloomService.Domain.Models.Responses;
+using BloomService.Web.Infrastructure.Constants;
+using BloomService.Web.Infrastructure.Mongo;
+using BloomService.Web.Infrastructure.Services.Interfaces;
+using BloomService.Web.Models;
+using Microsoft.Owin.Security;
+using RestSharp;
+using System;
+
+namespace BloomService.Web.Infrastructure.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Web.Script.Serialization;
 
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Domain.Models.Requests;
-    using BloomService.Domain.Models.Responses;
-    using BloomService.Web.Infrastructure.Constants;
-    using BloomService.Web.Infrastructure.Mongo;
-    using BloomService.Web.Infrastructure.Services.Interfaces;
-    using BloomService.Web.Models;
-
-    using Microsoft.Owin.Security;
-
-    using RestSharp;
-    using System;
     public class AuthorizationService : IAuthorizationService
     {
         private readonly IRepository _repository;
@@ -24,8 +23,8 @@
 
         public AuthorizationService(IRepository repository, BloomServiceConfiguration configuration)
         {
-            this._repository = repository;
-            this._configuration = configuration;
+            _repository = repository;
+            _configuration = configuration;
         }
 
         public UserModel GetUser(ClaimsPrincipal claimsPrincipal)
@@ -57,7 +56,7 @@
             var request = new RestRequest(EndPoints.Authorization, Method.POST) { RequestFormat = DataFormat.Json };
             var requestBody = new AuthorizationRequest() { Name = name, Password = password };
             request.AddBody(requestBody);
-            request.AddHeader("Authorization", string.Format("Basic {0}:{1}", _configuration.SageUsername, _configuration.SagePassword));
+            request.AddHeader("Authorization", $"Basic {_configuration.SageUsername}:{_configuration.SagePassword}");
             var restClient = new RestClient(_configuration.SageApiHost);
             var response = restClient.Execute<AuthorizationResponse>(request);
             return response.StatusCode != System.Net.HttpStatusCode.OK ? null
@@ -66,7 +65,7 @@
 
         public AuthorizationResponse Authorization(string login, string password)
         {
-            var user = this.CheckUser(login, password);
+            var user = CheckUser(login, password);
             if (user == null)
                 return null;
 
@@ -79,7 +78,6 @@
             };
 
             var identity = new ClaimsIdentity(claims, OwinConfig.OAuthOptions.AuthenticationType);
-
             var ticket = new AuthenticationTicket(identity, new AuthenticationProperties());
             var result = new AuthorizationResponse
             {

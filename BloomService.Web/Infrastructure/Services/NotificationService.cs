@@ -28,7 +28,7 @@ namespace BloomService.Web.Infrastructure.Services
         
         public void SendNotification(string message)
         {
-            var curDate = DateTime.Now.GetLocalDate(_settings.CurrentTimezone);
+            var curDate = DateTime.Now.GetLocalDate(_settings.Timezone);
             _repository.Add(new Notification()
             {
                 IsViewed = true,
@@ -41,7 +41,7 @@ namespace BloomService.Web.Infrastructure.Services
             {
                 IsViewed = true,
                 Message = message,
-                Time = $"{curDate.Date.ToString(DateTimeFormat.DateFormat)} {curDate.ToString(DateTimeFormat.TimeFormat)}"
+                Time = $"{curDate.Date.ToString(DateTimeFormat.DateFormat)} {new DateTime(curDate.Ticks).ToString(DateTimeFormat.TimeFormat)}"
             });
         }
 
@@ -58,7 +58,7 @@ namespace BloomService.Web.Infrastructure.Services
                 notificationModels.Add(new NotificationModel()
                 {
                     Message = obj.Message,
-                    Time = $"{obj.Date.Date.ToString(DateTimeFormat.DateFormat)} {obj.Time.ToString(DateTimeFormat.TimeFormat)}", 
+                    Time = $"{obj.Date.Date.ToString(DateTimeFormat.DateFormat)} {new DateTime(obj.Time.Ticks).ToString(DateTimeFormat.TimeFormat)}", 
                     IsViewed = true
                 });
                 

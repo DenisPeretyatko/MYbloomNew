@@ -309,7 +309,7 @@ namespace BloomService.Web.Controllers
                 Employee = Convert.ToInt64(userId),
                 Latitude = lat,
                 Longitude = lng,
-                Date = DateTime.Now.GetLocalDate(_settings.CurrentTimezone)
+                Date = DateTime.Now.GetLocalDate(_settings.Timezone)
             };
             _repository.Add(techLocation);
             var emploee = _repository.SearchFor<SageEmployee>(x => x.Employee == userId).Single();

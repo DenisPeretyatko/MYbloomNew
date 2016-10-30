@@ -18,6 +18,5 @@ namespace BloomService.Web
             runner.MigrationLocator.LookForMigrationsInAssemblyOfType<MigrationInitial>();
             runner.UpdateToLatest();
         }
-        
     }
 }

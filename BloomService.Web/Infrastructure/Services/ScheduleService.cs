@@ -2,7 +2,6 @@
 using System.Linq;
 using BloomService.Domain.Entities.Concrete;
 using BloomService.Domain.Extensions;
-using BloomService.Web.Infrastructure.Jobs;
 using BloomService.Web.Infrastructure.Mongo;
 using BloomService.Web.Infrastructure.Services.Interfaces;
 using BloomService.Web.Infrastructure.SignalR;
@@ -15,11 +14,10 @@ namespace BloomService.Web.Infrastructure.Services
     {
         private readonly IRepository _repository;
         private readonly ISageApiProxy _sageApiProxy;
-        private readonly ILog _log = LogManager.GetLogger(typeof(BloomJobRegistry));
+        private readonly ILog _log = LogManager.GetLogger(typeof(ScheduleService));
         private readonly IBloomServiceHub _hub;
         private readonly INotificationService _notification;
         private readonly ILocationService _locationService;
-
 
         public ScheduleService(IRepository repository, ISageApiProxy sageApiProxy, IBloomServiceHub hub, INotificationService notification, ILocationService locationService)
         {
@@ -51,7 +49,7 @@ namespace BloomService.Web.Infrastructure.Services
                 return false;
             }
 
-            databaseAssignment.EmployeeId = employee != null ? employee.Employee : 0;
+            databaseAssignment.EmployeeId = employee?.Employee ?? 0;
             databaseAssignment.Start = ((DateTime)edited.Entity.ScheduleDate).Add(((DateTime)edited.Entity.StartTime).TimeOfDay).ToString();
             databaseAssignment.End = ((DateTime)edited.Entity.ScheduleDate).Add(((DateTime)edited.Entity.StartTime).TimeOfDay).AddHours(edited.Entity.EstimatedRepairHours.AsDouble()).ToString();
             databaseAssignment.Color = employee?.Color ?? "";
@@ -124,7 +122,7 @@ namespace BloomService.Web.Infrastructure.Services
             workOrder.AssignmentId = databaseAssignment.Assignment;
             _repository.Update(workOrder);
             _log.InfoFormat("Repository update workorder. Name: {0}, Id: {1}", workOrder.Name, workOrder.Id);
-            _notification.SendNotification(string.Format("Workorder {0} unassigned from {1}", workOrder.Name, employee.Name));
+            _notification.SendNotification($"Workorder {workOrder.Name} unassigned from {employee.Name}");
             _hub.DeleteAssigment(model);
 
             return true;

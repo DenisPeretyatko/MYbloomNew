@@ -5,29 +5,28 @@ using BloomService.Web.Infrastructure.StorageProviders;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using RestSharp.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Web;
+using BloomService.Domain.Entities.Concrete;
+using BloomService.Web.Infrastructure.Mongo;
+using BloomService.Web.Infrastructure.Services.Interfaces;
+using BloomService.Web.Infrastructure.SignalR;
+using BloomService.Web.Models;
+
 
 namespace BloomService.Web.Infrastructure.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
-
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Web.Infrastructure.Mongo;
-    using BloomService.Web.Infrastructure.Services.Interfaces;
-    using BloomService.Web.Models;
-    using SignalR;
-    using Domain.Extensions;
 
     public class ImageService : IImageService
     {
-        private static readonly Dictionary<ImageFormat, string> _knownImageFormats = new Dictionary<ImageFormat, string>()
+        private static readonly Dictionary<ImageFormat, string> KnownImageFormats = new Dictionary<ImageFormat, string>()
         {
             { ImageFormat.Bmp, "bmp"},
             { ImageFormat.Jpeg, "jpg"},
@@ -46,8 +45,9 @@ namespace BloomService.Web.Infrastructure.Services
         private readonly string _urlToFolderPhotoWorkOrders;
         private readonly string _urlToFolderFonts;
         private readonly string small = "small";
-        private readonly Color colorTechnicianIcon = Color.FromArgb(0, 13, 255);
-        private readonly Color colorWorkOrderIcon = Color.FromArgb(255, 0, 4);
+
+        private readonly Color _colorTechnicianIcon = Color.FromArgb(0, 13, 255);
+        private readonly Color _colorWorkOrderIcon = Color.FromArgb(255, 0, 4);
         private readonly BloomServiceConfiguration settings;
 
         public ImageService(IHttpContextProvider httpContextProvider, IRepository repository, IBloomServiceHub hub, IStorageProvider storageProvider)
@@ -61,10 +61,8 @@ namespace BloomService.Web.Infrastructure.Services
             _urlToFolderTecnician = Path.Combine(settings.BasePath, "technician");
             _urlToFolderWorkOrder = Path.Combine(settings.BasePath, "workorder");
             _urlToFolderPhotoWorkOrders = Path.Combine(settings.BasePath, "images");
-            _urlToFolderFonts = Path.Combine(settings.BasePath.Replace("/userFiles", ""), "fonts");;
-
+            _urlToFolderFonts = Path.Combine(settings.BasePath.Replace("/userFiles", ""), "fonts"); ;
         }
-
 
         //Upload images to Azure
         private static List<string> DirSearch(string sDir)
@@ -192,7 +190,7 @@ namespace BloomService.Web.Infrastructure.Services
             Font theFont = new Font(family, fontSize);
 
             watermarkImage = ResizeImage(watermarkImage, new Size(newWidth, newHeight));
-           // watermarkImage = ChangeOpacity(watermarkImage, opacity);
+            // watermarkImage = ChangeOpacity(watermarkImage, opacity);
 
             using (var graphicsHandle = Graphics.FromImage(image))
             using (TextureBrush watermarkBrush = new TextureBrush(watermarkImage))
@@ -214,17 +212,17 @@ namespace BloomService.Web.Infrastructure.Services
                         Alignment = StringAlignment.Center,
                         LineAlignment = StringAlignment.Center
                     };
-                    
+
                     graphicsHandle.FillRectangle(brush, Rectangle.Round(rectF1));
                     var pen = new Pen(Color.Black, 0.1f);
                     graphicsHandle.DrawRectangle(pen, Rectangle.Round(rectF1));
                     pen.Color = Color.Red;
-                    RectangleF rectInside = new RectangleF(x+2, y+2, newWidth-4, newHeight-4);
+                    RectangleF rectInside = new RectangleF(x + 2, y + 2, newWidth - 4, newHeight - 4);
                     graphicsHandle.DrawRectangle(pen, Rectangle.Round(rectInside));
-                    var woDate=""; 
+                    var woDate = "";
                     if (workOrder.DateEntered != null)
-                         woDate = workOrder.DateEntered.Value.Date.ToShortDateString();
-                    graphicsHandle.DrawString($"WORK ORDER #{workOrder.WorkOrder}\r\n{woDate}\r\nIMAGE #{number}", arialFont, Brushes.Black, x+ newWidth/2, y+ newHeight/2, stringFormat);
+                        woDate = workOrder.DateEntered.Value.Date.ToShortDateString();
+                    graphicsHandle.DrawString($"WORK ORDER #{workOrder.WorkOrder}\r\n{woDate}\r\nIMAGE #{number}", arialFont, Brushes.Black, x + newWidth / 2, y + newHeight / 2, stringFormat);
                 }
 
             }
@@ -260,7 +258,7 @@ namespace BloomService.Web.Infrastructure.Services
             var milliseconds = DateTime.Now.TimeOfDay.TotalMilliseconds;
             var path = Path.Combine(this._urlToFolderPhotoWorkOrders, idWorkOrder.ToString());
 
-            foreach (var image in images.Images.Where(x=>!x.IsDeleted))
+            foreach (var image in images.Images.Where(x => !x.IsDeleted))
             {
                 image.Image = _storageProvider.GetFullUrl(Path.Combine(path, $"{image.Image}?{milliseconds}"));
                 image.BigImage = _storageProvider.GetFullUrl(Path.Combine(path, $"{image.BigImage}?{milliseconds}"));
@@ -277,7 +275,7 @@ namespace BloomService.Web.Infrastructure.Services
             if (!this.ValidateImage(image))
                 return string.Empty;
             //string name;
-            string ext = _knownImageFormats[ImageFormat.Jpeg];
+            string ext = KnownImageFormats[ImageFormat.Jpeg];
             //if (_knownImageFormats.TryGetValue(image.RawFormat, out name))
             //    ext = name.ToLower();
             image = AddWaterMark(image, workOrder, number);
@@ -339,7 +337,7 @@ namespace BloomService.Web.Infrastructure.Services
             //var pathToResultIconTechnician = string.Format("{0}{1}.{2}",
             //    this.httpContextProvider.MapPath(this._urlToFolderTecnician), "\\" + technician.Id, _knownImageFormats[ImageFormat.Png]);
             var pathToResultIconTechnician = string.Format("{0}{1}.{2}",
-              _storageProvider.GetPublicUrl(this._urlToFolderTecnician), "\\" + technician.Id, _knownImageFormats[ImageFormat.Png]);
+              _storageProvider.GetPublicUrl(this._urlToFolderTecnician), "\\" + technician.Id, KnownImageFormats[ImageFormat.Png]);
 
             //var pathToWorkOrderIcon = this.httpContextProvider.MapPath(this._urlToWorkOrderIcon);
             var pathToWorkOrderIcon = _storageProvider.GetPublicUrl(this._urlToWorkOrderIcon);
@@ -349,11 +347,11 @@ namespace BloomService.Web.Infrastructure.Services
             //    );
             var pathToResultIconWorkOrder = string.Format("{0}{1}.{2}",
                _storageProvider.GetPublicUrl(this._urlToFolderWorkOrder),
-               "\\" + technician.Id, _knownImageFormats[ImageFormat.Png]
+               "\\" + technician.Id, KnownImageFormats[ImageFormat.Png]
                );
 
-            return this.CreateIcon(pathToTechnicianIcon, technician.Color, pathToResultIconTechnician, this.colorTechnicianIcon)
-                   && this.CreateIcon(pathToWorkOrderIcon, technician.Color, pathToResultIconWorkOrder, this.colorWorkOrderIcon);
+            return this.CreateIcon(pathToTechnicianIcon, technician.Color, pathToResultIconTechnician, this._colorTechnicianIcon)
+                   && this.CreateIcon(pathToWorkOrderIcon, technician.Color, pathToResultIconWorkOrder, this._colorWorkOrderIcon);
         }
 
 
@@ -410,7 +408,7 @@ namespace BloomService.Web.Infrastructure.Services
             var zipStream = new ZipOutputStream(outputMemStream);
             zipStream.SetLevel(3);
 
-            foreach (var record in pictures.Images.Where(x=>!x.IsDeleted))
+            foreach (var record in pictures.Images.Where(x => !x.IsDeleted))
             {
                 byte[] bytes;
                 try

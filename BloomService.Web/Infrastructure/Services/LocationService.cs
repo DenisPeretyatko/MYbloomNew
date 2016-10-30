@@ -1,20 +1,18 @@
 ﻿using System;
 using BloomService.Web.Infrastructure.Dependecy;
 using BloomService.Web.Infrastructure.Mongo;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading;
+using System.Xml.Serialization;
+using BloomService.Domain.Entities.Concrete;
+using BloomService.Web.Infrastructure.Services.Interfaces;
+using BloomService.Web.Models;
 
 namespace BloomService.Web.Infrastructure.Services
 {
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Text;
-    using System.Threading;
-    using System.Xml.Serialization;
-
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Web.Infrastructure.Services.Interfaces;
-    using BloomService.Web.Models;
-
     public class LocationService : ILocationService
     {
         private static readonly string url = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false";
@@ -39,9 +37,9 @@ namespace BloomService.Web.Infrastructure.Services
                     sageLocation.Latitude = geometry.location.lat;
                     sageLocation.Longitude = geometry.location.lng;
 
-                    var sageLocationCache = cache ?? _repository.SearchFor<SageLocationCache>(x => x.Location == sageLocation.Location)
+                    var sageLocationCache = cache ?? _repository
+                        .SearchFor<SageLocationCache>(x => x.Location == sageLocation.Location)
                         .SingleOrDefault();
-
 
                     if (sageLocationCache != null)
                     {
@@ -106,8 +104,6 @@ namespace BloomService.Web.Infrastructure.Services
 
             return sb.ToString().TrimEnd(' ');
         }
-
-
 
         public double Distance(decimal latitude1, decimal longitude1, decimal latitude2, decimal longitude2)
         {

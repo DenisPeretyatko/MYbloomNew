@@ -1,23 +1,21 @@
-﻿namespace BloomService.Web.Infrastructure.Services
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
+using BloomService.Domain.Entities.Concrete;
+using BloomService.Web.Infrastructure.Constants;
+using BloomService.Web.Infrastructure.Mongo;
+using BloomService.Web.Infrastructure.Services.Interfaces;
+using BloomService.Web.Models;
+
+namespace BloomService.Web.Infrastructure.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using AutoMapper;
-
-    using BloomService.Domain.Entities.Concrete;
-    using BloomService.Web.Infrastructure.Constants;
-    using BloomService.Web.Infrastructure.Mongo;
-    using BloomService.Web.Infrastructure.Services.Interfaces;
-    using BloomService.Web.Models;
-
     public class DashboardService : IDashboardService
     {
         private readonly IRepository _repository;
 
         public DashboardService(IRepository repository)
         {
-            this._repository = repository;
+            _repository = repository;
         }
 
         public LookupsModel GetLookups()
