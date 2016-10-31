@@ -61,6 +61,8 @@ namespace BloomService.Web.Controllers
         {
             var dashboardModel = new DashboardViewModel();
             var workorders = _repository.SearchFor<SageWorkOrder>().Open().ToArray();
+            var currentDate = DateTime.Now.GetLocalDate(_settings.Timezone).Date;
+            var closedWorkorders = _repository.SearchFor<SageWorkOrder>(x => x.DateClosed == currentDate).Count();
             var assignments = _repository.SearchFor<SageAssignment>(x => x.Employee == "").ToArray();
             var chart = new List<ChartModel>();
             var chartModel = new ChartModel();
@@ -70,7 +72,7 @@ namespace BloomService.Web.Controllers
                 new Chart {label = "Open", data = workorders.Count(), color = ChartColors.Open},
                 new Chart {label = "Assigned", data = workorders.Count(x => assignments.Any(a => a.WorkOrder == x.WorkOrder)), color = ChartColors.Assigned},
                 new Chart {label = "Roof leak", data = workorders.Count(x => x.Problem == "Roof Leak"), color = ChartColors.RoofLeak},
-                new Chart {label = "Closed today", data = workorders.Count(x => x.DateClosed == DateTime.Now.GetLocalDate(_settings.Timezone).Date), color = ChartColors.ClosedToday}
+                new Chart {label = "Closed today", data =closedWorkorders, color = ChartColors.ClosedToday}
             };
             chartModel.data = chartData;
             chart.Add(chartModel);

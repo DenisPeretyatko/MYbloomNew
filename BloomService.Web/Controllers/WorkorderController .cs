@@ -69,6 +69,7 @@ namespace BloomService.Web.Controllers
                 JCJob = model.JCJob,
                 Contact = model.Contact,
                 Equipment = model.Equipment,
+                DateClosed = new DateTime(2000, 1, 1).Date
             };
 
             var result = _sageApiProxy.AddWorkOrder(workorder);
@@ -145,7 +146,7 @@ namespace BloomService.Web.Controllers
         {
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
             if (pictures == null)
-                return Error("Edit picture comments failed", $"GetWorkOrdersPictures method SageImageWorkOrder==false.");
+                return Success("");
 
            pictures.Images = pictures.Images.Where(x => !x.IsDeleted)
                     .OrderBy(x => x.Id)
@@ -160,7 +161,7 @@ namespace BloomService.Web.Controllers
         {
             var pictures = _repository.SearchFor<SageImageWorkOrder>(x => x.WorkOrder == model.WorkOrder).SingleOrDefault();
             if (pictures == null)
-                return Error("Edit picture comments failed", $"GetWorkOrdersPictures method SageImageWorkOrder==false.");
+                return Success("");
 
             pictures.Images.Find(x => x.Id == model.Id && !x.IsDeleted).Description = model.Comment;
             _repository.Update(pictures);
@@ -383,10 +384,6 @@ namespace BloomService.Web.Controllers
             workOrderResult.Entity.IsValid = true;
             workOrderResult.Entity.WorkOrderItems = _sageApiProxy.GetWorkorderItemsByWorkOrderId(workorder.WorkOrder).Entities;
             workOrderResult.Entity.WorkNotes = this._sageApiProxy.GetNotes(workorder.WorkOrder).Entities;
-            _repository.Update(workOrderResult.Entity);
-
-            _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
-            _hub.UpdateWorkOrder(model);
             if (model.Status == WorkOrderStatus.WorkCompleteId)
             {
                 _hub.ShowAlert(new SweetAlertModel()
@@ -396,6 +393,16 @@ namespace BloomService.Web.Controllers
                     Type = "success"
                 });
             }
+            else if (model.Status == WorkOrderStatus.ClosedId && workOrderResult.Entity.DateClosed?.Date==new DateTime(2000, 1, 1).Date)
+            {
+                workOrderResult.Entity.DateClosed = DateTime.Now.GetLocalDate(_settings.Timezone).Date;
+            }
+            _repository.Update(workOrderResult.Entity);
+
+            _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
+            _hub.UpdateWorkOrder(model);
+
+           
             return Success();
         }
 
@@ -617,10 +624,8 @@ namespace BloomService.Web.Controllers
             var workorder = this._repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
             if (workorder == null)
                 return Error("Workorder does not exist", $"There are no Workorder with workorderID: {id}. workorder == null");
-
-            if (workorder.WorkNotes == null)
-                return Error("WorkNotes notes does not exist", $"There are no WorkNotes with workorderID: {id}. WorkNotes == null");
-
+            if(workorder.WorkNotes==null)
+                return Success("");
             var notes = Mapper.Map<IEnumerable<WorkOrderNoteModel>>(workorder.WorkNotes).OrderBy(x => x.NoteId);
             return Success(notes);
         }
