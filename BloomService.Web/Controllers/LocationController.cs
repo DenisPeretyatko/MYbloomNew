@@ -4,6 +4,8 @@ using BloomService.Web.Models;
 using System.Web.Mvc;
 using BloomService.Domain.Entities.Concrete;
 using System.Collections.Generic;
+using BloomService.Domain.Extensions;
+using BloomService.Web.Infrastructure;
 using BloomService.Web.Infrastructure.Mongo;
 
 namespace BloomService.Web.Controllers
@@ -11,10 +13,12 @@ namespace BloomService.Web.Controllers
     public class LocationController : BaseController
     {
         private readonly IRepository _repository;
+        private readonly BloomServiceConfiguration _settings;
 
-        public LocationController(IRepository repository)
+        public LocationController(IRepository repository, BloomServiceConfiguration settings)
         {
             _repository = repository;
+            _settings = settings;
         }
 
         [HttpPost]
@@ -57,7 +61,7 @@ namespace BloomService.Web.Controllers
         [Route("Location/Trucks")]
         public ActionResult GetTrucks()
         {
-            var utcDateLimit = DateTime.UtcNow.AddHours(-1);
+            var utcDateLimit = DateTime.Now.GetLocalDate(_settings.Timezone).AddHours(-1);
             var techLocations = _repository.SearchFor<SageTechnicianLocation>(x => x.Date >= utcDateLimit);
             var employees = new List<SageEmployee>();
 
