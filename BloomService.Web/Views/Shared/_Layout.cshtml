@@ -29,7 +29,7 @@
     <script>
         var global = {
             TimeZone: "@System.Configuration.ConfigurationManager.AppSettings["CurrentTimezone"]",
-            BasePath: "@System.Configuration.ConfigurationManager.AppSettings["baseUrl"]"
+           BasePath: "@string.Format("{0}/{1}", @System.Configuration.ConfigurationManager.AppSettings["StorageUrl"], @System.Configuration.ConfigurationManager.AppSettings["BasePath"])"
         };
     </script>
 
