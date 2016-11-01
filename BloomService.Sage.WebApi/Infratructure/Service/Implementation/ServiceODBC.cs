@@ -149,6 +149,14 @@
             return result;
         }
 
+        public List<SageWorkOrderItem> GetDiapasoneWorkOrderItems(string first, string last)
+        {
+            var query = string.Format(Queries.SelectDiapasonWorkOrderItemsQuery, first, last);
+            var response = ExecuteQueryAndGetData(timberlineServiceManagementConnectionString, query);
+            var result = DictionaryToWorkOrderItemList(response);
+            return result;
+        }
+
         private List<SageWorkOrder> DictionaryToWorkOrderList(List<Dictionary<string, object>> response)
         {
             var result = new List<SageWorkOrder>();

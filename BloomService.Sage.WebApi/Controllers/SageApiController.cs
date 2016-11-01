@@ -473,6 +473,25 @@
             }
         }
 
+        [HttpPost, Route("api/v2/sm/workorders/items/{first}/{last}")]
+        public SageResponse<SageWorkOrderItem> EditWorkOrderStatus(long first, long last)
+        {
+            try
+            {                
+                var result = new SageResponse<SageWorkOrderItem>
+                {
+                    IsSucceed = true,
+                    Entities = serviceOdbc.GetDiapasoneWorkOrderItems(first.ToString(), last.ToString())
+                };
+                return result;
+            }
+            catch (ResponseException exception)
+            {
+                var result = new SageResponse<SageWorkOrderItem> { IsSucceed = false, ErrorMassage = exception.Error.Message };
+                return result;
+            }
+        }
+
         [HttpPost, Route("api/v2/sm/workorders/status/edit/{id}/{status}")]
         public SageResponse<SageWorkOrder> EditWorkOrderStatus(string id, string status)
         {

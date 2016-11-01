@@ -38,5 +38,7 @@
         List<SageWorkOrderItem> GetWorkOrderItems();
 
         List<SageWorkOrderLocationAccordance> GetWorkOrderLocationAccordance();
+
+        List<SageWorkOrderItem> GetDiapasoneWorkOrderItems(string first, string last);
     }
 }
