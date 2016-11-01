@@ -15,6 +15,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
 
     commonDataService.getTechnician($stateParams.id).then(function (response) {
         $scope.technician = response.data;
+        $scope.color = response.data.Color;
 
         $scope.obj.notAvailable = $scope.technician.IsAvailable;
        
@@ -98,7 +99,7 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
             header: {
                 left: 'prev,next',
                 center: 'title',
-                right: 'agendaWeek'
+                right: ''
             },
             eventClick: $scope.alertOnEventClick,
             eventDrop: $scope.alertOnDrop,
