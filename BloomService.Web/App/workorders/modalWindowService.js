@@ -2,6 +2,24 @@
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Id}}. {{Image}}</h1><div>{{Description}}</div></div>");
     var basePath = global.BasePath;
     var markersToRemove = [];
+    
+    this.openLargeMap = function (mapOptions, wo) {
+        var staticMapUrl = "https://maps.googleapis.com/maps/api/staticmap";
+        staticMapUrl += "?center=" + mapOptions.center.lat() + "," + mapOptions.center.lng();
+        staticMapUrl += "&size=640x640";
+        staticMapUrl += "&zoom=" + mapOptions.zoom;
+        staticMapUrl += "&maptype=satellite";
+        for (var i = 0; i < markersToRemove.length; i++) {
+            staticMapUrl += "&markers=color:red|label:" + markersToRemove[i].labelContent + "|" + markersToRemove[i].position.lat() + "," + markersToRemove[i].position.lng();
+        }
+        var a = document.createElement('a');
+        a.href = staticMapUrl;
+        a.download = wo+"-map.png";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
+
     this.setContent = function (wo, picture, markers, map) {
         $('#myModal').on('shown.bs.modal', function () {
             google.maps.event.trigger(map, 'resize');
@@ -14,10 +32,12 @@
             });
         });
     };
+
     var changeImage = function (image, description, wo) {
         $("#modalImg").attr('src', basePath + '/images/' + wo + '/' + image);
         $("#modalComment").text(description);
     };
+
     this.setMarkers = function (images, map, wo) {
         angular.forEach(images, function (value, key) {
             var content = tooltip(value);

@@ -25,6 +25,7 @@
         SageResponse<SageWorkOrder> UnassignWorkOrders(long id);
         SageResponse<SageWorkOrder> GetWorkorder(long id);
         SageResponse<SageWorkOrder> GetWorkorders();
+        SageResponse<SageWorkOrder> MarkAsReviewed(long id);
 
         SageResponse<SageWorkOrderItem> DeleteWorkOrderItems(long workOrderId, IEnumerable<long> ids);
         SageResponse<SageWorkOrderItem> GetWorkorderItemsByWorkOrderId(long id);

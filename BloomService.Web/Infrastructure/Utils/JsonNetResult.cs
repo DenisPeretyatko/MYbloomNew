@@ -1,4 +1,6 @@
-﻿namespace BloomService.Web.Infrastructure.Utils
+﻿using Newtonsoft.Json.Linq;
+
+namespace BloomService.Web.Infrastructure.Utils
 {
     using System;
     using System.IO;
@@ -11,7 +13,11 @@
     {
         public JsonNetResult()
         {
-            this.Settings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            this.Settings = new JsonSerializerSettings {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+
+            Settings.Converters.Add(new EscapeQuoteConverter());
         }
 
         public JsonSerializerSettings Settings { get; private set; }
@@ -43,6 +49,25 @@
                 scriptSerializer.Serialize(sw, this.Data);
                 response.Write(sw.ToString());
             }
+        }
+    }
+
+    public class EscapeQuoteConverter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            writer.WriteValue(value.ToString().Replace("'", "`"));
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var value = JToken.Load(reader).Value<string>();
+            return value.Replace("`", "'");
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(string);
         }
     }
 }

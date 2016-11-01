@@ -157,7 +157,13 @@
         $rootScope.$digest();
     };
     connection.client.ShowAlert = function (model) {
-        swal(model.Title, model.Message, model.Type);
+        swal({
+                title: model.Title,
+                text: model.Message,
+                type: model.Type,
+                confirmButtonColor: '#df4242'
+            }
+        );
     }
 
     $.connection.hub.start().done(function () { });

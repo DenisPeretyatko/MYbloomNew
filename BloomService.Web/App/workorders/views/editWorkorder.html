@@ -14,7 +14,7 @@
                 </div>
                 <tab heading="General">
                     <form role="form" name="edit_workorder_form" novalidate ng-submit="saveWorkOrder()">
-                        <div class="row">
+                        <div class="row edit-wo-tab">
                             <!--1-->
                             <div class="col-lg-4 col-md-6">
                                 <div class="ibox">
@@ -83,10 +83,11 @@
                                         </div>
                                         <div class="form-group hidden-lg hidden-md">
                                             <label>Contact</label>
-                                            <input type="text" placeholder="Contact" class="form-control" name="Contact" ng-model="obj.contact">
+                                            <input type="text" placeholder="Contact" class="form-control {{validation.contact ? 'wo-validation' : ' '}}" name="Contact" ng-model="obj.contact">
                                             <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                                 <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                             </div>
+                                            <span class="validation-message" ng-show="validation.contact" ng-bind="validation.message"></span>
                                         </div>
                                         <div class="form-group hidden-lg hidden-md">
                                             <label>Problem</label>
@@ -148,10 +149,11 @@
                                     <div class="ibox-content wo-ibox">
                                         <div class="form-group">
                                             <label>Contact</label>
-                                            <input type="text" placeholder="Contact" class="form-control" name="Contact" ng-model="obj.contact">
+                                            <input type="text" placeholder="Contact" class="form-control {{validation.contact ? 'wo-validation' : ' '}}" name="Contact" ng-model="obj.contact">
                                             <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                                 <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                             </div>
+                                            <span class="validation-message" ng-show="validation.contact" ng-bind="validation.message"></span>
                                         </div>
                                         <div class="form-group hidden-lg">
                                             <label>Problem</label>
@@ -227,10 +229,11 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Contact</label>
-                                            <input type="text" placeholder="Contact" class="form-control" name="Contact" ng-model="obj.contact">
+                                            <input type="text" placeholder="Contact" class="form-control {{validation.contact ? 'wo-validation' : ' '}}" name="Contact" ng-model="obj.contact">
                                             <div class="m-t-xs" ng-show="signup_form.email.$invalid && signup_form.submitted">
                                                 <small class="text-danger" ng-show="signup_form.email.$error">Please input a valid email address</small>
                                             </div>
+                                            <span class="validation-message" ng-show="validation.contact" ng-bind="validation.message"></span>
                                         </div>
                                         <div class="form-group">
                                             <label>Problem</label>
@@ -294,10 +297,6 @@
                                                     <div>{{item.Status}}</div>
                                                 </ui-select-choices>
                                             </ui-select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Mark as reviewed</label><br />
-                                            <button class="btn btn-sm btn-primary btn-mark-as" type="button" ng-click="markAsReviewed()"><strong>Mark as reviewed</strong></button>
                                         </div>
                                     </div>
                                 </div>
@@ -369,7 +368,7 @@
                                                 <td ng-if="equipm.isEditing == false">
                                                     <label>{{equipm.date}}</label>
                                                 </td>
-                                                <td ng-if="equipm.isEditing == true" class="editable-woitem">
+                                                <td ng-if="equipm.isEditing == true" class="editable-woitem td-part-type">
                                                     <ui-select ng-model="equipm.equipType.selected" theme="bootstrap" on-select="resetForm(equipm)">
                                                         <ui-select-match placeholder="Type">{{$select.selected}}</ui-select-match>
                                                         <ui-select-choices repeat="item in equipm.equipType | filter: $select.search">
@@ -395,6 +394,9 @@
                                                             <div>{{item.PartNumber}} {{item.Description}}</div>
                                                         </ui-select-choices>
                                                     </ui-select>
+                                                    <div ng-if="equipm.equipType.selected == 'Miscellaneous'" class="editable-woitem input-group workorder-edit-control">
+                                                            <input type="text" class="form-control" ng-model="equipm.Description">
+                                                    </div>
                                                 </td>
                                                 <td ng-if="equipm.isEditing == false">
                                                     <label>{{equipm.description}}</label>
@@ -406,6 +408,7 @@
                                                             <div>{{item.Name}}</div>
                                                         </ui-select-choices>
                                                     </ui-select>
+                                                    
                                                 </td>
                                                 <td ng-if="equipm.isEditing == false">
                                                     <label>{{equipm.empl}}</label>
@@ -425,6 +428,9 @@
                                                     <div class="input-group workorder-edit-control" ng-if="equipm.equipType.selected == 'Parts'  || !equipm.equipType.selected">
                                                         <input type="text" class="form-control" disabled="disabled" ng-model="equipm.cost">
                                                     </div>
+                                                    <div class="input-group workorder-edit-control" ng-if="equipm.equipType.selected == 'Miscellaneous'">
+                                                        <input type="text" class="form-control" ng-model="equipm.cost">
+                                                    </div>
                                                 </td>
                                                 <td ng-if="equipm.isEditing == false">
                                                     <label ng-hide="equipm.cost==0">{{equipm.cost}}</label>
@@ -436,6 +442,9 @@
                                                     </div>
                                                     <div class="input-group workorder-edit-control" ng-if="equipm.equipType.selected == 'Parts'  || !equipm.equipType.selected">
                                                         <input type="number" class="form-control" disabled="disabled" ng-model="equipm.rate" ng-change="equipm.cost=0" step="0.1" min="0.0000" value="0">
+                                                    </div>
+                                                    <div class="input-group workorder-edit-control" ng-if="equipm.equipType.selected == 'Miscellaneous'">
+                                                        <input type="number" class="form-control" ng-model="equipm.rate" step="0.1" min="0.0000" value="0">
                                                     </div>
                                                 </td>
                                                 <td ng-if="equipm.isEditing == false">
@@ -496,9 +505,9 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="row">
-                                            <button class="btn btn-sm btn-primary" ng-hide="pictures==''" ng-click="downloadArchive()"><strong>Download all</strong></button>
-                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <button class="btn btn-sm btn-primary" ng-hide="pictures==''" ng-click="downloadArchive()"><strong>Download all</strong></button>
                                     </div>
                                 </div>
                                
@@ -555,7 +564,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="form-group">
-                    <button class="btn btn-sm btn-primary" form="edit_workorder_form" ng-disabled="validation.location || validation.problem || validation.employee" ng-click="saveWorkOrder()"><strong>Save</strong></button>
+                    <button class="btn btn-sm btn-primary" form="edit_workorder_form" ng-click="saveWorkOrder()"><strong>Save</strong></button>
                     <button class="btn btn-sm btn-danger" back><strong>Cancel</strong></button>
                 </div>
             </div>
@@ -568,15 +577,17 @@
                         <div class="ibox">
                             <div class="row ibox-content">
                                 <div id="map" class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
-                                    <div ui-map="locationMap" ui-options="mapOptions" class="google-map wo-map"></div>
+                                    <div ui-map="locationMap" ui-options="mapOptions" class="google-map wo-map" id="wo-map"></div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
-                                    <img name="modalImg" id="modalImg" class="thumbnail" />
+                                    <img name="modalImg" id="modalImg" class="thumbnail"/>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12" name="modalComment" id="modalComment">
+
                                 </div>
                             </div>
                         </div>
+                        <button class="btn btn-sm btn-primary" ng-click="openLargeMap()"><strong>Download map</strong></button>
                     </div>
                 </div>
             </div>

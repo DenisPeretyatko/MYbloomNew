@@ -89,6 +89,7 @@ namespace BloomService.Web.Controllers
         {
             var workOrder = repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).Single();
             workOrder.Comments = workOrder.Comments.DecodeSafeHtmlString();
+            workOrder.Images = workOrder.Images.Where(x => !x.IsDeleted).ToList();
             return Json(workOrder, JsonRequestBehavior.AllowGet);
         }
 
@@ -124,12 +125,12 @@ namespace BloomService.Web.Controllers
                 var workorder = allWorkorders.SingleOrDefault(x => x.WorkOrder == assignment.WorkOrder);
                 if (workorder != null)
                 {
-                    workorder.Images = workorder.Images.OrderBy(x => x.Id).ToList();
+                    workorder.Images = workorder.Images.Where(x=>!x.IsDeleted).OrderBy(x => x.Id).ToList();
                     workorder.ScheduleDate = assignment.Start.TryAsDateTime();
                     workorders.Add(workorder);
                 }
             }
-            var equipments = repository.GetAll<SageEquipment>();
+
             var locations = repository.GetAll<SageLocation>();
             foreach (var order in workorders)
             {
@@ -142,12 +143,16 @@ namespace BloomService.Web.Controllers
                     order.Longitude = location.Longitude;
                     order.Address = string.Join(" ", String.Join(", ", new[] {location.Name, location.Address,location.City,location.State, location.ZIP }.Where(str => !string.IsNullOrEmpty(str))));
                 }
-                //if (order.Equipment != 0)
-                //{
-                //    var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment);
-                //    order.Equipments.AddRange(equipments);
-                //}
-                order.Equipments.AddRange(equipments);
+                if (order.Equipment != 0)
+                {
+                    var equipments = repository.SearchFor<SageEquipment>(x => x.Equipment == order.Equipment).ToList();
+                    foreach (var equipment in equipments)
+                    {
+                        if (equipment.InstallLocation == order.Location)
+                            equipment.EquipmentType = string.Format($"{equipment.EquipmentType} - {equipment.InstallLocation}");
+                    }
+                    order.Equipments.AddRange(equipments);
+                }
             }
             return Json(workorders, JsonRequestBehavior.AllowGet);
         }
@@ -279,7 +284,8 @@ namespace BloomService.Web.Controllers
             }
             var imageId = model.Id.AsInt();
             var image = imageItem.Images.FirstOrDefault(x => x.Id == imageId);
-            imageItem.Images.Remove(image);
+            if (image != null) image.IsDeleted = true;
+            //imageItem.Images.Remove(image);
             repository.Update(imageItem);
             _hub.UpdateWorkOrderPicture(imageItem);
             _log.InfoFormat("Image ({0}) deleted. Repository updated", model.Id);
@@ -379,6 +385,13 @@ namespace BloomService.Web.Controllers
             _hub.UpdateSageWorkOrder(workorder);
             _log.InfoFormat("Workorder ({0}) status changed. Status: {1}. Repository updated", workorder.Name, model.Status);
             notification.SendNotification($"Workorder {workorder.Name} change status by {model.Status}");
+            if (model.Status == WorkOrderStatus.WorkComplete)
+                _hub.ShowAlert(new SweetAlertModel()
+                {
+                    Message = $"Workorder #{workorder.WorkOrder} closed",
+                    Title = "Workorder completed",
+                    Type = "success"
+                });
             return Success();
         }
 

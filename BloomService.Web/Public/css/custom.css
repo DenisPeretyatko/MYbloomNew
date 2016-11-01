@@ -111,6 +111,10 @@
     max-width: 150px;
 }
 
+.equip td {
+    max-width: 20% !important;
+}
+
 .hiddenrow {
     display: none;
 }
@@ -583,6 +587,9 @@ body {
     left: 1% !important;
     top: 0 !important;
 }
+.wo-validation {
+    background-color: #f4c6c6 !important;
+}
 
 .wo-validation span {
     background-color: #f4c6c6;
@@ -637,6 +644,7 @@ div.ng-invalid.ng-touched span {
 .save-btn {
     margin-top: 5px;
 }
+
 img[src="https://maps.gstatic.com/mapfiles/api-3/images/mapcnt6.png"] {
     display: none;
 }
@@ -650,12 +658,60 @@ img[src="https://maps.gstatic.com/mapfiles/api-3/images/mapcnt6.png"] {
 
 .map-labels {
     color: white;
-       background-color: transparent;
-    font-family:"Lucida Grande", "Arial", sans-serif;
+    background-color: transparent;
+    font-family: "Lucida Grande", "Arial", sans-serif;
     font-size: 12px;
     text-align: center;
     width: 22px;
     white-space: nowrap;
-        margin-left: -11px !important;
+    margin-left: -11px !important;
     margin-top: -27px !important;
 }
+
+
+.edit-wo-tab .ui-select-match-text span {
+    display: inline-block;
+    width: 400px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+@media (min-width: 768px) {
+   .edit-wo-tab .ui-select-match-text span {
+        width: 580px;
+    }
+}
+@media (min-width: 992px) {
+ .edit-wo-tab .ui-select-match-text span {
+        width: 290px;
+    }
+}
+@media (min-width: 1200px) {
+  .edit-wo-tab .ui-select-match-text span {
+        width: 230px;
+    }
+}
+
+@media (min-width: 1400px) {
+   .edit-wo-tab .ui-select-match-text span {
+        width: 307px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .edit-wo-tab .ui-select-match-text span {
+        width: 395px;
+    }
+}
+
+.td-part-description {
+    width: 150px !important;
+}
+
+.td-part-type div{
+    width: 150px !important;
+}
+
+
+
+

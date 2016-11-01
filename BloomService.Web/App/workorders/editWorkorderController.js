@@ -25,7 +25,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.obj.hours = '';
     $scope.paymentmethods = "";
     $scope.lookups = state.lookups;
-    $scope.EquipType = ["Labor", "Parts"];
+    $scope.EquipType = ["Labor", "Parts", "Miscellaneous"];
     $scope.equipmentList = [];
     $scope.obj.data = new Date();
     $scope.obj.assignmentDate = new Date();
@@ -37,6 +37,21 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.noteObj.Note = "";
     $scope.workOrderNotes = [];
     $scope.basePath = global.BasePath;
+    var statusCancelled = {};
+
+    var sortEmployees = function() {
+        if ($scope.lookups != undefined) {
+            angular.forEach($scope.lookups.Employes, function (value, key) {
+                if (value.Alias.toLowerCase() == "other") {
+                    $scope.lookups.Employes[key] = $scope.lookups.Employes[0];
+                    $scope.lookups.Employes[0] = value;
+                    return;
+                }
+            });
+        }
+    }
+    sortEmployees();
+    
 
     $scope.validation = {
         location: false,
@@ -44,6 +59,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         problem: false,
         callType: false,
         other: false,
+        contact: false,
         message: ""
     };
 
@@ -70,6 +86,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             $scope.validation.callType = true;
             $scope.validation.message = message;
         }
+        else if (message.toLowerCase().indexOf('contact') !== -1) {
+            $scope.validation.contact = true;
+            $scope.validation.message = message;
+        }
         else {
             $scope.validation.other = true;
             $scope.validation.message = message;
@@ -78,6 +98,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
+        sortEmployees()
 
         if ($scope.editableWorkOrder !== undefined && $scope.lookups !== undefined) {
             $scope.getWOItems();
@@ -194,6 +215,13 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                     }
                 });
                 $scope.equipment = dBWOItem;
+                if (dBWOItem.length > 0) {
+                    angular.forEach($scope.lookups.Status, function (value, key) {
+                        if (value.Status === "Cancelled") {
+                            statusCancelled = $scope.lookups.Status.splice(key, 1);
+                        }
+                    });
+                }
             }
 
             var equipment = {
@@ -296,6 +324,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             validation("Call type is required");
             return;
         }
+        else if (!workorder.Contact) {
+            validation("Contact is required");
+            return;
+        }
         commonDataService.saveWorkorder(workorder).then(function (response) {
             if (response.data.success == true)
                 $state.go("manager.workorder.list");
@@ -364,8 +396,8 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
             item.labor = angular.copy($scope.lookups.Hours);
             item.labor.selected = selectedDesc;
-        } else {
-            var selectedDesc = $scope.lookups.Parts.find(function (element) {
+        } else if (item.equipType.selected == 'Part') {
+            var selectedDesc = $scope.lookups.Parts.find(function(element) {
                 return element.PartNumber + " " + element.Description === item.description;
             });
             item.description = angular.copy($scope.lookups.Parts);
@@ -374,14 +406,14 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             item.parts = angular.copy($scope.lookups.Parts);
             item.parts.selected = selectedDesc;
             item.part = selectedDesc.Part;
-        }
+        } 
 
         var selectedEmpl = $scope.lookups.Employes.find(function (element) {
             return element.Name === item.empl;
         });
         item.empl = angular.copy($scope.lookups.Employes);
         item.empl.selected = selectedEmpl;
-
+        item.Description = item.description;
         item.cost = parseFloat(item.cost);
         item.biled = parseFloat(item.biled);
         item.rate = parseFloat(item.rate);
@@ -394,12 +426,15 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             if (item.equipType == 'Labor') {
                 item.description = item.labor.selected.Description;
                 item.laborItem = item.labor.selected;
-            } else {
+            } else if (item.equipType == 'Parts') {
                 item.description = item.parts.selected.PartNumber + " " + item.parts.selected.Description;
                 item.part = item.parts.selected.Part;
+            } else {
+                item.description = item.Description;
             }
-
-            item.empl = item.empl.selected.Name;
+          
+                item.empl = item.empl.selected.Name;
+            
             var date = new Date(item.date);
             item.date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
             item.isEditing = false;
@@ -428,12 +463,20 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                 $scope.equipment.push(equipment);
             }
         }
+        angular.forEach($scope.lookups.Status, function (value, key) {
+            if (value.Status === "Cancelled") {
+                statusCancelled = $scope.lookups.Status.splice(key, 1);
+            }
+        });
     }
 
     $scope.deleteRow = function ($event, item) {
         var el = angular.element($event.target);
         el.parent().parent().remove();
         $scope.equipment.splice($scope.equipment.indexOf(item), 1);
+        if ($scope.equipment.length === 1) {//equal 0 equipments
+            $scope.lookups.Status.push(statusCancelled[0]);
+        }
     }
 
     $scope.setCustomer = function (selected) {
@@ -499,8 +542,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             value.Latitude = picture.Latitude + Math.sin(step * key) * radius;
             value.Longitude = picture.Longitude + Math.cos(step * key) * radius;
         });
-
-        modalWindowService.setMarkers(nonUniqueCoords, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
+       modalWindowService.setMarkers(nonUniqueCoords, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
         modalWindowService.setMarkers(images, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
         modalWindowService.setContent($scope.editableWorkOrder.WorkOrder, picture, markers, $scope.locationMap);
         $scope.locationMap.setMapTypeId(google.maps.MapTypeId.SATELLITE);
@@ -508,6 +550,9 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         $scope.locationMap.setZoom(100);
     };
 
+    $scope.openLargeMap = function() {
+        modalWindowService.openLargeMap($scope.locationMap, $scope.editableWorkOrder.WorkOrder);
+    }
 
     $scope.setEstimateHour = function (selected) {
         $scope.obj.hours = parseFloat(selected.$select.selected.EstimatedRepairHours);
@@ -595,8 +640,9 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
 
       $scope.joinStrings = function (Name, Address, City, ZIP, State) {
          return $.grep([Name, Address, City, State, ZIP ], Boolean).join(', ');
-
       }
+
+     
 
 }
 editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state", "modalWindowService", "$window"];
