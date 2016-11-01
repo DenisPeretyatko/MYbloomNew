@@ -138,6 +138,8 @@
             properties.Add("WorkDate", workOrderItem.WorkDate.ToString() ?? string.Empty);
             properties.Add("UnitSale", workOrderItem.UnitSale.ToString() ?? string.Empty);
             properties.Add("WorkOrder", workOrderItem.WorkOrder.ToString() ?? string.Empty);
+            if(workOrderItem.ItemType== "Miscellaneous")
+            properties.Add("Description", workOrderItem.Description.ToString() ?? string.Empty);
 
             if (workOrderItem.ItemType == "Labor")
             {
@@ -171,6 +173,8 @@
             properties.Add("UnitSale", workOrderItem.UnitSale.ToString() ?? string.Empty);
             properties.Add("WorkOrder", workOrderItem.WorkOrder.ToString() ?? string.Empty);
             properties.Add("WorkOrderItem", workOrderItem.WorkOrderItem.ToString() ?? string.Empty);
+            if (workOrderItem.ItemType == "Miscellaneous")
+                properties.Add("Description", workOrderItem.Description.ToString() ?? string.Empty);
 
             if (workOrderItem.ItemType == "Labor")
             {
