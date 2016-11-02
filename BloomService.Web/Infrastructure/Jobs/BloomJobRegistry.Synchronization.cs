@@ -160,6 +160,8 @@ namespace BloomService.Web.Infrastructure.Jobs
                                 entity.AvailableDays = mongoEntity.AvailableDays;
                                 entity.IsAvailable = mongoEntity.IsAvailable;
                                 entity.IosDeviceToken = mongoEntity.IosDeviceToken;
+                                entity.Alias = mongoEntity.Alias;
+                                entity.Name = mongoEntity.Name;
                                 _repository.Update(entity);
                             }
                         }
