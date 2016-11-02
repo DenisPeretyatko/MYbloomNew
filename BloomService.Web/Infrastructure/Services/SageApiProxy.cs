@@ -141,6 +141,17 @@ namespace BloomService.Web.Infrastructure.Services
             return results;
         }
 
+        public SageResponse<SageWorkOrderItem> GetDiapasonItems(long first, long last)
+        {
+            var request = new RestRequest(EndPoints.GetItems + "/{first}/{last}", Method.POST) { RequestFormat = DataFormat.Json };
+            request.AddUrlSegment("first", first.ToString());
+            request.AddUrlSegment("last", last.ToString());
+            BuildAuthenticationHeader(request);
+            var response = _restClient.Execute<SageResponse<SageWorkOrderItem>>(request);
+            var results = response.Data;
+            return results;
+        }
+
         public SageResponse<SageDepartment> GetDepartments()
         {
             return GetAll<SageDepartment>(EndPoints.GetDepartments);

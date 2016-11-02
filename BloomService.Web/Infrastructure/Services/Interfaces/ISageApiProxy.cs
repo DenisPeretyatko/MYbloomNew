@@ -43,6 +43,7 @@
 
         SageResponse<SageNote> GetNotes();
         SageResponse<SageWorkOrderItem> GetItems();
+        SageResponse<SageWorkOrderItem> GetDiapasonItems(long first, long last);
 
         SageResponse<SageWorkOrderLocationAccordance> GetAccordance();
     }
