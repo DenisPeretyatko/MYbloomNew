@@ -4,6 +4,7 @@
 
 var editWorkorderController = function ($scope, $rootScope, $stateParams, $state, $compile, $interpolate, commonDataService, state, modalWindowService, $window) {
     var markers = [];
+    $scope.form = {};
     $rootScope.updatedSageWorkOrder = [];
     $rootScope.addedImage = [];
     $scope.mapOptions = googleMapOptions;
@@ -51,50 +52,6 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         }
     }
     sortEmployees();
-    
-
-    $scope.validation = {
-        location: false,
-        employee: false,
-        problem: false,
-        callType: false,
-        other: false,
-        contact: false,
-        message: ""
-    };
-
-    var validation = function (message) {
-        $scope.validation.location = false;
-        $scope.validation.problem = false;
-        $scope.validation.employee = false;
-        $scope.validation.other = false;
-        $scope.validation.message = "";
-
-        if (message.toLowerCase().indexOf('employee') !== -1) {
-            $scope.validation.employee = true;
-            $scope.validation.message = message;
-        }
-        else if (message.toLowerCase().indexOf('location') !== -1) {
-            $scope.validation.location = true;
-            $scope.validation.message = message;
-        }
-        else if (message.toLowerCase().indexOf('problem') !== -1) {
-            $scope.validation.problem = true;
-            $scope.validation.message = message;
-        }
-        else if (message.toLowerCase().indexOf('call type') !== -1) {
-            $scope.validation.callType = true;
-            $scope.validation.message = message;
-        }
-        else if (message.toLowerCase().indexOf('contact') !== -1) {
-            $scope.validation.contact = true;
-            $scope.validation.message = message;
-        }
-        else {
-            $scope.validation.other = true;
-            $scope.validation.message = message;
-        }
-    }
 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
@@ -309,31 +266,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             AssignmentDate: $scope.obj.assignmentDate,
             AssignmentTime: $scope.obj.assignmentTime
         };
-        if (!workorder.Location) {
-            validation("Location is required");
-            return;
-        } else if (!workorder.Problem) {
-            validation("Problem is required");
-            return;
-        }
-        //else if (!workorder.Emploee) {
-        //    validation("Employee is required");
-        //    return;
-        //}
-        else if (!workorder.Calltype) {
-            validation("Call type is required");
-            return;
-        }
-        else if (!workorder.Contact) {
-            validation("Contact is required");
-            return;
-        }
+      
         commonDataService.saveWorkorder(workorder).then(function (response) {
             if (response.data.success == true)
                 $state.go("manager.workorder.list");
-            else {
-                validation(response.data.message);
-            }
         });
     };
 

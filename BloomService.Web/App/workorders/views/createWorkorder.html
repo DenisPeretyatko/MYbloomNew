@@ -16,7 +16,7 @@
                                     <div class="ibox-content wo-create-ibox">
                                         <div class="form-group">
                                             <label>Location</label>
-                                            <ui-select ng-model="lookups.Locations.selected" theme="bootstrap" on-select="setLocation(this)" ng-required="true" ng-click="validation.location = false">
+                                            <ui-select ng-model="lookups.Locations.selected" theme="bootstrap" on-select="setLocation(this)" ng-required="true">
                                                 <ui-select-match placeholder="Location"> {{joinStrings($select.selected.Name, $select.selected.Address, $select.selected.City, $select.selected.ZIP, $select.selected.State)}} </ui-select-match>
                                                 <ui-select-choices repeat="item in lookups.Locations | filter: $select.search | limitTo:100">
                                                     <div ng-bind="joinStrings(item.Name, item.Address, item.City, item.ZIP, item.State)"></div>
