@@ -34,6 +34,9 @@ namespace BloomService.Web.Infrastructure.Services
             var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
 
             var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
+            if (employee != null && !employee.IsAvailable)
+                return false;
+
             databaseAssignment.Employee = employee?.Name ?? "";
             databaseAssignment.ScheduleDate = model.ScheduleDate;
             databaseAssignment.WorkOrder = model.WorkOrder;

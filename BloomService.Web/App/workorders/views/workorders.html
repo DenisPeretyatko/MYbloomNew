@@ -37,8 +37,8 @@
                                 <td>{{workorder.Location}}</td>
                                 <td>{{workorder.Address}}</td>
                                 <td>
-                                    <span class="label" ng-class="workorder.AssignmentId == 0 ? 'label-available' : 'label-danger' ">
-                                        {{workorder.AssignmentId == 0 ? 'Assigned' : 'Not assigned' }}
+                                    <span class="label" ng-class="workorder.ScheduleDate ? 'label-available' : 'label-danger' ">
+                                        {{workorder.ScheduleDate ? 'Assigned' : 'Not assigned' }}
                                     </span>
                                 </td>
                                 <td>

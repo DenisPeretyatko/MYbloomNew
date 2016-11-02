@@ -92,27 +92,40 @@ namespace BloomService.Web.Controllers
             else
             {
                 var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Emploee).SingleOrDefault();
-                assignment.EmployeeId = employee?.Employee ?? 0;
-                assignment.Start = (model.AssignmentDate.Date).Add((model.AssignmentTime).TimeOfDay).ToString();
-                assignment.End = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay).AddHours(assignment.EstimatedRepairHours.AsDouble() == 0 ? 1 : assignment.EstimatedRepairHours.AsDouble()).ToString();
-                assignment.Color = employee?.Color ?? "";
-                assignment.Customer = result.Entity.ARCustomer;
-                assignment.Location = result.Entity.Location;
-
-                var locations = _repository.GetAll<SageLocation>().ToArray();
-                var itemLocation = locations.FirstOrDefault(l => l.Name == result.Entity.Location);
-                result.Entity.ScheduleDate = assignment.ScheduleDate;
-                result.Entity.Latitude = itemLocation.Latitude;
-                result.Entity.Longitude = itemLocation.Longitude;
-
-                _repository.Add(assignment);
-                _hub.CreateAssignment(new MapViewModel()
+                if (employee != null && !employee.IsAvailable)
                 {
-                    WorkOrder = result.Entity,
-                    DateEntered = assignment.ScheduleDate,
-                    Employee = employee?.Employee ?? 0,
-                    Color = employee?.Color ?? ""
-                });
+                    result.Entity.AssignmentId = assignment.Assignment;
+                    _repository.Add(assignment);
+                }
+                else
+                {
+                    assignment.EmployeeId = employee?.Employee ?? 0;
+                    assignment.Start = (model.AssignmentDate.Date).Add((model.AssignmentTime).TimeOfDay).ToString();
+                    assignment.End =
+                        model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay)
+                            .AddHours(assignment.EstimatedRepairHours.AsDouble() == 0
+                                ? 1
+                                : assignment.EstimatedRepairHours.AsDouble())
+                            .ToString();
+                    assignment.Color = employee?.Color ?? "";
+                    assignment.Customer = result.Entity.ARCustomer;
+                    assignment.Location = result.Entity.Location;
+
+                    var locations = _repository.GetAll<SageLocation>().ToArray();
+                    var itemLocation = locations.FirstOrDefault(l => l.Name == result.Entity.Location);
+                    result.Entity.ScheduleDate = assignment.ScheduleDate;
+                    result.Entity.Latitude = itemLocation.Latitude;
+                    result.Entity.Longitude = itemLocation.Longitude;
+
+                    _repository.Add(assignment);
+                    _hub.CreateAssignment(new MapViewModel()
+                    {
+                        WorkOrder = result.Entity,
+                        DateEntered = assignment.ScheduleDate,
+                        Employee = employee?.Employee ?? 0,
+                        Color = employee?.Color ?? ""
+                    });
+                }
             }
 
             _repository.Add(result.Entity);
@@ -318,9 +331,7 @@ namespace BloomService.Web.Controllers
         public ActionResult SaveWorkOrder(WorkOrderModel model)
         {
             _log.InfoFormat("Method: SaveWorkOrder. Model ID {0}", model.Id);
-
-            if (model.Emploee == 0)
-                return Error("Employee is required");
+           
             if (model.Location == null)
                 return Error("Location is required");
             if (model.Problem == null)
@@ -367,13 +378,14 @@ namespace BloomService.Web.Controllers
                 editedAssignment.Id = assignmentDb.Id;
                 editedAssignment.ScheduleDate = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay);
                 editedAssignment.WorkOrder = assignmentDb.WorkOrder;
-                _scheduleService.CerateAssignment(editedAssignment);
-
-                var locations = _repository.GetAll<SageLocation>().ToArray();
-                var itemLocation = locations.FirstOrDefault(l => l.Name == workOrderResult.Entity.Location);
-                workOrderResult.Entity.ScheduleDate = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay);
-                workOrderResult.Entity.Latitude = itemLocation.Latitude;
-                workOrderResult.Entity.Longitude = itemLocation.Longitude;
+                if (_scheduleService.CerateAssignment(editedAssignment))
+                {
+                    var locations = _repository.GetAll<SageLocation>().ToArray();
+                    var itemLocation = locations.FirstOrDefault(l => l.Name == workOrderResult.Entity.Location);
+                    workOrderResult.Entity.ScheduleDate = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay);
+                    workOrderResult.Entity.Latitude = itemLocation.Latitude;
+                    workOrderResult.Entity.Longitude = itemLocation.Longitude;
+                }
             }
 
             ResolveWorkOrderItems(model);
