@@ -316,10 +316,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             validation("Problem is required");
             return;
         }
-        else if (!workorder.Emploee) {
-            validation("Employee is required");
-            return;
-        }
+        //else if (!workorder.Emploee) {
+        //    validation("Employee is required");
+        //    return;
+        //}
         else if (!workorder.Calltype) {
             validation("Call type is required");
             return;

@@ -1,4 +1,5 @@
-﻿using BloomService.Web.Models;
+﻿using System;
+using BloomService.Web.Models;
 
 namespace BloomService.Web.Infrastructure.Services.Interfaces
 {
@@ -6,5 +7,6 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
     {
         bool CerateAssignment(AssignmentViewModel model);
         bool DeleteAssignment(AssignmentViewModel model);
+        bool HasСrossoverAssignment(string employeeName, DateTime start, DateTime end);
     }
 }

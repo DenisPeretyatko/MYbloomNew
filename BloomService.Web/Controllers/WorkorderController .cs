@@ -99,32 +99,35 @@ namespace BloomService.Web.Controllers
                 }
                 else
                 {
+                    var assignmentStart = (model.AssignmentDate.Date).Add((model.AssignmentTime).TimeOfDay);
+                    var assignmentEnd = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay)
+                        .AddHours(assignment.EstimatedRepairHours.AsDouble() == 0
+                            ? 1
+                            : assignment.EstimatedRepairHours.AsDouble());
                     assignment.EmployeeId = employee?.Employee ?? 0;
-                    assignment.Start = (model.AssignmentDate.Date).Add((model.AssignmentTime).TimeOfDay).ToString();
-                    assignment.End =
-                        model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay)
-                            .AddHours(assignment.EstimatedRepairHours.AsDouble() == 0
-                                ? 1
-                                : assignment.EstimatedRepairHours.AsDouble())
-                            .ToString();
-                    assignment.Color = employee?.Color ?? "";
-                    assignment.Customer = result.Entity.ARCustomer;
-                    assignment.Location = result.Entity.Location;
-
-                    var locations = _repository.GetAll<SageLocation>().ToArray();
-                    var itemLocation = locations.FirstOrDefault(l => l.Name == result.Entity.Location);
-                    result.Entity.ScheduleDate = assignment.ScheduleDate;
-                    result.Entity.Latitude = itemLocation.Latitude;
-                    result.Entity.Longitude = itemLocation.Longitude;
-
-                    _repository.Add(assignment);
-                    _hub.CreateAssignment(new MapViewModel()
+                    assignment.Start = assignmentStart.ToString();
+                    assignment.End = assignmentEnd.ToString();
+                    if (!_scheduleService.HasСrossoverAssignment(employee.Name, assignmentStart, assignmentEnd))
                     {
-                        WorkOrder = result.Entity,
-                        DateEntered = assignment.ScheduleDate,
-                        Employee = employee?.Employee ?? 0,
-                        Color = employee?.Color ?? ""
-                    });
+                        assignment.Color = employee?.Color ?? "";
+                        assignment.Customer = result.Entity.ARCustomer;
+                        assignment.Location = result.Entity.Location;
+
+                        var locations = _repository.GetAll<SageLocation>().ToArray();
+                        var itemLocation = locations.FirstOrDefault(l => l.Name == result.Entity.Location);
+                        result.Entity.ScheduleDate = assignment.ScheduleDate;
+                        result.Entity.Latitude = itemLocation.Latitude;
+                        result.Entity.Longitude = itemLocation.Longitude;
+
+                        _repository.Add(assignment);
+                        _hub.CreateAssignment(new MapViewModel()
+                        {
+                            WorkOrder = result.Entity,
+                            DateEntered = assignment.ScheduleDate,
+                            Employee = employee?.Employee ?? 0,
+                            Color = employee?.Color ?? ""
+                        });
+                    }
                 }
             }
 

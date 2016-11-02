@@ -31,10 +31,12 @@ namespace BloomService.Web.Infrastructure.Services
         public bool CerateAssignment(AssignmentViewModel model)
         {
             _log.InfoFormat("Method: CreateAssignment. Model ID {0}", model.Id);
+            
             var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
 
             var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
-            if (employee != null && !employee.IsAvailable)
+            
+            if (employee != null && (!employee.IsAvailable || HasСrossoverAssignment(employee.Name, model.ScheduleDate, model.EndDate)))
                 return false;
 
             databaseAssignment.Employee = employee?.Name ?? "";
@@ -129,6 +131,17 @@ namespace BloomService.Web.Infrastructure.Services
             _hub.DeleteAssigment(model);
 
             return true;
+        }
+
+        public bool HasСrossoverAssignment(string employeeName, DateTime start, DateTime end)
+        {
+            var assignments = _repository.SearchFor<SageAssignment>(
+                x => x.Employee == employeeName).ToList();
+            var crossed = assignments.Count(x => (start> Convert.ToDateTime(x.Start) && start < Convert.ToDateTime(x.End)) ||
+            (end< Convert.ToDateTime(x.End) && end> Convert.ToDateTime(x.Start)) ||
+            (start< Convert.ToDateTime(x.End) && end> Convert.ToDateTime(x.Start)) ||
+            (start> Convert.ToDateTime(x.Start) && end< Convert.ToDateTime(x.End)));            
+            return crossed != 0;
         }
     }
 }
