@@ -24,7 +24,7 @@ namespace BloomService.Web.Infrastructure.Services
             var locations = this._repository.GetAll<SageLocation>().ToList();
             var calltypes = this._repository.GetAll<SageCallType>().ToList();
             var problems = this._repository.GetAll<SageProblem>().ToList();
-            var employes = this._repository.GetAll<SageEmployee>().ToList();
+            var employes = _repository.SearchFor<SageEmployee>(x=>x.IsAvailable).ToList();
             var equipment = this._repository.GetAll<SageEquipment>().ToList();
             var customer = this._repository.GetAll<SageCustomer>().ToList();
             var repairs = this._repository.GetAll<SageRepair>().ToList();

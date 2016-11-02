@@ -39,7 +39,7 @@
         Column: '',
         Direction: false
     };
-  
+
 
     var connection = commonHub.GetConnection();
 
@@ -58,9 +58,9 @@
             _this.workorders = values[4].data;
             _this.alreadyLoaded = true;
         });
-         _this.alreadyLoaded = true;
+        _this.alreadyLoaded = true;
     }
-    
+
     connection.client.UpdateSageWorkOrder = function (model) {
         $rootScope.updatedSageWorkOrder = model;
         $rootScope.$digest();
@@ -70,7 +70,7 @@
         $rootScope.addedImage = image;
         $rootScope.$digest();
     };
-    
+
     connection.client.UpdateWorkOrder = function (workorder) {
         angular.forEach(_this.workorders, function (value, key) {
             if (value.WorkOrder === workorder.WorkOrder) {
@@ -86,11 +86,30 @@
         $rootScope.updatedTechnican = technician;
         angular.forEach(_this.technicians, function (value, key) {
             if (value.Employee == technician.Id) {
-                commonDataService.getTechnician(value.Id).then(function(response) {
+                commonDataService.getTechnician(value.Id).then(function (response) {
                     delete _this.technicians[key];
                     _this.technicians[key] = response.data;
+                    if (technician.IsAvailable) {
+                        var isExist = false;
+                        angular.forEach(_this.lookups.Employes, function (value, key) {
+                            if (value.Employee == technician.Id) {
+                                isExist = true;
+                                delete _this.lookups.Employes[key];
+                                _this.lookups.Employes[key] = response.data;
+                            }
+                        });
+                        if (!isExist) {
+                            _this.lookups.Employes.push(response.data);
+                        }
+                    } else {
+                        angular.forEach(_this.lookups.Employes, function (value, key) {
+                            if (value.Employee == technician.Id) {
+                                _this.lookups.Employes.splice(key, 1);
+                            }
+                        });
+                    }
                 });
-            } 
+            }
         });
         angular.forEach($rootScope.workorders, function (value, key) {
             if (value.Employee == technician.Id) {
@@ -103,14 +122,15 @@
         else if ($rootScope.unavailableTechniciansIds.includes(technician.Id) === false && technician.IsAvailable === false) {
             $rootScope.unavailableTechniciansIds.unshift(technician.Id);
         }
+
         $rootScope.$digest();
     };
 
     connection.client.updateTechnicianLocation = function (technician) {
         angular.forEach($rootScope.trucks, function (value, key) {
             if (value.Employee == technician.Employee) {
-                    delete $rootScope.trucks[key];
-                    $rootScope.trucks[key] = technician;
+                delete $rootScope.trucks[key];
+                $rootScope.trucks[key] = technician;
             }
         });
     };
@@ -121,7 +141,7 @@
 
     };
 
-    
+
     connection.client.CreateAssignment = function (model) {
         var isExist = false;
         angular.forEach(_this.locations, function (value, key) {
@@ -131,14 +151,14 @@
             }
         });
         if (isExist) {
-            angular.forEach($rootScope.workorders, function(value, key) {
+            angular.forEach($rootScope.workorders, function (value, key) {
                 if (value.WorkOrder.WorkOrder == model.WorkOrder.WorkOrder && value.Employee == model.Employee) {
                     $rootScope.workorders[key] = model;
                 }
             });
         } else {
             $rootScope.workorders.unshift(model);
-          // _this.locations.push(model);
+            // _this.locations.push(model);
         }
         $rootScope.$digest();
     };
@@ -149,7 +169,7 @@
                 _this.locations.splice(key, 1);
             }
         });
-        angular.forEach($rootScope.workorders, function(value, key) {
+        angular.forEach($rootScope.workorders, function (value, key) {
             if (value.WorkOrder.WorkOrder == model.WorkOrder) {
                 $rootScope.workorders.splice(key, 1);
             }
@@ -158,11 +178,11 @@
     };
     connection.client.ShowAlert = function (model) {
         swal({
-                title: model.Title,
-                text: model.Message,
-                type: model.Type,
-                confirmButtonColor: '#df4242'
-            }
+            title: model.Title,
+            text: model.Message,
+            type: model.Type,
+            confirmButtonColor: '#df4242'
+        }
         );
     }
 
