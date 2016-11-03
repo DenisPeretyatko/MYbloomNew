@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 
 namespace BloomService.Domain.Entities.Concrete
 {
+    [CollectionName("WorkOrderItemCollection")]
     [XmlType(AnonymousType = true)]
     public class SageWorkOrderItem : SageEntity
     {
