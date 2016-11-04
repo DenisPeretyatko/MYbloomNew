@@ -13,6 +13,7 @@
     using MongoDB.Driver.Linq;
     using Utils;
     using Domain.Entities.Concrete;
+    using System.Collections.Generic;
     public class MongoRepository : IRepository
     {
         private readonly MongoDatabase database;
@@ -37,6 +38,17 @@
             }
 
             return GetCollection<TEntity>().Insert(entity).HasLastErrorMessage;
+        }        
+
+        public virtual void AddMany<TEntity>(List<TEntity> entities) where TEntity : IEntity
+        {
+            var collection = GetCollection<TEntity>();
+            foreach (var item in entities)
+            {
+                if (item.Id == null)
+                    item.Id = ObjectId.GenerateNewId().ToString();
+            }
+            GetCollection<TEntity>().InsertBatch(entities);
         }
 
         public virtual bool Delete<TEntity>(TEntity entity) where TEntity : IEntity
@@ -71,7 +83,7 @@
         {
             var query = Query<TEntity>.EQ(e => e.Id, item.Id);
             GetCollection<TEntity>().Remove(query);
-        }
+        }      
 
         private MongoCollection<TEntity> GetCollection<TEntity>() where TEntity : IEntity
         {
