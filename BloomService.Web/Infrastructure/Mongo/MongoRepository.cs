@@ -30,7 +30,7 @@
             var collection = GetCollection<TEntity>();
             if (entity.Id == null)
             {
-                entity.Id = ObjectId.GenerateNewId().ToString(); ;
+                entity.Id = ObjectId.GenerateNewId().ToString();
             }
             else if (Get<TEntity>(entity.Id) != null)
             {
@@ -38,15 +38,15 @@
             }
 
             return GetCollection<TEntity>().Insert(entity).HasLastErrorMessage;
-        }        
+        }
 
         public virtual void AddMany<TEntity>(List<TEntity> entities) where TEntity : IEntity
         {
             var collection = GetCollection<TEntity>();
             foreach (var item in entities)
             {
-                if (item.Id == null)
-                    item.Id = ObjectId.GenerateNewId().ToString();
+                if(item.Id==null)
+                    item.Id = ObjectId.GenerateNewId().ToString(); 
             }
             GetCollection<TEntity>().InsertBatch(entities);
         }
@@ -54,6 +54,14 @@
         public virtual bool Delete<TEntity>(TEntity entity) where TEntity : IEntity
         {
             return GetCollection<TEntity>().Remove(Query.EQ("_id", entity.Id)).DocumentsAffected > 0;
+        }
+
+        public virtual bool DeleteMany<TEntity>(List<TEntity> entities) where TEntity : IEntity
+        {
+            var collection = GetCollection<TEntity>();
+            var ids = entities.Select(x => x.Id);
+            var query = Query.In("_id", new BsonArray(ids));
+            return collection.Remove(query).DocumentsAffected > 0;
         }
 
         public virtual TEntity Get<TEntity>(string id) where TEntity : IEntity
@@ -79,11 +87,25 @@
                        : GetCollection<TEntity>().Save<TEntity>(item).HasLastErrorMessage;
         }
 
+        public virtual void UpdateMany<TEntity>(List<TEntity> entities) where TEntity : IEntity
+        {
+            var collection = GetCollection<TEntity>();
+            var ids = entities.Select(x => x.Id).ToList();          
+            var query = Query.In("_id", new BsonArray(ids));
+            collection.Remove(query);
+            foreach (var item in entities)
+            {
+                if (string.IsNullOrEmpty(item.Id))
+                    item.Id = ObjectId.GenerateNewId().ToString();
+            }
+            collection.InsertBatch(entities);
+        }
+
         void IRepository.Delete<TEntity>(TEntity item)
         {
             var query = Query<TEntity>.EQ(e => e.Id, item.Id);
             GetCollection<TEntity>().Remove(query);
-        }      
+        }
 
         private MongoCollection<TEntity> GetCollection<TEntity>() where TEntity : IEntity
         {

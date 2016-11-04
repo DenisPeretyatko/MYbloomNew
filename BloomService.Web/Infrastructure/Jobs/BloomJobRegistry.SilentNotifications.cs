@@ -65,7 +65,8 @@ namespace BloomService.Web.Infrastructure.Jobs
                             {
                                 P12File = path
                             };
-                            push.SendToApple(notificationPayloads);
+                           
+                            var result = push.SendToApple(notificationPayloads);                                                      
 
                             _log.InfoFormat("Push notification send to technician {0} on device {1}", technician.Name, technician.IosDeviceToken);
                         }

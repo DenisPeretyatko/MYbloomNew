@@ -21,5 +21,9 @@
         bool Update<TEntity>(TEntity item) where TEntity : IEntity;
 
         void Delete<TEntity>(TEntity item) where TEntity : IEntity;
+
+        bool DeleteMany<TEntity>(List<TEntity> entities) where TEntity : IEntity;
+
+        void UpdateMany<TEntity>(List<TEntity> entities) where TEntity : IEntity;
     }
 }
