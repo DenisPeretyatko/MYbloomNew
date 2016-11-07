@@ -77,7 +77,8 @@ var editTechnicianController = function ($scope, $stateParams, $state, commonDat
         calendar: {
             schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
             now: date,
-            defaultView: 'agendaWeek',
+            defaultView: 'agendaWeek',            
+            slotDuration: '00:15:00',
             height: 630,
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar
