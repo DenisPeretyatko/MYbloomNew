@@ -21,7 +21,7 @@ namespace BloomService.Web.Infrastructure.Services
         public LookupsModel GetLookups()
         {
             var lookups = new LookupsModel();
-            var locations = this._repository.GetAll<SageLocation>().ToList();
+            var locations = this._repository.SearchFor<SageLocation>(x=>!string.IsNullOrEmpty(x.Contact1Name)|| !string.IsNullOrEmpty(x.Contact2Name)).ToList();
             var calltypes = this._repository.GetAll<SageCallType>().ToList();
             var problems = this._repository.GetAll<SageProblem>().ToList();
             var employes = _repository.SearchFor<SageEmployee>(x=>x.IsAvailable).ToList();

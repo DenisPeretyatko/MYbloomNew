@@ -39,8 +39,9 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.workOrderNotes = [];
     $scope.basePath = global.BasePath;
     var statusCancelled = {};
+    $scope.contacts = [];
 
-    var sortEmployees = function() {
+    var sortEmployees = function () {
         if ($scope.lookups != undefined) {
             angular.forEach($scope.lookups.Employes, function (value, key) {
                 if (value.Alias.toLowerCase() == "other") {
@@ -79,7 +80,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
             $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
             $scope.lookups.Status.selected = $scope.editableWorkOrder.StatusObj;
-
+            if ($scope.editableWorkOrder.LocationObj.Contact1Name != "")
+                $scope.contacts.push($scope.editableWorkOrder.LocationObj.Contact1Name);
+            if ($scope.editableWorkOrder.LocationObj.Contact2Name != "")
+                $scope.contacts.push($scope.editableWorkOrder.LocationObj.Contact2Name);
             commonDataService.getWorkorderPictures($scope.editableWorkOrder.WorkOrder).then(function (response) {
                 return $scope.pictures = response.data;
             });
@@ -109,7 +113,10 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             $scope.lookups.PermissionCodes.selected = $scope.editableWorkOrder.PermissionCodeObj;
             $scope.lookups.PaymentMethods.selected = $scope.editableWorkOrder.PaymentMethodObj;
             $scope.lookups.Status.selected = $scope.editableWorkOrder.StatusObj;
-
+            if ($scope.editableWorkOrder.LocationObj.Contact1Name != "")
+                $scope.contacts.push($scope.editableWorkOrder.LocationObj.Contact1Name);
+            if ($scope.editableWorkOrder.LocationObj.Contact2Name != "")
+                $scope.contacts.push($scope.editableWorkOrder.LocationObj.Contact2Name);
             commonDataService.getWorkorderPictures($scope.editableWorkOrder.WorkOrder).then(function (response) {
                 return $scope.pictures = response.data;
             });
@@ -266,7 +273,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             AssignmentDate: $scope.obj.assignmentDate,
             AssignmentTime: $scope.obj.assignmentTime
         };
-      
+
         commonDataService.saveWorkorder(workorder).then(function (response) {
             if (response.data.success == true)
                 $state.go("manager.workorder.list");
@@ -333,7 +340,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             item.labor = angular.copy($scope.lookups.Hours);
             item.labor.selected = selectedDesc;
         } else if (item.equipType.selected == 'Part') {
-            var selectedDesc = $scope.lookups.Parts.find(function(element) {
+            var selectedDesc = $scope.lookups.Parts.find(function (element) {
                 return element.PartNumber + " " + element.Description === item.description;
             });
             item.description = angular.copy($scope.lookups.Parts);
@@ -342,7 +349,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             item.parts = angular.copy($scope.lookups.Parts);
             item.parts.selected = selectedDesc;
             item.part = selectedDesc.Part;
-        } 
+        }
 
         var selectedEmpl = $scope.lookups.Employes.find(function (element) {
             return element.Name === item.empl;
@@ -368,9 +375,9 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             } else {
                 item.description = item.Description;
             }
-          
-                item.empl = item.empl.selected.Name;
-            
+
+            item.empl = item.empl.selected.Name;
+
             var date = new Date(item.date);
             item.date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
             item.isEditing = false;
@@ -443,16 +450,24 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                 $scope.lookups.Equipment.selected = response.data[0];
             }
         });
+        $scope.contacts = [];
+        $scope.obj.contact = "";
+        if (selected.$select.selected.Contact1Name != "") {
+            $scope.obj.contact = selected.$select.selected.Contact1Name;
+            $scope.contacts.push(selected.$select.selected.Contact1Name);
+        }
+        if (selected.$select.selected.Contact2Name != "")
+            $scope.contacts.push(selected.$select.selected.Contact2Name);
     };
 
     $scope.displayLocation = function (picture, woNumber) {
         var uniqueCoords = [];
-		var images = angular.copy($scope.pictures.Images);
+        var images = angular.copy($scope.pictures.Images);
         uniqueCoords.push($scope.pictures.Images[0]);
         var nonUniqueCoords = [];
         for (var i = 1; i < $scope.pictures.Images.length; i++) {
             for (var j = i - 1; j >= 0; j--) {
-                if (Math.abs($scope.pictures.Images[j].Latitude - $scope.pictures.Images[i].Latitude) < 0.00001 && Math.abs($scope.pictures.Images[j].Longitude - $scope.pictures.Images[i].Longitude) < 0.00001) {           
+                if (Math.abs($scope.pictures.Images[j].Latitude - $scope.pictures.Images[i].Latitude) < 0.00001 && Math.abs($scope.pictures.Images[j].Longitude - $scope.pictures.Images[i].Longitude) < 0.00001) {
                     var is_unique = true;
                     if (uniqueCoords.length == 0) {
                         is_unique = false;
@@ -464,21 +479,21 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
                         }
                     }
                     if (!is_unique) {
-                         nonUniqueCoords.push($scope.pictures.Images[i]);
-						 images.splice(i,1);
-                    } 
+                        nonUniqueCoords.push($scope.pictures.Images[i]);
+                        images.splice(i, 1);
+                    }
                     break;
                 }
             }
         }
-        
-        var radius = 0.00001*nonUniqueCoords.length/3;
+
+        var radius = 0.00001 * nonUniqueCoords.length / 3;
         var step = (Math.PI * 2) / nonUniqueCoords.length;
         angular.forEach(nonUniqueCoords, function (value, key) {
             value.Latitude = picture.Latitude + Math.sin(step * key) * radius;
             value.Longitude = picture.Longitude + Math.cos(step * key) * radius;
         });
-       modalWindowService.setMarkers(nonUniqueCoords, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
+        modalWindowService.setMarkers(nonUniqueCoords, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
         modalWindowService.setMarkers(images, $scope.locationMap, $scope.editableWorkOrder.WorkOrder);
         modalWindowService.setContent($scope.editableWorkOrder.WorkOrder, picture, markers, $scope.locationMap);
         $scope.locationMap.setMapTypeId(google.maps.MapTypeId.SATELLITE);
@@ -486,7 +501,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         $scope.locationMap.setZoom(100);
     };
 
-    $scope.openLargeMap = function() {
+    $scope.openLargeMap = function () {
         modalWindowService.openLargeMap($scope.locationMap, $scope.editableWorkOrder.WorkOrder);
     }
 
@@ -558,27 +573,26 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         $('#myModal').modal('hide');
     }
 
-      $scope.clockPopup = function()
-    {
-          $('.clockpicker').clockpicker({
-              donetext: 'Ok'
-          });
-      }
-  
-      $scope.downloadArchive  = function() {
-        commonDataService.getArchive($scope.editableWorkOrder.WorkOrder).success(function(response) {
+    $scope.clockPopup = function () {
+        $('.clockpicker').clockpicker({
+            donetext: 'Ok'
+        });
+    }
+
+    $scope.downloadArchive = function () {
+        commonDataService.getArchive($scope.editableWorkOrder.WorkOrder).success(function (response) {
             var file = new Blob([response], { type: 'application/zip' });
             var url = $window.URL || $window.webkitURL;
             $scope.fileUrl = url.createObjectURL(file);
             $window.saveAs(file, $scope.editableWorkOrder.WorkOrder + ".zip");
         });
-      }
+    }
 
-      $scope.joinStrings = function (Name, Address, City, ZIP, State) {
-         return $.grep([Name, Address, City, State, ZIP ], Boolean).join(', ');
-      }
+    $scope.joinStrings = function (Name, Address, City, ZIP, State) {
+        return $.grep([Name, Address, City, State, ZIP], Boolean).join(', ');
+    }
 
-     
+
 
 }
 editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state", "modalWindowService", "$window"];

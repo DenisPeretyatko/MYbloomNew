@@ -26,6 +26,7 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
     $scope.obj.assignmentDate = new Date();
     $scope.obj.assignmentTime = new Date(2000, 0, 1, 00, 00, 0);
     $scope.lookups = state.lookups;
+    $scope.contacts = [];
 
     $scope.$watch(function () { return state.lookups; }, function () {
         $scope.lookups = state.lookups;
@@ -114,6 +115,15 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
                 $scope.lookups.Equipment.selected = response.data[0];
             }
         });
+        $scope.contacts = [];
+        $scope.obj.contact = "";
+        if (selected.$select.selected.Contact1Name != "") {
+            $scope.obj.contact = selected.$select.selected.Contact1Name;
+            $scope.contacts.push(selected.$select.selected.Contact1Name);
+        }
+        if (selected.$select.selected.Contact2Name != "")
+            $scope.contacts.push(selected.$select.selected.Contact2Name);
+
     };
 
     $scope.setEstimateHour = function (selected) {
