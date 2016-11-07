@@ -4,18 +4,18 @@
  */
 
 var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $q, commonDataService) {
-    var date = new Date(); 
+    var date = new Date();
     var offset = -5.0;
-                var utc = date.getTime() + (date.getTimezoneOffset() * 60000);
-                var serverDate = new Date(utc + (3600000 * offset));
+    var utc = date.getTime() + (date.getTimezoneOffset() * 60000);
+    var serverDate = new Date(utc + (3600000 * offset));
 
-    var remainsFullHours = function(start, end) {
+    var remainsFullHours = function (start, end) {
         var dateDifference = end.getTime() - start.getTime();
         var remainsDate = new Date(dateDifference);
         var remainsSec = (parseInt(remainsDate / 1000));
         var remainsFullDays = (parseInt(remainsSec / (24 * 60 * 60)));
         var secInLastDay = remainsSec - remainsFullDays * 24 * 3600;
-        return  parseInt(secInLastDay / 3600);
+        return parseInt(secInLastDay / 3600);
     }
     // Events
     $scope.events = [];
@@ -67,7 +67,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             EstimatedRepairHours: estimate,
             EndDate: end
         };
-   
+
         commonDataService.assignWorkorder(assignment);
     };
     var setTechnicianColor = function (event) {
@@ -76,6 +76,26 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         });
         event.color = resource.color;
         return event;
+    }
+
+    var getBusinesHours = function () {
+        var result = [];
+        angular.forEach($scope.activeTechnicians, function (value, key) {
+            if (value.AvailableDays != null) {
+                angular.forEach(value.AvailableDays, function (item, key) {
+                    var event = {
+                        start: item.Start,
+                        end: item.End,
+                        color: '#D3D3D3',
+                        rendering: 'background',
+                        resourceId: value.Employee,
+                        title: "Unavailable time"
+                    }
+                    result.push(event);
+                });
+            }
+        });
+        return result;
     }
 
     /* config object */
@@ -170,10 +190,10 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     event.title = event.workorderId + " " + event.customerFoo + " " + event.locationFoo;
                     var estimate = parseInt(event.hourFoo);
                     var date = new Date(event.start);
-                    event.end._d = new Date(date.setHours(date.getHours() + (estimate == 0? 1: estimate > 8? 8 : estimate)));
+                    event.end._d = new Date(date.setHours(date.getHours() + (estimate == 0 ? 1 : estimate > 8 ? 8 : estimate)));
                     $("#calendar").fullCalendar("rerenderEvents");
                     saveEvent(event);
-                    
+
                     angular.forEach($scope.unassignedWorkorders, function (value, key) {
                         if (value.WorkOrder == event.workorderId) {
                             $scope.unassignedWorkorders.splice(key, 1);
@@ -231,7 +251,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             && y + scroll <= offset.bottom) { return true; }
         return false;
     }
-    
+
     $scope.eventSources = $scope.events;
     $scope.resouceSources = [$scope.resources];
 
@@ -239,7 +259,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
     $q.all([commonDataService.getTechnicians(), commonDataService.getSchedule()]).then(function (values) {
         $scope.activeTechnicians = values[0].data;
         angular.forEach($scope.activeTechnicians, function (value, key) {
-            if (value != null) {
+            if (value != null && value.IsAvailable) {
                 this.push({
                     id: value.Employee,
                     title: value.Name,
@@ -263,35 +283,35 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         angular.forEach($scope.assigments, function (value, key) {
             if (value != null) {
                 if (value.Start !== "" && value.End !== "") {
-                var spliter = (value.Customer == "" || value.Location == "") ? "" : "/";
-                tempEvents.push({
-                    id: value.Assignment,
-                    resourceId: value.EmployeeId,
-                    title: value.title = value.WorkOrder + " " + value.Customer + " " + value.Location,
-                    start: new Date(value.Start),
-                    end: new Date(value.End),
-                    assigmentId: value.Assigment,
-                    workorderId: value.WorkOrder,
-                    description: value.Customer + spliter + value.Location,
-                    dateFoo: value.DateEntered,
-                    customerFoo: value.Customer,
-                    locationFoo: value.Location,
-                    hourFoo: value.EstimatedRepairHours,
-                    color: value.Color == "" ? "" : value.Color,
-                    durationEditable: false
-                });
+                    var spliter = (value.Customer == "" || value.Location == "") ? "" : "/";
+                    tempEvents.push({
+                        id: value.Assignment,
+                        resourceId: value.EmployeeId,
+                        title: value.title = value.WorkOrder + " " + value.Customer + " " + value.Location,
+                        start: new Date(value.Start),
+                        end: new Date(value.End),
+                        assigmentId: value.Assigment,
+                        workorderId: value.WorkOrder,
+                        description: value.Customer + spliter + value.Location,
+                        dateFoo: value.DateEntered,
+                        customerFoo: value.Customer,
+                        locationFoo: value.Location,
+                        hourFoo: value.EstimatedRepairHours,
+                        color: value.Color == "" ? "" : value.Color,
+                        durationEditable: false
+                    });
                 }
             }
         });
-
-        $scope.events = tempEvents;
+        debugger;
+        $scope.events = tempEvents.concat(getBusinesHours());
 
         $timeout(function () {
             $("#calendar").fullCalendar("removeEvents");
             $("#calendar").fullCalendar("addEventSource", $scope.events);
             $("#calendar").fullCalendar("rerenderEvents");
             repaintUnavailables();
-         
+
             $(".fc-timelineWeek-button").click(function () {
                 repaintUnavailables();
             });
@@ -380,56 +400,99 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         });
 
 
-
-        $rootScope.$watchCollection(function () {
-            return $rootScope.unavailableTechniciansIds;
-        }, function () {
-            $("tr[data-resource-id]").css("background-color", "");
-            angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) {
-                $("tr[data-resource-id=" + value + "]").css("background-color", "aliceblue");
-            });
-        });
+        //todo
+        //$rootScope.$watchCollection(function () {
+        //    return $rootScope.unavailableTechniciansIds;
+        //}, function () {
+        //    angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) {
+        //        angular.forEach($scope.resources, function (item, itemKey) {
+        //            if (item.id == value) {
+        //                $scope.resources.splice(itemKey, 1);
+        //                $('#calendar').fullCalendar('removeResource', item.id);
+        //            }
+        //        });
+        //        angular.forEach($scope.events, function (item, itemKey) {
+        //            if (item.resourceId == value) {
+        //                $scope.events.splice(itemKey, 1);
+        //            }
+        //        });
+        //    });
+        //});
     });
 
     function formatDate(inputdate) {
         return inputdate.getMonth() + 1 + "-" + inputdate.getDate() + "-" + inputdate.getFullYear();
     }
 
-    var repaintUnavailables = function() {
+    var repaintUnavailables = function () {
+        //angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) {
+        //    var event = {
+        //        start: "1900-01-01T11:30:00.000Z",
+        //        end: "2100-11-07T19:30:00.000Z",
+        //        color: '#D3D3D3',
+        //        rendering: 'background',
+        //        resourceId: value,
+        //        title: "Unavailable time"
+        //    }
+        //    $scope.events.push(event);
+        //    $('#calendar').fullCalendar('renderEvent', event, true);
+        //});
         angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) {
-            $("tr[data-resource-id=" + value + "]").css("background-color", "aliceblue");
+            angular.forEach($scope.resources, function (item, itemKey) {
+                if (item.id == value) {
+                    $scope.resources.splice(itemKey, 1);
+                    $('#calendar').fullCalendar('removeResource', item.id);
+                }
+            });
+            angular.forEach($scope.events, function (item, itemKey) {
+                if (item.resourceId == value) {
+                    $scope.events.splice(itemKey,1);
+                }
+            });
         });
     }
 
 
-     $scope.changeSorting = function (data) {
-         if ($scope.sortKey != data) {
-             $("." + $scope.sortKey + "").removeClass("footable-sorted");
-             $("." + $scope.sortKey + "").removeClass("footable-sorted-desc");
-             $scope.sortKey = data;
-             $scope.reverse = true;
+    $scope.changeSorting = function (data) {
+        if ($scope.sortKey != data) {
+            $("." + $scope.sortKey + "").removeClass("footable-sorted");
+            $("." + $scope.sortKey + "").removeClass("footable-sorted-desc");
+            $scope.sortKey = data;
+            $scope.reverse = true;
             $("." + data + "").addClass("footable-sorted");
             $("." + data + "").removeClass("footable-sorted-desc");
         } else {
-             $scope.reverse = !$scope.reverse;
-             if ($("." + data + "").hasClass("footable-sorted-desc")) {
-                 $("." + data + "").addClass("footable-sorted");
-                 $("." + data + "").removeClass("footable-sorted-desc");
-             }
-             else{
-             $("." + data + "").addClass("footable-sorted-desc");
-             $("." + data + "").removeClass("footable-sorted");
-         }
+            $scope.reverse = !$scope.reverse;
+            if ($("." + data + "").hasClass("footable-sorted-desc")) {
+                $("." + data + "").addClass("footable-sorted");
+                $("." + data + "").removeClass("footable-sorted-desc");
+            }
+            else {
+                $("." + data + "").addClass("footable-sorted-desc");
+                $("." + data + "").removeClass("footable-sorted");
+            }
         }
-     }
+    }
 
-     $rootScope.$watchCollection(function () { return $rootScope.updatedTechnican; }, function () {
-         angular.forEach($scope.resources, function (value, key) {
-             if (value.id == $rootScope.updatedTechnican.Id) {
-                 $scope.resources[key].color = $rootScope.updatedTechnican.Сolor;
-             }
-         });
-     });
+    //todo
+    //$rootScope.$watchCollection(function () { return $rootScope.updatedTechnican; }, function () {
+    //    angular.forEach($rootScope.updatedTechnican.AvailableDays, function (value, key) {
+    //        var event = {
+    //            start: value.start,
+    //            end: value._end,
+    //            color: '#D3D3D3',
+    //            rendering: 'background',
+    //            resourceId: $rootScope.updatedTechnican.Id,
+    //            title: "Unavailable time"
+    //        }
+    //        $('#calendar').fullCalendar('renderEvent', event, true);
+    //    });
+    //    angular.forEach($scope.resources, function (value, key) {
+    //        if (value.id == $rootScope.updatedTechnican.Id) {
+    //            $scope.resources[key].color = $rootScope.updatedTechnican.Сolor;
+    //        }
+    //    });
+    //});
 
 };
 scheduleController.$inject = ["$rootScope", "$scope", "$interpolate", "$timeout", "$q", "commonDataService"];
