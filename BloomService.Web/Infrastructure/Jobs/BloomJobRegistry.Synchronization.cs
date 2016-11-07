@@ -48,8 +48,8 @@ namespace BloomService.Web.Infrastructure.Jobs
             {
                 lock (_syncSageLock)
                 {
-                    GetEntities(); //2min //6min
-                    try //Add: 0.3sec Update: 0.5sec
+                    GetEntities(); 
+                    try 
                     {
                         var newRateSheets = new List<SageRateSheet>();
                         var updateRateSheets = new List<SageRateSheet>();
@@ -78,7 +78,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
 
                     try
-                    { //Add: 0.3sec Update: 0.126sec
+                    { 
                         var updatePermissionCodes = new List<SagePermissionCode>();
                         var newPermissionCodes = new List<SagePermissionCode>();
                         var permissionCodeList = _repository.GetAll<SagePermissionCode>().ToList();
@@ -117,7 +117,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     var lastWo = WorkOrders.Entities.Max(x => x.WorkOrder);
                     var currentQuery = 0;
                     var querySize = lastWo / 10;
-                    try //Add: 3min Update: 4min
+                    try 
                     {
                         while (currentQuery < numberOfQueries)
                         {
@@ -135,7 +135,6 @@ namespace BloomService.Web.Infrastructure.Jobs
                                             x.WorkOrderItem == entity.WorkOrderItem);
                                 if (mongoEntity == null)
                                     newWorkOrderItems.Add(entity);
-                                //_repository.Add(entity);
                                 else
                                 {
                                     if (PublicInstancePropertiesEqual(mongoEntity, entity, "Id"))
@@ -156,7 +155,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         _log.ErrorFormat("Can`t sync SageWorkOrderItems {0}", ex);
                     }
 
-                    try //Add:5min Update: 4min
+                    try 
                     {
                         workorderItems = _repository.GetAll<SageWorkOrderItem>().ToList();
                         foreach (var workOrder in WorkOrders.Entities)
@@ -227,7 +226,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
 
                     try
-                    { //Add: 0.3 sec Update: 0.1sec
+                    { 
                         var updateCallTypes = new List<SageCallType>();
                         var newCallTypes = new List<SageCallType>();
                         var callTypeList = _repository.GetAll<SageCallType>().ToList();
@@ -236,7 +235,6 @@ namespace BloomService.Web.Infrastructure.Jobs
                             var mongoEntity = callTypeList.SingleOrDefault(x => x.CallType == entity.CallType);
                             if (mongoEntity == null)
                                 newCallTypes.Add(entity);
-                            // _repository.Add(entity);
                             else
                             {
                                 if (PublicInstancePropertiesEqual(entity, mongoEntity, "Id"))
@@ -291,7 +289,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
 
                     try
-                    {//Add: 50min Update: 4min
+                    {
                         updateWorkOrders = new List<SageWorkOrder>();
                         var updateAssignments = new List<SageAssignment>();
                         var newAssignments = new List<SageAssignment>();
@@ -343,7 +341,6 @@ namespace BloomService.Web.Infrastructure.Jobs
                                         _repository.Update(workorder);
                                     }
                                 }
-                                //_repository.Add(assigment);
                                 newAssignments.Add(assigment);
                             }
                             else
@@ -371,7 +368,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
 
                     try
-                    {//Add: 3sec Update: 3sec
+                    {
                         var updateEquipments = new List<SageEquipment>();
                         var newEquipments = new List<SageEquipment>();
                         var equipmentList = _repository.GetAll<SageEquipment>().ToList();
@@ -380,7 +377,6 @@ namespace BloomService.Web.Infrastructure.Jobs
                             var mongoEntity = equipmentList.SingleOrDefault(x => x.Equipment == entity.Equipment);
                             if (mongoEntity == null)
                                 newEquipments.Add(entity);
-                            //_repository.Add(entity);
                             else
                             {
                                 entity.Id = mongoEntity.Id;
@@ -400,7 +396,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
 
                     try
-                    {//Add: 3 sec
+                    {
                         var updateProblems = new List<SageProblem>();
                         var newProblems = new List<SageProblem>();
                         var problemList = _repository.GetAll<SageProblem>().ToList();
@@ -409,7 +405,6 @@ namespace BloomService.Web.Infrastructure.Jobs
                             var mongoEntity = problemList.SingleOrDefault(x => x.Problem == entity.Problem);
                             if (mongoEntity == null)
                                 newProblems.Add(entity);
-                            // _repository.Add(entity);
                             else
                             {
                                 entity.Id = mongoEntity.Id;
@@ -429,7 +424,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
 
                     try
-                    {//Add: 11 sec
+                    {
                         var updateRepairs = new List<SageRepair>();
                         var newRepairs = new List<SageRepair>();
                         var sageRepairList = _repository.GetAll<SageRepair>().ToList();
@@ -437,8 +432,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         {
                             var mongoEntity = sageRepairList.SingleOrDefault(x => x.Repair == entity.Repair);
                             if (mongoEntity == null)
-                                newRepairs.Add(entity);
-                            //_repository.Add(entity);
+                                newRepairs.Add(entity);                           
                             else
                             {
                                 entity.Id = mongoEntity.Id;
@@ -457,7 +451,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         _log.ErrorFormat("Can`t sync SageRepair {0}", ex);
                     }
                     try
-                    {//Add: 1.5 min Update: 9sec
+                    {
                         var updateLocation = new List<SageLocation>();
                         var workorderList = _repository.SearchFor<SageWorkOrder>(x => x.Status == "Open").ToList();
                         var tmpLocations = workorderList.Select(x => x.LocationNumber).ToList();
@@ -501,7 +495,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     {
                         _log.ErrorFormat("Can`t sync SageLocationCache {0}", ex);
                     }
-                    try//Add:8min Update: 11sec
+                    try
                     {
                         var updateLocations = new List<SageLocation>();
                         updateWorkOrders = new List<SageWorkOrder>();
@@ -521,8 +515,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     workorderList.Where(x => x.Location == entity.Name && x.Status == "Open");
                                 var hasOpenWorkOrder = woBylocation.Any();
                                 if (hasOpenWorkOrder)
-                                {
-                                    //var currentCacheLocation = locationsCache.SingleOrDefault(x => x.Location == entity.Location);
+                                {                                   
                                     if (currentCacheLocation != null)
                                     {
                                         entity.Longitude = currentCacheLocation.Longitude;
@@ -534,8 +527,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     wo.Latitude = entity.Latitude;
                                     wo.Longitude = entity.Longitude;
                                     updateWorkOrders.Add(wo);
-                                }
-                                //_repository.Add(entity);
+                                }                               
                                 newLocations.Add(entity);
                             }
                             else
@@ -568,7 +560,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
 
                     try
-                    { //Add: 4min 20sec Update: 14sec
+                    { 
                         var updateCustomers = new List<SageCustomer>();
                         var newCustomers = new List<SageCustomer>();
                         var customersList = _repository.GetAll<SageCustomer>().ToList();
@@ -576,8 +568,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         {
                             var mongoEntity = customersList.SingleOrDefault(x => x.Customer == entity.Customer);
                             if (mongoEntity == null)
-                                newCustomers.Add(entity);
-                            // _repository.Add(entity);
+                                newCustomers.Add(entity);                            
                             else
                             {
                                 entity.Id = mongoEntity.Id;
@@ -597,7 +588,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
 
                     try
-                    {//Add 2min 40 sec Update: 4sec
+                    {
                         var updateParts = new List<SagePart>();
                         var newParts = new List<SagePart>();
                         var partsList = _repository.GetAll<SagePart>().ToList();
@@ -605,8 +596,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         {
                             var mongoEntity = partsList.SingleOrDefault(x => x.Part == entity.Part);
                             if (mongoEntity == null)
-                                newParts.Add(entity);
-                            //_repository.Add(entity);
+                                newParts.Add(entity);                            
                             else
                             {
                                 entity.Id = mongoEntity.Id;
