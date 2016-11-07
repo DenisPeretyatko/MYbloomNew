@@ -20,7 +20,7 @@ namespace BloomService.Web.Infrastructure.Constants
             new SageWorkOrderStatus { Status = Open, Value= OpenId },
             new SageWorkOrderStatus { Status = ReturnRequired, Value= ReturnRequiredId },
             new SageWorkOrderStatus { Status = WorkComplete, Value = WorkCompleteId },
-            new SageWorkOrderStatus { Status = Closed, Value = ClosedId },
+            //new SageWorkOrderStatus { Status = Closed, Value = ClosedId },
             new SageWorkOrderStatus { Status = Cancelled, Value = CancelledId },
             new SageWorkOrderStatus { Status = Reviewed, Value = ReviewedId }
         };
