@@ -132,6 +132,15 @@
                                                 </ui-select-choices>
                                             </ui-select>
                                         </div>
+                                        <div class="form-group hidden-lg hidden-md">
+                                            <label>Status</label>
+                                            <ui-select ng-model="lookups.Status.selected" theme="bootstrap">
+                                                <ui-select-match placeholder="Status">{{$select.selected.Status}}</ui-select-match>
+                                                <ui-select-choices repeat="item in lookups.Status | filter: $select.search">
+                                                    <div>{{item.Status}}</div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -191,6 +200,15 @@
                                                 <ui-select-match placeholder="Payment method">{{$select.selected.Method}}</ui-select-match>
                                                 <ui-select-choices repeat="item in lookups.PaymentMethods | filter: $select.search">
                                                     <div>{{item.Method}}</div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                        <div class="form-group hidden-lg">
+                                            <label>Status</label>
+                                            <ui-select ng-model="lookups.Status.selected" theme="bootstrap">
+                                                <ui-select-match placeholder="Status">{{$select.selected.Status}}</ui-select-match>
+                                                <ui-select-choices repeat="item in lookups.Status | filter: $select.search">
+                                                    <div>{{item.Status}}</div>
                                                 </ui-select-choices>
                                             </ui-select>
                                         </div>
