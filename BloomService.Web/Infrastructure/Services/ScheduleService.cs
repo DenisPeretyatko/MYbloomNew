@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Linq;
 using BloomService.Domain.Entities.Concrete;
 using BloomService.Domain.Extensions;
@@ -28,16 +29,20 @@ namespace BloomService.Web.Infrastructure.Services
             _locationService = locationService;
         }
 
-        public bool CerateAssignment(AssignmentViewModel model)
+        public ResponceModel CerateAssignment(AssignmentViewModel model)
         {
             _log.InfoFormat("Method: CreateAssignment. Model ID {0}", model.Id);
-            
+
             var databaseAssignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == model.WorkOrder).Single();
 
             var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
-            
-            if (employee != null && (!employee.IsAvailable || HasСrossoverAssignment(employee.Name, model.ScheduleDate, model.EndDate)))
-                return false;
+
+            if (employee != null && (!employee.IsAvailable || HasСrossoverAssignment(employee.Name, model.ScheduleDate, model.EndDate)) || !CheckEmployeeAvailableTime(employee, model.ScheduleDate, model.EndDate))
+                return new ResponceModel
+                {
+                    IsSucceed = false,
+                    ErrorMessage = $"Sorry {employee.Name} is not available at this time."
+                };
 
             databaseAssignment.Employee = employee?.Name ?? "";
             databaseAssignment.ScheduleDate = model.ScheduleDate;
@@ -51,7 +56,11 @@ namespace BloomService.Web.Infrastructure.Services
             if (edited.IsSucceed == false)
             {
                 _log.ErrorFormat("edited == null. Error.");
-                return false;
+                return new ResponceModel
+                {
+                    IsSucceed = false,
+                    ErrorMessage = $"Sage error."
+                };
             }
 
             databaseAssignment.EmployeeId = employee?.Employee ?? 0;
@@ -65,7 +74,7 @@ namespace BloomService.Web.Infrastructure.Services
             databaseAssignment.Location = workorder.Location;
             var locations = _repository.GetAll<SageLocation>().ToArray();
             var itemLocation = locations.FirstOrDefault(l => l.Name == workorder.Location);
-            if (itemLocation == null )
+            if (itemLocation == null)
             {
                 itemLocation = new SageLocation();
                 _locationService.ResolveLocation(itemLocation);
@@ -98,7 +107,10 @@ namespace BloomService.Web.Infrastructure.Services
             _notification.SendNotification(string.Format("Workorder {0} assigned to {1}", workorder.Name, employee.Name));
             _log.InfoFormat("DatabaseAssignment added to repository. Employee {0}, Employee ID {1}", databaseAssignment.Employee, databaseAssignment.EmployeeId);
 
-            return true;
+            return new ResponceModel
+            {
+                IsSucceed = true,
+            };
         }
 
         public bool DeleteAssignment(AssignmentViewModel model)
@@ -137,11 +149,26 @@ namespace BloomService.Web.Infrastructure.Services
         {
             var assignments = _repository.SearchFor<SageAssignment>(
                 x => x.Employee == employeeName).ToList();
-            var crossed = assignments.Count(x => (start> Convert.ToDateTime(x.Start) && start < Convert.ToDateTime(x.End)) ||
-            (end< Convert.ToDateTime(x.End) && end> Convert.ToDateTime(x.Start)) ||
-            (start< Convert.ToDateTime(x.End) && end> Convert.ToDateTime(x.Start)) ||
-            (start> Convert.ToDateTime(x.Start) && end< Convert.ToDateTime(x.End)));            
+            var crossed = assignments.Count(x => (start > Convert.ToDateTime(x.Start) && start < Convert.ToDateTime(x.End)) ||
+            (end < Convert.ToDateTime(x.End) && end > Convert.ToDateTime(x.Start)) ||
+            (start < Convert.ToDateTime(x.End) && end > Convert.ToDateTime(x.Start)) ||
+            (start > Convert.ToDateTime(x.Start) && end < Convert.ToDateTime(x.End)));
             return crossed != 0;
+        }
+
+        public bool CheckEmployeeAvailableTime(SageEmployee employee, DateTime eventStart, DateTime eventEnd)
+        {
+            foreach (var range in employee.AvailableDays)
+            {
+                if (eventStart > Convert.ToDateTime(range.Start) && eventStart < Convert.ToDateTime(range.End) ||
+            (eventEnd < Convert.ToDateTime(range.End) && eventEnd > Convert.ToDateTime(range.Start)) ||
+            (eventStart < Convert.ToDateTime(range.End) && eventEnd > Convert.ToDateTime(range.Start)) ||
+            (eventStart > Convert.ToDateTime(range.Start) && eventEnd < Convert.ToDateTime(range.End)))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

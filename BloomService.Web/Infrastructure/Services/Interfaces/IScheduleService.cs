@@ -1,12 +1,14 @@
 ﻿using System;
+using BloomService.Domain.Entities.Concrete;
 using BloomService.Web.Models;
 
 namespace BloomService.Web.Infrastructure.Services.Interfaces
 {
     public interface IScheduleService
     {
-        bool CerateAssignment(AssignmentViewModel model);
+        ResponceModel CerateAssignment(AssignmentViewModel model);
         bool DeleteAssignment(AssignmentViewModel model);
         bool HasСrossoverAssignment(string employeeName, DateTime start, DateTime end);
+        bool CheckEmployeeAvailableTime(SageEmployee employee, DateTime eventStart, DateTime eventEnd);
     }
 }

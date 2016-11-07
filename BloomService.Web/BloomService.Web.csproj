@@ -432,6 +432,7 @@
     <Compile Include="Models\PermissionCodeModel.cs" />
     <Compile Include="Models\PictureModel.cs" />
     <Compile Include="Models\RateSheetModel.cs" />
+    <Compile Include="Models\ResponceModel.cs" />
     <Compile Include="Models\ScheduleViewModel.cs" />
     <Compile Include="Models\LookupsModel.cs" />
     <Compile Include="Models\EquipmentModel.cs" />

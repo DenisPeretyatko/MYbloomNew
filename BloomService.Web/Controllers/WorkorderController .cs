@@ -164,11 +164,11 @@ namespace BloomService.Web.Controllers
             if (pictures == null)
                 return Success("");
 
-           pictures.Images = pictures.Images.Where(x => !x.IsDeleted)
-                    .OrderBy(x => x.Id)
-                    .ToList();
+            pictures.Images = pictures.Images.Where(x => !x.IsDeleted)
+                     .OrderBy(x => x.Id)
+                     .ToList();
 
-           return Success(pictures);
+            return Success(pictures);
         }
 
         [HttpPost]
@@ -334,12 +334,12 @@ namespace BloomService.Web.Controllers
         public ActionResult SaveWorkOrder(WorkOrderModel model)
         {
             _log.InfoFormat("Method: SaveWorkOrder. Model ID {0}", model.Id);
-           
             if (model.Location == null)
                 return Error("Location is required");
             if (model.Problem == null)
                 return Error("Problem is required");
 
+            ResponceModel createAssignmentResult = new ResponceModel { IsSucceed = true };
             var workorder = new SageWorkOrder()
             {
                 ARCustomer = model.Customer,
@@ -381,7 +381,8 @@ namespace BloomService.Web.Controllers
                 editedAssignment.Id = assignmentDb.Id;
                 editedAssignment.ScheduleDate = model.AssignmentDate.Date.Add((model.AssignmentTime).TimeOfDay);
                 editedAssignment.WorkOrder = assignmentDb.WorkOrder;
-                if (_scheduleService.CerateAssignment(editedAssignment))
+                createAssignmentResult = _scheduleService.CerateAssignment(editedAssignment);
+                if (createAssignmentResult.IsSucceed)
                 {
                     var locations = _repository.GetAll<SageLocation>().ToArray();
                     var itemLocation = locations.FirstOrDefault(l => l.Name == workOrderResult.Entity.Location);
@@ -408,7 +409,7 @@ namespace BloomService.Web.Controllers
                     Type = "success"
                 });
             }
-            else if (model.Status == WorkOrderStatus.ClosedId && workOrderResult.Entity.DateClosed?.Date==new DateTime(2000, 1, 1).Date)
+            else if (model.Status == WorkOrderStatus.ClosedId && workOrderResult.Entity.DateClosed?.Date == new DateTime(2000, 1, 1).Date)
             {
                 workOrderResult.Entity.DateClosed = DateTime.Now.GetLocalDate(_settings.Timezone).Date;
             }
@@ -417,8 +418,10 @@ namespace BloomService.Web.Controllers
             _log.InfoFormat("Repository update workorder. Name {0}, ID {1}", workorder.Name, workorder.Id);
             _hub.UpdateWorkOrder(model);
 
-           
-            return Success();
+            if (createAssignmentResult.IsSucceed)
+                return Success();
+            else
+                return Error(createAssignmentResult.ErrorMessage, createAssignmentResult.ErrorMessage);
         }
 
         private void ResolveWorkOrderItems(WorkOrderModel model)
@@ -639,7 +642,7 @@ namespace BloomService.Web.Controllers
             var workorder = this._repository.SearchFor<SageWorkOrder>(x => x.WorkOrder == id).SingleOrDefault();
             if (workorder == null)
                 return Error("Workorder does not exist", $"There are no Workorder with workorderID: {id}. workorder == null");
-            if(workorder.WorkNotes==null)
+            if (workorder.WorkNotes == null)
                 return Success("");
             var notes = Mapper.Map<IEnumerable<WorkOrderNoteModel>>(workorder.WorkNotes).OrderBy(x => x.NoteId);
             return Success(notes);

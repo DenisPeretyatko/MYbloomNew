@@ -62,7 +62,7 @@ namespace BloomService.Web.Controllers
         public ActionResult CreateAssignment(AssignmentViewModel model)
         {
             var result = _scheduleService.CerateAssignment(model);
-            return !result ? Error("Create assignment failed") : Success();
+            return !result.IsSucceed ? Error(result.ErrorMessage) : Success();
         }
 
         [HttpPost]
