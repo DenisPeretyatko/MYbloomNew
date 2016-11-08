@@ -19,7 +19,8 @@
                     <h5>Chart</h5>
                 </div>
                 <div class="ibox-content">
-                    <div class="flot-chart" style="height: 360px;">
+                    <div class="tags-container margin-bottom-10"></div>
+                    <div class="flot-chart" style="height: 360px">
                         <div flot class="flot-chart-content" dataset="chartData" options="flotChartOptions"></div>
                     </div>
                 </div>
@@ -31,13 +32,18 @@
                     <div class="col-lg-6 col-md-6">
                         <h5>Today's Work Orders</h5>
                     </div>
-                    <div class="col-lg-2 col-lg-offset-4 col-md-2 col-md-offset-4">
+                    <div class="col-lg-2 col-lg-offset-4 col-md-2 col-md-offset-4" >
                         <label class="pull-right dashboard-label"><input type="checkbox" class="dashboard-checkbox" ng-change="showAllLocations()" ng-model="showAll" value="">Show all</label>
                     </div>
                 </div>
 
 
                 <div class="ibox-content">
+                    <div class="margin-bottom-10 tags-container">
+                        <ng-repeat ng-repeat="value in activeTechnicans">
+                            <span class="label map-tag" ng-style="{'background-color':value.Color==null?'red':value.Color}">{{value.Name}}</span>
+                        </ng-repeat>
+                    </div>
                     <section id="map">
                         <div ui-map="locationMap" ui-options="mapOptions" class="google-map" style="height: 360px;"></div>
                     </section>

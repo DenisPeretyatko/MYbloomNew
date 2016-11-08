@@ -16,6 +16,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
     $scope.workordersView = [];
     $scope.workorderMarkers = [];
     $scope.globalTimezone = global.TimeZone;
+    $scope.activeTechnicans = [];
 
     $scope.sort = function (data) {
         if ($scope.sortKey != data) {
@@ -31,15 +32,15 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
         var dashboard = response.data;
         $scope.listworkorders = dashboard.WorkOrders;
         $scope.chartData = dashboard.Chart[0].data;
-//            [
-//    {label: "Asia", data: 4119630000, color: "#005CDE" },
-//    { label: "Latin America", data: 590950000, color: "#00A36A" },
-//    { label: "Africa", data: 1012960000, color: "#7D0096" },
-//    { label: "Oceania", data: 35100000, color: "#992B00" },
-//    { label: "Europe", data: 727080000, color: "#DE000F" },
-//    { label: "North America", data: 344120000, color: "#ED7B00" }    
-//]; //
         $scope.flotChartOptions = flotChartOptions;
+    });
+
+    $scope.$watch(function () { return state.technicians; }, function () {
+        angular.forEach(state.technicians, function (value, key) {
+            if (value != null && value.IsAvailable) {
+                $scope.activeTechnicans.push({ Name: value.Name, Color: value.Color })
+            }
+        });
     });
 
     if (state.alreadyLoaded == false) {

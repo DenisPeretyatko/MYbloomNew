@@ -720,5 +720,23 @@ input[type="time"]::-ms-clear {
     display: none;
 }
 
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}
 
+.map-tag-large {
+    font-size: small !important;
+    color: rgb(255, 255, 255) !important;
+}
 
+.map-tag {
+    color: rgb(255, 255, 255) !important;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.tags-container {
+    height: 18px;
+}

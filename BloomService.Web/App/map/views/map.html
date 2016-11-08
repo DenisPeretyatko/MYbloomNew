@@ -21,9 +21,16 @@
         <div class="col-md-12">
             <div class="ibox">
                 <div class="ibox-content">
-                    <section id="map">
-                        <div ui-map="locationMap" ui-options="mapOptions" class="google-map" style="height: 730px; min-height: 100%;"></div>
-                    </section>
+                    <div class="margin-bottom-10">
+                        <ng-repeat ng-repeat="value in activeTechnicans">
+                            <span class="label map-tag-large" ng-style="{'background-color':value.Color==null?'red':value.Color}">{{value.Name}}</span>
+                        </ng-repeat>
+                    </div>
+                    <div>
+                        <section id="map">
+                            <div ui-map="locationMap" ui-options="mapOptions" class="google-map" style="height: 730px; min-height: 100%;"></div>
+                        </section>
+                    </div>
                 </div>
             </div>
         </div>

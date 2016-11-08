@@ -13,11 +13,19 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
     $scope.obj = {};
     $scope.obj.mapDate = new Date();
     $scope.showAll = false;
-
+    $scope.activeTechnicans = [];
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
 
-    $scope.showAllLocations = function () {
+    $scope.$watch(function() { return state.technicians; }, function() {
+        angular.forEach(state.technicians, function(value, key) {
+            if (value != null && value.IsAvailable) {
+                $scope.activeTechnicans.push({Name: value.Name, Color: value.Color })
+            }
+        });
+    });
+
+        $scope.showAllLocations = function () {
         var tempWorkordersView = [];
         if ($scope.showAll == true) {
             $scope.workordersView = [];
