@@ -37,7 +37,7 @@ namespace BloomService.Web.Infrastructure.Services
 
             var employee = _repository.SearchFor<SageEmployee>(x => x.Employee == model.Employee).SingleOrDefault();
 
-            if (employee != null && (!employee.IsAvailable || HasСrossoverAssignment(employee.Name, model.ScheduleDate, model.EndDate)) || !CheckEmployeeAvailableTime(employee, model.ScheduleDate, model.EndDate))
+            if (employee != null && (!employee.IsAvailable || HasСrossoverAssignment(employee.Name, model.ScheduleDate, model.EndDate, model.WorkOrder)) || !CheckEmployeeAvailableTime(employee, model.ScheduleDate, model.EndDate))
                 return new ResponceModel
                 {
                     IsSucceed = false,
@@ -145,10 +145,10 @@ namespace BloomService.Web.Infrastructure.Services
             return true;
         }
 
-        public bool HasСrossoverAssignment(string employeeName, DateTime start, DateTime end)
+        public bool HasСrossoverAssignment(string employeeName, DateTime start, DateTime end, long workOrder)
         {
             var assignments = _repository.SearchFor<SageAssignment>(
-                x => x.Employee == employeeName).ToList();
+                x => x.Employee == employeeName && x.WorkOrder!= workOrder).ToList();
             var crossed = assignments.Count(x => (start > Convert.ToDateTime(x.Start) && start < Convert.ToDateTime(x.End)) ||
             (end < Convert.ToDateTime(x.End) && end > Convert.ToDateTime(x.Start)) ||
             (start < Convert.ToDateTime(x.End) && end > Convert.ToDateTime(x.Start)) ||

@@ -107,7 +107,7 @@ namespace BloomService.Web.Controllers
                     assignment.EmployeeId = employee?.Employee ?? 0;
                     assignment.Start = assignmentStart.ToString();
                     assignment.End = assignmentEnd.ToString();
-                    if (!_scheduleService.HasСrossoverAssignment(employee.Name, assignmentStart, assignmentEnd))
+                    if (!_scheduleService.HasСrossoverAssignment(employee.Name, assignmentStart, assignmentEnd, model.WorkOrder))
                     {
                         assignment.Color = employee?.Color ?? "";
                         assignment.Customer = result.Entity.ARCustomer;

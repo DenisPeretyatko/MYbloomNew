@@ -8,7 +8,7 @@ namespace BloomService.Web.Infrastructure.Services.Interfaces
     {
         ResponceModel CerateAssignment(AssignmentViewModel model);
         bool DeleteAssignment(AssignmentViewModel model);
-        bool HasСrossoverAssignment(string employeeName, DateTime start, DateTime end);
+        bool HasСrossoverAssignment(string employeeName, DateTime start, DateTime end, long wo);
         bool CheckEmployeeAvailableTime(SageEmployee employee, DateTime eventStart, DateTime eventEnd);
     }
 }
