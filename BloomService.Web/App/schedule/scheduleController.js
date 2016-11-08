@@ -226,7 +226,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     });
                 }
             },
-            resourceLabelText: "Technicians",
+            resourceLabelText: "Employees",
             resources: $scope.resources,
             forceEventDuration: true,
             dayRender: function (date, cell) {
