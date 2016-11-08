@@ -126,6 +126,9 @@
         window.onload = function () {
             var loadingPath = global.BasePath + '/images/loading.gif';
             $("#cover").css({ "background": 'url(' + loadingPath + ') no-repeat scroll 50% 50% transparent', "background-size": "3%" });
+            $('body').on('click', 'a.close-sweet-alert', function () {
+                $(".swal2-confirm").trigger("click");
+            });
         }
     </script>
 

@@ -15,7 +15,7 @@ using BloomService.Web.Infrastructure;
 
 namespace BloomService.Web.Controllers
 {
-    public class WorkorderController : BaseController
+   public class WorkorderController : BaseController
     {
         private readonly ILog _log = LogManager.GetLogger(typeof(WorkorderController));
         private readonly IRepository _repository;
@@ -400,12 +400,14 @@ namespace BloomService.Web.Controllers
             workOrderResult.Entity.IsValid = true;
             workOrderResult.Entity.WorkOrderItems = _sageApiProxy.GetWorkorderItemsByWorkOrderId(workorder.WorkOrder).Entities;
             workOrderResult.Entity.WorkNotes = this._sageApiProxy.GetNotes(workorder.WorkOrder).Entities;
+            
             if (model.Status == WorkOrderStatus.WorkCompleteId)
             {
+                var now = $"{DateTime.Now.GetLocalDate(_settings.Timezone):MM/dd/yyyy HH:mm tt}";
                 _hub.ShowAlert(new SweetAlertModel()
                 {
-                    Message = $"Workorder #{model.WorkOrder} closed",
-                    Title = "Workorder completed",
+                    Title = "Work Order #<a ui-sref=\"manager.workorder.edit({ id:'"+workorder.Id+ "'})\" class=\"close-sweet-alert\" href=\"/#/manager/workorders/" + workorder.Id + "/edit\">" + model.WorkOrder+"</a> Marked Complete",
+                    Message = $"By {UserModel.Name} at {now}",
                     Type = "success"
                 });
             }

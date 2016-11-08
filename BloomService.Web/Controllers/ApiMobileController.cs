@@ -377,10 +377,11 @@ namespace BloomService.Web.Controllers
             _notification.SendNotification($"Workorder {workorder.Name} change status by {model.Status}");
             if (model.Status == WorkOrderStatus.WorkComplete)
             {
+                var now = $"{DateTime.Now.GetLocalDate(_settings.Timezone):MM/dd/yyyy HH:mm tt}";
                 _hub.ShowAlert(new SweetAlertModel()
                 {
-                    Message = $"Workorder #{workorder.WorkOrder} closed",
-                    Title = "Workorder completed",
+                    Title = "Work Order #<a ui-sref=\"manager.workorder.edit({ id:'" + workorder.Id + "'})\" class=\"close-sweet-alert\" href=\"/#/manager/workorders/" + workorder.Id + "/edit\">" + workorder.WorkOrder + "</a> Marked Complete",
+                    Message = $"By {UserModel.Name} at {now}",
                     Type = "success"
                 });
             }
