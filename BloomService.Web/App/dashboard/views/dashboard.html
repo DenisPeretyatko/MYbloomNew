@@ -32,8 +32,9 @@
                     <div class="col-lg-6 col-md-6">
                         <h5>Today's Work Orders</h5>
                     </div>
-                    <div class="col-lg-2 col-lg-offset-4 col-md-2 col-md-offset-4" >
-                        <label class="pull-right dashboard-label"><input type="checkbox" class="dashboard-checkbox" ng-change="showAllLocations()" ng-model="showAll" value="">Show all</label>
+                    <div class="col-lg-4 col-lg-offset-2 col-md-4 col-md-offset-2" >
+                        <label class="pull-right dashboard-label"><input type="checkbox" class="dashboard-checkbox" ng-change="showUnassignedWorkorders()" ng-model="showUnassigned">Show unassigned</label>
+                        <label class="pull-right dashboard-label margin-right-10"><input type="checkbox" class="dashboard-checkbox" ng-change="showAllLocations()" ng-model="showAll" value="">Show all</label>
                     </div>
                 </div>
 

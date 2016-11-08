@@ -13,6 +13,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
     $scope.sortType = 'ScheduleDate';
     $scope.sortDirection = true;
     $scope.showAll = false;
+    $scope.showUnassigned = false;
     $scope.workordersView = [];
     $scope.workorderMarkers = [];
     $scope.globalTimezone = global.TimeZone;
@@ -75,6 +76,8 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
 
     $scope.showAllLocations = function () {
         var tempWorkordersView = [];
+        if ($scope.showUnassigned)
+            $scope.showUnassigned = false;
         if ($scope.showAll == true) {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
@@ -83,7 +86,28 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
         } else {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD')) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD') && value.Employee) {
+                    tempWorkordersView.push(value);
+                }
+            });
+        }
+        $scope.workordersView = tempWorkordersView;
+    }
+
+    $scope.showUnassignedWorkorders = function () {
+        if ($scope.showAll)
+            $scope.showAll = false;
+        var tempWorkordersView = [];
+        if ($scope.showUnassigned == true) {
+            $scope.workordersView = [];
+            angular.forEach($rootScope.workorders, function (value, key) {
+                if (value.WorkOrder.Status == 'Open' && value.Employee === 0)
+                    tempWorkordersView.push(value);
+            });
+        } else {
+            $scope.workordersView = [];
+            angular.forEach($rootScope.workorders, function (value, key) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.mapDate).format('YYYY-MM-DD') && value.Employee) {
                     tempWorkordersView.push(value);
                 }
             });
@@ -100,7 +124,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
                 lat: parseFloat(value.WorkOrder.Latitude),
                 lng: parseFloat(value.WorkOrder.Longitude)
             }
-          //  var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + value.Color;
+            //  var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + value.Color;
             var icon = (value.Color == null || value.Color == "") ? global.BasePath + "/images/workorder.png" : global.BasePath + "/workorder/" + value.Employee + ".png?anti_cache=" + antiCache;
             var marker = new google.maps.Marker({
                 position: pos,
@@ -151,7 +175,7 @@ var dashboardController = function ($rootScope, $scope, $state, $interpolate, $q
                 lat: parseFloat(truck.Latitude),
                 lng: parseFloat(truck.Longitude)
             }
-           // var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + truck.Color;
+            // var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + truck.Color;
             var icon = truck.Color == null ? global.BasePath + "/images/technician.png" : global.BasePath + "/technician/" + truck.Employee + ".png?anti_cache=" + antiCache;
             var marker = new google.maps.Marker({
                 position: pos,

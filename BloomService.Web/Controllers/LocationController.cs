@@ -42,7 +42,13 @@ namespace BloomService.Web.Controllers
 
                 var assignment = assignments.FirstOrDefault(x => x.WorkOrder == item.WorkOrder);
                 if (string.IsNullOrEmpty(assignment?.Employee))
+                {
+                    mapModels.Add(new MapViewModel
+                    {
+                        WorkOrder = item
+                    });
                     continue;
+                }
 
                 var employee = employees.SingleOrDefault(x => x.Employee == assignment.EmployeeId);
 

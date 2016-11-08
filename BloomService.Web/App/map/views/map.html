@@ -2,15 +2,16 @@
     <div class="col-lg-2">
         <h2>Map</h2>
     </div>
-    <div class="col-lg-2 col-lg-offset-5  map_date">
+    <div class="col-lg-3 col-lg-offset-4  map_date">
         <div class="checkbox pull-right">
-            <label><input type="checkbox" class="dashboard-checkbox" ng-change="showAllLocations()" ng-model="showAll" value="">Show all</label>
+            <label class="radio-inline"><input type="checkbox" class="dashboard-checkbox" ng-change="showAllLocations()" ng-model="showAll" value="">Show all</label>
+            <label class="radio-inline"><input type="checkbox" class="dashboard-checkbox" ng-change="showUnassignedWorkorders()" ng-model="showUnassigned">Show unassigned</label>
         </div>
     </div>
     <div class="col-lg-3 pull-right">
         <div class="form-group map_date">
             <div class="input-group date">
-                <input type="datetime" class="form-control" date-time ng-model="obj.mapDate" ng-disabled="showAll" view="date" auto-close="true" min-view="date" format="MM/DD/YYYY">
+                <input type="datetime" class="form-control" date-time ng-model="obj.mapDate" ng-disabled="showAll||showUnassigned" view="date" auto-close="true" min-view="date" format="MM/DD/YYYY">
                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
             </div>
         </div>

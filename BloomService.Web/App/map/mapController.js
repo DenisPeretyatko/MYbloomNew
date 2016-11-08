@@ -13,20 +13,23 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
     $scope.obj = {};
     $scope.obj.mapDate = new Date();
     $scope.showAll = false;
+    $scope.showUnassigned = false;
     $scope.activeTechnicans = [];
     var tooltip = $interpolate("<div><h1 class='firstHeading'>{{Name}}</h1><div>{{Location}}</div></div>");
     var tooltipWO = $interpolate("<div><h1 class='firstHeading'>{{WorkOrder}}</h1><div>{{Location}}<br/>{{Problem}}<br/>{{CallType}}</div></div>");
 
-    $scope.$watch(function() { return state.technicians; }, function() {
-        angular.forEach(state.technicians, function(value, key) {
+    $scope.$watch(function () { return state.technicians; }, function () {
+        angular.forEach(state.technicians, function (value, key) {
             if (value != null && value.IsAvailable) {
-                $scope.activeTechnicans.push({Name: value.Name, Color: value.Color })
+                $scope.activeTechnicans.push({ Name: value.Name, Color: value.Color })
             }
         });
     });
 
-        $scope.showAllLocations = function () {
+    $scope.showAllLocations = function () {
         var tempWorkordersView = [];
+        if ($scope.showUnassigned)
+        $scope.showUnassigned = false;
         if ($scope.showAll == true) {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
@@ -35,7 +38,28 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
         } else {
             $scope.workordersView = [];
             angular.forEach($rootScope.workorders, function (value, key) {
-                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD')) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD') && value.Employee) {
+                    tempWorkordersView.push(value);
+                }
+            });
+        }
+        $scope.workordersView = tempWorkordersView;
+    }
+
+    $scope.showUnassignedWorkorders = function () {
+        if ($scope.showAll)
+        $scope.showAll = false;
+        var tempWorkordersView = [];
+        if ($scope.showUnassigned == true) {
+            $scope.workordersView = [];
+            angular.forEach($rootScope.workorders, function (value, key) {
+                if (value.WorkOrder.Status == 'Open' && value.Employee===0)
+                    tempWorkordersView.push(value);
+            });
+        } else {
+            $scope.workordersView = [];
+            angular.forEach($rootScope.workorders, function (value, key) {
+                if (moment(value.DateEntered).format('YYYY-MM-DD') == moment($scope.obj.mapDate).format('YYYY-MM-DD') && value.Employee) {
                     tempWorkordersView.push(value);
                 }
             });
@@ -53,7 +77,7 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
                 lng: parseFloat(value.WorkOrder.Longitude)
             }
             //var icon = (value.Color == null || value.Color == "") ? "/public/images/workorder.png" : "/Public/workorder/" + value.Employee + ".png?anti_cache=" + value.Color;
-            var icon = (value.Color == null || value.Color == "") ?  global.BasePath +"/images/workorder.png" :  global.BasePath +"/workorder/" + value.Employee + ".png?anti_cache=" + antiCache;
+            var icon = (value.Color == null || value.Color == "") ? global.BasePath + "/images/workorder.png" : global.BasePath + "/workorder/" + value.Employee + ".png?anti_cache=" + antiCache;
             var marker = new google.maps.Marker({
                 position: pos,
                 map: $scope.locationMap,
@@ -87,7 +111,7 @@ var mapController = function ($rootScope, $scope, $location, $state, $http, $com
             }
             if (pos.lat !== 0 && pos.lng !== 0) {
                 //var icon = truck.Color == null ? "/public/images/technician.png" : "/public/technician/" + truck.Employee + ".png?anti_cache=" + truck.Color;
-                var icon = truck.Color == null ?  global.BasePath +"/images/technician.png" :  global.BasePath +"/technician/" + truck.Employee + ".png?anti_cache=" + antiCache;
+                var icon = truck.Color == null ? global.BasePath + "/images/technician.png" : global.BasePath + "/technician/" + truck.Employee + ".png?anti_cache=" + antiCache;
                 var marker = new google.maps.Marker({
                     position: pos,
                     map: $scope.locationMap,
