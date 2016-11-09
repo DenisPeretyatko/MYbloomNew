@@ -548,6 +548,12 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         }
     });
 
+    $scope.$on('createdUnassignedWO', function(event, data) {
+        var date = new Date(data.item.DateEntered);
+        data.item.DateEntered = formatDate(date);
+        $scope.unassignedWorkorders.push(data.item);
+    });
+
     //todo
     //$rootScope.$watchCollection(function () { return $rootScope.updatedTechnican; }, function () {
     //    angular.forEach($rootScope.updatedTechnican.AvailableDays, function (value, key) {

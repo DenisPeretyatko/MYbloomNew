@@ -25,7 +25,7 @@ namespace BloomService.Web.Infrastructure.SignalR.Implementation
             this._clients.All.createAssignment(model);
         }
 
-        public void CreateWorkOrder(SageWorkOrder model)
+        public void CreateWorkOrder(WorkorderViewModel model)
         {
             this._clients.All.createWorkorder(model);
         }

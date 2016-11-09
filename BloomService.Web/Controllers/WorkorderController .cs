@@ -48,6 +48,7 @@ namespace BloomService.Web.Controllers
         public ActionResult CreateWorkOrder(WorkOrderModel model)
         {
             _log.InfoFormat("Method: CreateWorkOrder. Model ID {0}", model.Id);
+            var workOrderIsAssigned = false;
             if (string.IsNullOrEmpty(model.Calltype))
                 return Error("Call Type is required");
 
@@ -118,7 +119,7 @@ namespace BloomService.Web.Controllers
                         result.Entity.ScheduleDate = assignment.ScheduleDate;
                         result.Entity.Latitude = itemLocation.Latitude;
                         result.Entity.Longitude = itemLocation.Longitude;
-
+                        workOrderIsAssigned = true;
                         _repository.Add(assignment);
                         _hub.CreateAssignment(new AssignmentHubModel
                         {
@@ -134,6 +135,11 @@ namespace BloomService.Web.Controllers
             }
 
             _repository.Add(result.Entity);
+            if (!workOrderIsAssigned)
+            {
+                var mappedWorkorder = Mapper.Map<SageWorkOrder, WorkorderViewModel>(result.Entity);
+                _hub.CreateWorkOrder(mappedWorkorder);
+            }
             _log.InfoFormat("Workorder added to repository. ID: {0}, Name: {1}", workorder.Id, workorder.Name);
             _notification.SendNotification($"{workorder.WorkOrder} was created");
             return Success();

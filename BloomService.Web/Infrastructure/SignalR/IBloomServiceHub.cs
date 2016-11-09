@@ -8,7 +8,7 @@ namespace BloomService.Web.Infrastructure.SignalR
         void SendNotification(NotificationModel model);
         void CreateAssignment(AssignmentHubModel model);
         void DeleteAssigment(WorkorderViewModel id);
-        void CreateWorkOrder(SageWorkOrder model);
+        void CreateWorkOrder(WorkorderViewModel model);
         void UpdateWorkOrder(WorkOrderModel model);
         void UpdateTechnician(TechnicianModel model);
         void UpdateTechnicianLocation(SageEmployee model);

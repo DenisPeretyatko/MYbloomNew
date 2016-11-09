@@ -160,8 +160,8 @@
             $rootScope.workorders.unshift(model);
         }
         $rootScope.$broadcast('addedAssignment', {
-  item: model 
-});
+            item: model
+        });
         $rootScope.$digest();
     };
 
@@ -181,15 +181,20 @@
         });
         $rootScope.$digest();
     };
-    connection.client.ShowAlert = function (model) {
+    connection.client.ShowAlert = function(model) {
         swal({
             title: model.Title,
             text: model.Message,
             type: model.Type,
             confirmButtonColor: '#df4242'
-        }
-        );
-    }
+        });
+    };
+
+    connection.client.createWorkorder = function(model) {
+    $rootScope.$broadcast('createdUnassignedWO', {
+        item: model
+    });
+    };
 
     $.connection.hub.start().done(function () { });
     return _this;
