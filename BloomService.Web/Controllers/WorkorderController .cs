@@ -120,12 +120,14 @@ namespace BloomService.Web.Controllers
                         result.Entity.Longitude = itemLocation.Longitude;
 
                         _repository.Add(assignment);
-                        _hub.CreateAssignment(new MapViewModel()
+                        _hub.CreateAssignment(new AssignmentHubModel
                         {
                             WorkOrder = result.Entity,
                             DateEntered = assignment.ScheduleDate,
                             Employee = employee?.Employee ?? 0,
-                            Color = employee?.Color ?? ""
+                            Color = employee?.Color ?? "",
+                            Start = assignment.Start,
+                            End = assignment.End
                         });
                     }
                 }

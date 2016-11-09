@@ -193,7 +193,15 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     event.end._d = new Date(date.setHours(date.getHours() + (estimate == 0 ? 1 : estimate > 8 ? 8 : estimate)));
                     $("#calendar").fullCalendar("rerenderEvents");
                     saveEvent(event);
-
+                    var isExist = false;
+                    angular.forEach($scope.events, function (value, key) {
+                        if (value.workorderId == event.workorderId) {
+                            isExist = true;
+                            $scope.events[key] = event;
+                        }
+                    });
+                    if (!isExist)
+                        $scope.events.push(event);
                     angular.forEach($scope.unassignedWorkorders, function (value, key) {
                         if (value.WorkOrder == event.workorderId) {
                             $scope.unassignedWorkorders.splice(key, 1);
@@ -303,7 +311,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                 }
             }
         });
-        debugger;
+
         $scope.events = tempEvents.concat(getBusinesHours());
 
         $timeout(function () {
@@ -446,7 +454,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             });
             angular.forEach($scope.events, function (item, itemKey) {
                 if (item.resourceId == value) {
-                    $scope.events.splice(itemKey,1);
+                    $scope.events.splice(itemKey, 1);
                 }
             });
         });
@@ -473,6 +481,72 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             }
         }
     }
+
+    $scope.$on('addedAssignment', function (_event, data) {
+        var isExist = false;
+        angular.forEach($scope.events, function (value, key) {
+            if (data.item.WorkOrder.WorkOrder == value.workorderId) {
+                isExist = true;
+                if (value.id)
+                    $("#calendar").fullCalendar('removeEvents', value.id);
+                else
+                    $("#calendar").fullCalendar('removeEvents', value._id);
+                value.start = new Date(data.item.Start);
+                value.end = new Date(data.item.End);
+                value.resourceId = data.item.Employee;
+                $("#calendar").fullCalendar('renderEvent', value);
+            }
+        });
+        if (!isExist) {
+            var spliter = (data.item.Customer == "" || data.item.Location == "") ? "" : "/";
+            var event = {
+                id: data.item.Assignment,
+                resourceId: data.item.Employee,
+                title: data.item.WorkOrder.WorkOrder + " " + data.item.Customer + " " + data.item.Location,
+                start: new Date(data.item.Start),
+                end: new Date(data.item.End),
+                assigmentId: data.item.Assigment,
+                workorderId: data.item.WorkOrder.WorkOrder,
+                description: data.item.Customer + spliter + data.item.Location,
+                dateFoo: data.item.DateEntered,
+                customerFoo: data.item.Customer,
+                locationFoo: data.item.Location,
+                hourFoo: data.item.EstimatedRepairHours,
+                color: data.item.Color == "" ? "" : data.item.Color,
+                durationEditable: false
+            };
+            $scope.events.push(event);
+            $("#calendar").fullCalendar('renderEvent', event);
+        }
+        angular.forEach($scope.unassignedWorkorders, function (value, key) {
+            if (value.WorkOrder == data.item.WorkOrder.WorkOrder) {
+                $scope.unassignedWorkorders.splice(key, 1);
+            }
+        });
+    });
+
+    $scope.$on('deletedAssignment', function (_event, data) {
+        angular.forEach($scope.events, function (value, key) {
+            if (data.item.WorkOrder == value.workorderId) {
+                isExist = true;
+                if (value.id)
+                    $("#calendar").fullCalendar('removeEvents', value.id);
+                else
+                    $("#calendar").fullCalendar('removeEvents', value._id);
+            }
+        });
+        var isExist = false;
+        angular.forEach($scope.unassignedWorkorders, function (value, key) {
+            if (value.WorkOrder == data.item.WorkOrder) {
+                isExist = true;
+            }
+        });
+        if (!isExist) {
+            var date = new Date(data.item.DateEntered);
+            data.item.DateEntered = formatDate(date);
+            $scope.unassignedWorkorders.push(data.item);
+        }
+    });
 
     //todo
     //$rootScope.$watchCollection(function () { return $rootScope.updatedTechnican; }, function () {

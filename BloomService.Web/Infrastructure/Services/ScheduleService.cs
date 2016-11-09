@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using AutoMapper;
 using BloomService.Domain.Entities.Concrete;
 using BloomService.Domain.Extensions;
 using BloomService.Web.Infrastructure.Mongo;
@@ -96,12 +98,18 @@ namespace BloomService.Web.Infrastructure.Services
             _repository.Update(itemLocation);
 
 
-            _hub.CreateAssignment(new MapViewModel()
+            _hub.CreateAssignment(new AssignmentHubModel()
             {
                 WorkOrder = workorder,
                 DateEntered = databaseAssignment.ScheduleDate,
                 Employee = employee?.Employee ?? 0,
-                Color = employee?.Color ?? ""
+                Color = employee?.Color ?? "",
+                Start = databaseAssignment.Start,
+                End = databaseAssignment.End,
+                Customer = databaseAssignment.Customer,
+                Location = databaseAssignment.Location,
+                Assignment = databaseAssignment.Assignment,
+                EstimatedRepairHours = databaseAssignment.EstimatedRepairHours
             });
 
             _notification.SendNotification(string.Format("Workorder {0} assigned to {1}", workorder.Name, employee.Name));
@@ -140,8 +148,8 @@ namespace BloomService.Web.Infrastructure.Services
             _repository.Update(workOrder);
             _log.InfoFormat("Repository update workorder. Name: {0}, Id: {1}", workOrder.Name, workOrder.Id);
             _notification.SendNotification($"Workorder {workOrder.Name} unassigned from {employee.Name}");
-            _hub.DeleteAssigment(model);
-
+            var hubModel = Mapper.Map<SageWorkOrder, WorkorderViewModel>(workOrder);
+            _hub.DeleteAssigment(hubModel);
             return true;
         }
 

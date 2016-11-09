@@ -20,7 +20,7 @@ namespace BloomService.Web.Infrastructure.SignalR.Implementation
             this._clients.All.UpdateWorkOrderPicture(model);
         }
 
-        public void CreateAssignment(MapViewModel model)
+        public void CreateAssignment(AssignmentHubModel model)
         {
             this._clients.All.createAssignment(model);
         }
@@ -30,7 +30,7 @@ namespace BloomService.Web.Infrastructure.SignalR.Implementation
             this._clients.All.createWorkorder(model);
         }
 
-        public void DeleteAssigment(AssignmentViewModel model)
+        public void DeleteAssigment(WorkorderViewModel model)
         {
             this._clients.All.deleteAssigment(model);
         }

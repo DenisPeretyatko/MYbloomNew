@@ -158,8 +158,10 @@
             });
         } else {
             $rootScope.workorders.unshift(model);
-            // _this.locations.push(model);
         }
+        $rootScope.$broadcast('addedAssignment', {
+  item: model 
+});
         $rootScope.$digest();
     };
 
@@ -173,6 +175,9 @@
             if (value.WorkOrder.WorkOrder == model.WorkOrder) {
                 $rootScope.workorders.splice(key, 1);
             }
+        });
+        $rootScope.$broadcast('deletedAssignment', {
+            item: model
         });
         $rootScope.$digest();
     };
