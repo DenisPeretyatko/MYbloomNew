@@ -574,8 +574,15 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     }
 
     $scope.clockPopup = function () {
-        $('.clockpicker').clockpicker({
-            donetext: 'Ok'
+        $('.timepicker input').ptTimeSelect({
+            containerClass: "timeCntr",
+            containerWidth: "350px",
+            setButtonLabel: "Select",
+            minutesLabel: "min",
+            hoursLabel: "Hrs",
+            onClose: function(i) {
+                $scope.obj.assignmentTime = $(i).val();
+            }
         });
     }
 

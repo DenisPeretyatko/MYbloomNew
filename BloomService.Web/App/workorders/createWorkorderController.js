@@ -37,11 +37,11 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             $scope.lookups.Locations.selected = '';
             $scope.lookups.Calltypes.selected = '';
             $scope.obj.calldate;
-            $scope.lookups.Problems.selected  = '';
+            $scope.lookups.Problems.selected = '';
             $scope.lookups.RateSheets.selected = $scope.lookups.RateSheets.find(function (element) {
                 return element.RATESHEETNBR == 1;
             });;
-            $scope.lookups.Employes.selected  = '';
+            $scope.lookups.Employes.selected = '';
             $scope.lookups.Equipment = state.lookups.Equipment;
             $scope.lookups.Hours.selected = '';
             $scope.obj.nottoexceed = '';
@@ -49,7 +49,7 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             $scope.obj.customerpo = '';
             $scope.obj.hours = 0;
             $scope.obj.contact = '';
-            $scope.lookups.PermissionCodes.selected  = '';
+            $scope.lookups.PermissionCodes.selected = '';
             $scope.lookups.PaymentMethods.selected = $scope.lookups.PaymentMethods.find(function (element) {
                 return element.Value == 3;
             });;
@@ -99,7 +99,7 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
             $scope.lookups.Locations.selected = response.data.length === 1 ? response.data[0] : {};
         });
     };
-    
+
     $scope.setLocation = function (selected) {
         var arCustomer = selected.$select.selected.ARCustomer;
         var name = selected.$select.selected.Name;
@@ -130,15 +130,22 @@ var createWorkorderController = function ($scope, $stateParams, $state, state, c
         $scope.obj.hours = parseFloat(selected.$select.selected.EstimatedRepairHours);
     };
 
-    $scope.clockPopup = function()
-    {
-         $('.clockpicker').clockpicker({
-              donetext: 'Ok'
-          });
+    $scope.clockPopup = function () {
+        $('.timepicker input').ptTimeSelect({
+            containerClass: "timeCntr",
+            containerWidth: "350px",
+            setButtonLabel: "Select",
+            minutesLabel: "min",
+            hoursLabel: "Hrs",
+            onClose: function (i) {
+                $scope.obj.assignmentTime = $(i).val();
+            }
+        });
     }
-     $scope.joinStrings = function (Name, Address, City, ZIP, State) {
-         return $.grep([Name, Address, City, State, ZIP ], Boolean).join(', ');
 
-      }
+    $scope.joinStrings = function (Name, Address, City, ZIP, State) {
+        return $.grep([Name, Address, City, State, ZIP], Boolean).join(', ');
+
+    }
 };
 createWorkorderController.$inject = ["$scope", "$stateParams", "$state", "state", "commonDataService"];

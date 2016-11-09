@@ -545,6 +545,13 @@
     <Content Include="Public\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Public\js\plugins\sweet_alerts\sweetalert2.min.css" />
     <Content Include="Public\js\plugins\sweet_alerts\sweetalert2.min.js" />
+    <Content Include="Public\js\plugins\timeSelect\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Public\js\plugins\timeSelect\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Public\js\plugins\timeSelect\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Public\js\plugins\timeSelect\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Public\js\plugins\timeSelect\jquery-ui-1.7.1.custom.css" />
+    <Content Include="Public\js\plugins\timeSelect\jquery.ptTimeSelect.css" />
+    <Content Include="Public\js\plugins\timeSelect\jquery.ptTimeSelect.js" />
     <Content Include="Public\userFiles\images\loading.gif" />
     <Content Include="Public\userFiles\images\logo.png" />
     <Content Include="Public\userFiles\images\technician.png" />
