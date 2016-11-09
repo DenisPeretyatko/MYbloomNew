@@ -50,6 +50,46 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         saveEvent(event);
     };
 
+    var makeRowsDraggable = function() {
+        $(".drag").each(function () {
+            var descr = "";
+            var fooElements = [];
+            var a = $(this).find(".table-row");
+            $(this).find(".table-row").each(function (i, e) {
+                if (i == 2) {
+                    var spliter = (e.innerText == "" || e[i + 1] == "") ? "" : "/";
+                    descr += e.innerText + spliter;
+                }
+                if (i == 3) {
+                    descr += e.innerText;
+                }
+                fooElements[i] = e.innerText;
+            });
+            var startDate = new Date();
+            var endDate = new Date(startDate);
+
+            var rows = $(this).find(".table-row");
+
+            $(this).data("event", {
+                title: parseInt($(this).find(".table-row").first().text()), //textTitle,
+                start: startDate,
+                end: endDate.setHours(startDate.getHours() + parseInt(rows.last().text())),
+                workorderId: rows.first().text(),
+                description: descr,
+                dateFoo: fooElements[1],
+                customerFoo: fooElements[2],
+                locationFoo: fooElements[3],
+                hourFoo: fooElements[4],
+                durationEditable: false
+            });
+
+            $(this).draggable({
+                zIndex: 999,
+                revert: true,
+                revertDuration: 0
+            });
+        });
+    };
 
     var saveEvent = function (event) {
         var workorder = event.workorderId;
@@ -327,44 +367,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                 repaintUnavailables();
             });
 
-            $(".drag").each(function () {
-                var descr = "";
-                var fooElements = [];
-                var a = $(this).find(".table-row");
-                $(this).find(".table-row").each(function (i, e) {
-                    if (i == 2) {
-                        var spliter = (e.innerText == "" || e[i + 1] == "") ? "" : "/";
-                        descr += e.innerText + spliter;
-                    }
-                    if (i == 3) {
-                        descr += e.innerText;
-                    }
-                    fooElements[i] = e.innerText;
-                });
-                var startDate = new Date();
-                var endDate = new Date(startDate);
-
-                var rows = $(this).find(".table-row");
-
-                $(this).data("event", {
-                    title: parseInt($(this).find(".table-row").first().text()), //textTitle,
-                    start: startDate,
-                    end: endDate.setHours(startDate.getHours() + parseInt(rows.last().text())),
-                    workorderId: rows.first().text(),
-                    description: descr,
-                    dateFoo: fooElements[1],
-                    customerFoo: fooElements[2],
-                    locationFoo: fooElements[3],
-                    hourFoo: fooElements[4],
-                    durationEditable: false
-                });
-
-                $(this).draggable({
-                    zIndex: 999,
-                    revert: true,
-                    revertDuration: 0
-                });
-            });
+            makeRowsDraggable();
         }, 100);
 
         $(".ibox-content").on("dragstart", ".dragdemo", function (e) {
@@ -546,12 +549,16 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             data.item.DateEntered = formatDate(date);
             $scope.unassignedWorkorders.push(data.item);
         }
+        makeRowsDraggable();
+        $scope.$apply();
     });
 
     $scope.$on('createdUnassignedWO', function(event, data) {
         var date = new Date(data.item.DateEntered);
         data.item.DateEntered = formatDate(date);
         $scope.unassignedWorkorders.push(data.item);
+        makeRowsDraggable();
+        $scope.$apply();
     });
 
     //todo
