@@ -748,3 +748,7 @@ input[type="time"]::-ms-clear {
 .tags-container {
     height: 18px;
 }
+
+.opacity85 {
+    opacity: .85;
+}

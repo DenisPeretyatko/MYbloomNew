@@ -23,6 +23,7 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, $q
     $rootScope.unavailableTechniciansIds = [];
     $scope.resources = [];
     var prevDivState = {};
+    $scope.dayView = true;
 
     /* message on eventClick */
     $scope.alertOnEventClick = function(event, allDay, jsEvent, view) {
@@ -566,11 +567,13 @@ var scheduleController = function($rootScope, $scope, $interpolate, $timeout, $q
     }
     $(document).on('click', '.fc-timelineDay-button', function () {
         $(".fc-timelineWeek-button").removeClass("fc-state-active");
+        $scope.dayView = true;
     });
     
     $(document).on('click', '.fc-timelineWeek-button', function () {
         $("#calendar").fullCalendar('changeView', "basicWeek");
         $(this).addClass("fc-state-active");
+        $scope.dayView = false;
     });
    
 //todo
