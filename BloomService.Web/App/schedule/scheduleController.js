@@ -3,13 +3,13 @@
  * scheduleController - controller
  */
 
-var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $q, commonDataService) {
+var scheduleController = function($rootScope, $scope, $interpolate, $timeout, $q, commonDataService) {
     var date = new Date();
     var offset = -5.0;
     var utc = date.getTime() + (date.getTimezoneOffset() * 60000);
     var serverDate = new Date(utc + (3600000 * offset));
 
-    var remainsFullHours = function (start, end) {
+    var remainsFullHours = function(start, end) {
         var dateDifference = end.getTime() - start.getTime();
         var remainsDate = new Date(dateDifference);
         var remainsSec = (parseInt(remainsDate / 1000));
@@ -25,11 +25,11 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
     var prevDivState = {};
 
     /* message on eventClick */
-    $scope.alertOnEventClick = function (event, allDay, jsEvent, view) {
+    $scope.alertOnEventClick = function(event, allDay, jsEvent, view) {
         $scope.alertMessage = (event.title + ": Clicked ");
     };
     /* message on Drop */
-    $scope.alertOnDrop = function (event, delta, revertFunc, jsEvent, ui, view, dayDelta, minuteDelta, allDay) {
+    $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view, dayDelta, minuteDelta, allDay) {
         var now = new Date();
         var eventDate = new Date(event._start._d.getTime() + (now.getTimezoneOffset() * 60000));
         if (!$rootScope.unavailableTechniciansIds.includes(parseInt(event.resourceId)) && serverDate <= eventDate) {
@@ -37,13 +37,12 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             event = setTechnicianColor(event);
             $("#calendar").fullCalendar("rerenderEvents");
             saveEvent(event);
-        }
-        else {
+        } else {
             revertFunc();
         }
     };
     /* message on Resize */
-    $scope.alertOnResize = function (event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
+    $scope.alertOnResize = function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
         $scope.alertMessage = (event.title + ": Resized to make dayDelta " + minuteDelta);
         event = setTechnicianColor(event);
         $("#calendar").fullCalendar("rerenderEvents");
@@ -51,11 +50,11 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
     };
 
     var makeRowsDraggable = function() {
-        $(".drag").each(function () {
+        $(".drag").each(function() {
             var descr = "";
             var fooElements = [];
             var a = $(this).find(".table-row");
-            $(this).find(".table-row").each(function (i, e) {
+            $(this).find(".table-row").each(function(i, e) {
                 if (i == 2) {
                     var spliter = (e.innerText == "" || e[i + 1] == "") ? "" : "/";
                     descr += e.innerText + spliter;
@@ -91,7 +90,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         });
     };
 
-    var saveEvent = function (event) {
+    var saveEvent = function(event) {
         var workorder = event.workorderId;
         var now = new Date();
         var start = new Date(event._start._d.getTime() + (now.getTimezoneOffset() * 60000));
@@ -110,19 +109,19 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
 
         commonDataService.assignWorkorder(assignment);
     };
-    var setTechnicianColor = function (event) {
-        var resource = $scope.resources.find(function (element) {
+    var setTechnicianColor = function(event) {
+        var resource = $scope.resources.find(function(element) {
             return element.id.toString() === event.resourceId;
         });
         event.color = resource.color;
         return event;
     }
 
-    var getBusinesHours = function () {
+    var getBusinesHours = function() {
         var result = [];
-        angular.forEach($scope.activeTechnicians, function (value, key) {
+        angular.forEach($scope.activeTechnicians, function(value, key) {
             if (value.AvailableDays != null) {
-                angular.forEach(value.AvailableDays, function (item, key) {
+                angular.forEach(value.AvailableDays, function(item, key) {
                     var event = {
                         start: item.Start,
                         end: item.End,
@@ -150,10 +149,10 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             timezone: "America/New_York",
             events: $scope.events,
             eventDragStart:
-                function (event, element) {
+                function(event, element) {
                     eventBeforeDrag = event;
                 },
-            eventRender: function (event, element) {
+            eventRender: function(event, element) {
                 var qtip = $("div.qtip:visible");
 
                 qtip.remove();
@@ -172,23 +171,23 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                 center: "title",
                 right: "timelineWeek,timelineDay"
             },
-            drop: function () {
+            drop: function() {
                 $(this).remove();
             },
             eventClick: $scope.alertOnEventClick,
             eventDrop: $scope.alertOnDrop,
             eventResize: $scope.alertOnResize,
-            eventOverlap: function (stillEvent, movingEvent) {
+            eventOverlap: function(stillEvent, movingEvent) {
                 return false;
             },
-            resourceRender: function (resource, labelTds, bodyTds) {
+            resourceRender: function(resource, labelTds, bodyTds) {
                 var cell = '<div style="height: 34px;">' +
                     '<span class="client-avatar"><img alt="image" src="{{avatarUrl}}" style="height: 28px; margin: 3px;">&nbsp;</span>' +
                     '<span class="fc-cell-text">{{title}}</span>' +
                     "</div>";
                 labelTds.html($interpolate(cell)(resource));
             },
-            eventDragStop: function (event, jsEvent, ui, view) {
+            eventDragStop: function(event, jsEvent, ui, view) {
                 if (isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
                     $('#calendar').fullCalendar('removeEvents', event._id);
 
@@ -205,7 +204,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                         EstimatedRepairHours: estimate,
                         EndDate: end
                     };
-                    angular.forEach($scope.events, function (value, key) {
+                    angular.forEach($scope.events, function(value, key) {
                         if (value.workorderId == event.workorderId) {
                             $scope.events.splice(key, 1);
                             var element = {
@@ -222,7 +221,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     commonDataService.unAssignWorkorder(assignment);
                 }
             },
-            eventReceive: function (event) {
+            eventReceive: function(event) {
                 var now = new Date();
                 var eventDate = new Date(event._start._d.getTime() + (now.getTimezoneOffset() * 60000));
                 if (!$rootScope.unavailableTechniciansIds.includes(parseInt(event.resourceId)) && eventDate >= serverDate) {
@@ -234,7 +233,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     $("#calendar").fullCalendar("rerenderEvents");
                     saveEvent(event);
                     var isExist = false;
-                    angular.forEach($scope.events, function (value, key) {
+                    angular.forEach($scope.events, function(value, key) {
                         if (value.workorderId == event.workorderId) {
                             isExist = true;
                             $scope.events[key] = event;
@@ -242,7 +241,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     });
                     if (!isExist)
                         $scope.events.push(event);
-                    angular.forEach($scope.unassignedWorkorders, function (value, key) {
+                    angular.forEach($scope.unassignedWorkorders, function(value, key) {
                         if (value.WorkOrder == event.workorderId) {
                             $scope.unassignedWorkorders.splice(key, 1);
                         };
@@ -251,7 +250,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
                     $("#calendar").fullCalendar("removeEvents", event._id);
                     ///
                     var innerHtml = "<div class=\"table-row col-lg-1 col-md-1 col-sm-6 col-xs-6 ng-binding\">" + event.workorderId + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 col-sm-6 col-xs-6 ng-binding\">" + formatDate(new Date(event.dateFoo)) + "</div>" + "<div class=\"table-row col-lg-3 col-md-3 hidden-sm hidden-xs ng-binding\">" + event.customerFoo + "</div>" +
-                                 "<div class=\"table-row col-lg-4 col-md-4 hidden-sm hidden-xs ng-binding\">" + event.locationFoo + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 hidden-sm hidden-xs ng-binding\">" + parseInt(event.hourFoo) + "</div>";
+                        "<div class=\"table-row col-lg-4 col-md-4 hidden-sm hidden-xs ng-binding\">" + event.locationFoo + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 hidden-sm hidden-xs ng-binding\">" + parseInt(event.hourFoo) + "</div>";
 
                     var el = $("<div class=\"drag fc-event table row table-row dragdemo\" style=\"z-index: 999; display: block\" draggable=\"true\">").appendTo("#new-row").html(innerHtml);
                     el.draggable({
@@ -277,7 +276,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             resourceLabelText: "Technicians",
             resources: $scope.resources,
             forceEventDuration: true,
-            dayRender: function (date, cell) {
+            dayRender: function(date, cell) {
                 var expected = moment(cell.data("date")).local();
                 if (expected < serverDate) {
                     $(cell).css("background-color", "#e6e6e6");
@@ -286,7 +285,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         }
     };
 
-    var isEventOverDiv = function (x, y) {
+    var isEventOverDiv = function(x, y) {
         var external_events = $(".dragdpor_section");
         var offset = external_events.offset();
         offset.right = external_events.width() + offset.left;
@@ -296,7 +295,9 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         if (x >= offset.left
             && y + scroll >= offset.top
             && x <= offset.right
-            && y + scroll <= offset.bottom) { return true; }
+            && y + scroll <= offset.bottom) {
+            return true;
+        }
         return false;
     }
 
@@ -304,9 +305,9 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
     $scope.resouceSources = [$scope.resources];
 
 
-    $q.all([commonDataService.getTechnicians(), commonDataService.getSchedule()]).then(function (values) {
+    $q.all([commonDataService.getTechnicians(), commonDataService.getSchedule()]).then(function(values) {
         $scope.activeTechnicians = values[0].data;
-        angular.forEach($scope.activeTechnicians, function (value, key) {
+        angular.forEach($scope.activeTechnicians, function(value, key) {
             if (value != null && value.IsAvailable) {
                 this.push({
                     id: value.Employee,
@@ -322,13 +323,13 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
 
         var schedule = values[1].data;
         $scope.unassignedWorkorders = schedule.UnassignedWorkorders;
-        angular.forEach($scope.unassignedWorkorders, function (value, key) {
+        angular.forEach($scope.unassignedWorkorders, function(value, key) {
             if (value != null) {
                 value.DateEntered = formatDate(new Date(value.DateEntered));
             };
         });
         $scope.assigments = schedule.Assigments;
-        angular.forEach($scope.assigments, function (value, key) {
+        angular.forEach($scope.assigments, function(value, key) {
             if (value != null) {
                 if (value.Start !== "" && value.End !== "") {
                     var spliter = (value.Customer == "" || value.Location == "") ? "" : "/";
@@ -354,27 +355,27 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
 
         $scope.events = tempEvents.concat(getBusinesHours());
 
-        $timeout(function () {
+        $timeout(function() {
             $("#calendar").fullCalendar("removeEvents");
             $("#calendar").fullCalendar("addEventSource", $scope.events);
             $("#calendar").fullCalendar("rerenderEvents");
             repaintUnavailables();
 
-            $(".fc-timelineWeek-button").click(function () {
+            $(".fc-timelineWeek-button").click(function() {
                 repaintUnavailables();
             });
-            $(".fc-timelineDay-button").click(function () {
+            $(".fc-timelineDay-button").click(function() {
                 repaintUnavailables();
             });
 
             makeRowsDraggable();
         }, 100);
 
-        $(".ibox-content").on("dragstart", ".dragdemo", function (e) {
+        $(".ibox-content").on("dragstart", ".dragdemo", function(e) {
             var x = e.pageX;
             var y = e.pageY;
             var innerText = [];
-            angular.forEach(this.children, function (value, key) {
+            angular.forEach(this.children, function(value, key) {
                 innerText[key] = $(value).text();
             });
             var element = this;
@@ -396,9 +397,9 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             this.scrollWidth = 20;
             this.style.marginLeft = (x - 275) + "px";
             this.style.marginTop = -5 + "px";
-            document.getElementById("schedule").addEventListener("mouseup", function (event) {
+            document.getElementById("schedule").addEventListener("mouseup", function(event) {
                 var innerHtml = "<div class=\"table-row col-lg-1 col-md-1 col-sm-6 col-xs-6 ng-binding\">" + innerText[0] + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 col-sm-6 col-xs-6 ng-binding\">" + innerText[1] + "</div>" + "<div class=\"table-row col-lg-3 col-md-3 hidden-sm hidden-xs ng-binding\">" + innerText[2] + "</div>" +
-                              "<div class=\"table-row col-lg-4 col-md-4 hidden-sm hidden-xs ng-binding\">" + innerText[3] + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 hidden-sm hidden-xs ng-binding\">" + innerText[4] + "</div>";
+                    "<div class=\"table-row col-lg-4 col-md-4 hidden-sm hidden-xs ng-binding\">" + innerText[3] + "</div>" + "<div class=\"table-row col-lg-2 col-md-2 hidden-sm hidden-xs ng-binding\">" + innerText[4] + "</div>";
 
                 element.innerHTML = innerHtml;
                 element.style = prevDivState.style;
@@ -435,7 +436,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         return inputdate.getMonth() + 1 + "-" + inputdate.getDate() + "-" + inputdate.getFullYear();
     }
 
-    var repaintUnavailables = function () {
+    var repaintUnavailables = function() {
         //angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) {
         //    var event = {
         //        start: "1900-01-01T11:30:00.000Z",
@@ -448,14 +449,14 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         //    $scope.events.push(event);
         //    $('#calendar').fullCalendar('renderEvent', event, true);
         //});
-        angular.forEach($rootScope.unavailableTechniciansIds, function (value, key) {
-            angular.forEach($scope.resources, function (item, itemKey) {
+        angular.forEach($rootScope.unavailableTechniciansIds, function(value, key) {
+            angular.forEach($scope.resources, function(item, itemKey) {
                 if (item.id == value) {
                     $scope.resources.splice(itemKey, 1);
                     $('#calendar').fullCalendar('removeResource', item.id);
                 }
             });
-            angular.forEach($scope.events, function (item, itemKey) {
+            angular.forEach($scope.events, function(item, itemKey) {
                 if (item.resourceId == value) {
                     $scope.events.splice(itemKey, 1);
                 }
@@ -464,7 +465,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
     }
 
 
-    $scope.changeSorting = function (data) {
+    $scope.changeSorting = function(data) {
         if ($scope.sortKey != data) {
             $("." + $scope.sortKey + "").removeClass("footable-sorted");
             $("." + $scope.sortKey + "").removeClass("footable-sorted-desc");
@@ -477,17 +478,16 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             if ($("." + data + "").hasClass("footable-sorted-desc")) {
                 $("." + data + "").addClass("footable-sorted");
                 $("." + data + "").removeClass("footable-sorted-desc");
-            }
-            else {
+            } else {
                 $("." + data + "").addClass("footable-sorted-desc");
                 $("." + data + "").removeClass("footable-sorted");
             }
         }
     }
 
-    $scope.$on('addedAssignment', function (_event, data) {
+    $scope.$on('addedAssignment', function(_event, data) {
         var isExist = false;
-        angular.forEach($scope.events, function (value, key) {
+        angular.forEach($scope.events, function(value, key) {
             if (data.item.WorkOrder.WorkOrder == value.workorderId) {
                 isExist = true;
                 if (value.id)
@@ -521,15 +521,15 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             $scope.events.push(event);
             $("#calendar").fullCalendar('renderEvent', event);
         }
-        angular.forEach($scope.unassignedWorkorders, function (value, key) {
+        angular.forEach($scope.unassignedWorkorders, function(value, key) {
             if (value.WorkOrder == data.item.WorkOrder.WorkOrder) {
                 $scope.unassignedWorkorders.splice(key, 1);
             }
         });
     });
 
-    $scope.$on('deletedAssignment', function (_event, data) {
-        angular.forEach($scope.events, function (value, key) {
+    $scope.$on('deletedAssignment', function(_event, data) {
+        angular.forEach($scope.events, function(value, key) {
             if (data.item.WorkOrder == value.workorderId) {
                 isExist = true;
                 if (value.id)
@@ -539,7 +539,7 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
             }
         });
         var isExist = false;
-        angular.forEach($scope.unassignedWorkorders, function (value, key) {
+        angular.forEach($scope.unassignedWorkorders, function(value, key) {
             if (value.WorkOrder == data.item.WorkOrder) {
                 isExist = true;
             }
@@ -561,7 +561,19 @@ var scheduleController = function ($rootScope, $scope, $interpolate, $timeout, $
         $scope.$apply();
     });
 
-    //todo
+    $scope.weekView = function() {
+        $("#calendar").fullCalendar('changeView', "basicWeek");
+    }
+    $(document).on('click', '.fc-timelineDay-button', function () {
+        $(".fc-timelineWeek-button").removeClass("fc-state-active");
+    });
+    
+    $(document).on('click', '.fc-timelineWeek-button', function () {
+        $("#calendar").fullCalendar('changeView', "basicWeek");
+        $(this).addClass("fc-state-active");
+    });
+   
+//todo
     //$rootScope.$watchCollection(function () { return $rootScope.updatedTechnican; }, function () {
     //    angular.forEach($rootScope.updatedTechnican.AvailableDays, function (value, key) {
     //        var event = {
