@@ -662,9 +662,9 @@ namespace BloomService.Web.Controllers
         [Route("WorkOrder/GetAssignment/{id}")]
         public ActionResult GetAssignment(long id)
         {
-            var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == id).Single();
+            var assignment = _repository.SearchFor<SageAssignment>(x => x.WorkOrder == id).SingleOrDefault();
             return assignment == null ?
-                 Error("Workorder does not exist", $"There are no Workorder with workorderID: {id}. workorder == null") :
+                 Error("Assignment does not exist", $"There are no assignment with workorderID: {id}. Assignment == null") :
                  Success(assignment);
         }
 
