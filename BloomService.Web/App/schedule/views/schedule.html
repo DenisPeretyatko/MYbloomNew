@@ -10,7 +10,7 @@
                 <div class="ibox-content ui-calendar">
                     <div class="margin-bottom-10">
                         <ng-repeat ng-hide="dayView" ng-repeat="value in resources">
-                            <span class="label map-tag-large opacity85" ng-style="{'background-color':value.color==null?'#df4242':value.color}">{{value.title}}</span>
+                            <span class="label map-tag-large" ng-style="{'background-color':value.color==null?'#df4242':value.color}">{{value.title}}</span>
                         </ng-repeat>
                     </div>
                     <div id="calendar" ui-calendar="uiConfig.calendar" calendar="schedule" class="calendar" ng-model="eventSources"></div>
