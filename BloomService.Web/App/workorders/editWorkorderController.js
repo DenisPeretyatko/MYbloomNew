@@ -66,6 +66,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
             $scope.lookups.Calltypes.selected = $scope.editableWorkOrder.CalltypeObj;
             $scope.obj.calldate = $scope.editableWorkOrder.CallDate;
             $scope.obj.assignmentDate = moment($scope.editableWoAssignment.ScheduleDate).utc().toDate();
+            if($scope.editableWoAssignment.Start)
             $scope.obj.assignmentTime = moment($scope.editableWoAssignment.Start).utc().toDate();
             $scope.lookups.Problems.selected = $scope.editableWorkOrder.ProblemObj;
             $scope.lookups.RateSheets.selected = $scope.editableWorkOrder.RateSheetObj;
@@ -293,6 +294,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         commonDataService.getAssignment(response.data.WorkOrder).then(function (result) {
             $scope.editableWoAssignment = result.data;
             $scope.obj.assignmentDate = moment(result.data.ScheduleDate).utc().toDate();
+            if(result.data.Start)
             $scope.obj.assignmentTime = moment(result.data.Start).utc().toDate();
         });
         commonDataService.getNotes(response.data.WorkOrder).then(function (result) {
