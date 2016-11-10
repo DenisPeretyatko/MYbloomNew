@@ -2,7 +2,7 @@
  * editWorkorderController - controller
  */
 
-var editWorkorderController = function ($scope, $rootScope, $stateParams, $state, $compile, $interpolate, commonDataService, state, modalWindowService, $window) {
+var editWorkorderController = function ($scope, $rootScope, $stateParams, $state, $compile, $interpolate, commonDataService, state, modalWindowService, $window, commonHub) {
     var markers = [];
     $scope.form = {};
     $rootScope.updatedSageWorkOrder = [];
@@ -40,6 +40,7 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
     $scope.basePath = global.BasePath;
     var statusCancelled = {};
     $scope.contacts = [];
+    var connection = commonHub.GetConnection();
 
     var sortEmployees = function () {
         if ($scope.lookups != undefined) {
@@ -601,7 +602,14 @@ var editWorkorderController = function ($scope, $rootScope, $stateParams, $state
         return $.grep([Name, Address, City, State, ZIP], Boolean).join(', ');
     }
 
-
-
+    connection.client.AddNote = function (model) {
+        if ($scope.editableWorkOrder.WorkOrder == model.WorkOrderId) {
+            $scope.workOrderNotes.push({
+                SubjectLine: model.SubjectLine,
+                Text: model.Text
+            });
+            $scope.$apply();
+        }
+    };
 }
-editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state", "modalWindowService", "$window"];
+editWorkorderController.$inject = ["$scope", "$rootScope", "$stateParams", "$state", "$compile", "$interpolate", "commonDataService", "state", "modalWindowService", "$window", "commonHub"];

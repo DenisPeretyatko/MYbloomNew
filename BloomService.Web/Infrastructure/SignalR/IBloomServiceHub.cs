@@ -15,5 +15,6 @@ namespace BloomService.Web.Infrastructure.SignalR
         void UpdateWorkOrderPicture(SageImageWorkOrder model);
         void UpdateSageWorkOrder(SageWorkOrder model);
         void ShowAlert(SweetAlertModel model);
+        void AddNote(WorkOrderNoteModel model);
     }
 }

@@ -407,6 +407,7 @@ namespace BloomService.Web.Controllers
                 workOrder.WorkNotes = getNotesResult.Entities;
                 _repository.Update(workOrder);
                 _hub.UpdateSageWorkOrder(workOrder);
+                _hub.AddNote(model);
             }
             else
             {

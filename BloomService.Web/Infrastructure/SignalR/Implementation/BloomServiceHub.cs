@@ -64,5 +64,10 @@ namespace BloomService.Web.Infrastructure.SignalR.Implementation
         {
             this._clients.All.ShowAlert(model);
         }
+
+        public void AddNote(WorkOrderNoteModel model)
+        {
+            this._clients.All.AddNote(model);
+        }
     }
 }
