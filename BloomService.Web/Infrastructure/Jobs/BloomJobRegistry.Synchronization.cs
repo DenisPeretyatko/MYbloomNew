@@ -48,8 +48,8 @@ namespace BloomService.Web.Infrastructure.Jobs
             {
                 lock (_syncSageLock)
                 {
-                    GetEntities(); 
-                    try 
+                    GetEntities();
+                    try
                     {
                         var newRateSheets = new List<SageRateSheet>();
                         var updateRateSheets = new List<SageRateSheet>();
@@ -78,7 +78,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
 
                     try
-                    { 
+                    {
                         var updatePermissionCodes = new List<SagePermissionCode>();
                         var newPermissionCodes = new List<SagePermissionCode>();
                         var permissionCodeList = _repository.GetAll<SagePermissionCode>().ToList();
@@ -117,7 +117,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     var lastWo = WorkOrders.Entities.Max(x => x.WorkOrder);
                     var currentQuery = 0;
                     var querySize = lastWo / 10;
-                    try 
+                    try
                     {
                         while (currentQuery < numberOfQueries)
                         {
@@ -155,7 +155,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         _log.ErrorFormat("Can`t sync SageWorkOrderItems {0}", ex);
                     }
 
-                    try 
+                    try
                     {
                         workorderItems = _repository.GetAll<SageWorkOrderItem>().ToList();
                         foreach (var workOrder in WorkOrders.Entities)
@@ -226,7 +226,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
 
                     try
-                    { 
+                    {
                         var updateCallTypes = new List<SageCallType>();
                         var newCallTypes = new List<SageCallType>();
                         var callTypeList = _repository.GetAll<SageCallType>().ToList();
@@ -432,7 +432,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         {
                             var mongoEntity = sageRepairList.SingleOrDefault(x => x.Repair == entity.Repair);
                             if (mongoEntity == null)
-                                newRepairs.Add(entity);                           
+                                newRepairs.Add(entity);
                             else
                             {
                                 entity.Id = mongoEntity.Id;
@@ -515,7 +515,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     workorderList.Where(x => x.Location == entity.Name && x.Status == "Open");
                                 var hasOpenWorkOrder = woBylocation.Any();
                                 if (hasOpenWorkOrder)
-                                {                                   
+                                {
                                     if (currentCacheLocation != null)
                                     {
                                         entity.Longitude = currentCacheLocation.Longitude;
@@ -527,7 +527,8 @@ namespace BloomService.Web.Infrastructure.Jobs
                                     wo.Latitude = entity.Latitude;
                                     wo.Longitude = entity.Longitude;
                                     updateWorkOrders.Add(wo);
-                                }                               
+                                }
+                                _locationService.ResolveLocation(entity);
                                 newLocations.Add(entity);
                             }
                             else
@@ -560,7 +561,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                     }
 
                     try
-                    { 
+                    {
                         var updateCustomers = new List<SageCustomer>();
                         var newCustomers = new List<SageCustomer>();
                         var customersList = _repository.GetAll<SageCustomer>().ToList();
@@ -568,7 +569,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         {
                             var mongoEntity = customersList.SingleOrDefault(x => x.Customer == entity.Customer);
                             if (mongoEntity == null)
-                                newCustomers.Add(entity);                            
+                                newCustomers.Add(entity);
                             else
                             {
                                 entity.Id = mongoEntity.Id;
@@ -596,7 +597,7 @@ namespace BloomService.Web.Infrastructure.Jobs
                         {
                             var mongoEntity = partsList.SingleOrDefault(x => x.Part == entity.Part);
                             if (mongoEntity == null)
-                                newParts.Add(entity);                            
+                                newParts.Add(entity);
                             else
                             {
                                 entity.Id = mongoEntity.Id;
